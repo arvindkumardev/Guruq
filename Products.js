@@ -30,6 +30,26 @@ const FETCH_ALL_PRODUCT = gql`
     }
   }
 `;
+
+const GET_ALL_USERS = gql`
+  query {
+    users {
+      edges {
+        id
+        m_id
+        firstName
+        lastName
+        mobile
+        email
+        isPhoneNumberVerified
+        isEmailVerified
+        isFirstTime
+        lastLoginDate
+        type
+      }
+    }
+  }
+`;
 const itemsPerRow = 2;
 
 export default class Products extends React.Component {
@@ -43,7 +63,7 @@ export default class Products extends React.Component {
 
   render() {
     return (
-      <Query query={FETCH_ALL_PRODUCT}>
+      <Query query={GET_ALL_USERS}>
         {({loading, error, data}) => {
           if (loading) {
             return (
@@ -74,11 +94,11 @@ export default class Products extends React.Component {
               <StatusBar barStyle="dark-content" />
               <SafeAreaView style={styles.mainContainer}>
                 <FlatList
-                  data={data.all_product.items}
+                  data={data.users.edges}
                   dataSource={null}
                   numColumns={itemsPerRow}
                   renderItem={(item, index) => {
-                    console.log(item.item);
+                    console.log(item.id);
                     return (
                       <GridItem
                         item={item.item}
@@ -107,7 +127,7 @@ class GridItem extends React.PureComponent {
 
   render() {
     const item = this.props.item;
-    console.log('safdfdf' + this.props.item.price);
+    console.log('safdfdf' + item.email, item.mobile);
     StatusBar.setBarStyle('light-content', true);
     return (
       <TouchableHighlight
@@ -115,15 +135,15 @@ class GridItem extends React.PureComponent {
         onPress={() => this._onPress(item)}
         underlayColor="#dddddd">
         <View style={styles.flatlistView}>
-          <Image
-            style={styles.image}
-            source={{uri: item.featured_imageConnection.edges[0].node.url}}
-          />
+          {/*<Image*/}
+          {/*  style={styles.image}*/}
+          {/*  source={{uri: item.featured_imageConnection.edges[0].node.url}}*/}
+          {/*/>*/}
           <Text numberOfLines={1} style={styles.name}>
-            {item.title}
+            {item.firstName} {item.lastName}
           </Text>
           <Text numberOfLines={2} style={styles.price}>
-            ${item.price}
+            {item.email} {item.modile}
           </Text>
         </View>
       </TouchableHighlight>
