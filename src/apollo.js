@@ -1,4 +1,4 @@
-import {ApolloClient, InMemoryCache, from, HttpLink} from '@apollo/client';
+import { ApolloClient, InMemoryCache, from, HttpLink } from '@apollo/client';
 
 const GRAPHQL_ENDPOINT = 'http://localhost:5000/graphql';
 

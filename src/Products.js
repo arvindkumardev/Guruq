@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {gql, useQuery} from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 
 const GET_ALL_USERS = gql`
   query {
@@ -32,7 +32,7 @@ const GET_ALL_USERS = gql`
 const itemsPerRow = 2;
 
 const Products = (props) => {
-  const {loading, error, data} = useQuery(GET_ALL_USERS);
+  const { loading, error, data } = useQuery(GET_ALL_USERS);
 
   const onPressItem = (item) => {
     console.log(item);
@@ -72,9 +72,7 @@ const Products = (props) => {
               numColumns={itemsPerRow}
               renderItem={(item, index) => {
                 console.log(item.id);
-                return (
-                  <GridItem item={item.item} onPressItem={onPressItem} />
-                );
+                return <GridItem item={item.item} onPressItem={onPressItem} />;
               }}
             />
           </SafeAreaView>
@@ -121,7 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
   },
-  image: {alignContent: 'center', flex: 0.8, width: 170, height: 170},
+  image: { alignContent: 'center', flex: 0.8, width: 170, height: 170 },
   flatlistView: {
     flex: 1,
     flexDirection: 'column',
