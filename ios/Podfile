@@ -3,14 +3,14 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'ContentstackReactNative' do
+target 'GuruQ' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
-  target 'ContentstackReactNativeTests' do
+  target 'GuruQTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -25,10 +25,10 @@ target 'ContentstackReactNative' do
   end
 end
 
-target 'ContentstackReactNative-tvOS' do
-  # Pods for ContentstackReactNative-tvOS
+target 'GuruQ-tvOS' do
+  # Pods for GuruQ-tvOS
 
-  target 'ContentstackReactNative-tvOSTests' do
+  target 'GuruQ-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
