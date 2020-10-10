@@ -12,10 +12,16 @@ import apolloClient from './apollo';
 import { ApolloProvider } from '@apollo/react-hooks';
 import Products from './Products';
 
+import SplashScreen from 'react-native-splash-screen';
+
 class App extends Component {
   state = {
     client: apolloClient(),
   };
+
+  componentDidMount() {
+    SplashScreen.hide();
+  }
 
   render() {
     return (
