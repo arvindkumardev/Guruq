@@ -1,35 +1,14 @@
 import React from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableHighlight,
-  StatusBar,
   FlatList,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
 } from 'react-native';
-import {Query} from 'react-apollo';
-import {gql} from '@apollo/client';
-
-const FETCH_ALL_PRODUCT = gql`
-  query {
-    all_product(locale: "en-us") {
-      items {
-        title
-        description
-        price
-        featured_imageConnection(limit: 10) {
-          edges {
-            node {
-              url
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+import {gql, useQuery} from '@apollo/client';
 
 const GET_ALL_USERS = gql`
   query {
@@ -52,73 +31,58 @@ const GET_ALL_USERS = gql`
 `;
 const itemsPerRow = 2;
 
-export default class Products extends React.Component {
-  state = {
-    isLoading: true,
-  };
+const Products = (props) => {
+  const {loading, error, data} = useQuery(GET_ALL_USERS);
 
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <Query query={GET_ALL_USERS}>
-        {({loading, error, data}) => {
-          if (loading) {
-            return (
-              <>
-                <StatusBar barStyle="dark-content" />
-                <SafeAreaView>
-                  <View style={styles.container}>
-                    <Text>Loading....</Text>
-                  </View>
-                </SafeAreaView>
-              </>
-            );
-          }
-          if (error) {
-            return (
-              <>
-                <StatusBar barStyle="dark-content" />
-                <SafeAreaView>
-                  <View style={styles.container}>
-                    <Text>`Error! ${error.message}`</Text>
-                  </View>
-                </SafeAreaView>
-              </>
-            );
-          }
-          return (
-            <>
-              <StatusBar barStyle="dark-content" />
-              <SafeAreaView style={styles.mainContainer}>
-                <FlatList
-                  data={data.users.edges}
-                  dataSource={null}
-                  numColumns={itemsPerRow}
-                  renderItem={(item, index) => {
-                    console.log(item.id);
-                    return (
-                      <GridItem
-                        item={item.item}
-                        onPressItem={this.onPressItem}
-                      />
-                    );
-                  }}
-                />
-              </SafeAreaView>
-            </>
-          );
-        }}
-      </Query>
-    );
-  }
-
-  onPressItem = (item) => {
+  const onPressItem = (item) => {
     console.log(item);
   };
-}
+
+  return (
+    <>
+      {loading && (
+        <>
+          <StatusBar barStyle="dark-content" />
+          <SafeAreaView>
+            <View style={styles.container}>
+              <Text>Loading....</Text>
+            </View>
+          </SafeAreaView>
+        </>
+      )}
+
+      {error && (
+        <>
+          <StatusBar barStyle="dark-content" />
+          <SafeAreaView>
+            <View style={styles.container}>
+              <Text>`Error! ${error.message}`</Text>
+            </View>
+          </SafeAreaView>
+        </>
+      )}
+
+      {!loading && !error && (
+        <>
+          <StatusBar barStyle="dark-content" />
+          <SafeAreaView style={styles.mainContainer}>
+            <FlatList
+              data={data.users.edges}
+              dataSource={null}
+              numColumns={itemsPerRow}
+              renderItem={(item, index) => {
+                console.log(item.id);
+                return (
+                  <GridItem item={item.item} onPressItem={onPressItem} />
+                );
+              }}
+            />
+          </SafeAreaView>
+        </>
+      )}
+    </>
+  );
+};
 
 class GridItem extends React.PureComponent {
   _onPress = (item) => {
@@ -201,3 +165,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+export default Products;

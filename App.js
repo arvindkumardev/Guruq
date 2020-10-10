@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import {Router, Scene} from 'react-native-router-flux';
 import apolloClient from './apollo';
-import {ApolloProvider} from 'react-apollo';
+import {ApolloProvider} from '@apollo/react-hooks';
 import Products from './Products';
 
 class App extends Component {
