@@ -1,44 +1,49 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, { Component } from 'react';
-import { Router, Scene } from 'react-native-router-flux';
+import React, {useEffect, useRef} from 'react';
 import apolloClient from './apollo';
 import { ApolloProvider } from '@apollo/react-hooks';
-import Products from './Products';
-
 import SplashScreen from 'react-native-splash-screen';
+import {NavigationContainer} from '@react-navigation/native';
+import {SafeAreaView, StatusBar} from 'react-native';
+import AppStack from './routes/AppRoutes';
 
-class App extends Component {
-  state = {
-    client: apolloClient(),
+const getActiveRouteName = state => {
+  const route = state.routes[state.index];
+  if (route.state) {
+    return getActiveRouteName(route.state);
+  }
+  return route.name;
+};
+
+function App() {
+  const routeNameRef = useRef();
+  const navigationRef = useRef();
+  const client = apolloClient();
+
+  useEffect(() => {
+    const state = navigationRef.current.getRootState();
+    if (state) {
+      routeNameRef.current = getActiveRouteName(state);
+    }
+  }, []);
+
+  useEffect(() =>{
+    SplashScreen.hide();
+  });
+
+  const onStateChangeHandle = (state) => {
+    const currentRouteName = getActiveRouteName(state);
+    routeNameRef.current = currentRouteName;
   };
 
-  componentDidMount() {
-    SplashScreen.hide();
-  }
 
-  render() {
-    return (
-      <ApolloProvider client={this.state.client}>
-        <Router>
-          <Scene key="root">
-            <Scene
-              key="Products"
-              component={Products}
-              title="Products"
-              initial={true}
-            />
-          </Scene>
-        </Router>
-      </ApolloProvider>
-    );
-  }
+  return (
+    <ApolloProvider client={client}>
+      <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
+        <StatusBar barStyle={'dark-content'} />
+        <AppStack />
+      </NavigationContainer>
+    </ApolloProvider>
+  )
 }
 
 export default App;
