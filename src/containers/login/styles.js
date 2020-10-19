@@ -15,7 +15,18 @@ const styles = StyleSheet.create({
         marginHorizontal:RfW(16),
         color: Colors.white,
         marginBottom:RfH(56)
-    }
+    },
+    underlineStyleBase: {
+        width: 30,
+        height: 45,
+        borderWidth: 0,
+        borderBottomWidth: 1,
+        color: '#313031',
+        fontSize: 24
+    },
+        underlineStyleHighLighted: {
+        borderColor: "#03DAC6",
+    },
 });
 export default styles;
 

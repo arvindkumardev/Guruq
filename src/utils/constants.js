@@ -11,6 +11,12 @@ export const STANDARD_SCREEN_DIMENSIONS = {height:812, width:375};
 
 export const ANDROID_PACKAGE_NAME = 'com.guruq';
 
-export const LOCAL_STORAGE_DATA_KEY = {
-    
-};
+export const LOCAL_STORAGE_DATA_KEY = {};
+
+export const inputs = {};
+
+export const IND_COUNTRY_OBJ = {dialCode:'91',
+    iso2: 'in',
+    name: 'India',
+    nationality: 'IN',
+    mobileCode: 'India: 0091'};
