@@ -23,7 +23,23 @@ import routeNames from '../../routes/ScreenNames';
 function login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
-  const [checkUser, { loading, data }] = useLazyQuery(CHECK_USER);
+  const [checkUser, {
+    loading, data, refetch, called,
+  }] = useLazyQuery(CHECK_USER, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (d) => {
+      if (data) {
+        console.log('data', data);
+
+        if (!data.checkUser.isPasswordSet) {
+          navigation.navigate(routeNames.OTP_VERIFICATION);
+        } else {
+          // ask for password - show password input
+        }
+      }
+    }
+  });
+
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
@@ -33,16 +49,6 @@ function login() {
     navigation.goBack();
   };
 
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-
-      if (!data.checkUser.isPasswordSet) {
-        navigation.navigate(routeNames.OTP_VERIFICATION);
-      }
-    }
-  }, [data]);
-
   const onSubmitEditing = () => {
     setShowNext(true);
   };
@@ -50,8 +56,8 @@ function login() {
   const onClickContinue = () => {
     const countryCode = mobileObj.country.dialCode;
     const number = mobileObj.mobile;
+
     checkUser({
-      fetchPolicy: 'network-only',
       variables: { countryCode, number },
     });
   };
