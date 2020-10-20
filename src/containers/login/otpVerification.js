@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Keyboard,  TouchableWithoutFeedback, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Keyboard,  TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useRef, useState } from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -7,12 +7,17 @@ import Colors from '../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../utils/helpers';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import routeNames from '../../routes/ScreenNames';
 
 function otpVerification() {
     const navigation = useNavigation();
     
     const onBackPress = () =>{
         navigation.goBack();
+    }
+
+    const onClickContinue = () =>{
+        navigation.navigate(routeNames.SET_PASSWORD);
     }
 
     const bottonView = () =>{
@@ -51,6 +56,7 @@ function otpVerification() {
 
   return (
     <View style={[commonStyles.mainContainer,{backgroundColor: Colors.onboardBackground}]}>
+        <StatusBar barStyle='light-content' />
         <Icon onPress={() => onBackPress()} type='MaterialIcons' name='keyboard-backspace' style={{marginLeft:16, marginTop:58, color:Colors.white}}/>
         <View style={{flex:1}}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

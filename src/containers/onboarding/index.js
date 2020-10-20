@@ -1,4 +1,4 @@
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StatusBar } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import commonStyles from '../../common/styles';
@@ -20,6 +20,7 @@ function scheduleClass() {
 
   return (
     <View style={[commonStyles.mainContainer,{backgroundColor: Colors.onboardBackground}]}>
+        <StatusBar barStyle='light-content' />
         <TouchableOpacity onPress={() => goToLogin()}><Text style={styles.skip}>Skip</Text></TouchableOpacity>
         <Swiper horizontal autoplay autoplayTimeout={3}>
             <View>

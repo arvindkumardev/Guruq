@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity, Keyboard,  TouchableWithoutFeedback, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Keyboard,  TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useNavigation} from '@react-navigation/native';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
@@ -9,43 +9,55 @@ import { RfH, RfW } from '../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../utils/constants';
 import {CustomMobileNumber} from '../../components';
 import routeNames from '../../routes/ScreenNames';
+import { CHECK_USER } from '../../services/apollo_requests';
+import { useLazyQuery } from '@apollo/client';
 
 function login() {
     const navigation = useNavigation();
     const [showNext, setShowNext] = useState(false);
+    const [checkUser, { loading, data }] = useLazyQuery(CHECK_USER);
     const [mobileObj, setMobileObj] = useState({ mobile: '', country:IND_COUNTRY_OBJ })
 
     const onBackPress = () =>{
         navigation.goBack();
     }
 
+    useEffect(() =>{
+        if (data) {
+            console.log(data);
+        }
+    })
 
+    
     const onSubmitEditing = () =>{
         setShowNext(true);
     }
 
     const onClickContinue = () =>{
-        navigation.navigate(routeNames.OTP_VERIFICATION);
+        var countryCode = mobileObj.country.dialCode;
+        var number = mobileObj.mobile;
+        checkUser({ variables: { countryCode, number } })
+        //navigation.navigate(routeNames.OTP_VERIFICATION);
     }
 
     const bottonView = () =>{
+
         return(
             <KeyboardAvoidingView>
                 <View style={{backgroundColor:Colors.white, paddingHorizontal:16, paddingVertical:56, borderTopLeftRadius:25, borderTopRightRadius:25}}>
-                    <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'center', }}>
-                        <View>
-                            <CustomMobileNumber
-                                value={mobileObj}
-                                topMargin={0}
-                                onChangeHandler={(mobileObj) => {setMobileObj(mobileObj)}}
-                                returnKeyType={'done'}
-                                refKey={'mobileNumber'}
-                                placeholder={'Mobile number'}
-                                onSubmitEditing={() => onSubmitEditing()}
-                            />
-                        </View>
+                    <View>
+                        <CustomMobileNumber
+                            value={mobileObj}
+                            topMargin={0}
+                            onChangeHandler={(mobileObj) => {setMobileObj(mobileObj)}}
+                            returnKeyType={'done'}
+                            refKey={'mobileNumber'}
+                            placeholder={'Mobile number'}
+                            onSubmitEditing={() => onSubmitEditing()}
+                        />
                     </View>
-                    <TouchableOpacity onPress={() => onClickContinue()} style={[(showNext ? commonStyles.buttonPrimary:commonStyles.disableButton),{marginTop:RfH(107), alignSelf:'center', width:RfW(144)}]}>
+                    <View style={{marginTop:RfH(40), borderBottomWidth:0.5, borderBottomColor:Colors.inputLabel}}></View>
+                    <TouchableOpacity onPress={() => onClickContinue()} style={[(showNext ? commonStyles.buttonPrimary:commonStyles.disableButton),{marginTop:RfH(63), alignSelf:'center', width:RfW(144)}]}>
                         <Text style={commonStyles.textButtonPrimary}>
                             Continue
                         </Text>
@@ -57,6 +69,7 @@ function login() {
 
   return (
     <View style={[commonStyles.mainContainer,{backgroundColor: Colors.onboardBackground}]}>
+        <StatusBar barStyle='light-content' />
         <Icon onPress={() => onBackPress()} type='MaterialIcons' name='keyboard-backspace' style={{marginLeft:16, marginTop:58, color:Colors.white}}/>
         <View style={{flex:1}}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

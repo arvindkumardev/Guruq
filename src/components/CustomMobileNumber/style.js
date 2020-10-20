@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     marginTop: RfH(28),
   },
   inputStyle: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'normal',
     fontStyle: 'normal',
     textAlign: 'left',
@@ -18,8 +18,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop:RfH(4),
     justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderColor: Colors.inputLabel,
     alignItems:'center',
     paddingBottom: RfH(12),
    },
@@ -27,8 +25,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop:RfH(4),
     justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderColor: Colors.inputLabel,
     height: RfH(34)
   },
   iconContainer: {

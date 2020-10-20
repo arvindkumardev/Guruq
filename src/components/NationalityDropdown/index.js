@@ -97,7 +97,6 @@ function NationalityDropdown(props) {
                 sectionHeaderHeight={RfH(28)}
                 indexLetterColor={'#007aff'}
                 keyExtractor={(item, index)=>index.toString()}
-
             />
           </SafeAreaView>
         </Modal>

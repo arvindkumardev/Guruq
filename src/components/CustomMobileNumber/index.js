@@ -52,7 +52,7 @@ function CustomMobileNumber(props) {
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <View>
             {isCountryCodeLabel &&<Text style={[inputLabelStyle, error && { color: '#818181' }]}>
-              {'COUNTRY CODE'}
+              {''}
             </Text>}
             <TouchableOpacity onPress={() => setShowModal(true)}
               style={[styles.textInputInnerContainer, textInputStyle, { height: RfH(34) }]}>
