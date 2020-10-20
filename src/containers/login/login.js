@@ -18,6 +18,7 @@ import { RfH, RfW } from '../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../utils/constants';
 import { CustomMobileNumber } from '../../components';
 import { CHECK_USER } from './query';
+import routeNames from '../../routes/ScreenNames';
 
 function login() {
   const navigation = useNavigation();
@@ -35,6 +36,10 @@ function login() {
   useEffect(() => {
     if (data) {
       console.log(data);
+
+      if (!data.checkUser.isPasswordSet) {
+        navigation.navigate(routeNames.OTP_VERIFICATION);
+      }
     }
   }, [data]);
 
@@ -49,7 +54,6 @@ function login() {
       fetchPolicy: 'network-only',
       variables: { countryCode, number },
     });
-    // navigation.navigate(routeNames.OTP_VERIFICATION);
   };
 
   const bottonView = () => (
