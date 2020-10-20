@@ -10,13 +10,13 @@ import {
 import { Icon } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../utils/constants';
 import { CustomMobileNumber } from '../../components';
-import { useLazyQuery } from '@apollo/client';
 import { CHECK_USER } from './query';
 
 function login() {
@@ -43,71 +43,72 @@ function login() {
   };
 
   const onClickContinue = () => {
-    var countryCode = mobileObj.country.dialCode;
-    var number = mobileObj.mobile;
+    const countryCode = mobileObj.country.dialCode;
+    const number = mobileObj.mobile;
     checkUser({
       fetchPolicy: 'network-only',
       variables: { countryCode, number },
     });
-    //navigation.navigate(routeNames.OTP_VERIFICATION);
+    // navigation.navigate(routeNames.OTP_VERIFICATION);
   };
 
-  const bottonView = () => {
-    return (
-      <KeyboardAvoidingView>
+  const bottonView = () => (
+    <KeyboardAvoidingView>
+      <View
+        style={{
+          backgroundColor: Colors.white,
+          paddingHorizontal: 16,
+          paddingVertical: 56,
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+        }}
+      >
+        <View>
+          <CustomMobileNumber
+            value={mobileObj}
+            topMargin={0}
+            onChangeHandler={(mobileObj) => {
+              setMobileObj(mobileObj);
+            }}
+            returnKeyType="done"
+            refKey="mobileNumber"
+            placeholder="Mobile number"
+            onSubmitEditing={() => onSubmitEditing()}
+          />
+        </View>
         <View
           style={{
-            backgroundColor: Colors.white,
-            paddingHorizontal: 16,
-            paddingVertical: 56,
-            borderTopLeftRadius: 25,
-            borderTopRightRadius: 25,
-          }}>
-          <View>
-            <CustomMobileNumber
-              value={mobileObj}
-              topMargin={0}
-              onChangeHandler={(mobileObj) => {
-                setMobileObj(mobileObj);
-              }}
-              returnKeyType={'done'}
-              refKey={'mobileNumber'}
-              placeholder={'Mobile number'}
-              onSubmitEditing={() => onSubmitEditing()}
-            />
-          </View>
-          <View
-            style={{
-              marginTop: RfH(40),
-              borderBottomWidth: 0.5,
-              borderBottomColor: Colors.inputLabel,
-            }}
-          />
-          <TouchableOpacity
-            onPress={() => onClickContinue()}
-            style={[
-              showNext
-                ? commonStyles.buttonPrimary
-                : commonStyles.disableButton,
-              {
-                marginTop: RfH(63),
-                alignSelf: 'center',
-                width: RfW(144),
-              },
-            ]}>
-            <Text style={commonStyles.textButtonPrimary}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    );
-  };
+            marginTop: RfH(40),
+            borderBottomWidth: 0.5,
+            borderBottomColor: Colors.inputLabel,
+          }}
+        />
+        <TouchableOpacity
+          onPress={() => onClickContinue()}
+          style={[
+            showNext
+              ? commonStyles.buttonPrimary
+              : commonStyles.disableButton,
+            {
+              marginTop: RfH(63),
+              alignSelf: 'center',
+              width: RfW(144),
+            },
+          ]}
+        >
+          <Text style={commonStyles.textButtonPrimary}>Continue</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
 
   return (
     <View
       style={[
         commonStyles.mainContainer,
         { backgroundColor: Colors.onboardBackground },
-      ]}>
+      ]}
+    >
       <StatusBar barStyle="light-content" />
       <Icon
         onPress={() => onBackPress()}
@@ -120,7 +121,7 @@ function login() {
           <View style={{ flex: 1 }} />
         </TouchableWithoutFeedback>
       </View>
-      <KeyboardAvoidingView behavior={'padding'}>
+      <KeyboardAvoidingView behavior="padding">
         <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ marginTop: RfH(36) }}>

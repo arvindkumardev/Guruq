@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import {RfH, RfW} from '../../utils/helpers';
-import {STANDARD_SCREEN_SIZE} from '../../utils/constants';
+import { RfH, RfW } from '../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import Colors from '../../theme/colors';
 
 const styles = StyleSheet.create({
@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   sectionHeaderLabel: {
     fontSize: 17,
     fontWeight: '600',
-    color: Colors.black},
+    color: Colors.black
+  },
 
   headerContainer: {
     flexDirection: 'row',
@@ -22,38 +23,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: RfW(15),
   },
   headerText: {
-    flex:1,
+    flex: 1,
     fontSize: 17,
     fontWeight: '500',
     fontStyle: 'normal',
     color: Colors.black,
     textAlign: 'center',
-    marginRight:RfW(17)
+    marginRight: RfW(17)
   },
-  itemContainer:{
-    marginHorizontal:RfW(16),
-    paddingVertical:RfH(10),
-    flex:1,
-    flexDirection:'row',
+  itemContainer: {
+    marginHorizontal: RfW(16),
+    paddingVertical: RfH(10),
+    flex: 1,
+    flexDirection: 'row',
     borderBottomColor: Colors.lightGray,
     borderBottomWidth: 0.3,
   },
-  itemTextContainer:{
-    flexDirection:'row',
-    paddingVertical:RfW(2),
-    alignItems:'center',
-    marginLeft:RfW(10)
+  itemTextContainer: {
+    flexDirection: 'row',
+    paddingVertical: RfW(2),
+    alignItems: 'center',
+    marginLeft: RfW(10)
   },
-  itemText:{
+  itemText: {
     fontSize: 17,
     fontWeight: '400',
     fontStyle: 'normal',
     textAlign: 'left',
-    color:Colors.black,
+    color: Colors.black,
   }
-
 
 });
 export default styles;
-
-

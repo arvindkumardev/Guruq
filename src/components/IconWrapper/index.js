@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Image, ImageBackground, TouchableOpacity, View, Text } from 'react-native';
-import { getIconImageStyle } from './style';
-import styles from './style';
+import {
+  Image, ImageBackground, TouchableOpacity, View, Text
+} from 'react-native';
+import { isEmpty } from 'lodash';
+import styles, { getIconImageStyle } from './style';
+
 import { getImageSource, RfH, RfW } from '../../utils/helpers';
-import {isEmpty} from 'lodash';
 
 function stylingIconButtonWrapper(props) {
   const {
@@ -26,7 +28,7 @@ function stylingIconButtonWrapper(props) {
   const [loading, setLoading] = useState(true);
   const imageObject = iconImage ? getImageSource(iconImage) : placeHolderImage;
   const sourceImage = isError ? getImageSource(placeHolderImage) : imageObject;
-  
+
   return (
     <View>
       <TouchableOpacity
@@ -40,7 +42,7 @@ function stylingIconButtonWrapper(props) {
       >
         {
           (displayLoadingImage) ? (
-            
+
             <ImageBackground
               imageStyle={[
                 getIconImageStyle(iconHeight, iconWidth),
@@ -56,7 +58,7 @@ function stylingIconButtonWrapper(props) {
             >
               {
                 (loading || isError) && (
-                  
+
                   <Image
                     source={placeHolderImage}
                     style={[
@@ -69,23 +71,24 @@ function stylingIconButtonWrapper(props) {
               }
             </ImageBackground>
           ) : (
-              
-              <>
-                <Image source={sourceImage}
-                  style={[
-                    getIconImageStyle(iconHeight, iconWidth),
-                    styling,
-                    { resizeMode: imageResizeMode },
-                  ]}
-                />
-                {!isEmpty(notificationCount) && (
-                  <View style={styles.countbackground}>
-                    <Text style={styles.countText}>{notificationCount}</Text>
-                  </View>
-                )}
 
-              </>
-            )
+            <>
+              <Image
+                source={sourceImage}
+                style={[
+                  getIconImageStyle(iconHeight, iconWidth),
+                  styling,
+                  { resizeMode: imageResizeMode },
+                ]}
+              />
+              {!isEmpty(notificationCount) && (
+              <View style={styles.countbackground}>
+                <Text style={styles.countText}>{notificationCount}</Text>
+              </View>
+              )}
+
+            </>
+          )
         }
       </TouchableOpacity>
     </View>
@@ -121,7 +124,7 @@ stylingIconButtonWrapper.defaultProps = {
   submitFunction: null,
   placeHolderImage: '',
   displayLoadingImage: false,
-  notificationCount:''
+  notificationCount: ''
 };
 
 export default stylingIconButtonWrapper;

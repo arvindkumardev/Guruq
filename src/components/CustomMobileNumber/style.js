@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import {RfH, RfW} from '../../utils/helpers';
-import {Colors} from '../../theme';
+import { RfH, RfW } from '../../utils/helpers';
+import { Colors } from '../../theme';
 
 const styles = StyleSheet.create({
   textInputContainer: {
@@ -12,18 +12,18 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     color: '#262119',
-    padding:0
+    padding: 0
   },
   textInputInnerContainer: {
     flexDirection: 'row',
-    marginTop:RfH(4),
+    marginTop: RfH(4),
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
     paddingBottom: RfH(12),
-   },
+  },
   mobileInputInnerContainer: {
     flexDirection: 'row',
-    marginTop:RfH(4),
+    marginTop: RfH(4),
     justifyContent: 'space-between',
     height: RfH(34)
   },

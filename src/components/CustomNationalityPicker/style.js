@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import {STANDARD_SCREEN_SIZE} from '../../utils/constants';
-import {RfH, RfW} from '../../utils/helpers';
-import {Colors} from '../../theme';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { RfH, RfW } from '../../utils/helpers';
+import { Colors } from '../../theme';
 
 const styles = StyleSheet.create({
   textInputContainer: {
@@ -12,11 +12,11 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     color: '#262119',
-    padding:0
+    padding: 0
   },
   textInputInnerContainer: {
     flexDirection: 'row',
-    marginTop:RfH(5),
+    marginTop: RfH(5),
     justifyContent: 'space-between',
     paddingBottom: RfH(12),
   },

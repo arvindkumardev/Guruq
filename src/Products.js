@@ -56,7 +56,11 @@ const Products = (props) => {
           <StatusBar barStyle="dark-content" />
           <SafeAreaView>
             <View style={styles.container}>
-              <Text>`Error! ${error.message}`</Text>
+              <Text>
+                `Error! $
+                {error.message}
+                `
+              </Text>
             </View>
           </SafeAreaView>
         </>
@@ -88,24 +92,29 @@ class GridItem extends React.PureComponent {
   };
 
   render() {
-    const item = this.props.item;
-    console.log('safdfdf' + item.email, item.mobile);
+    const { item } = this.props;
+    console.log(`safdfdf${item.email}`, item.mobile);
     StatusBar.setBarStyle('light-content', true);
     return (
       <TouchableHighlight
         style={styles.flatlistView}
         onPress={() => this._onPress(item)}
-        underlayColor="#dddddd">
+        underlayColor="#dddddd"
+      >
         <View style={styles.flatlistView}>
-          {/*<Image*/}
-          {/*  style={styles.image}*/}
-          {/*  source={{uri: item.featured_imageConnection.edges[0].node.url}}*/}
-          {/*/>*/}
+          {/* <Image */}
+          {/*  style={styles.image} */}
+          {/*  source={{uri: item.featured_imageConnection.edges[0].node.url}} */}
+          {/* /> */}
           <Text numberOfLines={1} style={styles.name}>
-            {item.firstName} {item.lastName}
+            {item.firstName}
+            {' '}
+            {item.lastName}
           </Text>
           <Text numberOfLines={2} style={styles.price}>
-            {item.email} {item.modile}
+            {item.email}
+            {' '}
+            {item.modile}
           </Text>
         </View>
       </TouchableHighlight>
@@ -119,7 +128,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
   },
-  image: { alignContent: 'center', flex: 0.8, width: 170, height: 170 },
+  image: {
+    alignContent: 'center', flex: 0.8, width: 170, height: 170
+  },
   flatlistView: {
     flex: 1,
     flexDirection: 'column',
