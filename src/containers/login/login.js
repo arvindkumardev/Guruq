@@ -11,6 +11,7 @@ import { Icon } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
+import { GraphQLError } from 'graphql';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
@@ -19,22 +20,31 @@ import { IND_COUNTRY_OBJ } from '../../utils/constants';
 import { CustomMobileNumber } from '../../components';
 import { CHECK_USER } from './query';
 import routeNames from '../../routes/ScreenNames';
+import Loader from '../../components/Loader';
 
 function login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
-  const [checkUser, {
-    loading, data, refetch, called,
-  }] = useLazyQuery(CHECK_USER, {
+
+  const [checkUser, { loading, data }] = useLazyQuery(CHECK_USER, {
     fetchPolicy: 'no-cache',
-    onCompleted: (d) => {
+    onError: (e) => {
+      const error = e.graphQLErrors[0].extensions.exception.response;
+      console.log(error);
+      if (error.code === 404) {
+        // use not found
+        // TODO: generateOtp and take user for otp verification
+
+      }
+    },
+    onCompleted: (data) => {
       if (data) {
         console.log('data', data);
 
         if (!data.checkUser.isPasswordSet) {
           navigation.navigate(routeNames.OTP_VERIFICATION);
         } else {
-          // ask for password - show password input
+          // TODO: ask for password - show password input
         }
       }
     }
@@ -119,6 +129,7 @@ function login() {
         { backgroundColor: Colors.onboardBackground },
       ]}
     >
+      <Loader isLoading={loading} />
       <StatusBar barStyle="light-content" />
       <Icon
         onPress={() => onBackPress()}

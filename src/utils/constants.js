@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import * as DeviceInfo from 'react-native-device-info';
 
 export const APP_VERSION_IOS = DeviceInfo.getVersion();
@@ -21,4 +20,8 @@ export const IND_COUNTRY_OBJ = {
   name: 'India',
   nationality: 'IN',
   mobileCode: 'India: 0091',
+};
+
+export const LOTTIE_JSON_FILES = {
+  loaderJson: require('../assets/json/loader.json'),
 };
