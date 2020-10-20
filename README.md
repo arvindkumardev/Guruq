@@ -5,9 +5,6 @@ We have created a sample product catalog app that is built using Apollo Client S
 
 This document covers the steps to get this app up and running for you. Try out the app and play with it, before building bigger and better applications.
 
-| ![](https://github.com/contentstack/contentstack-reactnative-graphql-example/raw/master/iOS.png) |  ![](https://github.com/contentstack/contentstack-reactnative-graphql-example/raw/master/Android.png)|
-|--|--|
-
 ## Prerequisite
 
 - Use [Xcode 11.1 and later](https://developer.apple.com/xcode/) Mac OS X 10.15 and later (for iOS)
@@ -183,3 +180,8 @@ Now that we have a working project, you can build and run it.
 - [Using GraphQL queries with Apollo client React Native SDK](https://www.contentstack.com/docs/guide/contentstack-graphql-api/using-graphql-with-apollo-client-react-native-sdk)
 - [GraphQL API documentation](https://www.contentstack.com/docs/apis/graphql-content-delivery-api/)
 
+
+eslint settings
+- https://medium.com/@jQN/configure-eslint-for-react-native-d914679e122f
+
+- https://medium.com/@joanvila/productionizing-apollo-links-4cdc11d278eb

@@ -1,12 +1,14 @@
-import React, {useEffect, useRef} from 'react';
-import apolloClient from './apollo';
+import React, { useEffect, useRef } from 'react';
+import apolloClient from './apollo/apollo';
 import { ApolloProvider } from '@apollo/react-hooks';
+// import { ApolloProvider } from '@apollo/client';
+
 import SplashScreen from 'react-native-splash-screen';
-import {NavigationContainer} from '@react-navigation/native';
-import {SafeAreaView, StatusBar} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import AppStack from './routes/AppRoutes';
 
-const getActiveRouteName = state => {
+const getActiveRouteName = (state) => {
   const route = state.routes[state.index];
   if (route.state) {
     return getActiveRouteName(route.state);
@@ -26,7 +28,7 @@ function App() {
     }
   }, []);
 
-  useEffect(() =>{
+  useEffect(() => {
     SplashScreen.hide();
   });
 
@@ -35,15 +37,16 @@ function App() {
     routeNameRef.current = currentRouteName;
   };
 
-
   return (
     <ApolloProvider client={client}>
-      <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
+      <NavigationContainer
+        ref={navigationRef}
+        onStateChange={onStateChangeHandle}>
         <StatusBar barStyle={'dark-content'} />
         <AppStack />
       </NavigationContainer>
     </ApolloProvider>
-  )
+  );
 }
 
 export default App;
