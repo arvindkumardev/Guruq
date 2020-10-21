@@ -1,4 +1,5 @@
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   StatusBar,
@@ -6,41 +7,38 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  Alert
 } from 'react-native';
-import { Icon, Item, Input } from 'native-base';
+import { Icon, Input, Item } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import AsyncStorage from '@react-native-community/async-storage';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
-import { RfH, RfW } from '../../utils/helpers';
-import { IND_COUNTRY_OBJ } from '../../utils/constants';
+import { RfH, RfW, storeData } from '../../utils/helpers';
+import { IND_COUNTRY_OBJ, LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
 import { CustomMobileNumber } from '../../components';
 import routeNames from '../../routes/ScreenNames';
 import Loader from '../../components/Loader';
 import { CHECK_USER_QUERY } from './graphql-query';
-import { INVALID_INPUT } from '../../common/errorCodes';
+import { INVALID_INPUT, NOT_FOUND } from '../../common/errorCodes';
 import { SIGNIN_MUTATION } from './graphql-mutation';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
-import { storeData } from '../../utils/helpers';
-import AsyncStorage from '@react-native-community/async-storage';
 
 function login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword]= useState('');
-  const [title, setTitle]= useState('Login/ Sign Up');
-  const [subTitle, setSubTitle]= useState('Enter your phone number to continue');
+  const [password, setPassword] = useState('');
+  const [title, setTitle] = useState('Login/ Sign Up');
+  const [subTitle, setSubTitle] = useState('Enter your phone number to continue');
 
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
   });
 
-  /*const [checkUser, { loading, data }] = useLazyQuery(CHECK_USER_QUERY, {
+  const [checkUser, { loading: checkUserLoading }] = useLazyQuery(CHECK_USER_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
@@ -48,24 +46,34 @@ function login() {
       if (error.errorCode === NOT_FOUND) {
         // use not found
         // TODO: take user for otp verification
-        navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: true });
+        navigation.navigate(routeNames.OTP_VERIFICATION, {
+          countryCode: mobileObj.country.dialCode,
+          number: mobileObj.mobile,
+          newUser: true,
+        });
       }
     },
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
         if (!data.checkUser.isPasswordSet) {
-          navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: false});
+          navigation.navigate(routeNames.OTP_VERIFICATION, {
+            countryCode: mobileObj.country.dialCode,
+            number: mobileObj.mobile,
+            newUser: false,
+          });
         } else {
           setShowPassword(true);
+          setTitle('Welcome back!');
+          setSubTitle('Login to your account.');
         }
       }
     },
-  });*/
+  });
 
-  const [signIn, { loading, data }] = useMutation(SIGNIN_MUTATION, {
+  const [signIn, { loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
     fetchPolicy: 'no-cache',
-    variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, password: password },
+    variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, password },
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
@@ -79,7 +87,12 @@ function login() {
         console.log('data', data);
         AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
-        navigation.navigate(routeNames.SET_PASSWORD);
+
+        if (!data.signIn.isPasswordSet) {
+          navigation.navigate(routeNames.SET_PASSWORD);
+        } else {
+          navigation.navigate(routeNames.DASHBOARD);
+        }
       }
     },
   });
@@ -96,20 +109,17 @@ function login() {
     const countryCode = mobileObj.country.dialCode;
     const number = mobileObj.mobile;
 
-    if(!showPassword){
-      setShowPassword(true);
-      setTitle('Welcome back!');
-      setSubTitle('Login to your account.');
-      /*checkUser({
+    if (!showPassword) {
+      checkUser({
         variables: { countryCode, number },
-      });*/
-    }else{
+      });
+    } else {
       signIn();
     }
   };
 
   const bottonView = () => (
-    <KeyboardAvoidingView behavior='position'>
+    <KeyboardAvoidingView behavior="position">
       <View
         style={{
           backgroundColor: Colors.white,
@@ -139,12 +149,22 @@ function login() {
             borderBottomColor: Colors.inputLabel,
           }}
         />
-        {showPassword && <View>
+        {showPassword && (
+        <View>
           <Item style={{ marginTop: RfH(53.5) }}>
-              <Input secureTextEntry={true} placeholder="Password" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setPassword(text)}/>
-            </Item>
-            <Text style={{color:Colors.primaryButtonBackground, textAlign:'right', marginTop:RfH(6)}}>Forgot Password?</Text>
-        </View>}
+            <Input
+              secureTextEntry
+              placeholder="Password"
+              placeholderTextColor={Colors.inputLabel}
+              onChangeText={(text) => setPassword(text)}
+            />
+          </Item>
+          <Text style={{ color: Colors.primaryButtonBackground, textAlign: 'right', marginTop: RfH(6) }}>
+            Forgot
+            Password?
+          </Text>
+        </View>
+        )}
         <TouchableOpacity
           onPress={() => onClickContinue()}
           style={[
@@ -171,7 +191,7 @@ function login() {
         { backgroundColor: Colors.onboardBackground },
       ]}
     >
-      <Loader isLoading={loading} />
+      <Loader isLoading={checkUserLoading || signInLoading} />
       <StatusBar barStyle="light-content" />
       <Icon
         onPress={() => onBackPress()}

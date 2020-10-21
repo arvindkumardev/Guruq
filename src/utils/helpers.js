@@ -1,8 +1,19 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { isNumber } from 'lodash';
-import { Alert, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { ANDROID_PACKAGE_NAME, STANDARD_SCREEN_DIMENSIONS } from './constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+
+let token;
+
+export const getToken = async () => {
+  if (token) {
+    return Promise.resolve(token);
+  }
+
+  token = await AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+  return token;
+};
 
 export const storeData = async (key, value) => {
   try {
@@ -16,7 +27,10 @@ export const storeData = async (key, value) => {
   }
 };
 
-export const getSaveData = async (key) => await AsyncStorage.getItem(key);
+export const getSaveData = async (key) => {
+  const data = await AsyncStorage.getItem(key);
+  return data;
+};
 
 export const removeData = async (key) => {
   try {

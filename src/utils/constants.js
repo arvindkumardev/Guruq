@@ -10,6 +10,8 @@ export const STANDARD_SCREEN_DIMENSIONS = { height: 812, width: 375 };
 
 export const ANDROID_PACKAGE_NAME = 'com.guruq';
 
+export const AUTH_TOKEN = 'AUTH_TOKEN';
+
 export const LOCAL_STORAGE_DATA_KEY = {
   USER_TOKEN: 'userToken'
 };

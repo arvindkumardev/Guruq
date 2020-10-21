@@ -36,7 +36,7 @@ function setPassword() {
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        //storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
+        navigation.navigate(routeNames.DASHBOARD);
       }
     },
   });
