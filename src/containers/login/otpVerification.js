@@ -55,7 +55,6 @@ function otpVerification(props) {
         backgroundColor: Colors.white, paddingHorizontal: 16, paddingVertical: 56, borderTopLeftRadius: 25, borderTopRightRadius: 25
       }}
       >
-        <Text>{JSON.stringify(props)}</Text>
         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
           <View style={{ marginLeft: RfW(57) }}>
             <Text style={{ color: Colors.inputLabel }}>Enter OTP</Text>
