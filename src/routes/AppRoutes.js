@@ -6,8 +6,9 @@ import {
   Login,
   OTP_Verification,
   Set_Password,
-  Register,
+  Register
 } from '../containers/login/index';
+import dashboard from '../containers/dashboard/dashboard';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,11 @@ const AppStack = () => (
       <Stack.Screen
         name={NavigationRouteNames.REGISTER}
         component={Register}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.DASHBOARD}
+        component={dashboard}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

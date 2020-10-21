@@ -25,7 +25,7 @@ function otpVerification(props) {
 
   const { route } = props;
 
-  const [generateOtp, { error, loading, data }] = useMutation(GENERATE_OTP_MUTATION, {
+  const [generateOtp, { error }] = useMutation(GENERATE_OTP_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: route.params.countryCode, number: route.params.number },
     onError: (e) => {
@@ -38,8 +38,9 @@ function otpVerification(props) {
     }
   });
 
-  const [verifyPhoneNumber, { verifyLoading, verifyData }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
+  const [verifyPhoneNumber, { loading, data }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
     fetchPolicy: 'no-cache',
+    variables: { countryCode: route.params.countryCode, number: route.params.number, otp: code },
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
@@ -47,14 +48,10 @@ function otpVerification(props) {
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        if(route.param.newUser){
-          navigation.navigate(routeNames.REGISTER);
+        if(route.params.newUser){
+          navigation.navigate(routeNames.REGISTER, {countryCode: route.params.countryCode, number: route.params.number});
         }else{
-          if (!data.isPasswordSet) {
-            navigation.navigate(routeNames.SET_PASSWORD, { ...data });
-          } else {
-            // TODO: ask for password - show password input
-          }
+          navigation.navigate(routeNames.SET_PASSWORD);
         }
       }
     },
@@ -70,7 +67,7 @@ function otpVerification(props) {
   };
 
   const onClickContinue = () => {
-    verifyPhoneNumber(route.params.countryCode, route.params.number, code);
+    verifyPhoneNumber();
   };
 
   const bottonView = () => (

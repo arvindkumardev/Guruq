@@ -7,8 +7,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { Icon } from 'native-base';
-import React, { useState } from 'react';
+import { Icon, Item, Input } from 'native-base';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../common/styles';
@@ -25,6 +25,7 @@ import { NOT_FOUND } from '../../common/errorCodes';
 function login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
@@ -41,19 +42,14 @@ function login() {
         // TODO: take user for otp verification
         navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: true });
       }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        console.log('data', data);
-
-        if (!data.checkUser.isPasswordSet) {
-          navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: false });
-        } else {
-          // TODO: ask for password - show password input
-        }
-      }
-    },
+    }
   });
+
+  useEffect(() =>{
+    if(data){
+      setShowPassword(true);
+    }
+  })
 
   const onBackPress = () => {
     navigation.goBack();
@@ -66,14 +62,14 @@ function login() {
   const onClickContinue = () => {
     const countryCode = mobileObj.country.dialCode;
     const number = mobileObj.mobile;
-
+    console.log("Executed");
     checkUser({
       variables: { countryCode, number },
     });
   };
 
   const bottonView = () => (
-    <KeyboardAvoidingView>
+    <KeyboardAvoidingView behavior='position'>
       <View
         style={{
           backgroundColor: Colors.white,
@@ -103,6 +99,11 @@ function login() {
             borderBottomColor: Colors.inputLabel,
           }}
         />
+        {showPassword && <View>
+          <Item style={{ marginTop: RfH(53.5) }}>
+              <Input secureTextEntry={true} placeholder="Password" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setPassword(text)}/>
+            </Item>
+        </View>}
         <TouchableOpacity
           onPress={() => onClickContinue()}
           style={[
@@ -142,7 +143,7 @@ function login() {
           <View style={{ flex: 1 }} />
         </TouchableWithoutFeedback>
       </View>
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="position">
         <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ marginTop: RfH(36) }}>

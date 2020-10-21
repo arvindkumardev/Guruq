@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { isNumber } from 'lodash';
 import { Alert, Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { ANDROID_PACKAGE_NAME, LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+import { ANDROID_PACKAGE_NAME, STANDARD_SCREEN_DIMENSIONS } from './constants';
 
 export const storeData = async (key, value) => {
   try {
