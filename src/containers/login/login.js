@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
+  View
 } from 'react-native';
 import { Icon, Input, Item } from 'native-base';
 import React, { useState } from 'react';
@@ -23,13 +23,17 @@ import routeNames from '../../routes/ScreenNames';
 import Loader from '../../components/Loader';
 import { CHECK_USER_QUERY } from './graphql-query';
 import { INVALID_INPUT, NOT_FOUND } from '../../common/errorCodes';
-import { SIGNIN_MUTATION } from './graphql-mutation';
+import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from './graphql-mutation';
 
 function login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showClear, setShowClear] = useState(false);
   const [password, setPassword] = useState('');
+  const [hidePassword, setHidePassword] = useState(true);
+  const [eyeIcon, setEyeIcon] = useState('eye');
+  const [showEye, setShowEye] = useState(false);
   const [title, setTitle] = useState('Login/ Sign Up');
   const [subTitle, setSubTitle] = useState('Enter your phone number to continue');
 
@@ -97,6 +101,20 @@ function login() {
     },
   });
 
+  const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      const error = e.graphQLErrors[0].extensions.exception.response;
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+        navigation.navigate(routeNames.SET_PASSWORD);
+      }
+    },
+  });
+
   const onBackPress = () => {
     navigation.goBack();
   };
@@ -105,21 +123,50 @@ function login() {
     setShowNext(true);
   };
 
-  const onClickContinue = () => {
-    const countryCode = mobileObj.country.dialCode;
-    const number = mobileObj.mobile;
-
-    if (!showPassword) {
-      checkUser({
+  const onForgotPasswordClick = () => {
+    if(mobileObj.mobile){
+      const countryCode = mobileObj.country.dialCode;
+      const number = mobileObj.mobile;
+      forgotPassword({
         variables: { countryCode, number },
       });
-    } else {
-      signIn();
+    }else{
+      Alert.alert('Please enter mobile number.');
     }
   };
 
+  const onIconPress = () => {
+    (eyeIcon === 'eye') ? setEyeIcon('eye-with-line') : setEyeIcon('eye');
+    (hidePassword) ? setHidePassword(false) : setHidePassword(true);
+  };
+
+  const onClickContinue = () => {
+    if(mobileObj.mobile){
+      const countryCode = mobileObj.country.dialCode;
+      const number = mobileObj.mobile;
+      if (!showPassword) {
+        checkUser({
+          variables: { countryCode, number },
+        });
+      } else {
+        signIn();
+      }
+    }else{
+      Alert.alert('Please enter mobile number.');
+    }
+  };
+
+  const clearMobileNumber = () =>{
+    setMobileObj({mobile: '', country: IND_COUNTRY_OBJ});
+    setShowClear(false);
+  }
+
+  const onChangePassword = (text) =>{
+    setPassword(text);
+    text ? setShowEye(true) : setShowEye(false);
+  }
+
   const bottonView = () => (
-    <KeyboardAvoidingView behavior="position">
       <View
         style={{
           backgroundColor: Colors.white,
@@ -129,18 +176,21 @@ function login() {
           borderTopRightRadius: 25,
         }}
       >
-        <View>
-          <CustomMobileNumber
+        <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
+          <View style={{flex:0.95}}><CustomMobileNumber
             value={mobileObj}
             topMargin={0}
             onChangeHandler={(mobileObj) => {
               setMobileObj(mobileObj);
+              setShowClear(true);
+              setShowNext(true);
             }}
             returnKeyType="done"
             refKey="mobileNumber"
             placeholder="Mobile number"
             onSubmitEditing={() => onSubmitEditing()}
-          />
+          /></View>
+          {showClear && <Icon onPress={() => clearMobileNumber()} style={{flex:0.05, marginBottom:RfH(-30), fontSize:18, color:Colors.inputLabel}} type="Entypo" name="circle-with-cross"></Icon>}
         </View>
         <View
           style={{
@@ -153,16 +203,19 @@ function login() {
         <View>
           <Item style={{ marginTop: RfH(53.5) }}>
             <Input
-              secureTextEntry
+              secureTextEntry={hidePassword}
               placeholder="Password"
               placeholderTextColor={Colors.inputLabel}
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={(text) => onChangePassword(text)}
             />
+            {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
           </Item>
-          <Text style={{ color: Colors.primaryButtonBackground, textAlign: 'right', marginTop: RfH(6) }}>
-            Forgot
-            Password?
-          </Text>
+          <TouchableOpacity onPress={() => onForgotPasswordClick()}>
+            <Text style={{ color: Colors.primaryButtonBackground, textAlign: 'right', marginTop: RfH(6) }}>
+              Forgot
+              Password?
+            </Text>
+          </TouchableOpacity>
         </View>
         )}
         <TouchableOpacity
@@ -181,7 +234,6 @@ function login() {
           <Text style={commonStyles.textButtonPrimary}>Continue</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
   );
 
   return (
@@ -191,7 +243,7 @@ function login() {
         { backgroundColor: Colors.onboardBackground },
       ]}
     >
-      <Loader isLoading={checkUserLoading || signInLoading} />
+      <Loader isLoading={checkUserLoading || signInLoading || forgotPasswordLoading} />
       <StatusBar barStyle="light-content" />
       <Icon
         onPress={() => onBackPress()}
@@ -204,7 +256,7 @@ function login() {
           <View style={{ flex: 1 }} />
         </TouchableWithoutFeedback>
       </View>
-      <KeyboardAvoidingView behavior="position">
+      <KeyboardAvoidingView behavior="padding">
         <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ marginTop: RfH(36) }}>

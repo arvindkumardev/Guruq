@@ -1,5 +1,5 @@
 import {
-  View, Text, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar, ScrollView
+  View, Text, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar, ScrollView, Alert
 } from 'react-native';
 import {
   Icon, Input, Item, Label
@@ -14,6 +14,8 @@ import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
 import routeNames from '../../routes/ScreenNames';
 import { useMutation } from '@apollo/client';
 import { SIGNUP_MUTATION } from './graphql-mutation';
+import Loader from '../../components/Loader';
+import { DUPLICATE_FOUND } from '../../common/errorCodes';
 
 function register(props) {
   const navigation = useNavigation();
@@ -23,20 +25,27 @@ function register(props) {
   const [email, setEmail]= useState('');
   const [password, setPassword]= useState('');
   const [referCode, setReferCode]= useState('');
+  const [hidePassword, setHidePassword] = useState(true);
+  const [eyeIcon, setEyeIcon] = useState('eye');
+  const [showEye, setShowEye] = useState(false);
 
   const { route } = props;
 
-  const [addUser, { loading, data }] = useMutation(SIGNUP_MUTATION, {
+  const [addUser, { loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: route.params.countryCode, number: route.params.number, firstName: firstName, lastName: lastName, email: email, password: password, referCode : referCode },
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
+      if (error.errorCode === DUPLICATE_FOUND) {
+        Alert.alert('User already exists. Please login');
+      }
     },
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token);
+        navigation.navigate(routeNames.DASHBOARD);
       }
     },
   });
@@ -46,6 +55,9 @@ function register(props) {
   };
 
   const onClickContinue = () => {
+    if(!fullName){Alert.alert('Please enter fullname.'); return;}
+    if(!email){Alert.alert('Please enter email.'); return;}
+    if(!password){Alert.alert('Please enter password.'); return;}
     var first = fullName.lastIndexOf(' '); 
     var fName = fullName.substring(0, first);
     var lName = fullName.substring(first+1);
@@ -54,8 +66,17 @@ function register(props) {
     addUser();
   };
 
+  const onIconPress = () => {
+    (eyeIcon === 'eye') ? setEyeIcon('eye-with-line') : setEyeIcon('eye');
+    (hidePassword) ? setHidePassword(false) : setHidePassword(true);
+  };
+
+  const onChangePassword = (text) =>{
+    setPassword(text);
+    text ? setShowEye(true) : setShowEye(false);
+  }
+
   const bottonView = () => (
-    <KeyboardAvoidingView behavior="height">
       <View style={{
         backgroundColor: Colors.white, paddingHorizontal: 16, paddingTop: 56, paddingBottom: RfH(56), borderTopLeftRadius: 25, borderTopRightRadius: 25
       }}
@@ -69,7 +90,8 @@ function register(props) {
               <Input placeholder="Email ID" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setEmail(text)}/>
             </Item>
             <Item style={{ marginTop: RfH(53.5) }}>
-              <Input secureTextEntry={true} placeholder="Password" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setPassword(text)}/>
+              <Input secureTextEntry={hidePassword} placeholder="Password" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => onChangePassword(text)}/>
+              {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
             </Item>
             <Item style={{ marginTop: RfH(53.5) }}>
               <Input placeholder="Referral Code" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setReferCode(text)}/>
@@ -100,15 +122,15 @@ function register(props) {
           </Text>
         </View>
       </View>
-    </KeyboardAvoidingView>
   );
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
+      <Loader isLoading={addUserLoading} />
       <StatusBar barStyle="light-content" />
       <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={{ marginLeft: 16, marginTop: 58, color: Colors.white }} />
       <ScrollView>
-        <KeyboardAvoidingView behavior="height">
+        <KeyboardAvoidingView behavior="padding">
           <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
               <View style={{ marginTop: RfH(36) }}>

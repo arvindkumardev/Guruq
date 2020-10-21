@@ -13,9 +13,7 @@ import { RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
 import { SET_PASSWORD_MUTATION } from './graphql-mutation';
 import { useMutation } from '@apollo/client';
-import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
-//import { storeData } from '../../utils/helpers';
-import AsyncStorage from '@react-native-community/async-storage';
+import Loader from '../../components/Loader';
 
 function setPassword() {
   const navigation = useNavigation();
@@ -25,8 +23,10 @@ function setPassword() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
+  const [showEye, setShowEye] = useState(false);
+  const [showConfirmEye, setShowConfirmEye] = useState(false);
 
-  const [setUserPassword, { loading, data }] = useMutation(SET_PASSWORD_MUTATION, {
+  const [setUserPassword, { loading: setPasswordLoading }] = useMutation(SET_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { password: password },
     onError: (e) => {
@@ -64,6 +64,16 @@ function setPassword() {
     (hideConfirmPassword) ? setHideConfirmPassword(false) : setHideConfirmPassword(true);
   };
 
+  const onChangePassword = (text) =>{
+    setPassword(text);
+    text ? setShowEye(true) : setShowEye(false);
+  }
+
+  const onChangeConfirmPassword = (text) =>{
+    setConfirmPassword(text);
+    text ? setShowConfirmEye(true) : setShowConfirmEye(false);
+  }
+
   const bottonView = () => (
     <KeyboardAvoidingView>
       <View style={{
@@ -73,14 +83,14 @@ function setPassword() {
         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
           <View>
             <Item>
-              <Input secureTextEntry={hidePassword} placeholder="New Password" onChangeText = {(text) => setPassword(text)} />
-              <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />
+              <Input secureTextEntry={hidePassword} placeholder="New Password" onChangeText = {(text) => onChangePassword(text)} />
+              {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
             </Item>
           </View>
           <View style={{ marginTop: RfH(53.5) }}>
             <Item>
-              <Input secureTextEntry={hideConfirmPassword} placeholder="Confirm Password" onChangeText = {(text) => setConfirmPassword(text)}/>
-              <Icon type="Entypo" name={confirmEyeIcon} onPress={() => onConfirmIconPress()} style={{ fontSize: 18, color: '#818181' }} />
+              <Input secureTextEntry={hideConfirmPassword} placeholder="Confirm Password" onChangeText = {(text) => onChangeConfirmPassword(text)}/>
+              {showConfirmEye && <Icon type="Entypo" name={confirmEyeIcon} onPress={() => onConfirmIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
             </Item>
           </View>
         </View>
@@ -96,6 +106,7 @@ function setPassword() {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
       <StatusBar barStyle="light-content" />
+      <Loader isLoading={setPasswordLoading} />
       <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={{ marginLeft: 16, marginTop: 58, color: Colors.white }} />
       <View style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

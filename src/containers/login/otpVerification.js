@@ -1,4 +1,5 @@
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   StatusBar,
@@ -17,6 +18,8 @@ import Colors from '../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
+import Loader from '../../components/Loader';
+import { INVALID_INPUT } from '../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from './graphql-mutation';
 
 function otpVerification(props) {
@@ -38,12 +41,16 @@ function otpVerification(props) {
     }
   });
 
-  const [verifyPhoneNumber, { loading, data }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
+  const [verifyPhoneNumber, { loading: verifyLoading }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: route.params.countryCode, number: route.params.number, otp: code },
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
+      if (error.errorCode === INVALID_INPUT) {
+        // incorrect username/password
+        Alert.alert('Invalid OTP');
+      }
     },
     onCompleted: (data) => {
       if (data) {
@@ -67,11 +74,14 @@ function otpVerification(props) {
   };
 
   const onClickContinue = () => {
-    verifyPhoneNumber();
+    if(code){
+      verifyPhoneNumber();
+    }else{
+      Alert.alert('Enter OTP to verify.')
+    }
   };
 
   const bottonView = () => (
-    <KeyboardAvoidingView>
       <View style={{
         backgroundColor: Colors.white, paddingHorizontal: 16, paddingVertical: 56, borderTopLeftRadius: 25, borderTopRightRadius: 25
       }}
@@ -108,11 +118,11 @@ function otpVerification(props) {
           </Text>
         </View>
       </View>
-    </KeyboardAvoidingView>
   );
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
+      <Loader isLoading={verifyLoading} />
       <StatusBar barStyle="light-content" />
       <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={{ marginLeft: 16, marginTop: 58, color: Colors.white }} />
       <View style={{ flex: 1 }}>
@@ -120,7 +130,7 @@ function otpVerification(props) {
           <View style={{ flex: 1 }} />
         </TouchableWithoutFeedback>
       </View>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <KeyboardAvoidingView behavior="padding">
         <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View>
