@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
-// import { ApolloProvider } from '@apollo/client';
-
 import SplashScreen from 'react-native-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaView, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import apolloClient from './apollo/apollo';
 import AppStack from './routes/AppRoutes';
 
