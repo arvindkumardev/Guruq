@@ -20,6 +20,7 @@ import { CustomMobileNumber } from '../../components';
 import routeNames from '../../routes/ScreenNames';
 import Loader from '../../components/Loader';
 import { CHECK_USER_QUERY } from './graphql-query';
+import { NOT_FOUND } from '../../common/errorCodes';
 
 function login() {
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ function login() {
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
-      if (error.code === 404) {
+      if (error.errorCode === NOT_FOUND) {
         // use not found
         // TODO: take user for otp verification
         navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: true });
