@@ -1,20 +1,45 @@
 import {
-  View, Text, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar
+  Keyboard,
+  KeyboardAvoidingView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import {
-  Icon, Input, Item, Label
-} from 'native-base';
-import React, { useRef, useState } from 'react';
+import { Icon } from 'native-base';
+import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import { useMutation } from '@apollo/client';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
+import { GENERATE_OTP_MUTATION } from './graphql-mutation';
 
-function otpVerification() {
+function otpVerification(props) {
   const navigation = useNavigation();
+
+  const { route } = props;
+
+  const [generateOtp, { error, loading, data }] = useMutation(GENERATE_OTP_MUTATION, {
+    fetchPolicy: 'no-cache',
+    variables: { countryCode: route.params.countryCode, number: route.params.number },
+    onError: (e) => {
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+      }
+    }
+  });
+
+  useEffect(() => {
+    generateOtp();
+  }, []);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -30,6 +55,7 @@ function otpVerification() {
         backgroundColor: Colors.white, paddingHorizontal: 16, paddingVertical: 56, borderTopLeftRadius: 25, borderTopRightRadius: 25
       }}
       >
+        <Text>{JSON.stringify(props)}</Text>
         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
           <View style={{ marginLeft: RfW(57) }}>
             <Text style={{ color: Colors.inputLabel }}>Enter OTP</Text>

@@ -8,33 +8,37 @@ import {
   View,
 } from 'react-native';
 import { Icon } from 'native-base';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
-import { GraphQLError } from 'graphql';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../utils/constants';
 import { CustomMobileNumber } from '../../components';
-import { CHECK_USER } from './query';
 import routeNames from '../../routes/ScreenNames';
 import Loader from '../../components/Loader';
+import { CHECK_USER_QUERY } from './graphql-query';
 
 function login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
 
-  const [checkUser, { loading, data }] = useLazyQuery(CHECK_USER, {
+  const [mobileObj, setMobileObj] = useState({
+    mobile: '',
+    country: IND_COUNTRY_OBJ,
+  });
+
+  const [checkUser, { loading, data }] = useLazyQuery(CHECK_USER_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
       if (error.code === 404) {
         // use not found
-        // TODO: generateOtp and take user for otp verification
-
+        // TODO: take user for otp verification
+        navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: true });
       }
     },
     onCompleted: (data) => {
@@ -42,17 +46,12 @@ function login() {
         console.log('data', data);
 
         if (!data.checkUser.isPasswordSet) {
-          navigation.navigate(routeNames.OTP_VERIFICATION);
+          navigation.navigate(routeNames.OTP_VERIFICATION, { ...data });
         } else {
           // TODO: ask for password - show password input
         }
       }
-    }
-  });
-
-  const [mobileObj, setMobileObj] = useState({
-    mobile: '',
-    country: IND_COUNTRY_OBJ,
+    },
   });
 
   const onBackPress = () => {
