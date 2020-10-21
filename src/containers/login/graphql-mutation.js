@@ -38,3 +38,40 @@ export const SIGNUP_MUTATION = gql`
     }
   }
 `;
+
+export const SIGNIN_MUTATION = gql`
+  mutation SignIn($countryCode: String!, $number: String!, $password: String!) {
+    signIn(
+      phoneNumber: { countryCode: $countryCode, number: $number }
+      password: $password
+    ) {
+      id
+      firstName
+      lastName
+      email
+      isPasswordSet
+      isPhoneNumberVerified
+      isEmailVerified
+      token
+    }
+  }
+`;
+
+export const SET_PASSWORD_MUTATION = gql`
+  mutation SetPassword($password: String!) {
+    setPassword(password: $password) {
+      id
+    }
+  }
+`;
+
+export const FORGOT_PASSWORD_MUTATION = gql`
+  mutation ForgotPassword($countryCode: String!, $number: String!) {
+    forgotPassword(phoneNumber: { countryCode: $countryCode, number: $number  }) {
+      countryCode
+      number
+    }
+  }
+`;
+
+

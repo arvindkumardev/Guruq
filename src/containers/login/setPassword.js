@@ -1,5 +1,5 @@
 import {
-  View, Text, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar
+  View, Text, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar, Alert
 } from 'react-native';
 import {
   Icon, Input, Item, Label
@@ -11,20 +11,47 @@ import Colors from '../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
+import { SET_PASSWORD_MUTATION } from './graphql-mutation';
+import { useMutation } from '@apollo/client';
+import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
+//import { storeData } from '../../utils/helpers';
+import AsyncStorage from '@react-native-community/async-storage';
 
 function setPassword() {
   const navigation = useNavigation();
   const [eyeIcon, setEyeIcon] = useState('eye');
   const [confirmEyeIcon, setConfirmEyeIcon] = useState('eye');
   const [hidePassword, setHidePassword] = useState(true);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
+
+  const [setUserPassword, { loading, data }] = useMutation(SET_PASSWORD_MUTATION, {
+    fetchPolicy: 'no-cache',
+    variables: { password: password },
+    onError: (e) => {
+      const error = e.graphQLErrors[0].extensions.exception.response;
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+        //storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
+      }
+    },
+  });
+
 
   const onBackPress = () => {
     navigation.goBack();
   };
 
   const onClickContinue = () => {
-    navigation.navigate(routeNames.REGISTER);
+    if(password === confirmPassword){
+      setUserPassword();
+    }else{
+      Alert.alert('Password mismatch!');
+    }
   };
 
   const onIconPress = () => {
@@ -46,13 +73,13 @@ function setPassword() {
         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
           <View>
             <Item>
-              <Input secureTextEntry={hidePassword} placeholder="New Password" />
+              <Input secureTextEntry={hidePassword} placeholder="New Password" onChangeText = {(text) => setPassword(text)} />
               <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />
             </Item>
           </View>
           <View style={{ marginTop: RfH(53.5) }}>
             <Item>
-              <Input secureTextEntry={hideConfirmPassword} placeholder="Confirm Password" />
+              <Input secureTextEntry={hideConfirmPassword} placeholder="Confirm Password" onChangeText = {(text) => setConfirmPassword(text)}/>
               <Icon type="Entypo" name={confirmEyeIcon} onPress={() => onConfirmIconPress()} style={{ fontSize: 18, color: '#818181' }} />
             </Item>
           </View>

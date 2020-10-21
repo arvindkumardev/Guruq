@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Alert
 } from 'react-native';
 import { Icon, Item, Input } from 'native-base';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
@@ -20,19 +20,27 @@ import { CustomMobileNumber } from '../../components';
 import routeNames from '../../routes/ScreenNames';
 import Loader from '../../components/Loader';
 import { CHECK_USER_QUERY } from './graphql-query';
-import { NOT_FOUND } from '../../common/errorCodes';
+import { INVALID_INPUT } from '../../common/errorCodes';
+import { SIGNIN_MUTATION } from './graphql-mutation';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
+import { storeData } from '../../utils/helpers';
+import AsyncStorage from '@react-native-community/async-storage';
 
 function login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword]= useState('');
+  const [title, setTitle]= useState('Login/ Sign Up');
+  const [subTitle, setSubTitle]= useState('Enter your phone number to continue');
 
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
   });
 
-  const [checkUser, { loading, data }] = useLazyQuery(CHECK_USER_QUERY, {
+  /*const [checkUser, { loading, data }] = useLazyQuery(CHECK_USER_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
@@ -42,14 +50,39 @@ function login() {
         // TODO: take user for otp verification
         navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: true });
       }
-    }
-  });
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+        if (!data.checkUser.isPasswordSet) {
+          navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: false});
+        } else {
+          setShowPassword(true);
+        }
+      }
+    },
+  });*/
 
-  useEffect(() =>{
-    if(data){
-      setShowPassword(true);
-    }
-  })
+  const [signIn, { loading, data }] = useMutation(SIGNIN_MUTATION, {
+    fetchPolicy: 'no-cache',
+    variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, password: password },
+    onError: (e) => {
+      const error = e.graphQLErrors[0].extensions.exception.response;
+      console.log(error);
+      if (error.errorCode === INVALID_INPUT) {
+        // incorrect username/password
+        Alert.alert('Incorrect password');
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+        AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
+        navigation.navigate(routeNames.SET_PASSWORD);
+      }
+    },
+  });
 
   const onBackPress = () => {
     navigation.goBack();
@@ -62,10 +95,17 @@ function login() {
   const onClickContinue = () => {
     const countryCode = mobileObj.country.dialCode;
     const number = mobileObj.mobile;
-    console.log("Executed");
-    checkUser({
-      variables: { countryCode, number },
-    });
+
+    if(!showPassword){
+      setShowPassword(true);
+      setTitle('Welcome back!');
+      setSubTitle('Login to your account.');
+      /*checkUser({
+        variables: { countryCode, number },
+      });*/
+    }else{
+      signIn();
+    }
   };
 
   const bottonView = () => (
@@ -103,6 +143,7 @@ function login() {
           <Item style={{ marginTop: RfH(53.5) }}>
               <Input secureTextEntry={true} placeholder="Password" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setPassword(text)}/>
             </Item>
+            <Text style={{color:Colors.primaryButtonBackground, textAlign:'right', marginTop:RfH(6)}}>Forgot Password?</Text>
         </View>}
         <TouchableOpacity
           onPress={() => onClickContinue()}
@@ -147,9 +188,9 @@ function login() {
         <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ marginTop: RfH(36) }}>
-              <Text style={styles.title}>Login/ Sign Up</Text>
+              <Text style={styles.title}>{title}</Text>
               <Text style={styles.subtitle}>
-                Enter your phone number to continue
+                {subTitle}
               </Text>
             </View>
           </TouchableWithoutFeedback>
