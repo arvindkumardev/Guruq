@@ -8,3 +8,17 @@ export const GENERATE_OTP_MUTATION = gql`
     }
   }
 `;
+
+export const VERIFY_PHONE_NUMBER_MUTATION = gql`
+  mutation VerifyPhoneNumber($countryCode: String!, $number: String!, $otp: String!) {
+    verifyPhoneNumber(
+      phoneNumber: { countryCode: $countryCode, number: $number}
+      otp: $otp
+    ) {
+      id
+      token
+      isPasswordSet
+      isPhoneNumberVerified
+    }
+  }
+`;

@@ -46,7 +46,7 @@ function login() {
         console.log('data', data);
 
         if (!data.checkUser.isPasswordSet) {
-          navigation.navigate(routeNames.OTP_VERIFICATION, { ...data });
+          navigation.navigate(routeNames.OTP_VERIFICATION, { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, newUser: false });
         } else {
           // TODO: ask for password - show password input
         }

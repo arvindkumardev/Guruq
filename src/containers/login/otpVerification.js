@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { Icon } from 'native-base';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { useMutation } from '@apollo/client';
@@ -17,10 +17,11 @@ import Colors from '../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
-import { GENERATE_OTP_MUTATION } from './graphql-mutation';
+import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from './graphql-mutation';
 
 function otpVerification(props) {
   const navigation = useNavigation();
+  const [code, setCode] = useState(0);
 
   const { route } = props;
 
@@ -37,6 +38,29 @@ function otpVerification(props) {
     }
   });
 
+  const [verifyPhoneNumber, { verifyLoading, verifyData }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      const error = e.graphQLErrors[0].extensions.exception.response;
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+        if(route.param.newUser){
+          navigation.navigate(routeNames.REGISTER);
+        }else{
+          if (!data.isPasswordSet) {
+            navigation.navigate(routeNames.SET_PASSWORD, { ...data });
+          } else {
+            // TODO: ask for password - show password input
+          }
+        }
+      }
+    },
+  });
+
+
   useEffect(() => {
     generateOtp();
   }, []);
@@ -46,7 +70,7 @@ function otpVerification(props) {
   };
 
   const onClickContinue = () => {
-    navigation.navigate(routeNames.SET_PASSWORD);
+    verifyPhoneNumber(route.params.countryCode, route.params.number, code);
   };
 
   const bottonView = () => (
@@ -55,7 +79,6 @@ function otpVerification(props) {
         backgroundColor: Colors.white, paddingHorizontal: 16, paddingVertical: 56, borderTopLeftRadius: 25, borderTopRightRadius: 25
       }}
       >
-        <Text>{JSON.stringify(props)}</Text>
         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
           <View style={{ marginLeft: RfW(57) }}>
             <Text style={{ color: Colors.inputLabel }}>Enter OTP</Text>
@@ -63,13 +86,13 @@ function otpVerification(props) {
           <OTPInputView
             style={{ marginHorizontal: RfW(59), height: 80, marginBottom: 0 }}
             pinCount={4}
-                            // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-                            // onCodeChanged = {code => { this.setState({code})}}
+            // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+            // onCodeChanged = {code => { this.setState({code})}}
             autoFocusOnLoad
             codeInputFieldStyle={styles.underlineStyleBase}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
             onCodeFilled={((code) => {
-              console.log(`Code is ${code}, you are good to go!`);
+              setCode(code);
             })}
           />
         </View>
@@ -81,7 +104,7 @@ function otpVerification(props) {
         <View style={{ alignItems: 'center', marginTop: RfH(9) }}>
           <Text style={{ color: Colors.inputLabel }}>
             Resend Code in
-            <Text style={{ color: Colors.primaryButtonBackground }}>60</Text>
+            <Text style={{ color: Colors.primaryButtonBackground }}> 60</Text>
             {' '}
             Sec
             {' '}
@@ -105,7 +128,7 @@ function otpVerification(props) {
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View>
               <Text style={styles.title}>OTP Verification</Text>
-              <Text style={[styles.subtitle, { marginRight: RfW(100) }]}>We have sent a Verification code at +91 -9876543210</Text>
+                <Text style={[styles.subtitle, { marginRight: RfW(100) }]}>We have sent a Verification code at +{route.params.countryCode} -{route.params.number}</Text>
             </View>
           </TouchableWithoutFeedback>
           {bottonView()}
