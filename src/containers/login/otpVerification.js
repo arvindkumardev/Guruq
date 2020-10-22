@@ -25,10 +25,22 @@ import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from './graphql-m
 function otpVerification(props) {
   const navigation = useNavigation();
   const [code, setCode] = useState(0);
+  const [time, setTime]= useState(60);
 
   const { route } = props;
 
-  const [generateOtp, { error }] = useMutation(GENERATE_OTP_MUTATION, {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if(time > 0){ setTime(time => time - 1) }
+      else{ return; }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const [generateOtp, { error, loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: route.params.countryCode, number: route.params.number },
     onError: (e) => {
@@ -66,7 +78,7 @@ function otpVerification(props) {
 
 
   useEffect(() => {
-    generateOtp();
+    //generateOtp();
   }, []);
 
   const onBackPress = () => {
@@ -109,20 +121,20 @@ function otpVerification(props) {
           </Text>
         </TouchableOpacity>
         <View style={{ alignItems: 'center', marginTop: RfH(9) }}>
-          <Text style={{ color: Colors.inputLabel }}>
+          {time > 0 ?<Text style={{ color: Colors.inputLabel }}>
             Resend Code in
-            <Text style={{ color: Colors.primaryButtonBackground }}> 60</Text>
+            <Text style={{ color: Colors.primaryButtonBackground }}> {time}</Text>
             {' '}
             Sec
             {' '}
-          </Text>
+          </Text>:<TouchableOpacity onPress={() => generateOtp()}><Text style={{ color: Colors.primaryButtonBackground }}>Resend code</Text></TouchableOpacity>}
         </View>
       </View>
   );
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
-      <Loader isLoading={verifyLoading} />
+      <Loader isLoading={verifyLoading || otpLoading} />
       <StatusBar barStyle="light-content" />
       <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={{ marginLeft: 16, marginTop: 58, color: Colors.white }} />
       <View style={{ flex: 1 }}>

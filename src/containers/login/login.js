@@ -110,7 +110,11 @@ function login() {
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        navigation.navigate(routeNames.SET_PASSWORD);
+        navigation.navigate(routeNames.OTP_VERIFICATION, {
+          countryCode: mobileObj.country.dialCode,
+          number: mobileObj.mobile,
+          newUser: false,
+        });
       }
     },
   });
@@ -145,9 +149,14 @@ function login() {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
       if (!showPassword) {
-        checkUser({
-          variables: { countryCode, number },
+        navigation.navigate(routeNames.OTP_VERIFICATION, {
+          countryCode: mobileObj.country.dialCode,
+          number: mobileObj.mobile,
+          newUser: false,
         });
+        /*checkUser({
+          variables: { countryCode, number },
+        });*/
       } else {
         signIn();
       }
@@ -177,7 +186,8 @@ function login() {
         }}
       >
         <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-          <View style={{flex:0.95}}><CustomMobileNumber
+          <View style={{flex:0.95}}>
+            <CustomMobileNumber
             value={mobileObj}
             topMargin={0}
             onChangeHandler={(mobileObj) => {

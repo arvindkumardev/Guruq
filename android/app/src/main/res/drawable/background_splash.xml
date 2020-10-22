@@ -3,8 +3,8 @@
 
 
     <item
-            android:width="300dp"
-            android:height="600dp"
+            android:width="400dp"
+            android:height="800dp"
             android:drawable="@drawable/splashscreen"
             android:gravity="center"/>
 
