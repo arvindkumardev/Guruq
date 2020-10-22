@@ -5,7 +5,8 @@ const NavigationRouteNames = {
   OTP_VERIFICATION: 'otp verification',
   SET_PASSWORD: 'set password',
   REGISTER: 'register',
-  DASHBOARD: 'dashboard'
+  DASHBOARD: 'dashboard',
+  USER_ONBOARDING: 'user onboarding'
 };
 
 export default NavigationRouteNames;

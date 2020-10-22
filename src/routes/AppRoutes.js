@@ -10,6 +10,7 @@ import {
 } from '../containers/login/index';
 import splashScreen from '../containers/splashScreen/splashScreen';
 import dashboard from '../containers/dashboard/dashboard';
+import studentTutorSelector from '../containers/userOnboarding/studentTutorSelector'
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,11 @@ const AppStack = () => (
       <Stack.Screen
         name={NavigationRouteNames.REGISTER}
         component={Register}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.USER_ONBOARDING}
+        component={studentTutorSelector}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

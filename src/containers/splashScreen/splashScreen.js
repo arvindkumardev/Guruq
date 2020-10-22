@@ -22,7 +22,7 @@ function splashScreen() {
         }else{
             const token = await getToken();
             if(token){
-                navigation.navigate(routeNames.DASHBOARD);
+                navigation.navigate(routeNames.USER_ONBOARDING);
             }else{
                 navigation.navigate(routeNames.LOGIN);
             }

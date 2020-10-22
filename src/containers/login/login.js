@@ -101,7 +101,7 @@ function login() {
         if (!data.signIn.isPasswordSet) {
           navigation.navigate(routeNames.SET_PASSWORD);
         } else {
-          navigation.navigate(routeNames.DASHBOARD);
+          navigation.navigate(routeNames.USER_ONBOARDING);
         }
       }
     },
