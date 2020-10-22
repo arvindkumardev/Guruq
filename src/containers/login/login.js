@@ -154,9 +154,9 @@ function login() {
           number: mobileObj.mobile,
           newUser: false,
         });
-        /*checkUser({
+        checkUser({
           variables: { countryCode, number },
-        });*/
+        });
       } else {
         signIn();
       }

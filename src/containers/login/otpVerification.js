@@ -78,7 +78,7 @@ function otpVerification(props) {
 
 
   useEffect(() => {
-    //generateOtp();
+    generateOtp();
   }, []);
 
   const onBackPress = () => {
@@ -92,6 +92,11 @@ function otpVerification(props) {
       Alert.alert('Enter OTP to verify.')
     }
   };
+
+  const onResendOtpClick = () =>{
+    setTime(60);
+    generateOtp();
+  }
 
   const bottonView = () => (
       <View style={{
@@ -127,7 +132,7 @@ function otpVerification(props) {
             {' '}
             Sec
             {' '}
-          </Text>:<TouchableOpacity onPress={() => generateOtp()}><Text style={{ color: Colors.primaryButtonBackground }}>Resend code</Text></TouchableOpacity>}
+          </Text>:<TouchableOpacity onPress={() => onResendOtpClick()}><Text style={{ color: Colors.primaryButtonBackground }}>Resend code</Text></TouchableOpacity>}
         </View>
       </View>
   );
