@@ -13,7 +13,8 @@ export const ANDROID_PACKAGE_NAME = 'com.guruq';
 export const AUTH_TOKEN = 'AUTH_TOKEN';
 
 export const LOCAL_STORAGE_DATA_KEY = {
-  USER_TOKEN: 'userToken'
+  USER_TOKEN: 'userToken',
+  ONBOARDING_SHOWN: 'onboarding_shown'
 };
 
 export const inputs = {};

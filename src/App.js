@@ -30,7 +30,7 @@ function App() {
     SplashScreen.hide();
   });
 
-  const onStateChangeHandle = (state) => {
+  const onStateChangeHandle = async (state) => {
     const currentRouteName = getActiveRouteName(state);
     routeNameRef.current = currentRouteName;
   };
@@ -41,7 +41,7 @@ function App() {
         ref={navigationRef}
         onStateChange={onStateChangeHandle}
       >
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <AppStack />
       </NavigationContainer>
     </ApolloProvider>

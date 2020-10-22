@@ -1,4 +1,5 @@
 const NavigationRouteNames = {
+  SPLASH_SCREEN: 'splash_screen',
   ONBOARDING: 'onboarding',
   LOGIN: 'login',
   OTP_VERIFICATION: 'otp verification',

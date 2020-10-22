@@ -82,14 +82,16 @@ function setPassword() {
       >
         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
           <View>
-            <Item>
-              <Input secureTextEntry={hidePassword} placeholder="New Password" onChangeText = {(text) => onChangePassword(text)} />
+            <Item floatingLabel>
+              <Label>New Password</Label>
+              <Input secureTextEntry={hidePassword} onChangeText = {(text) => onChangePassword(text)} />
               {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
             </Item>
           </View>
           <View style={{ marginTop: RfH(53.5) }}>
-            <Item>
-              <Input secureTextEntry={hideConfirmPassword} placeholder="Confirm Password" onChangeText = {(text) => onChangeConfirmPassword(text)}/>
+            <Item floatingLabel>
+              <Label>Confirm Password</Label>
+              <Input secureTextEntry={hideConfirmPassword} onChangeText = {(text) => onChangeConfirmPassword(text)}/>
               {showConfirmEye && <Icon type="Entypo" name={confirmEyeIcon} onPress={() => onConfirmIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
             </Item>
           </View>

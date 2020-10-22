@@ -84,6 +84,12 @@ function login() {
       if (error.errorCode === INVALID_INPUT) {
         // incorrect username/password
         Alert.alert('Incorrect password');
+      }else if(error.errorCode === NOT_FOUND){
+        navigation.navigate(routeNames.OTP_VERIFICATION, {
+          countryCode: mobileObj.country.dialCode,
+          number: mobileObj.mobile,
+          newUser: true,
+        });
       }
     },
     onCompleted: (data) => {
@@ -149,11 +155,6 @@ function login() {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
       if (!showPassword) {
-        navigation.navigate(routeNames.OTP_VERIFICATION, {
-          countryCode: mobileObj.country.dialCode,
-          number: mobileObj.mobile,
-          newUser: false,
-        });
         checkUser({
           variables: { countryCode, number },
         });

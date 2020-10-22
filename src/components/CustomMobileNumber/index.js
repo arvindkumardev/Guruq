@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Image, Text, TextInput, TouchableOpacity, View
 } from 'react-native';
+import { Item, Input, Label} from 'native-base';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import styles from './style';

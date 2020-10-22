@@ -10,13 +10,15 @@ import Colors from '../../theme/colors';
 import ScheduleClass from './components/scheduleClass';
 import FindTutors from './components/findTutors';
 import ConnectWithTutor from './components/connectWithTutor';
-import { RfH } from '../../utils/helpers';
+import { RfH, storeData } from '../../utils/helpers';
+import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
 import routeNames from '../../routes/ScreenNames';
 
 function scheduleClass() {
   const navigation = useNavigation();
 
   const goToLogin = () => {
+    storeData(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN, true);
     navigation.navigate(routeNames.LOGIN);
   };
 

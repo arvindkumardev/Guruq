@@ -8,6 +8,7 @@ import {
   Set_Password,
   Register
 } from '../containers/login/index';
+import splashScreen from '../containers/splashScreen/splashScreen';
 import dashboard from '../containers/dashboard/dashboard';
 
 const Stack = createStackNavigator();
@@ -16,6 +17,11 @@ const AppStack = () => (
   <>
     <Stack.Navigator>
       <Stack.Screen
+        name={NavigationRouteNames.SPLASH_SCREEN}
+        component={splashScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name={NavigationRouteNames.ONBOARDING}
         component={onboarding}
         options={{ headerShown: false }}
@@ -23,6 +29,11 @@ const AppStack = () => (
       <Stack.Screen
         name={NavigationRouteNames.LOGIN}
         component={Login}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.DASHBOARD}
+        component={dashboard}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -38,11 +49,6 @@ const AppStack = () => (
       <Stack.Screen
         name={NavigationRouteNames.REGISTER}
         component={Register}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.DASHBOARD}
-        component={dashboard}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

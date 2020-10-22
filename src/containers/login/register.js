@@ -78,30 +78,35 @@ function register(props) {
 
   const bottonView = () => (
       <View style={{
-        backgroundColor: Colors.white, paddingHorizontal: 16, paddingTop: 56, paddingBottom: RfH(56), borderTopLeftRadius: 25, borderTopRightRadius: 25
+        backgroundColor: Colors.white, paddingHorizontal: 16, paddingTop:  RfH(56), paddingBottom: RfH(66), borderTopLeftRadius: 25, borderTopRightRadius: 25
       }}
       >
         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
           <View>
-            <Item>
-              <Input placeholder="Full Name" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setFullName(text)}/>
+            <Item floatingLabel>
+              <Label>Full Name</Label>
+              <Input onChangeText = {(text) => setFullName(text)}/>
             </Item>
-            <Item style={{ marginTop: RfH(53.5) }}>
-              <Input placeholder="Email ID" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setEmail(text)}/>
+            <Item floatingLabel style={{ marginTop: RfH(53.5) }}>
+              <Label>Email ID</Label>
+              <Input onChangeText = {(text) => setEmail(text)}/>
             </Item>
-            <Item style={{ marginTop: RfH(53.5) }}>
-              <Input secureTextEntry={hidePassword} placeholder="Password" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => onChangePassword(text)}/>
+            <Item floatingLabel style={{ marginTop: RfH(53.5) }}>
+              <Label>Password</Label>
+              <Input secureTextEntry={hidePassword} onChangeText = {(text) => onChangePassword(text)}/>
               {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
             </Item>
-            <Item style={{ marginTop: RfH(53.5) }}>
-              <Input placeholder="Referral Code" placeholderTextColor={Colors.inputLabel} onChangeText = {(text) => setReferCode(text)}/>
-              <Text style={{
-                color: '#FF9900', fontSize: 10, marginBottom: 10, alignSelf: 'flex-end'
+            <Item floatingLabel style={{ marginTop: RfH(53.5) }}>
+              <Label>Referral Code</Label>
+              <Input onChangeText = {(text) => setReferCode(text)}/>
+              
+            </Item>
+            <Text style={{
+                color: '#FF9900', fontSize: 10, marginTop: RfH(-20), alignSelf: 'flex-end'
               }}
               >
                 APPLY
               </Text>
-            </Item>
           </View>
         </View>
         <TouchableOpacity onPress={() => onClickContinue()} style={[commonStyles.buttonPrimary, { marginTop: RfH(63), alignSelf: 'center', width: RfW(144) }]}>
@@ -114,11 +119,11 @@ function register(props) {
             By Signing up you agree to GuruQ
             {' '}
             <Text style={{ color: Colors.primaryButtonBackground }}>{'Terms & Conditions'}</Text>
-            ,
-            <Text style={{ color: Colors.primaryButtonBackground }}>Privacy Policy</Text>
+            , 
+            <Text style={{ color: Colors.primaryButtonBackground }}> Privacy Policy</Text>
             {' '}
             and
-            <Text style={{ color: Colors.primaryButtonBackground }}>Cookie Policy</Text>
+            <Text style={{ color: Colors.primaryButtonBackground }}> Cookie Policy</Text>
           </Text>
         </View>
       </View>
@@ -135,7 +140,7 @@ function register(props) {
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
               <View style={{ marginTop: RfH(36) }}>
                 <Text style={styles.title}>Create Account</Text>
-                <Text style={styles.subtitle}>Sign Up to get started</Text>
+                <Text style={[styles.subtitle, {marginBottom:RfH(25)}]}>Sign Up to get started</Text>
               </View>
             </TouchableWithoutFeedback>
             {bottonView()}
