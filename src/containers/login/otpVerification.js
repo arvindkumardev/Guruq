@@ -55,7 +55,6 @@ function otpVerification(props) {
 
   const [verifyPhoneNumber, { loading: verifyLoading }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
     fetchPolicy: 'no-cache',
-    variables: { countryCode: route.params.countryCode, number: route.params.number, otp: code },
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
@@ -87,11 +86,20 @@ function otpVerification(props) {
 
   const onClickContinue = () => {
     if(code){
-      verifyPhoneNumber();
+      verifyPhoneNumber({
+        variables: { countryCode: route.params.countryCode, number: route.params.number, otp: code },
+      });
     }else{
       Alert.alert('Enter OTP to verify.')
     }
   };
+
+  const onCodeFilled = (otp) =>{
+    setCode(otp);
+    verifyPhoneNumber({
+      variables: { countryCode: route.params.countryCode, number: route.params.number, otp: otp },
+    });
+  }
 
   const onResendOtpClick = () =>{
     setTime(60);
@@ -116,7 +124,7 @@ function otpVerification(props) {
             codeInputFieldStyle={styles.underlineStyleBase}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
             onCodeFilled={((code) => {
-              setCode(code);
+              onCodeFilled(code)
             })}
           />
         </View>

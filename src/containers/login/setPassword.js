@@ -1,5 +1,5 @@
 import {
-  View, Text, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar, Alert
+  View, Text, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar, Alert, Image
 } from 'react-native';
 import {
   Icon, Input, Item, Label
@@ -14,6 +14,7 @@ import routeNames from '../../routes/ScreenNames';
 import { SET_PASSWORD_MUTATION } from './graphql-mutation';
 import { useMutation } from '@apollo/client';
 import Loader from '../../components/Loader';
+import { Images } from '../../theme';
 
 function setPassword() {
   const navigation = useNavigation();
@@ -24,6 +25,7 @@ function setPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
   const [showEye, setShowEye] = useState(false);
+  const [showTick, setShowTick] = useState(false);
   const [showConfirmEye, setShowConfirmEye] = useState(false);
 
   const [setUserPassword, { loading: setPasswordLoading }] = useMutation(SET_PASSWORD_MUTATION, {

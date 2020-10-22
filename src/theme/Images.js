@@ -6,6 +6,7 @@ const Images = {
   searchIcon: require('../assets/images/searchGlyph.png'),
   arrowRight: require('../assets/images/arrow-right.png'),
   expand: require('../assets/images/expand.png'),
+  check: require('../assets/images/check.png')
 };
 
 export default Images;
