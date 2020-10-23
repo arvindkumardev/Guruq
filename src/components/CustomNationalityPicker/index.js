@@ -11,14 +11,7 @@ import Flags from '../NationalityDropdown/country/flags';
 
 function CustomNationalityPicker(props) {
   const [showModal, setShowModal] = useState(false);
-  const {
-    label, error,
-    inputLabelStyle,
-    textInputStyle,
-    placeholder,
-    country,
-    onChangeHandler
-  } = props;
+  const { label, error, inputLabelStyle, textInputStyle, placeholder, country, onChangeHandler } = props;
 
   const onSelect = (country) => {
     onChangeHandler(country);
@@ -30,33 +23,17 @@ function CustomNationalityPicker(props) {
     <View>
       <View style={[styles.textInputContainer, error && { borderColor: '#818181' }]}>
         <View>
-          <Text style={[inputLabelStyle, error && { color: '#818181' }]}>
-            {label}
-          </Text>
+          <Text style={[inputLabelStyle, error && { color: '#818181' }]}>{label}</Text>
         </View>
         <TouchableOpacity onPress={() => setShowModal(true)} style={[styles.textInputInnerContainer, textInputStyle]}>
-          {isEmpty(country) && (
-            <Text style={[styles.inputStyle, { color: Colors.coolGrey }]}>
-              {placeholder}
-            </Text>
-          )}
+          {isEmpty(country) && <Text style={[styles.inputStyle, { color: Colors.coolGrey }]}>{placeholder}</Text>}
           {!isEmpty(country) && (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconImage={getFlag(country.iso2)}
-                iconWidth={RfW(22)}
-                iconHeight={RfH(15)}
-              />
-              <Text style={[styles.inputStyle, { marginLeft: RfW(12) }]}>
-                {country.name}
-              </Text>
+              <IconButtonWrapper iconImage={getFlag(country.iso2)} iconWidth={RfW(22)} iconHeight={RfH(15)} />
+              <Text style={[styles.inputStyle, { marginLeft: RfW(12) }]}>{country.name}</Text>
             </View>
           )}
-          <IconButtonWrapper
-            iconImage={Images.expand}
-            iconWidth={RfW(20)}
-            iconHeight={RfW(20)}
-          />
+          <IconButtonWrapper iconImage={Images.expand} iconWidth={RfW(20)} iconHeight={RfW(20)} />
         </TouchableOpacity>
         {showModal && (
           <NationalityDropdown
@@ -67,15 +44,7 @@ function CustomNationalityPicker(props) {
           />
         )}
       </View>
-      {
-                error
-                  ? (
-                    <Text style={styles.errorTextStyle}>
-                      {error}
-                    </Text>
-                  )
-                  : null
-            }
+      {error ? <Text style={styles.errorTextStyle}>{error}</Text> : null}
     </View>
   );
 }
@@ -88,7 +57,6 @@ CustomNationalityPicker.propTypes = {
   textInputStyle: PropTypes.object,
   placeholder: PropTypes.string,
   onChangeHandler: PropTypes.func,
-
 };
 
 CustomNationalityPicker.defaultProps = {

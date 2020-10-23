@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   buttonPrimary: {
     backgroundColor: Colors.primaryButtonBackground,
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     marginTop: RfH(30),
     shadowRadius: 4,
     shadowColor: '#000',
-    shadowOpacity: 0.1
+    shadowOpacity: 0.1,
   },
   disableButton: {
     backgroundColor: Colors.inputLabel,
@@ -29,12 +29,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    width: RfW(144)
+    width: RfW(144),
   },
   textButtonPrimary: {
     textAlign: 'center',
     color: Colors.white,
-    fontSize: 18
-  }
+    fontSize: 18,
+  },
 });
 export default styles;

@@ -8,7 +8,9 @@ function connectWithTutors() {
     <View style={styles.swipeChild}>
       <Image resizeMode="stretch" style={styles.centerImage} source={Images.onboarding3} />
       <Text style={styles.title}>Connect with Tutors</Text>
-      <Text style={styles.subtitle}>Students can connect with the best tutors and can take classes online and offline.</Text>
+      <Text style={styles.subtitle}>
+        Students can connect with the best tutors and can take classes online and offline.
+      </Text>
     </View>
   );
 }

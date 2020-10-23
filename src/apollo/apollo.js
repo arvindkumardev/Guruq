@@ -1,6 +1,4 @@
-import {
-  ApolloClient, ApolloLink, HttpLink, InMemoryCache
-} from '@apollo/client';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
 import { LoggingLink } from 'apollo-logger';
 import apolloLogger from 'apollo-link-logger';
 import { setContext } from 'apollo-link-context';
@@ -44,20 +42,21 @@ const authLink = setContext(async (req, { headers }) => {
 
 const link = authLink.concat(httpLink);
 
-const apolloClient = () => new ApolloClient({
-  link: ApolloLink.from([
-    apolloLogger,
-    new LoggingLink(logOptions),
-    link
-    // new HttpLink({
-    //   uri: GRAPHQL_ENDPOINT,
-    //   headers: {
-    //     // access_token: '<ENVIRONMENT_SPECIFIC_DELIVERY_TOKEN>',
-    //     Authorization: token ? `Bearer ${token}` : '',
-    //   },
-    // }),
-  ]),
-  cache: new InMemoryCache()
-});
+const apolloClient = () =>
+  new ApolloClient({
+    link: ApolloLink.from([
+      apolloLogger,
+      new LoggingLink(logOptions),
+      link,
+      // new HttpLink({
+      //   uri: GRAPHQL_ENDPOINT,
+      //   headers: {
+      //     // access_token: '<ENVIRONMENT_SPECIFIC_DELIVERY_TOKEN>',
+      //     Authorization: token ? `Bearer ${token}` : '',
+      //   },
+      // }),
+    ]),
+    cache: new InMemoryCache(),
+  });
 
 export default apolloClient;

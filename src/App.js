@@ -37,10 +37,7 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <NavigationContainer
-        ref={navigationRef}
-        onStateChange={onStateChangeHandle}
-      >
+      <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
         <StatusBar barStyle="light-content" />
         <AppStack />
       </NavigationContainer>

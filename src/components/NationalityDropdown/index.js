@@ -1,6 +1,4 @@
-import {
-  Modal, SafeAreaView, Text, TouchableOpacity, View
-} from 'react-native';
+import { Modal, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AlphabetList from 'react-native-section-alphabet-list';
 import PropTypes from 'prop-types';
@@ -17,9 +15,7 @@ function NationalityDropdown(props) {
   const getFlag = (iso2) => Flags.get(iso2);
   const [searchText, setSearchText] = useState('');
   const [data, setData] = useState([]);
-  const {
-    modalVisible, toggleModal, onCountrySelect, modalTitle, showDialcode
-  } = props;
+  const { modalVisible, toggleModal, onCountrySelect, modalTitle, showDialcode } = props;
   const [original, setOriginal] = useState([]);
 
   const updateSearch = (text) => {
@@ -37,15 +33,8 @@ function NationalityDropdown(props) {
     return (
       <>
         {countryFlag && (
-          <TouchableOpacity
-            style={styles.itemContainer}
-            onPress={() => onCountrySelect(item)}
-          >
-            <IconButtonWrapper
-              iconHeight={20}
-              iconWidth={25}
-              iconImage={countryFlag}
-            />
+          <TouchableOpacity style={styles.itemContainer} onPress={() => onCountrySelect(item)}>
+            <IconButtonWrapper iconHeight={20} iconWidth={25} iconImage={countryFlag} />
             <View style={styles.itemTextContainer}>
               <Text style={styles.itemText}>{item.name}</Text>
               {showDialcode && <Text style={styles.itemText}>{`  (+${item.dialCode})`}</Text>}
@@ -57,12 +46,12 @@ function NationalityDropdown(props) {
   };
 
   const SectionHeader = (section) => (
-    <View style={{
-      paddingLeft: 10,
-      backgroundColor: '#f1f2f3',
-      paddingVertical: 5,
-    }}
-    >
+    <View
+      style={{
+        paddingLeft: 10,
+        backgroundColor: '#f1f2f3',
+        paddingVertical: 5,
+      }}>
       <Text style={styles.sectionHeaderLabel}>{section.title}</Text>
     </View>
   );
@@ -73,12 +62,7 @@ function NationalityDropdown(props) {
   }, [countryData]);
 
   return (
-    <Modal
-      visible={modalVisible}
-      animationType="slide"
-      onRequestClose={() => toggleModal()}
-      transparent
-    >
+    <Modal visible={modalVisible} animationType="slide" onRequestClose={() => toggleModal()} transparent>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <IconButtonWrapper
@@ -90,11 +74,7 @@ function NationalityDropdown(props) {
           />
           <Text style={styles.headerText}>{modalTitle}</Text>
         </View>
-        <CustomSearchBar
-          placeholder="Search..."
-          value={searchText}
-          onChangeText={(search) => updateSearch(search)}
-        />
+        <CustomSearchBar placeholder="Search..." value={searchText} onChangeText={(search) => updateSearch(search)} />
         <AlphabetList
           style={{ flex: 1 }}
           data={data}
@@ -122,7 +102,7 @@ NationalityDropdown.defaultProps = {
   toggleModal: null,
   onCountrySelect: null,
   modalTitle: 'Select country',
-  showDialcode: true
+  showDialcode: true,
 };
 
 export default React.memo(NationalityDropdown);

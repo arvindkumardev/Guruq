@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Image, Text, TextInput, TouchableOpacity, View
-} from 'react-native';
-import { Item, Input, Label} from 'native-base';
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import styles from './style';
@@ -29,7 +26,7 @@ function CustomMobileNumber(props) {
     showClearButton,
     topMargin,
     isCountryCodeLabel,
-    modalTitle
+    modalTitle,
   } = props;
   const [country, setCountry] = useState(value.country);
 
@@ -53,22 +50,17 @@ function CustomMobileNumber(props) {
       <View style={[{ marginTop: RfH(topMargin) }, error && { borderColor: '#818181' }]}>
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <View>
-            {isCountryCodeLabel && (
-            <Text style={[inputLabelStyle, error && { color: '#818181' }]} />
-            )}
+            {isCountryCodeLabel && <Text style={[inputLabelStyle, error && { color: '#818181' }]} />}
             <TouchableOpacity
               onPress={() => setShowModal(true)}
-              style={[styles.textInputInnerContainer, textInputStyle, { height: RfH(34) }]}
-            >
+              style={[styles.textInputInnerContainer, textInputStyle, { height: RfH(34) }]}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <IconButtonWrapper
                   iconImage={!isEmpty(country) && getFlag(country.iso2)}
                   iconWidth={RfW(22)}
                   iconHeight={RfH(15)}
                 />
-                <Text style={[styles.inputStyle, { marginLeft: RfW(9) }]}>
-                  {`+${country.dialCode}`}
-                </Text>
+                <Text style={[styles.inputStyle, { marginLeft: RfW(9) }]}>{`+${country.dialCode}`}</Text>
                 <IconButtonWrapper
                   iconImage={Images.expand}
                   iconWidth={RfW(20)}
@@ -79,11 +71,7 @@ function CustomMobileNumber(props) {
             </TouchableOpacity>
           </View>
           <View style={{ marginLeft: RfW(10), flex: 1 }}>
-            {!isEmpty(label) && (
-            <Text style={[inputLabelStyle, error && { color: '#b00820' }]}>
-              {label}
-            </Text>
-            )}
+            {!isEmpty(label) && <Text style={[inputLabelStyle, error && { color: '#b00820' }]}>{label}</Text>}
             <View style={styles.mobileInputInnerContainer}>
               <TextInput
                 keyboardType="phone-pad"
@@ -91,7 +79,12 @@ function CustomMobileNumber(props) {
                 blurOnSubmit
                 value={value.mobile}
                 onChangeText={onChangeMobile}
-                style={[styles.inputStyle, !value.mobile && { color: Colors.coolGrey }, { flex: 1 }, { paddingBottom: RfH(12), }]}
+                style={[
+                  styles.inputStyle,
+                  !value.mobile && { color: Colors.coolGrey },
+                  { flex: 1 },
+                  { paddingBottom: RfH(12) },
+                ]}
                 refKey={refKey}
                 ref={(input) => {
                   inputs[refKey] = input;
@@ -103,38 +96,25 @@ function CustomMobileNumber(props) {
               />
 
               {showClearButton && !isEmpty(value.mobile) && isFocussed && (
-              <TouchableOpacity
-                style={styles.iconContainer}
-                activeOpacity={1}
-                onPress={() => onChangeHandler({ country, mobile: '' })}
-              >
-                <Image
-                  source={Images.clear}
-                  style={styles.iconStyle}
-                />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.iconContainer}
+                  activeOpacity={1}
+                  onPress={() => onChangeHandler({ country, mobile: '' })}>
+                  <Image source={Images.clear} style={styles.iconStyle} />
+                </TouchableOpacity>
               )}
-
             </View>
           </View>
         </View>
       </View>
-      {
-        error
-          ? (
-            <Text style={styles.errorTextStyle}>
-              {error}
-            </Text>
-          )
-          : null
-      }
+      {error ? <Text style={styles.errorTextStyle}>{error}</Text> : null}
       {showModal && (
-      <NationalityDropdown
-        toggleModal={() => setShowModal(!showModal)}
-        onCountrySelect={onChangeCountry}
-        modalVisible={showModal}
-        modalTitle={modalTitle}
-      />
+        <NationalityDropdown
+          toggleModal={() => setShowModal(!showModal)}
+          onCountrySelect={onChangeCountry}
+          modalVisible={showModal}
+          modalTitle={modalTitle}
+        />
       )}
     </View>
   );
@@ -154,23 +134,24 @@ CustomMobileNumber.propTypes = {
   showClearButton: PropTypes.bool,
   topMargin: PropTypes.number,
   isCountryCodeLabel: PropTypes.bool,
-  modalTitle: PropTypes.string
-
+  modalTitle: PropTypes.string,
 };
 
 CustomMobileNumber.defaultProps = {
   label: '',
   error: '',
-  showPasswordField: false,
   value: {},
-  countryCode: '',
   inputLabelStyle: {},
   textInputStyle: {},
-  keyboardType: 'default',
   returnKeyType: 'default',
   showClearButton: true,
   topMargin: 28,
   isCountryCodeLabel: true,
+  modalTitle: '',
+  placeholder: '',
+  onChangeHandler: () => {},
+  onSubmitEditing: () => {},
+  refKey: PropTypes.string,
 };
 
 export default CustomMobileNumber;

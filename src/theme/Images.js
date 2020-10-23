@@ -8,7 +8,7 @@ const Images = {
   expand: require('../assets/images/expand.png'),
   check: require('../assets/images/check.png'),
   student: require('../assets/images/student.png'),
-  tutor: require('../assets/images/tutor.png')
+  tutor: require('../assets/images/tutor.png'),
 };
 
 export default Images;

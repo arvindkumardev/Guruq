@@ -1,6 +1,6 @@
-import Login from './login';
-import OTP_Verification from './otpVerification';
-import Set_Password from './setPassword';
-import Register from './register';
+import login from './login';
+import otpVerification from './otpVerification';
+import setPassword from './setPassword';
+import register from './register';
 
-export { Login, OTP_Verification, Set_Password, Register };
+export { login, otpVerification, setPassword, register };

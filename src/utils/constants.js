@@ -14,7 +14,7 @@ export const AUTH_TOKEN = 'AUTH_TOKEN';
 
 export const LOCAL_STORAGE_DATA_KEY = {
   USER_TOKEN: 'userToken',
-  ONBOARDING_SHOWN: 'onboarding_shown'
+  ONBOARDING_SHOWN: 'onboarding_shown',
 };
 
 export const inputs = {};

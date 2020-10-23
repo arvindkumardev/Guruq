@@ -8,17 +8,17 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginTop: RfH(49),
     marginRight: RfW(19),
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   swipeChild: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   centerImage: {
     width: RfW(178),
     height: RfH(383),
-    marginTop: RfH(18)
+    marginTop: RfH(18),
   },
   title: {
     fontSize: 28,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginHorizontal: RfW(42),
     marginTop: RfH(28),
-    color: Colors.white
-  }
+    color: Colors.white,
+  },
 });
 export default styles;

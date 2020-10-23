@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     paddingVertical: RfH(7),
     paddingHorizontal: RfW(8),
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textStyle: {
     marginLeft: RfW(3),
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: Colors.black,
     flex: 1,
-    padding: 0
+    padding: 0,
   },
   placeholderTextStyle: {
     marginLeft: RfW(3),
@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: 'rgba(60, 60, 67, 0.6)',
     flex: 1,
-    padding: 0
-  }
+    padding: 0,
+  },
 });
 
 export default styles;

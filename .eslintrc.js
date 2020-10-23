@@ -1,11 +1,5 @@
 module.exports = {
-  extends: [
-    'airbnb',
-    'prettier',
-    'prettier/react',
-    'plugin:prettier/recommended',
-    'eslint-config-prettier',
-  ],
+  extends: ['airbnb', 'prettier', 'prettier/react', 'plugin:prettier/recommended', 'eslint-config-prettier'],
   parser: 'babel-eslint',
   rules: {
     'import/no-unresolved': 'off',
@@ -23,6 +17,9 @@ module.exports = {
         printWidth: 120,
       },
     ],
+    'no-shadow': 'off',
+    'react/prop-types': 0,
+    'react/forbid-prop-types': 0,
   },
   plugins: ['prettier'],
 };

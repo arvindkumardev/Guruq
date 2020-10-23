@@ -1,6 +1,4 @@
-import {
-  StyleSheet,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Colors } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 

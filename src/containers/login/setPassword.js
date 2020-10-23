@@ -1,18 +1,24 @@
 import {
-  View, Text, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, StatusBar, Alert, Image
+  View,
+  Text,
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  StatusBar,
+  Alert,
+  Image,
 } from 'react-native';
-import {
-  Icon, Input, Item, Label
-} from 'native-base';
+import { Icon, Input, Item, Label } from 'native-base';
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation } from '@apollo/client';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
 import { SET_PASSWORD_MUTATION } from './graphql-mutation';
-import { useMutation } from '@apollo/client';
 import Loader from '../../components/Loader';
 import { Images } from '../../theme';
 
@@ -30,7 +36,7 @@ function setPassword() {
 
   const [setUserPassword, { loading: setPasswordLoading }] = useMutation(SET_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
-    variables: { password: password },
+    variables: { password },
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
@@ -43,65 +49,82 @@ function setPassword() {
     },
   });
 
-
   const onBackPress = () => {
     navigation.goBack();
   };
 
   const onClickContinue = () => {
-    if(password === confirmPassword){
+    if (password === confirmPassword) {
       setUserPassword();
-    }else{
+    } else {
       Alert.alert('Password mismatch!');
     }
   };
 
   const onIconPress = () => {
-    (eyeIcon === 'eye') ? setEyeIcon('eye-with-line') : setEyeIcon('eye');
-    (hidePassword) ? setHidePassword(false) : setHidePassword(true);
+    eyeIcon === 'eye' ? setEyeIcon('eye-with-line') : setEyeIcon('eye');
+    hidePassword ? setHidePassword(false) : setHidePassword(true);
   };
 
   const onConfirmIconPress = () => {
-    (confirmEyeIcon === 'eye') ? setConfirmEyeIcon('eye-with-line') : setConfirmEyeIcon('eye');
-    (hideConfirmPassword) ? setHideConfirmPassword(false) : setHideConfirmPassword(true);
+    confirmEyeIcon === 'eye' ? setConfirmEyeIcon('eye-with-line') : setConfirmEyeIcon('eye');
+    hideConfirmPassword ? setHideConfirmPassword(false) : setHideConfirmPassword(true);
   };
 
-  const onChangePassword = (text) =>{
+  const onChangePassword = (text) => {
     setPassword(text);
     text ? setShowEye(true) : setShowEye(false);
-  }
+  };
 
-  const onChangeConfirmPassword = (text) =>{
+  const onChangeConfirmPassword = (text) => {
     setConfirmPassword(text);
     text ? setShowConfirmEye(true) : setShowConfirmEye(false);
-  }
+  };
 
   const bottonView = () => (
     <KeyboardAvoidingView>
-      <View style={{
-        backgroundColor: Colors.white, paddingHorizontal: 16, paddingVertical: 56, borderTopLeftRadius: 25, borderTopRightRadius: 25
-      }}
-      >
+      <View
+        style={{
+          backgroundColor: Colors.white,
+          paddingHorizontal: 16,
+          paddingVertical: 56,
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+        }}>
         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
           <View>
             <Item floatingLabel>
               <Label>New Password</Label>
-              <Input secureTextEntry={hidePassword} onChangeText = {(text) => onChangePassword(text)} />
-              {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
+              <Input secureTextEntry={hidePassword} onChangeText={(text) => onChangePassword(text)} />
+              {showEye && (
+                <Icon
+                  type="Entypo"
+                  name={eyeIcon}
+                  onPress={() => onIconPress()}
+                  style={{ fontSize: 18, color: '#818181' }}
+                />
+              )}
             </Item>
           </View>
           <View style={{ marginTop: RfH(53.5) }}>
             <Item floatingLabel>
               <Label>Confirm Password</Label>
-              <Input secureTextEntry={hideConfirmPassword} onChangeText = {(text) => onChangeConfirmPassword(text)}/>
-              {showConfirmEye && <Icon type="Entypo" name={confirmEyeIcon} onPress={() => onConfirmIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
+              <Input secureTextEntry={hideConfirmPassword} onChangeText={(text) => onChangeConfirmPassword(text)} />
+              {showConfirmEye && (
+                <Icon
+                  type="Entypo"
+                  name={confirmEyeIcon}
+                  onPress={() => onConfirmIconPress()}
+                  style={{ fontSize: 18, color: '#818181' }}
+                />
+              )}
             </Item>
           </View>
         </View>
-        <TouchableOpacity onPress={() => onClickContinue()} style={[commonStyles.buttonPrimary, { marginTop: RfH(63), alignSelf: 'center', width: RfW(144) }]}>
-          <Text style={commonStyles.textButtonPrimary}>
-            Submit
-          </Text>
+        <TouchableOpacity
+          onPress={() => onClickContinue()}
+          style={[commonStyles.buttonPrimary, { marginTop: RfH(63), alignSelf: 'center', width: RfW(144) }]}>
+          <Text style={commonStyles.textButtonPrimary}>Submit</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -111,7 +134,12 @@ function setPassword() {
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
       <StatusBar barStyle="light-content" />
       <Loader isLoading={setPasswordLoading} />
-      <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={{ marginLeft: 16, marginTop: 58, color: Colors.white }} />
+      <Icon
+        onPress={() => onBackPress()}
+        type="MaterialIcons"
+        name="keyboard-backspace"
+        style={{ marginLeft: 16, marginTop: 58, color: Colors.white }}
+      />
       <View style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={{ flex: 1 }} />

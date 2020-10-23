@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   sectionHeaderLabel: {
     fontSize: 17,
     fontWeight: '600',
-    color: Colors.black
+    color: Colors.black,
   },
 
   headerContainer: {
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     color: Colors.black,
     textAlign: 'center',
-    marginRight: RfW(17)
+    marginRight: RfW(17),
   },
   itemContainer: {
     marginHorizontal: RfW(16),
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: RfW(2),
     alignItems: 'center',
-    marginLeft: RfW(10)
+    marginLeft: RfW(10),
   },
   itemText: {
     fontSize: 17,
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     color: Colors.black,
-  }
-
+  },
 });
 export default styles;

@@ -1,6 +1,4 @@
-import {
-  StyleSheet,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { RfH, RfW } from '../../utils/helpers';
 
 const getIconImageStyle = (iconHeight, iconWidth, backgroundColor) => ({
@@ -31,13 +29,10 @@ const styles = StyleSheet.create({
     left: RfW(12),
     bottom: RfH(8),
     borderWidth: 1,
-    borderColor: 'white'
-  }
+    borderColor: 'white',
+  },
 });
 
 export default styles;
 
-export {
-  getIconImageStyle,
-  getLoaderImageStyle,
-};
+export { getIconImageStyle, getLoaderImageStyle };

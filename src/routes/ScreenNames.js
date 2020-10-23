@@ -6,7 +6,7 @@ const NavigationRouteNames = {
   SET_PASSWORD: 'set password',
   REGISTER: 'register',
   DASHBOARD: 'dashboard',
-  USER_ONBOARDING: 'user onboarding'
+  USER_ONBOARDING: 'user onboarding',
 };
 
 export default NavigationRouteNames;

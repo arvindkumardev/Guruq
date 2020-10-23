@@ -18,7 +18,7 @@ export const getToken = async () => {
 export const storeData = async (key, value) => {
   try {
     let v = value;
-    if (typeof (value) !== 'string') {
+    if (typeof value !== 'string') {
       v = JSON.stringify(value);
     }
     await AsyncStorage.setItem(key, v);
@@ -80,17 +80,17 @@ export const RfH = (value) => {
   return dim.height * (value / STANDARD_SCREEN_DIMENSIONS.height);
 };
 
-export const isIntegerString = (str) => (/^\+?(0|[1-9]\d*)$/.test(str));
+export const isIntegerString = (str) => /^\+?(0|[1-9]\d*)$/.test(str);
 
-export const isValidEmail = (str) => (/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(str));
+export const isValidEmail = (str) => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(str);
 
-export const isDisplayWithNotch = () => (DeviceInfo.hasNotch());
+export const isDisplayWithNotch = () => DeviceInfo.hasNotch();
 
 export const tConv24 = (time24) => {
   let ts = time24;
   const H = +ts.substr(0, 2);
-  let h = (H % 12) || 12;
-  h = (h < 10) ? (`0${h}`) : h;
+  let h = H % 12 || 12;
+  h = h < 10 ? `0${h}` : h;
   const ampm = H < 12 ? ' AM' : ' PM';
   ts = h + ampm;
   return ts;

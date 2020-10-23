@@ -8,13 +8,13 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontWeight: '700',
     marginHorizontal: RfW(16),
-    marginBottom: RfH(20)
+    marginBottom: RfH(20),
   },
   subtitle: {
     fontSize: 16,
     marginHorizontal: RfW(16),
     color: Colors.white,
-    marginBottom: RfH(56)
+    marginBottom: RfH(56),
   },
   underlineStyleBase: {
     width: 30,
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderBottomWidth: 1,
     color: '#313031',
-    fontSize: 24
+    fontSize: 24,
   },
   underlineStyleHighLighted: {
     borderColor: '#03DAC6',

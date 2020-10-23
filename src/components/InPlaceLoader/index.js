@@ -11,28 +11,21 @@ function InPlaceLoader(props) {
   const { isLoading, text } = props;
   return (
     <>
-      {isLoading
-        ? (
-          <View
-            style={[
-              styles.modalBackground,
-              { backgroundColor: 'rgba(0,0,0,0.1)' },
-            ]}
-          >
-            <LottieView
-              style={{
-                height: RfW(80),
-                width: RfW(80),
-                alignSelf: 'center',
-              }}
-              source={LOTTIE_JSON_FILES.loaderJson}
-              resizeMode="contain"
-              loop
-              autoPlay
-            />
-          </View>
-        )
-        : null}
+      {isLoading ? (
+        <View style={[styles.modalBackground, { backgroundColor: 'rgba(0,0,0,0.1)' }]}>
+          <LottieView
+            style={{
+              height: RfW(80),
+              width: RfW(80),
+              alignSelf: 'center',
+            }}
+            source={LOTTIE_JSON_FILES.loaderJson}
+            resizeMode="contain"
+            loop
+            autoPlay
+          />
+        </View>
+      ) : null}
     </>
   );
 }

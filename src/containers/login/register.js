@@ -1,16 +1,16 @@
 import {
-  View,
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
+  StatusBar,
   Text,
   TouchableOpacity,
-  Keyboard,
   TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  StatusBar,
-  ScrollView,
-  Alert,
+  View,
 } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../common/styles';

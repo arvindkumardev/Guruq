@@ -4,15 +4,14 @@ import { RfH, RfW } from '../../utils/helpers';
 import { Colors } from '../../theme';
 
 const styles = StyleSheet.create({
-  textInputContainer: {
-  },
+  textInputContainer: {},
   inputStyle: {
     fontSize: 15,
     fontWeight: 'normal',
     fontStyle: 'normal',
     textAlign: 'left',
     color: '#262119',
-    padding: 0
+    padding: 0,
   },
   textInputInnerContainer: {
     flexDirection: 'row',

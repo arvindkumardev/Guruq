@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { RfH, RfW } from '../../utils/helpers';
-import { Colors } from '../../theme';
 
 const styles = StyleSheet.create({
   textInputContainer: {
@@ -12,7 +11,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     color: '#262119',
-    padding: 0
+    padding: 0,
   },
   textInputInnerContainer: {
     flexDirection: 'row',
@@ -25,12 +24,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: RfH(4),
     justifyContent: 'space-between',
-    height: RfH(34)
+    height: RfH(34),
   },
   iconContainer: {
     paddingHorizontal: RfH(10),
     justifyContent: 'center',
-    paddingRight: RfW(5)
+    paddingRight: RfW(5),
   },
   iconStyle: {
     width: RfW(20.3),

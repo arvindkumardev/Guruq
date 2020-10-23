@@ -1,6 +1,4 @@
-import {
-  Button, SafeAreaView, StatusBar, Text, View, Alert
-} from 'react-native';
+import { Button, SafeAreaView, StatusBar, Text, View, Alert } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,7 +17,7 @@ function dashboard(props) {
   };
 
   const logout = () => {
-      Alert.alert('Logout!');
+    Alert.alert('Logout!');
     AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN).then(() => {
       navigation.navigate(routeNames.LOGIN);
     });
@@ -33,10 +31,7 @@ function dashboard(props) {
         <Text>This is Dashboard</Text>
 
         <View style={{ marginTop: 40 }}>
-          <Button
-            title="Logout"
-            onPress={() => logout()}
-          />
+          <Button title="Logout" onPress={() => logout()} />
         </View>
       </View>
     </SafeAreaView>
