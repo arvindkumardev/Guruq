@@ -1,16 +1,15 @@
 import {
-  View,
-  Text,
-  TouchableOpacity,
+  Alert,
   Keyboard,
-  TouchableWithoutFeedback,
   KeyboardAvoidingView,
   StatusBar,
-  Alert,
-  Image,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../common/styles';
@@ -20,7 +19,6 @@ import { RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
 import { SET_PASSWORD_MUTATION } from './graphql-mutation';
 import Loader from '../../components/Loader';
-import { Images } from '../../theme';
 
 function setPassword() {
   const navigation = useNavigation();
@@ -62,23 +60,33 @@ function setPassword() {
   };
 
   const onIconPress = () => {
-    eyeIcon === 'eye' ? setEyeIcon('eye-with-line') : setEyeIcon('eye');
-    hidePassword ? setHidePassword(false) : setHidePassword(true);
+    if (eyeIcon === 'eye') {
+      setEyeIcon('eye-with-line');
+    } else {
+      setEyeIcon('eye');
+    }
+
+    if (hidePassword) setHidePassword(false);
+    else setHidePassword(true);
   };
 
   const onConfirmIconPress = () => {
-    confirmEyeIcon === 'eye' ? setConfirmEyeIcon('eye-with-line') : setConfirmEyeIcon('eye');
-    hideConfirmPassword ? setHideConfirmPassword(false) : setHideConfirmPassword(true);
+    if (confirmEyeIcon === 'eye') setConfirmEyeIcon('eye-with-line');
+    else setConfirmEyeIcon('eye');
+    if (hideConfirmPassword) setHideConfirmPassword(false);
+    else setHideConfirmPassword(true);
   };
 
   const onChangePassword = (text) => {
     setPassword(text);
-    text ? setShowEye(true) : setShowEye(false);
+    if (text) setShowEye(true);
+    else setShowEye(false);
   };
 
   const onChangeConfirmPassword = (text) => {
     setConfirmPassword(text);
-    text ? setShowConfirmEye(true) : setShowConfirmEye(false);
+    if (text) setShowConfirmEye(true);
+    else setShowConfirmEye(false);
   };
 
   const bottonView = () => (

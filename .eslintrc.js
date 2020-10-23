@@ -21,6 +21,7 @@ module.exports = {
     'no-shadow': 'off',
     'react/prop-types': 0,
     'react/forbid-prop-types': 0,
+    curly: 'error',
   },
   plugins: ['prettier'],
 };
