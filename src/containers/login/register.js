@@ -101,15 +101,8 @@ function register(props) {
 
   const bottonView = () => (
     <View
-      style={{
-        backgroundColor: Colors.white,
-        paddingHorizontal: 16,
-        paddingTop: RfH(56),
-        paddingBottom: RfH(66),
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-      }}>
-      <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+      style={[styles.buttonView,{ paddingTop: RfH(56), paddingBottom: RfH(66)}]}>
+      <View style={styles.setPasswordView}>
         <View>
           <Item floatingLabel>
             <Label>Full Name</Label>
@@ -127,7 +120,7 @@ function register(props) {
                 type="Entypo"
                 name={eyeIcon}
                 onPress={() => onIconPress()}
-                style={{ fontSize: 18, color: '#818181' }}
+                style={styles.eyeIcon}
               />
             )}
           </Item>
@@ -136,12 +129,7 @@ function register(props) {
             <Input onChangeText={(text) => setReferCode(text)} />
           </Item>
           <Text
-            style={{
-              color: '#FF9900',
-              fontSize: 10,
-              marginTop: RfH(-20),
-              alignSelf: 'flex-end',
-            }}>
+            style={styles.applyIcon}>
             APPLY
           </Text>
         </View>
@@ -155,7 +143,7 @@ function register(props) {
         <Text>
           By Signing up you agree to GuruQ{' '}
           <Text style={{ color: Colors.primaryButtonBackground }}>Terms & Conditions</Text>,
-          <Text style={{ color: Colors.primaryButtonBackground }}> Privacy Policy</Text> and
+          <Text style={{ color: Colors.primaryButtonBackground, marginTop:RfH(4) }}> Privacy Policy</Text> and
           <Text style={{ color: Colors.primaryButtonBackground }}> Cookie Policy</Text>
         </Text>
       </View>
@@ -170,7 +158,7 @@ function register(props) {
         onPress={() => onBackPress()}
         type="MaterialIcons"
         name="keyboard-backspace"
-        style={{ marginLeft: 16, marginTop: 58, color: Colors.white }}
+        style={styles.backIcon}
       />
       <ScrollView>
         <KeyboardAvoidingView behavior="padding">

@@ -92,14 +92,8 @@ function setPassword() {
   const bottonView = () => (
     <KeyboardAvoidingView>
       <View
-        style={{
-          backgroundColor: Colors.white,
-          paddingHorizontal: 16,
-          paddingVertical: 56,
-          borderTopLeftRadius: 25,
-          borderTopRightRadius: 25,
-        }}>
-        <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+        style={styles.buttonView}>
+        <View style={styles.setPasswordView}>
           <View>
             <Item floatingLabel>
               <Label>New Password</Label>
@@ -109,7 +103,7 @@ function setPassword() {
                   type="Entypo"
                   name={eyeIcon}
                   onPress={() => onIconPress()}
-                  style={{ fontSize: 18, color: '#818181' }}
+                  style={styles.eyeIcon}
                 />
               )}
             </Item>
@@ -123,7 +117,7 @@ function setPassword() {
                   type="Entypo"
                   name={confirmEyeIcon}
                   onPress={() => onConfirmIconPress()}
-                  style={{ fontSize: 18, color: '#818181' }}
+                  style={styles.eyeIcon}
                 />
               )}
             </Item>
@@ -146,7 +140,7 @@ function setPassword() {
         onPress={() => onBackPress()}
         type="MaterialIcons"
         name="keyboard-backspace"
-        style={{ marginLeft: 16, marginTop: 58, color: Colors.white }}
+        style={styles.backIcon}
       />
       <View style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -154,7 +148,7 @@ function setPassword() {
         </TouchableWithoutFeedback>
       </View>
       <KeyboardAvoidingView behavior="position">
-        <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+        <View style={styles.setPasswordView}>
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ marginTop: RfH(36) }}>
               <Text style={styles.title}>Set Password</Text>

@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { Icon, Input, Item } from 'native-base';
+import { Icon, Input, Item, Label } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation } from '@apollo/client';
@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
-import { RfH, RfW, storeData } from '../../utils/helpers';
+import { removeData, RfH, RfW, storeData } from '../../utils/helpers';
 import { IND_COUNTRY_OBJ, LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
 import { CustomMobileNumber } from '../../components';
 import routeNames from '../../routes/ScreenNames';
@@ -95,9 +95,10 @@ function login() {
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+        removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
-
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.firstName);
+        storeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME, data.signIn.lastName);
         if (!data.signIn.isPasswordSet) {
           navigation.navigate(routeNames.SET_PASSWORD);
         } else {
@@ -191,14 +192,8 @@ function login() {
 
   const bottonView = () => (
     <View
-      style={{
-        backgroundColor: Colors.white,
-        paddingHorizontal: 16,
-        paddingVertical: 56,
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-      }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+      style={styles.buttonView}>
+      <View style={styles.bottomParent}>
         <View style={{ flex: 0.95 }}>
           <CustomMobileNumber
             value={mobileObj}
@@ -217,31 +212,19 @@ function login() {
         {showClear && (
           <Icon
             onPress={() => clearMobileNumber()}
-            style={{
-              flex: 0.05,
-              marginBottom: RfH(-30),
-              fontSize: 18,
-              color: Colors.inputLabel,
-            }}
+            style={styles.clearIcon}
             type="Entypo"
             name="circle-with-cross"
           />
         )}
       </View>
-      <View
-        style={{
-          marginTop: RfH(40),
-          borderBottomWidth: 0.5,
-          borderBottomColor: Colors.inputLabel,
-        }}
-      />
+      <View style={styles.underlineView} />
       {showPassword && (
         <View>
-          <Item style={{ marginTop: RfH(53.5) }}>
+          <Item floatingLabel style={{ marginTop: RfH(53.5) }}>
+            <Label>Password</Label>
             <Input
               secureTextEntry={hidePassword}
-              placeholder="Password"
-              placeholderTextColor={Colors.inputLabel}
               onChangeText={(text) => onChangePassword(text)}
             />
             {showEye && (
@@ -249,17 +232,13 @@ function login() {
                 type="Entypo"
                 name={eyeIcon}
                 onPress={() => onIconPress()}
-                style={{ fontSize: 18, color: '#818181' }}
+                style={styles.eyeIcon}
               />
             )}
           </Item>
           <TouchableOpacity onPress={() => onForgotPasswordClick()}>
             <Text
-              style={{
-                color: Colors.primaryButtonBackground,
-                textAlign: 'right',
-                marginTop: RfH(6),
-              }}>
+              style={styles.forgotPassword}>
               Forgot Password?
             </Text>
           </TouchableOpacity>
@@ -288,7 +267,7 @@ function login() {
         onPress={() => onBackPress()}
         type="MaterialIcons"
         name="keyboard-backspace"
-        style={{ marginLeft: 16, marginTop: 58, color: Colors.white }}
+        style={styles.backIcon}
       />
       <View style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

@@ -112,22 +112,18 @@ function otpVerification(props) {
 
   const bottonView = () => (
     <View
-      style={{
-        backgroundColor: Colors.white,
-        paddingHorizontal: 16,
-        paddingVertical: 56,
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-      }}>
-      <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+      style={styles.buttonView}>
+      <View style={styles.setPasswordView}>
         <View style={{ marginLeft: RfW(57) }}>
           <Text style={{ color: Colors.inputLabel }}>Enter OTP</Text>
         </View>
         <OTPInputView
-          style={{ marginHorizontal: RfW(59), height: 80, marginBottom: 0 }}
+          style={{
+            marginHorizontal: RfW(59), 
+            height: RfH(80), 
+            marginBottom: 0
+          }}
           pinCount={4}
-          // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-          // onCodeChanged = {code => { this.setState({code})}}
           autoFocusOnLoad
           codeInputFieldStyle={styles.underlineStyleBase}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
@@ -141,7 +137,7 @@ function otpVerification(props) {
         style={[commonStyles.buttonPrimary, { marginTop: RfH(50), alignSelf: 'center', width: RfW(144) }]}>
         <Text style={commonStyles.textButtonPrimary}>Verify</Text>
       </TouchableOpacity>
-      <View style={{ alignItems: 'center', marginTop: RfH(9) }}>
+      <View style={styles.resendParent}>
         {time > 0 ? (
           <Text style={{ color: Colors.inputLabel }}>
             Resend Code in
@@ -164,7 +160,7 @@ function otpVerification(props) {
         onPress={() => onBackPress()}
         type="MaterialIcons"
         name="keyboard-backspace"
-        style={{ marginLeft: 16, marginTop: 58, color: Colors.white }}
+        style={styles.backIcon}
       />
       <View style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -172,13 +168,14 @@ function otpVerification(props) {
         </TouchableWithoutFeedback>
       </View>
       <KeyboardAvoidingView behavior="padding">
-        <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+        <View style={styles.setPasswordView}>
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View>
               <Text style={styles.title}>OTP Verification</Text>
-              <Text style={[styles.subtitle, { marginRight: RfW(100) }]}>
-                We have sent a Verification code at +{route.params.countryCode} -{route.params.number}
+              <Text style={styles.otpNumber}>
+                We have sent a Verification code at
               </Text>
+              <Text style={[styles.otpNumber,{marginBottom:RfH(51), marginTop:RfH(6)}]}>+{route.params.countryCode} -{route.params.number}</Text>
             </View>
           </TouchableWithoutFeedback>
           {bottonView()}

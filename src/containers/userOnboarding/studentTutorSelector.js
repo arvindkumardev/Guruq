@@ -1,11 +1,12 @@
 import { View, Image, Text, StatusBar } from 'react-native';
 import { Icon } from 'native-base';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../common/styles';
 import { Colors, Images } from '../../theme';
-import { RfH, RfW } from '../../utils/helpers';
+import { RfH, RfW, getSaveData } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
+import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants'
 import styles from './style';
 
 function studentTutorSelector() {
@@ -15,6 +16,15 @@ function studentTutorSelector() {
   const onBackPress = () => {
     navigation.goBack();
   };
+
+  useEffect(()=>{
+    //getFirstName();
+  })
+
+  const getFirstName = async () => {
+    const firstname = await getSaveData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
+    setUserName(firstname);
+  }
 
   return (
     <View style={commonStyles.mainContainer}>
@@ -30,11 +40,11 @@ function studentTutorSelector() {
       </View>
       <Text style={styles.userName}>{userName}</Text>
       <Text style={styles.subHeading}>Continue as</Text>
-      <View style={styles.iconView}>
+      <View>
         <Image style={{ alignSelf: 'center', marginTop: 16 }} source={Images.student} />
       </View>
       <Text style={[styles.subHeading, { marginTop: RfH(34) }]}>Student</Text>
-      <View style={styles.iconView}>
+      <View>
         <Image style={{ alignSelf: 'center', marginTop: 12 }} source={Images.tutor} />
       </View>
       <Text style={[styles.subHeading, { marginTop: RfH(34) }]}>Tutor</Text>

@@ -20,15 +20,6 @@ const styles = StyleSheet.create({
     marginTop: RfH(58),
     fontSize: 20,
     color: '#313030',
-  },
-  iconView: {
-    height: RfH(146),
-    width: RfW(146),
-    borderColor: Colors.primaryButtonBackground,
-    borderRadius: RfH(73),
-    borderWidth: 1,
-    marginTop: RfH(34),
-    alignSelf: 'center',
-  },
+  }
 });
 export default styles;

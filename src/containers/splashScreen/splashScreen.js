@@ -1,7 +1,8 @@
 import { Image, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import styles from '../../common/styles';
+import commonStyles from '../../common/styles';
+import styles from './styles';
 import { Colors } from '../../theme';
 import { getToken, RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
@@ -20,54 +21,28 @@ function splashScreen() {
     // } else {
     const token = await getToken();
     if (token) {
-      navigation.navigate(routeNames.USER_ONBOARDING);
+      navigation.navigate(routeNames.DASHBOARD);
     } else {
       navigation.navigate(routeNames.ONBOARDING);
     }
     // }
   };
   return (
-    <View style={[styles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
+    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
       <Image
-        style={{
-          height: 233,
-          width: 233,
-          marginTop: RfH(179),
-          marginHorizontal: RfW(71),
-          alignSelf: 'center',
-        }}
+        style={styles.splashImage}
         source={require('../../assets/images/splash_image.png')}
       />
       <Text
-        style={{
-          fontSize: 20,
-          color: '#fff',
-          fontWeight: '500',
-          alignSelf: 'center',
-          marginTop: RfH(-40),
-        }}>
+        style={styles.msgOne}>
         Find the best
       </Text>
       <Text
-        style={{
-          fontSize: 20,
-          color: '#fff',
-          fontWeight: '500',
-          alignSelf: 'center',
-        }}>
+        style={styles.msgTwo}>
         Tutors and Institutes
       </Text>
       <Text
-        style={{
-          fontSize: 14,
-          color: '#fff',
-          opacity: 0.5,
-          textAlign: 'center',
-          bottom: RfH(48),
-          left: 0,
-          right: 0,
-          position: 'absolute',
-        }}>
+        style={styles.bottomMsg}>
         Powered by RHA Technologies
       </Text>
     </View>

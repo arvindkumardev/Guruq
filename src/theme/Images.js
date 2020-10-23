@@ -9,6 +9,22 @@ const Images = {
   check: require('../assets/images/check.png'),
   student: require('../assets/images/student.png'),
   tutor: require('../assets/images/tutor.png'),
+  user: require('../assets/images/user.png'),
+  book: require('../assets/images/book.png'),
+  physics: require('../assets/images/physics.png'),
+  beaker: require('../assets/images/beaker.png'),
+  math: require('../assets/images/math.png'),
+  civic: require('../assets/images/civic.png'),
+  history: require('../assets/images/history.png'),
+  geo: require('../assets/images/geo.png'),
+  dna: require('../assets/images/dna.png'),
+  kushal: require('../assets/images/kushal.png'),
+  home: require('../assets/images/home.png'),
+  home_active: require('../assets/images/home_active.png'),
+  calendar: require('../assets/images/calendar.png'),
+  classes: require('../assets/images/classes.png'),
+  tutor_tab: require('../assets/images/tutor_tab.png'),
+  profile: require('../assets/images/profile.png')
 };
 
 export default Images;
