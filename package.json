@@ -10,6 +10,12 @@
     "lint": "eslint *.js **/*.js",
     "clean:android": "cd android && ./gradlew clean && cd ../",
     "clean:ios": "cd ios && xcodebuild clean && cd ../",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@apollo/client": "^3.0.2",
