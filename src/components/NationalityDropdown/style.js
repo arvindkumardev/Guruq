@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     paddingVertical: RfH(10),
     flex: 1,
     flexDirection: 'row',
-    borderBottomColor: Colors.lightGray,
-    borderBottomWidth: 0.3,
+    // borderBottomColor: Colors.lightGray,
+    // borderBottomWidth: 0.3,
   },
   itemTextContainer: {
     flexDirection: 'row',

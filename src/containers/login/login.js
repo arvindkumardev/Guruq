@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
 } from 'react-native';
 import { Icon, Input, Item } from 'native-base';
 import React, { useState } from 'react';
@@ -84,7 +84,7 @@ function login() {
       if (error.errorCode === INVALID_INPUT) {
         // incorrect username/password
         Alert.alert('Incorrect password');
-      }else if(error.errorCode === NOT_FOUND){
+      } else if (error.errorCode === NOT_FOUND) {
         navigation.navigate(routeNames.OTP_VERIFICATION, {
           countryCode: mobileObj.country.dialCode,
           number: mobileObj.mobile,
@@ -134,24 +134,33 @@ function login() {
   };
 
   const onForgotPasswordClick = () => {
-    if(mobileObj.mobile){
+    if (mobileObj.mobile) {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
       forgotPassword({
         variables: { countryCode, number },
       });
-    }else{
+    } else {
       Alert.alert('Please enter mobile number.');
     }
   };
 
   const onIconPress = () => {
-    (eyeIcon === 'eye') ? setEyeIcon('eye-with-line') : setEyeIcon('eye');
-    (hidePassword) ? setHidePassword(false) : setHidePassword(true);
+    if (eyeIcon === 'eye') {
+      setEyeIcon('eye-with-line');
+    } else {
+      setEyeIcon('eye');
+    }
+
+    if (hidePassword) {
+      setHidePassword(false);
+    } else {
+      setHidePassword(true);
+    }
   };
 
   const onClickContinue = () => {
-    if(mobileObj.mobile){
+    if (mobileObj.mobile) {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
       if (!showPassword) {
@@ -161,38 +170,41 @@ function login() {
       } else {
         signIn();
       }
-    }else{
+    } else {
       Alert.alert('Please enter mobile number.');
     }
   };
 
-  const clearMobileNumber = () =>{
-    setMobileObj({mobile: '', country: IND_COUNTRY_OBJ});
+  const clearMobileNumber = () => {
+    setMobileObj({ mobile: '', country: IND_COUNTRY_OBJ });
     setShowClear(false);
-  }
+  };
 
-  const onChangePassword = (text) =>{
+  const onChangePassword = (text) => {
     setPassword(text);
-    text ? setShowEye(true) : setShowEye(false);
-  }
+    if (text) {
+      setShowEye(true);
+    } else {
+      setShowEye(false);
+    }
+  };
 
   const bottonView = () => (
-      <View
-        style={{
-          backgroundColor: Colors.white,
-          paddingHorizontal: 16,
-          paddingVertical: 56,
-          borderTopLeftRadius: 25,
-          borderTopRightRadius: 25,
-        }}
-      >
-        <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-          <View style={{flex:0.95}}>
-            <CustomMobileNumber
+    <View
+      style={{
+        backgroundColor: Colors.white,
+        paddingHorizontal: 16,
+        paddingVertical: 56,
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
+      }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+        <View style={{ flex: 0.95 }}>
+          <CustomMobileNumber
             value={mobileObj}
             topMargin={0}
-            onChangeHandler={(mobileObj) => {
-              setMobileObj(mobileObj);
+            onChangeHandler={(m) => {
+              setMobileObj(m);
               setShowClear(true);
               setShowNext(true);
             }}
@@ -200,17 +212,30 @@ function login() {
             refKey="mobileNumber"
             placeholder="Mobile number"
             onSubmitEditing={() => onSubmitEditing()}
-          /></View>
-          {showClear && <Icon onPress={() => clearMobileNumber()} style={{flex:0.05, marginBottom:RfH(-30), fontSize:18, color:Colors.inputLabel}} type="Entypo" name="circle-with-cross"></Icon>}
+          />
         </View>
-        <View
-          style={{
-            marginTop: RfH(40),
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.inputLabel,
-          }}
-        />
-        {showPassword && (
+        {showClear && (
+          <Icon
+            onPress={() => clearMobileNumber()}
+            style={{
+              flex: 0.05,
+              marginBottom: RfH(-30),
+              fontSize: 18,
+              color: Colors.inputLabel,
+            }}
+            type="Entypo"
+            name="circle-with-cross"
+          />
+        )}
+      </View>
+      <View
+        style={{
+          marginTop: RfH(40),
+          borderBottomWidth: 0.5,
+          borderBottomColor: Colors.inputLabel,
+        }}
+      />
+      {showPassword && (
         <View>
           <Item style={{ marginTop: RfH(53.5) }}>
             <Input
@@ -219,41 +244,44 @@ function login() {
               placeholderTextColor={Colors.inputLabel}
               onChangeText={(text) => onChangePassword(text)}
             />
-            {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={{ fontSize: 18, color: '#818181' }} />}
+            {showEye && (
+              <Icon
+                type="Entypo"
+                name={eyeIcon}
+                onPress={() => onIconPress()}
+                style={{ fontSize: 18, color: '#818181' }}
+              />
+            )}
           </Item>
           <TouchableOpacity onPress={() => onForgotPasswordClick()}>
-            <Text style={{ color: Colors.primaryButtonBackground, textAlign: 'right', marginTop: RfH(6) }}>
-              Forgot
-              Password?
+            <Text
+              style={{
+                color: Colors.primaryButtonBackground,
+                textAlign: 'right',
+                marginTop: RfH(6),
+              }}>
+              Forgot Password?
             </Text>
           </TouchableOpacity>
         </View>
-        )}
-        <TouchableOpacity
-          onPress={() => onClickContinue()}
-          style={[
-            showNext
-              ? commonStyles.buttonPrimary
-              : commonStyles.disableButton,
-            {
-              marginTop: RfH(63),
-              alignSelf: 'center',
-              width: RfW(144),
-            },
-          ]}
-        >
-          <Text style={commonStyles.textButtonPrimary}>Continue</Text>
-        </TouchableOpacity>
-      </View>
+      )}
+      <TouchableOpacity
+        onPress={() => onClickContinue()}
+        style={[
+          showNext ? commonStyles.buttonPrimary : commonStyles.disableButton,
+          {
+            marginTop: RfH(63),
+            alignSelf: 'center',
+            width: RfW(144),
+          },
+        ]}>
+        <Text style={commonStyles.textButtonPrimary}>Continue</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   return (
-    <View
-      style={[
-        commonStyles.mainContainer,
-        { backgroundColor: Colors.onboardBackground },
-      ]}
-    >
+    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
       <Loader isLoading={checkUserLoading || signInLoading || forgotPasswordLoading} />
       <StatusBar barStyle="light-content" />
       <Icon
@@ -272,9 +300,7 @@ function login() {
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ marginTop: RfH(36) }}>
               <Text style={styles.title}>{title}</Text>
-              <Text style={styles.subtitle}>
-                {subTitle}
-              </Text>
+              <Text style={styles.subtitle}>{subTitle}</Text>
             </View>
           </TouchableWithoutFeedback>
           {bottonView()}
