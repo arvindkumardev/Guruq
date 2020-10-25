@@ -13,10 +13,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../../common/styles';
 import styles from './styles';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { AuthContext } from '../../../common/context';
+import { isLoggedIn, userDetails } from '../../../apollo/cache';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
 function setPassword() {
   const navigation = useNavigation();
@@ -24,8 +25,6 @@ function setPassword() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
-
-  const { signIn } = React.useContext(AuthContext);
 
   const [setUserPassword, { loading: setPasswordLoading }] = useMutation(SET_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
@@ -36,7 +35,11 @@ function setPassword() {
     },
     onCompleted: (data) => {
       if (data) {
-        signIn(data.setPassword);
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token);
+
+        // set in apollo cache
+        isLoggedIn(true);
+        userDetails(data.setPassword);
       }
     },
   });

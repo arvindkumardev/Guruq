@@ -1,27 +1,17 @@
 import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
+import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../../common/styles';
 import { Colors, Images } from '../../../../theme';
-import { getSaveData, RfH, RfW } from '../../../../utils/helpers';
+import { removeData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import { IconButtonWrapper } from '../../../../components';
-import { AuthContext } from '../../../../common/context';
+import { isLoggedIn, userDetails } from '../../../../apollo/cache';
 
 function dashboard() {
-  const [userName, setUserName] = useState('');
-
-  const getFirstName = async () => {
-    const firstName = await getSaveData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
-    setUserName(firstName);
-  };
-
-  useEffect(() => {
-    getFirstName();
-  });
-
-  const { signOut } = React.useContext(AuthContext);
+  const userInfo = useReactiveVar(userDetails);
 
   const [favouriteTutor, setFavouriteTutor] = useState([
     { name: 'Ritesh Jain', subject: 'English, Maths', imageUrl: '' },
@@ -30,9 +20,11 @@ function dashboard() {
   ]);
 
   const logout = () => {
-    // Alert.alert('Logout!')
+    removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
 
-    signOut();
+    // set in apollo cache
+    isLoggedIn(false);
+    userDetails({});
   };
 
   const renderSubjects = () => {
@@ -248,7 +240,7 @@ function dashboard() {
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(18) }}>
           <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
-            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.darktitle }}>Hi {userName}</Text>
+            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.darktitle }}>Hi {userInfo.firstName}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
               <Text style={{ color: Colors.inputLabel, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
               <Icon

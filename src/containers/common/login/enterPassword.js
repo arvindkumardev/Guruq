@@ -5,12 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../../common/styles';
 import styles from './styles';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW, storeData } from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/ScreenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { AuthContext } from '../../../common/context';
+import { isLoggedIn, userDetails } from '../../../apollo/cache';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
 function enterPassword(props) {
   const { route } = props;
@@ -20,8 +21,6 @@ function enterPassword(props) {
   const [hidePassword, setHidePassword] = useState(true);
 
   const [mobileObj, setMobileObj] = useState(route.params.mobileObj);
-
-  const { signIn: signIn1 } = React.useContext(AuthContext);
 
   const [signIn, { loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
     fetchPolicy: 'no-cache',
@@ -38,7 +37,11 @@ function enterPassword(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        signIn1(data.signIn);
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
+
+        // set in apollo cache
+        isLoggedIn(true);
+        userDetails(data.signIn);
       }
     },
   });

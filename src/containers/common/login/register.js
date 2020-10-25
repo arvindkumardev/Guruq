@@ -6,11 +6,12 @@ import { useMutation } from '@apollo/client';
 import commonStyles from '../../../common/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import { AuthContext } from '../../../common/context';
+import { isLoggedIn, userDetails } from '../../../apollo/cache';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
 function register(props) {
   const navigation = useNavigation();
@@ -23,8 +24,6 @@ function register(props) {
   const [hidePassword, setHidePassword] = useState(true);
 
   const { route } = props;
-
-  const { signIn } = React.useContext(AuthContext);
 
   const [addUser, { loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
     fetchPolicy: 'no-cache',
@@ -45,7 +44,11 @@ function register(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        signIn(data.signUp);
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token);
+
+        // set in apollo cache
+        isLoggedIn(true);
+        userDetails(data.signUp);
       }
     },
   });

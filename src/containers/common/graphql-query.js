@@ -14,6 +14,11 @@ export const ME_QUERY = gql`
       id
       firstName
       lastName
+      email
+      isPasswordSet
+      isFirstTime
+      isPhoneNumberVerified
+      isEmailVerified
       type
       role {
         name

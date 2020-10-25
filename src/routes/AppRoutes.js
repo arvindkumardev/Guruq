@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './ScreenNames';
 import onboarding from '../containers/common/onboarding/index';
@@ -14,24 +14,18 @@ import splashScreen from '../containers/common/splashScreen/splashScreen';
 const Stack = createStackNavigator();
 
 const AuthRoutes = (props) => {
-  // const { loading, error, data } = useQuery(ME_QUERY);
-
-  const { state } = props;
-
-  useEffect(() => {
-    console.log('state: ', state);
-  }, [state]);
+  const { isUserLoggedIn, isUserTokenLoading } = props;
 
   return (
     <Stack.Navigator>
-      {state.isLoading && (
+      {isUserTokenLoading && (
         <Stack.Screen
           name={NavigationRouteNames.SPLASH_SCREEN}
           component={splashScreen}
           options={{ headerShown: false }}
         />
       )}
-      {!state.userToken ? (
+      {!isUserTokenLoading && !isUserLoggedIn ? (
         <>
           <Stack.Screen
             name={NavigationRouteNames.ON_BOARDING}

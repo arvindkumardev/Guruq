@@ -6,8 +6,8 @@ import { getToken } from '../utils/helpers';
 
 const logOptions = { logger: console.log };
 
-// const GRAPHQL_ENDPOINT = 'http://127.0.0.1:5000/graphql';
-const GRAPHQL_ENDPOINT = 'http://13.229.107.165:5000/graphql';
+const GRAPHQL_ENDPOINT = 'http://127.0.0.1:5000/graphql';
+// const GRAPHQL_ENDPOINT = 'http://13.229.107.165:5000/graphql';
 
 // const apolloClient = () => {
 //   console.log(token);
@@ -43,6 +43,8 @@ const authLink = setContext(async (req, { headers }) => {
 
 const link = authLink.concat(httpLink);
 
+const cache = new InMemoryCache();
+
 const apolloClient = () =>
   new ApolloClient({
     link: ApolloLink.from([
@@ -57,7 +59,7 @@ const apolloClient = () =>
       //   },
       // }),
     ]),
-    cache: new InMemoryCache(),
+    cache,
   });
 
 export default apolloClient;
