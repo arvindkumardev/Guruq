@@ -6,12 +6,11 @@ import { useMutation } from '@apollo/client';
 import commonStyles from '../../../common/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import { RfH, RfW, storeData } from '../../../utils/helpers';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import NavigationRouteNames from '../../../routes/ScreenNames';
+import { RfH, RfW } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
+import { AuthContext } from '../../../common/context';
 
 function register(props) {
   const navigation = useNavigation();
@@ -22,10 +21,10 @@ function register(props) {
   const [password, setPassword] = useState('');
   const [referCode, setReferCode] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
-  // const [eyeIcon, setEyeIcon] = useState('eye');
-  // const [showEye, setShowEye] = useState(false);
 
   const { route } = props;
+
+  const { signIn } = React.useContext(AuthContext);
 
   const [addUser, { loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
     fetchPolicy: 'no-cache',
@@ -40,18 +39,13 @@ function register(props) {
     },
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
       if (error.errorCode === DUPLICATE_FOUND) {
         Alert.alert('User already exists. Please login');
       }
     },
     onCompleted: (data) => {
       if (data) {
-        console.log('data', data);
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token);
-
-        // TODO: check user type and send to corresponding dashboard
-        navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD);
+        signIn(data.signUp);
       }
     },
   });

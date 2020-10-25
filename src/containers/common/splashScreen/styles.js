@@ -3,8 +3,8 @@ import { RfH, RfW } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
   splashImage: {
-    height: RfH(233),
-    width: RfW(233),
+    height: RfH(210),
+    width: RfW(210),
     marginTop: RfH(179),
     marginHorizontal: RfW(71),
     alignSelf: 'center',
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '500',
     alignSelf: 'center',
-    marginTop: RfH(-40),
+    marginTop: RfH(-45),
   },
   msgTwo: {
     fontSize: 20,

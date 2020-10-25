@@ -14,7 +14,6 @@ import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
 function otpVerification(props) {
   const navigation = useNavigation();
-  const [code, setCode] = useState(0);
   const [time, setTime] = useState(60);
 
   const { route } = props;
@@ -25,7 +24,6 @@ function otpVerification(props) {
     const interval = setInterval(() => {
       if (time > 0) {
         setTime((time) => time - 1);
-      } else {
       }
     }, 1000);
 
@@ -34,17 +32,17 @@ function otpVerification(props) {
     };
   }, [time]);
 
-  const [generateOtp, { error, loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION, {
+  const [generateOtp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile },
-    onError: (e) => {
-      console.log(error);
-    },
-    onCompleted: (data) => {
-      if (data) {
-        console.log('data', data);
-      }
-    },
+    // onError: (e) => {
+    //   console.log(error);
+    // },
+    // onCompleted: (data) => {
+    //   if (data) {
+    //     console.log('data', data);
+    //   }
+    // },
   });
 
   const [verifyPhoneNumber, { loading: verifyLoading }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
@@ -85,18 +83,7 @@ function otpVerification(props) {
     navigation.goBack();
   };
 
-  const onClickContinue = () => {
-    if (code) {
-      verifyPhoneNumber({
-        variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, otp: code },
-      });
-    } else {
-      Alert.alert('Enter OTP to verify.');
-    }
-  };
-
   const onCodeFilled = (otp) => {
-    setCode(otp);
     verifyPhoneNumber({
       variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, otp },
     });
@@ -151,11 +138,6 @@ function otpVerification(props) {
             )}
           </View>
         </View>
-        {/* <TouchableOpacity */}
-        {/*  onPress={() => onClickContinue()} */}
-        {/*  style={[commonStyles.buttonPrimary, { marginTop: RfH(48), alignSelf: 'center', width: RfW(144) }]}> */}
-        {/*  <Text style={commonStyles.textButtonPrimary}>Verify</Text> */}
-        {/* </TouchableOpacity> */}
       </View>
     </MainContainer>
   );

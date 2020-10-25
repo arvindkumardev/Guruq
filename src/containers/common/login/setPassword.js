@@ -13,23 +13,19 @@ import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../../common/styles';
 import styles from './styles';
-import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
-import NavigationRouteNames from '../../../routes/ScreenNames';
+import { RfH, RfW } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { AuthContext } from '../../../common/context';
 
 function setPassword() {
   const navigation = useNavigation();
-  const [eyeIcon, setEyeIcon] = useState('eye');
-  const [confirmEyeIcon, setConfirmEyeIcon] = useState('eye');
   const [hidePassword, setHidePassword] = useState(true);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
-  const [showEye, setShowEye] = useState(false);
-  const [showTick, setShowTick] = useState(false);
-  const [showConfirmEye, setShowConfirmEye] = useState(false);
+
+  const { signIn } = React.useContext(AuthContext);
 
   const [setUserPassword, { loading: setPasswordLoading }] = useMutation(SET_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
@@ -40,14 +36,7 @@ function setPassword() {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log('data', data);
-        removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token);
-        storeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME, data.setPassword.firstName);
-        storeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME, data.setPassword.lastName);
-
-        // TODO: check user type and send to corresponding dashboard
-        navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD);
+        signIn(data.setPassword);
       }
     },
   });
@@ -62,36 +51,6 @@ function setPassword() {
     } else {
       Alert.alert('Password mismatch!');
     }
-  };
-
-  const onIconPress = () => {
-    if (eyeIcon === 'eye') {
-      setEyeIcon('eye-with-line');
-    } else {
-      setEyeIcon('eye');
-    }
-
-    if (hidePassword) setHidePassword(false);
-    else setHidePassword(true);
-  };
-
-  const onConfirmIconPress = () => {
-    if (confirmEyeIcon === 'eye') setConfirmEyeIcon('eye-with-line');
-    else setConfirmEyeIcon('eye');
-    if (hideConfirmPassword) setHideConfirmPassword(false);
-    else setHideConfirmPassword(true);
-  };
-
-  const onChangePassword = (text) => {
-    setPassword(text);
-    if (text) setShowEye(true);
-    else setShowEye(false);
-  };
-
-  const onChangeConfirmPassword = (text) => {
-    setConfirmPassword(text);
-    if (text) setShowConfirmEye(true);
-    else setShowConfirmEye(false);
   };
 
   return (
@@ -109,22 +68,25 @@ function setPassword() {
             <View>
               <Item floatingLabel>
                 <Label>New Password</Label>
-                <Input secureTextEntry={hidePassword} onChangeText={(text) => onChangePassword(text)} />
-                {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={styles.eyeIcon} />}
+                <Input secureTextEntry={hidePassword} onChangeText={(text) => setPassword(text)} />
+                <Icon
+                  type="Entypo"
+                  name={hidePassword ? 'eye' : 'eye-with-line'}
+                  onPress={() => setHidePassword(!hidePassword)}
+                  style={styles.eyeIcon}
+                />
               </Item>
             </View>
             <View style={{ marginTop: RfH(40) }}>
               <Item floatingLabel>
                 <Label>Confirm Password</Label>
-                <Input secureTextEntry={hideConfirmPassword} onChangeText={(text) => onChangeConfirmPassword(text)} />
-                {showConfirmEye && (
-                  <Icon
-                    type="Entypo"
-                    name={confirmEyeIcon}
-                    onPress={() => onConfirmIconPress()}
-                    style={styles.eyeIcon}
-                  />
-                )}
+                <Input secureTextEntry={hideConfirmPassword} onChangeText={(text) => setConfirmPassword(text)} />
+                <Icon
+                  type="Entypo"
+                  name={hideConfirmPassword ? 'eye' : 'eye-with-line'}
+                  onPress={() => setHideConfirmPassword(!hideConfirmPassword)}
+                  style={styles.eyeIcon}
+                />
               </Item>
             </View>
           </View>

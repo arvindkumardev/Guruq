@@ -6,7 +6,6 @@ import { useMutation } from '@apollo/client';
 import commonStyles from '../../../common/styles';
 import styles from './styles';
 import { RfH, RfW } from '../../../utils/helpers';
-// import routeNames from '../../../routes/ScreenNames';
 import NavigationRouteNames from '../../../routes/ScreenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
@@ -17,11 +16,8 @@ function enterPassword(props) {
   const { route } = props;
 
   const navigation = useNavigation();
-  // const [showNext, setShowNext] = useState(false);
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
-  // const [eyeIcon, setEyeIcon] = useState('eye');
-  // const [showEye, setShowEye] = useState(false);
 
   const [mobileObj, setMobileObj] = useState(route.params.mobileObj);
 
@@ -42,20 +38,7 @@ function enterPassword(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        // if (!data.signIn.isPasswordSet) {
-        //   navigation.navigate(NavigationRouteNames.SET_PASSWORD);
-        // } else
-        // if (data.signIn.isFirstTime) {
-        //   TODO: check user type and send to corresponding on boarding
-        // navigation.navigate(NavigationRouteNames.STUDENT.ON_BOARDING);
-        // } else {
-        // console.log('sign_in-data', data);
-
         signIn1(data.signIn);
-
-        // TODO: check user type and send to corresponding dashboard
-        // navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD);
-        // }
       }
     },
   });
@@ -78,10 +61,6 @@ function enterPassword(props) {
     navigation.goBack();
   };
 
-  // const onSubmitEditing = () => {
-  //   setShowNext(true);
-  // };
-
   const onForgotPasswordClick = () => {
     if (mobileObj.mobile) {
       const countryCode = mobileObj.country.dialCode;
@@ -93,33 +72,6 @@ function enterPassword(props) {
       Alert.alert('Please enter mobile number.');
     }
   };
-
-  // const onIconPress = () => {
-  //   if (eyeIcon === 'eye') {
-  //     setEyeIcon('eye-with-line');
-  //   } else {
-  //     setEyeIcon('eye');
-  //   }
-  //
-  //   if (hidePassword) {
-  //     setHidePassword(false);
-  //   } else {
-  //     setHidePassword(true);
-  //   }
-  // };
-
-  const onClickContinue = () => {
-    signIn();
-  };
-
-  // const onChangePassword = (text) => {
-  //   setPassword(text);
-  //   if (text) {
-  //     setShowEye(true);
-  //   } else {
-  //     setShowEye(false);
-  //   }
-  // };
 
   return (
     <MainContainer isLoading={signInLoading || forgotPasswordLoading} onBackPress={onBackPress}>
@@ -148,7 +100,7 @@ function enterPassword(props) {
         </View>
         {/* )} */}
         <TouchableOpacity
-          onPress={() => onClickContinue()}
+          onPress={() => signIn()}
           style={[
             password ? commonStyles.buttonPrimary : commonStyles.disableButton,
             {
