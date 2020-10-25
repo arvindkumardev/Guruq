@@ -41,6 +41,7 @@ function App() {
           return {
             ...prevState,
             userToken: action.token,
+            isSignout: action.isSignout,
             isLoading: false,
           };
         case 'SIGN_IN':
@@ -58,14 +59,14 @@ function App() {
         default:
           return {
             isLoading: true,
-            isSignout: false,
+            isSignout: true,
             userToken: null,
           };
       }
     },
     {
       isLoading: true,
-      isSignout: false,
+      isSignout: true,
       userToken: null,
     }
   );
@@ -82,10 +83,11 @@ function App() {
       }
 
       // After restoring token, we may need to validate it in production apps
+      // CALL BACKEND AND VALIDATE TOKEN
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken, isSignout: false });
     };
 
     bootstrapAsync();
@@ -106,7 +108,13 @@ function App() {
 
         dispatch({ type: 'SIGN_IN', token: data.token });
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: async () => {
+        await removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+        await removeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
+        await removeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME);
+
+        dispatch({ type: 'SIGN_OUT' });
+      },
       signUp: async (data) => {
         // In a production app, we need to send user data to server and get a token
         // We will also need to handle errors if sign up failed
@@ -114,8 +122,9 @@ function App() {
         // In the example, we'll use a dummy token
 
         await removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-        await removeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
-        await removeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME);
+        await storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.token);
+        await storeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME, data.firstName);
+        await storeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME, data.lastName);
 
         dispatch({ type: 'SIGN_IN', token: data.token });
       },

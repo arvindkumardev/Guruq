@@ -31,7 +31,7 @@ const AuthRoutes = (props) => {
           options={{ headerShown: false }}
         />
       )}
-      {state.isSignout ? (
+      {!state.userToken ? (
         <>
           <Stack.Screen
             name={NavigationRouteNames.ON_BOARDING}
