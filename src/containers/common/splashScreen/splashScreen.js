@@ -44,8 +44,7 @@ function splashScreen() {
         } else {
           navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD);
         }
-        / /;
-      } else {
+        // } else {
         //   navigation.navigate(NavigationRouteNames.ON_BOARDING);
       }
     },
