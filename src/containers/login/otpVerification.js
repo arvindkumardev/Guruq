@@ -16,12 +16,13 @@ import { useMutation } from '@apollo/client';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
-import { RfH, RfW } from '../../utils/helpers';
+import { removeData, RfH, RfW, storeData } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
 import Loader from '../../components/Loader';
 import { INVALID_INPUT } from '../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from './graphql-mutation';
 import MainContainer from './components/mainContainer';
+import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
 
 function otpVerification(props) {
   const navigation = useNavigation();
@@ -77,6 +78,11 @@ function otpVerification(props) {
             number: mobileObj.mobile,
           });
         } else {
+          // set token
+          console.log('data', data);
+          removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+          storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.verifyPhoneNumber.token);
+
           navigation.navigate(routeNames.SET_PASSWORD);
         }
       }
@@ -157,11 +163,11 @@ function otpVerification(props) {
             )}
           </View>
         </View>
-        <TouchableOpacity
-          onPress={() => onClickContinue()}
-          style={[commonStyles.buttonPrimary, { marginTop: RfH(48), alignSelf: 'center', width: RfW(144) }]}>
-          <Text style={commonStyles.textButtonPrimary}>Verify</Text>
-        </TouchableOpacity>
+        {/* <TouchableOpacity */}
+        {/*  onPress={() => onClickContinue()} */}
+        {/*  style={[commonStyles.buttonPrimary, { marginTop: RfH(48), alignSelf: 'center', width: RfW(144) }]}> */}
+        {/*  <Text style={commonStyles.textButtonPrimary}>Verify</Text> */}
+        {/* </TouchableOpacity> */}
       </View>
     </MainContainer>
   );
