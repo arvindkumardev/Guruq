@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { RfH, RfW } from '../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import Colors from '../../theme/colors';
 
 const styles = StyleSheet.create({

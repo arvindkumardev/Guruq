@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Platform } from 'react-native';
+import { Modal, Platform, View } from 'react-native';
 import PropTypes from 'prop-types';
 
 import LottieView from 'lottie-react-native';

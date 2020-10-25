@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     marginTop: RfH(58),
     fontSize: 20,
     color: '#313030',
-  }
+  },
 });
 export default styles;

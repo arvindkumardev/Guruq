@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../theme/colors';
 import { RfH, RfW } from '../utils/helpers';
-import {spacePX} from '../theme/variables';
+import { spacePX } from '../theme/variables';
 
 const styles = StyleSheet.create({
   mainContainer: {

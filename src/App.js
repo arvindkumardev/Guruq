@@ -1,15 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
-import { createStackNavigator } from '@react-navigation/stack';
 import apolloClient from './apollo/apollo';
 import AppStack from './routes/AppRoutes';
-import StudentAppStack from './routes/StudentAppRoutes';
 import { getToken, removeData, storeData } from './utils/helpers';
-import NavigationRouteNames from './routes/ScreenNames';
 import { AuthContext } from './common/context';
 import { LOCAL_STORAGE_DATA_KEY } from './utils/constants';
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Image, ImageBackground, TouchableOpacity, View, Text } from 'react-native';
+import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import { isEmpty } from 'lodash';
 import styles, { getIconImageStyle } from './style';
 
-import { getImageSource, RfH, RfW } from '../../utils/helpers';
+import { getImageSource } from '../../utils/helpers';
 
 function stylingIconButtonWrapper(props) {
   const {

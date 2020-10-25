@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../theme/colors';
 import { RfH, RfW } from '../../../utils/helpers';
-import { cardPX, cardPT, cardPB, cardRadiusMedium, spacePX } from '../../../theme/variables';
+import { cardPB, cardPT, cardPX, cardRadiusMedium, spacePX } from '../../../theme/variables';
 
 const styles = StyleSheet.create({
   title: {

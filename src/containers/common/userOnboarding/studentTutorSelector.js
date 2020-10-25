@@ -1,12 +1,11 @@
-import { View, Image, Text, StatusBar } from 'react-native';
+import { Image, StatusBar, Text, View } from 'react-native';
 import { Icon } from 'native-base';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../common/styles';
 import { Colors, Images } from '../../../theme';
-import { RfH, RfW, getSaveData } from '../../../utils/helpers';
-import routeNames from '../../../routes/ScreenNames';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants'
+import { getSaveData, RfH, RfW } from '../../../utils/helpers';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import styles from './style';
 
 function studentTutorSelector() {
@@ -17,14 +16,14 @@ function studentTutorSelector() {
     navigation.goBack();
   };
 
-  useEffect(()=>{
-    //getFirstName();
-  })
+  useEffect(() => {
+    // getFirstName();
+  });
 
   const getFirstName = async () => {
     const firstname = await getSaveData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
     setUserName(firstname);
-  }
+  };
 
   return (
     <View style={commonStyles.mainContainer}>

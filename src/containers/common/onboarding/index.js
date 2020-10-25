@@ -1,4 +1,4 @@
-import { View, Image, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Swiper from 'react-native-swiper';

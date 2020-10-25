@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useQuery } from '@apollo/client';
 import NavigationRouteNames from './ScreenNames';
 import onboarding from '../containers/common/onboarding/index';
 import login from '../containers/common/login/login';
@@ -10,7 +9,6 @@ import register from '../containers/common/login/register';
 import enterPassword from '../containers/common/login/enterPassword';
 import studentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
 import studentTutorSelector from '../containers/common/userOnboarding/studentTutorSelector';
-import { ME_QUERY } from '../containers/common/graphql-query';
 import splashScreen from '../containers/common/splashScreen/splashScreen';
 
 const Stack = createStackNavigator();

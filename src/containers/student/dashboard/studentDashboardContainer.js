@@ -1,12 +1,9 @@
-import { SafeAreaView, StatusBar, Text, View, Alert } from 'react-native';
+import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { Container, Footer, FooterTab, Button, Content, Icon, Thumbnail } from 'native-base';
+import { Button, Container, Content, Footer, FooterTab, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 import commonStyles from '../../../common/styles';
 import { Colors, Images } from '../../../theme';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import routeNames from '../../../routes/ScreenNames';
 import styles from './styles';
 import Dashboard from './components/dashboard';
 

@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import Colors from '../../../theme/colors';
 import { RfH, RfW } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
@@ -21,7 +20,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
     fontWeight: '500',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   bottomMsg: {
     fontSize: 14,

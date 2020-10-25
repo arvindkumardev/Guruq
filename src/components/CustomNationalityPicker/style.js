@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { RfH, RfW } from '../../utils/helpers';
-import { Colors } from '../../theme';
 
 const styles = StyleSheet.create({
   textInputContainer: {},

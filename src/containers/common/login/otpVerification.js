@@ -1,24 +1,12 @@
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import { Icon } from 'native-base';
+import { Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { useMutation } from '@apollo/client';
-import commonStyles from '../../../common/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { removeData, RfH, storeData } from '../../../utils/helpers';
 import routeNames from '../../../routes/ScreenNames';
-import Loader from '../../../components/Loader';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';

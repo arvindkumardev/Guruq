@@ -1,11 +1,10 @@
-import { Alert, FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import commonStyles from '../../../../common/styles';
 import { Colors, Images } from '../../../../theme';
-import { getSaveData, removeData, RfH, RfW } from '../../../../utils/helpers';
+import { getSaveData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import { IconButtonWrapper } from '../../../../components';
 import { AuthContext } from '../../../../common/context';

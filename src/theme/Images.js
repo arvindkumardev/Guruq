@@ -24,7 +24,7 @@ const Images = {
   calendar: require('../assets/images/calendar.png'),
   classes: require('../assets/images/classes.png'),
   tutor_tab: require('../assets/images/tutor_tab.png'),
-  profile: require('../assets/images/profile.png')
+  profile: require('../assets/images/profile.png'),
 };
 
 export default Images;

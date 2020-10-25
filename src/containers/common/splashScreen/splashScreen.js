@@ -1,11 +1,10 @@
 import { Image, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/client';
 import commonStyles from '../../../common/styles';
 import styles from './styles';
 import { Colors } from '../../../theme';
-import { getToken, RfH, RfW } from '../../../utils/helpers';
 // import routeNames from '../../../routes/ScreenNames';
 import NavigationRouteNames from '../../../routes/ScreenNames';
 import { ME_QUERY } from '../graphql-query';

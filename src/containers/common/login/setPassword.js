@@ -2,7 +2,6 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
-  StatusBar,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -13,15 +12,12 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../../common/styles';
-import Colors from '../../../theme/colors';
 import styles from './styles';
 import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
-import routeNames from '../../../routes/ScreenNames';
+import NavigationRouteNames from '../../../routes/ScreenNames';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
-import Loader from '../../../components/Loader';
 import MainContainer from './components/mainContainer';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import NavigationRouteNames from '../../../routes/ScreenNames';
 
 function setPassword() {
   const navigation = useNavigation();

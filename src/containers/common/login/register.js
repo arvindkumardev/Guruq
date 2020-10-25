@@ -8,11 +8,10 @@ import Colors from '../../../theme/colors';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import routeNames from '../../../routes/ScreenNames';
+import NavigationRouteNames from '../../../routes/ScreenNames';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import NavigationRouteNames from '../../../routes/ScreenNames';
 
 function register(props) {
   const navigation = useNavigation();
