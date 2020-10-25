@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import Colors from '../../theme/colors';
-import { RfH, RfW } from '../../utils/helpers';
-import {cardPX, cardPT, cardPB, cardRadiusMedium, spacePX} from '../../theme/variables';
+import Colors from '../../../theme/colors';
+import { RfH, RfW } from '../../../utils/helpers';
+import { cardPX, cardPT, cardPB, cardRadiusMedium, spacePX } from '../../../theme/variables';
 
 const styles = StyleSheet.create({
   title: {
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   backIcon: {
     marginLeft: RfW(16),
     marginTop: RfH(58),
+    marginBottom: RfH(16),
     color: Colors.white,
   },
   eyeIcon: {
@@ -92,6 +93,10 @@ const styles = StyleSheet.create({
   resendParent: {
     alignItems: 'center',
     marginTop: RfH(8),
+  },
+
+  contentMarginTop: {
+    marginTop: RfH(36),
   },
 });
 export default styles;

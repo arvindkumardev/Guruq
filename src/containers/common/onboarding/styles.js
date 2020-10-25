@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import Colors from '../../theme/colors';
-import { RfH, RfW } from '../../utils/helpers';
+import Colors from '../../../theme/colors';
+import { RfH, RfW } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
   skip: {

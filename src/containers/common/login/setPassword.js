@@ -12,14 +12,16 @@ import { Icon, Input, Item, Label } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
-import commonStyles from '../../common/styles';
-import Colors from '../../theme/colors';
+import commonStyles from '../../../common/styles';
+import Colors from '../../../theme/colors';
 import styles from './styles';
-import { RfH, RfW } from '../../utils/helpers';
-import routeNames from '../../routes/ScreenNames';
+import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import routeNames from '../../../routes/ScreenNames';
 import { SET_PASSWORD_MUTATION } from './graphql-mutation';
-import Loader from '../../components/Loader';
+import Loader from '../../../components/Loader';
 import MainContainer from './components/mainContainer';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import NavigationRouteNames from '../../../routes/ScreenNames';
 
 function setPassword() {
   const navigation = useNavigation();
@@ -43,7 +45,13 @@ function setPassword() {
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        navigation.navigate(routeNames.DASHBOARD);
+        removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token);
+        storeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME, data.setPassword.firstName);
+        storeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME, data.setPassword.lastName);
+
+        // TODO: check user type and send to corresponding dashboard
+        navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD);
       }
     },
   });
@@ -93,7 +101,7 @@ function setPassword() {
   return (
     <MainContainer isLoading={setPasswordLoading} onBackPress={onBackPress}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={{ marginTop: RfH(36) }}>
+        <View style={styles.contentMarginTop}>
           <Text style={styles.title}>Set Password</Text>
           <Text style={styles.subtitle}>Enter the new password and submit</Text>
         </View>
@@ -126,7 +134,7 @@ function setPassword() {
           </View>
           <TouchableOpacity
             onPress={() => onClickContinue()}
-            style={[commonStyles.buttonPrimary, { marginTop: RfH(63), alignSelf: 'center', width: RfW(144) }]}>
+            style={[commonStyles.buttonPrimary, { marginTop: RfH(48), alignSelf: 'center', width: RfW(144) }]}>
             <Text style={commonStyles.textButtonPrimary}>Submit</Text>
           </TouchableOpacity>
         </View>

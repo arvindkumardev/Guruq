@@ -1,7 +1,7 @@
 import { View, Image, Text } from 'react-native';
 import React from 'react';
 import styles from '../styles';
-import Images from '../../../theme/Images';
+import Images from '../../../../theme/Images';
 
 function findTutors() {
   return (

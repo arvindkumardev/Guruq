@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Icon, Item, Input, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
-import commonStyles from '../../common/styles';
-import styles from './styles';
-import { Colors, Images } from '../../theme';
-import { getSaveData, removeData, RfH, RfW } from '../../utils/helpers';
-import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
-import routeNames from '../../routes/ScreenNames';
-import { IconButtonWrapper } from '../../components';
-import { cardPX, spacePX } from '../../theme/variables';
+import commonStyles from '../../../../common/styles';
+import styles from '../styles';
+import { Colors, Images } from '../../../../theme';
+import { getSaveData, removeData, RfH, RfW } from '../../../../utils/helpers';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
+import routeNames from '../../../../routes/ScreenNames';
+import { IconButtonWrapper } from '../../../../components';
+import { cardPX, spacePX } from '../../../../theme/variables';
 
 function dashboard() {
   const [userName, setUserName] = useState('');

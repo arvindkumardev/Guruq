@@ -63,6 +63,14 @@ export const SET_PASSWORD_MUTATION = gql`
   mutation SetPassword($password: String!) {
     setPassword(password: $password) {
       id
+      firstName
+      lastName
+      email
+      isPasswordSet
+      isFirstTime
+      isPhoneNumberVerified
+      isEmailVerified
+      token
     }
   }
 `;

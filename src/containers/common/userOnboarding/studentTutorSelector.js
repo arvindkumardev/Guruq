@@ -2,11 +2,11 @@ import { View, Image, Text, StatusBar } from 'react-native';
 import { Icon } from 'native-base';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import commonStyles from '../../common/styles';
-import { Colors, Images } from '../../theme';
-import { RfH, RfW, getSaveData } from '../../utils/helpers';
-import routeNames from '../../routes/ScreenNames';
-import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants'
+import commonStyles from '../../../common/styles';
+import { Colors, Images } from '../../../theme';
+import { RfH, RfW, getSaveData } from '../../../utils/helpers';
+import routeNames from '../../../routes/ScreenNames';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants'
 import styles from './style';
 
 function studentTutorSelector() {

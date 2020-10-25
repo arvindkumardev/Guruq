@@ -13,18 +13,19 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
-import commonStyles from '../../common/styles';
-import Colors from '../../theme/colors';
+import commonStyles from '../../../common/styles';
+import Colors from '../../../theme/colors';
 import styles from './styles';
-import { removeData, RfH, RfW, storeData } from '../../utils/helpers';
-import { IND_COUNTRY_OBJ, LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
-import { CustomMobileNumber } from '../../components';
-import routeNames from '../../routes/ScreenNames';
-import Loader from '../../components/Loader';
+import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { IND_COUNTRY_OBJ, LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { CustomMobileNumber } from '../../../components';
+import routeNames from '../../../routes/ScreenNames';
+import Loader from '../../../components/Loader';
 import { CHECK_USER_QUERY } from './graphql-query';
-import { INVALID_INPUT, NOT_FOUND } from '../../common/errorCodes';
+import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from './graphql-mutation';
 import MainContainer from './components/mainContainer';
+import NavigationRouteNames from '../../../routes/ScreenNames';
 
 function enterPassword(props) {
   const { route } = props;
@@ -67,9 +68,11 @@ function enterPassword(props) {
         if (!data.signIn.isPasswordSet) {
           navigation.navigate(routeNames.SET_PASSWORD);
         } else if (data.signIn.isFirstTime) {
-          navigation.navigate(routeNames.USER_ONBOARDING);
+          // TODO: check user type and send to corresponding on boarding
+          navigation.navigate(routeNames.STUDENT.ON_BOARDING);
         } else {
-          navigation.navigate(routeNames.DASHBOARD);
+          // TODO: check user type and send to corresponding dashboard
+          navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD);
         }
       }
     },
@@ -139,7 +142,7 @@ function enterPassword(props) {
   return (
     <MainContainer isLoading={signInLoading || forgotPasswordLoading} onBackPress={onBackPress}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={{ marginTop: RfH(36) }}>
+        <View style={styles.contentMarginTop}>
           <Text style={styles.title}>Welcome back!</Text>
           <Text style={styles.subtitle}>Enter password to login to your account.</Text>
         </View>

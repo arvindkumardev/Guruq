@@ -13,16 +13,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { useMutation } from '@apollo/client';
-import commonStyles from '../../common/styles';
-import Colors from '../../theme/colors';
+import commonStyles from '../../../common/styles';
+import Colors from '../../../theme/colors';
 import styles from './styles';
-import { removeData, RfH, RfW, storeData } from '../../utils/helpers';
-import routeNames from '../../routes/ScreenNames';
-import Loader from '../../components/Loader';
-import { INVALID_INPUT } from '../../common/errorCodes';
+import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import routeNames from '../../../routes/ScreenNames';
+import Loader from '../../../components/Loader';
+import { INVALID_INPUT } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from './graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
 function otpVerification(props) {
   const navigation = useNavigation();
@@ -122,7 +122,7 @@ function otpVerification(props) {
   return (
     <MainContainer isLoading={verifyLoading || otpLoading} onBackPress={onBackPress}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View>
+        <View style={styles.contentMarginTop}>
           <Text style={styles.title}>OTP Verification</Text>
           <Text style={styles.otpNumber}>We have sent a Verification code at</Text>
           <Text style={[styles.otpNumber, { marginBottom: RfH(40), marginTop: RfH(6) }]}>
