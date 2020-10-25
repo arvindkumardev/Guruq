@@ -26,13 +26,13 @@ const AuthRoutes = (props) => {
 
   return (
     <Stack.Navigator>
-      {/* {loading && ( */}
-      {/*  <Stack.Screen */}
-      {/*    name={NavigationRouteNames.SPLASH_SCREEN} */}
-      {/*    component={splashScreen} */}
-      {/*    options={{ headerShown: false }} */}
-      {/*  /> */}
-      {/* )} */}
+      {state.isLoading && (
+        <Stack.Screen
+          name={NavigationRouteNames.SPLASH_SCREEN}
+          component={splashScreen}
+          options={{ headerShown: false }}
+        />
+      )}
       {state.isSignout ? (
         <>
           <Stack.Screen

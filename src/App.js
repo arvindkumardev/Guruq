@@ -8,9 +8,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import apolloClient from './apollo/apollo';
 import AppStack from './routes/AppRoutes';
 import StudentAppStack from './routes/StudentAppRoutes';
-import { getToken } from './utils/helpers';
+import { getToken, removeData, storeData } from './utils/helpers';
 import NavigationRouteNames from './routes/ScreenNames';
 import { AuthContext } from './common/context';
+import { LOCAL_STORAGE_DATA_KEY } from './utils/constants';
 
 const getActiveRouteName = (state) => {
   const route = state.routes[state.index];
@@ -101,7 +102,10 @@ function App() {
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
 
-        console.log('sign_in-data', data);
+        await removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+        await storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.token);
+        await storeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME, data.firstName);
+        await storeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME, data.lastName);
 
         dispatch({ type: 'SIGN_IN', token: data.token });
       },
@@ -111,6 +115,10 @@ function App() {
         // We will also need to handle errors if sign up failed
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
+
+        await removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+        await removeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
+        await removeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME);
 
         dispatch({ type: 'SIGN_IN', token: data.token });
       },

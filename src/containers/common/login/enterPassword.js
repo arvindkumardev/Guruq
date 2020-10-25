@@ -43,11 +43,6 @@ function enterPassword(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
-        storeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME, data.signIn.firstName);
-        storeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME, data.signIn.lastName);
-
         // if (!data.signIn.isPasswordSet) {
         //   navigation.navigate(NavigationRouteNames.SET_PASSWORD);
         // } else
@@ -55,7 +50,7 @@ function enterPassword(props) {
         //   TODO: check user type and send to corresponding on boarding
         // navigation.navigate(NavigationRouteNames.STUDENT.ON_BOARDING);
         // } else {
-        console.log('sign_in-data', data);
+        // console.log('sign_in-data', data);
 
         signIn1(data.signIn);
 

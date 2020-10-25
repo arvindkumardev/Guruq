@@ -31,11 +31,7 @@ function dashboard() {
   ]);
 
   const logout = () => {
-    Alert.alert('Logout!');
-
-    removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-    removeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
-    removeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME);
+    // Alert.alert('Logout!')
 
     signOut();
   };
