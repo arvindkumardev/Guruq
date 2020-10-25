@@ -1,16 +1,14 @@
-import { Image, Text, TouchableOpacity, View, Alert, ScrollView, FlatList, StatusBar } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { Alert, FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Icon, Item, Input, Thumbnail } from 'native-base';
+import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import commonStyles from '../../../../common/styles';
-import styles from '../styles';
 import { Colors, Images } from '../../../../theme';
 import { getSaveData, removeData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
-import routeNames from '../../../../routes/ScreenNames';
 import { IconButtonWrapper } from '../../../../components';
-import { cardPX, spacePX } from '../../../../theme/variables';
+import { AuthContext } from '../../../../common/context';
 
 function dashboard() {
   const [userName, setUserName] = useState('');
@@ -24,19 +22,22 @@ function dashboard() {
     getFirstName();
   });
 
+  const { signOut } = React.useContext(AuthContext);
+
   const [favouriteTutor, setFavouriteTutor] = useState([
     { name: 'Ritesh Jain', subject: 'English, Maths', imageUrl: '' },
     { name: 'Simran Rai', subject: 'Chemistry', imageUrl: '' },
     { name: 'Priyam', subject: 'Maths', imageUrl: '' },
   ]);
-  const navigation = useNavigation();
 
   const logout = () => {
     Alert.alert('Logout!');
+
     removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
     removeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
     removeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME);
-    navigation.navigate(routeNames.LOGIN);
+
+    signOut();
   };
 
   const renderSubjects = () => {

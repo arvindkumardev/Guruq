@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useQuery } from '@apollo/client';
 import NavigationRouteNames from './ScreenNames';
@@ -15,19 +15,25 @@ import splashScreen from '../containers/common/splashScreen/splashScreen';
 
 const Stack = createStackNavigator();
 
-const AuthRoutes = () => {
-  const { loading, error, data } = useQuery(ME_QUERY);
+const AuthRoutes = (props) => {
+  // const { loading, error, data } = useQuery(ME_QUERY);
+
+  const { state } = props;
+
+  useEffect(() => {
+    console.log('state: ', state);
+  }, [state]);
 
   return (
     <Stack.Navigator>
-      {loading && (
-        <Stack.Screen
-          name={NavigationRouteNames.SPLASH_SCREEN}
-          component={splashScreen}
-          options={{ headerShown: false }}
-        />
-      )}
-      {!loading && error ? (
+      {/* {loading && ( */}
+      {/*  <Stack.Screen */}
+      {/*    name={NavigationRouteNames.SPLASH_SCREEN} */}
+      {/*    component={splashScreen} */}
+      {/*    options={{ headerShown: false }} */}
+      {/*  /> */}
+      {/* )} */}
+      {state.isSignout ? (
         <>
           <Stack.Screen
             name={NavigationRouteNames.ON_BOARDING}

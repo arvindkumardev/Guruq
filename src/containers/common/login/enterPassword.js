@@ -7,23 +7,26 @@ import commonStyles from '../../../common/styles';
 import styles from './styles';
 import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import routeNames from '../../../routes/ScreenNames';
+// import routeNames from '../../../routes/ScreenNames';
 import NavigationRouteNames from '../../../routes/ScreenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
+import { AuthContext } from '../../../common/context';
 
 function enterPassword(props) {
   const { route } = props;
 
   const navigation = useNavigation();
-  const [showNext, setShowNext] = useState(false);
+  // const [showNext, setShowNext] = useState(false);
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
-  const [eyeIcon, setEyeIcon] = useState('eye');
-  const [showEye, setShowEye] = useState(false);
+  // const [eyeIcon, setEyeIcon] = useState('eye');
+  // const [showEye, setShowEye] = useState(false);
 
   const [mobileObj, setMobileObj] = useState(route.params.mobileObj);
+
+  const { signIn: signIn1 } = React.useContext(AuthContext);
 
   const [signIn, { loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
     fetchPolicy: 'no-cache',
@@ -35,7 +38,7 @@ function enterPassword(props) {
         // incorrect username/password
         Alert.alert('Incorrect password');
       } else if (error.errorCode === NOT_FOUND) {
-        navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
       }
     },
     onCompleted: (data) => {
@@ -45,15 +48,20 @@ function enterPassword(props) {
         storeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME, data.signIn.firstName);
         storeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME, data.signIn.lastName);
 
-        if (!data.signIn.isPasswordSet) {
-          navigation.navigate(routeNames.SET_PASSWORD);
-        } else if (data.signIn.isFirstTime) {
-          // TODO: check user type and send to corresponding on boarding
-          navigation.navigate(routeNames.STUDENT.ON_BOARDING);
-        } else {
-          // TODO: check user type and send to corresponding dashboard
-          navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD);
-        }
+        // if (!data.signIn.isPasswordSet) {
+        //   navigation.navigate(NavigationRouteNames.SET_PASSWORD);
+        // } else
+        // if (data.signIn.isFirstTime) {
+        //   TODO: check user type and send to corresponding on boarding
+        // navigation.navigate(NavigationRouteNames.STUDENT.ON_BOARDING);
+        // } else {
+        console.log('sign_in-data', data);
+
+        signIn1(data.signIn);
+
+        // TODO: check user type and send to corresponding dashboard
+        // navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD);
+        // }
       }
     },
   });
@@ -67,7 +75,7 @@ function enterPassword(props) {
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: false });
+        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: false });
       }
     },
   });
@@ -76,9 +84,9 @@ function enterPassword(props) {
     navigation.goBack();
   };
 
-  const onSubmitEditing = () => {
-    setShowNext(true);
-  };
+  // const onSubmitEditing = () => {
+  //   setShowNext(true);
+  // };
 
   const onForgotPasswordClick = () => {
     if (mobileObj.mobile) {
@@ -92,32 +100,32 @@ function enterPassword(props) {
     }
   };
 
-  const onIconPress = () => {
-    if (eyeIcon === 'eye') {
-      setEyeIcon('eye-with-line');
-    } else {
-      setEyeIcon('eye');
-    }
-
-    if (hidePassword) {
-      setHidePassword(false);
-    } else {
-      setHidePassword(true);
-    }
-  };
+  // const onIconPress = () => {
+  //   if (eyeIcon === 'eye') {
+  //     setEyeIcon('eye-with-line');
+  //   } else {
+  //     setEyeIcon('eye');
+  //   }
+  //
+  //   if (hidePassword) {
+  //     setHidePassword(false);
+  //   } else {
+  //     setHidePassword(true);
+  //   }
+  // };
 
   const onClickContinue = () => {
     signIn();
   };
 
-  const onChangePassword = (text) => {
-    setPassword(text);
-    if (text) {
-      setShowEye(true);
-    } else {
-      setShowEye(false);
-    }
-  };
+  // const onChangePassword = (text) => {
+  //   setPassword(text);
+  //   if (text) {
+  //     setShowEye(true);
+  //   } else {
+  //     setShowEye(false);
+  //   }
+  // };
 
   return (
     <MainContainer isLoading={signInLoading || forgotPasswordLoading} onBackPress={onBackPress}>
@@ -132,8 +140,13 @@ function enterPassword(props) {
         <View>
           <Item floatingLabel style={{}}>
             <Label style={{ fontSize: 16 }}>Password</Label>
-            <Input secureTextEntry={hidePassword} onChangeText={(text) => onChangePassword(text)} />
-            <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={styles.eyeIcon} />
+            <Input secureTextEntry={hidePassword} onChangeText={(text) => setPassword(text)} />
+            <Icon
+              type="Entypo"
+              name={hidePassword ? 'eye' : 'eye-with-line'}
+              onPress={() => setHidePassword(!hidePassword)}
+              style={styles.eyeIcon}
+            />
           </Item>
           <TouchableOpacity onPress={() => onForgotPasswordClick()}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>
@@ -143,7 +156,7 @@ function enterPassword(props) {
         <TouchableOpacity
           onPress={() => onClickContinue()}
           style={[
-            showNext ? commonStyles.buttonPrimary : commonStyles.disableButton,
+            password ? commonStyles.buttonPrimary : commonStyles.disableButton,
             {
               marginTop: RfH(48),
               alignSelf: 'center',
