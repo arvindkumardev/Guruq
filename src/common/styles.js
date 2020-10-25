@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../theme/colors';
 import { RfH, RfW } from '../utils/helpers';
+import {spacePX} from '../theme/variables';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -8,6 +9,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
+    paddingHorizontal: spacePX,
   },
   buttonPrimary: {
     backgroundColor: Colors.primaryButtonBackground,

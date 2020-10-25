@@ -1,4 +1,4 @@
-package com.guruq;
+package in.guruq;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,22 +1,25 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../theme/colors';
 import { RfH, RfW } from '../../utils/helpers';
+import {cardPX, cardPT, cardPB, cardRadiusMedium, spacePX} from '../../theme/variables';
 
 const styles = StyleSheet.create({
   title: {
+    fontFamily: 'SegoeUI-Semibold',
     fontSize: 28,
     color: Colors.white,
     fontWeight: '700',
-    marginHorizontal: RfW(16),
-    marginBottom: RfH(20),
+    marginHorizontal: spacePX,
+    marginBottom: RfH(16),
   },
   subtitle: {
+    // fontFamily: 'SegoeUI',
     fontSize: 16,
-    marginHorizontal: RfW(16),
+    marginHorizontal: spacePX,
     color: Colors.white,
-    marginBottom: RfH(56),
+    marginBottom: RfH(40),
   },
-  otpNumber:{
+  otpNumber: {
     fontSize: 16,
     marginHorizontal: RfW(16),
     color: Colors.white,
@@ -32,62 +35,63 @@ const styles = StyleSheet.create({
   underlineStyleHighLighted: {
     borderColor: '#03DAC6',
   },
-  buttonView:{
+  bottomCard: {
     backgroundColor: Colors.white,
-    paddingHorizontal: RfW(16),
-    paddingVertical: RfH(56),
-    borderTopLeftRadius: RfW(25),
-    borderTopRightRadius: RfW(25),
+    paddingHorizontal: cardPX,
+    paddingTop: cardPT,
+    paddingBottom: cardPB,
+    borderTopLeftRadius: cardRadiusMedium,
+    borderTopRightRadius: cardRadiusMedium,
   },
-  bottomParent:{
-    flexDirection: 'row', 
-    justifyContent: 'flex-start', 
-    alignItems: 'stretch'
+  bottomParent: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
   },
-  underlineView:{
+  underlineView: {
     marginTop: RfH(40),
     borderBottomWidth: 0.5,
     borderBottomColor: Colors.inputLabel,
   },
-  forgotPassword:{
+  forgotPassword: {
     color: Colors.primaryButtonBackground,
     textAlign: 'right',
     marginTop: RfH(6),
   },
-  backIcon:{
-    marginLeft: RfW(16), 
-    marginTop: RfH(58), 
-    color: Colors.white 
+  backIcon: {
+    marginLeft: RfW(16),
+    marginTop: RfH(58),
+    color: Colors.white,
   },
-  eyeIcon:{
-    fontSize: 18, 
-    color: '#818181'
+  eyeIcon: {
+    fontSize: 18,
+    color: '#818181',
   },
-  clearIcon:{
+  clearIcon: {
     flex: 0.05,
     fontSize: 18,
     color: Colors.inputLabel,
-    marginBottom: RfH(-25)
+    marginBottom: RfH(-25),
   },
-  applyIcon:{
+  applyIcon: {
     color: '#FF9900',
     fontSize: 10,
     marginTop: RfH(-20),
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
-  setPasswordView:{ 
-    flexDirection: 'column', 
-    justifyContent: 'flex-start', 
-    alignItems: 'stretch' 
+  setPasswordView: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
   },
-  otpView:{
-    marginHorizontal: RfW(59), 
-    height: RfH(80), 
-    marginBottom: 0
+  otpView: {
+    marginHorizontal: RfW(59),
+    height: RfH(80),
+    marginBottom: 0,
   },
-  resendParent:{
-    alignItems: 'center', 
-    marginTop: RfH(9)
-  }
+  resendParent: {
+    alignItems: 'center',
+    marginTop: RfH(8),
+  },
 });
 export default styles;

@@ -76,8 +76,9 @@
 		<string>rubicon-icon-font.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
-		<string>Segoe UI Semibold.otf</string>
-		<string>seguisb.ttf</string>
+		<string>SegoeUI-Regular.ttf</string>
+		<string>SegoeUI-Semibold.ttf</string>
+		<string>SegoeUI-Bold.ttf</string>
 	</array>
 </dict>
 </plist>

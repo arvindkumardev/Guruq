@@ -8,7 +8,7 @@ export const STANDARD_SCREEN_SIZE = 812;
 
 export const STANDARD_SCREEN_DIMENSIONS = { height: 812, width: 375 };
 
-export const ANDROID_PACKAGE_NAME = 'com.guruq';
+export const ANDROID_PACKAGE_NAME = 'in.guruq';
 
 export const AUTH_TOKEN = 'AUTH_TOKEN';
 
@@ -16,7 +16,7 @@ export const LOCAL_STORAGE_DATA_KEY = {
   USER_TOKEN: 'userToken',
   ONBOARDING_SHOWN: 'onboarding_shown',
   FIRST_NAME: 'firstName',
-  LAST_NAME: 'lastName'
+  LAST_NAME: 'lastName',
 };
 
 export const inputs = {};
@@ -30,5 +30,5 @@ export const IND_COUNTRY_OBJ = {
 };
 
 export const LOTTIE_JSON_FILES = {
-  loaderJson: require('../assets/json/loader1.json'),
+  loaderJson: require('../assets/json/loader.json'),
 };

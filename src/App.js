@@ -3,6 +3,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
+import GlobalFont from 'react-native-global-font';
 import apolloClient from './apollo/apollo';
 import AppStack from './routes/AppRoutes';
 
@@ -24,6 +25,8 @@ function App() {
     if (state) {
       routeNameRef.current = getActiveRouteName(state);
     }
+
+    GlobalFont.applyGlobal('SegoeUI');
   }, []);
 
   useEffect(() => {

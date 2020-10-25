@@ -21,6 +21,7 @@ import routeNames from '../../routes/ScreenNames';
 import Loader from '../../components/Loader';
 import { INVALID_INPUT } from '../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from './graphql-mutation';
+import MainContainer from './components/mainContainer';
 
 function otpVerification(props) {
   const navigation = useNavigation();
@@ -28,6 +29,8 @@ function otpVerification(props) {
   const [time, setTime] = useState(60);
 
   const { route } = props;
+
+  const { mobileObj, newUser } = route.params;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,11 +43,11 @@ function otpVerification(props) {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [time]);
 
   const [generateOtp, { error, loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION, {
     fetchPolicy: 'no-cache',
-    variables: { countryCode: route.params.countryCode, number: route.params.number },
+    variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile },
     onError: (e) => {
       console.log(error);
     },
@@ -62,16 +65,16 @@ function otpVerification(props) {
       console.log(error);
       if (error.errorCode === INVALID_INPUT) {
         // incorrect username/password
-        Alert.alert('Invalid OTP');
+        Alert.alert('Invalid or Incorrect OTP');
       }
     },
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        if (route.params.newUser) {
+        if (newUser) {
           navigation.navigate(routeNames.REGISTER, {
-            countryCode: route.params.countryCode,
-            number: route.params.number,
+            countryCode: mobileObj.country.dialCode,
+            number: mobileObj.mobile,
           });
         } else {
           navigation.navigate(routeNames.SET_PASSWORD);
@@ -91,7 +94,7 @@ function otpVerification(props) {
   const onClickContinue = () => {
     if (code) {
       verifyPhoneNumber({
-        variables: { countryCode: route.params.countryCode, number: route.params.number, otp: code },
+        variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, otp: code },
       });
     } else {
       Alert.alert('Enter OTP to verify.');
@@ -101,7 +104,7 @@ function otpVerification(props) {
   const onCodeFilled = (otp) => {
     setCode(otp);
     verifyPhoneNumber({
-      variables: { countryCode: route.params.countryCode, number: route.params.number, otp },
+      variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, otp },
     });
   };
 
@@ -110,78 +113,57 @@ function otpVerification(props) {
     generateOtp();
   };
 
-  const bottonView = () => (
-    <View
-      style={styles.buttonView}>
-      <View style={styles.setPasswordView}>
-        <View style={{ marginLeft: RfW(57) }}>
-          <Text style={{ color: Colors.inputLabel }}>Enter OTP</Text>
-        </View>
-        <OTPInputView
-          style={{
-            marginHorizontal: RfW(59), 
-            height: RfH(80), 
-            marginBottom: 0
-          }}
-          pinCount={4}
-          autoFocusOnLoad
-          codeInputFieldStyle={styles.underlineStyleBase}
-          codeInputHighlightStyle={styles.underlineStyleHighLighted}
-          onCodeFilled={(code) => {
-            onCodeFilled(code);
-          }}
-        />
-      </View>
-      <TouchableOpacity
-        onPress={() => onClickContinue()}
-        style={[commonStyles.buttonPrimary, { marginTop: RfH(50), alignSelf: 'center', width: RfW(144) }]}>
-        <Text style={commonStyles.textButtonPrimary}>Verify</Text>
-      </TouchableOpacity>
-      <View style={styles.resendParent}>
-        {time > 0 ? (
-          <Text style={{ color: Colors.inputLabel }}>
-            Resend Code in
-            <Text style={{ color: Colors.primaryButtonBackground }}> {time}</Text> Sec{' '}
-          </Text>
-        ) : (
-          <TouchableOpacity onPress={() => onResendOtpClick()}>
-            <Text style={{ color: Colors.primaryButtonBackground }}>Resend code</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
-  );
-
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
-      <Loader isLoading={verifyLoading || otpLoading} />
-      <StatusBar barStyle="light-content" />
-      <Icon
-        onPress={() => onBackPress()}
-        type="MaterialIcons"
-        name="keyboard-backspace"
-        style={styles.backIcon}
-      />
-      <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={{ flex: 1 }} />
-        </TouchableWithoutFeedback>
-      </View>
-      <KeyboardAvoidingView behavior="padding">
-        <View style={styles.setPasswordView}>
-          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View>
-              <Text style={styles.title}>OTP Verification</Text>
-              <Text style={styles.otpNumber}>
-                We have sent a Verification code at
-              </Text>
-              <Text style={[styles.otpNumber,{marginBottom:RfH(51), marginTop:RfH(6)}]}>+{route.params.countryCode} -{route.params.number}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-          {bottonView()}
+    <MainContainer isLoading={verifyLoading || otpLoading} onBackPress={onBackPress}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View>
+          <Text style={styles.title}>OTP Verification</Text>
+          <Text style={styles.otpNumber}>We have sent a Verification code at</Text>
+          <Text style={[styles.otpNumber, { marginBottom: RfH(40), marginTop: RfH(6) }]}>
+            +{mobileObj.country.dialCode}-{mobileObj.mobile}
+          </Text>
         </View>
-      </KeyboardAvoidingView>
-    </View>
+      </TouchableWithoutFeedback>
+
+      <View style={styles.bottomCard}>
+        <View style={[styles.setPasswordView, { paddingHorizontal: 64 }]}>
+          <View>
+            <Text style={{ color: Colors.inputLabel }}>Enter OTP</Text>
+          </View>
+          <OTPInputView
+            style={{
+              height: RfH(80),
+              marginBottom: 0,
+            }}
+            pinCount={4}
+            autoFocusOnLoad
+            codeInputFieldStyle={[styles.underlineStyleBase, { fontSize: 24 }]}
+            codeInputHighlightStyle={styles.underlineStyleHighLighted}
+            onCodeFilled={(code) => {
+              onCodeFilled(code);
+            }}
+          />
+
+          <View style={styles.resendParent}>
+            {time > 0 ? (
+              <Text style={{ color: Colors.inputLabel, fontSize: 14 }}>
+                Resend Code in
+                <Text style={{ color: Colors.primaryButtonBackground }}> {time}</Text> Sec{' '}
+              </Text>
+            ) : (
+              <TouchableOpacity onPress={() => onResendOtpClick()}>
+                <Text style={{ color: Colors.primaryButtonBackground, fontSize: 14 }}>Resend code</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={() => onClickContinue()}
+          style={[commonStyles.buttonPrimary, { marginTop: RfH(48), alignSelf: 'center', width: RfW(144) }]}>
+          <Text style={commonStyles.textButtonPrimary}>Verify</Text>
+        </TouchableOpacity>
+      </View>
+    </MainContainer>
   );
 }
 

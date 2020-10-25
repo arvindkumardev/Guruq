@@ -8,22 +8,21 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { Icon, Input, Item, Label } from 'native-base';
+import { Icon } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import AsyncStorage from '@react-native-community/async-storage';
+import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../common/styles';
 import Colors from '../../theme/colors';
 import styles from './styles';
-import { removeData, RfH, RfW, storeData } from '../../utils/helpers';
-import { IND_COUNTRY_OBJ, LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
+import { RfH, RfW } from '../../utils/helpers';
+import { IND_COUNTRY_OBJ } from '../../utils/constants';
 import { CustomMobileNumber } from '../../components';
 import routeNames from '../../routes/ScreenNames';
 import Loader from '../../components/Loader';
 import { CHECK_USER_QUERY } from './graphql-query';
-import { INVALID_INPUT, NOT_FOUND } from '../../common/errorCodes';
-import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from './graphql-mutation';
+import { NOT_FOUND } from '../../common/errorCodes';
+import MainContainer from './components/mainContainer';
 
 function login() {
   const navigation = useNavigation();
@@ -48,80 +47,17 @@ function login() {
       const error = e.graphQLErrors[0].extensions.exception.response;
       console.log(error);
       if (error.errorCode === NOT_FOUND) {
-        // use not found
-        // TODO: take user for otp verification
-        navigation.navigate(routeNames.OTP_VERIFICATION, {
-          countryCode: mobileObj.country.dialCode,
-          number: mobileObj.mobile,
-          newUser: true,
-        });
+        navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: true });
       }
     },
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
         if (!data.checkUser.isPasswordSet) {
-          navigation.navigate(routeNames.OTP_VERIFICATION, {
-            countryCode: mobileObj.country.dialCode,
-            number: mobileObj.mobile,
-            newUser: false,
-          });
+          navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: false });
         } else {
-          setShowPassword(true);
-          setTitle('Welcome back!');
-          setSubTitle('Login to your account.');
+          navigation.navigate(routeNames.ENTER_PASSWORD, { mobileObj, newUser: false });
         }
-      }
-    },
-  });
-
-  const [signIn, { loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
-    fetchPolicy: 'no-cache',
-    variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, password },
-    onError: (e) => {
-      const error = e.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
-      if (error.errorCode === INVALID_INPUT) {
-        // incorrect username/password
-        Alert.alert('Incorrect password');
-      } else if (error.errorCode === NOT_FOUND) {
-        navigation.navigate(routeNames.OTP_VERIFICATION, {
-          countryCode: mobileObj.country.dialCode,
-          number: mobileObj.mobile,
-          newUser: true,
-        });
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        console.log('data', data);
-        removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.firstName);
-        storeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME, data.signIn.lastName);
-        if (!data.signIn.isPasswordSet) {
-          navigation.navigate(routeNames.SET_PASSWORD);
-        } else {
-          navigation.navigate(routeNames.USER_ONBOARDING);
-        }
-      }
-    },
-  });
-
-  const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      const error = e.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
-    },
-    onCompleted: (data) => {
-      if (data) {
-        console.log('data', data);
-        navigation.navigate(routeNames.OTP_VERIFICATION, {
-          countryCode: mobileObj.country.dialCode,
-          number: mobileObj.mobile,
-          newUser: false,
-        });
       }
     },
   });
@@ -134,32 +70,6 @@ function login() {
     setShowNext(true);
   };
 
-  const onForgotPasswordClick = () => {
-    if (mobileObj.mobile) {
-      const countryCode = mobileObj.country.dialCode;
-      const number = mobileObj.mobile;
-      forgotPassword({
-        variables: { countryCode, number },
-      });
-    } else {
-      Alert.alert('Please enter mobile number.');
-    }
-  };
-
-  const onIconPress = () => {
-    if (eyeIcon === 'eye') {
-      setEyeIcon('eye-with-line');
-    } else {
-      setEyeIcon('eye');
-    }
-
-    if (hidePassword) {
-      setHidePassword(false);
-    } else {
-      setHidePassword(true);
-    }
-  };
-
   const onClickContinue = () => {
     if (mobileObj.mobile) {
       const countryCode = mobileObj.country.dialCode;
@@ -168,8 +78,6 @@ function login() {
         checkUser({
           variables: { countryCode, number },
         });
-      } else {
-        signIn();
       }
     } else {
       Alert.alert('Please enter mobile number.');
@@ -181,111 +89,52 @@ function login() {
     setShowClear(false);
   };
 
-  const onChangePassword = (text) => {
-    setPassword(text);
-    if (text) {
-      setShowEye(true);
-    } else {
-      setShowEye(false);
-    }
-  };
-
-  const bottonView = () => (
-    <View
-      style={styles.buttonView}>
-      <View style={styles.bottomParent}>
-        <View style={{ flex: 0.95 }}>
-          <CustomMobileNumber
-            value={mobileObj}
-            topMargin={0}
-            onChangeHandler={(m) => {
-              setMobileObj(m);
-              setShowClear(true);
-              setShowNext(true);
-            }}
-            returnKeyType="done"
-            refKey="mobileNumber"
-            placeholder="Mobile number"
-            onSubmitEditing={() => onSubmitEditing()}
-          />
-        </View>
-        {showClear && (
-          <Icon
-            onPress={() => clearMobileNumber()}
-            style={styles.clearIcon}
-            type="Entypo"
-            name="circle-with-cross"
-          />
-        )}
-      </View>
-      <View style={styles.underlineView} />
-      {showPassword && (
-        <View>
-          <Item floatingLabel style={{ marginTop: RfH(53.5) }}>
-            <Label>Password</Label>
-            <Input
-              secureTextEntry={hidePassword}
-              onChangeText={(text) => onChangePassword(text)}
-            />
-            {showEye && (
-              <Icon
-                type="Entypo"
-                name={eyeIcon}
-                onPress={() => onIconPress()}
-                style={styles.eyeIcon}
-              />
-            )}
-          </Item>
-          <TouchableOpacity onPress={() => onForgotPasswordClick()}>
-            <Text
-              style={styles.forgotPassword}>
-              Forgot Password?
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      <TouchableOpacity
-        onPress={() => onClickContinue()}
-        style={[
-          showNext ? commonStyles.buttonPrimary : commonStyles.disableButton,
-          {
-            marginTop: RfH(63),
-            alignSelf: 'center',
-            width: RfW(144),
-          },
-        ]}>
-        <Text style={commonStyles.textButtonPrimary}>Continue</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
-      <Loader isLoading={checkUserLoading || signInLoading || forgotPasswordLoading} />
-      <StatusBar barStyle="light-content" />
-      <Icon
-        onPress={() => onBackPress()}
-        type="MaterialIcons"
-        name="keyboard-backspace"
-        style={styles.backIcon}
-      />
-      <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={{ flex: 1 }} />
-        </TouchableWithoutFeedback>
-      </View>
-      <KeyboardAvoidingView behavior="padding">
-        <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>
-          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={{ marginTop: RfH(36) }}>
-              <Text style={styles.title}>{title}</Text>
-              <Text style={styles.subtitle}>{subTitle}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-          {bottonView()}
+    <MainContainer isLoading={checkUserLoading} onBackPress={onBackPress}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ marginTop: RfH(36) }}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{subTitle}</Text>
         </View>
-      </KeyboardAvoidingView>
-    </View>
+      </TouchableWithoutFeedback>
+
+      <View style={styles.bottomCard}>
+        <View style={styles.bottomParent}>
+          <View style={{ flex: 1 }}>
+            <CustomMobileNumber
+              value={mobileObj}
+              topMargin={0}
+              onChangeHandler={(m) => {
+                setMobileObj(m);
+                setShowClear(true);
+                setShowNext(true);
+              }}
+              returnKeyType="done"
+              refKey="mobileNumber"
+              placeholder="Mobile number"
+              onSubmitEditing={() => onSubmitEditing()}
+            />
+          </View>
+          {showClear && (
+            <Icon onPress={() => clearMobileNumber()} style={styles.clearIcon} type="Entypo" name="circle-with-cross" />
+          )}
+        </View>
+        <View style={styles.underlineView} />
+
+        <TouchableOpacity
+          onPress={() => onClickContinue()}
+          style={[
+            showNext ? commonStyles.buttonPrimary : commonStyles.disableButton,
+            {
+              marginTop: RfH(48),
+              alignSelf: 'center',
+              width: RfW(144),
+            },
+          ]}>
+          <Text style={commonStyles.textButtonPrimary}>Continue</Text>
+        </TouchableOpacity>
+      </View>
+    </MainContainer>
   );
 }
 

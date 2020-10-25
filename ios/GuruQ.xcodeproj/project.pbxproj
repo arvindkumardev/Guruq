@@ -38,8 +38,9 @@
 		B2F9ACB4B8B04171951003C0 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7936FE574D74B659EFE2A01 /* Octicons.ttf */; };
 		CDA6EC346E4CD3B8A233BF5B /* libPods-GuruQ-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E10FBEF3F246AE32D1371B2 /* libPods-GuruQ-tvOSTests.a */; };
 		D2BC0F5243CE4DE5A838A95E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69116DD09F734418B0B82635 /* Foundation.ttf */; };
-		E530D7EA2539966B00DF182E /* Segoe UI Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E530D7E82539966A00DF182E /* Segoe UI Semibold.otf */; };
-		E530D7EB2539966B00DF182E /* seguisb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E530D7E92539966B00DF182E /* seguisb.ttf */; };
+		F45D12F42544969100ECE3D8 /* SegoeUI-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45D12F22544969000ECE3D8 /* SegoeUI-Semibold.ttf */; };
+		F45D12F52544969100ECE3D8 /* SegoeUI-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45D12F32544969100ECE3D8 /* SegoeUI-Regular.ttf */; };
+		F45D12FF25449C2700ECE3D8 /* SegoeUI-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45D12FE25449C2700ECE3D8 /* SegoeUI-Bold.ttf */; };
 		F552A5CFA47C47B9A09E5E0C /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA85652DEF4C47CCBECDDC87 /* Roboto_medium.ttf */; };
 /* End PBXBuildFile section */
 
@@ -103,12 +104,11 @@
 		D89CEE7741D844E985CB294E /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		DF62E044659042B99B6468F1 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
 		E4128759C910DB762599F371 /* libPods-GuruQ.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuruQ.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E530D7E82539966A00DF182E /* Segoe UI Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Segoe UI Semibold.otf"; sourceTree = "<group>"; };
-		E530D7E92539966B00DF182E /* seguisb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = seguisb.ttf; sourceTree = "<group>"; };
-		E530D7EC253996B700DF182E /* Segoe UI Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Segoe UI Semibold.otf"; path = "fonts/Segoe UI Semibold.otf"; sourceTree = "<group>"; };
-		E530D7ED253996B700DF182E /* seguisb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = seguisb.ttf; path = fonts/seguisb.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F45D12F22544969000ECE3D8 /* SegoeUI-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SegoeUI-Semibold.ttf"; sourceTree = "<group>"; };
+		F45D12F32544969100ECE3D8 /* SegoeUI-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SegoeUI-Regular.ttf"; sourceTree = "<group>"; };
+		F45D12FE25449C2700ECE3D8 /* SegoeUI-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SegoeUI-Bold.ttf"; sourceTree = "<group>"; };
 		F7A6AA1E179D41FC8A42B341 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		FA85652DEF4C47CCBECDDC87 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -244,8 +244,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				E530D7EC253996B700DF182E /* Segoe UI Semibold.otf */,
-				E530D7ED253996B700DF182E /* seguisb.ttf */,
 				E530D7E7253995BD00DF182E /* fonts */,
 				13B07FAE1A68108700A75B9A /* GuruQ */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -274,8 +272,9 @@
 		E530D7E7253995BD00DF182E /* fonts */ = {
 			isa = PBXGroup;
 			children = (
-				E530D7E82539966A00DF182E /* Segoe UI Semibold.otf */,
-				E530D7E92539966B00DF182E /* seguisb.ttf */,
+				F45D12FE25449C2700ECE3D8 /* SegoeUI-Bold.ttf */,
+				F45D12F32544969100ECE3D8 /* SegoeUI-Regular.ttf */,
+				F45D12F22544969000ECE3D8 /* SegoeUI-Semibold.ttf */,
 			);
 			path = fonts;
 			sourceTree = "<group>";
@@ -423,8 +422,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E530D7EA2539966B00DF182E /* Segoe UI Semibold.otf in Resources */,
-				E530D7EB2539966B00DF182E /* seguisb.ttf in Resources */,
+				F45D12FF25449C2700ECE3D8 /* SegoeUI-Bold.ttf in Resources */,
+				F45D12F42544969100ECE3D8 /* SegoeUI-Semibold.ttf in Resources */,
+				F45D12F52544969100ECE3D8 /* SegoeUI-Regular.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				42F4767635A64A319622C0B9 /* AntDesign.ttf in Resources */,

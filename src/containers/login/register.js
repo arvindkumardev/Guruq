@@ -101,18 +101,18 @@ function register(props) {
 
   const bottonView = () => (
     <View
-      style={[styles.buttonView,{ paddingTop: RfH(56), paddingBottom: RfH(66)}]}>
+      style={[styles.bottomCard,{ paddingTop: RfH(56), paddingBottom: RfH(66)}]}>
       <View style={styles.setPasswordView}>
         <View>
           <Item floatingLabel>
             <Label>Full Name</Label>
             <Input onChangeText={(text) => setFullName(text)} />
           </Item>
-          <Item floatingLabel style={{ marginTop: RfH(53.5) }}>
+          <Item floatingLabel style={{ marginTop: RfH(40) }}>
             <Label>Email ID</Label>
             <Input onChangeText={(text) => setEmail(text)} />
           </Item>
-          <Item floatingLabel style={{ marginTop: RfH(53.5) }}>
+          <Item floatingLabel style={{ marginTop: RfH(40) }}>
             <Label>Password</Label>
             <Input secureTextEntry={hidePassword} onChangeText={(text) => onChangePassword(text)} />
             {showEye && (
@@ -124,7 +124,7 @@ function register(props) {
               />
             )}
           </Item>
-          <Item floatingLabel style={{ marginTop: RfH(53.5) }}>
+          <Item floatingLabel style={{ marginTop: RfH(40) }}>
             <Label>Referral Code</Label>
             <Input onChangeText={(text) => setReferCode(text)} />
           </Item>

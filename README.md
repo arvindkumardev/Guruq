@@ -185,3 +185,7 @@ eslint settings
 - https://medium.com/@jQN/configure-eslint-for-react-native-d914679e122f
 
 - https://medium.com/@joanvila/productionizing-apollo-links-4cdc11d278eb
+
+
+adb -s <device name> tcp:8081 tcp:8081
+adb reverse tcp:8081 tcp:8081

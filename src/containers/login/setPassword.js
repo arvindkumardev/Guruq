@@ -19,6 +19,7 @@ import { RfH, RfW } from '../../utils/helpers';
 import routeNames from '../../routes/ScreenNames';
 import { SET_PASSWORD_MUTATION } from './graphql-mutation';
 import Loader from '../../components/Loader';
+import MainContainer from './components/mainContainer';
 
 function setPassword() {
   const navigation = useNavigation();
@@ -89,76 +90,48 @@ function setPassword() {
     else setShowConfirmEye(false);
   };
 
-  const bottonView = () => (
-    <KeyboardAvoidingView>
-      <View
-        style={styles.buttonView}>
-        <View style={styles.setPasswordView}>
-          <View>
-            <Item floatingLabel>
-              <Label>New Password</Label>
-              <Input secureTextEntry={hidePassword} onChangeText={(text) => onChangePassword(text)} />
-              {showEye && (
-                <Icon
-                  type="Entypo"
-                  name={eyeIcon}
-                  onPress={() => onIconPress()}
-                  style={styles.eyeIcon}
-                />
-              )}
-            </Item>
-          </View>
-          <View style={{ marginTop: RfH(53.5) }}>
-            <Item floatingLabel>
-              <Label>Confirm Password</Label>
-              <Input secureTextEntry={hideConfirmPassword} onChangeText={(text) => onChangeConfirmPassword(text)} />
-              {showConfirmEye && (
-                <Icon
-                  type="Entypo"
-                  name={confirmEyeIcon}
-                  onPress={() => onConfirmIconPress()}
-                  style={styles.eyeIcon}
-                />
-              )}
-            </Item>
-          </View>
-        </View>
-        <TouchableOpacity
-          onPress={() => onClickContinue()}
-          style={[commonStyles.buttonPrimary, { marginTop: RfH(63), alignSelf: 'center', width: RfW(144) }]}>
-          <Text style={commonStyles.textButtonPrimary}>Submit</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
-  );
-
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
-      <StatusBar barStyle="light-content" />
-      <Loader isLoading={setPasswordLoading} />
-      <Icon
-        onPress={() => onBackPress()}
-        type="MaterialIcons"
-        name="keyboard-backspace"
-        style={styles.backIcon}
-      />
-      <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={{ flex: 1 }} />
-        </TouchableWithoutFeedback>
-      </View>
-      <KeyboardAvoidingView behavior="position">
-        <View style={styles.setPasswordView}>
-          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={{ marginTop: RfH(36) }}>
-              <Text style={styles.title}>Set Password</Text>
-              <Text style={styles.subtitle}>Enter the new password and submit</Text>
+    <MainContainer isLoading={setPasswordLoading} onBackPress={onBackPress}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ marginTop: RfH(36) }}>
+          <Text style={styles.title}>Set Password</Text>
+          <Text style={styles.subtitle}>Enter the new password and submit</Text>
+        </View>
+      </TouchableWithoutFeedback>
+
+      <KeyboardAvoidingView>
+        <View style={styles.bottomCard}>
+          <View style={styles.setPasswordView}>
+            <View>
+              <Item floatingLabel>
+                <Label>New Password</Label>
+                <Input secureTextEntry={hidePassword} onChangeText={(text) => onChangePassword(text)} />
+                {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={styles.eyeIcon} />}
+              </Item>
             </View>
-          </TouchableWithoutFeedback>
-          {bottonView()}
+            <View style={{ marginTop: RfH(40) }}>
+              <Item floatingLabel>
+                <Label>Confirm Password</Label>
+                <Input secureTextEntry={hideConfirmPassword} onChangeText={(text) => onChangeConfirmPassword(text)} />
+                {showConfirmEye && (
+                  <Icon
+                    type="Entypo"
+                    name={confirmEyeIcon}
+                    onPress={() => onConfirmIconPress()}
+                    style={styles.eyeIcon}
+                  />
+                )}
+              </Item>
+            </View>
+          </View>
+          <TouchableOpacity
+            onPress={() => onClickContinue()}
+            style={[commonStyles.buttonPrimary, { marginTop: RfH(63), alignSelf: 'center', width: RfW(144) }]}>
+            <Text style={commonStyles.textButtonPrimary}>Submit</Text>
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </View>
+    </MainContainer>
   );
 }
 
