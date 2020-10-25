@@ -1,45 +1,27 @@
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import AsyncStorage from '@react-native-community/async-storage';
+import { useMutation } from '@apollo/client';
 import commonStyles from '../../../common/styles';
-import Colors from '../../../theme/colors';
 import styles from './styles';
 import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
-import { IND_COUNTRY_OBJ, LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { CustomMobileNumber } from '../../../components';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import routeNames from '../../../routes/ScreenNames';
-import Loader from '../../../components/Loader';
-import { CHECK_USER_QUERY } from './graphql-query';
-import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
-import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from './graphql-mutation';
-import MainContainer from './components/mainContainer';
 import NavigationRouteNames from '../../../routes/ScreenNames';
+import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
+import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
+import MainContainer from './components/mainContainer';
 
 function enterPassword(props) {
   const { route } = props;
 
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showClear, setShowClear] = useState(false);
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
   const [eyeIcon, setEyeIcon] = useState('eye');
   const [showEye, setShowEye] = useState(false);
-  const [title, setTitle] = useState('Login/ Sign Up');
-  const [subTitle, setSubTitle] = useState('Enter your phone number to continue');
 
   const [mobileObj, setMobileObj] = useState(route.params.mobileObj);
 
@@ -49,7 +31,6 @@ function enterPassword(props) {
 
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
       if (error.errorCode === INVALID_INPUT) {
         // incorrect username/password
         Alert.alert('Incorrect password');
@@ -59,7 +40,6 @@ function enterPassword(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log('data', data);
         removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
         storeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME, data.signIn.firstName);
@@ -153,7 +133,7 @@ function enterPassword(props) {
           <Item floatingLabel style={{}}>
             <Label style={{ fontSize: 16 }}>Password</Label>
             <Input secureTextEntry={hidePassword} onChangeText={(text) => onChangePassword(text)} />
-            {showEye && <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={styles.eyeIcon} />}
+            <Icon type="Entypo" name={eyeIcon} onPress={() => onIconPress()} style={styles.eyeIcon} />
           </Item>
           <TouchableOpacity onPress={() => onForgotPasswordClick()}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>

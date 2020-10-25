@@ -20,7 +20,7 @@ import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import routeNames from '../../../routes/ScreenNames';
 import Loader from '../../../components/Loader';
 import { INVALID_INPUT } from '../../../common/errorCodes';
-import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from './graphql-mutation';
+import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 

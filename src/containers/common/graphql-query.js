@@ -7,3 +7,17 @@ export const CHECK_USER_QUERY = gql`
     }
   }
 `;
+
+export const ME_QUERY = gql`
+  query Me {
+    me {
+      id
+      firstName
+      lastName
+      type
+      role {
+        name
+      }
+    }
+  }
+`;

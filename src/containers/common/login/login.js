@@ -1,40 +1,22 @@
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../../common/styles';
-import Colors from '../../../theme/colors';
 import styles from './styles';
 import { RfH, RfW } from '../../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../../utils/constants';
 import { CustomMobileNumber } from '../../../components';
 import routeNames from '../../../routes/ScreenNames';
-import Loader from '../../../components/Loader';
-import { CHECK_USER_QUERY } from './graphql-query';
+import { CHECK_USER_QUERY } from '../graphql-query';
 import { NOT_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
 
 function login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [showClear, setShowClear] = useState(false);
-  const [password, setPassword] = useState('');
-  const [hidePassword, setHidePassword] = useState(true);
-  const [eyeIcon, setEyeIcon] = useState('eye');
-  const [showEye, setShowEye] = useState(false);
-  const [title, setTitle] = useState('Login/ Sign Up');
-  const [subTitle, setSubTitle] = useState('Enter your phone number to continue');
 
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
@@ -45,14 +27,12 @@ function login() {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
       if (error.errorCode === NOT_FOUND) {
         navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: true });
       }
     },
     onCompleted: (data) => {
       if (data) {
-        console.log('data', data);
         if (!data.checkUser.isPasswordSet) {
           navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: false });
         } else {
@@ -74,11 +54,9 @@ function login() {
     if (mobileObj.mobile) {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
-      if (!showPassword) {
-        checkUser({
-          variables: { countryCode, number },
-        });
-      }
+      checkUser({
+        variables: { countryCode, number },
+      });
     } else {
       Alert.alert('Please enter mobile number.');
     }
@@ -93,8 +71,8 @@ function login() {
     <MainContainer isLoading={checkUserLoading} onBackPress={onBackPress}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.contentMarginTop}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subTitle}</Text>
+          <Text style={styles.title}>Login/ Sign Up</Text>
+          <Text style={styles.subtitle}>Enter your phone number to continue</Text>
         </View>
       </TouchableWithoutFeedback>
 

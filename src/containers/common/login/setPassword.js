@@ -17,7 +17,7 @@ import Colors from '../../../theme/colors';
 import styles from './styles';
 import { removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import routeNames from '../../../routes/ScreenNames';
-import { SET_PASSWORD_MUTATION } from './graphql-mutation';
+import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import Loader from '../../../components/Loader';
 import MainContainer from './components/mainContainer';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
