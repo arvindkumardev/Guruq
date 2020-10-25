@@ -283,12 +283,13 @@ function dashboard() {
           </Item>
         </View>
 
+        {/* // FIXME: remove me */}
         <TouchableOpacity onPress={() => logout()}>
           <Text className="h5">Logout</Text>
         </TouchableOpacity>
 
         <View style={{ height: RfH(210), marginTop: RfH(29) }}>
-          <Swiper horizontal autoplay autoplayTimeout={2}>
+          <Swiper horizontal autoplay autoplayTimeout={5}>
             <View>
               <View style={{ height: RfH(170), backgroundColor: '#ceecfe', borderRadius: 20 }} />
             </View>

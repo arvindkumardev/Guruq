@@ -66,7 +66,6 @@ function App() {
         <StatusBar barStyle="light-content" />
 
         <AppStack />
-
       </NavigationContainer>
     </ApolloProvider>
   );
