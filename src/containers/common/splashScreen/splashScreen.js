@@ -11,9 +11,11 @@ function splashScreen() {
   const { loading, error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
 
   useEffect(() => {
-    isLoggedIn(false);
-    isTokenLoading(false);
-    userDetails({});
+    if (error) {
+      isLoggedIn(false);
+      isTokenLoading(false);
+      userDetails({});
+    }
   }, [error]);
 
   useEffect(() => {

@@ -21,7 +21,7 @@ const AuthRoutes = (props) => {
 
   return (
     <Stack.Navigator>
-      {(isUserTokenLoading) && (
+      {isUserTokenLoading && (
         <Stack.Screen
           name={NavigationRouteNames.SPLASH_SCREEN}
           component={splashScreen}
@@ -67,20 +67,12 @@ const AuthRoutes = (props) => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-          name={NavigationRouteNames.STUDY_AREA}
-          component={studyAreaSelector}
-          options={{headerShown: false }}
+            name={NavigationRouteNames.STUDY_AREA}
+            component={studyAreaSelector}
+            options={{ headerShown: false }}
           />
-          <Stack.Screen
-          name={NavigationRouteNames.BOARD}
-          component={boardSelector}
-          options={{headerShown: false }}
-          />
-          <Stack.Screen
-          name={NavigationRouteNames.CLASS}
-          component={classSelector}
-          options={{headerShown: false }}
-          />
+          <Stack.Screen name={NavigationRouteNames.BOARD} component={boardSelector} options={{ headerShown: false }} />
+          <Stack.Screen name={NavigationRouteNames.CLASS} component={classSelector} options={{ headerShown: false }} />
         </>
       )}
     </Stack.Navigator>
