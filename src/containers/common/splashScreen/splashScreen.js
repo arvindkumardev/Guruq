@@ -8,18 +8,18 @@ import { ME_QUERY } from '../graphql-query';
 import { isLoggedIn, isTokenLoading, userDetails } from '../../../apollo/cache';
 
 function splashScreen() {
-  const { loading, error, data } = useQuery(ME_QUERY, {
-    onError: (e) => {
-      isLoggedIn(false);
-      isTokenLoading(false);
-      userDetails({});
-    },
-    onCompleted: (d) => {
-      isLoggedIn(true);
-      isTokenLoading(false);
-      userDetails(d.me);
-    },
-  });
+  const { loading, error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
+
+  if (error) {
+    isLoggedIn(false);
+    isTokenLoading(false);
+    userDetails({});
+  }
+  if (data) {
+    isLoggedIn(true);
+    isTokenLoading(false);
+    userDetails(data.me);
+  }
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>

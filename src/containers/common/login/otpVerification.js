@@ -48,11 +48,13 @@ function otpVerification(props) {
   const [verifyPhoneNumber, { loading: verifyLoading }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      const error = e.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
-      if (error.errorCode === INVALID_INPUT) {
-        // incorrect username/password
-        Alert.alert('Invalid or Incorrect OTP');
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        console.log(error);
+        if (error.errorCode === INVALID_INPUT) {
+          // incorrect username/password
+          Alert.alert('Invalid or Incorrect OTP');
+        }
       }
     },
     onCompleted: (data) => {

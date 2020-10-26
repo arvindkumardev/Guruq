@@ -27,12 +27,14 @@ function enterPassword(props) {
     variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, password },
 
     onError: (e) => {
-      const error = e.graphQLErrors[0].extensions.exception.response;
-      if (error.errorCode === INVALID_INPUT) {
-        // incorrect username/password
-        Alert.alert('Incorrect password');
-      } else if (error.errorCode === NOT_FOUND) {
-        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === INVALID_INPUT) {
+          // incorrect username/password
+          Alert.alert('Incorrect password');
+        } else if (error.errorCode === NOT_FOUND) {
+          navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+        }
       }
     },
     onCompleted: (data) => {
@@ -49,8 +51,10 @@ function enterPassword(props) {
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      const error = e.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        console.log(error);
+      }
     },
     onCompleted: (data) => {
       if (data) {
