@@ -1,4 +1,5 @@
 const Images = {
+  // eslint-disable-next-line global-require
   onboarding1: require('../assets/images/tutorDetail5.png'),
   onboarding2: require('../assets/images/onboarding2.png'),
   onboarding3: require('../assets/images/onboarding3.png'),
@@ -33,6 +34,15 @@ const Images = {
   bell : require('../assets/images/bell.png'),
   qpoint : require('../assets/images/qpoint.png'),
   cart : require('../assets/images/cart.png'),
+  expand_gray : require('../assets/images/expand_grey.png'),
+  collapse_grey : require('../assets/images/collapse_grey.png'),
+  qpoint : require('../assets/images/qpoint.png'),
+  cart : require('../assets/images/cart.png'),
+  expand_gray : require('../assets/images/expand_grey.png'),
+  collapse_grey : require('../assets/images/collapse_grey.png'),
+  personal : require('../assets/images/personal.png'),
+  parent_details : require('../assets/images/parent_details.png'),
+  education : require('../assets/images/education.png'),
 };
 
 export default Images;
