@@ -55,6 +55,7 @@ export const SIGNIN_MUTATION = gql`
       isPhoneNumberVerified
       isEmailVerified
       token
+      type
     }
   }
 `;
@@ -71,6 +72,7 @@ export const SET_PASSWORD_MUTATION = gql`
       isPhoneNumberVerified
       isEmailVerified
       token
+      type
     }
   }
 `;
