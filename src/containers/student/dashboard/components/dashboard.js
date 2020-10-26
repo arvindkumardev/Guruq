@@ -1,16 +1,19 @@
 import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import { useReactiveVar } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
+import routeNames from '../../../../routes/ScreenNames';
 import { removeData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import { IconButtonWrapper } from '../../../../components';
 import { isLoggedIn, userDetails } from '../../../../apollo/cache';
 
 function dashboard() {
+  const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
 
   const [favouriteTutor, setFavouriteTutor] = useState([
@@ -18,6 +21,12 @@ function dashboard() {
     { name: 'Simran Rai', subject: 'Chemistry', imageUrl: '' },
     { name: 'Priyam', subject: 'Maths', imageUrl: '' },
   ]);
+
+  useEffect(() => {
+    setTimeout(() =>{
+      navigation.navigate(routeNames.STUDY_AREA);
+    }, 1000)
+  },[])
 
   const logout = () => {
     removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);

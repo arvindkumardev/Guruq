@@ -1,5 +1,5 @@
 import { Image, Text, View } from 'react-native';
-import React from 'react';
+import React, { useEffect} from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
@@ -9,6 +9,8 @@ import { isLoggedIn, isTokenLoading, userDetails } from '../../../apollo/cache';
 
 function splashScreen() {
   const { loading, error, data } = useQuery(ME_QUERY, {
+    pollInterval:0,
+    notifyOnNetworkStatusChange: true,
     onError: (e) => {
       isLoggedIn(false);
       isTokenLoading(false);

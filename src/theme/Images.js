@@ -25,6 +25,10 @@ const Images = {
   classes: require('../assets/images/classes.png'),
   tutor_tab: require('../assets/images/tutor_tab.png'),
   profile: require('../assets/images/profile.png'),
+  cbse : require('../assets/images/cbse.png'),
+  icse : require('../assets/images/icse.png'),
+  ib : require('../assets/images/ib.png'),
+  igcse : require('../assets/images/igcse.png'),
 };
 
 export default Images;

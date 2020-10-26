@@ -45,7 +45,6 @@ function register(props) {
     onCompleted: (data) => {
       if (data) {
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token);
-
         // set in apollo cache
         isLoggedIn(true);
         userDetails(data.signUp);

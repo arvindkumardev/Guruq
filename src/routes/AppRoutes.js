@@ -9,6 +9,9 @@ import register from '../containers/common/login/register';
 import enterPassword from '../containers/common/login/enterPassword';
 import studentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
 import studentTutorSelector from '../containers/common/userOnboarding/studentTutorSelector';
+import studyAreaSelector from '../containers/common/userOnboarding/studyAreaSelector';
+import boardSelector from '../containers/common/userOnboarding/boardSelector';
+import classSelector from '../containers/common/userOnboarding/classSelector';
 import splashScreen from '../containers/common/splashScreen/splashScreen';
 
 const Stack = createStackNavigator();
@@ -62,6 +65,21 @@ const AuthRoutes = (props) => {
             name={NavigationRouteNames.STUDENT.ON_BOARDING}
             component={studentTutorSelector}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+          name={NavigationRouteNames.STUDY_AREA}
+          component={studyAreaSelector}
+          options={{headerShown: false }}
+          />
+          <Stack.Screen
+          name={NavigationRouteNames.BOARD}
+          component={boardSelector}
+          options={{headerShown: false }}
+          />
+          <Stack.Screen
+          name={NavigationRouteNames.CLASS}
+          component={classSelector}
+          options={{headerShown: false }}
           />
         </>
       )}

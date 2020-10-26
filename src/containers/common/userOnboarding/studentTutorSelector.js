@@ -35,7 +35,7 @@ function studentTutorSelector() {
           name="keyboard-backspace"
           style={{ color: Colors.darktitle }}
         />
-        <Text style={{ marginLeft: RfW(8), fontSize: 16, color: Colors.inputLabel }}>Hello</Text>
+        <Text style={styles.helloText}>Hello</Text>
       </View>
       <Text style={styles.userName}>{userName}</Text>
       <Text style={styles.subHeading}>Continue as</Text>

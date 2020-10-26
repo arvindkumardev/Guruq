@@ -6,6 +6,9 @@ const NavigationRouteNames = {
   OTP_VERIFICATION: 'otp_verification',
   SET_PASSWORD: 'set_password',
   REGISTER: 'register',
+  STUDY_AREA: 'study area',
+  BOARD: 'Board',
+  CLASS: 'Class',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
