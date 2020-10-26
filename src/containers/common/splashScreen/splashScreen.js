@@ -1,5 +1,5 @@
 import { Image, Text, View } from 'react-native';
-import React, { useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
@@ -10,16 +10,19 @@ import { isLoggedIn, isTokenLoading, userDetails } from '../../../apollo/cache';
 function splashScreen() {
   const { loading, error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
 
-  if (error) {
+  useEffect(() => {
     isLoggedIn(false);
     isTokenLoading(false);
     userDetails({});
-  }
-  if (data) {
-    isLoggedIn(true);
-    isTokenLoading(false);
-    userDetails(data.me);
-  }
+  }, [error]);
+
+  useEffect(() => {
+    if (data) {
+      isLoggedIn(true);
+      isTokenLoading(false);
+      userDetails(data.me);
+    }
+  }, [data]);
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>

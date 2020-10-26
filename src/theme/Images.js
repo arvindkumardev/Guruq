@@ -29,6 +29,10 @@ const Images = {
   icse : require('../assets/images/icse.png'),
   ib : require('../assets/images/ib.png'),
   igcse : require('../assets/images/igcse.png'),
+  heart : require('../assets/images/heart.png'),
+  bell : require('../assets/images/bell.png'),
+  qpoint : require('../assets/images/qpoint.png'),
+  cart : require('../assets/images/cart.png'),
 };
 
 export default Images;

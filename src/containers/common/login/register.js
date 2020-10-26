@@ -1,5 +1,5 @@
 import { Alert, Keyboard, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Item, Icon, Input, Label } from 'native-base';
+import { Icon, Input, Item, Label } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
@@ -103,14 +103,14 @@ function register(props) {
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
                 <Label>Password</Label>
                 <Input secureTextEntry={hidePassword} onChangeText={(text) => setPassword(text)} />
-                {password && (
-                  <Icon
-                    type="Entypo"
-                    name={hidePassword ? 'eye' : 'eye-with-line'}
-                    onPress={() => setHidePassword(!hidePassword)}
-                    style={styles.eyeIcon}
-                  />
-                )}
+                {/* {password && ( */}
+                <Icon
+                  type="Entypo"
+                  name={hidePassword ? 'eye' : 'eye-with-line'}
+                  onPress={() => setHidePassword(!hidePassword)}
+                  style={styles.eyeIcon}
+                />
+                {/* )} */}
               </Item>
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
                 <Label>Referral Code</Label>
