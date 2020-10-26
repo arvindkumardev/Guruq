@@ -21,7 +21,7 @@ const AuthRoutes = (props) => {
 
   return (
     <Stack.Navigator>
-      {isUserTokenLoading && (
+      {(isUserTokenLoading) && (
         <Stack.Screen
           name={NavigationRouteNames.SPLASH_SCREEN}
           component={splashScreen}

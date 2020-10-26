@@ -25,6 +25,24 @@ function App() {
 
   const isUserLoggedIn = useReactiveVar(isLoggedIn);
   const isUserTokenLoading = useReactiveVar(isTokenLoading);
+  // const isNetworkConnectivityError = useReactiveVar(networkConnectivityError);
+
+  // const netInfo = useNetInfo({
+  //   reachabilityUrl: 'http://localhost:5000',
+  //   reachabilityTest: async (response) => response.status === 204,
+  //   reachabilityLongTimeout: 60 * 1000, // 60s
+  //   reachabilityShortTimeout: 5 * 1000, // 5s
+  //   reachabilityRequestTimeout: 15 * 1000, // 15s
+  // });
+  //
+  // // Subscribe
+  // const unsubscribe = NetInfo.addEventListener((state) => {
+  //   console.log('Connection type', state.type);
+  //   console.log('Is connected?', state.isConnected);
+  //   console.log('State: ', state);
+  //
+  //   networkConnectivityError(!state.isConnected);
+  // });
 
   useEffect(() => {
     const state = navigationRef.current.getRootState();
@@ -72,7 +90,11 @@ function App() {
       <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
         <StatusBar barStyle="light-content" />
 
-        <AppStack isUserLoggedIn={isUserLoggedIn} isUserTokenLoading={isUserTokenLoading} />
+        <AppStack
+          isUserLoggedIn={isUserLoggedIn}
+          isUserTokenLoading={isUserTokenLoading}
+          // isNetworkConnectivityError={isNetworkConnectivityError}
+        />
       </NavigationContainer>
     </ApolloProvider>
   );

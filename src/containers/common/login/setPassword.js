@@ -30,8 +30,10 @@ function setPassword() {
     fetchPolicy: 'no-cache',
     variables: { password },
     onError: (e) => {
-      const error = e.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        console.log(error);
+      }
     },
     onCompleted: (data) => {
       if (data) {

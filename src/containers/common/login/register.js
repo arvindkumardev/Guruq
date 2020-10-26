@@ -1,5 +1,5 @@
 import { Alert, Keyboard, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Icon, Input, Item, Label } from 'native-base';
+import { Item, Icon, Input, Label } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
@@ -37,9 +37,11 @@ function register(props) {
       referCode,
     },
     onError: (e) => {
-      const error = e.graphQLErrors[0].extensions.exception.response;
-      if (error.errorCode === DUPLICATE_FOUND) {
-        Alert.alert('User already exists. Please login');
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === DUPLICATE_FOUND) {
+          Alert.alert('User already exists. Please login');
+        }
       }
     },
     onCompleted: (data) => {
@@ -90,7 +92,7 @@ function register(props) {
         <View style={styles.bottomCard}>
           <View style={styles.setPasswordView}>
             <View>
-              <Item floatingLabel>
+              <Item floatingLabel style={{}}>
                 <Label>Full Name</Label>
                 <Input onChangeText={(text) => setFullName(text)} />
               </Item>
