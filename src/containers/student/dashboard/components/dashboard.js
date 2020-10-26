@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import { useReactiveVar } from '@apollo/client';
-import commonStyles from '../../../../common/styles';
+import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import { removeData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';

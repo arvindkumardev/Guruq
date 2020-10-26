@@ -2,7 +2,7 @@ import { Keyboard, KeyboardAvoidingView, StatusBar, TouchableWithoutFeedback, Vi
 import { Icon } from 'native-base';
 import React from 'react';
 import PropTypes from 'prop-types';
-import commonStyles from '../../../../common/styles';
+import commonStyles from '../../../../theme/styles';
 import Colors from '../../../../theme/colors';
 import styles from '../styles';
 import Loader from '../../../../components/Loader';

@@ -2,7 +2,7 @@ import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { Button, Container, Content, Footer, FooterTab, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import commonStyles from '../../../common/styles';
+import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
 import Dashboard from './components/dashboard';

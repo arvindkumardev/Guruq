@@ -1,7 +1,7 @@
 import { Image, Text, View } from 'react-native';
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import commonStyles from '../../../common/styles';
+import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { Colors } from '../../../theme';
 import { ME_QUERY } from '../graphql-query';

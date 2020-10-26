@@ -2,7 +2,7 @@ import { Image, StatusBar, Text, View } from 'react-native';
 import { Icon } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import commonStyles from '../../../common/styles';
+import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { getSaveData, RfH, RfW } from '../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';

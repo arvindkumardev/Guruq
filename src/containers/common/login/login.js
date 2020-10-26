@@ -3,7 +3,7 @@ import { Icon } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
-import commonStyles from '../../../common/styles';
+import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW } from '../../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../../utils/constants';

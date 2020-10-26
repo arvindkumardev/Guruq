@@ -2,7 +2,7 @@ import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
-import commonStyles from '../../../common/styles';
+import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import Colors from '../../../theme/colors';
 import ScheduleClass from './components/scheduleClass';
