@@ -336,16 +336,16 @@ function Dashboard() {
             <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>
               Hi {userInfo.firstName}
             </Text>
-            <TouchableOpacity onPress={() => setStudyAreaModalVisible(true)}>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
+              <TouchableOpacity onPress={() => setStudyAreaModalVisible(true)}>
                 <Icon
                   type="MaterialIcons"
                   name="keyboard-arrow-down"
                   style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }}
                 />
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={{ flex: 0.1, marginRight: RfW(16) }}>
             <Image

@@ -1,7 +1,6 @@
 import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { Button, Container, Content, Footer, FooterTab, Thumbnail } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
@@ -11,15 +10,8 @@ import Tutor from '../tutor/tutor';
 import Profile from '../profile/profile';
 import Dashboard from './components/dashboard';
 
-function studentDashboardContainer(props) {
-  const navigation = useNavigation();
+function studentDashboardContainer() {
   const [activeTab, setActiveTab] = useState(1);
-
-  const { route } = props;
-
-  const onBackPress = () => {
-    navigation.goBack();
-  };
 
   const changeTab = (number) => {
     setActiveTab(number);

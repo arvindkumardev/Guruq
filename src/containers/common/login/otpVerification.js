@@ -36,14 +36,14 @@ function otpVerification(props) {
   const [generateOtp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile },
-    // onError: (e) => {
-    //   console.log(error);
-    // },
-    // onCompleted: (data) => {
-    //   if (data) {
-    //     console.log('data', data);
-    //   }
-    // },
+    onError: (e) => {
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+      }
+    },
   });
 
   const [verifyPhoneNumber, { loading: verifyLoading }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
