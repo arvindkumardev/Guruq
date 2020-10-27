@@ -6,10 +6,10 @@ import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
 import Dashboard from './components/dashboard';
-import Calendar from './components/calendar';
-import Classes from './components/classes';
-import Tutor from './components/tutor';
-import Profile from './components/profile';
+import Calendar from '../calendar/calendar';
+import Classes from '../classes/classes';
+import Tutor from '../tutor/tutor';
+import Profile from '../profile/profile';
 
 function studentDashboardContainer(props) {
   const navigation = useNavigation();

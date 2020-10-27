@@ -1,11 +1,11 @@
 import { Image, Text, View, StatusBar, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
-import IconWrapper from '../../../../components/IconWrapper';
-import styles from '../styles';
+import commonStyles from '../../../theme/styles';
+import { Colors, Images } from '../../../theme';
+import { RfH, RfW } from '../../../utils/helpers';
+import IconWrapper from '../../../components/IconWrapper';
+import styles from '../dashboard/styles';
 
 function profile() {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
