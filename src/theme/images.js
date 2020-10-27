@@ -1,4 +1,4 @@
-// eslint-disable global-require
+// eslint-disable-line global-require
 const Images = {
   onboarding1: require('../assets/images/tutorDetail5.png'),
   onboarding2: require('../assets/images/onboarding2.png'),
@@ -32,10 +32,6 @@ const Images = {
   igcse: require('../assets/images/igcse.png'),
   heart: require('../assets/images/heart.png'),
   bell: require('../assets/images/bell.png'),
-  qpoint: require('../assets/images/qpoint.png'),
-  cart: require('../assets/images/cart.png'),
-  expand_gray: require('../assets/images/expand_grey.png'),
-  collapse_grey: require('../assets/images/collapse_grey.png'),
   qpoint: require('../assets/images/qpoint.png'),
   cart: require('../assets/images/cart.png'),
   expand_gray: require('../assets/images/expand_grey.png'),
