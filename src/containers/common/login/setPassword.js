@@ -18,6 +18,8 @@ import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { UserTypeEnum } from '../../../common/userType.enum';
+import NavigationRouteNames from '../../../routes/ScreenNames';
 
 function setPassword() {
   const navigation = useNavigation();
@@ -38,10 +40,14 @@ function setPassword() {
     onCompleted: (data) => {
       if (data) {
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token);
-
-        // set in apollo cache
         isLoggedIn(true);
         userDetails(data.setPassword);
+
+        // if (data.type === UserTypeEnum.OTHER.label) {
+        //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR, { user: data.setPassword });
+        // } else {
+        // set in apollo cache
+        // }
       }
     },
   });
@@ -97,7 +103,14 @@ function setPassword() {
           </View>
           <TouchableOpacity
             onPress={() => onClickContinue()}
-            style={[commonStyles.buttonPrimary, { marginTop: RfH(48), alignSelf: 'center', width: RfW(144) }]}>
+            style={[
+              commonStyles.buttonPrimary,
+              {
+                marginTop: RfH(48),
+                alignSelf: 'center',
+                width: RfW(144),
+              },
+            ]}>
             <Text style={commonStyles.textButtonPrimary}>Submit</Text>
           </TouchableOpacity>
         </View>

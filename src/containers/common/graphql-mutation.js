@@ -85,3 +85,37 @@ export const FORGOT_PASSWORD_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_STUDENT = gql`
+  mutation CreateStudent {
+    createStudent {
+      id
+      contactDetail {
+        firstName
+        lastName
+        phoneNumber {
+          countryCode
+          number
+        }
+        email
+      }
+    }
+  }
+`;
+
+export const CREATE_TUTOR = gql`
+  mutation CreateTutor {
+    createTutor {
+      id
+      contactDetail {
+        firstName
+        lastName
+        phoneNumber {
+          countryCode
+          number
+        }
+        email
+      }
+    }
+  }
+`;
