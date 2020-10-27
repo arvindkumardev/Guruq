@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Flags from './country/flags';
 import styles from './style';
 import IconButtonWrapper from '../IconWrapper';
-import Images from '../../theme/Images';
+import Images from '../../theme/images';
 import { RfH, RfW } from '../../utils/helpers';
 import CustomSearchBar from '../CustomSearchBar';
 

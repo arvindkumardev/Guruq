@@ -1,7 +1,7 @@
 import { Image, Text, View } from 'react-native';
 import React from 'react';
-import commonStyles from '../../../../theme/styles';
-import { Colors } from '../../../../theme';
+import commonStyles from '../../../theme/styles';
+import { Colors } from '../../../theme';
 
 function calendar() {
   return (
