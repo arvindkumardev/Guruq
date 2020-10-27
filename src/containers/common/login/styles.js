@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
   underlineView: {
     marginTop: RfH(40),
     borderBottomWidth: 0.5,
-    borderBottomColor: Colors.inputLabel,
+    borderBottomColor: Colors.secondaryText,
   },
   forgotPassword: {
-    color: Colors.primaryButtonBackground,
+    color: Colors.brandBlue2,
     textAlign: 'right',
     marginTop: RfH(6),
   },
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   clearIcon: {
     flex: 0.05,
     fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
-    color: Colors.inputLabel,
+    color: Colors.secondaryText,
     marginBottom: RfH(-25),
   },
   applyIcon: {

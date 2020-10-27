@@ -15,11 +15,9 @@ import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
-import MainContainer from './components/MainContainer';
+import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { UserTypeEnum } from '../../../common/userType.enum';
-import NavigationRouteNames from '../../../routes/ScreenNames';
 
 function setPassword() {
   const navigation = useNavigation();

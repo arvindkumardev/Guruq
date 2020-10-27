@@ -8,12 +8,12 @@ const styles = StyleSheet.create({
   bottomText: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     marginTop: RfH(4),
-    color: Colors.inputLabel,
+    color: Colors.secondaryText,
   },
   bottomTabActive: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     marginTop: RfH(4),
-    color: Colors.primaryButtonBackground,
+    color: Colors.brandBlue2,
   },
   myProfileText: {
     marginTop: RfH(48),
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   separatorView: {
     flex: 1,
-    borderBottomColor: Colors.inputLabel,
+    borderBottomColor: Colors.secondaryText,
     borderBottomWidth: 0.5,
     marginTop: RfH(16),
   },
@@ -64,12 +64,12 @@ const styles = StyleSheet.create({
   menuItemPrimaryText: {
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
-    color: Colors.darktitle,
+    color: Colors.primaryText,
     marginLeft: RfW(12),
   },
   menuItemSecondaryText: {
     marginLeft: RfW(12),
-    color: Colors.inputLabel,
+    color: Colors.secondaryText,
   },
   actionIconParentView: {
     flex: 0.25,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
-    color: Colors.inputLabel,
+    color: Colors.secondaryText,
     marginTop: RfH(8),
   },
 });

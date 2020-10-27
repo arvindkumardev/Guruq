@@ -28,13 +28,13 @@ function studyAreaSelector() {
           onPress={() => onBackPress()}
           type="MaterialIcons"
           name="keyboard-backspace"
-          style={{ color: Colors.darktitle }}
+          style={{ color: Colors.primaryText }}
         />
         <Text style={styles.helloText}>Hello</Text>
       </View>
       <Text style={styles.userName}>{userName}</Text>
       <Text style={[styles.subHeading, { textAlign: 'left', fontWeight: 'bold' }]}>Select Your Study Area</Text>
-      <Text style={{ color: Colors.inputLabel }}>To help us find the best tutors for you</Text>
+      <Text style={{ color: Colors.secondaryText }}>To help us find the best tutors for you</Text>
       <View style={styles.areaParentView}>
         <TouchableWithoutFeedback onPress={() => onAreaClick()} style={{ alignItems: 'center', flex: 1 }}>
           <View style={[styles.areaView, { backgroundColor: 'rgb(255,247,240)', marginRight: RfW(8) }]}>

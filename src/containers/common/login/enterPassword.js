@@ -10,10 +10,9 @@ import { RfH, RfW, storeData } from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/ScreenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
-import MainContainer from './components/MainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { UserTypeEnum } from '../../../common/userType.enum';
+import MainContainer from './components/mainContainer';
 
 function enterPassword(props) {
   const { route } = props;

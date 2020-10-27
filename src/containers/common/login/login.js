@@ -11,7 +11,7 @@ import { CustomMobileNumber } from '../../../components';
 import routeNames from '../../../routes/ScreenNames';
 import { CHECK_USER_QUERY } from '../graphql-query';
 import { NOT_FOUND } from '../../../common/errorCodes';
-import MainContainer from './components/MainContainer';
+import MainContainer from './components/mainContainer';
 
 function login() {
   const navigation = useNavigation();

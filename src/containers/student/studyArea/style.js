@@ -15,10 +15,10 @@ const styles = StyleSheet.create({
   helloText: {
     marginLeft: RfW(8),
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    color: Colors.inputLabel,
+    color: Colors.secondaryText,
   },
   userName: {
-    color: Colors.darktitle,
+    color: Colors.primaryText,
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
     marginLeft: RfW(51),
   },

@@ -52,7 +52,7 @@ function splashScreen() {
   }, [currentTutor]);
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
+    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.brandBlue }]}>
       {/* eslint-disable-next-line global-require */}
       <Image style={styles.splashImage} source={require('../../../assets/images/splash_image.png')} />
       <Text style={styles.msgOne}>Find the best</Text>

@@ -1,11 +1,13 @@
-import { Image, Text, View, StatusBar, FlatList, SafeAreaView } from 'react-native';
+import { Image, Text, View, StatusBar, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { RfH, RfW } from '../../../utils/helpers';
+import { removeData, RfH, RfW } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
 import styles from '../dashboard/styles';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { isLoggedIn, userDetails } from '../../../apollo/cache';
 
 function profile() {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
@@ -16,6 +18,14 @@ function profile() {
     { name: 'Education', icon: Images.education },
   ]);
 
+  const logout = () => {
+    removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+
+    // set in apollo cache
+    isLoggedIn(false);
+    userDetails({});
+  };
+
   const renderItem = (item) => {
     return (
       <View
@@ -25,7 +35,7 @@ function profile() {
         ]}>
         <View style={{ flexDirection: 'row' }}>
           <IconWrapper iconImage={item.icon} iconHeight={RfH(18)} iconWidth={RfW(20)} />
-          <Text style={{ color: Colors.darktitle, marginLeft: RfW(8) }}>{item.name}</Text>
+          <Text style={{ color: Colors.primaryText, marginLeft: RfW(8) }}>{item.name}</Text>
         </View>
         <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
       </View>
@@ -98,6 +108,11 @@ function profile() {
           />
         </SafeAreaView>
       )}
+
+      {/* // FIXME: remove me */}
+      <TouchableOpacity onPress={() => logout()}>
+        <Text className="h5">Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }

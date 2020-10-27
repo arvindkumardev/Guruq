@@ -5,9 +5,9 @@ import Swiper from 'react-native-swiper';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import Colors from '../../../theme/colors';
-import ScheduleClass from './components/ScheduleClass';
-import FindTutors from './components/FindTutors';
-import ConnectWithTutor from './components/ConnectWithTutor';
+import ScheduleClass from './components/scheduleClass';
+import FindTutors from './components/findTutors';
+import ConnectWithTutor from './components/connectWithTutor';
 import { RfH, storeData } from '../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import routeNames from '../../../routes/ScreenNames';
@@ -21,7 +21,7 @@ function GettingStarted() {
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.onboardBackground }]}>
+    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.brandBlue }]}>
       <StatusBar barStyle="light-content" />
       <TouchableOpacity onPress={() => goToLogin()}>
         <Text style={styles.skip}>Skip</Text>

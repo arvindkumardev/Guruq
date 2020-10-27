@@ -1,4 +1,4 @@
-import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View, Modal } from 'react-native';
+import { FlatList, Image, ScrollView, StatusBar, Text, View, Modal } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
@@ -8,12 +8,11 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import routeNames from '../../../../routes/ScreenNames';
-import { removeData, RfH, RfW } from '../../../../utils/helpers';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
+import { RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper, CustomRadioButton } from '../../../../components';
-import { isLoggedIn, userDetails } from '../../../../apollo/cache';
+import { userDetails } from '../../../../apollo/cache';
 
-function dashboard() {
+function Dashboard() {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
   const [studyAreaModalVisible, setStudyAreaModalVisible] = useState(true);
@@ -35,14 +34,6 @@ function dashboard() {
   //    navigation.navigate(routeNames.STUDENT.STUDY_AREA);
   //  }
   // }, [userInfo]);
-
-  const logout = () => {
-    removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-
-    // set in apollo cache
-    isLoggedIn(false);
-    userDetails({});
-  };
 
   const renderSubjects = () => {
     return (
@@ -66,7 +57,7 @@ function dashboard() {
                 iconImage={Images.book}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.darktitle, marginTop: RfH(5) }}>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               English
             </Text>
           </View>
@@ -88,7 +79,7 @@ function dashboard() {
                 iconImage={Images.physics}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.darktitle, marginTop: RfH(5) }}>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Physics
             </Text>
           </View>
@@ -110,7 +101,7 @@ function dashboard() {
                 iconImage={Images.beaker}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.darktitle, marginTop: RfH(5) }}>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Chemistry
             </Text>
           </View>
@@ -132,7 +123,7 @@ function dashboard() {
                 iconImage={Images.dna}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.darktitle, marginTop: RfH(5) }}>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Biology
             </Text>
           </View>
@@ -157,7 +148,9 @@ function dashboard() {
                 iconImage={Images.math}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.darktitle, marginTop: RfH(5) }}>Maths</Text>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
+              Maths
+            </Text>
           </View>
           <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
@@ -177,7 +170,7 @@ function dashboard() {
                 iconImage={Images.civic}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.darktitle, marginTop: RfH(5) }}>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Civics
             </Text>
           </View>
@@ -199,7 +192,7 @@ function dashboard() {
                 iconImage={Images.history}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.darktitle, marginTop: RfH(5) }}>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               History
             </Text>
           </View>
@@ -221,7 +214,7 @@ function dashboard() {
                 iconImage={Images.geo}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.darktitle, marginTop: RfH(5) }}>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Geography
             </Text>
           </View>
@@ -243,8 +236,8 @@ function dashboard() {
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Thumbnail large style={{ marginTop: RfH(11) }} source={Images.kushal} />
-          <Text style={{ marginTop: 1, color: Colors.darktitle }}>{item.name}</Text>
-          <Text style={{ marginTop: 1, color: Colors.inputLabel, fontSize: 12 }}>{item.subject}</Text>
+          <Text style={{ marginTop: 1, color: Colors.primaryText }}>{item.name}</Text>
+          <Text style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12 }}>{item.subject}</Text>
         </View>
       </View>
     );
@@ -315,15 +308,15 @@ function dashboard() {
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(18) }}>
           <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
-            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.darktitle }}>
+            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>
               Hi {userInfo.firstName}
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Text style={{ color: Colors.inputLabel, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
+              <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
               <Icon
                 type="MaterialIcons"
                 name="keyboard-arrow-down"
-                style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.inputLabel }}
+                style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }}
               />
             </View>
           </View>
@@ -343,15 +336,10 @@ function dashboard() {
               borderColor: 'transparent',
               height: RfH(50),
             }}>
-            <Icon type="MaterialIcons" name="search" style={{ color: Colors.primaryButtonBackground }} />
+            <Icon type="MaterialIcons" name="search" style={{ color: Colors.brandBlue2 }} />
             <Input placeholder="Search" />
           </Item>
         </View>
-
-        {/* // FIXME: remove me */}
-        <TouchableOpacity onPress={() => logout()}>
-          <Text className="h5">Logout</Text>
-        </TouchableOpacity>
 
         <View style={{ height: RfH(210), marginTop: RfH(29) }}>
           <Swiper horizontal autoplay autoplayTimeout={5}>
@@ -364,8 +352,8 @@ function dashboard() {
           </Swiper>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <Text style={{ color: Colors.darktitle, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Upcoming Classes</Text>
-          <Text style={{ color: Colors.primaryButtonBackground, fontSize: 10 }}>View All</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Upcoming Classes</Text>
+          <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
         </View>
         <View
           style={{ height: RfH(140), backgroundColor: '#ceecfe', borderRadius: 20, marginTop: RfH(20), padding: 16 }}>
@@ -374,46 +362,48 @@ function dashboard() {
               <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
             </View>
             <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-              <Text style={{ fontSize: 16, color: Colors.darktitle, fontFamily: 'SegoeUI-Semibold' }}>
+              <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
                 Science by Rahul Das
               </Text>
-              <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>CBSE Class 9</Text>
+              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>CBSE Class 9</Text>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <Icon
                   type="FontAwesome"
                   name="calendar-o"
-                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.primaryButtonBackground }}
+                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
                 />
-                <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>Sunday , June 10 </Text>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>Sunday , June 10 </Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <Icon
                   type="Feather"
                   name="clock"
-                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.primaryButtonBackground }}
+                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
                 />
-                <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>7:00-8:00 PM</Text>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>7:00-8:00 PM</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <Icon
                   type="MaterialIcons"
                   name="computer"
-                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.primaryButtonBackground }}
+                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
                 />
-                <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>Online Class</Text>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>Online Class</Text>
               </View>
             </View>
           </View>
         </View>
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
-          <Text style={{ color: Colors.darktitle, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Tutors By Subjects</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
+            Tutors By Subjects
+          </Text>
         </View>
         {renderSubjects()}
         <View
           style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: RfH(25) }}>
-          <Text style={{ color: Colors.darktitle, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Favourite Tutors</Text>
-          <Text style={{ color: Colors.primaryButtonBackground, fontSize: 10 }}>View All</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Favourite Tutors</Text>
+          <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
         </View>
         <FlatList
           horizontal
@@ -424,7 +414,9 @@ function dashboard() {
         />
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
-          <Text style={{ color: Colors.darktitle, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Recommended Tutors</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
+            Recommended Tutors
+          </Text>
         </View>
         <View style={{ height: RfH(92), backgroundColor: 'rgb(230,252,231)', borderRadius: 8, marginTop: RfH(20) }}>
           <View
@@ -445,20 +437,22 @@ function dashboard() {
                   <Icon
                     type="FontAwesome"
                     name="star"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.primaryButtonBackground }}
+                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.darktitle, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
                 </View>
               </View>
-              <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>3 years of Experience</Text>
+              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                3 years of Experience
+              </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   English, Maths , Science
                 </Text>
                 <Icon
                   type="MaterialIcons"
                   name="computer"
-                  style={{ fontSize: 20, marginRight: RfW(8), color: Colors.inputLabel }}
+                  style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
                 />
               </View>
             </View>
@@ -483,26 +477,28 @@ function dashboard() {
                   <Icon
                     type="FontAwesome"
                     name="star"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.primaryButtonBackground }}
+                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.darktitle, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
                 </View>
               </View>
-              <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>3 years of Experience</Text>
+              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                3 years of Experience
+              </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   English, Maths , Science
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
                   <Icon
                     type="AntDesign"
                     name="home"
-                    style={{ fontSize: 18, marginRight: RfW(8), color: Colors.inputLabel }}
+                    style={{ fontSize: 18, marginRight: RfW(8), color: Colors.secondaryText }}
                   />
                   <Icon
                     type="MaterialIcons"
                     name="computer"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.inputLabel }}
+                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
                   />
                 </View>
               </View>
@@ -528,20 +524,22 @@ function dashboard() {
                   <Icon
                     type="FontAwesome"
                     name="star"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.primaryButtonBackground }}
+                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.darktitle, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
                 </View>
               </View>
-              <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>3 years of Experience</Text>
+              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                3 years of Experience
+              </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: Colors.inputLabel, fontSize: 14, marginTop: RfH(2) }}>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   English, Maths , Science
                 </Text>
                 <Icon
                   type="MaterialIcons"
                   name="computer"
-                  style={{ fontSize: 20, marginRight: RfW(8), color: Colors.inputLabel }}
+                  style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
                 />
               </View>
             </View>
@@ -553,4 +551,4 @@ function dashboard() {
   );
 }
 
-export default dashboard;
+export default Dashboard;

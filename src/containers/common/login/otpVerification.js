@@ -10,7 +10,7 @@ import { removeData, RfH, storeData } from '../../../utils/helpers';
 import routeNames from '../../../routes/ScreenNames';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
-import MainContainer from './components/MainContainer';
+import MainContainer from './components/mainContainer';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 function otpVerification(props) {
@@ -112,7 +112,7 @@ function otpVerification(props) {
       <View style={styles.bottomCard}>
         <View style={[styles.setPasswordView, { paddingHorizontal: 64 }]}>
           <View>
-            <Text style={{ color: Colors.inputLabel }}>Enter OTP</Text>
+            <Text style={{ color: Colors.secondaryText }}>Enter OTP</Text>
           </View>
           <OTPInputView
             style={{
@@ -130,13 +130,13 @@ function otpVerification(props) {
 
           <View style={styles.resendParent}>
             {time > 0 ? (
-              <Text style={{ color: Colors.inputLabel, fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>
+              <Text style={{ color: Colors.secondaryText, fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>
                 Resend Code in
-                <Text style={{ color: Colors.primaryButtonBackground }}> {time}</Text> Sec{' '}
+                <Text style={{ color: Colors.brandBlue2 }}> {time}</Text> Sec{' '}
               </Text>
             ) : (
               <TouchableOpacity onPress={() => onResendOtpClick()}>
-                <Text style={{ color: Colors.primaryButtonBackground, fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>
+                <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>
                   Resend code
                 </Text>
               </TouchableOpacity>
