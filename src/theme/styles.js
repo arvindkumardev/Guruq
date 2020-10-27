@@ -40,5 +40,12 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
   },
+
+  lineSeparator: {
+    flex: 1,
+    borderBottomColor: Colors.secondaryText,
+    borderBottomWidth: 0.5,
+    marginTop: RfH(16),
+  },
 });
 export default styles;
