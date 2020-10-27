@@ -40,13 +40,13 @@ function splashScreen() {
   }, [data]);
 
   useEffect(() => {
-    if (currentStudent) {
+    if (currentStudent && currentStudent.id > 0) {
       studentDetails(currentStudent);
     }
   }, [currentStudent]);
 
   useEffect(() => {
-    if (currentTutor) {
+    if (currentTutor && currentTutor.id > 0) {
       tutorDetails(currentTutor);
     }
   }, [currentTutor]);

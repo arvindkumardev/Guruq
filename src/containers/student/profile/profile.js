@@ -1,4 +1,4 @@
-import { Image, Text, View, StatusBar, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import commonStyles from '../../../theme/styles';
@@ -24,8 +24,6 @@ function profile() {
   const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
-
-
 
   const logout = () => {
     removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
@@ -138,12 +136,17 @@ function profile() {
       <View style={styles.separatorView} />
 
       <View style={styles.userMenuParentView}>
-        <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
+        <IconWrapper
+          styling={{ flex: 0.1 }}
+          iconHeight={RfH(16)}
+          iconWidth={RfW(16)}
+          iconImage={Images.bookingDetails}
+        />
         <View style={styles.menuItemParentView}>
           <Text style={styles.menuItemPrimaryText}>Booking Details</Text>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
             Purchased History
-         </Text>
+          </Text>
         </View>
         <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
           <IconWrapper
@@ -195,12 +198,17 @@ function profile() {
       <View style={styles.separatorView} />
 
       <View style={styles.userMenuParentView}>
-        <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
+        <IconWrapper
+          styling={{ flex: 0.1 }}
+          iconHeight={RfH(16)}
+          iconWidth={RfW(16)}
+          iconImage={Images.moreInformation}
+        />
         <View style={styles.menuItemParentView}>
           <Text style={styles.menuItemPrimaryText}> More Information</Text>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
             Customer Care, FAQ's, Send feedback
-         </Text>
+          </Text>
         </View>
         <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
           <IconWrapper
@@ -219,7 +227,7 @@ function profile() {
           <Text style={styles.menuItemPrimaryText}> About GuruQ</Text>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
             About, team
-         </Text>
+          </Text>
         </View>
         <TouchableWithoutFeedback onPress={() => setIsAboutGuruMenuOpen(!isAboutGuruMenuOpen)}>
           <IconWrapper
@@ -235,7 +243,10 @@ function profile() {
       <View style={styles.userMenuParentView}>
         <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />
         <View style={styles.menuItemParentView}>
-          <Text style={styles.menuItemPrimaryText}> Logout</Text>
+          <TouchableOpacity onPress={() => logout()}>
+            <Text style={styles.menuItemPrimaryText}> Logout</Text>
+          </TouchableOpacity>
+
           {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
             Calendar, Schedule Class, Renew Class, Class...
          </Text> */}
@@ -250,57 +261,57 @@ function profile() {
         </TouchableWithoutFeedback> */}
       </View>
       <View style={styles.separatorView} />
-      <View style={{
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 100,
-        marginTop: -20
-      }}>
+      <View
+        style={{
+          justifyContent: 'space-around',
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 100,
+          marginTop: -20,
+        }}>
         <View>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
             Current
-         </Text>
+          </Text>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
             Version.2.5
-           </Text>
+          </Text>
         </View>
-        <View style={{
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(65)} iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} />
-
-          <View style={{
+        <View
+          style={{
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
           }}>
+          <IconWrapper
+            styling={{ flex: 0.1 }}
+            iconHeight={RfH(65)}
+            iconWidth={RfW(65)}
+            iconImage={Images.profile_footer_logo}
+          />
+
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
               Powered by
             </Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
               RHA Technologies
-              </Text>
+            </Text>
           </View>
-          <View>
-          </View>
+          <View />
         </View>
         <View>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
             Latest
-           </Text>
+          </Text>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
             Version.3.0
           </Text>
         </View>
       </View>
-
-
-        {/* // FIXME: remove me */}
-        <TouchableOpacity onPress={() => logout()}>
-            <Text className="h5">Logout</Text>
-        </TouchableOpacity>
-
     </View>
   );
 }

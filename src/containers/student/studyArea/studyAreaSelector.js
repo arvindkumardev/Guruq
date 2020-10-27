@@ -1,16 +1,19 @@
-import { Image, Text, View, StatusBar, TouchableWithoutFeedback } from 'react-native';
+import { StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon, Thumbnail } from 'native-base';
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { getSaveData, RfH, RfW } from '../../../utils/helpers';
+import { RfW } from '../../../utils/helpers';
 import styles from './style';
 import routeNames from '../../../routes/ScreenNames';
+import { userDetails } from '../../../apollo/cache';
 
 function studyAreaSelector() {
   const navigation = useNavigation();
-  const [userName, setUserName] = useState('Sheena');
+
+  const userInfo = useReactiveVar(userDetails);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -32,9 +35,10 @@ function studyAreaSelector() {
         />
         <Text style={styles.helloText}>Hello</Text>
       </View>
-      <Text style={styles.userName}>{userName}</Text>
-      <Text style={[styles.subHeading, { textAlign: 'left', fontWeight: 'bold' }]}>Select Your Study Area</Text>
-      <Text style={{ color: Colors.secondaryText }}>To help us find the best tutors for you</Text>
+      <Text style={styles.userName}>{userInfo?.firstName}</Text>
+      <Text style={styles.subHeading}>Select Your Study Area</Text>
+      <Text style={styles.subHeadingText}>To help us find the best tutors for you</Text>
+
       <View style={styles.areaParentView}>
         <TouchableWithoutFeedback onPress={() => onAreaClick()} style={{ alignItems: 'center', flex: 1 }}>
           <View style={[styles.areaView, { backgroundColor: 'rgb(255,247,240)', marginRight: RfW(8) }]}>
