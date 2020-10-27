@@ -1,4 +1,4 @@
 import Colors from './colors';
-import Images from './Images';
+import Images from './images';
 
 export { Colors, Images };

@@ -18,10 +18,10 @@ function profile() {
 
   const renderItem = (item) => {
     <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'stretch', paddingLeft: RfW(16) }}>
-        <IconWrapper iconImage={Images.personal} />
-        <Text style={{ color: Colors.darktitle }}>{item.name}</Text>
-    </View>
-  }
+      <IconWrapper iconImage={Images.personal} />
+      <Text style={{ color: Colors.darktitle }}>{item.name}</Text>
+    </View>;
+  };
 
   return (
     <View style={commonStyles.mainContainer}>
@@ -84,7 +84,7 @@ function profile() {
           />
         </TouchableWithoutFeedback>
       </View>
-        <View style={{ flex: 1, borderBottomColor: Colors.inputLabel, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
+      <View style={{ flex: 1, borderBottomColor: Colors.inputLabel, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
       <View>
         {isAccountMenuOpen && (
           <FlatList
@@ -94,7 +94,7 @@ function profile() {
             keyExtractor={(item, index) => index.toString()}
           />
         )}
-    </View>
+      </View>
     </View>
   );
 }
