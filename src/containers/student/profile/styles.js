@@ -73,6 +73,12 @@ const styles = StyleSheet.create({
     marginLeft: RfW(12),
     color: Colors.secondaryText,
   },
+
+  versionText: {
+    color: Colors.secondaryText,
+    textAlign: 'left',
+  },
+
   actionIconParentView: {
     flex: 0.25,
     flexDirection: 'column',

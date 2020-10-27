@@ -53,19 +53,19 @@ function profile() {
     return (
       <View style={[styles.userMenuParentView, { justifyContent: 'space-evenly' }]}>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.heart} />
+          <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.heart} />
           <Text style={styles.actionText}>Favourites</Text>
         </View>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.bell} />
+          <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.bell} />
           <Text style={styles.actionText}>Notification</Text>
         </View>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.qpoint} />
+          <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.qpoint} />
           <Text style={styles.actionText}>Q Points</Text>
         </View>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.cart} />
+          <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.cart} />
           <Text style={styles.actionText}>Cart</Text>
         </View>
       </View>
@@ -266,53 +266,40 @@ function profile() {
       <View
         style={{
           justifyContent: 'space-around',
+          alignItems: 'flex-start',
           flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: 100,
-          marginTop: -20,
+          marginTop: 20,
         }}>
         <View>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
             Current
           </Text>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
             Version.2.5
           </Text>
         </View>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <IconWrapper
-            styling={{ flex: 0.1 }}
-            iconHeight={RfH(65)}
-            iconWidth={RfW(65)}
-            iconImage={Images.profile_footer_logo}
-          />
 
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-              Powered by
-            </Text>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-              RHA Technologies
-            </Text>
-          </View>
-          <View />
-        </View>
         <View>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+          <IconWrapper iconHeight={RfH(65)} iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} />
+        </View>
+
+        <View>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
             Latest
           </Text>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
             Version.3.0
           </Text>
         </View>
+      </View>
+
+      <View style={{ flex: 1, justifyContent: 'center', marginTop: 24, marginBottom: 24 }}>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.versionText, { textAlign: 'center' }]}>
+          Powered by
+        </Text>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.versionText, { textAlign: 'center' }]}>
+          RHA Technologies
+        </Text>
       </View>
     </View>
   );
