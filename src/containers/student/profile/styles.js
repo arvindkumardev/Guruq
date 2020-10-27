@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   },
   myProfileText: {
     // marginTop: RfH(16),
+    fontFamily: 'SegoeUI-Semibold',
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     // fontWeight: 'bold',
   },
@@ -44,9 +45,10 @@ const styles = StyleSheet.create({
   },
   separatorView: {
     flex: 1,
-    borderBottomColor: Colors.secondaryText,
+    borderBottomColor: Colors.darkGrey,
     borderBottomWidth: 0.5,
     marginTop: RfH(16),
+    opacity: 0.1,
   },
   userMenuParentView: {
     flex: 1,

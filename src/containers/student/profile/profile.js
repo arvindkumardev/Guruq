@@ -5,7 +5,7 @@ import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { removeData, RfH, RfW } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
-import styles from '../dashboard/styles';
+import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 
@@ -87,15 +87,17 @@ function profile() {
       <View style={styles.separatorView} />
       {renderActionIcons()}
       <View style={styles.separatorView} />
-      <View style={styles.userMenuParentView}>
-        <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
-        <View style={styles.menuItemParentView}>
-          <Text style={styles.menuItemPrimaryText}>My Account</Text>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-            Personal Details , Address , Parent Details , Education
-          </Text>
-        </View>
-        <TouchableWithoutFeedback onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}>
+      <View>
+        <TouchableWithoutFeedback
+          onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
+          style={styles.userMenuParentView}>
+          <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
+          <View style={styles.menuItemParentView}>
+            <Text style={styles.menuItemPrimaryText}>My Account</Text>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+              Personal Details, Address, Parent Details, Education
+            </Text>
+          </View>
           <IconWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
