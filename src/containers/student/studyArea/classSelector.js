@@ -41,13 +41,13 @@ function classSelector() {
           onPress={() => onBackPress()}
           type="MaterialIcons"
           name="keyboard-backspace"
-          style={{ color: Colors.darktitle }}
+          style={{ color: Colors.primaryText }}
         />
         <Text
           style={{
             fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
             fontWeight: 'bold',
-            color: Colors.darktitle,
+            color: Colors.primaryText,
             marginLeft: RfH(20),
             alignSelf: 'center',
           }}>

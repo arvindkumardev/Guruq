@@ -9,10 +9,9 @@ import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
-import MainContainer from './components/MainContainer';
+import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import NavigationRouteNames from '../../../routes/ScreenNames';
 
 function register(props) {
   const navigation = useNavigation();
@@ -129,9 +128,9 @@ function register(props) {
           <View style={{ marginTop: RfH(8) }}>
             <Text style={{ textAlign: 'center' }}>
               By Signing up you agree to GuruQ{' '}
-              <Text style={{ color: Colors.primaryButtonBackground }}>Terms & Conditions</Text>,
-              <Text style={{ color: Colors.primaryButtonBackground, marginTop: RfH(4) }}> Privacy Policy</Text> and
-              <Text style={{ color: Colors.primaryButtonBackground }}> Cookie Policy</Text>
+              <Text style={{ color: Colors.brandBlue2 }}>Terms & Conditions</Text>,
+              <Text style={{ color: Colors.brandBlue2, marginTop: RfH(4) }}> Privacy Policy</Text> and
+              <Text style={{ color: Colors.brandBlue2 }}> Cookie Policy</Text>
             </Text>
           </View>
         </View>

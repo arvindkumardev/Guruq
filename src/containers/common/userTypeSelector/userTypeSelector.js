@@ -68,7 +68,7 @@ function userTypeSelector(props) {
           onPress={() => onBackPress()}
           type="MaterialIcons"
           name="keyboard-backspace"
-          style={{ color: Colors.darktitle }}
+          style={{ color: Colors.primaryText }}
         />
         <Text style={styles.helloText}>Hello</Text>
       </View>

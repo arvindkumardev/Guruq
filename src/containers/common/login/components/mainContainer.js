@@ -11,7 +11,7 @@ function MainContainer(props) {
   const { isLoading, onBackPress } = props;
 
   return (
-    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.onboardBackground }]}>
+    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.brandBlue }]}>
       <Loader isLoading={isLoading} />
       <StatusBar barStyle="light-content" />
       <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={styles.backIcon} />

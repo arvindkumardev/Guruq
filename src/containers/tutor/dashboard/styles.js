@@ -8,12 +8,12 @@ const styles = StyleSheet.create({
   bottomText: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     marginTop: RfH(4),
-    color: Colors.inputLabel,
+    color: Colors.secondaryText,
   },
   bottomTabActive: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     marginTop: RfH(4),
-    color: Colors.primaryButtonBackground,
+    color: Colors.brandBlue2,
   },
 });
 export default styles;

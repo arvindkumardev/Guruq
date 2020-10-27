@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacePX,
   },
   buttonPrimary: {
-    backgroundColor: Colors.primaryButtonBackground,
+    backgroundColor: Colors.brandBlue2,
     marginHorizontal: RfW(58),
     height: RfH(46),
     flexDirection: 'row',
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
   },
   disableButton: {
-    backgroundColor: Colors.inputLabel,
+    backgroundColor: Colors.secondaryText,
     height: RfH(46),
     flexDirection: 'row',
     justifyContent: 'center',

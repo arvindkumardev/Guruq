@@ -5,11 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
-import Dashboard from './components/Dashboard';
 import Calendar from '../calendar/calendar';
 import Classes from '../classes/classes';
 import Tutor from '../tutor/tutor';
 import Profile from '../profile/profile';
+import Dashboard from './components/dashboard';
 
 function studentDashboardContainer(props) {
   const navigation = useNavigation();
