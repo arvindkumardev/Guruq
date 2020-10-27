@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { RfH, RfW } from '../../utils/helpers';
 import Colors from '../../theme/colors';
 
@@ -9,7 +11,7 @@ const styles = StyleSheet.create({
   },
 
   sectionHeaderLabel: {
-    fontSize: 17,
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
     color: Colors.black,
   },
@@ -23,7 +25,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
-    fontSize: 17,
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontWeight: '500',
     fontStyle: 'normal',
     color: Colors.black,
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
     marginLeft: RfW(10),
   },
   itemText: {
-    fontSize: 17,
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontWeight: '400',
     fontStyle: 'normal',
     textAlign: 'left',

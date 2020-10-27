@@ -3,6 +3,7 @@ import { Icon, Input, Item, Label } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
+import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
@@ -11,7 +12,7 @@ import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/MainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { UserTypeEnum } from '../../../common/userType.enum';
 
 function enterPassword(props) {
@@ -97,7 +98,7 @@ function enterPassword(props) {
       <View style={styles.bottomCard}>
         <View>
           <Item floatingLabel style={{}}>
-            <Label style={{ fontSize: 16 }}>Password</Label>
+            <Label style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>Password</Label>
             <Input secureTextEntry={hidePassword} onChangeText={(text) => setPassword(text)} />
             <Icon
               type="Entypo"

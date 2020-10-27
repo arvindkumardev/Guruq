@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
@@ -10,20 +12,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   msgOne: {
-    fontSize: 20,
+    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: '#fff',
     fontWeight: '500',
     alignSelf: 'center',
     marginTop: RfH(-45),
   },
   msgTwo: {
-    fontSize: 20,
+    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: '#fff',
     fontWeight: '500',
     alignSelf: 'center',
   },
   bottomMsg: {
-    fontSize: 14,
+    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
     color: '#fff',
     opacity: 0.5,
     textAlign: 'center',

@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
@@ -12,18 +14,18 @@ const styles = StyleSheet.create({
   },
   helloText: {
     marginLeft: RfW(8),
-    fontSize: 16,
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     color: Colors.inputLabel,
   },
   userName: {
     color: Colors.darktitle,
-    fontSize: 28,
+    fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
     marginLeft: RfW(51),
   },
   subHeading: {
     textAlign: 'center',
     marginTop: RfH(58),
-    fontSize: 20,
+    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: '#313030',
   },
   areaParentView: {
@@ -41,12 +43,12 @@ const styles = StyleSheet.create({
   },
   areaTitleOne: {
     marginTop: RfH(12),
-    fontSize: 16,
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
     textAlign: 'center',
   },
   areaTitleTwo: {
-    fontSize: 16,
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   classTitle: {
-    fontSize: 35,
+    fontSize: RFValue(35, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
     textAlign: 'center',
   },

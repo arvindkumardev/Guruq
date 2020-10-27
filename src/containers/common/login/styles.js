@@ -1,12 +1,14 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
 import { cardPB, cardPT, cardPX, cardRadiusMedium, spacePX } from '../../../theme/variables';
 
 const styles = StyleSheet.create({
   title: {
     fontFamily: 'SegoeUI-Semibold',
-    fontSize: 28,
+    fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
     color: Colors.white,
     fontWeight: '700',
     marginHorizontal: spacePX,
@@ -14,13 +16,13 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     // fontFamily: 'SegoeUI',
-    fontSize: 16,
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     marginHorizontal: spacePX,
     color: Colors.white,
     marginBottom: RfH(40),
   },
   otpNumber: {
-    fontSize: 16,
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     marginHorizontal: RfW(16),
     color: Colors.white,
   },
@@ -30,7 +32,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderBottomWidth: 1,
     color: '#313031',
-    fontSize: 24,
+    fontSize: RFValue(24, STANDARD_SCREEN_SIZE),
   },
   underlineStyleHighLighted: {
     borderColor: '#03DAC6',
@@ -65,18 +67,18 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   eyeIcon: {
-    fontSize: 18,
+    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
     color: '#818181',
   },
   clearIcon: {
     flex: 0.05,
-    fontSize: 18,
+    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
     color: Colors.inputLabel,
     marginBottom: RfH(-25),
   },
   applyIcon: {
     color: '#FF9900',
-    fontSize: 10,
+    fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     marginTop: RfH(-20),
     alignSelf: 'flex-end',
   },

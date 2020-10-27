@@ -2,8 +2,10 @@ import { Image, Text, View, StatusBar, TouchableWithoutFeedback } from 'react-na
 import { Icon, Thumbnail } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { getSaveData, RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
 import routeNames from '../../../routes/ScreenNames';
@@ -43,7 +45,7 @@ function classSelector() {
         />
         <Text
           style={{
-            fontSize: 20,
+            fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
             fontWeight: 'bold',
             color: Colors.darktitle,
             marginLeft: RfH(20),

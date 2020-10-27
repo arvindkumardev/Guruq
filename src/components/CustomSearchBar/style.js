@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { RfH, RfW } from '../../utils/helpers';
 import { Colors } from '../../theme';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,7 +16,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     marginLeft: RfW(3),
-    fontSize: 17,
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 22,
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
   },
   placeholderTextStyle: {
     marginLeft: RfW(3),
-    fontSize: 17,
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 22,

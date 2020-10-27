@@ -2,7 +2,9 @@ import { Image, Text, View, StatusBar, TouchableWithoutFeedback } from 'react-na
 import { Icon, Thumbnail } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { Colors, Images } from '../../../theme';
 import { getSaveData, RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
@@ -31,7 +33,7 @@ function boardSelector() {
         />
         <Text
           style={{
-            fontSize: 20,
+            fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
             fontWeight: 'bold',
             color: Colors.darktitle,
             marginLeft: RfH(20),
@@ -70,10 +72,8 @@ function boardSelector() {
         <TouchableWithoutFeedback onPress={() => onBoardClick()} style={{ alignItems: 'center', flex: 1 }}>
           <View style={[styles.areaView, { backgroundColor: 'rgb(203,231,255)', marginLeft: RfW(8) }]}>
             <View style={{ alignItems: 'center' }}>
-              <Thumbnail square source={Images.igcse} />
-              <Text style={{ height: RfH(70) }} style={styles.areaTitleOne}>
-                IGCSE
-              </Text>
+              <Thumbnail style={{ height: RfH(70) }} square source={Images.igcse} />
+              <Text style={styles.areaTitleOne}>IGCSE</Text>
             </View>
           </View>
         </TouchableWithoutFeedback>

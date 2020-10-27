@@ -1,7 +1,9 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from './colors';
 import { RfH, RfW } from '../utils/helpers';
 import { spacePX } from './variables';
+import { STANDARD_SCREEN_SIZE } from '../utils/constants';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
   textButtonPrimary: {
     textAlign: 'center',
     color: Colors.white,
-    fontSize: 18,
+    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
   },
 });
 export default styles;

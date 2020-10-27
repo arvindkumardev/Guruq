@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { useMutation } from '@apollo/client';
+import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import styles from './styles';
 import { removeData, RfH, storeData } from '../../../utils/helpers';
@@ -10,7 +11,7 @@ import routeNames from '../../../routes/ScreenNames';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/MainContainer';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 function otpVerification(props) {
   const navigation = useNavigation();
@@ -120,7 +121,7 @@ function otpVerification(props) {
             }}
             pinCount={4}
             autoFocusOnLoad
-            codeInputFieldStyle={[styles.underlineStyleBase, { fontSize: 24 }]}
+            codeInputFieldStyle={[styles.underlineStyleBase, { fontSize: RFValue(24, STANDARD_SCREEN_SIZE) }]}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
             onCodeFilled={(code) => {
               onCodeFilled(code);
@@ -129,13 +130,15 @@ function otpVerification(props) {
 
           <View style={styles.resendParent}>
             {time > 0 ? (
-              <Text style={{ color: Colors.inputLabel, fontSize: 14 }}>
+              <Text style={{ color: Colors.inputLabel, fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>
                 Resend Code in
                 <Text style={{ color: Colors.primaryButtonBackground }}> {time}</Text> Sec{' '}
               </Text>
             ) : (
               <TouchableOpacity onPress={() => onResendOtpClick()}>
-                <Text style={{ color: Colors.primaryButtonBackground, fontSize: 14 }}>Resend code</Text>
+                <Text style={{ color: Colors.primaryButtonBackground, fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>
+                  Resend code
+                </Text>
               </TouchableOpacity>
             )}
           </View>

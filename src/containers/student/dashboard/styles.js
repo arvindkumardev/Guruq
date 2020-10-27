@@ -1,21 +1,23 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
   bottomText: {
-    fontSize: 10,
+    fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     marginTop: RfH(4),
     color: Colors.inputLabel,
   },
   bottomTabActive: {
-    fontSize: 10,
+    fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     marginTop: RfH(4),
     color: Colors.primaryButtonBackground,
   },
   myProfileText: {
     marginTop: RfH(48),
-    fontSize: 20,
+    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     fontWeight: 'bold',
   },
   userDetailsView: {
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
   userName: {
     marginTop: RfH(8),
     marginLeft: RfW(12),
-    fontSize: 18,
+    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
     color: 'rgb(25,24,24)',
   },
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   menuItemPrimaryText: {
-    fontSize: 16,
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
     color: Colors.darktitle,
     marginLeft: RfW(12),
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   actionText: {
-    fontSize: 12,
+    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
     color: Colors.inputLabel,
     marginTop: RfH(8),
   },

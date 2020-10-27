@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { RfH, RfW } from '../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 
 const styles = StyleSheet.create({
   textInputContainer: {},
   inputStyle: {
-    fontSize: 15,
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     fontWeight: 'normal',
     fontStyle: 'normal',
     textAlign: 'left',
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   errorTextStyle: {
-    fontSize: 15,
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 22,

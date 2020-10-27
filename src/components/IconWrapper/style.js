@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { RfH, RfW } from '../../utils/helpers';
 
 const getIconImageStyle = (iconHeight, iconWidth, backgroundColor) => ({
@@ -18,7 +20,7 @@ const getLoaderImageStyle = (borderRadius) => ({
 
 const styles = StyleSheet.create({
   loaderImg: { height: 15, width: 15 },
-  countText: { fontSize: RfW(7), textAlign: 'center', color: 'white' },
+  countText: { fontSize: RFValue(7, STANDARD_SCREEN_SIZE), textAlign: 'center', color: 'white' },
   countbackground: {
     height: RfW(13),
     width: RfW(13),
