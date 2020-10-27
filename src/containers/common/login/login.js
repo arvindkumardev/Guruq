@@ -11,7 +11,7 @@ import { CustomMobileNumber } from '../../../components';
 import routeNames from '../../../routes/ScreenNames';
 import { CHECK_USER_QUERY } from '../graphql-query';
 import { NOT_FOUND } from '../../../common/errorCodes';
-import MainContainer from './components/MainContainer';
+import MainContainer from './components/mainContainer';
 
 function login() {
   const navigation = useNavigation();
@@ -54,9 +54,11 @@ function login() {
     if (mobileObj.mobile) {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
-      checkUser({
-        variables: { countryCode, number },
-      });
+      navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+
+      // checkUser({
+      //   variables: { countryCode, number },
+      // });
     } else {
       Alert.alert('Please enter mobile number.');
     }

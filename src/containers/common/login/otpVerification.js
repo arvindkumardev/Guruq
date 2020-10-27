@@ -10,7 +10,7 @@ import { removeData, RfH, storeData } from '../../../utils/helpers';
 import routeNames from '../../../routes/ScreenNames';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
-import MainContainer from './components/MainContainer';
+import MainContainer from './components/mainContainer';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 function otpVerification(props) {
@@ -36,14 +36,14 @@ function otpVerification(props) {
   const [generateOtp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile },
-    // onError: (e) => {
-    //   console.log(error);
-    // },
-    // onCompleted: (data) => {
-    //   if (data) {
-    //     console.log('data', data);
-    //   }
-    // },
+    onError: (e) => {
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+      }
+    },
   });
 
   const [verifyPhoneNumber, { loading: verifyLoading }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
