@@ -12,7 +12,7 @@ import { RfH, storeData } from '../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import routeNames from '../../../routes/ScreenNames';
 
-function scheduleClass() {
+function GettingStarted() {
   const navigation = useNavigation();
 
   const goToLogin = () => {
@@ -44,4 +44,4 @@ function scheduleClass() {
   );
 }
 
-export default scheduleClass;
+export default GettingStarted;

@@ -12,6 +12,7 @@ import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { UserTypeEnum } from '../../../common/userType.enum';
 
 function enterPassword(props) {
   const { route } = props;
@@ -40,10 +41,14 @@ function enterPassword(props) {
     onCompleted: (data) => {
       if (data) {
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
-
-        // set in apollo cache
         isLoggedIn(true);
         userDetails(data.signIn);
+
+        // if (data.type === UserTypeEnum.OTHER.label) {
+        //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR);
+        // } else {
+        // set in apollo cache
+        // }
       }
     },
   });

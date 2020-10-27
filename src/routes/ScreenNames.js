@@ -1,17 +1,20 @@
 const NavigationRouteNames = {
   SPLASH_SCREEN: 'splash_screen',
-  ON_BOARDING: 'on_boarding',
+  GETTING_STARTED: 'getting_started',
   LOGIN: 'login',
   ENTER_PASSWORD: 'enter_password',
   OTP_VERIFICATION: 'otp_verification',
   SET_PASSWORD: 'set_password',
   REGISTER: 'register',
-  STUDY_AREA: 'study area',
-  BOARD: 'Board',
-  CLASS: 'Class',
+  USER_TYPE_SELECTOR: 'user_type_selector',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
+
+    STUDY_AREA: 'student_study_area',
+    BOARD: 'student_board',
+    CLASS: 'student_class',
+
     DASHBOARD: 'student_dashboard',
     CALENDAR: 'student_calendar',
     CLASSES: 'student_classes',

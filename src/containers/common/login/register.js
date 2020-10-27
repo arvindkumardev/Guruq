@@ -12,6 +12,7 @@ import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import NavigationRouteNames from '../../../routes/ScreenNames';
 
 function register(props) {
   const navigation = useNavigation();
@@ -40,16 +41,17 @@ function register(props) {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
         if (error.errorCode === DUPLICATE_FOUND) {
-          Alert.alert('User already exists. Please login');
+          Alert.alert('Email already being used by another user, please use different email!');
         }
       }
     },
     onCompleted: (data) => {
       if (data) {
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token);
-        // set in apollo cache
         isLoggedIn(true);
         userDetails(data.signUp);
+
+        // navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR);
       }
     },
   });

@@ -26,3 +26,37 @@ export const ME_QUERY = gql`
     }
   }
 `;
+
+export const GET_CURRENT_STUDENT_QUERY = gql`
+  query GetCurrentStudent {
+    getCurrentStudent {
+      id
+      contactDetail {
+        firstName
+        lastName
+        phoneNumber {
+          countryCode
+          number
+        }
+        email
+      }
+    }
+  }
+`;
+
+export const GET_CURRENT_TUTOR_QUERY = gql`
+  query GetCurrentTutor {
+    getCurrentTutor {
+      id
+      contactDetail {
+        firstName
+        lastName
+        phoneNumber {
+          countryCode
+          number
+        }
+        email
+      }
+    }
+  }
+`;

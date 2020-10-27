@@ -23,10 +23,10 @@ function dashboard() {
   ]);
 
   useEffect(() => {
-    setTimeout(() =>{
-      navigation.navigate(routeNames.STUDY_AREA);
-    }, 1000)
-  },[])
+    if (userInfo && userInfo.isFirstTime) {
+      navigation.navigate(routeNames.STUDENT.STUDY_AREA);
+    }
+  }, [userInfo]);
 
   const logout = () => {
     removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
@@ -249,7 +249,9 @@ function dashboard() {
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(18) }}>
           <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
-            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.darktitle }}>Hi {userInfo.firstName}</Text>
+            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.darktitle }}>
+              Hi {userInfo.firstName}
+            </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
               <Text style={{ color: Colors.inputLabel, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
               <Icon

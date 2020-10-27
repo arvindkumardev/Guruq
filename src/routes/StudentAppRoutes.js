@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './ScreenNames';
 import studentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
-import studentTutorSelector from '../containers/common/userOnboarding/studentTutorSelector';
+import userTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +15,7 @@ const StudentAppRoutes = () => (
     />
     <Stack.Screen
       name={NavigationRouteNames.STUDENT.ON_BOARDING}
-      component={studentTutorSelector}
+      component={userTypeSelector}
       options={{ headerShown: false }}
     />
   </Stack.Navigator>

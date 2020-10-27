@@ -7,3 +7,6 @@ export const isLoggedIn = makeVar(false);
 export const networkConnectivityError = makeVar(false);
 
 export const userDetails = makeVar({});
+
+export const studentDetails = makeVar({});
+export const tutorDetails = makeVar({});

@@ -6,9 +6,10 @@ import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { useReactiveVar } from '@apollo/client';
 import apolloClient from './apollo/apollo';
-import AppStack from './routes/AppRoutes';
 import { getToken } from './utils/helpers';
-import { isLoggedIn, isTokenLoading } from './apollo/cache';
+import { isLoggedIn, isTokenLoading, userDetails } from './apollo/cache';
+import AppStack from './routes/AppRoutes';
+import { UserTypeEnum } from './common/userType.enum';
 
 const getActiveRouteName = (state) => {
   const route = state.routes[state.index];
@@ -25,6 +26,7 @@ function App() {
 
   const isUserLoggedIn = useReactiveVar(isLoggedIn);
   const isUserTokenLoading = useReactiveVar(isTokenLoading);
+  const userInfo = useReactiveVar(userDetails);
   // const isNetworkConnectivityError = useReactiveVar(networkConnectivityError);
 
   // const netInfo = useNetInfo({
@@ -93,6 +95,7 @@ function App() {
         <AppStack
           isUserLoggedIn={isUserLoggedIn}
           isUserTokenLoading={isUserTokenLoading}
+          userTypeSet={userInfo.type !== UserTypeEnum.OTHER.label}
           // isNetworkConnectivityError={isNetworkConnectivityError}
         />
       </NavigationContainer>

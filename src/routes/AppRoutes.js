@@ -1,23 +1,23 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './ScreenNames';
-import onboarding from '../containers/common/onboarding/index';
 import login from '../containers/common/login/login';
 import otpVerification from '../containers/common/login/otpVerification';
 import setPassword from '../containers/common/login/setPassword';
 import register from '../containers/common/login/register';
 import enterPassword from '../containers/common/login/enterPassword';
 import studentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
-import studentTutorSelector from '../containers/common/userOnboarding/studentTutorSelector';
-import studyAreaSelector from '../containers/common/userOnboarding/studyAreaSelector';
-import boardSelector from '../containers/common/userOnboarding/boardSelector';
-import classSelector from '../containers/common/userOnboarding/classSelector';
+import userTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
+import studyAreaSelector from '../containers/student/studyArea/studyAreaSelector';
+import boardSelector from '../containers/student/studyArea/boardSelector';
+import classSelector from '../containers/student/studyArea/classSelector';
 import splashScreen from '../containers/common/splashScreen/splashScreen';
+import GettingStarted from '../containers/common/onboarding';
 
 const Stack = createStackNavigator();
 
-const AuthRoutes = (props) => {
-  const { isUserLoggedIn, isUserTokenLoading } = props;
+const AppStack = (props) => {
+  const { isUserLoggedIn, isUserTokenLoading, userTypeSet } = props;
 
   return (
     <Stack.Navigator>
@@ -28,11 +28,12 @@ const AuthRoutes = (props) => {
           options={{ headerShown: false }}
         />
       )}
+
       {!isUserTokenLoading && !isUserLoggedIn ? (
         <>
           <Stack.Screen
-            name={NavigationRouteNames.ON_BOARDING}
-            component={onboarding}
+            name={NavigationRouteNames.GETTING_STARTED}
+            component={GettingStarted}
             options={{ headerShown: false }}
           />
           <Stack.Screen name={NavigationRouteNames.LOGIN} component={login} options={{ headerShown: false }} />
@@ -53,7 +54,18 @@ const AuthRoutes = (props) => {
             options={{ headerShown: false }}
           />
           <Stack.Screen name={NavigationRouteNames.REGISTER} component={register} options={{ headerShown: false }} />
+          <Stack.Screen
+            name={NavigationRouteNames.USER_TYPE_SELECTOR}
+            component={userTypeSelector}
+            options={{ headerShown: false }}
+          />
         </>
+      ) : !userTypeSet ? (
+        <Stack.Screen
+          name={NavigationRouteNames.USER_TYPE_SELECTOR}
+          component={userTypeSelector}
+          options={{ headerShown: false }}
+        />
       ) : (
         <>
           <Stack.Screen
@@ -62,20 +74,23 @@ const AuthRoutes = (props) => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name={NavigationRouteNames.STUDENT.ON_BOARDING}
-            component={studentTutorSelector}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDY_AREA}
+            name={NavigationRouteNames.STUDENT.STUDY_AREA}
             component={studyAreaSelector}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name={NavigationRouteNames.BOARD} component={boardSelector} options={{ headerShown: false }} />
-          <Stack.Screen name={NavigationRouteNames.CLASS} component={classSelector} options={{ headerShown: false }} />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.BOARD}
+            component={boardSelector}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.CLASS}
+            component={classSelector}
+            options={{ headerShown: false }}
+          />
         </>
       )}
     </Stack.Navigator>
   );
 };
-export default AuthRoutes;
+export default AppStack;
