@@ -40,6 +40,13 @@ const Images = {
   personal: require('../assets/images/personal.png'),
   parent_details: require('../assets/images/parent_details.png'),
   education: require('../assets/images/education.png'),
+  aboutGuru: require('../assets/images/about_guru.png'),
+  bookingDetails: require('../assets/images/booking_details.png'),
+  refFriend: require('../assets/images/referFriend.png'),
+  myClass: require('../assets/images/my_class.png'),
+  moreInformation: require('../assets/images/more_information.png'),
+  logOut: require('../assets/images/log_out.png'),
+  profile_footer_logo: require('../assets/images/guru_logo_profile_footer.png'),
 };
 
 export default Images;

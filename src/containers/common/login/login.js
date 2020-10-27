@@ -54,9 +54,11 @@ function login() {
     if (mobileObj.mobile) {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
-      checkUser({
-        variables: { countryCode, number },
-      });
+      navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+
+      // checkUser({
+      //   variables: { countryCode, number },
+      // });
     } else {
       Alert.alert('Please enter mobile number.');
     }
