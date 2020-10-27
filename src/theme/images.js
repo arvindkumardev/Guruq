@@ -40,6 +40,8 @@ const Images = {
   personal: require('../assets/images/personal.png'),
   parent_details: require('../assets/images/parent_details.png'),
   education: require('../assets/images/education.png'),
+  cross: require('../assets/images/cross.png'),
+  radio: require('../assets/images/radio.png'),
 };
 
 export default Images;

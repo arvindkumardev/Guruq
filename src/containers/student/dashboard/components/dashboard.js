@@ -1,20 +1,22 @@
-import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View, Modal } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import { useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import routeNames from '../../../../routes/ScreenNames';
 import { removeData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
-import { IconButtonWrapper } from '../../../../components';
+import { IconButtonWrapper, CustomRadioButton } from '../../../../components';
 import { isLoggedIn, userDetails } from '../../../../apollo/cache';
 
 function dashboard() {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
+  const [studyAreaModalVisible, setStudyAreaModalVisible] = useState(true);
 
   const [favouriteTutor, setFavouriteTutor] = useState([
     { name: 'Ritesh Jain', subject: 'English, Maths', imageUrl: '' },
@@ -22,11 +24,17 @@ function dashboard() {
     { name: 'Priyam', subject: 'Maths', imageUrl: '' },
   ]);
 
-  useEffect(() => {
-    if (userInfo && userInfo.isFirstTime) {
-      navigation.navigate(routeNames.STUDENT.STUDY_AREA);
-    }
-  }, [userInfo]);
+  const [studyArea, setStudyArea] = useState([
+    { name: 'CBSE, Class 6', checked: true },
+    { name: 'IIT-JEE Foundation', checked: false },
+    { name: 'NEET', checked: false },
+  ]);
+
+  // useEffect(() => {
+  //  if (userInfo && userInfo.isFirstTime) {
+  //    navigation.navigate(routeNames.STUDENT.STUDY_AREA);
+  //  }
+  // }, [userInfo]);
 
   const logout = () => {
     removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
@@ -239,6 +247,64 @@ function dashboard() {
           <Text style={{ marginTop: 1, color: Colors.inputLabel, fontSize: 12 }}>{item.subject}</Text>
         </View>
       </View>
+    );
+  };
+
+  const setChecked = (item, index) => {
+    const studyArr = studyArea;
+    studyArr[index].checked = !studyArr[index].checked;
+    setStudyArea(studyArr);
+  };
+
+  const renderItem = (item, index) => {
+    return (
+      <View style={{ paddingLeft: RfW(16), marginTop: RfH(24) }}>
+        <View style={{ flexDirection: 'row' }}>
+          <CustomRadioButton enabled={item.checked} submitFunction={() => setChecked(item, index)} />
+          <Text style={{ color: Colors.inputLabel, marginLeft: RfW(8) }}>{item.name}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  const showStudyAreaModel = () => {
+    return (
+      <Modal
+        animationType="slide"
+        transparent
+        visible={studyAreaModalVisible}
+        onRequestClose={() => {
+          setStudyAreaModalVisible(false);
+        }}>
+        <View
+          style={{
+            height: RfH(289),
+            bottom: 0,
+            left: 0,
+            right: 0,
+            position: 'absolute',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch',
+            backgroundColor: Colors.white,
+            paddingHorizontal: RfW(16),
+            paddingVertical: RfW(16),
+          }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={{ fontSize: 16, fontWeight: '600', marginLeft: RfW(16) }}>Choose your study area</Text>
+            <TouchableWithoutFeedback onPress={() => setStudyAreaModalVisible(false)}>
+              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+            </TouchableWithoutFeedback>
+          </View>
+          <FlatList
+            data={studyArea}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => renderItem(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <View />
+        </View>
+      </Modal>
     );
   };
 
@@ -482,6 +548,7 @@ function dashboard() {
           </View>
         </View>
       </View>
+      {showStudyAreaModel()}
     </ScrollView>
   );
 }
