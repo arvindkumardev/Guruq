@@ -17,7 +17,7 @@ function studyAreaSelector() {
   };
 
   const onAreaClick = () => {
-    navigation.navigate(routeNames.BOARD);
+    navigation.navigate(routeNames.STUDENT.BOARD);
   };
 
   return (

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
-import Dashboard from './components/dashboard';
+import Dashboard from './components/Dashboard';
 import Calendar from './components/calendar';
 import Classes from './components/classes';
 import Tutor from './components/tutor';

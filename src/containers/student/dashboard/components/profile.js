@@ -1,4 +1,4 @@
-import { Image, Text, View, StatusBar, FlatList } from 'react-native';
+import { Image, Text, View, StatusBar, FlatList, SafeAreaView } from 'react-native';
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import commonStyles from '../../../../theme/styles';
@@ -17,10 +17,19 @@ function profile() {
   ]);
 
   const renderItem = (item) => {
-    <View style={styles.userMenuParentView}>
-      <IconWrapper iconImage={Images.personal} />
-      <Text style={{ color: Colors.darktitle }}>{item.name}</Text>
-    </View>;
+    return (
+      <View
+        style={[
+          styles.userMenuParentView,
+          { justifyContent: 'space-between', paddingLeft: RfW(16), marginTop: RfH(20) },
+        ]}>
+        <View style={{ flexDirection: 'row' }}>
+          <IconWrapper iconImage={item.icon} iconHeight={RfH(18)} iconWidth={RfW(20)} />
+          <Text style={{ color: Colors.darktitle, marginLeft: RfW(8) }}>{item.name}</Text>
+        </View>
+        <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
+      </View>
+    );
   };
 
   const renderActionIcons = () => {
@@ -79,16 +88,16 @@ function profile() {
         </TouchableWithoutFeedback>
       </View>
       <View style={styles.separatorView} />
-      <View>
-        {isAccountMenuOpen && (
+      {isAccountMenuOpen && (
+        <SafeAreaView>
           <FlatList
             data={accountData}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
           />
-        )}
-      </View>
+        </SafeAreaView>
+      )}
     </View>
   );
 }

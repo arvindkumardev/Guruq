@@ -12,7 +12,7 @@ function boardSelector() {
   const navigation = useNavigation();
 
   const onBoardClick = () => {
-    navigation.navigate(routeNames.CLASS);
+    navigation.navigate(routeNames.STUDENT.CLASS);
   };
 
   const onBackPress = () => {

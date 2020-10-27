@@ -1,5 +1,6 @@
+/* eslint-disable no-dupe-keys */
+/* eslint-disable global-require */
 const Images = {
-  // eslint-disable-next-line global-require
   onboarding1: require('../assets/images/tutorDetail5.png'),
   onboarding2: require('../assets/images/onboarding2.png'),
   onboarding3: require('../assets/images/onboarding3.png'),
@@ -26,23 +27,23 @@ const Images = {
   classes: require('../assets/images/classes.png'),
   tutor_tab: require('../assets/images/tutor_tab.png'),
   profile: require('../assets/images/profile.png'),
-  cbse : require('../assets/images/cbse.png'),
-  icse : require('../assets/images/icse.png'),
-  ib : require('../assets/images/ib.png'),
-  igcse : require('../assets/images/igcse.png'),
-  heart : require('../assets/images/heart.png'),
-  bell : require('../assets/images/bell.png'),
-  qpoint : require('../assets/images/qpoint.png'),
-  cart : require('../assets/images/cart.png'),
-  expand_gray : require('../assets/images/expand_grey.png'),
-  collapse_grey : require('../assets/images/collapse_grey.png'),
-  qpoint : require('../assets/images/qpoint.png'),
-  cart : require('../assets/images/cart.png'),
-  expand_gray : require('../assets/images/expand_grey.png'),
-  collapse_grey : require('../assets/images/collapse_grey.png'),
-  personal : require('../assets/images/personal.png'),
-  parent_details : require('../assets/images/parent_details.png'),
-  education : require('../assets/images/education.png'),
+  cbse: require('../assets/images/cbse.png'),
+  icse: require('../assets/images/icse.png'),
+  ib: require('../assets/images/ib.png'),
+  igcse: require('../assets/images/igcse.png'),
+  heart: require('../assets/images/heart.png'),
+  bell: require('../assets/images/bell.png'),
+  qpoint: require('../assets/images/qpoint.png'),
+  cart: require('../assets/images/cart.png'),
+  expand_gray: require('../assets/images/expand_grey.png'),
+  collapse_grey: require('../assets/images/collapse_grey.png'),
+  qpoint: require('../assets/images/qpoint.png'),
+  cart: require('../assets/images/cart.png'),
+  expand_gray: require('../assets/images/expand_grey.png'),
+  collapse_grey: require('../assets/images/collapse_grey.png'),
+  personal: require('../assets/images/personal.png'),
+  parent_details: require('../assets/images/parent_details.png'),
+  education: require('../assets/images/education.png'),
 };
 
 export default Images;

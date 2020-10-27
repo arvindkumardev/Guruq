@@ -15,7 +15,7 @@ import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
-import MainContainer from './components/mainContainer';
+import MainContainer from './components/MainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { UserTypeEnum } from '../../../common/userType.enum';
