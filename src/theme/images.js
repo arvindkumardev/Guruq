@@ -42,6 +42,10 @@ const Images = {
   education: require('../assets/images/education.png'),
   cross: require('../assets/images/cross.png'),
   radio: require('../assets/images/radio.png'),
+  calendar_active: require('../assets/images/calendar_active.png'),
+  classes_active: require('../assets/images/classes_active.png'),
+  tutor_active: require('../assets/images/tutor_active.png'),
+  user_active: require('../assets/images/user_active.png'),
 };
 
 export default Images;

@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
     marginLeft: RfW(12),
     fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
-    color: 'rgb(25,24,24)',
+    color: Colors.blackTwo,
   },
   userMobDetails: {
     marginLeft: RfW(12),
-    color: 'rgb(129,129,129)',
+    color: Colors.darkGrey,
   },
   separatorView: {
     flex: 1,

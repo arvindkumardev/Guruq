@@ -1,6 +1,7 @@
-import { FlatList, Image, ScrollView, StatusBar, Text, View, Modal } from 'react-native';
+/* eslint-disable no-plusplus */
+import { FlatList, Image, ScrollView, StatusBar, Text, View, Modal, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Icon, Input, Item, Thumbnail } from 'native-base';
+import { Button, Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import { useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
@@ -15,7 +16,8 @@ import { userDetails } from '../../../../apollo/cache';
 function Dashboard() {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
-  const [studyAreaModalVisible, setStudyAreaModalVisible] = useState(true);
+  const [studyAreaModalVisible, setStudyAreaModalVisible] = useState(false);
+  const [refreshList, setRefreshList] = useState(false);
 
   const [favouriteTutor, setFavouriteTutor] = useState([
     { name: 'Ritesh Jain', subject: 'English, Maths', imageUrl: '' },
@@ -245,8 +247,12 @@ function Dashboard() {
 
   const setChecked = (item, index) => {
     const studyArr = studyArea;
+    for (let i = 0; i < studyArr.length; i++) {
+      studyArr[i].checked = false;
+    }
     studyArr[index].checked = !studyArr[index].checked;
     setStudyArea(studyArr);
+    setRefreshList(!refreshList);
   };
 
   const renderItem = (item, index) => {
@@ -269,33 +275,52 @@ function Dashboard() {
         onRequestClose={() => {
           setStudyAreaModalVisible(false);
         }}>
-        <View
-          style={{
-            height: RfH(289),
-            bottom: 0,
-            left: 0,
-            right: 0,
-            position: 'absolute',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'stretch',
-            backgroundColor: Colors.white,
-            paddingHorizontal: RfW(16),
-            paddingVertical: RfW(16),
-          }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={{ fontSize: 16, fontWeight: '600', marginLeft: RfW(16) }}>Choose your study area</Text>
-            <TouchableWithoutFeedback onPress={() => setStudyAreaModalVisible(false)}>
-              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-            </TouchableWithoutFeedback>
+        <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
+          <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
+          <View
+            style={{
+              bottom: 0,
+              left: 0,
+              right: 0,
+              position: 'absolute',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              alignItems: 'stretch',
+              backgroundColor: Colors.white,
+              paddingHorizontal: RfW(16),
+              paddingVertical: RfW(16),
+            }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, fontWeight: '600', marginLeft: RfW(16) }}>Choose your study area</Text>
+              <TouchableWithoutFeedback onPress={() => setStudyAreaModalVisible(false)}>
+                <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              </TouchableWithoutFeedback>
+            </View>
+            <FlatList
+              data={studyArea}
+              extraData={refreshList}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item, index }) => renderItem(item, index)}
+              keyExtractor={(item, index) => index.toString()}
+              style={{ marginBottom: RfH(23) }}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                marginBottom: RfH(27),
+              }}>
+              <Button
+                bordered
+                style={{ flex: 0.5, borderColor: Colors.brandBlue2, justifyContent: 'center', marginRight: RfW(4) }}>
+                <Text style={{ color: Colors.brandBlue2, fontSize: 16, fontWeight: '600' }}>Add study area</Text>
+              </Button>
+              <Button block style={{ flex: 0.5, backgroundColor: Colors.brandBlue2, marginLeft: RfW(4) }}>
+                <Text style={{ color: Colors.white, fontSize: 16, fontWeight: '600' }}>Select</Text>
+              </Button>
+            </View>
           </View>
-          <FlatList
-            data={studyArea}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => renderItem(item, index)}
-            keyExtractor={(item, index) => index.toString()}
-          />
-          <View />
         </View>
       </Modal>
     );
@@ -311,14 +336,16 @@ function Dashboard() {
             <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>
               Hi {userInfo.firstName}
             </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
-              <Icon
-                type="MaterialIcons"
-                name="keyboard-arrow-down"
-                style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }}
-              />
-            </View>
+            <TouchableOpacity onPress={() => setStudyAreaModalVisible(true)}>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
+                <Icon
+                  type="MaterialIcons"
+                  name="keyboard-arrow-down"
+                  style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={{ flex: 0.1, marginRight: RfW(16) }}>
             <Image
