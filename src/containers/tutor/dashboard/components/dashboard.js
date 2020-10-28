@@ -10,7 +10,7 @@ import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import routeNames from '../../../../routes/ScreenNames';
 import { IconButtonWrapper } from '../../../../components';
 
-function dashboard() {
+function TutorDashboard() {
   const [userName, setUserName] = useState('');
 
   const getFirstName = async () => {
@@ -484,4 +484,4 @@ function dashboard() {
   );
 }
 
-export default dashboard;
+export default TutorDashboard;

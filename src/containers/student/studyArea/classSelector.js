@@ -1,16 +1,15 @@
-import { Image, Text, View, StatusBar, TouchableWithoutFeedback } from 'react-native';
-import { Icon, Thumbnail } from 'native-base';
-import React, { useState } from 'react';
+import { StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Icon } from 'native-base';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
-import { Colors, Images } from '../../../theme';
+import { Colors } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getSaveData, RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
-import routeNames from '../../../routes/ScreenNames';
 
-function classSelector() {
+function ClassSelector() {
   const navigation = useNavigation();
 
   const onClassClick = () => {
@@ -78,4 +77,4 @@ function classSelector() {
   );
 }
 
-export default classSelector;
+export default ClassSelector;

@@ -3,7 +3,7 @@ import React from 'react';
 import styles from '../styles';
 import Images from '../../../../theme/images';
 
-function scheduleClass() {
+function ScheduleClass() {
   return (
     <View style={styles.swipeChild}>
       <Image style={styles.centerImage} source={Images.onboarding1} />
@@ -13,4 +13,4 @@ function scheduleClass() {
   );
 }
 
-export default scheduleClass;
+export default ScheduleClass;

@@ -1,11 +1,8 @@
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
 import commonStyles from '../../../theme/styles';
-import { Colors } from '../../../theme';
 
-
-function classes() {
-
+function Classes() {
   return (
     <View style={commonStyles.mainContainer}>
       <Text>You are on Classes</Text>
@@ -13,4 +10,4 @@ function classes() {
   );
 }
 
-export default classes;
+export default Classes;

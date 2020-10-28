@@ -11,7 +11,7 @@ import styles from './style';
 import { isLoggedIn, studentDetails, tutorDetails, userDetails } from '../../../apollo/cache';
 import { CREATE_STUDENT, CREATE_TUTOR } from '../graphql-mutation';
 
-function userTypeSelector(props) {
+function UserTypeSelector(props) {
   const [userName, setUserName] = useState('Sheena');
   const navigation = useNavigation();
 
@@ -92,4 +92,4 @@ function userTypeSelector(props) {
   );
 }
 
-export default userTypeSelector;
+export default UserTypeSelector;

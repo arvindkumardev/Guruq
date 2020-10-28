@@ -1,18 +1,18 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './ScreenNames';
-import login from '../containers/common/login/login';
-import otpVerification from '../containers/common/login/otpVerification';
-import setPassword from '../containers/common/login/setPassword';
-import signUp from '../containers/common/login/signUp';
-import enterPassword from '../containers/common/login/enterPassword';
-import studentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
-import userTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
-import studyAreaSelector from '../containers/student/studyArea/studyAreaSelector';
-import boardSelector from '../containers/student/studyArea/boardSelector';
-import classSelector from '../containers/student/studyArea/classSelector';
-import splashScreen from '../containers/common/splashScreen/splashScreen';
-import GettingStarted from '../containers/common/onboarding';
+import Login from '../containers/common/login/login';
+import OtpVerification from '../containers/common/login/otpVerification';
+import SetPassword from '../containers/common/login/setPassword';
+import SignUp from '../containers/common/login/signUp';
+import EnterPassword from '../containers/common/login/enterPassword';
+import StudentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
+import UserTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
+import StudyAreaSelector from '../containers/student/studyArea/studyAreaSelector';
+import BoardSelector from '../containers/student/studyArea/boardSelector';
+import ClassSelector from '../containers/student/studyArea/classSelector';
+import SplashScreen from '../containers/common/splashScreen/splashScreen';
+import GettingStarted from '../containers/common/onboarding/gettingStarted';
 
 const Stack = createStackNavigator();
 
@@ -24,7 +24,7 @@ const AppStack = (props) => {
       {isUserTokenLoading && (
         <Stack.Screen
           name={NavigationRouteNames.SPLASH_SCREEN}
-          component={splashScreen}
+          component={SplashScreen}
           options={{ headerShown: false }}
         />
       )}
@@ -36,26 +36,26 @@ const AppStack = (props) => {
             component={GettingStarted}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name={NavigationRouteNames.LOGIN} component={login} options={{ headerShown: false }} />
+          <Stack.Screen name={NavigationRouteNames.LOGIN} component={Login} options={{ headerShown: false }} />
           <Stack.Screen
             name={NavigationRouteNames.ENTER_PASSWORD}
-            component={enterPassword}
+            component={EnterPassword}
             options={{ headerShown: false }}
           />
           <Stack.Screen
             name={NavigationRouteNames.OTP_VERIFICATION}
-            component={otpVerification}
+            component={OtpVerification}
             options={{ headerShown: false }}
           />
           <Stack.Screen
             name={NavigationRouteNames.SET_PASSWORD}
-            component={setPassword}
+            component={SetPassword}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name={NavigationRouteNames.REGISTER} component={signUp} options={{ headerShown: false }} />
+          <Stack.Screen name={NavigationRouteNames.REGISTER} component={SignUp} options={{ headerShown: false }} />
           <Stack.Screen
             name={NavigationRouteNames.USER_TYPE_SELECTOR}
-            component={userTypeSelector}
+            component={UserTypeSelector}
             options={{ headerShown: false }}
           />
         </>
@@ -64,7 +64,7 @@ const AppStack = (props) => {
       {isUserLoggedIn && !userTypeSet && (
         <Stack.Screen
           name={NavigationRouteNames.USER_TYPE_SELECTOR}
-          component={userTypeSelector}
+          component={UserTypeSelector}
           options={{ headerShown: false }}
         />
       )}
@@ -73,22 +73,22 @@ const AppStack = (props) => {
         <>
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.DASHBOARD}
-            component={studentDashboardContainer}
+            component={StudentDashboardContainer}
             options={{ headerShown: false }}
           />
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.STUDY_AREA}
-            component={studyAreaSelector}
+            component={StudyAreaSelector}
             options={{ headerShown: false }}
           />
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.BOARD}
-            component={boardSelector}
+            component={BoardSelector}
             options={{ headerShown: false }}
           />
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.CLASS}
-            component={classSelector}
+            component={ClassSelector}
             options={{ headerShown: false }}
           />
         </>

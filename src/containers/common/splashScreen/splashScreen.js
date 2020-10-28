@@ -10,7 +10,7 @@ import { isLoggedIn, isTokenLoading, studentDetails, tutorDetails, userDetails }
 import { UserTypeEnum } from '../../../common/userType.enum';
 import Loader from '../../../components/Loader';
 
-function splashScreen() {
+function SplashScreen() {
   const { error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
 
   const [getCurrentStudent, { data: currentStudent }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
@@ -64,4 +64,4 @@ function splashScreen() {
   );
 }
 
-export default splashScreen;
+export default SplashScreen;

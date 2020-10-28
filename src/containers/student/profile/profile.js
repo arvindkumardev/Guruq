@@ -9,7 +9,7 @@ import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 
-function profile() {
+function Profile() {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [accountData, setAccountData] = useState([
     { name: 'Personal Details', icon: Images.personal },
@@ -305,4 +305,4 @@ function profile() {
   );
 }
 
-export default profile;
+export default Profile;

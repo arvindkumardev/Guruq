@@ -13,7 +13,7 @@ import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
-function signUp(props) {
+function SignUp(props) {
   const navigation = useNavigation();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -143,4 +143,4 @@ function signUp(props) {
   );
 }
 
-export default signUp;
+export default SignUp;

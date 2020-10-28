@@ -8,9 +8,9 @@ import Calendar from '../calendar/calendar';
 import Classes from '../classes/classes';
 import Tutor from '../tutor/tutor';
 import Profile from '../profile/profile';
-import Dashboard from './components/dashboard';
+import StudentDashboard from './components/dashboard';
 
-function studentDashboardContainer() {
+function StudentDashboardContainer() {
   const [activeTab, setActiveTab] = useState(1);
 
   const changeTab = (number) => {
@@ -23,7 +23,7 @@ function studentDashboardContainer() {
       <Container>
         <Content>
           <View>
-            {activeTab === 1 && <Dashboard />}
+            {activeTab === 1 && <StudentDashboard />}
             {activeTab === 2 && <Calendar />}
             {activeTab === 3 && <Classes />}
             {activeTab === 4 && <Tutor />}
@@ -99,4 +99,4 @@ function studentDashboardContainer() {
   );
 }
 
-export default studentDashboardContainer;
+export default StudentDashboardContainer;

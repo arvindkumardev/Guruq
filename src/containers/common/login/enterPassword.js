@@ -14,7 +14,7 @@ import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import MainContainer from './components/mainContainer';
 
-function enterPassword(props) {
+function EnterPassword(props) {
   const { route } = props;
 
   const navigation = useNavigation();
@@ -128,4 +128,4 @@ function enterPassword(props) {
   );
 }
 
-export default enterPassword;
+export default EnterPassword;

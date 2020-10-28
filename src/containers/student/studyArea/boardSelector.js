@@ -10,7 +10,7 @@ import { getSaveData, RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
 import routeNames from '../../../routes/ScreenNames';
 
-function boardSelector() {
+function BoardSelector() {
   const navigation = useNavigation();
 
   const onBoardClick = () => {
@@ -82,4 +82,4 @@ function boardSelector() {
   );
 }
 
-export default boardSelector;
+export default BoardSelector;

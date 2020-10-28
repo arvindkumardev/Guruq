@@ -10,7 +10,7 @@ import styles from './style';
 import routeNames from '../../../routes/ScreenNames';
 import { userDetails } from '../../../apollo/cache';
 
-function studyAreaSelector() {
+function StudyAreaSelector() {
   const navigation = useNavigation();
 
   const userInfo = useReactiveVar(userDetails);
@@ -83,4 +83,4 @@ function studyAreaSelector() {
   );
 }
 
-export default studyAreaSelector;
+export default StudyAreaSelector;

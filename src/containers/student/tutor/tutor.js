@@ -7,7 +7,7 @@ import { RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 import { IconButtonWrapper } from '../../../components';
 
-function tutor() {
+function Tutor() {
   const [isTutor, setIsTutor] = useState(true);
   const [tutorData, setTutorData] = useState([
     {
@@ -114,4 +114,4 @@ function tutor() {
   );
 }
 
-export default tutor;
+export default Tutor;

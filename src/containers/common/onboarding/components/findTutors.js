@@ -3,7 +3,7 @@ import React from 'react';
 import styles from '../styles';
 import Images from '../../../../theme/images';
 
-function findTutors() {
+function FindTutors() {
   return (
     <View style={styles.swipeChild}>
       <Image resizeMode="stretch" style={styles.centerImage} source={Images.onboarding2} />
@@ -13,4 +13,4 @@ function findTutors() {
   );
 }
 
-export default findTutors;
+export default FindTutors;

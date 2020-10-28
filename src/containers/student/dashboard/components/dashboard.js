@@ -13,7 +13,7 @@ import { RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper, CustomRadioButton } from '../../../../components';
 import { userDetails } from '../../../../apollo/cache';
 
-function Dashboard() {
+function StudentDashboard() {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
   const [studyAreaModalVisible, setStudyAreaModalVisible] = useState(false);
@@ -578,4 +578,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default StudentDashboard;

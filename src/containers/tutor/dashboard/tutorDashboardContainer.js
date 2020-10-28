@@ -5,17 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
-import Dashboard from './components/Dashboard';
+import TutorDashboard from './components/dashboard';
 
-function tutorDashboardContainer(props) {
+function TutorDashboardContainer(props) {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState(1);
-
-  const { route } = props;
-
-  const onBackPress = () => {
-    navigation.goBack();
-  };
 
   const changeTab = (number) => {
     setActiveTab(number);
@@ -27,7 +21,7 @@ function tutorDashboardContainer(props) {
       <Container>
         <Content>
           <View>
-            <Dashboard />
+            <TutorDashboard />
           </View>
         </Content>
         <Footer>
@@ -67,4 +61,4 @@ function tutorDashboardContainer(props) {
   );
 }
 
-export default tutorDashboardContainer;
+export default TutorDashboardContainer;

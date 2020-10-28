@@ -19,7 +19,7 @@ import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
-function setPassword() {
+function SetPassword() {
   const navigation = useNavigation();
   const [hidePassword, setHidePassword] = useState(true);
   const [password, setPassword] = useState('');
@@ -42,7 +42,7 @@ function setPassword() {
         userDetails(data.setPassword);
 
         // if (data.type === UserTypeEnum.OTHER.label) {
-        //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR, { user: data.setPassword });
+        //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR, { user: data.SetPassword });
         // } else {
         // set in apollo cache
         // }
@@ -117,4 +117,4 @@ function setPassword() {
   );
 }
 
-export default setPassword;
+export default SetPassword;

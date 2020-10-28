@@ -1,9 +1,8 @@
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
 import commonStyles from '../../../theme/styles';
-import { Colors } from '../../../theme';
 
-function calendar() {
+function Calendar() {
   return (
     <View style={commonStyles.mainContainer}>
       <Text>You are on Calendar</Text>
@@ -11,4 +10,4 @@ function calendar() {
   );
 }
 
-export default calendar;
+export default Calendar;

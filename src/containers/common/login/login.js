@@ -13,7 +13,7 @@ import {CHECK_USER_QUERY} from '../graphql-query';
 import {NOT_FOUND} from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
 
-function login() {
+function Login() {
   const navigation = useNavigation();
   const [showNext, setShowNext] = useState(false);
   const [showClear, setShowClear] = useState(false);
@@ -117,4 +117,4 @@ function login() {
   );
 }
 
-export default login;
+export default Login;
