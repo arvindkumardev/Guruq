@@ -50,6 +50,11 @@ const styles = StyleSheet.create({
     marginTop: RfH(16),
     opacity: 0.1,
   },
+  bottomParent: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+  },
   userMenuParentView: {
     flex: 1,
     marginTop: RfH(16),
