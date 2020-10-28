@@ -53,6 +53,9 @@ const Images = {
   moreInformation: require('../assets/images/more_information.png'),
   logOut: require('../assets/images/log_out.png'),
   profile_footer_logo: require('../assets/images/guru_logo_profile_footer.png'),
+  active_blue_circle: require('../assets/images/active_blue_circle.png'),
+  small_active_blue: require('../assets/images/small_active_blue.png'),
+  filter: require('../assets/images/filter.png'),
 };
 
 export default Images;

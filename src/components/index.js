@@ -4,6 +4,7 @@ import NationalityDropdown from './NationalityDropdown';
 import CustomMobileNumber from './CustomMobileNumber';
 import CustomSearchBar from './CustomSearchBar';
 import CustomRadioButton from './CustomRadioButton';
+import CustomRangeSelector from './CustomRangeSelector';
 
 export {
   IconButtonWrapper,
@@ -12,4 +13,5 @@ export {
   CustomMobileNumber,
   CustomSearchBar,
   CustomRadioButton,
+  CustomRangeSelector,
 };

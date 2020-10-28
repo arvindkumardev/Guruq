@@ -1,16 +1,16 @@
-import {Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
-import {Icon} from 'native-base';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {useLazyQuery} from '@apollo/client';
+import { Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Icon } from 'native-base';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
-import {RfH, RfW} from '../../../utils/helpers';
-import {IND_COUNTRY_OBJ} from '../../../utils/constants';
-import {CustomMobileNumber} from '../../../components';
+import { RfH, RfW } from '../../../utils/helpers';
+import { IND_COUNTRY_OBJ } from '../../../utils/constants';
+import { CustomMobileNumber } from '../../../components';
 import routeNames from '../../../routes/ScreenNames';
-import {CHECK_USER_QUERY} from '../graphql-query';
-import {NOT_FOUND} from '../../../common/errorCodes';
+import { CHECK_USER_QUERY } from '../graphql-query';
+import { NOT_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
 
 function Login() {

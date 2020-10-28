@@ -327,7 +327,7 @@ function StudentDashboard() {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <StatusBar barStyle="dark-content" />
       <View style={[commonStyles.mainContainer]}>
         <View

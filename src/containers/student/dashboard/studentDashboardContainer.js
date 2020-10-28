@@ -21,15 +21,13 @@ function StudentDashboardContainer() {
     <SafeAreaView style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <StatusBar barStyle="light-content" />
       <Container>
-        <Content>
-          <View>
-            {activeTab === 1 && <StudentDashboard />}
-            {activeTab === 2 && <Calendar />}
-            {activeTab === 3 && <Classes />}
-            {activeTab === 4 && <Tutor />}
-            {activeTab === 5 && <Profile />}
-          </View>
-        </Content>
+        <View style={{ flex: 1 }}>
+          {activeTab === 1 && <StudentDashboard />}
+          {activeTab === 2 && <Calendar />}
+          {activeTab === 3 && <Classes />}
+          {activeTab === 4 && <Tutor />}
+          {activeTab === 5 && <Profile />}
+        </View>
         <Footer>
           <FooterTab style={{ backgroundColor: Colors.white }}>
             <Button

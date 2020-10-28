@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     marginLeft: RfW(12),
     fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
     fontWeight: '600',
-    color: Colors.blackTwo,
+    color: Colors.black,
   },
   userMobDetails: {
     marginLeft: RfW(12),
