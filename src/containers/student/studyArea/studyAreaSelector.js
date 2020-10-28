@@ -7,7 +7,7 @@ import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfW } from '../../../utils/helpers';
 import styles from './style';
-import routeNames from '../../../routes/ScreenNames';
+import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
 
 function StudyAreaSelector() {

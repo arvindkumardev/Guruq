@@ -7,7 +7,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import styles from './styles';
 import { removeData, RfH, storeData } from '../../../utils/helpers';
-import routeNames from '../../../routes/ScreenNames';
+import routeNames from '../../../routes/screenNames';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';

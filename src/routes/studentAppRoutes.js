@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import NavigationRouteNames from './ScreenNames';
+import NavigationRouteNames from './screenNames';
 import StudentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
 import UserTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import NavigationRouteNames from './ScreenNames';
+import NavigationRouteNames from './screenNames';
 import Login from '../containers/common/login/login';
 import OtpVerification from '../containers/common/login/otpVerification';
 import SetPassword from '../containers/common/login/setPassword';

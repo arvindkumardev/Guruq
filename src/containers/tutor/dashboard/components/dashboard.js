@@ -7,7 +7,7 @@ import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import { getSaveData, removeData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
-import routeNames from '../../../../routes/ScreenNames';
+import routeNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
 
 function TutorDashboard() {

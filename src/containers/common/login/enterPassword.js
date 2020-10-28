@@ -7,7 +7,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
-import NavigationRouteNames from '../../../routes/ScreenNames';
+import NavigationRouteNames from '../../../routes/screenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';

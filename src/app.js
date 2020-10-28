@@ -8,7 +8,7 @@ import { useReactiveVar } from '@apollo/client';
 import apolloClient from './apollo/apollo';
 import { getToken } from './utils/helpers';
 import { isLoggedIn, isTokenLoading, userDetails } from './apollo/cache';
-import AppStack from './routes/AppRoutes';
+import AppStack from './routes/appRoutes';
 import { UserTypeEnum } from './common/userType.enum';
 
 const getActiveRouteName = (state) => {
