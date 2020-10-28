@@ -30,7 +30,8 @@ function StudentDashboardContainer() {
             {activeTab === 5 && <Profile />}
           </View>
         </Content>
-        <Footer>
+
+        <Footer style={{ height: 48 }}>
           <FooterTab style={{ backgroundColor: Colors.white }}>
             <Button
               style={{ backgroundColor: Colors.white }}

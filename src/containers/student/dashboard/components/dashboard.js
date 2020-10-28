@@ -8,10 +8,10 @@ import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import routeNames from '../../../../routes/ScreenNames';
 import { RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper, CustomRadioButton } from '../../../../components';
 import { userDetails } from '../../../../apollo/cache';
+import NavigationRouteNames from '../../../../routes/screenNames';
 
 function StudentDashboard() {
   const navigation = useNavigation();
@@ -255,15 +255,21 @@ function StudentDashboard() {
     setRefreshList(!refreshList);
   };
 
-  const renderItem = (item, index) => {
+  const renderItem = (item, index, showSeparator) => {
     return (
       <View style={{ paddingLeft: RfW(16), marginTop: RfH(24) }}>
         <View style={{ flexDirection: 'row' }}>
           <CustomRadioButton enabled={item.checked} submitFunction={() => setChecked(item, index)} />
           <Text style={{ color: Colors.inputLabel, marginLeft: RfW(8) }}>{item.name}</Text>
         </View>
+        {showSeparator && <View style={commonStyles.lineSeparator} />}
       </View>
     );
+  };
+
+  const addStudyArea = () => {
+    setStudyAreaModalVisible(false);
+    navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
   };
 
   const showStudyAreaModel = () => {
@@ -300,24 +306,25 @@ function StudentDashboard() {
               data={studyArea}
               extraData={refreshList}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }) => renderItem(item, index)}
+              renderItem={({ item, index }) => renderItem(item, index, studyArea.length - 1 > index)}
               keyExtractor={(item, index) => index.toString()}
-              style={{ marginBottom: RfH(23) }}
+              style={{ marginBottom: RfH(40) }}
             />
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-evenly',
-                marginBottom: RfH(27),
+                marginBottom: RfH(24),
               }}>
+              <Button block style={{ flex: 0.5, backgroundColor: Colors.brandBlue2, marginRight: RfW(4) }}>
+                <Text style={{ color: Colors.white, fontSize: 16, fontWeight: '600' }}>Select</Text>
+              </Button>
               <Button
                 bordered
-                style={{ flex: 0.5, borderColor: Colors.brandBlue2, justifyContent: 'center', marginRight: RfW(4) }}>
+                style={{ flex: 0.5, borderColor: Colors.brandBlue2, justifyContent: 'center', marginLeft: RfW(4) }}
+                onPress={() => addStudyArea()}>
                 <Text style={{ color: Colors.brandBlue2, fontSize: 16, fontWeight: '600' }}>Add study area</Text>
-              </Button>
-              <Button block style={{ flex: 0.5, backgroundColor: Colors.brandBlue2, marginLeft: RfW(4) }}>
-                <Text style={{ color: Colors.white, fontSize: 16, fontWeight: '600' }}>Select</Text>
               </Button>
             </View>
           </View>
@@ -330,38 +337,38 @@ function StudentDashboard() {
     <ScrollView>
       <StatusBar barStyle="dark-content" />
       <View style={[commonStyles.mainContainer]}>
-        <View
-          style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(18) }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(0) }}>
           <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
             <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>
               Hi {userInfo.firstName}
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
+              <Text style={{ color: Colors.darkGrey, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
               <TouchableOpacity onPress={() => setStudyAreaModalVisible(true)}>
-                <Icon
-                  type="MaterialIcons"
-                  name="keyboard-arrow-down"
-                  style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }}
-                />
+                {/* <Icon */}
+                {/*  type="MaterialIcons" */}
+                {/*  name="keyboard-arrow-down" */}
+                {/*  style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }} */}
+                {/* /> */}
+                <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
               </TouchableOpacity>
             </View>
           </View>
           <View style={{ flex: 0.1, marginRight: RfW(16) }}>
             <Image
               source={Images.user}
-              style={{ height: RfH(49), width: RfW(49), borderRadius: 12, marginBottom: RfH(8) }}
+              style={{ height: RfH(48), width: RfW(48), borderRadius: 12, marginBottom: RfH(8) }}
             />
           </View>
         </View>
-        <View style={{ marginTop: RfW(26) }}>
+        <View style={{ marginTop: RfW(16) }}>
           <Item
             style={{
               backgroundColor: '#F3F4F9',
               borderRadius: 10,
               paddingHorizontal: RfW(10),
               borderColor: 'transparent',
-              height: RfH(50),
+              height: RfH(48),
             }}>
             <Icon type="MaterialIcons" name="search" style={{ color: Colors.brandBlue2 }} />
             <Input placeholder="Search" />
@@ -369,7 +376,7 @@ function StudentDashboard() {
         </View>
 
         <View style={{ height: RfH(210), marginTop: RfH(29) }}>
-          <Swiper horizontal autoplay autoplayTimeout={5}>
+          <Swiper horizontal>
             <View>
               <View style={{ height: RfH(170), backgroundColor: '#ceecfe', borderRadius: 20 }} />
             </View>
