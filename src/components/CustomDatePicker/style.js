@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import Fonts from '../../theme/Fonts';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {STANDARD_SCREEN_SIZE} from '../../utils/constants';
-import {RfH, RfW} from '../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { RfH, RfW } from '../../utils/helpers';
 import { Colors } from '../../theme';
 
 const styles = StyleSheet.create({
@@ -17,15 +17,15 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     color: '#262119',
-    padding:0,
+    padding: 0,
   },
   textInputInnerContainer: {
     flexDirection: 'row',
-    marginTop:RfH(4),
+    marginTop: RfH(4),
     justifyContent: 'space-between',
     paddingBottom: RfH(12),
-    borderBottomWidth: 1,
-    borderColor: Colors.separator,
+    // borderBottomWidth: 1,
+    // borderColor: Colors.separator,
   },
   iconContainer: {
     paddingHorizontal: RfH(10),

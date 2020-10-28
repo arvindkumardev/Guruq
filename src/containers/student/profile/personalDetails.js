@@ -236,38 +236,38 @@ function PersonalDetails() {
 
           <CustomDatePicker />
 
-          <DatePicker
-            style={{}}
-            date={date}
-            mode="date"
-            disabled={disabled}
-            placeholder="select date"
-            format="DD-MM-YYYY"
-            minDate="01-01-2020"
-            maxDate="01-01-2030"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            onOpenModal={() => setDisabled(true)}
-            onCloseModal={() => setDisabled(false)}
-            customStyles={{
-              dateIcon: {
-                position: 'absolute',
-                left: 0,
-                //  top: 4,
-                marginLeft: width / 1.1,
-                backgroundColor: '#FFFFFF',
-              },
-              dateInput: {
-                marginLeft: -33,
-                fontSize: 30,
-                borderWidth: null,
-                color: 'rgb(129,129,129)',
-                backgroundColor: '#FFFFFF',
-              },
-              // ... You can check the source to find the other keys.
-            }}
-            onDateChange={(date) => setDate(date)}
-          />
+          {/*<DatePicker*/}
+          {/*  style={{}}*/}
+          {/*  date={date}*/}
+          {/*  mode="date"*/}
+          {/*  disabled={disabled}*/}
+          {/*  placeholder="select date"*/}
+          {/*  format="DD-MM-YYYY"*/}
+          {/*  minDate="01-01-2020"*/}
+          {/*  maxDate="01-01-2030"*/}
+          {/*  confirmBtnText="Confirm"*/}
+          {/*  cancelBtnText="Cancel"*/}
+          {/*  onOpenModal={() => setDisabled(true)}*/}
+          {/*  onCloseModal={() => setDisabled(false)}*/}
+          {/*  customStyles={{*/}
+          {/*    dateIcon: {*/}
+          {/*      position: 'absolute',*/}
+          {/*      left: 0,*/}
+          {/*      //  top: 4,*/}
+          {/*      marginLeft: width / 1.1,*/}
+          {/*      backgroundColor: '#FFFFFF',*/}
+          {/*    },*/}
+          {/*    dateInput: {*/}
+          {/*      marginLeft: -33,*/}
+          {/*      fontSize: 30,*/}
+          {/*      borderWidth: null,*/}
+          {/*      color: 'rgb(129,129,129)',*/}
+          {/*      backgroundColor: '#FFFFFF',*/}
+          {/*    },*/}
+          {/*    // ... You can check the source to find the other keys.*/}
+          {/*  }}*/}
+          {/*  onDateChange={(date) => setDate(date)}*/}
+          {/*/>*/}
         </View>
 
         <View style={commonStyles.lineSeparator} />
