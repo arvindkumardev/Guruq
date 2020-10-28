@@ -27,7 +27,7 @@ function CustomMobileNumber(props) {
     topMargin,
     isCountryCodeLabel,
     modalTitle,
-    editableText
+    editable,
   } = props;
   const [country, setCountry] = useState(value.country);
 
@@ -79,8 +79,7 @@ function CustomMobileNumber(props) {
                 placeholder={placeholder}
                 blurOnSubmit
                 value={value.mobile}
-                editable={editableText._editText}
-
+                editable={editable}
                 onChangeText={onChangeMobile}
                 style={[
                   styles.inputStyle,
@@ -138,6 +137,7 @@ CustomMobileNumber.propTypes = {
   topMargin: PropTypes.number,
   isCountryCodeLabel: PropTypes.bool,
   modalTitle: PropTypes.string,
+  editable: PropTypes.bool,
 };
 
 CustomMobileNumber.defaultProps = {
@@ -155,6 +155,7 @@ CustomMobileNumber.defaultProps = {
   onChangeHandler: () => {},
   onSubmitEditing: () => {},
   refKey: PropTypes.string,
+  editable: true,
 };
 
 export default CustomMobileNumber;

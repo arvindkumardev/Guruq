@@ -1,6 +1,7 @@
 import { FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { removeData, RfH, RfW } from '../../../utils/helpers';
@@ -8,19 +9,18 @@ import IconWrapper from '../../../components/IconWrapper';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
-import {useNavigation} from '@react-navigation/native';
 
-import routeNames from '../../../routes/ScreenNames';
+import routeNames from '../../../routes/screenNames';
 
 function Profile() {
   const navigation = useNavigation();
 
- //console.log('navigation===>',props)
+  // console.log('navigation===>',props)
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isPersonalMenuOpen, setIsPersonalMenuOpen] = useState(true);
 
   const [accountData, setAccountData] = useState([
-    { name: 'Personal Details', icon: Images.personal,},
+    { name: 'Personal Details', icon: Images.personal },
     { name: 'Address', icon: Images.home },
     { name: 'Parents Details', icon: Images.parent_details },
     { name: 'Education', icon: Images.education },
@@ -34,7 +34,6 @@ function Profile() {
     { name: 'Customer Care', icon: Images.personal },
     { name: "FAQ's", icon: Images.home },
     { name: 'Send Feedback', icon: Images.parent_details },
-    
   ]);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
@@ -46,22 +45,21 @@ function Profile() {
     isLoggedIn(false);
     userDetails({});
   };
- const personalDetails=(item)=>{
-
-    if(item.name == 'Personal Details'){
-       navigation.navigate(routeNames.STUDENT.PERSONAL_DETAILS)
-     // setIsPersonalMenuOpen(false)
-    //  alert('ok')
-    }else{
-     // setIsPersonalMenuOpen(true)
-     return null;
+  const personalDetails = (item) => {
+    if (item.name == 'Personal Details') {
+      navigation.navigate(routeNames.STUDENT.PERSONAL_DETAILS);
+      // setIsPersonalMenuOpen(false)
+      //  alert('ok')
+    } else {
+      // setIsPersonalMenuOpen(true)
+      return null;
     }
-  }
+  };
   const renderItem = (item) => {
     return (
       <TouchableOpacity
-      onPress={()=>personalDetails(item)}
-     // disabled={}
+        onPress={() => personalDetails(item)}
+        // disabled={}
         style={[
           styles.userMenuParentView,
           { justifyContent: 'space-between', paddingLeft: RfW(16), marginTop: RfH(20) },
