@@ -10,6 +10,8 @@ import IconWrapper from '../../../components/IconWrapper';
 import styles from './styles';
 import { IND_COUNTRY_OBJ, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { CustomMobileNumber } from '../../../components';
+import CustomDatePicker from '../../../components/CustomDatePicker';
+import CustomDropDown from '../../../components/CustomDropDown';
 
 const { height, width } = Dimensions.get('window');
 
@@ -263,6 +265,8 @@ function PersonalDetails() {
             Date of Birth
           </Text>
 
+          <CustomDatePicker />
+
           <DatePicker
             style={{}}
             date={date}
@@ -328,6 +332,9 @@ function PersonalDetails() {
             />
           </TouchableWithoutFeedback>
         </View>
+
+          <CustomDropDown />
+
         <View
           style={{
             // flex: 1,
