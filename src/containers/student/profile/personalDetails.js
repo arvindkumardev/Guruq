@@ -12,6 +12,7 @@ import { IND_COUNTRY_OBJ, STANDARD_SCREEN_SIZE } from '../../../utils/constants'
 import { CustomMobileNumber } from '../../../components';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import CustomDropDown from '../../../components/CustomDropDown';
+import commonStyles from '../../../theme/styles';
 
 const { height, width } = Dimensions.get('window');
 
@@ -153,17 +154,9 @@ function PersonalDetails() {
               // value={value}
             />
           </View>
-          <View
-            style={{
-              // flex: 1,
-              width: width / 1.1,
-              borderBottomColor: Colors.darkGrey,
-              borderBottomWidth: 2,
-              // marginTop: RfH(10),
-              opacity: 0.1,
-              alignSelf: 'center',
-            }}
-          />
+
+          <View style={commonStyles.lineSeparator} />
+
           <View
             style={{
               marginTop: 12,
@@ -176,17 +169,9 @@ function PersonalDetails() {
               // value={value}
             />
           </View>
-          <View
-            style={{
-              // flex: 1,
-              width: width / 1.1,
-              borderBottomColor: Colors.darkGrey,
-              borderBottomWidth: 2,
-              // marginTop: RfH(10),
-              opacity: 0.1,
-              alignSelf: 'center',
-            }}
-          />
+
+          <View style={commonStyles.lineSeparator} />
+
           <View
             style={{
               marginTop: 12,
@@ -200,17 +185,9 @@ function PersonalDetails() {
             />
           </View>
         </View>
-        <View
-          style={{
-            // flex: 1,
-            width: width / 1.1,
-            borderBottomColor: Colors.darkGrey,
-            borderBottomWidth: 2,
-            // marginTop: RfH(10),
-            opacity: 0.1,
-            alignSelf: 'center',
-          }}
-        />
+
+        <View style={commonStyles.lineSeparator} />
+
         <View
           style={{
             width: width / 1.1,
@@ -237,17 +214,9 @@ function PersonalDetails() {
             </View>
           </View>
         </View>
-        <View
-          style={{
-            // flex: 1,
-            width: width / 1.1,
-            borderBottomColor: Colors.darkGrey,
-            borderBottomWidth: 2,
-            marginTop: RfH(10),
-            opacity: 0.1,
-            alignSelf: 'center',
-          }}
-        />
+
+        <View style={commonStyles.lineSeparator} />
+
         <View
           style={{
             height: 70,
@@ -301,17 +270,7 @@ function PersonalDetails() {
           />
         </View>
 
-        <View
-          style={{
-            // flex: 1,
-            width: width / 1.1,
-            borderBottomColor: Colors.darkGrey,
-            borderBottomWidth: 2,
-            marginTop: RfH(10),
-            opacity: 0.1,
-            alignSelf: 'center',
-          }}
-        />
+        <View style={commonStyles.lineSeparator} />
 
         <View>
           <TouchableWithoutFeedback
@@ -333,48 +292,44 @@ function PersonalDetails() {
           </TouchableWithoutFeedback>
         </View>
 
-          <CustomDropDown />
-
-        <View
-          style={{
-            // flex: 1,
-            width: width / 1.1,
-            borderBottomColor: Colors.darkGrey,
-            borderBottomWidth: 2,
-            marginTop: RfH(10),
-            opacity: 0.1,
-            alignSelf: 'center',
-          }}
+        <CustomDropDown
+          data={[
+            { key: 'Male', value: 'Male' },
+            { key: 'Female', value: 'Female' },
+            { key: 'Other', value: 'Other' },
+          ]}
         />
-        {isAccountMenuOpen && (
-          <SafeAreaView>
-            <FlatList
-              data={accountData}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </SafeAreaView>
-        )}
+
+        <View style={commonStyles.lineSeparator} />
+
+        {/* {isAccountMenuOpen && ( */}
+        {/*  <SafeAreaView> */}
+        {/*    <FlatList */}
+        {/*      data={accountData} */}
+        {/*      showsVerticalScrollIndicator={false} */}
+        {/*      renderItem={({ item }) => renderItem(item)} */}
+        {/*      keyExtractor={(item, index) => index.toString()} */}
+        {/*    /> */}
+        {/*  </SafeAreaView> */}
+        {/* )} */}
         {isEditDisable ? (
           <TouchableOpacity
             onPress={() => _saveButton()}
             style={{
-              height: RfH(45),
-              width: width / 2.5,
-              borderRadius: 10,
+              height: RfH(40),
+              width: RfW(144),
+              borderRadius: 8,
               marginTop: RfH(30),
               justifyContent: 'center',
               alignItems: 'center',
               alignSelf: 'center',
-              fontFamily: 'SegoeUI-Semibold',
-              fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
-
-              backgroundColor: 'rgb(105,165,235)',
+              backgroundColor: Colors.brandBlue2,
             }}>
             <Text
               style={{
                 color: '#FFFFFF',
+                fontFamily: 'SegoeUI-Semibold',
+                fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
               }}>
               Save
             </Text>
