@@ -29,7 +29,7 @@ const AppStack = (props) => {
         />
       )}
 
-      {!isUserTokenLoading && !isUserLoggedIn ? (
+      {!isUserTokenLoading && !isUserLoggedIn && (
         <>
           <Stack.Screen
             name={NavigationRouteNames.GETTING_STARTED}
@@ -42,7 +42,6 @@ const AppStack = (props) => {
             component={enterPassword}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name={NavigationRouteNames.OTP_VERIFICATION}
             component={otpVerification}
@@ -60,13 +59,17 @@ const AppStack = (props) => {
             options={{ headerShown: false }}
           />
         </>
-      ) : !userTypeSet ? (
+      )}
+
+      {isUserLoggedIn && !userTypeSet && (
         <Stack.Screen
           name={NavigationRouteNames.USER_TYPE_SELECTOR}
           component={userTypeSelector}
           options={{ headerShown: false }}
         />
-      ) : (
+      )}
+
+      {isUserLoggedIn && userTypeSet && (
         <>
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.DASHBOARD}
