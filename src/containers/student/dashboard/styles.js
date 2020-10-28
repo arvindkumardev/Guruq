@@ -7,12 +7,12 @@ import { RfH, RfW } from '../../../utils/helpers';
 const styles = StyleSheet.create({
   bottomText: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
-    marginTop: RfH(4),
+    // marginTop: RfH(4),
     color: Colors.secondaryText,
   },
   bottomTabActive: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
-    marginTop: RfH(4),
+    // marginTop: RfH(4),
     color: Colors.brandBlue2,
   },
   myProfileText: {

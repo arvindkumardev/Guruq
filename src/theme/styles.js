@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: 0.5,
     marginTop: RfH(16),
+    opacity: 0.2,
   },
 });
 export default styles;

@@ -73,7 +73,7 @@ function UserTypeSelector(props) {
         <Text style={styles.helloText}>Hello</Text>
       </View>
       <Text style={styles.userName}>{userInfo.firstName}</Text>
-      <Text style={styles.subHeading}>Are you a</Text>
+      <Text style={styles.subHeading}>Continue as </Text>
 
       <View style={{ marginTop: RfH(16) }}>
         <TouchableOpacity onPress={() => createStudent()}>

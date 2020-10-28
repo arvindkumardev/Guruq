@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: RfH(58),
-    marginLeft: RfW(16),
+    // marginLeft: RfW(16),
   },
   helloText: {
     marginLeft: RfW(8),
@@ -20,13 +20,15 @@ const styles = StyleSheet.create({
   userName: {
     color: Colors.primaryText,
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
-    marginLeft: RfW(51),
+    marginLeft: RfW(36),
+    fontFamily: 'SegoeUI-Semibold',
   },
   subHeading: {
     textAlign: 'center',
     marginTop: RfH(58),
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    color: '#313030',
+    color: Colors.black,
+    fontFamily: 'SegoeUI-Semibold',
   },
   areaParentView: {
     flexDirection: 'row',

@@ -1,14 +1,14 @@
-import { Image, Text, View, StatusBar, TouchableWithoutFeedback } from 'react-native';
+import { StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon, Thumbnail } from 'native-base';
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { Colors, Images } from '../../../theme';
-import { getSaveData, RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
-import routeNames from '../../../routes/ScreenNames';
+import routeNames from '../../../routes/screenNames';
 
 function BoardSelector() {
   const navigation = useNavigation();
