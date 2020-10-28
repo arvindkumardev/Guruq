@@ -53,6 +53,8 @@ const Images = {
   moreInformation: require('../assets/images/more_information.png'),
   logOut: require('../assets/images/log_out.png'),
   profile_footer_logo: require('../assets/images/guru_logo_profile_footer.png'),
+  radio_button_null: require('../assets/images/radio-button.png'),
+   
 };
 
 export default Images;
