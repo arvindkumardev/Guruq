@@ -13,9 +13,8 @@ import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
-function register(props) {
+function signUp(props) {
   const navigation = useNavigation();
-  const [fullName, setFullName] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -27,15 +26,6 @@ function register(props) {
 
   const [addUser, { loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
     fetchPolicy: 'no-cache',
-    variables: {
-      countryCode: route.params.countryCode,
-      number: route.params.number,
-      firstName,
-      lastName,
-      email,
-      password,
-      referCode,
-    },
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -60,8 +50,12 @@ function register(props) {
   };
 
   const onClickContinue = () => {
-    if (!fullName) {
-      Alert.alert('Please enter full name.');
+    if (!firstName) {
+      Alert.alert('Please enter first name.');
+      return;
+    }
+    if (!lastName) {
+      Alert.alert('Please enter last name.');
       return;
     }
     if (!email) {
@@ -72,12 +66,17 @@ function register(props) {
       Alert.alert('Please enter password.');
       return;
     }
-    const first = fullName.lastIndexOf(' ');
-    const fName = fullName.substring(0, first);
-    const lName = fullName.substring(first + 1);
-    setFirstName(fName);
-    setLastName(lName);
-    addUser();
+    addUser({
+      variables: {
+        countryCode: route.params.countryCode,
+        number: route.params.number,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.toLowerCase().trim(),
+        password,
+        referCode,
+      },
+    });
   };
 
   return (
@@ -93,12 +92,18 @@ function register(props) {
         <View style={styles.bottomCard}>
           <View style={styles.setPasswordView}>
             <View>
-              <Item floatingLabel style={{}}>
-                <Label>Full Name</Label>
-                <Input onChangeText={(text) => setFullName(text)} />
-              </Item>
+              <View style={{ flexDirection: 'row' }}>
+                <Item floatingLabel style={{ flex: 0.5 }}>
+                  <Label>First Name</Label>
+                  <Input onChangeText={(text) => setFirstName(text)} />
+                </Item>
+                <Item floatingLabel style={{ flex: 0.5 }}>
+                  <Label>Last Name</Label>
+                  <Input onChangeText={(text) => setLastName(text)} />
+                </Item>
+              </View>
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
-                <Label>Email ID</Label>
+                <Label>Email</Label>
                 <Input onChangeText={(text) => setEmail(text)} />
               </Item>
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
@@ -127,8 +132,7 @@ function register(props) {
           </TouchableOpacity>
           <View style={{ marginTop: RfH(8) }}>
             <Text style={{ textAlign: 'center' }}>
-              By Signing up you agree to GuruQ{' '}
-              <Text style={{ color: Colors.brandBlue2 }}>Terms & Conditions</Text>,
+              By Signing up you agree to GuruQ <Text style={{ color: Colors.brandBlue2 }}>Terms & Conditions</Text>,
               <Text style={{ color: Colors.brandBlue2, marginTop: RfH(4) }}> Privacy Policy</Text> and
               <Text style={{ color: Colors.brandBlue2 }}> Cookie Policy</Text>
             </Text>
@@ -139,4 +143,4 @@ function register(props) {
   );
 }
 
-export default register;
+export default signUp;

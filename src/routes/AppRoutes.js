@@ -4,7 +4,7 @@ import NavigationRouteNames from './ScreenNames';
 import login from '../containers/common/login/login';
 import otpVerification from '../containers/common/login/otpVerification';
 import setPassword from '../containers/common/login/setPassword';
-import register from '../containers/common/login/register';
+import signUp from '../containers/common/login/signUp';
 import enterPassword from '../containers/common/login/enterPassword';
 import studentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
 import userTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
@@ -52,7 +52,7 @@ const AppStack = (props) => {
             component={setPassword}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name={NavigationRouteNames.REGISTER} component={register} options={{ headerShown: false }} />
+          <Stack.Screen name={NavigationRouteNames.REGISTER} component={signUp} options={{ headerShown: false }} />
           <Stack.Screen
             name={NavigationRouteNames.USER_TYPE_SELECTOR}
             component={userTypeSelector}

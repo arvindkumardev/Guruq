@@ -8,6 +8,7 @@ import { Colors } from '../../../theme';
 import { GET_CURRENT_STUDENT_QUERY, GET_CURRENT_TUTOR_QUERY, ME_QUERY } from '../graphql-query';
 import { isLoggedIn, isTokenLoading, studentDetails, tutorDetails, userDetails } from '../../../apollo/cache';
 import { UserTypeEnum } from '../../../common/userType.enum';
+import Loader from '../../../components/Loader';
 
 function splashScreen() {
   const { error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
@@ -53,6 +54,7 @@ function splashScreen() {
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.brandBlue }]}>
+      <Loader isLoading />
       {/* eslint-disable-next-line global-require */}
       <Image style={styles.splashImage} source={require('../../../assets/images/splash_image.png')} />
       <Text style={styles.msgOne}>Find the best</Text>
