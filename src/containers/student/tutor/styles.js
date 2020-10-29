@@ -3,28 +3,31 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   topView: {
-    height: RfH(100),
+    height: RfH(98),
     backgroundColor: Colors.lightPurple,
-    padding: RfH(16),
+    // paddingVertical: RfH(16),
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   bookIcon: {
     alignSelf: 'flex-end',
-    marginTop: RfH(16),
+    // marginTop: RfH(16),
   },
   switchView: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    padding: RfH(12),
+    // padding: RfH(12),
+    height: 54,
   },
   switchText: {
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: Fonts.semiBold,
   },
   subjectTitleView: {
     flexDirection: 'column',
@@ -32,13 +35,13 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   subjectTitle: {
+    color: Colors.primaryText,
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    fontWeight: 'bold',
-    paddingHorizontal: RfW(16),
+    fontFamily: Fonts.bold,
   },
   classText: {
-    color: Colors.secondaryText,
-    paddingHorizontal: RfW(16),
+    color: Colors.darkGrey,
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
   },
   filterParentView: {
     flexDirection: 'row',
@@ -47,15 +50,15 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.secondaryText,
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: RfH(0.5),
-    borderTopWidth: RfH(0.5),
-    paddingVertical: RfH(4),
-    marginTop: RfH(12),
+    // borderTopWidth: RfH(0.5),
+    // paddingVertical: RfH(4),
+    // marginTop: RfH(12),
     paddingHorizontal: RfW(16),
+    height: 34,
   },
   filterText: {
-    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
-    color: Colors.secondaryText,
-    marginLeft: RfW(8),
+    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    color: Colors.darkGrey,
   },
   listItemParent: {
     borderRadius: RfH(8),
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     alignSelf: 'flex-start',
-    marginLeft: RfW(8),
+    // marginLeft: RfW(8),
     marginTop: RfH(24),
   },
   filterPopupParentView: {

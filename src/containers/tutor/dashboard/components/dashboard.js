@@ -9,6 +9,7 @@ import { getSaveData, removeData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
+import Fonts from '../../../../theme/Fonts';
 
 function TutorDashboard() {
   const [userName, setUserName] = useState('');
@@ -250,7 +251,7 @@ function TutorDashboard() {
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(18) }}>
           <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
-            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>Hi {userName}</Text>
+            <Text style={{ fontFamily: Fonts.semiBold, fontSize: 28, color: Colors.primaryText }}>Hi {userName}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
               <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
               <Icon
@@ -296,7 +297,7 @@ function TutorDashboard() {
           </Swiper>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Upcoming Classes</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
           <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
         </View>
         <View
@@ -306,7 +307,7 @@ function TutorDashboard() {
               <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
             </View>
             <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-              <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+              <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
                 Science by Rahul Das
               </Text>
               <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>CBSE Class 9</Text>
@@ -339,12 +340,12 @@ function TutorDashboard() {
         </View>
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Tutors By Subjects</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Tutors By Subjects</Text>
         </View>
         {renderSubjects()}
         <View
           style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: RfH(25) }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Favourite Tutors</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Favourite Tutors</Text>
           <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
         </View>
         <FlatList
@@ -356,7 +357,7 @@ function TutorDashboard() {
         />
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Recommended Tutors</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Recommended Tutors</Text>
         </View>
         <View style={{ height: RfH(92), backgroundColor: 'rgb(230,252,231)', borderRadius: 8, marginTop: RfH(20) }}>
           <View

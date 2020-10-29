@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
-import { FlatList, Image, ScrollView, StatusBar, Text, View, Modal, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import { Button, Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import { useReactiveVar } from '@apollo/client';
@@ -9,10 +9,10 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
-import { IconButtonWrapper, CustomRadioButton } from '../../../../components';
+import { CustomRadioButton, IconButtonWrapper } from '../../../../components';
 import { userDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
-import MainContainer from '../../../common/login/components/mainContainer';
+import Fonts from '../../../../theme/Fonts';
 
 function StudentDashboard() {
   const navigation = useNavigation();
@@ -304,7 +304,9 @@ function StudentDashboard() {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={{ fontSize: 16, fontFamily: 'SegoeUI-Semibold' }}>Choose your study area</Text>
+              <Text style={{ color: Colors.primaryText, fontSize: 18, fontFamily: Fonts.semiBold }}>
+                Choose your study area
+              </Text>
               <TouchableOpacity onPress={() => setStudyAreaModalVisible(false)}>
                 <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
               </TouchableOpacity>
@@ -375,7 +377,7 @@ function StudentDashboard() {
               alignItems: 'center',
             }}>
             <View>
-              <Text style={{ fontFamily: 'SegoeUI-Bold', fontSize: 34, color: Colors.primaryText }}>
+              <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
                 Hi {userInfo.firstName}
               </Text>
               {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}> */}
@@ -391,7 +393,17 @@ function StudentDashboard() {
               {/* </View> */}
             </View>
             <View>
-              <Image source={Images.user} style={{ height: RfH(32), width: RfW(32), borderRadius: 32 }} />
+              <Image
+                source={Images.user}
+                style={{
+                  height: RfH(32),
+                  width: RfW(32),
+                  borderTopLeftRadius: RfH(32),
+                  borderTopRightRadius: RfH(32),
+                  borderBottomLeftRadius: RfH(32),
+                  borderBottomRightRadius: RfH(32),
+                }}
+              />
             </View>
           </View>
           <View style={{ height: 44 }}>
@@ -421,9 +433,7 @@ function StudentDashboard() {
             </Swiper>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-            <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
-              Upcoming Classes
-            </Text>
+            <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
             <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
           </View>
           <View
@@ -433,7 +443,7 @@ function StudentDashboard() {
                 <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
               </View>
               <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-                <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
                   Science by Rahul Das
                 </Text>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>CBSE Class 9</Text>
@@ -468,9 +478,7 @@ function StudentDashboard() {
           </View>
           <View
             style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
-            <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
-              Tutors By Subjects
-            </Text>
+            <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Tutors By Subjects</Text>
           </View>
           {renderSubjects()}
           <View
@@ -480,9 +488,7 @@ function StudentDashboard() {
               alignItems: 'flex-end',
               marginTop: RfH(25),
             }}>
-            <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
-              Favourite Tutors
-            </Text>
+            <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Favourite Tutors</Text>
             <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
           </View>
           <FlatList
@@ -494,9 +500,7 @@ function StudentDashboard() {
           />
           <View
             style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
-            <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
-              Recommended Tutors
-            </Text>
+            <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Recommended Tutors</Text>
           </View>
           <View style={{ height: RfH(92), backgroundColor: 'rgb(230,252,231)', borderRadius: 8, marginTop: RfH(20) }}>
             <View

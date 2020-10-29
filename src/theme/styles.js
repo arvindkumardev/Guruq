@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    paddingHorizontal: spacePX,
+    paddingHorizontal: 16,
   },
   buttonPrimary: {
     backgroundColor: Colors.brandBlue2,

@@ -351,50 +351,71 @@ function Tutor() {
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
       <ScrollView
-        stickyHeaderIndices={[1]}
+        stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}>
-        <View>
-          <View style={styles.topView}>
+        <View style={{}}>
+          <View style={[styles.topView, { paddingHorizontal: RfW(16), height: showBackButton ? 60 : 98 }]}>
+            {/* <IconButtonWrapper */}
+            {/*  iconHeight={RfH(20)} */}
+            {/*  iconWidth={RfW(20)} */}
+            {/*  styling={styles.backButton} */}
+            {/*  iconImage={Images.arrowRight} */}
+            {/* /> */}
+            <View>
+              <Text style={[styles.subjectTitle, { fontSize: showBackButton ? 17 : 20 }]}>English Tutors</Text>
+              <Text style={styles.classText}>CBSE | Class 9</Text>
+            </View>
             <IconButtonWrapper
-              iconHeight={RfH(20)}
-              iconWidth={RfW(20)}
-              styling={styles.backButton}
-              iconImage={Images.arrowRight}
+              styling={[styles.bookIcon, { height: showBackButton ? 40 : 80 }]}
+              iconImage={Images.book}
             />
-            <IconButtonWrapper styling={styles.bookIcon} iconImage={Images.book} />
           </View>
-          <View style={styles.switchView}>
-            <Text style={styles.switchText}>TUTORS</Text>
-            <Switch onValueChange={() => setIsTutor(!isTutor)} value={isTutor} />
-            <Text style={styles.switchText}>INSTITUTES</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ paddingTop: RfH(8), backgroundColor: Colors.white }}>
-            <View style={styles.subjectTitleView}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start',
-                }}>
-                {showBackButton && (
-                  <IconButtonWrapper
-                    iconHeight={RfH(20)}
-                    iconWidth={RfW(20)}
-                    styling={[styles.backButton, { marginTop: RfH(4) }]}
-                    iconImage={Images.arrowRight}
-                  />
-                )}
-                <View>
-                  <Text style={styles.subjectTitle}>English Tutors</Text>
-                  <Text style={styles.classText}>CBSE | Class 9</Text>
+
+          {showBackButton && (
+            <View style={[styles.filterParentView, { marginTop: 0, backgroundColor: Colors.white }]}>
+              <Text style={styles.filterText}>20 TUTORS</Text>
+              <TouchableOpacity onPress={() => setShowFilterPopup(true)}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
+                  <Text style={styles.filterText}>Filters</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+
+        <View>
+          <View style={{ paddingTop: RfH(0), backgroundColor: Colors.white }}>
+            <View style={styles.subjectTitleView}>
+              {/* <View */}
+              {/*  style={{ */}
+              {/*    flexDirection: 'row', */}
+              {/*    justifyContent: 'flex-start', */}
+              {/*    alignItems: 'center', */}
+              {/*  }}> */}
+              {/*  /!*{showBackButton && (*!/ */}
+              {/*  /!*  <IconButtonWrapper*!/ */}
+              {/*  /!*    iconHeight={RfH(20)}*!/ */}
+              {/*  /!*    iconWidth={RfW(20)}*!/ */}
+              {/*  /!*    styling={[styles.backButton, { marginLeft: RfW(16), marginTop: RfH(4) }]}*!/ */}
+              {/*  /!*    iconImage={Images.arrowRight}*!/ */}
+              {/*  /!*  />*!/ */}
+              {/*  /!*)}*!/ */}
+              {/*  <View> */}
+              {/*    <Text style={styles.subjectTitle}>English Tutors</Text> */}
+              {/*    <Text style={styles.classText}>CBSE | Class 9</Text> */}
+              {/*  </View> */}
+              {/* </View> */}
               <View style={styles.filterParentView}>
                 <Text style={styles.filterText}>20 TUTORS</Text>
+                {/*<View style={styles.switchView}>*/}
+                {/*  <Text style={styles.switchText}>TUTORS</Text>*/}
+                {/*  <Switch onValueChange={() => setIsTutor(!isTutor)} value={isTutor} />*/}
+                {/*  <Text style={styles.switchText}>INSTITUTES</Text>*/}
+                {/*</View>*/}
+
                 <TouchableOpacity onPress={() => setShowFilterPopup(true)}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />

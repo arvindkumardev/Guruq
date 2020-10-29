@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   myProfileText: {
     fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
+    color: Colors.primaryText,
   },
 
   userDetailsView: {

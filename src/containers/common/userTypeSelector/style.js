@@ -3,6 +3,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   helloView: {
@@ -21,14 +22,14 @@ const styles = StyleSheet.create({
     color: Colors.primaryText,
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
     marginLeft: RfW(36),
-    fontFamily: 'SegoeUI-Semibold',
+    fontFamily: Fonts.semiBold,
   },
   subHeading: {
     textAlign: 'center',
     marginTop: RfH(58),
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: Colors.black,
-    fontFamily: 'SegoeUI-Semibold',
+    fontFamily: Fonts.semiBold,
   },
   areaParentView: {
     flexDirection: 'row',

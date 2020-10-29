@@ -14,6 +14,7 @@ import { CustomMobileNumber } from '../../../components';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import CustomDropDown from '../../../components/CustomDropDown';
 import commonStyles from '../../../theme/styles';
+import Fonts from '../../../theme/Fonts';
 
 const { height, width } = Dimensions.get('window');
 
@@ -124,7 +125,7 @@ function PersonalDetails() {
             <Title
               style={{
                 fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
-                fontFamily: 'SegoeUI-Semibold',
+                  fontFamily: Fonts.semiBold,
                 color: 'rgb(25,24,24)',
               }}>
               Personal Details
@@ -136,7 +137,7 @@ function PersonalDetails() {
             <Text
               style={{
                 fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                fontFamily: 'SegoeUI-Semibold',
+                  fontFamily: Fonts.semiBold,
                 color: 'rgb(25,24,24)',
               }}>
               Edit
@@ -340,7 +341,7 @@ function PersonalDetails() {
             <Text
               style={{
                 color: '#FFFFFF',
-                fontFamily: 'SegoeUI-Semibold',
+                  fontFamily: Fonts.semiBold,
                 fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
               }}>
               Save

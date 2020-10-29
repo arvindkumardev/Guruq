@@ -3,7 +3,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
-import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   bottomText: {
