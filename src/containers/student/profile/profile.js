@@ -2,19 +2,22 @@ import { FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View,
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { removeData, RfH, RfW } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { isLoggedIn, userDetails } from '../../../apollo/cache';
+import {isLoggedIn, studentDetails, userDetails} from '../../../apollo/cache';
 
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/Fonts';
 
 function Profile() {
   const navigation = useNavigation();
+  const userInfo = useReactiveVar(userDetails);
+  const studentInfo = useReactiveVar(studentDetails);
 
   // console.log('navigation===>',props)
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
@@ -110,9 +113,13 @@ function Profile() {
         <View style={styles.userDetailsView}>
           <Image style={styles.userIcon} source={Images.user} />
           <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-            <Text style={styles.userName}>Sheena Jain</Text>
-            <Text style={styles.userMobDetails}>+91-9876543210</Text>
-            <Text style={styles.userMobDetails}>GURUQS21223I</Text>
+            <Text style={styles.userName}>
+              {userInfo.firstName} {userInfo.lastName}
+            </Text>
+            <Text style={styles.userMobDetails}>
+              +{userInfo.phoneNumber.countryCode}-{userInfo.phoneNumber.number}
+            </Text>
+            <Text style={styles.userMobDetails}>GURUQS{userInfo.id}</Text>
           </View>
         </View>
         <View style={styles.separatorView} />

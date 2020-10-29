@@ -353,11 +353,18 @@ function StudentDashboard() {
     <>
       <StatusBar barStyle="dark-content" />
       <View style={[commonStyles.mainContainer]}>
-        <View style={{ height: 44, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-          <Text style={{ color: Colors.darkGrey, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
-          <TouchableOpacity onPress={() => setStudyAreaModalVisible(true)}>
-            <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
-          </TouchableOpacity>
+        <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ color: Colors.darkGrey, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
+            <TouchableOpacity onPress={() => setStudyAreaModalVisible(true)}>
+              <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => {}}>
+              <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
+            </TouchableOpacity>
+          </View>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
