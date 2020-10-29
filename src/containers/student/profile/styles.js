@@ -26,32 +26,30 @@ const styles = StyleSheet.create({
   userDetailsView: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'stretch',
-    marginTop: RfH(24),
+    alignItems: 'center',
+    // marginTop: RfH(24),
   },
   userIcon: {
-    height: RfH(82),
-    width: RfW(82),
-    borderRadius: 8,
+    height: RfH(64),
+    width: RfW(64),
+    // TODO: fix circle
+    borderTopLeftRadius: RfW(64),
+    borderTopRightRadius: RfW(64),
+    borderBottomLeftRadius: RfW(64),
+    borderBottomRightRadius: RfW(64),
   },
   userName: {
-    marginTop: RfH(8),
-    marginLeft: RfW(12),
-    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
-    color: 'rgb(25,24,24)',
+    // marginTop: RfH(8),
+    // marginLeft: RfW(12),
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
+    color: Colors.primaryText,
   },
   userMobDetails: {
-    marginLeft: RfW(12),
-    color: 'rgb(129,129,129)',
+    color: Colors.darkGrey,
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
   },
-  separatorView: {
-    flex: 1,
-    borderBottomColor: Colors.darkGrey,
-    borderBottomWidth: 0.5,
-    marginTop: RfH(16),
-    opacity: 0.1,
-  },
+
   bottomParent: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -59,11 +57,17 @@ const styles = StyleSheet.create({
   },
   userMenuParentView: {
     flex: 1,
-    marginTop: RfH(16),
+    // marginTop: RfH(16),
+    backgroundColor: Colors.white,
+    paddingHorizontal: RfW(16),
+    height: RfH(54),
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    borderBottomColor: Colors.borderColor,
+    borderBottomWidth: 0.5,
   },
+
   menuItemParentView: {
     flex: 1,
     flexDirection: 'column',
@@ -71,13 +75,13 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   menuItemPrimaryText: {
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     color: Colors.primaryText,
-    marginLeft: RfW(12),
+    marginLeft: RfW(16),
   },
   menuItemSecondaryText: {
-    marginLeft: RfW(12),
+    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    marginLeft: RfW(16),
     color: Colors.secondaryText,
   },
 
@@ -93,9 +97,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   actionText: {
-    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     color: Colors.secondaryText,
-    marginTop: RfH(8),
+    // marginTop: RfH(8),
   },
 });
 export default styles;

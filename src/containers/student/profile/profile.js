@@ -9,7 +9,7 @@ import { removeData, RfH, RfW } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import {isLoggedIn, studentDetails, userDetails} from '../../../apollo/cache';
+import { isLoggedIn, studentDetails, userDetails } from '../../../apollo/cache';
 
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/Fonts';
@@ -64,13 +64,10 @@ function Profile() {
       <TouchableWithoutFeedback
         onPress={() => personalDetails(item)}
         // disabled={}
-        style={[
-          styles.userMenuParentView,
-          { justifyContent: 'space-between', paddingLeft: RfW(16), marginTop: RfH(20) },
-        ]}>
+        style={[styles.userMenuParentView, { height: 44, justifyContent: 'space-between', paddingLeft: RfW(48),     borderBottomColor: Colors.lightGrey}]}>
         <View style={{ flexDirection: 'row' }}>
-          <IconWrapper iconImage={item.icon} iconHeight={RfH(18)} iconWidth={RfW(20)} />
-          <Text style={{ color: Colors.primaryText, marginLeft: RfW(8) }}>{item.name}</Text>
+          <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} />
+          <Text style={{ fontSize: 15, color: Colors.primaryText, marginLeft: RfW(16) }}>{item.name}</Text>
         </View>
         <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
       </TouchableWithoutFeedback>
@@ -79,21 +76,21 @@ function Profile() {
 
   const renderActionIcons = () => {
     return (
-      <View style={[styles.userMenuParentView, { justifyContent: 'space-evenly' }]}>
+      <View style={[styles.userMenuParentView, { justifyContent: 'space-evenly', alignItems: 'center' }]}>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.heart} />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
           <Text style={styles.actionText}>Favourites</Text>
         </View>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.bell} />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bell} />
           <Text style={styles.actionText}>Notification</Text>
         </View>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.qpoint} />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.qpoint} />
           <Text style={styles.actionText}>Q Points</Text>
         </View>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.cart} />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.cart} />
           <Text style={styles.actionText}>Cart</Text>
         </View>
       </View>
@@ -101,7 +98,7 @@ function Profile() {
   };
 
   return (
-    <View style={commonStyles.mainContainer}>
+    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
       <StatusBar barStyle="dark-content" />
       <ScrollView
         stickyHeaderIndices={[0]}
@@ -109,27 +106,32 @@ function Profile() {
         // onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}>
         <View style={{ height: 44 }} />
-        <Text style={styles.myProfileText}>My Profile</Text>
-        <View style={styles.userDetailsView}>
-          <Image style={styles.userIcon} source={Images.user} />
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-            <Text style={styles.userName}>
-              {userInfo.firstName} {userInfo.lastName}
-            </Text>
-            <Text style={styles.userMobDetails}>
-              +{userInfo.phoneNumber.countryCode}-{userInfo.phoneNumber.number}
-            </Text>
-            <Text style={styles.userMobDetails}>GURUQS{userInfo.id}</Text>
+        <View style={{ paddingHorizontal: RfW(16), height: 54 }}>
+          <Text style={styles.myProfileText}>My Profile</Text>
+        </View>
+        <View
+          style={{ height: 102, backgroundColor: Colors.white, paddingHorizontal: RfW(16), justifyContent: 'center' }}>
+          <View style={styles.userDetailsView}>
+            <Image style={styles.userIcon} source={Images.user} />
+            <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16) }}>
+              <Text style={styles.userName}>
+                {userInfo?.firstName} {userInfo?.lastName}
+              </Text>
+              <Text style={styles.userMobDetails}>
+                +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
+              </Text>
+              <Text style={styles.userMobDetails}>GURUQS{userInfo?.id}</Text>
+            </View>
           </View>
         </View>
-        <View style={styles.separatorView} />
         {renderActionIcons()}
-        <View style={styles.separatorView} />
+        <View style={commonStyles.blankViewSmall} />
         <View>
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-            style={styles.userMenuParentView}>
-            <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
+            style={[styles.userMenuParentView, commonStyles.borderTop, { height: 60 }]}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
+
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>My Account</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -139,7 +141,6 @@ function Profile() {
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
-              styling={{ flex: 0.2 }}
               iconImage={isAccountMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
           </TouchableWithoutFeedback>
@@ -154,10 +155,8 @@ function Profile() {
             />
           </SafeAreaView>
         )}
-        <View style={styles.separatorView} />
-
         <View style={styles.userMenuParentView}>
-          <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
           <View style={styles.menuItemParentView}>
             <Text style={styles.menuItemPrimaryText}>My Study Area</Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -168,20 +167,12 @@ function Profile() {
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
-              styling={{ flex: 0.2 }}
               iconImage={isStudyMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
           </TouchableWithoutFeedback>
         </View>
-        <View style={styles.separatorView} />
-
         <View style={styles.userMenuParentView}>
-          <IconWrapper
-            styling={{ flex: 0.1 }}
-            iconHeight={RfH(16)}
-            iconWidth={RfW(16)}
-            iconImage={Images.bookingDetails}
-          />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
           <View style={styles.menuItemParentView}>
             <Text style={styles.menuItemPrimaryText}>Booking Details</Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -192,17 +183,15 @@ function Profile() {
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
-              styling={{ flex: 0.2 }}
               iconImage={isBookingMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
           </TouchableWithoutFeedback>
         </View>
-        <View style={styles.separatorView} />
 
         <View style={styles.userMenuParentView}>
-          <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
           <View style={styles.menuItemParentView}>
-            <Text style={styles.menuItemPrimaryText}> My Classes</Text>
+            <Text style={styles.menuItemPrimaryText}>My Classes</Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
               Calendar, Schedule Class, Renew Class, Class...
             </Text>
@@ -211,15 +200,15 @@ function Profile() {
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
-              styling={{ flex: 0.2 }}
               iconImage={isMyClassesMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
           </TouchableWithoutFeedback>
         </View>
-        <View style={styles.separatorView} />
 
-        <View style={styles.userMenuParentView}>
-          <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
+        <View style={commonStyles.blankViewSmall} />
+
+        <View style={[styles.userMenuParentView, commonStyles.borderTop]}>
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
           <View style={styles.menuItemParentView}>
             <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -230,35 +219,49 @@ function Profile() {
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
-              styling={{ flex: 0.2 }}
               iconImage={isReferFriendMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
           </TouchableWithoutFeedback>
         </View>
-        <View style={styles.separatorView} />
 
-        <View style={styles.userMenuParentView}>
-          <IconWrapper
-            styling={{ flex: 0.1 }}
-            iconHeight={RfH(16)}
-            iconWidth={RfW(16)}
-            iconImage={Images.moreInformation}
-          />
+        <View style={commonStyles.blankViewSmall} />
+
+        <View style={[styles.userMenuParentView, commonStyles.borderTop]}>
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
           <View style={styles.menuItemParentView}>
-            <Text style={styles.menuItemPrimaryText}> More Information</Text>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-              Customer Care, FAQ's, Send feedback
-            </Text>
+            <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
+              <Text style={styles.menuItemPrimaryText}>Settings</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Account Settings, Change Password, Notifications
+              </Text>
+            </TouchableWithoutFeedback>
           </View>
-          <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
-            <IconWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              styling={{ flex: 0.2 }}
-              iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
-            />
-          </TouchableWithoutFeedback>
+          <IconWrapper
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
+          />
         </View>
+
+        <View style={commonStyles.blankViewSmall} />
+
+        <View style={[styles.userMenuParentView, commonStyles.borderTop]}>
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
+          <View style={styles.menuItemParentView}>
+            <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
+              <Text style={styles.menuItemPrimaryText}>Help</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Customer Care, FAQ's, Send feedback
+              </Text>
+            </TouchableWithoutFeedback>
+          </View>
+          <IconWrapper
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
+          />
+        </View>
+
         {isInformationMenuOpen && (
           <SafeAreaView>
             <FlatList
@@ -269,12 +272,11 @@ function Profile() {
             />
           </SafeAreaView>
         )}
-        <View style={styles.separatorView} />
 
         <View style={styles.userMenuParentView}>
-          <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
           <View style={styles.menuItemParentView}>
-            <Text style={styles.menuItemPrimaryText}> About GuruQ</Text>
+            <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
               About, team
             </Text>
@@ -283,18 +285,18 @@ function Profile() {
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
-              styling={{ flex: 0.2 }}
               iconImage={isAboutGuruMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
           </TouchableWithoutFeedback>
         </View>
-        <View style={styles.separatorView} />
 
-        <View style={styles.userMenuParentView}>
-          <IconWrapper styling={{ flex: 0.1 }} iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />
+        <View style={commonStyles.blankViewSmall} />
+
+        <View style={[styles.userMenuParentView, commonStyles.borderTop]}>
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />
           <View style={styles.menuItemParentView}>
             <TouchableOpacity onPress={() => logout()}>
-              <Text style={styles.menuItemPrimaryText}> Logout</Text>
+              <Text style={styles.menuItemPrimaryText}>Logout</Text>
             </TouchableOpacity>
 
             {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -305,12 +307,12 @@ function Profile() {
           <IconWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
-            styling={{ flex: 0.2 }}
+            
             iconImage={isLogout ? Images.collapse_grey : Images.expand_gray}
           />
         </TouchableWithoutFeedback> */}
         </View>
-        <View style={styles.separatorView} />
+        {/* <View style={commonStyles.lineSeparator} /> */}
         <View
           style={{
             justifyContent: 'space-around',
@@ -340,13 +342,9 @@ function Profile() {
             </Text>
           </View>
         </View>
-
-        <View style={{ flex: 1, justifyContent: 'center', marginTop: 24, marginBottom: 24 }}>
+        <View style={{ flex: 1, justifyContent: 'center', marginTop: 24, marginBottom: 16 }}>
           <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.versionText, { textAlign: 'center' }]}>
-            Powered by
-          </Text>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.versionText, { textAlign: 'center' }]}>
-            RHA Technologies
+            Powered by RHA Technologies
           </Text>
         </View>
       </ScrollView>

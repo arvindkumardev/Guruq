@@ -57,6 +57,7 @@ const Images = {
   small_active_blue: require('../assets/images/small_active_blue.png'),
   filter: require('../assets/images/filter.png'),
   radio_button_null: require('../assets/images/radio-button.png'),
+  settings: require('../assets/images/settings.png'),
 };
 
 export default Images;

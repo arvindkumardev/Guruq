@@ -1,14 +1,15 @@
 const Colors = {
   white: '#ffffff',
-  black: '#191818',
+  black: '#000000',
   darkGrey: '#818181',
   lightGrey: '#f6f6f6',
 
   brandBlue: '#1E5AA0',
   brandBlue2: '#07A6EE',
 
-  primaryText: '#313030',
-  secondaryText: '#999999',
+  primaryText: '#000000',
+  secondaryText: '#8a8a8e',
+  borderColor: '#d9d9d9',
 
   orange: '#fcb92d',
   orangeRed: '#fe3d3d',

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from './colors';
 import { RfH, RfW } from '../utils/helpers';
@@ -46,7 +46,20 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: 0.5,
     // marginTop: RfH(16),
-    opacity: 0.2,
+    opacity: 0.5,
+  },
+
+  blankViewSmall: {
+    marginTop: RfH(24),
+  },
+
+  borderTop: {
+    borderTopColor: Colors.borderColor,
+    borderTopWidth: 0.5,
+  },
+  borderBottom: {
+    borderBottomColor: Colors.borderColor,
+    borderBottomWidth: 0.5,
   },
 });
 export default styles;
