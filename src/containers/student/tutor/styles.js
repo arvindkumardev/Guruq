@@ -83,7 +83,8 @@ const styles = StyleSheet.create({
   },
   tutorName: {
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    color: Colors.black,
+    color: Colors.primaryText,
+    fontFamily: Fonts.semiBold,
   },
   tutorDetails: {
     color: Colors.darkGrey,
