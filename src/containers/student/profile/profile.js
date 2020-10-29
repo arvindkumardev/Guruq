@@ -55,7 +55,6 @@ function Profile() {
       // setIsPersonalMenuOpen(true)
       return null;
     }
-    return;
   };
   const renderItem = (item) => {
     return (
