@@ -19,7 +19,7 @@ function StudentDashboardContainer() {
   };
 
   return (
-    <SafeAreaView style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
+    <SafeAreaView style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
       <StatusBar barStyle="light-content" />
       <Container>
         <View style={{ flex: 1 }}>

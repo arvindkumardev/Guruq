@@ -4,10 +4,11 @@ import Colors from '../../../theme/colors';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
 import { cardPB, cardPT, cardPX, cardRadiusMedium, spacePX } from '../../../theme/variables';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   title: {
-    fontFamily: 'SegoeUI-Semibold',
+    fontFamily: Fonts.semiBold,
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
     color: Colors.white,
     fontFamily: 'SegoeUI-Semibold',

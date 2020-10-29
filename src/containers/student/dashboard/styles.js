@@ -77,10 +77,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  actionText: {
-    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
-    color: Colors.secondaryText,
-    marginTop: RfH(8),
-  },
 });
 export default styles;

@@ -4,6 +4,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Container, Content, Header, Left, Right, Title } from 'native-base';
 import DatePicker from 'react-native-datepicker';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useNavigation } from '@react-navigation/native';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
@@ -13,10 +14,13 @@ import { CustomMobileNumber } from '../../../components';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import CustomDropDown from '../../../components/CustomDropDown';
 import commonStyles from '../../../theme/styles';
+import Fonts from '../../../theme/Fonts';
 
 const { height, width } = Dimensions.get('window');
 
 function PersonalDetails() {
+  const navigation = useNavigation();
+
   const [isEditDisable, setIsEditDisable] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isGender, setIsGender] = useState('Female');
@@ -64,6 +68,10 @@ function PersonalDetails() {
     console.log(new Date(date).toISOString());
   };
 
+  const onBackPress = () => {
+    navigation.goBack();
+  };
+
   const personalDetails = (item) => {
     console.log('accountData====>', item);
     if (item.name == 'Male') {
@@ -107,12 +115,17 @@ function PersonalDetails() {
               flexDirection: 'row',
               marginLeft: 10,
             }}>
-            <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.arrowRight} />
+            <IconWrapper
+              submitFunction={() => onBackPress()}
+              iconHeight={RfH(20)}
+              iconWidth={RfW(20)}
+              iconImage={Images.arrowRight}
+            />
             <View style={{ width: 40 }} />
             <Title
               style={{
                 fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
-                fontFamily: 'SegoeUI-Semibold',
+                  fontFamily: Fonts.semiBold,
                 color: 'rgb(25,24,24)',
               }}>
               Personal Details
@@ -124,7 +137,7 @@ function PersonalDetails() {
             <Text
               style={{
                 fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                fontFamily: 'SegoeUI-Semibold',
+                  fontFamily: Fonts.semiBold,
                 color: 'rgb(25,24,24)',
               }}>
               Edit
@@ -328,7 +341,7 @@ function PersonalDetails() {
             <Text
               style={{
                 color: '#FFFFFF',
-                fontFamily: 'SegoeUI-Semibold',
+                  fontFamily: Fonts.semiBold,
                 fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
               }}>
               Save

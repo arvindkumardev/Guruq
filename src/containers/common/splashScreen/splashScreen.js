@@ -53,7 +53,7 @@ function SplashScreen() {
   }, [currentTutor]);
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.brandBlue }]}>
+    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.brandBlue }]}>
       <Loader isLoading />
       {/* eslint-disable-next-line global-require */}
       <Image style={styles.splashImage} source={require('../../../assets/images/splash_image.png')} />

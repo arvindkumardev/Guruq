@@ -7,7 +7,9 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/background_splash</item>
+<!--        <item android:drawable="@android:color/primary_light"/>-->
+        <item name="android:windowBackground">@color/primary_light</item>
+<!--        <item name="android:windowBackground">@drawable/background_splash</item>-->
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/primary_light</item>
     </style>
 

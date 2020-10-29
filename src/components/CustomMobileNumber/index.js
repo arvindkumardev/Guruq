@@ -50,7 +50,7 @@ function CustomMobileNumber(props) {
     <View>
       <View style={[{ marginTop: RfH(topMargin) }, error && { borderColor: '#818181' }]}>
         <View style={{ flex: 1, flexDirection: 'row' }}>
-          <View>
+          <View style={{ flex: 0.5 }}>
             {isCountryCodeLabel && <Text style={[inputLabelStyle, error && { color: '#818181' }]} />}
             <TouchableOpacity
               onPress={() => setShowModal(true)}
@@ -83,7 +83,7 @@ function CustomMobileNumber(props) {
                 onChangeText={onChangeMobile}
                 style={[
                   styles.inputStyle,
-                  !value.mobile && { color: Colors.coolGrey },
+                  !value.mobile && { color: Colors.secondaryText },
                   { flex: 1 },
                   { paddingBottom: RfH(12) },
                 ]}

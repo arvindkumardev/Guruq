@@ -8,7 +8,7 @@ import styles from './styles';
 import { RfH, RfW } from '../../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../../utils/constants';
 import { CustomMobileNumber } from '../../../components';
-import routeNames from '../../../routes/ScreenNames';
+import routeNames from '../../../routes/screenNames';
 import { CHECK_USER_QUERY } from '../graphql-query';
 import { NOT_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
@@ -26,9 +26,11 @@ function Login() {
   const [checkUser, { loading: checkUserLoading }] = useLazyQuery(CHECK_USER_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      const error = e.graphQLErrors[0].extensions.exception.response;
-      if (error.errorCode === NOT_FOUND) {
-        navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === NOT_FOUND) {
+          navigation.navigate(routeNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+        }
       }
     },
     onCompleted: (data) => {
@@ -98,6 +100,7 @@ function Login() {
             <Icon onPress={() => clearMobileNumber()} style={styles.clearIcon} type="Entypo" name="circle-with-cross" />
           )}
         </View>
+
         <View style={styles.underlineView} />
 
         <TouchableOpacity

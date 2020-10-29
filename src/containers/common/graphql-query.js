@@ -15,6 +15,10 @@ export const ME_QUERY = gql`
       firstName
       lastName
       email
+      phoneNumber {
+        countryCode
+        number
+      }
       isPasswordSet
       isFirstTime
       isPhoneNumberVerified

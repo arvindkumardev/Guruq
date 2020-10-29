@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from './colors';
 import { RfH, RfW } from '../utils/helpers';
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    paddingHorizontal: spacePX,
+    paddingHorizontal: 16,
   },
   buttonPrimary: {
     backgroundColor: Colors.brandBlue2,
@@ -86,6 +86,19 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
+  },
+
+  blankViewSmall: {
+    marginTop: RfH(24),
+  },
+
+  borderTop: {
+    borderTopColor: Colors.borderColor,
+    borderTopWidth: 0.5,
+  },
+  borderBottom: {
+    borderBottomColor: Colors.borderColor,
+    borderBottomWidth: 0.5,
   },
 });
 export default styles;

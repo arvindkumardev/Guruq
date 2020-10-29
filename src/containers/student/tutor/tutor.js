@@ -554,7 +554,7 @@ function Tutor() {
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
       <ScrollView
-        stickyHeaderIndices={[1]}
+        stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}>
@@ -574,6 +574,7 @@ function Tutor() {
             </View>
           )}
         </View>
+
         <View>
           <View style={{ backgroundColor: Colors.white }}>
             <View style={commonStyles.verticallyStretchedItemsView}>

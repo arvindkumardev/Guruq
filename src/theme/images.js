@@ -66,6 +66,7 @@ const Images = {
   share: require('../assets/images/share.png'),
   four_stars: require('../assets/images/four_stars.png'),
   laptop: require('../assets/images/laptop.png'),
+  settings: require('../assets/images/settings.png'),
 };
 
 export default Images;

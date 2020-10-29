@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
 
+    <!--    <item-->
+    <!--            android:width="400dp"-->
+    <!--            android:height="800dp"-->
+    <!--            android:drawable="@drawable/splashscreen"-->
+    <!--            android:gravity="center"/>-->
 
-    <item
-            android:width="400dp"
-            android:height="800dp"
-            android:drawable="@drawable/splashscreen"
-            android:gravity="center"/>
+    <!--    <item>-->
+    <!--        <bitmap-->
+    <!--                android:gravity="center"-->
+    <!--                android:src="@drawable/splashscreen"/>-->
+    <!--    </item>-->
+
+    <!-- The background color, preferably the same as your normal theme -->
+    <item android:drawable="@color/primary_light"/>
+
+    <!-- Your product logo - 144dp color version of your app icon -->
+    <item>
+
+        <bitmap
+                android:src="@drawable/icon_foreground"
+                android:gravity="center"/>
+
+    </item>
 
 </layer-list>
