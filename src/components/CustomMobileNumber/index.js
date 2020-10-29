@@ -83,7 +83,7 @@ function CustomMobileNumber(props) {
                 onChangeText={onChangeMobile}
                 style={[
                   styles.inputStyle,
-                  !value.mobile && { color: Colors.coolGrey },
+                  !value.mobile && { color: Colors.secondaryText },
                   { flex: 1 },
                   { paddingBottom: RfH(12) },
                 ]}
