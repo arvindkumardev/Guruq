@@ -3,6 +3,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   bottomText: {
@@ -15,12 +16,12 @@ const styles = StyleSheet.create({
     marginTop: RfH(4),
     color: Colors.brandBlue2,
   },
+
   myProfileText: {
-    // marginTop: RfH(16),
-    fontFamily: 'SegoeUI-Semibold',
-    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    // fontWeight: 'bold',
+    fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
   },
+
   userDetailsView: {
     flexDirection: 'row',
     justifyContent: 'flex-start',

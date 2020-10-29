@@ -4,6 +4,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Container, Content, Header, Left, Right, Title } from 'native-base';
 import DatePicker from 'react-native-datepicker';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useNavigation } from '@react-navigation/native';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
@@ -17,6 +18,8 @@ import commonStyles from '../../../theme/styles';
 const { height, width } = Dimensions.get('window');
 
 function PersonalDetails() {
+  const navigation = useNavigation();
+
   const [isEditDisable, setIsEditDisable] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isGender, setIsGender] = useState('Female');
@@ -64,6 +67,10 @@ function PersonalDetails() {
     console.log(new Date(date).toISOString());
   };
 
+  const onBackPress = () => {
+    navigation.goBack();
+  };
+
   const personalDetails = (item) => {
     console.log('accountData====>', item);
     if (item.name == 'Male') {
@@ -107,7 +114,12 @@ function PersonalDetails() {
               flexDirection: 'row',
               marginLeft: 10,
             }}>
-            <IconWrapper iconHeight={RfH(20)} iconWidth={RfW(20)} iconImage={Images.arrowRight} />
+            <IconWrapper
+              submitFunction={() => onBackPress()}
+              iconHeight={RfH(20)}
+              iconWidth={RfW(20)}
+              iconImage={Images.arrowRight}
+            />
             <View style={{ width: 40 }} />
             <Title
               style={{
@@ -236,38 +248,38 @@ function PersonalDetails() {
 
           <CustomDatePicker />
 
-          {/*<DatePicker*/}
-          {/*  style={{}}*/}
-          {/*  date={date}*/}
-          {/*  mode="date"*/}
-          {/*  disabled={disabled}*/}
-          {/*  placeholder="select date"*/}
-          {/*  format="DD-MM-YYYY"*/}
-          {/*  minDate="01-01-2020"*/}
-          {/*  maxDate="01-01-2030"*/}
-          {/*  confirmBtnText="Confirm"*/}
-          {/*  cancelBtnText="Cancel"*/}
-          {/*  onOpenModal={() => setDisabled(true)}*/}
-          {/*  onCloseModal={() => setDisabled(false)}*/}
-          {/*  customStyles={{*/}
-          {/*    dateIcon: {*/}
-          {/*      position: 'absolute',*/}
-          {/*      left: 0,*/}
-          {/*      //  top: 4,*/}
-          {/*      marginLeft: width / 1.1,*/}
-          {/*      backgroundColor: '#FFFFFF',*/}
-          {/*    },*/}
-          {/*    dateInput: {*/}
-          {/*      marginLeft: -33,*/}
-          {/*      fontSize: 30,*/}
-          {/*      borderWidth: null,*/}
-          {/*      color: 'rgb(129,129,129)',*/}
-          {/*      backgroundColor: '#FFFFFF',*/}
-          {/*    },*/}
-          {/*    // ... You can check the source to find the other keys.*/}
-          {/*  }}*/}
-          {/*  onDateChange={(date) => setDate(date)}*/}
-          {/*/>*/}
+          {/* <DatePicker */}
+          {/*  style={{}} */}
+          {/*  date={date} */}
+          {/*  mode="date" */}
+          {/*  disabled={disabled} */}
+          {/*  placeholder="select date" */}
+          {/*  format="DD-MM-YYYY" */}
+          {/*  minDate="01-01-2020" */}
+          {/*  maxDate="01-01-2030" */}
+          {/*  confirmBtnText="Confirm" */}
+          {/*  cancelBtnText="Cancel" */}
+          {/*  onOpenModal={() => setDisabled(true)} */}
+          {/*  onCloseModal={() => setDisabled(false)} */}
+          {/*  customStyles={{ */}
+          {/*    dateIcon: { */}
+          {/*      position: 'absolute', */}
+          {/*      left: 0, */}
+          {/*      //  top: 4, */}
+          {/*      marginLeft: width / 1.1, */}
+          {/*      backgroundColor: '#FFFFFF', */}
+          {/*    }, */}
+          {/*    dateInput: { */}
+          {/*      marginLeft: -33, */}
+          {/*      fontSize: 30, */}
+          {/*      borderWidth: null, */}
+          {/*      color: 'rgb(129,129,129)', */}
+          {/*      backgroundColor: '#FFFFFF', */}
+          {/*    }, */}
+          {/*    // ... You can check the source to find the other keys. */}
+          {/*  }} */}
+          {/*  onDateChange={(date) => setDate(date)} */}
+          {/* /> */}
         </View>
 
         <View style={commonStyles.lineSeparator} />
