@@ -297,7 +297,9 @@ function StudentDashboard() {
               paddingVertical: RfW(16),
             }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', marginLeft: RfW(16) }}>Choose your study area</Text>
+              <Text style={{ fontSize: 16, fontFamily: 'SegoeUI-Semibold', marginLeft: RfW(16) }}>
+                Choose your study area
+              </Text>
               <TouchableWithoutFeedback onPress={() => setStudyAreaModalVisible(false)}>
                 <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
               </TouchableWithoutFeedback>
@@ -318,13 +320,15 @@ function StudentDashboard() {
                 marginBottom: RfH(24),
               }}>
               <Button block style={{ flex: 0.5, backgroundColor: Colors.brandBlue2, marginRight: RfW(4) }}>
-                <Text style={{ color: Colors.white, fontSize: 16, fontWeight: '600' }}>Select</Text>
+                <Text style={{ color: Colors.white, fontSize: 16, fontFamily: 'SegoeUI-Semibold' }}>Select</Text>
               </Button>
               <Button
                 bordered
                 style={{ flex: 0.5, borderColor: Colors.brandBlue2, justifyContent: 'center', marginLeft: RfW(4) }}
                 onPress={() => addStudyArea()}>
-                <Text style={{ color: Colors.brandBlue2, fontSize: 16, fontWeight: '600' }}>Add study area</Text>
+                <Text style={{ color: Colors.brandBlue2, fontSize: 16, fontFamily: 'SegoeUI-Semibold' }}>
+                  Add study area
+                </Text>
               </Button>
             </View>
           </View>
@@ -473,7 +477,9 @@ function StudentDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                    4.5
+                  </Text>
                 </View>
               </View>
               <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
@@ -513,7 +519,9 @@ function StudentDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                    4.5
+                  </Text>
                 </View>
               </View>
               <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
@@ -560,7 +568,9 @@ function StudentDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                    4.5
+                  </Text>
                 </View>
               </View>
               <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>

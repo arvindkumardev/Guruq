@@ -57,6 +57,15 @@ const Images = {
   small_active_blue: require('../assets/images/small_active_blue.png'),
   filter: require('../assets/images/filter.png'),
   radio_button_null: require('../assets/images/radio-button.png'),
+  blue_star: require('../assets/images/blue_star.png'),
+  grey_star: require('../assets/images/grey_star.png'),
+  single_user: require('../assets/images/single_user.png'),
+  multiple_user: require('../assets/images/multiple_user.png'),
+  user_board: require('../assets/images/user_board.png'),
+  blue_cross: require('../assets/images/blue_cross.png'),
+  share: require('../assets/images/share.png'),
+  four_stars: require('../assets/images/four_stars.png'),
+  laptop: require('../assets/images/laptop.png'),
 };
 
 export default Images;

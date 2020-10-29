@@ -150,7 +150,9 @@ function TutorDashboard() {
                 iconImage={Images.math}
               />
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>Maths</Text>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
+              Maths
+            </Text>
           </View>
           <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
@@ -250,7 +252,9 @@ function TutorDashboard() {
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(18) }}>
           <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
-            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>Hi {userName}</Text>
+            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>
+              Hi {userName}
+            </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
               <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
               <Icon
@@ -339,7 +343,9 @@ function TutorDashboard() {
         </View>
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Tutors By Subjects</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
+            Tutors By Subjects
+          </Text>
         </View>
         {renderSubjects()}
         <View
@@ -356,7 +362,9 @@ function TutorDashboard() {
         />
         <View
           style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>Recommended Tutors</Text>
+          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
+            Recommended Tutors
+          </Text>
         </View>
         <View style={{ height: RfH(92), backgroundColor: 'rgb(230,252,231)', borderRadius: 8, marginTop: RfH(20) }}>
           <View
@@ -379,10 +387,14 @@ function TutorDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                    4.5
+                  </Text>
                 </View>
               </View>
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>3 years of Experience</Text>
+              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                3 years of Experience
+              </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   English, Maths , Science
@@ -417,10 +429,14 @@ function TutorDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                    4.5
+                  </Text>
                 </View>
               </View>
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>3 years of Experience</Text>
+              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                3 years of Experience
+              </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   English, Maths , Science
@@ -462,10 +478,14 @@ function TutorDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                    4.5
+                  </Text>
                 </View>
               </View>
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>3 years of Experience</Text>
+              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                3 years of Experience
+              </Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   English, Maths , Science

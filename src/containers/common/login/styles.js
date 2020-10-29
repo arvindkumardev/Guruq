@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SegoeUI-Semibold',
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
     color: Colors.white,
-    fontWeight: '700',
+    fontFamily: 'SegoeUI-Semibold',
     marginHorizontal: spacePX,
     marginBottom: RfH(16),
   },

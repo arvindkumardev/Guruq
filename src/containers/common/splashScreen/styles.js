@@ -14,14 +14,14 @@ const styles = StyleSheet.create({
   msgOne: {
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: '#fff',
-    fontWeight: '500',
+    fontFamily: 'SegoeUI-Semibold',
     alignSelf: 'center',
     marginTop: RfH(-45),
   },
   msgTwo: {
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: '#fff',
-    fontWeight: '500',
+    fontFamily: 'SegoeUI-Semibold',
     alignSelf: 'center',
   },
   bottomMsg: {

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 
   sectionHeaderLabel: {
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
     color: Colors.black,
   },
 
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   headerText: {
     flex: 1,
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-    fontWeight: '500',
+    fontFamily: 'SegoeUI-Semibold',
     fontStyle: 'normal',
     color: Colors.black,
     textAlign: 'center',
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-    fontWeight: '400',
+    fontFamily: 'SegoeUI-Semibold',
     fontStyle: 'normal',
     textAlign: 'left',
     color: Colors.black,

@@ -2,7 +2,7 @@
 /* eslint-disable import/no-cycle */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity, View, FlatList, Text } from 'react-native';
+import { TouchableWithoutFeedback, View, FlatList, Text } from 'react-native';
 import { Images, Colors } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
@@ -30,7 +30,7 @@ function customRangeSelector(props) {
 
   const renderItem = (item, index) => {
     return (
-      <TouchableOpacity onPress={() => submitFunction(item, index)}>
+      <TouchableWithoutFeedback onPress={() => submitFunction(item, index)}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
           <View style={{ alignSelf: 'flex-start', marginRight: RfW(16), width: 100 }}>
             <Text
@@ -160,7 +160,7 @@ function customRangeSelector(props) {
             )}
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     );
   };
 

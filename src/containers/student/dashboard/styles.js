@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   myProfileText: {
     marginTop: RfH(48),
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    fontWeight: 'bold',
+    fontFamily: 'SegoeUI-Bold',
   },
   userDetailsView: {
     flexDirection: 'row',
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     marginTop: RfH(8),
     marginLeft: RfW(12),
     fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
     color: Colors.black,
   },
   userMobDetails: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   menuItemPrimaryText: {
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
     color: Colors.primaryText,
     marginLeft: RfW(12),
   },

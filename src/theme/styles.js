@@ -40,13 +40,52 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
   },
-
   lineSeparator: {
     flex: 1,
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: 0.5,
     marginTop: RfH(16),
-    opacity: 0.2,
+    opacity: 0.5,
+  },
+  topActionView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: RfH(48),
+  },
+  horizontalChildrenView: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  horizontalChildrenStartView: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+  pageTitle: {
+    fontFamily: 'SegoeUI-bold',
+    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+  },
+  horizontalChildrenSpaceView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  horizontalChildrenCenterView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  verticallyCenterItemsView: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  verticallyStretchedItemsView: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
   },
 });
 export default styles;

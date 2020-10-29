@@ -34,7 +34,7 @@ function BoardSelector() {
         <Text
           style={{
             fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-            fontWeight: 'bold',
+            fontFamily: 'SegoeUI-Bold',
             color: Colors.primaryText,
             marginLeft: RfH(20),
             alignSelf: 'center',
