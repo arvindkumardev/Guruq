@@ -558,44 +558,39 @@ function Tutor() {
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}>
-        <View>
-          <View style={styles.topView}>
-            <View style={{ marginTop: RfH(12) }}>
-              <Text style={styles.subjectTitle}>English Tutors</Text>
+        <View style={{}}>
+          <View style={[styles.topView, { paddingHorizontal: RfW(16), height: showBackButton ? 60 : 98 }]}>
+            <View>
+              <Text style={[styles.subjectTitle, { fontSize: showBackButton ? 17 : 20 }]}>English Tutors</Text>
               <Text style={styles.classText}>CBSE | Class 9</Text>
             </View>
-            <IconButtonWrapper styling={styles.bookIcon} iconImage={Images.book} />
+            <IconButtonWrapper
+              styling={[styles.bookIcon, { height: showBackButton ? 40 : 80 }]}
+              iconImage={Images.book}
+            />
           </View>
-          {!showBackButton && (
-            <View style={styles.switchView}>
-              <Text style={styles.switchText}>TUTORS</Text>
-              <Switch onValueChange={() => setIsTutor(!isTutor)} value={isTutor} />
-              <Text style={styles.switchText}>INSTITUTES</Text>
+
+          {showBackButton && (
+            <View style={[styles.filterParentView, { marginTop: 0, backgroundColor: Colors.white }]}>
+              <Text style={styles.filterText}>20 TUTORS</Text>
+              <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
+                  <Text style={styles.filterText}>Filters</Text>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
           )}
         </View>
 
         <View>
-          <View style={{ backgroundColor: Colors.white }}>
-            <View style={commonStyles.verticallyStretchedItemsView}>
-              {showBackButton && (
-                <View style={styles.topViewAfterScroll}>
-                  <View style={{ marginBottom: RfH(12) }}>
-                    <Text style={styles.subjectTitle}>English Tutors</Text>
-                    <Text style={styles.classText}>CBSE | Class 9</Text>
-                  </View>
-                  <IconButtonWrapper
-                    iconWidth={RfW(24)}
-                    iconHeight={RfH(40)}
-                    styling={{ marginRight: RfW(16), marginTop: RfH(4) }}
-                    iconImage={Images.book}
-                  />
-                </View>
-              )}
+          <View style={{ paddingTop: RfH(0), backgroundColor: Colors.white }}>
+            <View style={styles.subjectTitleView}>
               <View style={styles.filterParentView}>
                 <Text style={styles.filterText}>20 TUTORS</Text>
+
                 <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
-                  <View style={commonStyles.horizontalChildrenView}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
                     <Text style={styles.filterText}>Filters</Text>
                   </View>
