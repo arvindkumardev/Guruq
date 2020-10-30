@@ -46,7 +46,7 @@ function StudentDashboard() {
     return (
       <View style={{ marginTop: RfH(20) }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={() => gotoTutors('English')}
             style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
@@ -69,8 +69,10 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               English
             </Text>
-          </TouchableOpacity>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => gotoTutors('Physics')}
+            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
                 flexDirection: 'column',
@@ -91,8 +93,10 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Physics
             </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => gotoTutors('English')}
+            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
                 flexDirection: 'column',
@@ -113,8 +117,10 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Chemistry
             </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => gotoTutors('English')}
+            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
                 flexDirection: 'column',
@@ -135,12 +141,14 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Biology
             </Text>
-          </View>
+          </TouchableWithoutFeedback>
         </View>
 
         <View
           style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginTop: RfH(20) }}>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+          <TouchableWithoutFeedback
+            onPress={() => gotoTutors('English')}
+            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
                 flexDirection: 'column',
@@ -161,8 +169,10 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Maths
             </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => gotoTutors('English')}
+            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
                 flexDirection: 'column',
@@ -183,8 +193,10 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Civics
             </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => gotoTutors('English')}
+            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
                 flexDirection: 'column',
@@ -205,8 +217,10 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               History
             </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => gotoTutors('English')}
+            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
                 flexDirection: 'column',
@@ -227,7 +241,7 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               Geography
             </Text>
-          </View>
+          </TouchableWithoutFeedback>
         </View>
       </View>
     );

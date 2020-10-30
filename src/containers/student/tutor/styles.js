@@ -65,10 +65,10 @@ const styles = StyleSheet.create({
   },
   listItemParent: {
     // borderRadius: RfH(8),
-    marginBottom: RfH(34),
+    marginBottom: RfH(17),
   },
   userIconParent: {
-    flex: 0.3,
+    // flex: 0.3,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -184,13 +184,18 @@ const styles = StyleSheet.create({
     height: RfH(52),
   },
   filterButton: {
-    justifyContent: 'center',
+    borderWidth: 0.5,
+    borderColor: Colors.primaryText,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: RfH(8),
-    borderColor: Colors.darkGrey,
-    height: RfH(28),
-    marginLeft: RfW(8),
-    borderRadius: RfW(8),
+    // padding: RfH(8),
+    // height: RfH(28),
+    marginVertical: RfH(4),
+    marginRight: RfW(8),
+    paddingVertical: RfW(4),
+    paddingHorizontal: RfW(8),
+    borderRadius: RfW(4),
   },
   compareTutorName: {
     marginTop: RfH(16),
@@ -235,7 +240,7 @@ const styles = StyleSheet.create({
     paddingTop: RfH(8),
   },
   appliedFilterText: {
-    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
     color: Colors.darkGrey,
   },
 });

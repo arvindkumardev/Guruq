@@ -13,6 +13,9 @@ import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../..
 function TutorListing() {
   const navigation = useNavigation();
   const [isTutor, setIsTutor] = useState(true);
+
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
+
   const [showBackButton, setShowBackButton] = useState(false);
   const [showFilterPopup, setShowFilterPopup] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
@@ -132,7 +135,7 @@ function TutorListing() {
           <View style={styles.userIconParent}>
             <Thumbnail square style={styles.userIcon} source={item.imageUrl} />
           </View>
-          <View style={[commonStyles.verticallyStretchedItemsView, {}]}>
+          <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
             <Text style={styles.tutorName}>{item.name}</Text>
             <Text style={styles.tutorDetails}>{item.qualification}</Text>
             <Text style={styles.tutorDetails}>{item.experience} Years of Experience</Text>
@@ -162,9 +165,11 @@ function TutorListing() {
               </View>
             </View>
           </View>
-          <View style={{}}>
-            <Text style={styles.chargeText}>{item.charge}</Text>
-            <Text style={styles.chargeText}>{item.charge}</Text>
+          <View>
+            <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+              <Text style={styles.chargeText}>{item.charge}</Text>
+              <Text style={styles.chargeText}>{item.charge}</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -341,6 +346,11 @@ function TutorListing() {
     );
   };
 
+  const applyFilters = () => {
+    setShowFilterPopup(false);
+    setIsFilterApplied(true);
+  };
+
   const clearFilters = () => {
     filterValues.qualification = '';
     filterValues.experience = '';
@@ -349,6 +359,8 @@ function TutorListing() {
     filterValues.sortBy = '';
     filterValues.studyMode = '';
     setFilterValues(filterValues);
+
+    setIsFilterApplied(false);
   };
 
   const showFilterModel = () => {
@@ -419,7 +431,7 @@ function TutorListing() {
                   Clear All
                 </Text>
               </Button>
-              <Button onPress={() => setShowFilterPopup(false)} block style={styles.solidButton}>
+              <Button onPress={() => applyFilters()} block style={styles.solidButton}>
                 <Text
                   style={[
                     styles.buttonText,
@@ -466,24 +478,25 @@ function TutorListing() {
 
   const filtersView = () => {
     return (
-      <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(8) }]}>
+      <View
+        style={[commonStyles.horizontalChildrenView, { marginTop: RfH(isFilterApplied ? 62 : 16), height: RfH(44) }]}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
           {filterValues.qualification ? (
-            <Button bordered iconRight style={[styles.filterButton, { marginLeft: 0 }]}>
+            <View style={styles.filterButton}>
               <Text style={styles.appliedFilterText}>{filterValues.qualification}</Text>
               <IconButtonWrapper
-                iconWidth={RfW(15)}
-                iconHeight={RfH(15)}
+                iconWidth={RfW(16)}
+                iconHeight={RfH(16)}
                 iconImage={Images.blue_cross}
                 styling={{ marginLeft: RfW(12) }}
                 submitFunction={() => removeFilter(1)}
               />
-            </Button>
+            </View>
           ) : (
             <View />
           )}
           {filterValues.experience ? (
-            <Button bordered iconRight style={styles.filterButton}>
+            <View style={styles.filterButton}>
               <Text style={styles.appliedFilterText}>{filterValues.experience} years</Text>
               <IconButtonWrapper
                 iconWidth={RfW(15)}
@@ -492,12 +505,12 @@ function TutorListing() {
                 styling={{ marginLeft: RfW(12) }}
                 submitFunction={() => removeFilter(2)}
               />
-            </Button>
+            </View>
           ) : (
             <View />
           )}
           {filterValues.price ? (
-            <Button bordered iconRight style={styles.filterButton}>
+            <View style={styles.filterButton}>
               <Text style={styles.appliedFilterText}>{filterValues.price}</Text>
               <IconButtonWrapper
                 iconWidth={RfW(15)}
@@ -506,12 +519,12 @@ function TutorListing() {
                 styling={{ marginLeft: RfW(12) }}
                 submitFunction={() => removeFilter(3)}
               />
-            </Button>
+            </View>
           ) : (
             <View />
           )}
           {filterValues.rating ? (
-            <Button bordered iconRight style={styles.filterButton}>
+            <View style={styles.filterButton}>
               <Text style={styles.appliedFilterText}>Rating {filterValues.rating}</Text>
               <IconButtonWrapper
                 iconWidth={RfW(15)}
@@ -520,12 +533,12 @@ function TutorListing() {
                 styling={{ marginLeft: RfW(12) }}
                 submitFunction={() => removeFilter(4)}
               />
-            </Button>
+            </View>
           ) : (
             <View />
           )}
           {filterValues.sortBy ? (
-            <Button bordered iconRight style={styles.filterButton}>
+            <View style={styles.filterButton}>
               <Text style={styles.appliedFilterText}>{filterValues.sortBy}</Text>
               <IconButtonWrapper
                 iconWidth={RfW(15)}
@@ -534,12 +547,12 @@ function TutorListing() {
                 styling={{ marginLeft: RfW(12) }}
                 submitFunction={() => removeFilter(5)}
               />
-            </Button>
+            </View>
           ) : (
             <View />
           )}
           {filterValues.studyMode ? (
-            <Button bordered iconRight style={styles.filterButton}>
+            <View style={styles.filterButton}>
               <Text style={styles.appliedFilterText}>{filterValues.studyMode}</Text>
               <IconButtonWrapper
                 iconWidth={RfW(15)}
@@ -548,7 +561,7 @@ function TutorListing() {
                 styling={{ marginLeft: RfW(12) }}
                 submitFunction={() => removeFilter(6)}
               />
-            </Button>
+            </View>
           ) : (
             <View />
           )}
@@ -558,7 +571,7 @@ function TutorListing() {
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, padding: 0 }]}>
+    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
       <ScrollView
         stickyHeaderIndices={[0]}
@@ -566,36 +579,67 @@ function TutorListing() {
         onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}>
         {/* <View> */}
-        <View style={[styles.topView, { paddingTop: RfH(44), height: showBackButton?88:142 }]}>
-          <View
-            style={{
-              height: RfH(showBackButton ? 44 : 98),
-              // marginTop: showBackButton ? 44 : 44,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: RfW(16),
-            }}>
-            <View style={{ flexDirection: showBackButton ? 'row' : 'column', justifyContent:'center' }}>
-              <Icon
-                onPress={() => onBackPress()}
-                type="MaterialIcons"
-                name="keyboard-backspace"
-                style={[styles.backIcon, { alignSelf: 'flex-start' }]}
-              />
-              {/* {showBackButton && ( */}
-              <View style={{height: showBackButton?44:54, paddingHorizontal: RfW(showBackButton ? 16 : 0) }}>
-                <Text style={[styles.subjectTitle, { fontSize: showBackButton ? 17 : 20 }]}>English Tutors</Text>
-                <Text style={[styles.classText, { fontSize: showBackButton ? 13 : 15 }]}>CBSE | Class 9</Text>
+        <View style={[styles.topView, { paddingTop: RfH(44) }]}>
+          {showBackButton && (
+            <View
+              style={{
+                height: RfH(44),
+                // marginTop: RfH(44),
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: RfW(16),
+              }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Icon
+                  onPress={() => onBackPress()}
+                  type="MaterialIcons"
+                  name="keyboard-backspace"
+                  style={[styles.backIcon, { alignSelf: 'flex-start' }]}
+                />
+                {/* {showBackButton && ( */}
+                <View style={{ height: 44, paddingHorizontal: RfW(16) }}>
+                  <Text style={[styles.subjectTitle, { fontSize: 17 }]}>English Tutors</Text>
+                  <Text style={[styles.classText, { fontSize: 13 }]}>CBSE | Class 9</Text>
+                </View>
+                {/* )} */}
               </View>
-              {/* )} */}
-            </View>
 
-            {/*<IconButtonWrapper*/}
-            {/*  styling={[styles.bookIcon, { height: showBackButton ? 40 : 80 }]}*/}
-            {/*  iconImage={Images.book}*/}
-            {/*/>*/}
-          </View>
+              <IconButtonWrapper styling={[styles.bookIcon, { height: 40 }]} iconImage={Images.book} />
+            </View>
+          )}
+
+          {!showBackButton && (
+            <View
+              style={{
+                height: RfH(98),
+                marginTop: RfH(44),
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: RfW(16),
+                backgroundColor: Colors.lightPurple,
+              }}>
+              <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+                <View style={{}}>
+                  <Icon
+                    onPress={() => onBackPress()}
+                    type="MaterialIcons"
+                    name="keyboard-backspace"
+                    style={[styles.backIcon, { alignSelf: 'flex-start' }]}
+                  />
+                </View>
+                {/* {showBackButton && ( */}
+                <View style={{ height: RfH(54), paddingHorizontal: RfW(0) }}>
+                  <Text style={[styles.subjectTitle, { fontSize: 20 }]}>English Tutors</Text>
+                  <Text style={[styles.classText, { fontSize: 15 }]}>CBSE | Class 9</Text>
+                </View>
+                {/* )} */}
+              </View>
+
+              <IconButtonWrapper styling={[styles.bookIcon, { height: 80 }]} iconImage={Images.book} />
+            </View>
+          )}
 
           {/* {!showBackButton && ( */}
           {/*  <View style={{ padding: RfW(16) }}> */}
@@ -644,6 +688,7 @@ function TutorListing() {
         {/*    </View> */}
         {/*  </View> */}
         {/* </View> */}
+
         <View>{filtersView()}</View>
 
         <View>

@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     marginTop: RfH(6),
   },
   backIcon: {
-    marginLeft: RfW(16),
-    marginTop: RfH(58),
-    marginBottom: RfH(16),
+    // marginLeft: RfW(16),
+    // marginTop: RfH(58),
+    // marginBottom: RfH(16),
     color: Colors.white,
   },
   eyeIcon: {
