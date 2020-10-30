@@ -38,11 +38,17 @@ function StudentDashboard() {
   //  }
   // }, [userInfo]);
 
+  const gotoTutors = (subject) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR);
+  };
+
   const renderSubjects = () => {
     return (
       <View style={{ marginTop: RfH(20) }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
+          <TouchableOpacity
+            onPress={() => gotoTutors('English')}
+            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
                 flexDirection: 'column',
@@ -63,7 +69,7 @@ function StudentDashboard() {
             <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
               English
             </Text>
-          </View>
+          </TouchableOpacity>
           <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
@@ -131,6 +137,7 @@ function StudentDashboard() {
             </Text>
           </View>
         </View>
+
         <View
           style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginTop: RfH(20) }}>
           <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>

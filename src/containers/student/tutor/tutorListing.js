@@ -1,16 +1,16 @@
 /* eslint-disable no-plusplus */
-import { Text, View, StatusBar, Switch, FlatList, Modal, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
-import { Thumbnail, Button } from 'native-base';
+import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
-import { IconButtonWrapper, CustomRadioButton, CustomRangeSelector } from '../../../components';
+import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
 
-function Tutor() {
+function TutorListing() {
   const navigation = useNavigation();
   const [isTutor, setIsTutor] = useState(true);
   const [showBackButton, setShowBackButton] = useState(false);
@@ -121,14 +121,18 @@ function Tutor() {
     },
   ]);
 
+  const onBackPress = () => {
+    navigation.goBack();
+  };
+
   const renderItem = (item) => {
     return (
       <View style={styles.listItemParent}>
-        <View style={[commonStyles.horizontalChildrenStartView, { marginRight: RfW(16) }]}>
+        <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
             <Thumbnail square style={styles.userIcon} source={item.imageUrl} />
           </View>
-          <View style={[commonStyles.verticallyStretchedItemsView, { flex: 0.7 }]}>
+          <View style={[commonStyles.verticallyStretchedItemsView, {}]}>
             <Text style={styles.tutorName}>{item.name}</Text>
             <Text style={styles.tutorDetails}>{item.qualification}</Text>
             <Text style={styles.tutorDetails}>{item.experience} Years of Experience</Text>
@@ -156,8 +160,11 @@ function Tutor() {
                   styling={{ marginLeft: RfW(10) }}
                 />
               </View>
-              <Text style={styles.chargeText}>{item.charge}</Text>
             </View>
+          </View>
+          <View style={{}}>
+            <Text style={styles.chargeText}>{item.charge}</Text>
+            <Text style={styles.chargeText}>{item.charge}</Text>
           </View>
         </View>
       </View>
@@ -558,58 +565,94 @@ function Tutor() {
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}>
-        <View style={{}}>
-          <View style={[styles.topView, { paddingHorizontal: RfW(16), height: showBackButton ? 60 : 98 }]}>
-            <View>
-              <Text style={[styles.subjectTitle, { fontSize: showBackButton ? 17 : 20 }]}>English Tutors</Text>
-              <Text style={styles.classText}>CBSE | Class 9</Text>
-            </View>
-            <IconButtonWrapper
-              styling={[styles.bookIcon, { height: showBackButton ? 40 : 80 }]}
-              iconImage={Images.book}
-            />
-          </View>
-
-          {showBackButton && (
-            <View style={[styles.filterParentView, { marginTop: 0, backgroundColor: Colors.white }]}>
-              <Text style={styles.filterText}>20 TUTORS</Text>
-              <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
-                  <Text style={styles.filterText}>Filters</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          )}
-        </View>
-
-        <View>
-          <View style={{ paddingTop: RfH(0), backgroundColor: Colors.white }}>
-            <View style={styles.subjectTitleView}>
-              <View style={styles.filterParentView}>
-                <Text style={styles.filterText}>20 TUTORS</Text>
-
-                <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
-                    <Text style={styles.filterText}>Filters</Text>
-                  </View>
-                </TouchableWithoutFeedback>
+        {/* <View> */}
+        <View style={[styles.topView, { paddingTop: RfH(44), height: showBackButton?88:142 }]}>
+          <View
+            style={{
+              height: RfH(showBackButton ? 44 : 98),
+              // marginTop: showBackButton ? 44 : 44,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingHorizontal: RfW(16),
+            }}>
+            <View style={{ flexDirection: showBackButton ? 'row' : 'column', justifyContent:'center' }}>
+              <Icon
+                onPress={() => onBackPress()}
+                type="MaterialIcons"
+                name="keyboard-backspace"
+                style={[styles.backIcon, { alignSelf: 'flex-start' }]}
+              />
+              {/* {showBackButton && ( */}
+              <View style={{height: showBackButton?44:54, paddingHorizontal: RfW(showBackButton ? 16 : 0) }}>
+                <Text style={[styles.subjectTitle, { fontSize: showBackButton ? 17 : 20 }]}>English Tutors</Text>
+                <Text style={[styles.classText, { fontSize: showBackButton ? 13 : 15 }]}>CBSE | Class 9</Text>
               </View>
+              {/* )} */}
             </View>
+
+            {/*<IconButtonWrapper*/}
+            {/*  styling={[styles.bookIcon, { height: showBackButton ? 40 : 80 }]}*/}
+            {/*  iconImage={Images.book}*/}
+            {/*/>*/}
           </View>
+
+          {/* {!showBackButton && ( */}
+          {/*  <View style={{ padding: RfW(16) }}> */}
+          {/*    <Text style={[styles.subjectTitle, { fontSize: showBackButton ? 17 : 20 }]}>English Tutors</Text> */}
+          {/*    <Text style={styles.classText}>CBSE | Class 9</Text> */}
+          {/*  </View> */}
+          {/* )} */}
+
+          {/* {showBackButton && ( */}
+          <View
+            style={[
+              styles.filterParentView,
+              commonStyles.borderBottom,
+              { paddingHorizontal: RfW(16), backgroundColor: Colors.lightGrey },
+            ]}>
+            <Text style={styles.tutorCountText}>20 TUTORS</Text>
+
+            <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS)}>
+              <Text style={{ color: Colors.brandBlue2 }}>Compare Tutors</Text>
+            </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
+                <Text style={styles.filterText}>Filters</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+          {/* )} */}
+          {/* </View> */}
         </View>
+
+        {/* <View> */}
+        {/*  <View style={{ paddingTop: RfH(0), backgroundColor: Colors.white }}> */}
+        {/*    <View style={styles.subjectTitleView}> */}
+        {/*      <View style={styles.filterParentView}> */}
+        {/*        <Text style={styles.filterText}>20 TUTORS</Text> */}
+
+        {/*        <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}> */}
+        {/*          <View style={{ flexDirection: 'row', alignItems: 'center' }}> */}
+        {/*            <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} /> */}
+        {/*            <Text style={styles.filterText}>Filters</Text> */}
+        {/*          </View> */}
+        {/*        </TouchableWithoutFeedback> */}
+        {/*      </View> */}
+        {/*    </View> */}
+        {/*  </View> */}
+        {/* </View> */}
         <View>{filtersView()}</View>
-        <Button small style={{ marginTop: 16 }} onPress={() => navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS)}>
-          <Text>Compare</Text>
-        </Button>
+
         <View>
           <FlatList
             data={tutorData}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ paddingBottom: RfH(16) }}
+            contentContainerStyle={{ paddingHorizontal: RfH(16), marginTop: RfH(16), marginBottom: RfH(34) }}
           />
         </View>
       </ScrollView>
@@ -618,4 +661,4 @@ function Tutor() {
   );
 }
 
-export default Tutor;
+export default TutorListing;

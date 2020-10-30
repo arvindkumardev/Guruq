@@ -30,5 +30,5 @@ export const IND_COUNTRY_OBJ = {
 };
 
 export const LOTTIE_JSON_FILES = {
-  loaderJson: require('../assets/json/loader.json'),
+  loaderJson: require('../assets/json/loader1.json'),
 };

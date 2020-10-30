@@ -6,7 +6,7 @@ import { Colors, Images } from '../../../theme';
 import styles from './styles';
 import Calendar from '../calendar/calendar';
 import Classes from '../classes/classes';
-import Tutor from '../tutor/tutor';
+import TutorListing from '../tutor/tutorListing';
 import Profile from '../profile/profile';
 import { RfH, RfW } from '../../../utils/helpers';
 import StudentDashboard from './components/dashboard';
@@ -26,7 +26,7 @@ function StudentDashboardContainer() {
           {activeTab === 1 && <StudentDashboard />}
           {activeTab === 2 && <Calendar />}
           {activeTab === 3 && <Classes />}
-          {activeTab === 4 && <Tutor />}
+          {/*{activeTab === 4 && <TutorListing />}*/}
           {activeTab === 5 && <Profile />}
         </View>
         <Footer>
@@ -67,18 +67,18 @@ function StudentDashboardContainer() {
               />
               <Text style={activeTab === 3 ? styles.bottomTabActive : styles.bottomText}>Classes</Text>
             </Button>
-            <Button
-              style={{ backgroundColor: Colors.white }}
-              vertical
-              active={activeTab === 4}
-              onPress={() => changeTab(4)}>
-              <Thumbnail
-                square
-                style={{ height: RfH(16.8), width: RfW(20.8) }}
-                source={activeTab === 4 ? Images.tutor_active : Images.tutor_tab}
-              />
-              <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Tutor</Text>
-            </Button>
+            {/*<Button*/}
+            {/*  style={{ backgroundColor: Colors.white }}*/}
+            {/*  vertical*/}
+            {/*  active={activeTab === 4}*/}
+            {/*  onPress={() => changeTab(4)}>*/}
+            {/*  <Thumbnail*/}
+            {/*    square*/}
+            {/*    style={{ height: RfH(16.8), width: RfW(20.8) }}*/}
+            {/*    source={activeTab === 4 ? Images.tutor_active : Images.tutor_tab}*/}
+            {/*  />*/}
+            {/*  <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Tutor</Text>*/}
+            {/*</Button>*/}
             <Button
               style={{ backgroundColor: Colors.white }}
               vertical
