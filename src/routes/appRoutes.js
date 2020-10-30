@@ -14,6 +14,7 @@ import ClassSelector from '../containers/student/studyArea/classSelector';
 import SplashScreen from '../containers/common/splashScreen/splashScreen';
 import GettingStarted from '../containers/common/onboarding/gettingStarted';
 import PersonalDetails from '../containers/student/profile/personalDetails';
+import CompareTutors from '../containers/student/tutor/compareTutors';
 
 const Stack = createStackNavigator();
 
@@ -92,11 +93,16 @@ const AppStack = (props) => {
             component={ClassSelector}
             options={{ headerShown: false }}
           />
-            <Stack.Screen
+          <Stack.Screen
             name={NavigationRouteNames.STUDENT.PERSONAL_DETAILS}
             component={PersonalDetails}
             options={{ headerShown: false }}
-             />
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.COMPARE_TUTORS}
+            component={CompareTutors}
+            options={{ headerShown: false }}
+          />
         </>
       )}
     </Stack.Navigator>

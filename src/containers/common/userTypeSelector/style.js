@@ -47,12 +47,12 @@ const styles = StyleSheet.create({
   areaTitleOne: {
     marginTop: RfH(12),
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
     textAlign: 'center',
   },
   areaTitleTwo: {
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
     textAlign: 'center',
   },
   classView: {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   classTitle: {
     fontSize: RFValue(35, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
     textAlign: 'center',
   },
 });

@@ -15,7 +15,11 @@ const styles = StyleSheet.create({
     // marginTop: RfH(4),
     color: Colors.brandBlue2,
   },
-
+  myProfileText: {
+    marginTop: RfH(48),
+    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+    fontFamily: 'SegoeUI-Bold',
+  },
   userDetailsView: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -31,21 +35,47 @@ const styles = StyleSheet.create({
     marginTop: RfH(8),
     marginLeft: RfW(12),
     fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
     color: Colors.black,
   },
   userMobDetails: {
     marginLeft: RfW(12),
     color: Colors.darkGrey,
   },
-
-
+  separatorView: {
+    flex: 1,
+    borderBottomColor: Colors.secondaryText,
+    borderBottomWidth: 0.5,
+    marginTop: RfH(16),
+  },
+  userMenuParentView: {
+    flex: 1,
+    marginTop: RfH(16),
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  menuItemParentView: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+  },
+  menuItemPrimaryText: {
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    fontFamily: 'SegoeUI-Semibold',
+    color: Colors.primaryText,
+    marginLeft: RfW(12),
+  },
+  menuItemSecondaryText: {
+    marginLeft: RfW(12),
+    color: Colors.secondaryText,
+  },
   actionIconParentView: {
     flex: 0.25,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
-
 });
 export default styles;

@@ -336,13 +336,15 @@ function StudentDashboard() {
                 marginBottom: RfH(34),
               }}>
               <Button block style={{ flex: 0.5, backgroundColor: Colors.brandBlue2, marginRight: RfW(4) }}>
-                <Text style={{ color: Colors.white, fontSize: 16, fontWeight: '600' }}>Select</Text>
+                <Text style={{ color: Colors.white, fontSize: 16, fontFamily: 'SegoeUI-Semibold' }}>Select</Text>
               </Button>
               <Button
                 bordered
                 style={{ flex: 0.5, borderColor: Colors.brandBlue2, justifyContent: 'center', marginLeft: RfW(4) }}
                 onPress={() => addStudyArea()}>
-                <Text style={{ color: Colors.brandBlue2, fontSize: 16, fontWeight: '600' }}>Add study area</Text>
+                <Text style={{ color: Colors.brandBlue2, fontSize: 16, fontFamily: 'SegoeUI-Semibold' }}>
+                  Add study area
+                </Text>
               </Button>
             </View>
           </View>

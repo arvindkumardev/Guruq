@@ -1,15 +1,17 @@
 /* eslint-disable no-plusplus */
-import { Text, View, StatusBar, Switch, FlatList, Modal, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, StatusBar, Switch, FlatList, Modal, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
 import { Thumbnail, Button } from 'native-base';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
+import routeNames from '../../../routes/screenNames';
 import { IconButtonWrapper, CustomRadioButton, CustomRangeSelector } from '../../../components';
 
 function Tutor() {
+  const navigation = useNavigation();
   const [isTutor, setIsTutor] = useState(true);
   const [showBackButton, setShowBackButton] = useState(false);
   const [showFilterPopup, setShowFilterPopup] = useState(false);
@@ -17,7 +19,16 @@ function Tutor() {
   const [refreshItemList, setRefreshItemList] = useState(false);
   const [isRadioViewEnabled, setIsRadioViewEnabled] = useState(true);
   const [selectedFilterBubble, setSelectedFilterBubble] = useState(0);
+  const [filterIndex, setFilterIndex] = useState(0);
   const [selectedFilterLabel, setSelectedFilterLabel] = useState('');
+  const [filterValues, setFilterValues] = useState({
+    qualification: '',
+    experience: '',
+    price: '',
+    rating: 0,
+    sortBy: '',
+    studyMode: '',
+  });
   const [minFilterValue, setMinFilterValue] = useState('');
   const [maxFilterValue, setMaxFilterValue] = useState('');
   const [filterDataArray, setFilterDataArray] = useState([]);
@@ -113,16 +124,38 @@ function Tutor() {
   const renderItem = (item) => {
     return (
       <View style={styles.listItemParent}>
-        <View style={styles.deatilsParent}>
+        <View style={[commonStyles.horizontalChildrenStartView, { marginRight: RfW(16) }]}>
           <View style={styles.userIconParent}>
             <Thumbnail square style={styles.userIcon} source={item.imageUrl} />
           </View>
-          <View style={[styles.subjectTitleView, { flex: 0.7 }]}>
+          <View style={[commonStyles.verticallyStretchedItemsView, { flex: 0.7 }]}>
             <Text style={styles.tutorName}>{item.name}</Text>
             <Text style={styles.tutorDetails}>{item.qualification}</Text>
-            <Text style={styles.tutorDetails}>{item.experience} years of Experience</Text>
+            <Text style={styles.tutorDetails}>{item.experience} Years of Experience</Text>
             <View style={styles.iconsView}>
-              <Text style={styles.chargeText}>{item.rating}</Text>
+              <View
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', marginTop: RfH(4) }}>
+                <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
+                <Text style={styles.chargeText}>{parseFloat(item.rating).toFixed(1)}</Text>
+                <IconButtonWrapper
+                  iconHeight={RfH(15)}
+                  iconWidth={RfW(10)}
+                  iconImage={Images.single_user}
+                  styling={{ marginLeft: RfW(20) }}
+                />
+                <IconButtonWrapper
+                  iconHeight={RfH(15)}
+                  iconWidth={RfW(19)}
+                  iconImage={Images.multiple_user}
+                  styling={{ marginLeft: RfW(10) }}
+                />
+                <IconButtonWrapper
+                  iconHeight={RfH(17)}
+                  iconWidth={RfW(18)}
+                  iconImage={Images.user_board}
+                  styling={{ marginLeft: RfW(10) }}
+                />
+              </View>
               <Text style={styles.chargeText}>{item.charge}</Text>
             </View>
           </View>
@@ -134,7 +167,7 @@ function Tutor() {
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
 
-    if (scrollPosition > 150) {
+    if (scrollPosition > 100) {
       setShowBackButton(true);
     } else {
       setShowBackButton(false);
@@ -147,6 +180,26 @@ function Tutor() {
       filterArr[i].checked = false;
     }
     filterArr[index].checked = !filterArr[index].checked;
+    switch (filterIndex) {
+      case 0:
+        filterValues.qualification = filterArr[index].name;
+        break;
+      case 4:
+        filterValues.sortBy = filterArr[index].name;
+        break;
+      case 5:
+        filterValues.studyMode = filterArr[index].name;
+        break;
+      default:
+        filterValues.qualification = '';
+        filterValues.experience = '';
+        filterValues.price = '';
+        filterValues.rating = 0;
+        filterValues.sortBy = '';
+        filterValues.studyMode = '';
+        break;
+    }
+    setFilterValues(filterValues);
     setFilterOptions(filterArr);
     setRefreshList(!refreshList);
   };
@@ -159,6 +212,7 @@ function Tutor() {
     filterArr[index].checked = !filterArr[index].checked;
     setFilterItems(filterArr);
     let options = [];
+    setFilterIndex(index);
     switch (index) {
       case 0:
         options = [
@@ -223,6 +277,26 @@ function Tutor() {
 
   const selectRange = (item, index) => {
     setSelectedFilterBubble(item);
+    switch (filterIndex) {
+      case 1:
+        filterValues.experience = item;
+        break;
+      case 2:
+        filterValues.price = item;
+        break;
+      case 3:
+        filterValues.rating = item;
+        break;
+      default:
+        filterValues.qualification = '';
+        filterValues.experience = '';
+        filterValues.price = '';
+        filterValues.rating = 0;
+        filterValues.sortBy = '';
+        filterValues.studyMode = '';
+        break;
+    }
+    setFilterValues(filterValues);
   };
 
   const renderOptionsItem = (item, index) => {
@@ -238,7 +312,7 @@ function Tutor() {
 
   const renderFilterItem = (item, index) => {
     return (
-      <TouchableOpacity onPress={() => setItemChecked(item, index)}>
+      <TouchableWithoutFeedback onPress={() => setItemChecked(item, index)}>
         <View style={item.checked ? styles.activeFilterItem : styles.disableFilterItem}>
           <View
             style={
@@ -256,8 +330,18 @@ function Tutor() {
             {item.name}
           </Text>
         </View>
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     );
+  };
+
+  const clearFilters = () => {
+    filterValues.qualification = '';
+    filterValues.experience = '';
+    filterValues.price = '';
+    filterValues.rating = 0;
+    filterValues.sortBy = '';
+    filterValues.studyMode = '';
+    setFilterValues(filterValues);
   };
 
   const showFilterModel = () => {
@@ -274,9 +358,13 @@ function Tutor() {
           <View style={styles.bottomViewParent}>
             <View style={styles.popupHeaderView}>
               <Text style={[styles.switchText, { marginLeft: RfW(16) }]}>Filters</Text>
-              <TouchableWithoutFeedback onPress={() => setShowFilterPopup(false)} style={{ paddingRight: RfW(8) }}>
-                <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-              </TouchableWithoutFeedback>
+              <IconButtonWrapper
+                submitFunction={() => setShowFilterPopup(false)}
+                iconImage={Images.cross}
+                iconWidth={RfW(24)}
+                iconHeight={RfH(24)}
+                styling={{ marginRight: RfW(8) }}
+              />
             </View>
             <View style={styles.filterContentView}>
               <View style={styles.filterItemView}>
@@ -298,12 +386,7 @@ function Tutor() {
                     keyExtractor={(item, index) => index.toString()}
                   />
                 ) : (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'stretch',
-                      justifyContent: 'center',
-                    }}>
+                  <View style={commonStyles.horizontalChildrenCenterView}>
                     <CustomRangeSelector
                       height={RfH(250)}
                       dataValue={filterDataArray}
@@ -318,7 +401,7 @@ function Tutor() {
               </View>
             </View>
             <View style={styles.filterButttonParent}>
-              <Button bordered style={styles.borderButton}>
+              <Button onPress={() => clearFilters()} bordered style={styles.borderButton}>
                 <Text
                   style={[
                     styles.buttonText,
@@ -329,7 +412,7 @@ function Tutor() {
                   Clear All
                 </Text>
               </Button>
-              <Button block style={styles.solidButton}>
+              <Button onPress={() => setShowFilterPopup(false)} block style={styles.solidButton}>
                 <Text
                   style={[
                     styles.buttonText,
@@ -347,6 +430,126 @@ function Tutor() {
     );
   };
 
+  const removeFilter = (filter) => {
+    switch (filter) {
+      case 1:
+        filterValues.qualification = '';
+        break;
+      case 2:
+        filterValues.experience = '';
+        break;
+      case 3:
+        filterValues.price = '';
+        break;
+      case 4:
+        filterValues.rating = 0;
+        break;
+      case 5:
+        filterValues.sortBy = '';
+        break;
+      case 6:
+        filterValues.studyMode = '';
+        break;
+      default:
+        break;
+    }
+    setFilterValues(filterValues);
+    setRefreshList(!refreshList);
+  };
+
+  const filtersView = () => {
+    return (
+      <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(8) }]}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
+          {filterValues.qualification ? (
+            <Button bordered iconRight style={[styles.filterButton, { marginLeft: 0 }]}>
+              <Text style={styles.appliedFilterText}>{filterValues.qualification}</Text>
+              <IconButtonWrapper
+                iconWidth={RfW(15)}
+                iconHeight={RfH(15)}
+                iconImage={Images.blue_cross}
+                styling={{ marginLeft: RfW(12) }}
+                submitFunction={() => removeFilter(1)}
+              />
+            </Button>
+          ) : (
+            <View />
+          )}
+          {filterValues.experience ? (
+            <Button bordered iconRight style={styles.filterButton}>
+              <Text style={styles.appliedFilterText}>{filterValues.experience} years</Text>
+              <IconButtonWrapper
+                iconWidth={RfW(15)}
+                iconHeight={RfH(15)}
+                iconImage={Images.blue_cross}
+                styling={{ marginLeft: RfW(12) }}
+                submitFunction={() => removeFilter(2)}
+              />
+            </Button>
+          ) : (
+            <View />
+          )}
+          {filterValues.price ? (
+            <Button bordered iconRight style={styles.filterButton}>
+              <Text style={styles.appliedFilterText}>{filterValues.price}</Text>
+              <IconButtonWrapper
+                iconWidth={RfW(15)}
+                iconHeight={RfH(15)}
+                iconImage={Images.blue_cross}
+                styling={{ marginLeft: RfW(12) }}
+                submitFunction={() => removeFilter(3)}
+              />
+            </Button>
+          ) : (
+            <View />
+          )}
+          {filterValues.rating ? (
+            <Button bordered iconRight style={styles.filterButton}>
+              <Text style={styles.appliedFilterText}>Rating {filterValues.rating}</Text>
+              <IconButtonWrapper
+                iconWidth={RfW(15)}
+                iconHeight={RfH(15)}
+                iconImage={Images.blue_cross}
+                styling={{ marginLeft: RfW(12) }}
+                submitFunction={() => removeFilter(4)}
+              />
+            </Button>
+          ) : (
+            <View />
+          )}
+          {filterValues.sortBy ? (
+            <Button bordered iconRight style={styles.filterButton}>
+              <Text style={styles.appliedFilterText}>{filterValues.sortBy}</Text>
+              <IconButtonWrapper
+                iconWidth={RfW(15)}
+                iconHeight={RfH(15)}
+                iconImage={Images.blue_cross}
+                styling={{ marginLeft: RfW(12) }}
+                submitFunction={() => removeFilter(5)}
+              />
+            </Button>
+          ) : (
+            <View />
+          )}
+          {filterValues.studyMode ? (
+            <Button bordered iconRight style={styles.filterButton}>
+              <Text style={styles.appliedFilterText}>{filterValues.studyMode}</Text>
+              <IconButtonWrapper
+                iconWidth={RfW(15)}
+                iconHeight={RfH(15)}
+                iconImage={Images.blue_cross}
+                styling={{ marginLeft: RfW(12) }}
+                submitFunction={() => removeFilter(6)}
+              />
+            </Button>
+          ) : (
+            <View />
+          )}
+        </ScrollView>
+      </View>
+    );
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
@@ -357,12 +560,6 @@ function Tutor() {
         scrollEventThrottle={16}>
         <View style={{}}>
           <View style={[styles.topView, { paddingHorizontal: RfW(16), height: showBackButton ? 60 : 98 }]}>
-            {/* <IconButtonWrapper */}
-            {/*  iconHeight={RfH(20)} */}
-            {/*  iconWidth={RfW(20)} */}
-            {/*  styling={styles.backButton} */}
-            {/*  iconImage={Images.arrowRight} */}
-            {/* /> */}
             <View>
               <Text style={[styles.subjectTitle, { fontSize: showBackButton ? 17 : 20 }]}>English Tutors</Text>
               <Text style={styles.classText}>CBSE | Class 9</Text>
@@ -376,12 +573,12 @@ function Tutor() {
           {showBackButton && (
             <View style={[styles.filterParentView, { marginTop: 0, backgroundColor: Colors.white }]}>
               <Text style={styles.filterText}>20 TUTORS</Text>
-              <TouchableOpacity onPress={() => setShowFilterPopup(true)}>
+              <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
                   <Text style={styles.filterText}>Filters</Text>
                 </View>
-              </TouchableOpacity>
+              </TouchableWithoutFeedback>
             </View>
           )}
         </View>
@@ -389,43 +586,23 @@ function Tutor() {
         <View>
           <View style={{ paddingTop: RfH(0), backgroundColor: Colors.white }}>
             <View style={styles.subjectTitleView}>
-              {/* <View */}
-              {/*  style={{ */}
-              {/*    flexDirection: 'row', */}
-              {/*    justifyContent: 'flex-start', */}
-              {/*    alignItems: 'center', */}
-              {/*  }}> */}
-              {/*  /!*{showBackButton && (*!/ */}
-              {/*  /!*  <IconButtonWrapper*!/ */}
-              {/*  /!*    iconHeight={RfH(20)}*!/ */}
-              {/*  /!*    iconWidth={RfW(20)}*!/ */}
-              {/*  /!*    styling={[styles.backButton, { marginLeft: RfW(16), marginTop: RfH(4) }]}*!/ */}
-              {/*  /!*    iconImage={Images.arrowRight}*!/ */}
-              {/*  /!*  />*!/ */}
-              {/*  /!*)}*!/ */}
-              {/*  <View> */}
-              {/*    <Text style={styles.subjectTitle}>English Tutors</Text> */}
-              {/*    <Text style={styles.classText}>CBSE | Class 9</Text> */}
-              {/*  </View> */}
-              {/* </View> */}
               <View style={styles.filterParentView}>
                 <Text style={styles.filterText}>20 TUTORS</Text>
-                {/*<View style={styles.switchView}>*/}
-                {/*  <Text style={styles.switchText}>TUTORS</Text>*/}
-                {/*  <Switch onValueChange={() => setIsTutor(!isTutor)} value={isTutor} />*/}
-                {/*  <Text style={styles.switchText}>INSTITUTES</Text>*/}
-                {/*</View>*/}
 
-                <TouchableOpacity onPress={() => setShowFilterPopup(true)}>
+                <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
                     <Text style={styles.filterText}>Filters</Text>
                   </View>
-                </TouchableOpacity>
+                </TouchableWithoutFeedback>
               </View>
             </View>
           </View>
         </View>
+        <View>{filtersView()}</View>
+        <Button small style={{ marginTop: 16 }} onPress={() => navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS)}>
+          <Text>Compare</Text>
+        </Button>
         <View>
           <FlatList
             data={tutorData}

@@ -9,7 +9,8 @@ const styles = StyleSheet.create({
   topView: {
     height: RfH(98),
     backgroundColor: Colors.lightPurple,
-    // paddingVertical: RfH(16),
+    paddingVertical: RfH(16),
+    paddingRight: RfW(16),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -27,17 +28,13 @@ const styles = StyleSheet.create({
   },
   switchText: {
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontFamily: Fonts.semiBold,
-  },
-  subjectTitleView: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
+    fontFamily: 'SegoeUI-Semibold',
   },
   subjectTitle: {
     color: Colors.primaryText,
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    fontFamily: Fonts.bold,
+    fontFamily: 'SegoeUI-Bold',
+    // paddingHorizontal: RfW(16),
   },
   classText: {
     color: Colors.darkGrey,
@@ -50,9 +47,8 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.secondaryText,
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: RfH(0.5),
-    // borderTopWidth: RfH(0.5),
-    // paddingVertical: RfH(4),
-    // marginTop: RfH(12),
+    borderTopWidth: RfH(0.5),
+    paddingVertical: RfH(4),
     paddingHorizontal: RfW(16),
     height: 34,
   },
@@ -63,12 +59,6 @@ const styles = StyleSheet.create({
   listItemParent: {
     borderRadius: RfH(8),
     marginTop: RfH(35),
-  },
-  deatilsParent: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    marginRight: RfW(16),
   },
   userIconParent: {
     flex: 0.3,
@@ -94,7 +84,8 @@ const styles = StyleSheet.create({
   chargeText: {
     color: Colors.black,
     fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
+    marginLeft: RfW(4),
   },
   iconsView: {
     flexDirection: 'row',
@@ -154,7 +145,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
+    fontFamily: 'SegoeUI-Semibold',
   },
   borderButton: {
     flex: 0.5,
@@ -184,6 +175,61 @@ const styles = StyleSheet.create({
   indicatorView: {
     width: RfW(4),
     height: RfH(52),
+  },
+  filterButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: RfH(8),
+    borderColor: Colors.darkGrey,
+    height: RfH(28),
+    marginLeft: RfW(8),
+    borderRadius: RfW(8),
+  },
+  compareTutorName: {
+    marginTop: RfH(16),
+    alignSelf: 'center',
+    fontFamily: 'SegoeUI-Semibold',
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+  },
+  informationParentMargin: {
+    paddingHorizontal: RfW(16),
+    marginTop: RfH(30),
+  },
+  infoCategoryText: {
+    marginTop: RfH(8),
+    alignSelf: 'center',
+    color: Colors.black,
+  },
+  ratingText: {
+    fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
+    color: Colors.darkGrey,
+  },
+  qualificationItemText: {
+    flex: 0.5,
+    color: Colors.darkGrey,
+    marginTop: RfH(8),
+  },
+  typeItemText: {
+    color: Colors.darkGrey,
+    alignSelf: 'center',
+    marginLeft: RfW(8),
+  },
+  crossIcon: {
+    alignSelf: 'flex-end',
+    borderColor: Colors.darkGrey,
+    borderWidth: 1,
+    borderRadius: 9,
+  },
+  topViewAfterScroll: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    backgroundColor: Colors.lightPurple,
+    paddingTop: RfH(8),
+  },
+  appliedFilterText: {
+    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
+    color: Colors.darkGrey,
   },
 });
 export default styles;
