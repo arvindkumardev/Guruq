@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
     color: Colors.white,
-    fontFamily: 'SegoeUI-Semibold',
     marginHorizontal: spacePX,
     marginBottom: RfH(16),
   },

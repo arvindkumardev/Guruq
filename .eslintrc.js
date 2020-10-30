@@ -19,9 +19,10 @@ module.exports = {
       },
     ],
     'no-shadow': 'off',
-    'react/prop-types': 0,
     'react/forbid-prop-types': 0,
     curly: 'error',
+    'react/prop-types': 0,
+    'react/require-default-props': 0,
   },
   plugins: ['prettier'],
 };

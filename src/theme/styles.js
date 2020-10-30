@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: 0.5,
-    marginTop: RfH(16),
+    // marginTop: RfH(16),
     opacity: 0.5,
   },
   topActionView: {

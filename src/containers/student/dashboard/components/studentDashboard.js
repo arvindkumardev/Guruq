@@ -1,24 +1,32 @@
 /* eslint-disable no-plusplus */
-import { FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
-import { Button, Icon, Input, Item, Thumbnail } from 'native-base';
+import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
-import { useReactiveVar } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
-import { CustomRadioButton, IconButtonWrapper } from '../../../../components';
+import { IconButtonWrapper } from '../../../../components';
 import { userDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/Fonts';
+import StudentOfferingModal from './studentOfferingModal';
+import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../graphql-query';
+import { MARK_INTERESTED_OFFERING_SELECTED } from '../../graphql-mutation';
+import Loader from '../../../../components/Loader';
 
-function StudentDashboard() {
+function StudentDashboard(props) {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
-  const [studyAreaModalVisible, setStudyAreaModalVisible] = useState(false);
-  const [refreshList, setRefreshList] = useState(false);
+
+  const { refetchStudentOfferings } = props;
+
+  const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
+  const [selectedOffering, setSelectedOffering] = useState({});
 
   const [favouriteTutor, setFavouriteTutor] = useState([
     { name: 'Ritesh Jain', subject: 'English, Maths', imageUrl: '' },
@@ -26,17 +34,77 @@ function StudentDashboard() {
     { name: 'Priyam', subject: 'Maths', imageUrl: '' },
   ]);
 
-  const [studyArea, setStudyArea] = useState([
-    { name: 'CBSE, Class 6', checked: true },
-    { name: 'IIT-JEE Foundation', checked: false },
-    { name: 'NEET', checked: false },
-  ]);
+  const { loading: loadingOfferingMasterData, error: offeringMasterError, data: offeringMasterData } = useQuery(
+    GET_OFFERINGS_MASTER_DATA
+  );
 
-  // useEffect(() => {
-  //  if (userInfo && userInfo.isFirstTime) {
-  //    navigation.navigate(routeNames.STUDENT.STUDY_AREA);
-  //  }
-  // }, [userInfo]);
+  const { loading: loadingOfferings, error: offeringError, data: offerings, refetch: _refetchOffering } = useQuery(
+    GET_INTERESTED_OFFERINGS,
+    {
+      fetchPolicy: 'network-only',
+    }
+  );
+  const refetchOffering = (args) => _refetchOffering(args);
+
+  const [markInterestedOffering] = useMutation(MARK_INTERESTED_OFFERING_SELECTED, {
+    fetchPolicy: 'no-cache',
+
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        if (refetchOffering) {
+          refetchOffering({ fetchPolicy: 'network-only' });
+        }
+      }
+    },
+  });
+
+  useEffect(() => {
+    console.log(offeringError);
+    if (offeringError && offeringError.graphQLErrors && offeringError.graphQLErrors.length > 0) {
+      navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
+    }
+  }, [offeringError]);
+
+  useEffect(() => {
+    console.log(offerings);
+
+    if (offerings && offerings.getInterestedOfferings.length > 0) {
+      const selectedOffering = offerings.getInterestedOfferings.find((s) => s.selected);
+      setSelectedOffering(selectedOffering ? selectedOffering.offering : {});
+    } else if (!loadingOfferings && offerings.getInterestedOfferings.length === 0) {
+      navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
+    }
+  }, [offerings]);
+
+  const onOfferingSelect = (offering) => {
+    setStudentOfferingModalVisible(false);
+
+    setSelectedOffering(offering);
+
+    console.log('offering selected', offering);
+
+    // call mutation
+    markInterestedOffering({ variables: { offeringId: offering.id } });
+
+    // refetchOffering();
+  };
+
+  useEffect(() => {
+    if (refetchOffering) {
+      refetchOffering({ fetchPolicy: 'network-only' });
+    }
+    // console.log('refetchStudentOfferings', refetchStudentOfferings);
+  }, [refetchStudentOfferings]);
+
+  useEffect(() => {
+    // refetch everything
+
+    console.log('selectedOffering updated', selectedOffering);
+  }, [selectedOffering]);
 
   const gotoTutors = (subject) => {
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR);
@@ -45,6 +113,52 @@ function StudentDashboard() {
   const renderSubjects = () => {
     return (
       <View style={{ marginTop: RfH(20) }}>
+        <View style={{ flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center' }}>
+          {offeringMasterData &&
+            offeringMasterData.offerings &&
+            offeringMasterData.offerings.edges &&
+            offeringMasterData.offerings.edges
+              .filter((s) => s?.parentOffering?.id === selectedOffering?.id)
+              .map((s) => {
+                return (
+                  <TouchableWithoutFeedback
+                    onPress={() => gotoTutors('English')}
+                    style={{
+                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
+                      alignItems: 'stretch',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#E7E5F2',
+                        height: RfH(67),
+                        width: RfW(67),
+                        borderRadius: RfW(8),
+                      }}>
+                      <IconButtonWrapper
+                        iconWidth={RfW(24.5)}
+                        styling={{ alignSelf: 'center' }}
+                        iconHeight={RfH(34.2)}
+                        iconImage={Images.book}
+                      />
+                    </View>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        fontSize: 12,
+                        color: Colors.primaryText,
+                        marginTop: RfH(5),
+                      }}>
+                      {s.displayName}
+                    </Text>
+                  </TouchableWithoutFeedback>
+                );
+              })}
+        </View>
+
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
           <TouchableWithoutFeedback
             onPress={() => gotoTutors('English')}
@@ -145,7 +259,12 @@ function StudentDashboard() {
         </View>
 
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginTop: RfH(20) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            marginTop: RfH(20),
+          }}>
           <TouchableWithoutFeedback
             onPress={() => gotoTutors('English')}
             style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
@@ -267,121 +386,22 @@ function StudentDashboard() {
     );
   };
 
-  const setChecked = (item, index) => {
-    const studyArr = studyArea;
-    for (let i = 0; i < studyArr.length; i++) {
-      studyArr[i].checked = false;
-    }
-    studyArr[index].checked = !studyArr[index].checked;
-    setStudyArea(studyArr);
-    setRefreshList(!refreshList);
-  };
-
-  const renderItem = (item, index, showSeparator) => {
-    return (
-      <TouchableWithoutFeedback onPress={() => setChecked(item, index)}>
-        <View style={{ height: 44, flexDirection: 'row', alignItems: 'center' }}>
-          <CustomRadioButton enabled={item.checked} submitFunction={() => setChecked(item, index)} />
-          <Text style={{ color: Colors.primaryText, marginLeft: RfW(8) }}>{item.name}</Text>
-        </View>
-        {showSeparator && <View style={commonStyles.lineSeparator} />}
-      </TouchableWithoutFeedback>
-    );
-  };
-
-  const addStudyArea = () => {
-    setStudyAreaModalVisible(false);
-    navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
-  };
-
-  const showStudyAreaModel = () => {
-    return (
-      <Modal
-        animationType="slide"
-        transparent
-        visible={studyAreaModalVisible}
-        onRequestClose={() => {
-          setStudyAreaModalVisible(false);
-        }}>
-        <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
-          <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
-          <View
-            style={{
-              bottom: 0,
-              left: 0,
-              right: 0,
-              position: 'absolute',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-              backgroundColor: Colors.white,
-              paddingHorizontal: RfW(16),
-              // paddingVertical: RfW(16),
-            }}>
-            <View
-              style={{
-                height: 44,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Text style={{ color: Colors.primaryText, fontSize: 18, fontFamily: Fonts.semiBold }}>
-                Choose your study area
-              </Text>
-              <TouchableOpacity onPress={() => setStudyAreaModalVisible(false)}>
-                <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={{ height: 8 }} />
-
-            <FlatList
-              data={studyArea}
-              extraData={refreshList}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }) => renderItem(item, index, studyArea.length - 1 > index)}
-              keyExtractor={(item, index) => index.toString()}
-              style={{}}
-            />
-
-            <View style={{ height: 24 }} />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                height: RfH(48),
-                paddingTop: RfH(4),
-                paddingBottom: RfH(4),
-                marginBottom: RfH(34),
-              }}>
-              <Button block style={{ flex: 0.5, backgroundColor: Colors.brandBlue2, marginRight: RfW(4) }}>
-                <Text style={{ color: Colors.white, fontSize: 16, fontFamily: 'SegoeUI-Semibold' }}>Select</Text>
-              </Button>
-              <Button
-                bordered
-                style={{ flex: 0.5, borderColor: Colors.brandBlue2, justifyContent: 'center', marginLeft: RfW(4) }}
-                onPress={() => addStudyArea()}>
-                <Text style={{ color: Colors.brandBlue2, fontSize: 16, fontFamily: 'SegoeUI-Semibold' }}>
-                  Add study area
-                </Text>
-              </Button>
-            </View>
-          </View>
-        </View>
-      </Modal>
-    );
-  };
-
   return (
     <>
       <StatusBar barStyle="dark-content" />
+
+      <Loader isLoading={loadingOfferingMasterData || loadingOfferings} />
+
       <View style={[commonStyles.mainContainer]}>
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ color: Colors.darkGrey, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
-            <TouchableOpacity onPress={() => setStudyAreaModalVisible(true)}>
+            {selectedOffering && (
+              <Text style={{ color: Colors.darkGrey, fontSize: 16, marginTop: RfH(4) }}>
+                {selectedOffering?.parentOffering?.displayName} - {selectedOffering?.displayName}
+              </Text>
+            )}
+
+            <TouchableOpacity onPress={() => setStudentOfferingModalVisible(true)}>
               <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
             </TouchableOpacity>
           </View>
@@ -457,15 +477,27 @@ function StudentDashboard() {
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
-            <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
+            <Text style={{ color: Colors.brandBlue2, fontSize: 15 }}>View All</Text>
           </View>
           <View
-            style={{ height: RfH(140), backgroundColor: '#ceecfe', borderRadius: 20, marginTop: RfH(20), padding: 16 }}>
+            style={{
+              height: RfH(140),
+              backgroundColor: '#ceecfe',
+              borderRadius: 20,
+              marginTop: RfH(20),
+              padding: 16,
+            }}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
               <View style={{ flex: 0.3 }}>
                 <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
               </View>
-              <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+              <View
+                style={{
+                  flex: 0.7,
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'stretch',
+                }}>
                 <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
                   Science by Rahul Das
                 </Text>
@@ -500,7 +532,12 @@ function StudentDashboard() {
             </View>
           </View>
           <View
-            style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-end',
+              marginTop: RfH(25),
+            }}>
             <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Tutors By Subjects</Text>
           </View>
           {renderSubjects()}
@@ -522,10 +559,21 @@ function StudentDashboard() {
             keyExtractor={(item, index) => index.toString()}
           />
           <View
-            style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-end',
+              marginTop: RfH(25),
+            }}>
             <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Recommended Tutors</Text>
           </View>
-          <View style={{ height: RfH(92), backgroundColor: 'rgb(230,252,231)', borderRadius: 8, marginTop: RfH(20) }}>
+          <View
+            style={{
+              height: RfH(92),
+              backgroundColor: 'rgb(230,252,231)',
+              borderRadius: 8,
+              marginTop: RfH(20),
+            }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -534,11 +582,28 @@ function StudentDashboard() {
                 paddingVertical: RfH(13),
                 marginRight: RfW(16),
               }}>
-              <View style={{ flex: 0.3, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <View
+                style={{
+                  flex: 0.3,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
                 <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
               </View>
-              <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View
+                style={{
+                  flex: 0.7,
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'stretch',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
                   <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Gurbani Singh</Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Icon
@@ -546,13 +611,25 @@ function StudentDashboard() {
                       name="star"
                       style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                     />
-                    <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                    <Text
+                      style={{
+                        alignSelf: 'center',
+                        color: Colors.primaryText,
+                        fontWeight: '600',
+                      }}>
+                      4.5
+                    </Text>
                   </View>
                 </View>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   3 years of Experience
                 </Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
                   <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                     English, Maths , Science
                   </Text>
@@ -565,7 +642,13 @@ function StudentDashboard() {
               </View>
             </View>
           </View>
-          <View style={{ height: RfH(92), backgroundColor: 'rgb(231,229,242)', borderRadius: 8, marginTop: RfH(20) }}>
+          <View
+            style={{
+              height: RfH(92),
+              backgroundColor: 'rgb(231,229,242)',
+              borderRadius: 8,
+              marginTop: RfH(20),
+            }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -574,11 +657,28 @@ function StudentDashboard() {
                 paddingVertical: RfH(13),
                 marginRight: RfW(16),
               }}>
-              <View style={{ flex: 0.3, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <View
+                style={{
+                  flex: 0.3,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
                 <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
               </View>
-              <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View
+                style={{
+                  flex: 0.7,
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'stretch',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
                   <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Tushar Das</Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Icon
@@ -586,13 +686,25 @@ function StudentDashboard() {
                       name="star"
                       style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                     />
-                    <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                    <Text
+                      style={{
+                        alignSelf: 'center',
+                        color: Colors.primaryText,
+                        fontWeight: '600',
+                      }}>
+                      4.5
+                    </Text>
                   </View>
                 </View>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   3 years of Experience
                 </Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
                   <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                     English, Maths , Science
                   </Text>
@@ -612,7 +724,13 @@ function StudentDashboard() {
               </View>
             </View>
           </View>
-          <View style={{ height: RfH(92), backgroundColor: 'rgb(255,247,240)', borderRadius: 8, marginTop: RfH(20) }}>
+          <View
+            style={{
+              height: RfH(92),
+              backgroundColor: 'rgb(255,247,240)',
+              borderRadius: 8,
+              marginTop: RfH(20),
+            }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -621,11 +739,28 @@ function StudentDashboard() {
                 paddingVertical: RfH(13),
                 marginRight: RfW(16),
               }}>
-              <View style={{ flex: 0.3, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <View
+                style={{
+                  flex: 0.3,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
                 <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
               </View>
-              <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View
+                style={{
+                  flex: 0.7,
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'stretch',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
                   <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Gurbani Singh</Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Icon
@@ -633,13 +768,25 @@ function StudentDashboard() {
                       name="star"
                       style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                     />
-                    <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontWeight: '600' }}>4.5</Text>
+                    <Text
+                      style={{
+                        alignSelf: 'center',
+                        color: Colors.primaryText,
+                        fontWeight: '600',
+                      }}>
+                      4.5
+                    </Text>
                   </View>
                 </View>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   3 years of Experience
                 </Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
                   <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                     English, Maths , Science
                   </Text>
@@ -654,9 +801,23 @@ function StudentDashboard() {
           </View>
         </ScrollView>
       </View>
-      {showStudyAreaModel()}
+
+      <StudentOfferingModal
+        onClose={setStudentOfferingModalVisible}
+        visible={studentOfferingModalVisible}
+        onSelect={onOfferingSelect}
+        offerings={offerings && offerings.getInterestedOfferings}
+      />
     </>
   );
 }
+
+StudentDashboard.propTypes = {
+  refetchStudentOfferings: PropTypes.bool,
+};
+
+StudentDashboard.defaultProps = {
+  refetchStudentOfferings: false,
+};
 
 export default StudentDashboard;

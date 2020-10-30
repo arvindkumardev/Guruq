@@ -9,10 +9,13 @@ import Classes from '../classes/classes';
 import TutorListing from '../tutor/tutorListing';
 import Profile from '../profile/profile';
 import { RfH, RfW } from '../../../utils/helpers';
-import StudentDashboard from './components/dashboard';
+import StudentDashboard from './components/studentDashboard';
 
-function StudentDashboardContainer() {
+function StudentDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);
+
+  const { route } = props;
+  const refetchStudentOfferings = route?.params?.refetchStudentOfferings;
 
   const changeTab = (number) => {
     setActiveTab(number);
@@ -23,10 +26,10 @@ function StudentDashboardContainer() {
       <StatusBar barStyle="light-content" />
       <Container>
         <View style={{ flex: 1 }}>
-          {activeTab === 1 && <StudentDashboard />}
+          {activeTab === 1 && <StudentDashboard refetchStudentOfferings={refetchStudentOfferings} />}
           {activeTab === 2 && <Calendar />}
           {activeTab === 3 && <Classes />}
-          {/*{activeTab === 4 && <TutorListing />}*/}
+          {/* {activeTab === 4 && <TutorListing />} */}
           {activeTab === 5 && <Profile />}
         </View>
         <Footer>
@@ -67,18 +70,18 @@ function StudentDashboardContainer() {
               />
               <Text style={activeTab === 3 ? styles.bottomTabActive : styles.bottomText}>Classes</Text>
             </Button>
-            {/*<Button*/}
-            {/*  style={{ backgroundColor: Colors.white }}*/}
-            {/*  vertical*/}
-            {/*  active={activeTab === 4}*/}
-            {/*  onPress={() => changeTab(4)}>*/}
-            {/*  <Thumbnail*/}
-            {/*    square*/}
-            {/*    style={{ height: RfH(16.8), width: RfW(20.8) }}*/}
-            {/*    source={activeTab === 4 ? Images.tutor_active : Images.tutor_tab}*/}
-            {/*  />*/}
-            {/*  <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Tutor</Text>*/}
-            {/*</Button>*/}
+            {/* <Button */}
+            {/*  style={{ backgroundColor: Colors.white }} */}
+            {/*  vertical */}
+            {/*  active={activeTab === 4} */}
+            {/*  onPress={() => changeTab(4)}> */}
+            {/*  <Thumbnail */}
+            {/*    square */}
+            {/*    style={{ height: RfH(16.8), width: RfW(20.8) }} */}
+            {/*    source={activeTab === 4 ? Images.tutor_active : Images.tutor_tab} */}
+            {/*  /> */}
+            {/*  <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Tutor</Text> */}
+            {/* </Button> */}
             <Button
               style={{ backgroundColor: Colors.white }}
               vertical
