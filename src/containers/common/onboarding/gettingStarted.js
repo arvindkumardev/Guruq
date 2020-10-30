@@ -26,7 +26,7 @@ function GettingStarted() {
       <TouchableOpacity onPress={() => goToLogin()}>
         <Text style={styles.skip}>Skip</Text>
       </TouchableOpacity>
-      <Swiper horizontal autoplay autoplayTimeout={3}>
+      <Swiper horizontal autoplay autoplayTimeout={5}>
         <View>
           <ScheduleClass />
         </View>
@@ -37,7 +37,7 @@ function GettingStarted() {
           <ConnectWithTutor />
         </View>
       </Swiper>
-      <TouchableOpacity style={[commonStyles.buttonPrimary, { marginBottom: RfH(58) }]} onPress={() => goToLogin()}>
+      <TouchableOpacity style={[commonStyles.buttonPrimary, { marginBottom: RfH(34) }]} onPress={() => goToLogin()}>
         <Text style={commonStyles.textButtonPrimary}>Get Started</Text>
       </TouchableOpacity>
     </View>

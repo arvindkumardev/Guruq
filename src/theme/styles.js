@@ -4,6 +4,7 @@ import Colors from './colors';
 import { RfH, RfW } from '../utils/helpers';
 import { spacePX } from './variables';
 import { STANDARD_SCREEN_SIZE } from '../utils/constants';
+import Fonts from './Fonts';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -15,13 +16,13 @@ const styles = StyleSheet.create({
   },
   buttonPrimary: {
     backgroundColor: Colors.brandBlue2,
-    marginHorizontal: RfW(58),
-    height: RfH(46),
+    marginHorizontal: RfW(56),
+    height: RfH(40),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    marginTop: RfH(30),
+    marginVertical: RfH(4),
     shadowRadius: 4,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -38,7 +39,8 @@ const styles = StyleSheet.create({
   textButtonPrimary: {
     textAlign: 'center',
     color: Colors.white,
-    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
   },
 
   lineSeparator: {

@@ -3,13 +3,14 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
+import Fonts from '../../../theme/Fonts';
 
 const styles = StyleSheet.create({
   skip: {
-    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     color: Colors.white,
-    marginTop: RfH(49),
-    marginRight: RfW(19),
+    marginTop: RfH(44),
+    // marginRight: RfW(16),
     alignSelf: 'flex-end',
   },
   swipeChild: {
@@ -20,21 +21,20 @@ const styles = StyleSheet.create({
   centerImage: {
     width: RfW(178),
     height: RfH(383),
-    marginTop: RfH(18),
+    marginTop: RfH(44),
   },
   title: {
-    fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
-    marginTop: RfH(38),
+    fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
+    marginTop: RfH(22),
     textAlign: 'center',
     color: Colors.white,
-    fontWeight: '700',
+    fontFamily: Fonts.bold,
   },
   subtitle: {
     textAlign: 'center',
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontWeight: '600',
-    marginHorizontal: RfW(42),
-    marginTop: RfH(28),
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    // marginHorizontal: RfW(42),
+    marginTop: RfH(8),
     color: Colors.white,
   },
 });
