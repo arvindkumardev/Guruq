@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { Colors, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
-import Fonts from '../../../../theme/Fonts';
+import Fonts from '../../../../theme/fonts';
 import { CustomRadioButton, IconButtonWrapper } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import NavigationRouteNames from '../../../../routes/screenNames';

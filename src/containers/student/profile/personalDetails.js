@@ -14,7 +14,7 @@ import { CustomMobileNumber } from '../../../components';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import CustomDropDown from '../../../components/CustomDropDown';
 import commonStyles from '../../../theme/styles';
-import Fonts from '../../../theme/Fonts';
+import Fonts from '../../../theme/fonts';
 
 const { height, width } = Dimensions.get('window');
 

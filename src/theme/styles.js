@@ -4,7 +4,7 @@ import Colors from './colors';
 import { RfH, RfW } from '../utils/helpers';
 import { spacePX } from './variables';
 import { STANDARD_SCREEN_SIZE } from '../utils/constants';
-import Fonts from './Fonts';
+import Fonts from './fonts';
 
 const styles = StyleSheet.create({
   mainContainer: {

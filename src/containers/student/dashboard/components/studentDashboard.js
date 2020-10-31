@@ -13,7 +13,7 @@ import { RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
 import { userDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
-import Fonts from '../../../../theme/Fonts';
+import Fonts from '../../../../theme/fonts';
 import StudentOfferingModal from './studentOfferingModal';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../graphql-query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../graphql-mutation';
