@@ -1,7 +1,17 @@
 /* eslint-disable no-plusplus */
-import { FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  Modal,
+  ScrollView,
+  StatusBar,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, { useState } from 'react';
-import { Button, Icon, Thumbnail } from 'native-base';
+import { Button, Icon, Input, Item, Label, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
@@ -13,6 +23,7 @@ import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../..
 import { SEARCH_TUTORS } from '../tutor-query';
 import IconWrapper from '../../../components/IconWrapper';
 import Loader from '../../../components/Loader';
+import { inputs } from '../../../utils/constants';
 
 function TutorListing(props) {
   const navigation = useNavigation();
@@ -33,12 +44,30 @@ function TutorListing(props) {
   const [filterIndex, setFilterIndex] = useState(0);
   const [selectedFilterLabel, setSelectedFilterLabel] = useState('');
   const [filterValues, setFilterValues] = useState({
-    qualification: '',
-    experience: '',
-    price: '',
-    rating: 0,
-    sortBy: '',
-    studyMode: '',
+    page: 1,
+    size: 20,
+    active: true,
+    certified: true,
+    offeringId: offering?.id,
+
+    degreeLevel: 0,
+
+    experience: 0,
+    // maxExperience: 0,
+
+    averageRating: 0,
+
+    minBudget: 0,
+    maxBudget: 0,
+
+    teachingMode: 0,
+
+    // qualification: '',
+    // experience: '',
+    // price: '',
+    // rating: 0,
+    // sortBy: '',
+    // studyMode: '',
   });
   const [minFilterValue, setMinFilterValue] = useState('');
   const [maxFilterValue, setMaxFilterValue] = useState('');
@@ -50,31 +79,13 @@ function TutorListing(props) {
     { name: 'Experience', checked: false },
     { name: 'Price', checked: false },
     { name: 'Rating', checked: false },
-    { name: 'Sort By', checked: false },
     { name: 'Mode of Study', checked: false },
+    { name: 'Sort By', checked: false },
   ]);
 
   const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
     variables: {
-      searchDto: {
-        page: 1,
-        size: 20,
-        active: true,
-        certified: true,
-        offeringId: offering?.id,
-
-        degreeLevel: 0,
-
-        minExperience: 0,
-        maxExperience: 0,
-
-        averageRating: 0,
-
-        minBudget: 0,
-        maxBudget: 0,
-
-        teachingMode: 0,
-      },
+      searchDto: filterValues,
     },
   });
 
@@ -202,6 +213,7 @@ function TutorListing(props) {
     switch (index) {
       case 0:
         options = [
+          { name: 'All Qualifications', checked: false, value: 0 },
           { name: 'Secondary', checked: false, value: 1 },
           { name: 'Higher Secondary', checked: false, value: 2 },
           { name: 'Diploma', checked: false, value: 3 },
@@ -214,48 +226,70 @@ function TutorListing(props) {
         setIsRadioViewEnabled(true);
         break;
       case 1:
-        setFilterDataArray(['10+', '7+', '3+', '2+', 'Any']);
+        setFilterDataArray([
+          { name: '10+', value: 10 },
+          { name: '7+', value: 7 },
+          { name: '3+', value: 3 },
+          { name: '2+', value: 2 },
+          { name: 'Any', value: 0 },
+        ]);
         setSelectedFilterLabel('Experience');
-        setMinFilterValue('');
-        setMaxFilterValue('');
+        setMinFilterValue('Any');
+        setMaxFilterValue('10');
         setIsRadioViewEnabled(false);
         break;
       case 2:
-        setFilterDataArray(['Maximum cost', 'Minimum cost']);
-        setSelectedFilterLabel('₹0 - Any');
-        setMinFilterValue('₹ 200');
-        setMaxFilterValue('Any');
-        setIsRadioViewEnabled(false);
+        options = [
+          { name: 'All Prices', checked: true, value: { min: 0, max: 0 } },
+          { name: 'Under ₹250', checked: false, value: { min: 0, max: 250 } },
+          { name: '₹250 - ₹500', checked: false, value: { min: 250, max: 500 } },
+          { name: '₹500 - ₹750', checked: false, value: { min: 500, max: 750 } },
+          { name: '₹750 - ₹1000', checked: false, value: { min: 750, max: 1000 } },
+          { name: '₹1000 - ₹1500', checked: false, value: { min: 1000, max: 1500 } },
+          { name: '₹1500 - ₹2000', checked: false, value: { min: 1500, max: 2000 } },
+          { name: 'Over ₹2000', checked: false, value: { min: 2000, max: 10000 } },
+        ];
+        setIsRadioViewEnabled(true);
+        // setFilterDataArray(['Maximum cost', 'Minimum cost']);
+        // setSelectedFilterLabel('₹0 - Any');
+        // setMinFilterValue('₹ 200');
+        // setMaxFilterValue('Any');
+        // setIsRadioViewEnabled(false);
         break;
       case 3:
-        setFilterDataArray(['5', '4', '3', '2', 'Any']);
+        setFilterDataArray([
+          { name: '5', value: 5 },
+          { name: '4', value: 4 },
+          { name: '3', value: 3 },
+          { name: '2', value: 2 },
+          { name: 'Any', value: 0 },
+        ]);
         setSelectedFilterLabel('Any +');
-        setMinFilterValue('');
-        setMaxFilterValue('Any');
+        setMinFilterValue('Any');
+        setMaxFilterValue('5');
         setIsRadioViewEnabled(false);
         break;
       case 4:
         options = [
-          { name: 'Budget- High to Low', checked: true },
-          { name: 'Budget- Low to High', checked: false },
-          { name: 'Experience', checked: false },
+          { name: 'Experience', checked: true, value: 'teachingExperience' },
+          { name: 'Budget - High to Low', checked: false, value: 'budgets.price', order: 'DESC' },
+          { name: 'Budget - Low to High', checked: false, value: 'budgets.price', order: 'ASC' },
         ];
         setIsRadioViewEnabled(true);
         break;
       case 5:
         options = [
-          { name: 'Online', checked: true },
-          { name: 'Offline', checked: false },
-          { name: 'Any', checked: false },
+          { name: 'Any', checked: true, value: 0 },
+          { name: 'Online', checked: false, value: 1 },
+          { name: 'Offline', checked: false, value: 2 },
         ];
         setIsRadioViewEnabled(true);
         break;
       default:
         options = [
-          { name: 'Bachelors', checked: true },
-          { name: 'Diploma', checked: false },
-          { name: 'Masters', checked: false },
-          { name: 'Certification', checked: false },
+          { name: 'Any', checked: true, value: 0 },
+          { name: 'Online', checked: false, value: 1 },
+          { name: 'Offline', checked: false, value: 2 },
         ];
         setIsRadioViewEnabled(true);
         break;
@@ -269,7 +303,7 @@ function TutorListing(props) {
     setSelectedFilterBubble(item);
     switch (filterIndex) {
       case 1:
-        filterValues.experience = item;
+        filterValues.experience = item.value;
         break;
       case 2:
         filterValues.price = item;
@@ -291,7 +325,7 @@ function TutorListing(props) {
 
   const renderOptionsItem = (item, index) => {
     return (
-      <View style={{ paddingLeft: RfW(16), marginTop: RfH(24) }}>
+      <View style={{ paddingLeft: RfW(16), marginTop: RfH(16) }}>
         <View style={{ flexDirection: 'row' }}>
           <CustomRadioButton enabled={item.checked} submitFunction={() => setChecked(item, index)} />
           <Text style={{ color: Colors.inputLabel, marginLeft: RfW(8) }}>{item.name}</Text>
@@ -373,7 +407,7 @@ function TutorListing(props) {
                   keyExtractor={(item, index) => index.toString()}
                 />
               </View>
-              <View style={{ flex: 0.6 }}>
+              <View style={{ flex: 0.6, paddingBottom: RfH(40) }}>
                 {isRadioViewEnabled ? (
                   <FlatList
                     data={filterOptions}
@@ -397,7 +431,7 @@ function TutorListing(props) {
                 )}
               </View>
             </View>
-            <View style={styles.filterButttonParent}>
+            <View style={styles.filterButtonParent}>
               <Button onPress={() => clearFilters()} bordered style={styles.borderButton}>
                 <Text
                   style={[

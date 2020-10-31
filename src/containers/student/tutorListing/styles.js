@@ -136,14 +136,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingBottom: RfH(140),
+    // marginBottom: RfH(40),
   },
   filterItemView: {
     flex: 0.4,
-    borderRightColor: Colors.darkGrey,
-    borderRightWidth: 0.5,
+    // borderRightColor: Colors.darkGrey,
+    // borderRightWidth: 0.5,
+    paddingBottom: RfH(80),
   },
-  filterButttonParent: {
+  filterButtonParent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
