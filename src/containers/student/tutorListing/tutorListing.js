@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
@@ -44,9 +44,6 @@ function TutorListing(props) {
   const [filterIndex, setFilterIndex] = useState(0);
   const [selectedFilterLabel, setSelectedFilterLabel] = useState('');
   const [filterValues, setFilterValues] = useState({
-    page: 1,
-    size: 20,
-    active: true,
     certified: true,
     offeringId: offering?.id,
 
@@ -62,6 +59,12 @@ function TutorListing(props) {
 
     teachingMode: 0,
 
+    page: 1,
+    size: 20,
+    sortBy: 'teachingExperience',
+    sortOrder: 'desc',
+
+    active: true,
     // qualification: '',
     // experience: '',
     // price: '',
@@ -114,9 +117,13 @@ function TutorListing(props) {
             <Text style={styles.tutorName}>
               {item.contactDetail.firstName} {item.contactDetail.lastName}
             </Text>
-            <Text style={styles.tutorDetails}>
-              {item.educationDetails.length > 0 && item.educationDetails[0].degree?.name}
-            </Text>
+            {item.educationDetails.length > 0 && (
+              <Text style={styles.tutorDetails}>
+                {titleCaseIfExists(item.educationDetails[0].degree?.degreeLevel)}
+                {' - '}
+                {titleCaseIfExists(item.educationDetails[0].fieldOfStudy)}
+              </Text>
+            )}
             <Text style={styles.tutorDetails}>{item.teachingExperience} Years of Experience</Text>
             <View style={styles.iconsView}>
               <View
