@@ -6,7 +6,7 @@ const Images = {
   onboarding3: require('../assets/images/onboarding3.png'),
   chevronRight: require('../assets/images/ic_chevron_right.png'),
   searchIcon: require('../assets/images/searchGlyph.png'),
-  arrowRight: require('../assets/images/arrow-right.png'),
+  backArrow: require('../assets/images/arrow-left.png'),
   expand: require('../assets/images/expand.png'),
   check: require('../assets/images/check.png'),
   student: require('../assets/images/student.png'),

@@ -119,7 +119,7 @@ function PersonalDetails() {
               submitFunction={() => onBackPress()}
               iconHeight={RfH(20)}
               iconWidth={RfW(20)}
-              iconImage={Images.arrowRight}
+              iconImage={Images.backArrow}
             />
             <View style={{ width: 40 }} />
             <Title

@@ -66,7 +66,7 @@ function NationalityDropdown(props) {
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <IconButtonWrapper
-            iconImage={Images.arrowRight}
+            iconImage={Images.backArrow}
             iconWidth={RfW(17)}
             iconHeight={RfH(11)}
             styling={{ justifyContent: 'center', paddingVertical: RfH(15) }}

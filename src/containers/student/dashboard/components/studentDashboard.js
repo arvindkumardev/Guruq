@@ -39,10 +39,7 @@ function StudentDashboard(props) {
   );
 
   const { loading: loadingOfferings, error: offeringError, data: offerings, refetch: _refetchOffering } = useQuery(
-    GET_INTERESTED_OFFERINGS,
-    {
-      fetchPolicy: 'network-only',
-    }
+    GET_INTERESTED_OFFERINGS
   );
   const refetchOffering = (args) => _refetchOffering(args);
 
