@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const SEARCH_TUTORS = gql`
-  query SearchTutors($page: Int!, $size: Int!) {
-    searchTutors(searchDto: { page: $page, size: $size }) {
+  query SearchTutors($searchDto: TutorSearchDto!) {
+    searchTutors(searchDto: $searchDto) {
       edges {
         id
         teachingExperience
@@ -21,17 +21,29 @@ export const SEARCH_TUTORS = gql`
         }
         tutorOfferings {
           id
-          offering {
-            id
-            name
-            displayName
-            level
-          }
+          # offering {
+          #   id
+          #   name
+          #   displayName
+          #   level
+          # }
           offerings {
             id
             name
             displayName
             level
+            parentOffering {
+              id
+              name
+              displayName
+              level
+              parentOffering {
+                id
+                name
+                displayName
+                level
+              }
+            }
           }
         }
         experienceDetails {
@@ -64,3 +76,45 @@ export const SEARCH_TUTORS = gql`
     }
   }
 `;
+
+export class SearchDto {
+  id: number;
+
+  active: boolean;
+
+  deleted: boolean;
+
+  userId: number;
+
+  page: number = 1;
+
+  size: number = 20;
+
+  sortBy: string = 'id';
+
+  sortOrder: string = 'ASC';
+}
+
+export class TutorSearchDto extends SearchDto {
+  firstName: string;
+
+  lastName: string;
+
+  certified: boolean;
+
+  offeringId: number;
+
+  degreeLevel: number;
+
+  minExperience: number;
+
+  maxExperience: number;
+
+  averageRating: number;
+
+  minBudget: number;
+
+  maxBudget: number;
+
+  teachingMode: number;
+}

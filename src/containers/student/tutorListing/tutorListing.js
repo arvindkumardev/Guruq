@@ -43,12 +43,8 @@ function TutorListing(props) {
   const [minFilterValue, setMinFilterValue] = useState('');
   const [maxFilterValue, setMaxFilterValue] = useState('');
   const [filterDataArray, setFilterDataArray] = useState([]);
-  const [filterOptions, setFilterOptions] = useState([
-    { name: 'Bachelors', checked: true },
-    { name: 'Diploma', checked: false },
-    { name: 'Masters', checked: false },
-    { name: 'Certification', checked: false },
-  ]);
+  const [filterOptions, setFilterOptions] = useState([]);
+
   const [filterItems, setFilterItems] = useState([
     { name: 'Qualifications', checked: true },
     { name: 'Experience', checked: false },
@@ -57,85 +53,29 @@ function TutorListing(props) {
     { name: 'Sort By', checked: false },
     { name: 'Mode of Study', checked: false },
   ]);
-  const [tutorData1, setTutorData1] = useState([
-    {
-      name: 'Ritesh Jain',
-      qualification: 'Commerce Stream',
-      imageUrl: Images.kushal,
-      experience: 3,
-      rating: 4.5,
-      charge: '₹ 150/Hr',
-    },
-    {
-      name: 'Simran Rai',
-      qualification: 'B.tech',
-      imageUrl: Images.user,
-      experience: 2,
-      rating: 4,
-      charge: '₹ 250/Hr',
-    },
-    {
-      name: 'Priyam',
-      qualification: 'Mass Communication',
-      imageUrl: Images.kushal,
-      experience: 5,
-      rating: 3,
-      charge: '₹ 350/Hr',
-    },
-    {
-      name: 'Ritesh Jain',
-      qualification: 'Commerce Stream',
-      imageUrl: Images.kushal,
-      experience: 3,
-      rating: 4.5,
-      charge: '₹ 150/Hr',
-    },
-    {
-      name: 'Simran Rai',
-      qualification: 'B.tech',
-      imageUrl: Images.user,
-      experience: 2,
-      rating: 4,
-      charge: '₹ 250/Hr',
-    },
-    {
-      name: 'Priyam',
-      qualification: 'Mass Communication',
-      imageUrl: Images.kushal,
-      experience: 5,
-      rating: 3,
-      charge: '₹ 350/Hr',
-    },
-    {
-      name: 'Ritesh Jain',
-      qualification: 'Commerce Stream',
-      imageUrl: Images.kushal,
-      experience: 3,
-      rating: 4.5,
-      charge: '₹ 150/Hr',
-    },
-    {
-      name: 'Simran Rai',
-      qualification: 'B.tech',
-      imageUrl: Images.user,
-      experience: 2,
-      rating: 4,
-      charge: '₹ 250/Hr',
-    },
-    {
-      name: 'Priyam',
-      qualification: 'Mass Communication',
-      imageUrl: Images.kushal,
-      experience: 5,
-      rating: 3,
-      charge: '₹ 350/Hr',
-    },
-  ]);
 
-  console.log(offering);
+  const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
+    variables: {
+      searchDto: {
+        page: 1,
+        size: 20,
+        active: true,
+        certified: true,
+        offeringId: offering?.id,
 
-  const { loading: loadingTutors, error, data: tutorsData } = useQuery(SEARCH_TUTORS, {
-    variables: { page: 1, size: 20 },
+        degreeLevel: 0,
+
+        minExperience: 0,
+        maxExperience: 0,
+
+        averageRating: 0,
+
+        minBudget: 0,
+        maxBudget: 0,
+
+        teachingMode: 0,
+      },
+    },
   });
 
   const onBackPress = () => {
@@ -228,6 +168,7 @@ function TutorListing(props) {
     switch (filterIndex) {
       case 0:
         filterValues.qualification = filterArr[index].name;
+        filterValues.degreeLevel = filterArr[index].value;
         break;
       case 4:
         filterValues.sortBy = filterArr[index].name;
@@ -261,10 +202,14 @@ function TutorListing(props) {
     switch (index) {
       case 0:
         options = [
-          { name: 'Bachelors', checked: true },
-          { name: 'Diploma', checked: false },
-          { name: 'Masters', checked: false },
-          { name: 'Certification', checked: false },
+          { name: 'Secondary', checked: false, value: 1 },
+          { name: 'Higher Secondary', checked: false, value: 2 },
+          { name: 'Diploma', checked: false, value: 3 },
+          { name: 'Bachelors', checked: false, value: 4 },
+          { name: 'PG Diploma', checked: false, value: 5 },
+          { name: 'Masters', checked: false, value: 6 },
+          { name: 'Doctoral', checked: false, value: 7 },
+          { name: 'Other', checked: false, value: 8 },
         ];
         setIsRadioViewEnabled(true);
         break;
@@ -641,8 +586,12 @@ function TutorListing(props) {
                 />
                 {/* {showBackButton && ( */}
                 <View style={{ height: 44, paddingHorizontal: RfW(16) }}>
-                  <Text style={[styles.subjectTitle, { fontSize: 17 }]}>English Tutors</Text>
-                  <Text style={[styles.classText, { fontSize: 13 }]}>CBSE | Class 9</Text>
+                  <Text style={[styles.subjectTitle, { fontSize: 17 }]}>{offering?.displayName} Tutors</Text>
+                  <Text style={[styles.classText, { fontSize: 13 }]}>
+                    {offering?.parentOffering?.parentOffering?.displayName}
+                    {' | '}
+                    {offering?.parentOffering?.displayName}
+                  </Text>
                 </View>
                 {/* )} */}
               </View>
@@ -673,8 +622,12 @@ function TutorListing(props) {
                 </View>
                 {/* {showBackButton && ( */}
                 <View style={{ height: RfH(54), paddingHorizontal: RfW(0) }}>
-                  <Text style={[styles.subjectTitle, { fontSize: 20 }]}>English Tutors</Text>
-                  <Text style={[styles.classText, { fontSize: 15 }]}>CBSE | Class 9</Text>
+                  <Text style={[styles.subjectTitle, { fontSize: 20 }]}>{offering?.displayName} Tutors</Text>
+                  <Text style={[styles.classText, { fontSize: 15 }]}>
+                    {offering?.parentOffering?.parentOffering?.displayName}
+                    {' | '}
+                    {offering?.parentOffering?.displayName}
+                  </Text>
                 </View>
                 {/* )} */}
               </View>
