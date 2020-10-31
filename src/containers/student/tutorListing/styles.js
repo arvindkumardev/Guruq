@@ -50,15 +50,15 @@ const styles = StyleSheet.create({
     // borderTopWidth: RfH(0.5),
     // paddingVertical: RfH(4),
     // paddingHorizontal: RfW(16),
-    height: 34,
+    height: 44,
   },
   tutorCountText: {
-    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     color: Colors.primaryText,
     // marginLeft: RfW(8),
   },
   filterText: {
-    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     color: Colors.primaryText,
     marginLeft: RfW(8),
     fontFamily: Fonts.semiBold,

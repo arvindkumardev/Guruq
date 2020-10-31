@@ -1,17 +1,7 @@
 /* eslint-disable no-plusplus */
-import {
-  FlatList,
-  Image,
-  Modal,
-  ScrollView,
-  StatusBar,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
-import { Button, Icon, Input, Item, Label, Thumbnail } from 'native-base';
+import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
@@ -21,9 +11,7 @@ import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
 import { SEARCH_TUTORS } from '../tutor-query';
-import IconWrapper from '../../../components/IconWrapper';
 import Loader from '../../../components/Loader';
-import { inputs } from '../../../utils/constants';
 
 function TutorListing(props) {
   const navigation = useNavigation();
@@ -78,12 +66,12 @@ function TutorListing(props) {
   const [filterOptions, setFilterOptions] = useState([]);
 
   const [filterItems, setFilterItems] = useState([
-    { name: 'Qualifications', checked: true },
+    { name: 'Qualifications', checked: false },
     { name: 'Experience', checked: false },
     { name: 'Price', checked: false },
     { name: 'Rating', checked: false },
     { name: 'Mode of Study', checked: false },
-    { name: 'Sort By', checked: false },
+    { name: 'Sort By', checked: true },
   ]);
 
   const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
@@ -385,7 +373,7 @@ function TutorListing(props) {
   const showFilterModel = () => {
     return (
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent
         visible={showFilterPopup}
         onRequestClose={() => {
@@ -689,18 +677,24 @@ function TutorListing(props) {
             style={[
               styles.filterParentView,
               commonStyles.borderBottom,
-              { paddingHorizontal: RfW(16), backgroundColor: Colors.lightGrey },
+              { paddingLeft: RfW(16), backgroundColor: Colors.lightGrey },
             ]}>
-            <Text style={styles.tutorCountText}>20 TUTORS</Text>
+            <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>
 
             <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS)}>
               <Text style={{ color: Colors.brandBlue2 }}>Compare Tutors</Text>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingHorizontal: RfW(16),
+                  paddingVertical: RfW(10),
+                }}>
                 <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
-                <Text style={styles.filterText}>Filters</Text>
+                <Text style={styles.filterText}>Sort / Filters</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>

@@ -73,6 +73,12 @@ export const SEARCH_TUTORS = gql`
           isCurrent
         }
       }
+      pageInfo {
+        page
+        limit
+        size
+        count
+      }
     }
   }
 `;
