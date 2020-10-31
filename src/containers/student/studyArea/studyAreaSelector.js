@@ -9,7 +9,7 @@ import { RfW } from '../../../utils/helpers';
 import styles from './style';
 import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
-import { GET_OFFERINGS_MASTER_DATA } from '../graphql-query';
+import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
 
 function StudyAreaSelector() {
   const navigation = useNavigation();

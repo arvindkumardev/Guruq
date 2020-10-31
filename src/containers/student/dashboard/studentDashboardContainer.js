@@ -6,7 +6,7 @@ import { Colors, Images } from '../../../theme';
 import styles from './styles';
 import Calendar from '../calendar/calendar';
 import Classes from '../classes/classes';
-import TutorListing from '../tutor/tutorListing';
+import TutorListing from '../tutorListing/tutorListing';
 import Profile from '../profile/profile';
 import { RfH, RfW } from '../../../utils/helpers';
 import StudentDashboard from './components/studentDashboard';

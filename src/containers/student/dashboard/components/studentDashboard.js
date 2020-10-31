@@ -15,8 +15,8 @@ import { userDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/fonts';
 import StudentOfferingModal from './studentOfferingModal';
-import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../graphql-query';
-import { MARK_INTERESTED_OFFERING_SELECTED } from '../../graphql-mutation';
+import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashboard-query';
+import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 
 function StudentDashboard(props) {
@@ -104,7 +104,7 @@ function StudentDashboard(props) {
   }, [selectedOffering]);
 
   const gotoTutors = (subject) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR);
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR, { offering: subject });
   };
 
   const renderSubjects = () => {
@@ -119,7 +119,7 @@ function StudentDashboard(props) {
               .map((s) => {
                 return (
                   <TouchableWithoutFeedback
-                    onPress={() => gotoTutors('English')}
+                    onPress={() => gotoTutors(s)}
                     style={{
                       flexDirection: 'column',
                       justifyContent: 'flex-end',

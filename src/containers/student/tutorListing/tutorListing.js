@@ -1,18 +1,26 @@
 /* eslint-disable no-plusplus */
-import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
+import { SEARCH_TUTORS } from '../tutor-query';
+import IconWrapper from '../../../components/IconWrapper';
+import Loader from '../../../components/Loader';
 
-function TutorListing() {
+function TutorListing(props) {
   const navigation = useNavigation();
   const [isTutor, setIsTutor] = useState(true);
+
+  const { route } = props;
+
+  const offering = route?.params?.offering;
 
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
@@ -49,7 +57,7 @@ function TutorListing() {
     { name: 'Sort By', checked: false },
     { name: 'Mode of Study', checked: false },
   ]);
-  const [tutorData, setTutorData] = useState([
+  const [tutorData1, setTutorData1] = useState([
     {
       name: 'Ritesh Jain',
       qualification: 'Commerce Stream',
@@ -124,8 +132,24 @@ function TutorListing() {
     },
   ]);
 
+  console.log(offering);
+
+  const { loading: loadingTutors, error, data: tutorsData } = useQuery(SEARCH_TUTORS, {
+    variables: { page: 1, size: 20 },
+  });
+
   const onBackPress = () => {
     navigation.goBack();
+  };
+
+  const getTutorImage = (tutor) => {
+    return tutor && tutor.profileImage && tutor.profileImage.filename
+      ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
+      : {
+          uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
+            tutor.id % 4
+          }.png`,
+        };
   };
 
   const renderItem = (item) => {
@@ -133,17 +157,26 @@ function TutorListing() {
       <View style={styles.listItemParent}>
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
-            <Thumbnail square style={styles.userIcon} source={item.imageUrl} />
+            <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
           </View>
           <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-            <Text style={styles.tutorName}>{item.name}</Text>
-            <Text style={styles.tutorDetails}>{item.qualification}</Text>
-            <Text style={styles.tutorDetails}>{item.experience} Years of Experience</Text>
+            <Text style={styles.tutorName}>
+              {item.contactDetail.firstName} {item.contactDetail.lastName}
+            </Text>
+            <Text style={styles.tutorDetails}>
+              {item.educationDetails.length > 0 && item.educationDetails[0].degree?.name}
+            </Text>
+            <Text style={styles.tutorDetails}>{item.teachingExperience} Years of Experience</Text>
             <View style={styles.iconsView}>
               <View
-                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', marginTop: RfH(4) }}>
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  marginTop: RfH(4),
+                }}>
                 <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
-                <Text style={styles.chargeText}>{parseFloat(item.rating).toFixed(1)}</Text>
+                <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
                 <IconButtonWrapper
                   iconHeight={RfH(15)}
                   iconWidth={RfW(10)}
@@ -479,7 +512,13 @@ function TutorListing() {
   const filtersView = () => {
     return (
       <View
-        style={[commonStyles.horizontalChildrenView, { marginTop: RfH(isFilterApplied ? 62 : 16), height: RfH(44) }]}>
+        style={[
+          commonStyles.horizontalChildrenView,
+          {
+            marginTop: RfH(isFilterApplied ? 62 : 16),
+            height: RfH(44),
+          },
+        ]}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
           {filterValues.qualification ? (
             <View style={styles.filterButton}>
@@ -573,6 +612,9 @@ function TutorListing() {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
+
+      <Loader isLoading={loadingTutors} />
+
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
@@ -693,7 +735,7 @@ function TutorListing() {
 
         <View>
           <FlatList
-            data={tutorData}
+            data={tutorsData?.searchTutors?.edges}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
