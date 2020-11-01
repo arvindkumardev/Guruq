@@ -12,6 +12,7 @@ import routeNames from '../../../routes/screenNames';
 import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
 import { SEARCH_TUTORS } from '../tutor-query';
 import Loader from '../../../components/Loader';
+import Fonts from '../../../theme/fonts';
 
 function TutorListing(props) {
   const navigation = useNavigation();
@@ -600,23 +601,25 @@ function TutorListing(props) {
             <View
               style={{
                 height: RfH(44),
-                // marginTop: RfH(44),
+                marginTop: RfH(16),
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingHorizontal: RfW(16),
+                // backgroundColor: '#ff0000'
               }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Icon
-                  onPress={() => onBackPress()}
-                  type="MaterialIcons"
-                  name="keyboard-backspace"
-                  style={[styles.backIcon, { alignSelf: 'flex-start' }]}
+                <IconButtonWrapper
+                  styling={{ marginRight: RfW(16) }}
+                  iconImage={Images.backArrow}
+                  iconHeight={RfH(24)}
+                  iconWidth={RfW(24)}
+                  submitFunction={() => onBackPress()}
                 />
                 {/* {showBackButton && ( */}
-                <View style={{ height: 44, paddingHorizontal: RfW(16) }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Text style={[styles.subjectTitle, { fontSize: 17 }]}>{offering?.displayName} Tutors</Text>
-                  <Text style={[styles.classText, { fontSize: 13 }]}>
+                  <Text style={[styles.classText, { fontSize: 15, marginLeft: RfW(8) }]}>
                     {offering?.parentOffering?.parentOffering?.displayName}
                     {' | '}
                     {offering?.parentOffering?.displayName}
@@ -633,7 +636,7 @@ function TutorListing(props) {
             <View
               style={{
                 height: RfH(98),
-                marginTop: RfH(44),
+                marginTop: RfH(68),
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -642,11 +645,12 @@ function TutorListing(props) {
               }}>
               <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
                 <View style={{}}>
-                  <Icon
-                    onPress={() => onBackPress()}
-                    type="MaterialIcons"
-                    name="keyboard-backspace"
-                    style={[styles.backIcon, { alignSelf: 'flex-start' }]}
+                  <IconButtonWrapper
+                    styling={{ marginRight: RfW(16) }}
+                    iconImage={Images.backArrow}
+                    iconHeight={RfH(24)}
+                    iconWidth={RfW(24)}
+                    submitFunction={() => onBackPress()}
                   />
                 </View>
                 {/* {showBackButton && ( */}
@@ -727,7 +731,7 @@ function TutorListing(props) {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ paddingHorizontal: RfH(16), marginTop: RfH(16), marginBottom: RfH(34) }}
+            contentContainerStyle={{ paddingHorizontal: RfH(16), marginTop: RfH(34), marginBottom: RfH(34) }}
           />
         </View>
       </ScrollView>

@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   subjectTitle: {
     color: Colors.primaryText,
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    fontFamily: 'SegoeUI-Bold',
+    fontFamily: Fonts.semiBold,
     // paddingHorizontal: RfW(16),
   },
   classText: {
