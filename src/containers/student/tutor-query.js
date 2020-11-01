@@ -45,6 +45,14 @@ export const SEARCH_TUTORS = gql`
               }
             }
           }
+          budgets {
+            id
+            count
+            groupSize
+            onlineClass
+            price
+            demo
+          }
         }
         experienceDetails {
           id

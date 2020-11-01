@@ -96,6 +96,9 @@ function TutorListing(props) {
   };
 
   const renderItem = (item) => {
+    const onlineBudget = item.tutorOfferings && item.tutorOfferings[0].budgets.find((s) => s.onlineClass === true);
+    const offlineBudget = item.tutorOfferings && item.tutorOfferings[0].budgets.find((s) => s.onlineClass === false);
+
     return (
       <View style={styles.listItemParent}>
         <View style={[commonStyles.horizontalChildrenStartView]}>
@@ -147,8 +150,8 @@ function TutorListing(props) {
           </View>
           <View>
             <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-              <Text style={styles.chargeText}>{item.charge}</Text>
-              <Text style={styles.chargeText}>{item.charge}</Text>
+              {onlineBudget && <Text style={styles.chargeText}>Online ₹{onlineBudget.price}/Hr</Text>}
+              {offlineBudget && <Text style={styles.chargeText}>Offline ₹{offlineBudget.price}/Hr</Text>}
             </View>
           </View>
         </View>
