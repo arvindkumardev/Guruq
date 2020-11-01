@@ -39,7 +39,7 @@ function customRangeSelector(props) {
                   ? { textAlign: 'right', fontSize: 16, color: Colors.brandBlue2 }
                   : { textAlign: 'right' }
               }>
-              {item}
+              {item.name}
             </Text>
           </View>
           <View style={{ alignItems: 'center' }}>

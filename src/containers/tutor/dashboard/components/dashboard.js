@@ -9,7 +9,7 @@ import { getSaveData, removeData, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
-import Fonts from '../../../../theme/Fonts';
+import Fonts from '../../../../theme/fonts';
 
 function TutorDashboard() {
   const [userName, setUserName] = useState('');

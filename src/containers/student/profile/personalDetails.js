@@ -14,7 +14,7 @@ import { CustomMobileNumber } from '../../../components';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import CustomDropDown from '../../../components/CustomDropDown';
 import commonStyles from '../../../theme/styles';
-import Fonts from '../../../theme/Fonts';
+import Fonts from '../../../theme/fonts';
 
 const { height, width } = Dimensions.get('window');
 
@@ -119,7 +119,7 @@ function PersonalDetails() {
               submitFunction={() => onBackPress()}
               iconHeight={RfH(20)}
               iconWidth={RfW(20)}
-              iconImage={Images.arrowRight}
+              iconImage={Images.backArrow}
             />
             <View style={{ width: 40 }} />
             <Title

@@ -1,5 +1,6 @@
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
@@ -7,6 +8,8 @@ import { RfH, RfW } from '../../../utils/helpers';
 import { IconButtonWrapper } from '../../../components';
 
 function tutorDetails() {
+  const navigation = useNavigation();
+
   const onBackPress = () => {
     navigation.goBack();
   };

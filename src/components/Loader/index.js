@@ -14,7 +14,7 @@ function Loader(props) {
       {isLoading ? (
         <>
           {Platform.OS === 'ios' ? (
-            <View style={[styles.modalBackground, { backgroundColor: 'rgba(0,0,0,0.1)' }]}>
+            <View style={[styles.modalBackground, { backgroundColor: 'rgba(0,0,0,0.2)' }]}>
               <LottieView
                 style={{
                   height: RfW(80),

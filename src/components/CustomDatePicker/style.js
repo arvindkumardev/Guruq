@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import Fonts from '../../theme/Fonts';
+import Fonts from '../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { RfH, RfW } from '../../utils/helpers';
 import { Colors } from '../../theme';

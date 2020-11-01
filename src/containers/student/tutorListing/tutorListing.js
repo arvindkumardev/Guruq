@@ -3,16 +3,24 @@ import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback,
 import React, { useState } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
+import { SEARCH_TUTORS } from '../tutor-query';
+import Loader from '../../../components/Loader';
+import Fonts from '../../../theme/fonts';
 
-function TutorListing() {
+function TutorListing(props) {
   const navigation = useNavigation();
   const [isTutor, setIsTutor] = useState(true);
+
+  const { route } = props;
+
+  const offering = route?.params?.offering;
 
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
@@ -25,157 +33,125 @@ function TutorListing() {
   const [filterIndex, setFilterIndex] = useState(0);
   const [selectedFilterLabel, setSelectedFilterLabel] = useState('');
   const [filterValues, setFilterValues] = useState({
-    qualification: '',
-    experience: '',
-    price: '',
-    rating: 0,
-    sortBy: '',
-    studyMode: '',
+    certified: true,
+    offeringId: offering?.id,
+
+    degreeLevel: 0,
+
+    experience: 0,
+    // maxExperience: 0,
+
+    averageRating: 0,
+
+    minBudget: 0,
+    maxBudget: 0,
+
+    teachingMode: 0,
+
+    page: 1,
+    size: 20,
+    sortBy: 'teachingExperience',
+    sortOrder: 'desc',
+
+    active: true,
+    // qualification: '',
+    // experience: '',
+    // price: '',
+    // rating: 0,
+    // sortBy: '',
+    // studyMode: '',
   });
   const [minFilterValue, setMinFilterValue] = useState('');
   const [maxFilterValue, setMaxFilterValue] = useState('');
   const [filterDataArray, setFilterDataArray] = useState([]);
-  const [filterOptions, setFilterOptions] = useState([
-    { name: 'Bachelors', checked: true },
-    { name: 'Diploma', checked: false },
-    { name: 'Masters', checked: false },
-    { name: 'Certification', checked: false },
-  ]);
+  const [filterOptions, setFilterOptions] = useState([]);
+
   const [filterItems, setFilterItems] = useState([
-    { name: 'Qualifications', checked: true },
+    { name: 'Qualifications', checked: false },
     { name: 'Experience', checked: false },
     { name: 'Price', checked: false },
     { name: 'Rating', checked: false },
-    { name: 'Sort By', checked: false },
     { name: 'Mode of Study', checked: false },
+    { name: 'Sort By', checked: true },
   ]);
-  const [tutorData, setTutorData] = useState([
-    {
-      name: 'Ritesh Jain',
-      qualification: 'Commerce Stream',
-      imageUrl: Images.kushal,
-      experience: 3,
-      rating: 4.5,
-      charge: '₹ 150/Hr',
+
+  const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
+    variables: {
+      searchDto: filterValues,
     },
-    {
-      name: 'Simran Rai',
-      qualification: 'B.tech',
-      imageUrl: Images.user,
-      experience: 2,
-      rating: 4,
-      charge: '₹ 250/Hr',
-    },
-    {
-      name: 'Priyam',
-      qualification: 'Mass Communication',
-      imageUrl: Images.kushal,
-      experience: 5,
-      rating: 3,
-      charge: '₹ 350/Hr',
-    },
-    {
-      name: 'Ritesh Jain',
-      qualification: 'Commerce Stream',
-      imageUrl: Images.kushal,
-      experience: 3,
-      rating: 4.5,
-      charge: '₹ 150/Hr',
-    },
-    {
-      name: 'Simran Rai',
-      qualification: 'B.tech',
-      imageUrl: Images.user,
-      experience: 2,
-      rating: 4,
-      charge: '₹ 250/Hr',
-    },
-    {
-      name: 'Priyam',
-      qualification: 'Mass Communication',
-      imageUrl: Images.kushal,
-      experience: 5,
-      rating: 3,
-      charge: '₹ 350/Hr',
-    },
-    {
-      name: 'Ritesh Jain',
-      qualification: 'Commerce Stream',
-      imageUrl: Images.kushal,
-      experience: 3,
-      rating: 4.5,
-      charge: '₹ 150/Hr',
-    },
-    {
-      name: 'Simran Rai',
-      qualification: 'B.tech',
-      imageUrl: Images.user,
-      experience: 2,
-      rating: 4,
-      charge: '₹ 250/Hr',
-    },
-    {
-      name: 'Priyam',
-      qualification: 'Mass Communication',
-      imageUrl: Images.kushal,
-      experience: 5,
-      rating: 3,
-      charge: '₹ 350/Hr',
-    },
-  ]);
+  });
 
   const onBackPress = () => {
     navigation.goBack();
   };
 
+  const getTutorImage = (tutor) => {
+    return tutor && tutor.profileImage && tutor.profileImage.filename
+      ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
+      : {
+          uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
+            tutor.id % 4
+          }.png`,
+        };
+  };
+
   const renderItem = (item) => {
+    const onlineBudget = item.tutorOfferings && item.tutorOfferings[0].budgets.find((s) => s.onlineClass === true);
+    const offlineBudget = item.tutorOfferings && item.tutorOfferings[0].budgets.find((s) => s.onlineClass === false);
+
     return (
       <View style={styles.listItemParent}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS)}>
-          <View style={[commonStyles.horizontalChildrenStartView]}>
-            <View style={styles.userIconParent}>
-              <Thumbnail square style={styles.userIcon} source={item.imageUrl} />
-            </View>
-            <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-              <Text style={styles.tutorName}>{item.name}</Text>
-              <Text style={styles.tutorDetails}>{item.qualification}</Text>
-              <Text style={styles.tutorDetails}>{item.experience} Years of Experience</Text>
-              <View style={styles.iconsView}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'flex-start',
-                    marginTop: RfH(4),
-                  }}>
-                  <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
-                  <Text style={styles.chargeText}>{parseFloat(item.rating).toFixed(1)}</Text>
-                  <IconButtonWrapper
-                    iconHeight={RfH(15)}
-                    iconWidth={RfW(10)}
-                    iconImage={Images.single_user}
-                    styling={{ marginLeft: RfW(20) }}
-                  />
-                  <IconButtonWrapper
-                    iconHeight={RfH(15)}
-                    iconWidth={RfW(19)}
-                    iconImage={Images.multiple_user}
-                    styling={{ marginLeft: RfW(10) }}
-                  />
-                  <IconButtonWrapper
-                    iconHeight={RfH(17)}
-                    iconWidth={RfW(18)}
-                    iconImage={Images.user_board}
-                    styling={{ marginLeft: RfW(10) }}
-                  />
-                </View>
+        <View style={[commonStyles.horizontalChildrenStartView]}>
+          <View style={styles.userIconParent}>
+            <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
+          </View>
+          <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
+            <Text style={styles.tutorName}>
+              {item.contactDetail.firstName} {item.contactDetail.lastName}
+            </Text>
+            {item.educationDetails.length > 0 && (
+              <Text style={styles.tutorDetails}>
+                {titleCaseIfExists(item.educationDetails[0].degree?.degreeLevel)}
+                {' - '}
+                {titleCaseIfExists(item.educationDetails[0].fieldOfStudy)}
+              </Text>
+            )}
+            <Text style={styles.tutorDetails}>{item.teachingExperience} Years of Experience</Text>
+            <View style={styles.iconsView}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  marginTop: RfH(4),
+                }}>
+                <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
+                <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
+                <IconButtonWrapper
+                  iconHeight={RfH(15)}
+                  iconWidth={RfW(10)}
+                  iconImage={Images.single_user}
+                  styling={{ marginLeft: RfW(20) }}
+                />
+                <IconButtonWrapper
+                  iconHeight={RfH(15)}
+                  iconWidth={RfW(19)}
+                  iconImage={Images.multiple_user}
+                  styling={{ marginLeft: RfW(10) }}
+                />
+                <IconButtonWrapper
+                  iconHeight={RfH(17)}
+                  iconWidth={RfW(18)}
+                  iconImage={Images.user_board}
+                  styling={{ marginLeft: RfW(10) }}
+                />
               </View>
             </View>
-            <View>
-              <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                <Text style={styles.chargeText}>{item.charge}</Text>
-                <Text style={styles.chargeText}>{item.charge}</Text>
-              </View>
+          </View>
+          <View>
+            <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+              {onlineBudget && <Text style={styles.chargeText}>Online ₹{onlineBudget.price}/Hr</Text>}
+              {offlineBudget && <Text style={styles.chargeText}>Offline ₹{offlineBudget.price}/Hr</Text>}
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -202,6 +178,7 @@ function TutorListing() {
     switch (filterIndex) {
       case 0:
         filterValues.qualification = filterArr[index].name;
+        filterValues.degreeLevel = filterArr[index].value;
         break;
       case 4:
         filterValues.sortBy = filterArr[index].name;
@@ -235,56 +212,83 @@ function TutorListing() {
     switch (index) {
       case 0:
         options = [
-          { name: 'Bachelors', checked: true },
-          { name: 'Diploma', checked: false },
-          { name: 'Masters', checked: false },
-          { name: 'Certification', checked: false },
+          { name: 'All Qualifications', checked: false, value: 0 },
+          { name: 'Secondary', checked: false, value: 1 },
+          { name: 'Higher Secondary', checked: false, value: 2 },
+          { name: 'Diploma', checked: false, value: 3 },
+          { name: 'Bachelors', checked: false, value: 4 },
+          { name: 'PG Diploma', checked: false, value: 5 },
+          { name: 'Masters', checked: false, value: 6 },
+          { name: 'Doctoral', checked: false, value: 7 },
+          { name: 'Other', checked: false, value: 8 },
         ];
         setIsRadioViewEnabled(true);
         break;
       case 1:
-        setFilterDataArray(['10+', '7+', '3+', '2+', 'Any']);
+        setFilterDataArray([
+          { name: '10+', value: 10 },
+          { name: '7+', value: 7 },
+          { name: '3+', value: 3 },
+          { name: '2+', value: 2 },
+          { name: 'Any', value: 0 },
+        ]);
         setSelectedFilterLabel('Experience');
-        setMinFilterValue('');
-        setMaxFilterValue('');
+        setMinFilterValue('Any');
+        setMaxFilterValue('10');
         setIsRadioViewEnabled(false);
         break;
       case 2:
-        setFilterDataArray(['Maximum cost', 'Minimum cost']);
-        setSelectedFilterLabel('₹0 - Any');
-        setMinFilterValue('₹ 200');
-        setMaxFilterValue('Any');
-        setIsRadioViewEnabled(false);
+        options = [
+          { name: 'All Prices', checked: true, value: { min: 0, max: 0 } },
+          { name: 'Under ₹250', checked: false, value: { min: 0, max: 250 } },
+          { name: '₹250 - ₹500', checked: false, value: { min: 250, max: 500 } },
+          { name: '₹500 - ₹750', checked: false, value: { min: 500, max: 750 } },
+          { name: '₹750 - ₹1000', checked: false, value: { min: 750, max: 1000 } },
+          { name: '₹1000 - ₹1500', checked: false, value: { min: 1000, max: 1500 } },
+          { name: '₹1500 - ₹2000', checked: false, value: { min: 1500, max: 2000 } },
+          { name: 'Over ₹2000', checked: false, value: { min: 2000, max: 10000 } },
+        ];
+        setIsRadioViewEnabled(true);
+        // setFilterDataArray(['Maximum cost', 'Minimum cost']);
+        // setSelectedFilterLabel('₹0 - Any');
+        // setMinFilterValue('₹ 200');
+        // setMaxFilterValue('Any');
+        // setIsRadioViewEnabled(false);
         break;
       case 3:
-        setFilterDataArray(['5', '4', '3', '2', 'Any']);
+        setFilterDataArray([
+          { name: '5', value: 5 },
+          { name: '4', value: 4 },
+          { name: '3', value: 3 },
+          { name: '2', value: 2 },
+          { name: 'Any', value: 0 },
+        ]);
         setSelectedFilterLabel('Any +');
-        setMinFilterValue('');
-        setMaxFilterValue('Any');
+        setMinFilterValue('Any');
+        setMaxFilterValue('5');
         setIsRadioViewEnabled(false);
         break;
       case 4:
         options = [
-          { name: 'Budget- High to Low', checked: true },
-          { name: 'Budget- Low to High', checked: false },
-          { name: 'Experience', checked: false },
+          { name: 'Experience', checked: true, value: 'teachingExperience' },
+          { name: 'Budget - High to Low', checked: false, value: 'budgets.price', order: 'DESC' },
+          { name: 'Budget - Low to High', checked: false, value: 'budgets.price', order: 'ASC' },
         ];
         setIsRadioViewEnabled(true);
         break;
       case 5:
         options = [
-          { name: 'Online', checked: true },
-          { name: 'Offline', checked: false },
-          { name: 'Any', checked: false },
+          { name: 'Any', checked: true, value: 0 },
+          { name: 'Online', checked: false, value: 1 },
+          { name: 'Offline', checked: false, value: 2 },
         ];
         setIsRadioViewEnabled(true);
         break;
       default:
         options = [
-          { name: 'Bachelors', checked: true },
-          { name: 'Diploma', checked: false },
-          { name: 'Masters', checked: false },
-          { name: 'Certification', checked: false },
+          { name: 'Any', checked: true, value: 0 },
+          { name: 'Online', checked: false, value: 1 },
+          { name: 'Offline', checked: false, value: 2 },
         ];
         setIsRadioViewEnabled(true);
         break;
@@ -298,7 +302,7 @@ function TutorListing() {
     setSelectedFilterBubble(item);
     switch (filterIndex) {
       case 1:
-        filterValues.experience = item;
+        filterValues.experience = item.value;
         break;
       case 2:
         filterValues.price = item;
@@ -320,7 +324,7 @@ function TutorListing() {
 
   const renderOptionsItem = (item, index) => {
     return (
-      <View style={{ paddingLeft: RfW(16), marginTop: RfH(24) }}>
+      <View style={{ paddingLeft: RfW(16), marginTop: RfH(16) }}>
         <View style={{ flexDirection: 'row' }}>
           <CustomRadioButton enabled={item.checked} submitFunction={() => setChecked(item, index)} />
           <Text style={{ color: Colors.inputLabel, marginLeft: RfW(8) }}>{item.name}</Text>
@@ -373,7 +377,7 @@ function TutorListing() {
   const showFilterModel = () => {
     return (
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent
         visible={showFilterPopup}
         onRequestClose={() => {
@@ -402,7 +406,7 @@ function TutorListing() {
                   keyExtractor={(item, index) => index.toString()}
                 />
               </View>
-              <View style={{ flex: 0.6 }}>
+              <View style={{ flex: 0.6, paddingBottom: RfH(40) }}>
                 {isRadioViewEnabled ? (
                   <FlatList
                     data={filterOptions}
@@ -426,7 +430,7 @@ function TutorListing() {
                 )}
               </View>
             </View>
-            <View style={styles.filterButttonParent}>
+            <View style={styles.filterButtonParent}>
               <Button onPress={() => clearFilters()} bordered style={styles.borderButton}>
                 <Text
                   style={[
@@ -486,7 +490,13 @@ function TutorListing() {
   const filtersView = () => {
     return (
       <View
-        style={[commonStyles.horizontalChildrenView, { marginTop: RfH(isFilterApplied ? 62 : 16), height: RfH(44) }]}>
+        style={[
+          commonStyles.horizontalChildrenView,
+          {
+            marginTop: RfH(isFilterApplied ? 62 : 16),
+            height: RfH(44),
+          },
+        ]}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
           {filterValues.qualification ? (
             <View style={styles.filterButton}>
@@ -580,6 +590,9 @@ function TutorListing() {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
+
+      <Loader isLoading={loadingTutors} />
+
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
@@ -591,23 +604,29 @@ function TutorListing() {
             <View
               style={{
                 height: RfH(44),
-                // marginTop: RfH(44),
+                marginTop: RfH(16),
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingHorizontal: RfW(16),
+                // backgroundColor: '#ff0000'
               }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Icon
-                  onPress={() => onBackPress()}
-                  type="MaterialIcons"
-                  name="keyboard-backspace"
-                  style={[styles.backIcon, { alignSelf: 'flex-start' }]}
+                <IconButtonWrapper
+                  styling={{ marginRight: RfW(16) }}
+                  iconImage={Images.backArrow}
+                  iconHeight={RfH(24)}
+                  iconWidth={RfW(24)}
+                  submitFunction={() => onBackPress()}
                 />
                 {/* {showBackButton && ( */}
-                <View style={{ height: 44, paddingHorizontal: RfW(16) }}>
-                  <Text style={[styles.subjectTitle, { fontSize: 17 }]}>English Tutors</Text>
-                  <Text style={[styles.classText, { fontSize: 13 }]}>CBSE | Class 9</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={[styles.subjectTitle, { fontSize: 17 }]}>{offering?.displayName} Tutors</Text>
+                  <Text style={[styles.classText, { fontSize: 15, marginLeft: RfW(8) }]}>
+                    {offering?.parentOffering?.parentOffering?.displayName}
+                    {' | '}
+                    {offering?.parentOffering?.displayName}
+                  </Text>
                 </View>
                 {/* )} */}
               </View>
@@ -620,7 +639,7 @@ function TutorListing() {
             <View
               style={{
                 height: RfH(98),
-                marginTop: RfH(44),
+                marginTop: RfH(68),
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -629,17 +648,22 @@ function TutorListing() {
               }}>
               <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
                 <View style={{}}>
-                  <Icon
-                    onPress={() => onBackPress()}
-                    type="MaterialIcons"
-                    name="keyboard-backspace"
-                    style={[styles.backIcon, { alignSelf: 'flex-start' }]}
+                  <IconButtonWrapper
+                    styling={{ marginRight: RfW(16) }}
+                    iconImage={Images.backArrow}
+                    iconHeight={RfH(24)}
+                    iconWidth={RfW(24)}
+                    submitFunction={() => onBackPress()}
                   />
                 </View>
                 {/* {showBackButton && ( */}
                 <View style={{ height: RfH(54), paddingHorizontal: RfW(0) }}>
-                  <Text style={[styles.subjectTitle, { fontSize: 20 }]}>English Tutors</Text>
-                  <Text style={[styles.classText, { fontSize: 15 }]}>CBSE | Class 9</Text>
+                  <Text style={[styles.subjectTitle, { fontSize: 20 }]}>{offering?.displayName} Tutors</Text>
+                  <Text style={[styles.classText, { fontSize: 15 }]}>
+                    {offering?.parentOffering?.parentOffering?.displayName}
+                    {' | '}
+                    {offering?.parentOffering?.displayName}
+                  </Text>
                 </View>
                 {/* )} */}
               </View>
@@ -660,18 +684,24 @@ function TutorListing() {
             style={[
               styles.filterParentView,
               commonStyles.borderBottom,
-              { paddingHorizontal: RfW(16), backgroundColor: Colors.lightGrey },
+              { paddingLeft: RfW(16), backgroundColor: Colors.lightGrey },
             ]}>
-            <Text style={styles.tutorCountText}>20 TUTORS</Text>
+            <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>
 
             <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS)}>
               <Text style={{ color: Colors.brandBlue2 }}>Compare Tutors</Text>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingHorizontal: RfW(16),
+                  paddingVertical: RfW(10),
+                }}>
                 <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
-                <Text style={styles.filterText}>Filters</Text>
+                <Text style={styles.filterText}>Sort / Filters</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -700,11 +730,11 @@ function TutorListing() {
 
         <View>
           <FlatList
-            data={tutorData}
+            data={tutorsData?.searchTutors?.edges}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ paddingHorizontal: RfH(16), marginTop: RfH(16), marginBottom: RfH(34) }}
+            contentContainerStyle={{ paddingHorizontal: RfH(16), marginTop: RfH(34), marginBottom: RfH(34) }}
           />
         </View>
       </ScrollView>

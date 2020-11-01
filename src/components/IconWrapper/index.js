@@ -30,7 +30,7 @@ function stylingIconButtonWrapper(props) {
   return (
     <View>
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={1}
         disabled={!(submitFunction || onHold || onLeave)}
         onLongPress={onHold}
         onPress={submitFunction}

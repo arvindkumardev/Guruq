@@ -4,7 +4,7 @@ import Colors from './colors';
 import { RfH, RfW } from '../utils/helpers';
 import { spacePX } from './variables';
 import { STANDARD_SCREEN_SIZE } from '../utils/constants';
-import Fonts from './Fonts';
+import Fonts from './fonts';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: 0.5,
-    marginTop: RfH(16),
+    // marginTop: RfH(16),
     opacity: 0.5,
   },
   topActionView: {

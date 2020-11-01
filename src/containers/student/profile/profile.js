@@ -12,7 +12,7 @@ import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { isLoggedIn, studentDetails, userDetails } from '../../../apollo/cache';
 
 import routeNames from '../../../routes/screenNames';
-import Fonts from '../../../theme/Fonts';
+import Fonts from '../../../theme/fonts';
 
 function Profile() {
   const navigation = useNavigation();

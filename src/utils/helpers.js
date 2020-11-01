@@ -95,3 +95,14 @@ export const tConv24 = (time24) => {
   ts = h + ampm;
   return ts;
 };
+
+export const titleCaseIfExists = (inputString) => {
+  if (!inputString) {
+    return '';
+  }
+  const str = inputString.toLowerCase().split(/[ -]/g);
+  for (let i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+  }
+  return str.join(' ').trim();
+};
