@@ -16,6 +16,7 @@ import GettingStarted from '../containers/common/onboarding/gettingStarted';
 import PersonalDetails from '../containers/student/profile/personalDetails';
 import CompareTutors from '../containers/student/tutor/compareTutors';
 import TutorListing from '../containers/student/tutor/tutorListing';
+import tutorDetails from '../containers/student/tutor/tutorDetails';
 
 const Stack = createStackNavigator();
 
@@ -108,6 +109,11 @@ const AppStack = (props) => {
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.TUTOR}
             component={TutorListing}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.TUTOR_DETAILS}
+            component={tutorDetails}
             options={{ headerShown: false }}
           />
         </>

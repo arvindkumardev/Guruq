@@ -20,6 +20,7 @@ const NavigationRouteNames = {
     PROFILE: 'student_profile',
     PERSONAL_DETAILS: 'personal_details',
     COMPARE_TUTORS: 'compare_tutors',
+    TUTOR_DETAILS: 'tutor_details',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',

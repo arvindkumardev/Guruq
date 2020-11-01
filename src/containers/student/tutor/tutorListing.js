@@ -131,47 +131,54 @@ function TutorListing() {
   const renderItem = (item) => {
     return (
       <View style={styles.listItemParent}>
-        <View style={[commonStyles.horizontalChildrenStartView]}>
-          <View style={styles.userIconParent}>
-            <Thumbnail square style={styles.userIcon} source={item.imageUrl} />
-          </View>
-          <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-            <Text style={styles.tutorName}>{item.name}</Text>
-            <Text style={styles.tutorDetails}>{item.qualification}</Text>
-            <Text style={styles.tutorDetails}>{item.experience} Years of Experience</Text>
-            <View style={styles.iconsView}>
-              <View
-                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', marginTop: RfH(4) }}>
-                <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
-                <Text style={styles.chargeText}>{parseFloat(item.rating).toFixed(1)}</Text>
-                <IconButtonWrapper
-                  iconHeight={RfH(15)}
-                  iconWidth={RfW(10)}
-                  iconImage={Images.single_user}
-                  styling={{ marginLeft: RfW(20) }}
-                />
-                <IconButtonWrapper
-                  iconHeight={RfH(15)}
-                  iconWidth={RfW(19)}
-                  iconImage={Images.multiple_user}
-                  styling={{ marginLeft: RfW(10) }}
-                />
-                <IconButtonWrapper
-                  iconHeight={RfH(17)}
-                  iconWidth={RfW(18)}
-                  iconImage={Images.user_board}
-                  styling={{ marginLeft: RfW(10) }}
-                />
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS)}>
+          <View style={[commonStyles.horizontalChildrenStartView]}>
+            <View style={styles.userIconParent}>
+              <Thumbnail square style={styles.userIcon} source={item.imageUrl} />
+            </View>
+            <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
+              <Text style={styles.tutorName}>{item.name}</Text>
+              <Text style={styles.tutorDetails}>{item.qualification}</Text>
+              <Text style={styles.tutorDetails}>{item.experience} Years of Experience</Text>
+              <View style={styles.iconsView}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                    marginTop: RfH(4),
+                  }}>
+                  <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
+                  <Text style={styles.chargeText}>{parseFloat(item.rating).toFixed(1)}</Text>
+                  <IconButtonWrapper
+                    iconHeight={RfH(15)}
+                    iconWidth={RfW(10)}
+                    iconImage={Images.single_user}
+                    styling={{ marginLeft: RfW(20) }}
+                  />
+                  <IconButtonWrapper
+                    iconHeight={RfH(15)}
+                    iconWidth={RfW(19)}
+                    iconImage={Images.multiple_user}
+                    styling={{ marginLeft: RfW(10) }}
+                  />
+                  <IconButtonWrapper
+                    iconHeight={RfH(17)}
+                    iconWidth={RfW(18)}
+                    iconImage={Images.user_board}
+                    styling={{ marginLeft: RfW(10) }}
+                  />
+                </View>
+              </View>
+            </View>
+            <View>
+              <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                <Text style={styles.chargeText}>{item.charge}</Text>
+                <Text style={styles.chargeText}>{item.charge}</Text>
               </View>
             </View>
           </View>
-          <View>
-            <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-              <Text style={styles.chargeText}>{item.charge}</Text>
-              <Text style={styles.chargeText}>{item.charge}</Text>
-            </View>
-          </View>
-        </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   };

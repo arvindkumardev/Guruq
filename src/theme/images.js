@@ -67,6 +67,7 @@ const Images = {
   four_stars: require('../assets/images/four_stars.png'),
   laptop: require('../assets/images/laptop.png'),
   settings: require('../assets/images/settings.png'),
+  rectangle: require('../assets/images/rectangle.png'),
 };
 
 export default Images;
