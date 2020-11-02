@@ -433,7 +433,7 @@ function StudentDashboard(props) {
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flexDirection: 'row' }}>
             {selectedOffering && (
-              <Text style={{ color: Colors.darkGrey, fontSize: 16, marginTop: RfH(4) }}>
+              <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4) }}>
                 {selectedOffering?.parentOffering?.displayName} - {selectedOffering?.displayName}
               </Text>
             )}
