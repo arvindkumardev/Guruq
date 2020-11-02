@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/client';
@@ -360,6 +360,7 @@ function TutorListing(props) {
   const applyFilters = () => {
     setShowFilterPopup(false);
     setIsFilterApplied(true);
+    setRefreshList(!refreshList);
   };
 
   const clearFilters = () => {
@@ -493,7 +494,7 @@ function TutorListing(props) {
         style={[
           commonStyles.horizontalChildrenView,
           {
-            marginTop: RfH(isFilterApplied ? 62 : 16),
+            marginTop: RfH(isFilterApplied ? 100 : 16),
             height: RfH(44),
           },
         ]}>
@@ -732,6 +733,7 @@ function TutorListing(props) {
           <FlatList
             data={tutorsData?.searchTutors?.edges}
             showsVerticalScrollIndicator={false}
+            extraData={refreshList}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ paddingHorizontal: RfH(16), marginTop: RfH(34), marginBottom: RfH(34) }}

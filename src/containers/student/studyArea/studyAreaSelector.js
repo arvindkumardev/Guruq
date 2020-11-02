@@ -60,7 +60,7 @@ function StudyAreaSelector() {
                     style={[
                       styles.areaView,
                       {
-                        marginRight: RfW(8),
+                        marginHorizontal: RfW(4),
                         backgroundColor: Colors.lightOrange,
                         flex: 1,
                         justifyContent: 'center',

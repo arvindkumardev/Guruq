@@ -7,26 +7,24 @@ import Fonts from '../../../theme/fonts';
 
 const styles = StyleSheet.create({
   helloView: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: RfH(58),
-    // marginLeft: RfW(16),
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginTop: RfH(44),
+    height: RfH(98),
   },
   helloText: {
-    marginLeft: RfW(8),
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    color: Colors.secondaryText,
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    color: Colors.primaryText,
   },
   userName: {
     color: Colors.primaryText,
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
-    marginLeft: RfW(36),
     fontFamily: Fonts.semiBold,
   },
   subHeading: {
     textAlign: 'center',
-    marginTop: RfH(58),
+    marginTop: RfH(44),
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: Colors.black,
     fontFamily: Fonts.semiBold,

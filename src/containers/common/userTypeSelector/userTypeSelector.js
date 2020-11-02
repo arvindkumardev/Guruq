@@ -64,15 +64,15 @@ function UserTypeSelector(props) {
     <View style={commonStyles.mainContainer}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.helloView}>
-        <Icon
-          onPress={() => onBackPress()}
-          type="MaterialIcons"
-          name="keyboard-backspace"
-          style={{ color: Colors.primaryText }}
-        />
+        {/* <Icon */}
+        {/*  onPress={() => onBackPress()} */}
+        {/*  type="MaterialIcons" */}
+        {/*  name="keyboard-backspace" */}
+        {/*  style={{ color: Colors.primaryText }} */}
+        {/* /> */}
         <Text style={styles.helloText}>Hello</Text>
+        <Text style={styles.userName}>{userInfo.firstName}</Text>
       </View>
-      <Text style={styles.userName}>{userInfo.firstName}</Text>
       <Text style={styles.subHeading}>Continue as </Text>
 
       <View style={{ marginTop: RfH(16) }}>

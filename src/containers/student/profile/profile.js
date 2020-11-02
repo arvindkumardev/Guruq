@@ -9,10 +9,12 @@ import { removeData, RfH, RfW } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { isLoggedIn, studentDetails, userDetails } from '../../../apollo/cache';
+import { isLoggedIn, studentDetails, tutorDetails, userDetails } from '../../../apollo/cache';
 
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/fonts';
+import apolloClient from '../../../apollo/apollo';
+import initializeApollo from '../../../apollo/apollo';
 
 function Profile() {
   const navigation = useNavigation();
@@ -40,14 +42,24 @@ function Profile() {
     { name: 'Send Feedback', icon: Images.parent_details },
   ]);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
-  const [isLogout, setIsLogout] = useState(false);
+
+  const client = initializeApollo();
 
   const logout = () => {
+    console.log(client.cache);
     removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
 
     // set in apollo cache
     isLoggedIn(false);
     userDetails({});
+
+    studentDetails({});
+    tutorDetails({});
+
+    client.cache.reset();
+
+    console.log('User logged out!');
+    console.log(client.cache);
   };
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
@@ -64,7 +76,10 @@ function Profile() {
       <TouchableWithoutFeedback
         onPress={() => personalDetails(item)}
         // disabled={}
-        style={[styles.userMenuParentView, { height: 44, justifyContent: 'space-between', paddingLeft: RfW(48),     borderBottomColor: Colors.lightGrey}]}>
+        style={[
+          styles.userMenuParentView,
+          { height: 44, justifyContent: 'space-between', paddingLeft: RfW(48), borderBottomColor: Colors.lightGrey },
+        ]}>
         <View style={{ flexDirection: 'row' }}>
           <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} />
           <Text style={{ fontSize: 15, color: Colors.primaryText, marginLeft: RfW(16) }}>{item.name}</Text>
