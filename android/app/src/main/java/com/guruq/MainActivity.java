@@ -1,4 +1,4 @@
-package in.guruq;
+package com.guruq;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen;

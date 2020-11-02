@@ -769,7 +769,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = in.guruq;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tuition.GuruQ;
 				PRODUCT_NAME = GuruQ;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -792,7 +792,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = in.guruq;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tuition.GuruQ;
 				PRODUCT_NAME = GuruQ;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

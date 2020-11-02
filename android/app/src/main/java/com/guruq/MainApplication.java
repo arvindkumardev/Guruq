@@ -1,4 +1,4 @@
-package in.guruq;
+package com.guruq;
 
 import android.app.Application;
 import android.content.Context;
