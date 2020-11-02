@@ -1,4 +1,5 @@
-import { Alert, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+/* eslint-disable no-nested-ternary */
+import { Alert, StatusBar, Text, TouchableWithoutFeedback, View, FlatList } from 'react-native';
 import { Icon } from 'native-base';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -49,6 +50,40 @@ function ClassSelector(props) {
     navigation.goBack();
   };
 
+  const renderItem = (item, index) => {
+    return (
+      <TouchableWithoutFeedback onPress={() => onClick(item)}>
+        <View
+          style={[
+            styles.areaView,
+            {
+              marginHorizontal: RfW(8),
+              marginVertical: RfW(16),
+              height: RfH(100),
+              width: RfW(100),
+              backgroundColor:
+                index % 4 === 0
+                  ? Colors.lightOrange
+                  : index % 4 === 1
+                  ? Colors.lightGreen
+                  : index % 4 === 2
+                  ? Colors.lightPurple
+                  : Colors.lightBlue,
+              flex: 0,
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          ]}>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={[styles.areaTitleOne, { marginTop: RfH(0), fontSize: RFValue(24, STANDARD_SCREEN_SIZE) }]}>
+              {item.displayName}
+            </Text>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <StatusBar barStyle="dark-content" />
@@ -70,8 +105,20 @@ function ClassSelector(props) {
           Select your Class
         </Text>
       </View>
-      <View style={[commonStyles.verticallyCenterItemsView, { marginTop: RfH(56) }]}>
-        {data &&
+      <View style={[commonStyles.verticallyStretchedItemsView, { marginTop: RfH(56) }]}>
+        <FlatList
+          data={
+            data &&
+            data.offerings &&
+            data.offerings.edges &&
+            data.offerings.edges.filter((s) => s?.parentOffering?.id === board.id)
+          }
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => renderItem(item, index)}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={3}
+        />
+        {/* {data &&
           data.offerings &&
           data.offerings.edges &&
           data.offerings.edges
@@ -86,7 +133,7 @@ function ClassSelector(props) {
                   </View>
                 </TouchableWithoutFeedback>
               );
-            })}
+            })} */}
       </View>
 
       {/* <View style={[styles.areaParentView, { marginTop: RfH(56) }]}> */}

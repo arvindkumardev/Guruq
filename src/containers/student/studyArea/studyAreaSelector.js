@@ -1,4 +1,5 @@
-import { StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+/* eslint-disable no-nested-ternary */
+import { StatusBar, Text, TouchableWithoutFeedback, View, FlatList } from 'react-native';
 import { Icon, Thumbnail } from 'native-base';
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +11,7 @@ import styles from './style';
 import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
 import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
+import { IconButtonWrapper } from '../../../components';
 
 function StudyAreaSelector() {
   const navigation = useNavigation();
@@ -31,6 +33,47 @@ function StudyAreaSelector() {
     navigation.navigate(routeNames.STUDENT.BOARD, { studyArea: s });
   };
 
+  const renderItem = (item, index) => {
+    return (
+      <TouchableWithoutFeedback onPress={() => onClick(item)}>
+        <View
+          style={[
+            styles.areaView,
+            {
+              marginHorizontal: RfW(8),
+              marginVertical: RfW(16),
+              backgroundColor:
+                index === 0
+                  ? Colors.lightOrange
+                  : index === 1
+                  ? Colors.lightGreen
+                  : index === 2
+                  ? Colors.lightPurple
+                  : Colors.lightBlue,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          ]}>
+          <View style={{ alignItems: 'center' }}>
+            <IconButtonWrapper
+              iconImage={
+                index === 0
+                  ? Images.school_education
+                  : index === 1
+                  ? Images.language
+                  : index === 2
+                  ? Images.abroad
+                  : Images.pen_paper
+              }
+            />
+            <Text style={styles.areaTitleOne}>{item.displayName}</Text>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <StatusBar barStyle="dark-content" />
@@ -47,8 +90,15 @@ function StudyAreaSelector() {
       <Text style={styles.subHeading}>Select Your Study Area</Text>
       <Text style={styles.subHeadingText}>To help us find the best tutors for you</Text>
 
-      <View style={[styles.areaParentView, { justifyContent: 'space-evenly' }]}>
-        {data &&
+      <View style={styles.areaParentView}>
+        <FlatList
+          data={data && data.offerings && data.offerings.edges && data.offerings.edges.filter((s) => s.level === 0)}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => renderItem(item, index)}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+        />
+        {/* {data &&
           data.offerings &&
           data.offerings.edges &&
           data.offerings.edges
@@ -74,7 +124,7 @@ function StudyAreaSelector() {
                   </View>
                 </TouchableWithoutFeedback>
               );
-            })}
+            })} */}
 
         {/* <TouchableWithoutFeedback onPress={() => onAreaClick()} style={{ alignItems: 'center', flex: 1 }}> */}
         {/*  <View style={[styles.areaView, { backgroundColor: 'rgb(230,252,231)', marginLeft: RfW(8) }]}> */}

@@ -69,6 +69,10 @@ const Images = {
   settings: require('../assets/images/settings.png'),
   rectangle: require('../assets/images/rectangle.png'),
   dash_img: require('../assets/images/dash_img.png'),
+  abroad: require('../assets/images/abroad.png'),
+  pen_paper: require('../assets/images/pen_paper.png'),
+  school_education: require('../assets/images/school_education.png'),
+  language: require('../assets/images/language.png'),
 };
 
 export default Images;

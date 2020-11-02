@@ -3,7 +3,7 @@ import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback,
 import React, { useState, useEffect } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
@@ -65,6 +65,7 @@ function TutorListing(props) {
   const [maxFilterValue, setMaxFilterValue] = useState('');
   const [filterDataArray, setFilterDataArray] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
+  const [tutorsData, setTutorsData] = useState([]);
 
   const [filterItems, setFilterItems] = useState([
     { name: 'Qualifications', checked: false },
@@ -75,11 +76,30 @@ function TutorListing(props) {
     { name: 'Sort By', checked: true },
   ]);
 
-  const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
-    variables: {
-      searchDto: filterValues,
+  // const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
+  //   variables: {
+  //     searchDto: filterValues,
+  //   },
+  // });
+
+  const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setTutorsData(data);
+      }
     },
   });
+
+  useEffect(() => {
+    getTutors({
+      variables: { searchDto: filterValues },
+    });
+  }, []);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -360,6 +380,9 @@ function TutorListing(props) {
   const applyFilters = () => {
     setShowFilterPopup(false);
     setIsFilterApplied(true);
+    getTutors({
+      variables: { searchDto: filterValues },
+    });
     setRefreshList(!refreshList);
   };
 
