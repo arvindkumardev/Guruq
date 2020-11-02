@@ -1,12 +1,10 @@
-import { Image, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import React from 'react';
 import { Button } from 'native-base';
-import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import { Images, Colors } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import styles from './styles';
 
 function compareTutors() {
@@ -185,18 +183,20 @@ function compareTutors() {
             </View>
           </View>
         </View>
-        <View style={[commonStyles.lineSeparator, { marginTop: RfH(6) }]} />
+        <View style={[commonStyles.lineSeparator, { marginTop: RfH(6), marginBottom: RfH(34) }]} />
       </View>
     );
   };
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
       <ScreenHeader label="Compare Tutors" horizontalPadding={16} lineVisible homeIcon />
-      <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8), paddingHorizontal: RfW(16) }]}>
-        <View style={{ flex: 0.5 }}>{renderTutorView()}</View>
-        <View style={{ flex: 0.5 }}>{renderTutorView()}</View>
-      </View>
-      <View>{renderBasicInfoView()}</View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8), paddingHorizontal: RfW(16) }]}>
+          <View style={{ flex: 0.5 }}>{renderTutorView()}</View>
+          <View style={{ flex: 0.5 }}>{renderTutorView()}</View>
+        </View>
+        <View>{renderBasicInfoView()}</View>
+      </ScrollView>
     </View>
   );
 }

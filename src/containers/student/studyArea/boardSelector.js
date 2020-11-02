@@ -58,7 +58,7 @@ function BoardSelector(props) {
             .map((s) => {
               return (
                 <TouchableWithoutFeedback onPress={() => onClick(s)} style={{ alignItems: 'center', flex: 1 }}>
-                  <View style={[styles.areaView, { backgroundColor: 'rgb(255,247,240)', marginRight: RfW(8) }]}>
+                  <View style={[styles.areaView, { backgroundColor: 'rgb(255,247,240)', marginHorizontal: RfW(4) }]}>
                     <View style={{ alignItems: 'center' }}>
                       <Thumbnail style={{ height: RfH(70) }} square source={Images.cbse} />
                       <Text style={styles.areaTitleOne}>{s.displayName}</Text>

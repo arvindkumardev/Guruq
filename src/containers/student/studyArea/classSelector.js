@@ -70,7 +70,7 @@ function ClassSelector(props) {
           Select your Class
         </Text>
       </View>
-      <View style={[styles.areaParentView, { marginTop: RfH(56) }]}>
+      <View style={[commonStyles.verticallyCenterItemsView, { marginTop: RfH(56) }]}>
         {data &&
           data.offerings &&
           data.offerings.edges &&
