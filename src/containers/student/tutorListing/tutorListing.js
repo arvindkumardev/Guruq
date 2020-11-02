@@ -131,60 +131,62 @@ function TutorListing(props) {
 
     return (
       <View style={styles.listItemParent}>
-        <View style={[commonStyles.horizontalChildrenStartView]}>
-          <View style={styles.userIconParent}>
-            <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
-          </View>
-          <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-            <Text style={styles.tutorName}>
-              {item.contactDetail.firstName} {item.contactDetail.lastName}
-            </Text>
-            {item.educationDetails.length > 0 && (
-              <Text style={styles.tutorDetails}>
-                {titleCaseIfExists(item.educationDetails[0].degree?.degreeLevel)}
-                {' - '}
-                {titleCaseIfExists(item.educationDetails[0].fieldOfStudy)}
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS)}>
+          <View style={[commonStyles.horizontalChildrenStartView]}>
+            <View style={styles.userIconParent}>
+              <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
+            </View>
+            <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
+              <Text style={styles.tutorName}>
+                {item.contactDetail.firstName} {item.contactDetail.lastName}
               </Text>
-            )}
-            <Text style={styles.tutorDetails}>{item.teachingExperience} Years of Experience</Text>
-            <View style={styles.iconsView}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  marginTop: RfH(4),
-                }}>
-                <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
-                <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
-                <IconButtonWrapper
-                  iconHeight={RfH(15)}
-                  iconWidth={RfW(10)}
-                  iconImage={Images.single_user}
-                  styling={{ marginLeft: RfW(20) }}
-                />
-                <IconButtonWrapper
-                  iconHeight={RfH(15)}
-                  iconWidth={RfW(19)}
-                  iconImage={Images.multiple_user}
-                  styling={{ marginLeft: RfW(10) }}
-                />
-                <IconButtonWrapper
-                  iconHeight={RfH(17)}
-                  iconWidth={RfW(18)}
-                  iconImage={Images.user_board}
-                  styling={{ marginLeft: RfW(10) }}
-                />
+              {item.educationDetails.length > 0 && (
+                <Text style={styles.tutorDetails}>
+                  {titleCaseIfExists(item.educationDetails[0].degree?.degreeLevel)}
+                  {' - '}
+                  {titleCaseIfExists(item.educationDetails[0].fieldOfStudy)}
+                </Text>
+              )}
+              <Text style={styles.tutorDetails}>{item.teachingExperience} Years of Experience</Text>
+              <View style={styles.iconsView}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                    marginTop: RfH(4),
+                  }}>
+                  <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
+                  <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
+                  <IconButtonWrapper
+                    iconHeight={RfH(15)}
+                    iconWidth={RfW(10)}
+                    iconImage={Images.single_user}
+                    styling={{ marginLeft: RfW(20) }}
+                  />
+                  <IconButtonWrapper
+                    iconHeight={RfH(15)}
+                    iconWidth={RfW(19)}
+                    iconImage={Images.multiple_user}
+                    styling={{ marginLeft: RfW(10) }}
+                  />
+                  <IconButtonWrapper
+                    iconHeight={RfH(17)}
+                    iconWidth={RfW(18)}
+                    iconImage={Images.user_board}
+                    styling={{ marginLeft: RfW(10) }}
+                  />
+                </View>
+              </View>
+            </View>
+            <View>
+              <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                {onlineBudget && <Text style={styles.chargeText}>Online ₹{onlineBudget.price}/Hr</Text>}
+                {offlineBudget && <Text style={styles.chargeText}>Offline ₹{offlineBudget.price}/Hr</Text>}
               </View>
             </View>
           </View>
-          <View>
-            <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-              {onlineBudget && <Text style={styles.chargeText}>Online ₹{onlineBudget.price}/Hr</Text>}
-              {offlineBudget && <Text style={styles.chargeText}>Offline ₹{offlineBudget.price}/Hr</Text>}
-            </View>
-          </View>
-        </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   };
