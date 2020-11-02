@@ -14,9 +14,9 @@ import ClassSelector from '../containers/student/studyArea/classSelector';
 import SplashScreen from '../containers/common/splashScreen/splashScreen';
 import GettingStarted from '../containers/common/onboarding/gettingStarted';
 import PersonalDetails from '../containers/student/profile/personalDetails';
-import CompareTutors from '../containers/student/tutor/compareTutors';
-import TutorListing from '../containers/student/tutor/tutorListing';
-import TutorDetails from '../containers/student/tutor/tutorDetails';
+import CompareTutors from '../containers/student/tutorListing/compareTutors';
+import TutorListing from '../containers/student/tutorListing/tutorListing';
+import TutorDetails from '../containers/student/tutorListing/tutorDetails';
 
 const Stack = createStackNavigator();
 

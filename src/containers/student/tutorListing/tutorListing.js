@@ -154,7 +154,7 @@ function TutorListing(props) {
               {offlineBudget && <Text style={styles.chargeText}>Offline ₹{offlineBudget.price}/Hr</Text>}
             </View>
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       </View>
     );
   };

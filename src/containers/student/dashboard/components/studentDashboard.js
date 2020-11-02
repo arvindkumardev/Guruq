@@ -367,7 +367,6 @@ function StudentDashboard(props) {
     return (
       <View
         style={{
-          height: RfH(141),
           width: RfW(109),
           borderRadius: 8,
           backgroundColor: 'rgb(245,245,245)',
@@ -377,7 +376,9 @@ function StudentDashboard(props) {
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Thumbnail large style={{ marginTop: RfH(11) }} source={Images.kushal} />
           <Text style={{ marginTop: 1, color: Colors.primaryText }}>{item.name}</Text>
-          <Text style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12 }}>{item.subject}</Text>
+          <Text style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12, marginBottom: RfH(16) }}>
+            {item.subject}
+          </Text>
         </View>
       </View>
     );
@@ -462,7 +463,7 @@ function StudentDashboard(props) {
             </Item>
           </View>
 
-          <View style={{ height: RfH(210), marginTop: RfH(29) }}>
+          <View style={{ height: RfH(220), marginTop: RfH(29) }}>
             <Swiper horizontal>
               <View>
                 <View style={{ height: RfH(170), backgroundColor: '#ceecfe', borderRadius: 20 }} />
@@ -478,7 +479,6 @@ function StudentDashboard(props) {
           </View>
           <View
             style={{
-              height: RfH(140),
               backgroundColor: '#ceecfe',
               borderRadius: 20,
               marginTop: RfH(20),
