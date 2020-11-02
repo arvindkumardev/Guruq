@@ -73,6 +73,7 @@ const Images = {
   pen_paper: require('../assets/images/pen_paper.png'),
   school_education: require('../assets/images/school_education.png'),
   language: require('../assets/images/language.png'),
+  golden_star: require('../assets/images/golden_star.png'),
 };
 
 export default Images;
