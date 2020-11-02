@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   bottomText: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     // marginTop: RfH(4),
-    color: Colors.secondaryText,
+    color: Colors.darkgrey,
   },
   bottomTabActive: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
