@@ -39,6 +39,19 @@ export const SIGNUP_MUTATION = gql`
     ) {
       id
       token
+      firstName
+      lastName
+      email
+      isPasswordSet
+      isFirstTime
+      isPhoneNumberVerified
+      isEmailVerified
+      token
+      type
+      phoneNumber {
+        countryCode
+        number
+      }
     }
   }
 `;
@@ -56,6 +69,10 @@ export const SIGNIN_MUTATION = gql`
       isEmailVerified
       token
       type
+      phoneNumber {
+        countryCode
+        number
+      }
     }
   }
 `;
@@ -73,6 +90,10 @@ export const SET_PASSWORD_MUTATION = gql`
       isEmailVerified
       token
       type
+      phoneNumber {
+        countryCode
+        number
+      }
     }
   }
 `;
