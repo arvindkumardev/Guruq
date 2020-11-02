@@ -156,23 +156,23 @@ function TutorListing(props) {
                     justifyContent: 'flex-start',
                     marginTop: RfH(4),
                   }}>
-                  <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(18)} iconImage={Images.blue_star} />
+                  <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.blue_star} />
                   <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
                   <IconButtonWrapper
-                    iconHeight={RfH(15)}
-                    iconWidth={RfW(10)}
+                    iconHeight={RfH(14)}
+                    iconWidth={RfW(14)}
                     iconImage={Images.single_user}
                     styling={{ marginLeft: RfW(20) }}
                   />
                   <IconButtonWrapper
-                    iconHeight={RfH(15)}
-                    iconWidth={RfW(19)}
+                    iconHeight={RfH(16)}
+                    iconWidth={RfW(16)}
                     iconImage={Images.multiple_user}
                     styling={{ marginLeft: RfW(10) }}
                   />
                   <IconButtonWrapper
-                    iconHeight={RfH(17)}
-                    iconWidth={RfW(18)}
+                    iconHeight={RfH(16)}
+                    iconWidth={RfW(16)}
                     iconImage={Images.user_board}
                     styling={{ marginLeft: RfW(10) }}
                   />
