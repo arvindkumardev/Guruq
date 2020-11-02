@@ -6,15 +6,6 @@ import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants'
 
 let token;
 
-export const getToken = async () => {
-  if (token) {
-    return Promise.resolve(token);
-  }
-
-  token = await AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-  return token;
-};
-
 export const storeData = async (key, value) => {
   try {
     let v = value;
@@ -38,6 +29,20 @@ export const removeData = async (key) => {
   } catch (e) {
     // clear error
   }
+};
+
+export const getToken = async () => {
+  if (token) {
+    return Promise.resolve(token);
+  }
+
+  token = await AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+  return token;
+};
+
+export const removeToken = async () => {
+  removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+  token = null;
 };
 
 export const clearAllLocalStorage = async () => {

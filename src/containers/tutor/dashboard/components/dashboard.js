@@ -5,7 +5,7 @@ import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { getSaveData, removeData, RfH, RfW } from '../../../../utils/helpers';
+import { getSaveData, removeToken, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
@@ -28,15 +28,6 @@ function TutorDashboard() {
     { name: 'Simran Rai', subject: 'Chemistry', imageUrl: '' },
     { name: 'Priyam', subject: 'Maths', imageUrl: '' },
   ]);
-  const navigation = useNavigation();
-
-  const logout = () => {
-    Alert.alert('Logout!');
-    removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-    removeData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
-    removeData(LOCAL_STORAGE_DATA_KEY.LAST_NAME);
-    navigation.navigate(routeNames.LOGIN);
-  };
 
   const renderSubjects = () => {
     return (
@@ -132,7 +123,12 @@ function TutorDashboard() {
           </View>
         </View>
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', marginTop: RfH(20) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            marginTop: RfH(20),
+          }}>
           <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
             <View
               style={{
@@ -251,7 +247,12 @@ function TutorDashboard() {
       <StatusBar barStyle="dark-content" />
       <View style={[commonStyles.mainContainer]}>
         <View
-          style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(18) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-end',
+            marginTop: RfH(18),
+          }}>
           <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
             <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>
               Hi {userName}
@@ -305,12 +306,24 @@ function TutorDashboard() {
           <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
         </View>
         <View
-          style={{ height: RfH(140), backgroundColor: '#ceecfe', borderRadius: 20, marginTop: RfH(20), padding: 16 }}>
+          style={{
+            height: RfH(140),
+            backgroundColor: '#ceecfe',
+            borderRadius: 20,
+            marginTop: RfH(20),
+            padding: 16,
+          }}>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
             <View style={{ flex: 0.3 }}>
               <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
             </View>
-            <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+            <View
+              style={{
+                flex: 0.7,
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'stretch',
+              }}>
               <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
                 Science by Rahul Das
               </Text>
@@ -343,14 +356,24 @@ function TutorDashboard() {
           </View>
         </View>
         <View
-          style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-end',
+            marginTop: RfH(25),
+          }}>
           <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
             Tutors By Subjects
           </Text>
         </View>
         {renderSubjects()}
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: RfH(25) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginTop: RfH(25),
+          }}>
           <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Favourite Tutors</Text>
           <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
         </View>
@@ -362,7 +385,12 @@ function TutorDashboard() {
           keyExtractor={(item, index) => index.toString()}
         />
         <View
-          style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', marginTop: RfH(25) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-end',
+            marginTop: RfH(25),
+          }}>
           <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
             Recommended Tutors
           </Text>
@@ -376,10 +404,22 @@ function TutorDashboard() {
               paddingVertical: RfH(13),
               marginRight: RfW(16),
             }}>
-            <View style={{ flex: 0.3, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <View
+              style={{
+                flex: 0.3,
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
               <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
             </View>
-            <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+            <View
+              style={{
+                flex: 0.7,
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'stretch',
+              }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Gurbani Singh</Text>
                 <View style={{ flexDirection: 'row' }}>
@@ -388,7 +428,12 @@ function TutorDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      color: Colors.primaryText,
+                      fontFamily: 'SegoeUI-Semibold',
+                    }}>
                     4.5
                   </Text>
                 </View>
@@ -418,10 +463,22 @@ function TutorDashboard() {
               paddingVertical: RfH(13),
               marginRight: RfW(16),
             }}>
-            <View style={{ flex: 0.3, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <View
+              style={{
+                flex: 0.3,
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
               <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
             </View>
-            <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+            <View
+              style={{
+                flex: 0.7,
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'stretch',
+              }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Tushar Das</Text>
                 <View style={{ flexDirection: 'row' }}>
@@ -430,7 +487,12 @@ function TutorDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      color: Colors.primaryText,
+                      fontFamily: 'SegoeUI-Semibold',
+                    }}>
                     4.5
                   </Text>
                 </View>
@@ -467,10 +529,22 @@ function TutorDashboard() {
               paddingVertical: RfH(13),
               marginRight: RfW(16),
             }}>
-            <View style={{ flex: 0.3, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <View
+              style={{
+                flex: 0.3,
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
               <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
             </View>
-            <View style={{ flex: 0.7, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+            <View
+              style={{
+                flex: 0.7,
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'stretch',
+              }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Gurbani Singh</Text>
                 <View style={{ flexDirection: 'row' }}>
@@ -479,7 +553,12 @@ function TutorDashboard() {
                     name="star"
                     style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ alignSelf: 'center', color: Colors.primaryText, fontFamily: 'SegoeUI-Semibold' }}>
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      color: Colors.primaryText,
+                      fontFamily: 'SegoeUI-Semibold',
+                    }}>
                     4.5
                   </Text>
                 </View>

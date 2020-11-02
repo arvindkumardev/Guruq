@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import { removeData, RfH, storeData } from '../../../utils/helpers';
+import {removeData, removeToken, RfH, storeData} from '../../../utils/helpers';
 import routeNames from '../../../routes/screenNames';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
@@ -69,7 +69,7 @@ function OtpVerification(props) {
         } else {
           // set token
           console.log('data', data);
-          removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+          // removeToken();
           storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.verifyPhoneNumber.token);
 
           navigation.navigate(routeNames.SET_PASSWORD);

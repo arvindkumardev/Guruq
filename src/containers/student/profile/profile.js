@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { clearAllLocalStorage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { clearAllLocalStorage, removeData, removeToken, RfH, RfW, storeData } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
@@ -48,13 +48,14 @@ function Profile() {
   const logout = () => {
     clearAllLocalStorage().then(() => {
       client.cache.reset().then(() => {
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, '');
-        // set in apollo cache
-        isLoggedIn(false);
-        userDetails({});
+        removeToken().then(() => {
+          // set in apollo cache
+          isLoggedIn(false);
+          userDetails({});
 
-        studentDetails({});
-        tutorDetails({});
+          studentDetails({});
+          tutorDetails({});
+        });
       });
     });
   };
@@ -76,7 +77,12 @@ function Profile() {
         // disabled={}
         style={[
           styles.userMenuParentView,
-          { height: 44, justifyContent: 'space-between', paddingLeft: RfW(48), borderBottomColor: Colors.lightGrey },
+          {
+            height: 44,
+            justifyContent: 'space-between',
+            paddingLeft: RfW(48),
+            borderBottomColor: Colors.lightGrey,
+          },
         ]}>
         <View style={{ flexDirection: 'row' }}>
           <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} />
@@ -123,7 +129,12 @@ function Profile() {
           <Text style={styles.myProfileText}>My Profile</Text>
         </View>
         <View
-          style={{ height: 102, backgroundColor: Colors.white, paddingHorizontal: RfW(16), justifyContent: 'center' }}>
+          style={{
+            height: 102,
+            backgroundColor: Colors.white,
+            paddingHorizontal: RfW(16),
+            justifyContent: 'center',
+          }}>
           <View style={styles.userDetailsView}>
             <Image style={styles.userIcon} source={Images.user} />
             <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16) }}>
