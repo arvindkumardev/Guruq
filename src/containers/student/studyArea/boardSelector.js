@@ -1,4 +1,5 @@
-import { StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+/* eslint-disable no-nested-ternary */
+import { StatusBar, Text, TouchableWithoutFeedback, View, FlatList } from 'react-native';
 import { Icon, Thumbnail } from 'native-base';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +9,7 @@ import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
+import { IconButtonWrapper } from '../../../components';
 import styles from './style';
 import routeNames from '../../../routes/screenNames';
 import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
@@ -26,6 +28,40 @@ function BoardSelector(props) {
 
   const onBackPress = () => {
     navigation.goBack();
+  };
+
+  const renderItem = (item, index) => {
+    return (
+      <TouchableWithoutFeedback onPress={() => onClick(item)}>
+        <View
+          style={[
+            styles.areaView,
+            {
+              marginHorizontal: RfW(8),
+              marginVertical: RfW(16),
+              backgroundColor:
+                index === 0
+                  ? Colors.lightOrange
+                  : index === 1
+                  ? Colors.lightGreen
+                  : index === 2
+                  ? Colors.lightPurple
+                  : Colors.lightBlue,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          ]}>
+          <View style={{ alignItems: 'center' }}>
+            <IconButtonWrapper
+              iconHeight={RfH(70)}
+              iconImage={index === 0 ? Images.igcse : index === 1 ? Images.ib : index === 2 ? Images.icse : Images.cbse}
+            />
+            <Text style={styles.areaTitleOne}>{item.displayName}</Text>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    );
   };
 
   return (
@@ -50,7 +86,19 @@ function BoardSelector(props) {
         </Text>
       </View>
       <View style={styles.areaParentView}>
-        {data &&
+        <FlatList
+          data={
+            data &&
+            data.offerings &&
+            data.offerings.edges &&
+            data.offerings.edges.filter((s) => s?.parentOffering?.id === studyArea.id)
+          }
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => renderItem(item, index)}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+        />
+        {/* {data &&
           data.offerings &&
           data.offerings.edges &&
           data.offerings.edges
@@ -66,7 +114,7 @@ function BoardSelector(props) {
                   </View>
                 </TouchableWithoutFeedback>
               );
-            })}
+            })} */}
         {/* <TouchableWithoutFeedback onPress={() => onBoardClick()} style={{ alignItems: 'center', flex: 1 }}> */}
         {/*  <View style={[styles.areaView, { backgroundColor: 'rgb(230,252,231)', marginLeft: RfW(8) }]}> */}
         {/*    <View style={{ alignItems: 'center' }}> */}

@@ -3,7 +3,7 @@ import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback,
 import React, { useState, useEffect } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
@@ -64,22 +64,52 @@ function TutorListing(props) {
   const [minFilterValue, setMinFilterValue] = useState('');
   const [maxFilterValue, setMaxFilterValue] = useState('');
   const [filterDataArray, setFilterDataArray] = useState([]);
-  const [filterOptions, setFilterOptions] = useState([]);
+  const [filterOptions, setFilterOptions] = useState([
+    { name: 'All Qualifications', checked: false, value: 0 },
+    { name: 'Secondary', checked: false, value: 1 },
+    { name: 'Higher Secondary', checked: false, value: 2 },
+    { name: 'Diploma', checked: false, value: 3 },
+    { name: 'Bachelors', checked: false, value: 4 },
+    { name: 'PG Diploma', checked: false, value: 5 },
+    { name: 'Masters', checked: false, value: 6 },
+    { name: 'Doctoral', checked: false, value: 7 },
+    { name: 'Other', checked: false, value: 8 },
+  ]);
+  const [tutorsData, setTutorsData] = useState([]);
 
   const [filterItems, setFilterItems] = useState([
-    { name: 'Qualifications', checked: false },
+    { name: 'Qualifications', checked: true },
     { name: 'Experience', checked: false },
     { name: 'Price', checked: false },
     { name: 'Rating', checked: false },
+    { name: 'Sort By', checked: false },
     { name: 'Mode of Study', checked: false },
-    { name: 'Sort By', checked: true },
   ]);
 
-  const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
-    variables: {
-      searchDto: filterValues,
+  // const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
+  //   variables: {
+  //     searchDto: filterValues,
+  //   },
+  // });
+
+  const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setTutorsData(data);
+      }
     },
   });
+
+  useEffect(() => {
+    getTutors({
+      variables: { searchDto: filterValues },
+    });
+  }, []);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -177,22 +207,27 @@ function TutorListing(props) {
     filterArr[index].checked = !filterArr[index].checked;
     switch (filterIndex) {
       case 0:
-        filterValues.qualification = filterArr[index].name;
-        filterValues.degreeLevel = filterArr[index].value;
+        // filterValues.qualification = filterArr[index].name;
+        filterValues.degreeLevel = item.value;
+        break;
+      case 2:
+        // filterValues.price = item.name;
+        filterValues.maxBudget = item.value.max;
+        filterValues.minBudget = item.value.min;
         break;
       case 4:
-        filterValues.sortBy = filterArr[index].name;
+        filterValues.sortBy = item.name;
         break;
       case 5:
-        filterValues.studyMode = filterArr[index].name;
+        filterValues.teachingMode = item.value;
         break;
       default:
-        filterValues.qualification = '';
+        // filterValues.qualification = '';
         filterValues.experience = '';
-        filterValues.price = '';
-        filterValues.rating = 0;
+        // filterValues.price = '';
+        filterValues.averageRating = 0;
         filterValues.sortBy = '';
-        filterValues.studyMode = '';
+        filterValues.teachingMode = '';
         break;
     }
     setFilterValues(filterValues);
@@ -286,9 +321,15 @@ function TutorListing(props) {
         break;
       default:
         options = [
-          { name: 'Any', checked: true, value: 0 },
-          { name: 'Online', checked: false, value: 1 },
-          { name: 'Offline', checked: false, value: 2 },
+          { name: 'All Qualifications', checked: false, value: 0 },
+          { name: 'Secondary', checked: false, value: 1 },
+          { name: 'Higher Secondary', checked: false, value: 2 },
+          { name: 'Diploma', checked: false, value: 3 },
+          { name: 'Bachelors', checked: false, value: 4 },
+          { name: 'PG Diploma', checked: false, value: 5 },
+          { name: 'Masters', checked: false, value: 6 },
+          { name: 'Doctoral', checked: false, value: 7 },
+          { name: 'Other', checked: false, value: 8 },
         ];
         setIsRadioViewEnabled(true);
         break;
@@ -304,19 +345,16 @@ function TutorListing(props) {
       case 1:
         filterValues.experience = item.value;
         break;
-      case 2:
-        filterValues.price = item;
-        break;
       case 3:
-        filterValues.rating = item;
+        filterValues.averageRating = item.value;
         break;
       default:
-        filterValues.qualification = '';
+        // filterValues.qualification = '';
         filterValues.experience = '';
-        filterValues.price = '';
-        filterValues.rating = 0;
+        // filterValues.price = '';
+        filterValues.averageRating = 0;
         filterValues.sortBy = '';
-        filterValues.studyMode = '';
+        // filterValues.studyMode = '';
         break;
     }
     setFilterValues(filterValues);
@@ -360,6 +398,9 @@ function TutorListing(props) {
   const applyFilters = () => {
     setShowFilterPopup(false);
     setIsFilterApplied(true);
+    getTutors({
+      variables: { searchDto: filterValues },
+    });
     setRefreshList(!refreshList);
   };
 
@@ -367,9 +408,9 @@ function TutorListing(props) {
     filterValues.qualification = '';
     filterValues.experience = '';
     filterValues.price = '';
-    filterValues.rating = 0;
+    filterValues.averageRating = 0;
     filterValues.sortBy = '';
-    filterValues.studyMode = '';
+    filterValues.teachingMode = '';
     setFilterValues(filterValues);
 
     setIsFilterApplied(false);
@@ -464,27 +505,31 @@ function TutorListing(props) {
   const removeFilter = (filter) => {
     switch (filter) {
       case 1:
-        filterValues.qualification = '';
+        filterValues.degreeLevel = 0;
         break;
       case 2:
-        filterValues.experience = '';
+        filterValues.experience = 0;
         break;
       case 3:
-        filterValues.price = '';
+        filterValues.maxBudget = 0;
+        filterValues.minBudget = 0;
         break;
       case 4:
-        filterValues.rating = 0;
+        filterValues.averageRating = 0;
         break;
       case 5:
         filterValues.sortBy = '';
         break;
       case 6:
-        filterValues.studyMode = '';
+        filterValues.teachingMode = 0;
         break;
       default:
         break;
     }
     setFilterValues(filterValues);
+    getTutors({
+      variables: { searchDto: filterValues },
+    });
     setRefreshList(!refreshList);
   };
 
@@ -499,7 +544,7 @@ function TutorListing(props) {
           },
         ]}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
-          {filterValues.qualification ? (
+          {filterValues.degreeLevel ? (
             <View style={styles.filterButton}>
               <Text style={styles.appliedFilterText}>{filterValues.qualification}</Text>
               <IconButtonWrapper
@@ -527,9 +572,11 @@ function TutorListing(props) {
           ) : (
             <View />
           )}
-          {filterValues.price ? (
+          {filterValues.minBudget ? (
             <View style={styles.filterButton}>
-              <Text style={styles.appliedFilterText}>{filterValues.price}</Text>
+              <Text style={styles.appliedFilterText}>
+                {filterValues.minBudget} - {filterValues.maxBudget}
+              </Text>
               <IconButtonWrapper
                 iconWidth={RfW(15)}
                 iconHeight={RfH(15)}
@@ -541,9 +588,9 @@ function TutorListing(props) {
           ) : (
             <View />
           )}
-          {filterValues.rating ? (
+          {filterValues.averageRating ? (
             <View style={styles.filterButton}>
-              <Text style={styles.appliedFilterText}>Rating {filterValues.rating}</Text>
+              <Text style={styles.appliedFilterText}>Rating {filterValues.averageRating}</Text>
               <IconButtonWrapper
                 iconWidth={RfW(15)}
                 iconHeight={RfH(15)}
@@ -569,9 +616,11 @@ function TutorListing(props) {
           ) : (
             <View />
           )}
-          {filterValues.studyMode ? (
+          {filterValues.teachingMode ? (
             <View style={styles.filterButton}>
-              <Text style={styles.appliedFilterText}>{filterValues.studyMode}</Text>
+              <Text style={styles.appliedFilterText}>
+                {filterValues.teachingMode === 0 ? 'Any' : filterValues.teachingMode === 1 ? 'Online' : 'Offline'}
+              </Text>
               <IconButtonWrapper
                 iconWidth={RfW(15)}
                 iconHeight={RfH(15)}
