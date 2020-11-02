@@ -36,9 +36,10 @@ function SignUp(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token);
-        isLoggedIn(true);
-        userDetails(data.signUp);
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
+          isLoggedIn(true);
+          userDetails(data.signUp);
+        });
 
         // navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR);
       }

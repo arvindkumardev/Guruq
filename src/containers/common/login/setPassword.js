@@ -37,9 +37,10 @@ function SetPassword() {
     },
     onCompleted: (data) => {
       if (data) {
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token);
-        isLoggedIn(true);
-        userDetails(data.setPassword);
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token).then(() => {
+          isLoggedIn(true);
+          userDetails(data.setPassword);
+        });
 
         // if (data.type === UserTypeEnum.OTHER.label) {
         //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR, { user: data.SetPassword });

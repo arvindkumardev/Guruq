@@ -40,7 +40,7 @@ export const removeData = async (key) => {
   }
 };
 
-export const clearAll = async () => {
+export const clearAllLocalStorage = async () => {
   try {
     await AsyncStorage.clear();
   } catch (e) {

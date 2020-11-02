@@ -6,15 +6,22 @@ import commonStyles from '../../../../theme/styles';
 import Colors from '../../../../theme/colors';
 import styles from '../styles';
 import Loader from '../../../../components/Loader';
+import { RfH, RfW } from '../../../../utils/helpers';
 
 function MainContainer(props) {
   const { isLoading, onBackPress } = props;
 
   return (
-    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.brandBlue }]}>
+    <View
+      style={[
+        commonStyles.mainContainer,
+        { paddingTop: RfH(44), paddingHorizontal: 0, backgroundColor: Colors.brandBlue },
+      ]}>
       <Loader isLoading={isLoading} />
       <StatusBar barStyle="light-content" />
-      <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={styles.backIcon} />
+      <View style={{ paddingHorizontal: RfW(16) }}>
+        <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={styles.backIcon} />
+      </View>
       <View style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={{ flex: 1 }} />

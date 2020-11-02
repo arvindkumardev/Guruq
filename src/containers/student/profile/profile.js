@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { removeData, RfH, RfW } from '../../../utils/helpers';
+import { clearAllLocalStorage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import IconWrapper from '../../../components/IconWrapper';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
@@ -46,20 +46,17 @@ function Profile() {
   const client = initializeApollo();
 
   const logout = () => {
-    console.log(client.cache);
-    removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+    clearAllLocalStorage().then(() => {
+      client.cache.reset().then(() => {
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, '');
+        // set in apollo cache
+        isLoggedIn(false);
+        userDetails({});
 
-    // set in apollo cache
-    isLoggedIn(false);
-    userDetails({});
-
-    studentDetails({});
-    tutorDetails({});
-
-    client.cache.reset();
-
-    console.log('User logged out!');
-    console.log(client.cache);
+        studentDetails({});
+        tutorDetails({});
+      });
+    });
   };
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
@@ -70,6 +67,7 @@ function Profile() {
       // setIsPersonalMenuOpen(true)
       return null;
     }
+    return null;
   };
   const renderItem = (item) => {
     return (

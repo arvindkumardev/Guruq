@@ -40,9 +40,10 @@ function EnterPassword(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
-        isLoggedIn(true);
-        userDetails(data.signIn);
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token).then(() => {
+          isLoggedIn(true);
+          userDetails(data.signIn);
+        });
 
         // if (data.type === UserTypeEnum.OTHER.label) {
         //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR);
