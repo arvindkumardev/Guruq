@@ -74,6 +74,15 @@ const Images = {
   school_education: require('../assets/images/school_education.png'),
   language: require('../assets/images/language.png'),
   golden_star: require('../assets/images/golden_star.png'),
+  understanding: require('../assets/images/understanding.png'),
+  thumb_range: require('../assets/images/thumb_range.png'),
+  stats: require('../assets/images/stats.png'),
+  methodology: require('../assets/images/methodology.png'),
+  professional: require('../assets/images/professional.png'),
+  chat: require('../assets/images/chat.png'),
+  minus_blue: require('../assets/images/minus_blue.png'),
+  plus_blue: require('../assets/images/plus_blue.png'),
+  logo_yellow: require('../assets/images/logo_yellow.png'),
 };
 
 export default Images;

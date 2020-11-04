@@ -21,6 +21,8 @@ const NavigationRouteNames = {
     PERSONAL_DETAILS: 'personal_details',
     COMPARE_TUTORS: 'compare_tutors',
     TUTOR_DETAILS: 'tutor_details',
+    SELECT_CLASS_MODE: 'select_class_mode',
+    MY_CART: 'my_cart',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',

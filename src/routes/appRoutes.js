@@ -17,6 +17,8 @@ import PersonalDetails from '../containers/student/profile/personalDetails';
 import CompareTutors from '../containers/student/tutorListing/compareTutors';
 import TutorListing from '../containers/student/tutorListing/tutorListing';
 import TutorDetails from '../containers/student/tutorListing/tutorDetails';
+import selectClassMode from '../containers/student/tutorListing/bookingTutor/selectClassMode';
+import myCart from '../containers/student/tutorListing/bookingTutor/myCart';
 
 const Stack = createStackNavigator();
 
@@ -114,6 +116,16 @@ const AppStack = (props) => {
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.TUTOR_DETAILS}
             component={TutorDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.SELECT_CLASS_MODE}
+            component={selectClassMode}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.MY_CART}
+            component={myCart}
             options={{ headerShown: false }}
           />
         </>
