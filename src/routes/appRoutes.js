@@ -19,6 +19,8 @@ import TutorListing from '../containers/student/tutorListing/tutorListing';
 import TutorDetails from '../containers/student/tutorListing/tutorDetails';
 import selectClassMode from '../containers/student/tutorListing/bookingTutor/selectClassMode';
 import myCart from '../containers/student/tutorListing/bookingTutor/myCart';
+import paymentMethod from '../containers/student/payment/paymentMethod';
+import bookingConfirmed from '../containers/student/payment/bookingConfirmed';
 
 const Stack = createStackNavigator();
 
@@ -126,6 +128,16 @@ const AppStack = (props) => {
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.MY_CART}
             component={myCart}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}
+            component={paymentMethod}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
+            component={bookingConfirmed}
             options={{ headerShown: false }}
           />
         </>

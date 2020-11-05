@@ -56,7 +56,7 @@ customRangeSelector.propTypes = {
 customRangeSelector.defaultProps = {
   style: {},
   label: '',
-  topMargin: RfH(48),
+  topMargin: RfH(44),
   horizontalPadding: 0,
   lineVisible: false,
   homeIcon: false,

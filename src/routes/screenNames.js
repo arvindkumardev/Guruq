@@ -23,6 +23,8 @@ const NavigationRouteNames = {
     TUTOR_DETAILS: 'tutor_details',
     SELECT_CLASS_MODE: 'select_class_mode',
     MY_CART: 'my_cart',
+    PAYMENT_METHOD: 'payment_method',
+    BOOKING_CONFIRMED: 'booking_confirmed',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',
