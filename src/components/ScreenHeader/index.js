@@ -22,7 +22,7 @@ function customRangeSelector(props) {
       <View
         style={[
           commonStyles.topActionView,
-          { style, marginTop: RfH(topMargin), paddingHorizontal: RfW(horizontalPadding) },
+          { style, marginTop: RfH(topMargin), paddingHorizontal: RfW(horizontalPadding), height: RfH(44) },
         ]}>
         <View style={commonStyles.horizontalChildrenView}>
           {homeIcon && (

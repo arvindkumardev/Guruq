@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
   topView: {
     height: RfH(98),
     backgroundColor: Colors.lightPurple,
-    // paddingVertical: RfH(16),
-    // paddingRight: RfW(16),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -23,7 +21,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    // padding: RfH(12),
     height: 54,
   },
   switchText: {
@@ -34,7 +31,6 @@ const styles = StyleSheet.create({
     color: Colors.primaryText,
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
-    // paddingHorizontal: RfW(16),
   },
   classText: {
     color: Colors.darkGrey,
@@ -243,6 +239,49 @@ const styles = StyleSheet.create({
   appliedFilterText: {
     fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
     color: Colors.darkGrey,
+  },
+  itemView: {
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
+    borderColor: Colors.darkGrey,
+  },
+  buttonParentView: {
+    alignSelf: 'center',
+    marginTop: RfH(30),
+    marginBottom: RfH(34),
+  },
+  bookingSelectorParent: {
+    borderRadius: 8,
+    width: RfW(72),
+    height: RfH(32),
+    borderWidth: 1,
+    borderColor: Colors.brandBlue2,
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+  },
+  tutorIcon: {
+    alignSelf: 'center',
+    marginTop: RfH(48),
+    borderRadius: RfW(16),
+  },
+  classTableText: {
+    flex: 0.25,
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    color: Colors.darkGrey,
+    textAlign: 'center',
+  },
+  fabActionParent: {
+    bottom: RfH(84),
+    right: RfW(16),
+    position: 'absolute',
+    height: RfH(56),
+    width: RfW(56),
+    borderRadius: 28,
+    backgroundColor: Colors.orange,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 export default styles;
