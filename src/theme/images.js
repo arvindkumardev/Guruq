@@ -83,6 +83,7 @@ const Images = {
   minus_blue: require('../assets/images/minus_blue.png'),
   plus_blue: require('../assets/images/plus_blue.png'),
   logo_yellow: require('../assets/images/logo_yellow.png'),
+  cart_white: require('../assets/images/cart_white.png'),
 };
 
 export default Images;

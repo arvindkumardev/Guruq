@@ -283,5 +283,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  cartText: {
+    marginTop: RfH(-34),
+    marginLeft: RfW(8),
+    alignSelf: 'center',
+    color: Colors.white,
+    fontWeight: 'bold',
+  },
 });
 export default styles;

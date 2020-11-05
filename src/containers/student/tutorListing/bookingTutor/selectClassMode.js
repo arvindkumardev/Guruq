@@ -104,8 +104,8 @@ const selectClassMode = () => {
       <View style={styles.fabActionParent}>
         <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
           <View>
-            <IconButtonWrapper iconHeight={RfH(32)} iconImage={Images.cart} />
-            <Text style={{ marginTop: RfH(-30), color: Colors.white }}>{numberOfClass}</Text>
+            <IconButtonWrapper iconHeight={RfH(40)} iconImage={Images.cart_white} styling={{ alignSelf: 'center' }} />
+            <Text style={styles.cartText}>{numberOfClass}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
