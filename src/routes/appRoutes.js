@@ -80,13 +80,6 @@ const AppStack = (props) => {
 
       {isUserLoggedIn && userTypeSet && (
         <>
-          {/* // temp */}
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}
-            component={PaymentMethod}
-            options={{ headerShown: false }}
-          />
-
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.DASHBOARD}
             component={StudentDashboardContainer}
@@ -138,11 +131,11 @@ const AppStack = (props) => {
             component={myCart}
             options={{ headerShown: false }}
           />
-          {/*<Stack.Screen*/}
-          {/*  name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}*/}
-          {/*  component={PaymentMethod}*/}
-          {/*  options={{ headerShown: false }}*/}
-          {/*/>*/}
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}
+            component={PaymentMethod}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
             component={bookingConfirmed}

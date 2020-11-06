@@ -54,7 +54,7 @@ function PaymentMethod() {
   };
 
   const initiatePaytmPayment = async () => {
-    const response = await fetch('http://localhost:5000/payment/initiateTransaction', {
+    const response = await fetch('http://localhost:5000/payment/initiatePaytmTransaction', {
       method: 'GET',
     });
 
