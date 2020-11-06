@@ -15,12 +15,12 @@ PODS:
     - Flipper-Folly (~> 2.2)
     - Flipper-RSocket (~> 1.1)
   - Flipper-DoubleConversion (1.1.7)
-  - Flipper-Folly (2.2.0):
+  - Flipper-Folly (2.3.0):
     - boost-for-react-native
     - CocoaLibEvent (~> 1.0)
     - Flipper-DoubleConversion
     - Flipper-Glog
-    - OpenSSL-Universal (= 1.0.2.19)
+    - OpenSSL-Universal (= 1.0.2.20)
   - Flipper-Glog (0.3.6)
   - Flipper-PeerTalk (0.0.4)
   - Flipper-RSocket (1.1.0):
@@ -71,9 +71,10 @@ PODS:
   - lottie-react-native (3.5.0):
     - lottie-ios (~> 3.1.8)
     - React
-  - OpenSSL-Universal (1.0.2.19):
-    - OpenSSL-Universal/Static (= 1.0.2.19)
-  - OpenSSL-Universal/Static (1.0.2.19)
+  - OpenSSL-Universal (1.0.2.20):
+    - OpenSSL-Universal/Static (= 1.0.2.20)
+  - OpenSSL-Universal/Static (1.0.2.20)
+  - razorpay-pod (1.1.7)
   - RCTRequired (0.63.3)
   - RCTTypeSafety (0.63.3):
     - FBLazyVector (= 0.63.3)
@@ -242,6 +243,9 @@ PODS:
   - React-jsinspector (0.63.3)
   - react-native-netinfo (5.9.7):
     - React-Core
+  - react-native-razorpay (2.2.1):
+    - razorpay-pod
+    - React
   - react-native-safe-area-context (3.1.8):
     - React-Core
   - react-native-splash-screen (3.0.6):
@@ -318,6 +322,8 @@ PODS:
     - React-Core
   - RNGestureHandler (1.8.0):
     - React
+  - RNPayTm (1.0.13):
+    - React
   - RNReanimated (1.13.1):
     - React
   - RNScreens (2.11.0):
@@ -365,6 +371,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-razorpay (from `../node_modules/react-native-razorpay`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -383,6 +390,7 @@ DEPENDENCIES:
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - "RNPayTm (from `../node_modules/@philly25/react-native-paytm`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -401,6 +409,7 @@ SPEC REPOS:
     - FlipperKit
     - lottie-ios
     - OpenSSL-Universal
+    - razorpay-pod
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -438,6 +447,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-razorpay:
+    :path: "../node_modules/react-native-razorpay"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-splash-screen:
@@ -474,6 +485,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPayTm:
+    :path: "../node_modules/@philly25/react-native-paytm"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -490,7 +503,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 7da9338acfb98d4ef9e5536805a0704572d33c2f
   Flipper: be611d4b742d8c87fbae2ca5f44603a02539e365
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
-  Flipper-Folly: c12092ea368353b58e992843a990a3225d4533c3
+  Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
   Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
@@ -499,7 +512,8 @@ SPEC CHECKSUMS:
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   lottie-react-native: 1fb4ce21d6ad37dab8343eaff8719df76035bd93
-  OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
+  OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
+  razorpay-pod: 6ee0c8c7afad8eead9524d5eb516bc35ac1604ef
   RCTRequired: 48884c74035a0b5b76dbb7a998bd93bcfc5f2047
   RCTTypeSafety: edf4b618033c2f1c5b7bc3d90d8e085ed95ba2ab
   React: f36e90f3ceb976546e97df3403e37d226f79d0e3
@@ -511,6 +525,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b56c03e61c0dd5f5801255f2160a815f4a53d451
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
   react-native-netinfo: 250dc0ca126512f618a8a2ca6a936577e1f66586
+  react-native-razorpay: 5c7216443173b90baa43871fdf565fd15f6108f3
   react-native-safe-area-context: 79fea126c6830c85f65947c223a5e3058a666937
   react-native-splash-screen: d712b25c25f6671a15227f9b8579f87b2dbb0340
   React-RCTActionSheet: 53ea72699698b0b47a6421cb1c8b4ab215a774aa
@@ -529,6 +544,7 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 3d1931e387248cb8f1d1d33740d4a1a82dfe622a
   RNDeviceInfo: 9b6aba9ffaed69ecb72bd13c7bcb0debf277bc9f
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNPayTm: e90982d0292290daa54768113ffd4e9d7564cf41
   RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
   RNScreens: 0e91da98ab26d5d04c7b59a9b6bd694124caf88c
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a

@@ -14,6 +14,7 @@
   "dependencies": {
     "@apollo/client": "^3.0.2",
     "@apollo/react-hooks": "^4.0.0",
+    "@philly25/react-native-paytm": "^1.0.13",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/datetimepicker": "^3.0.4",
     "@react-native-community/masked-view": "^0.1.10",
