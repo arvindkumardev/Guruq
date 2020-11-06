@@ -1,5 +1,5 @@
 import { Alert, NativeEventEmitter, NativeModules, Text, TouchableOpacity, View } from 'react-native';
-import React, { useRef } from 'react';
+import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Card } from 'native-base';
@@ -97,15 +97,7 @@ function PaymentMethod() {
     const clientId = 'ATyFhrGwKtQXOl6CctMYjxObRRQeys2xmBUG1uKZvgkCRtzxNdMq75Xu1p9jQiM8ez4dfkOpI9jSrAVJ';
     const clientSecret = 'EMwjugQJWArgzPjQSMCFFqbGp2md_xmb69tCiGcP_hmdF_K1T8uJcyIUCUN2Mzf43cXAvZwBXiSnJsFy';
 
-    PayPal.paymentRequest({
-      clientId,
-      environment: 0,
-      price: '42.00',
-      currency: 'USD',
-      description: 'PayPal Test',
-    })
-      .then((confirm, payment) => console.log('Paid', confirm, payment))
-      .catch((error_code) => console.error('Failed to pay through PayPal', error_code));
+    // TODO: use Linking and inappbrowser for PayPal - https://blog.codecentric.de/en/2020/05/paypal-integration-with-react-native/
   };
 
   return (
