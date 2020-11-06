@@ -5,9 +5,6 @@ We have created a sample product catalog app that is built using Apollo Client S
 
 This document covers the steps to get this app up and running for you. Try out the app and play with it, before building bigger and better applications.
 
-| ![](https://github.com/contentstack/contentstack-reactnative-graphql-example/raw/master/iOS.png) |  ![](https://github.com/contentstack/contentstack-reactnative-graphql-example/raw/master/Android.png)|
-|--|--|
-
 ## Prerequisite
 
 - Use [Xcode 11.1 and later](https://developer.apple.com/xcode/) Mac OS X 10.15 and later (for iOS)
