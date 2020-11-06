@@ -277,18 +277,19 @@ const styles = StyleSheet.create({
     right: RfW(16),
     position: 'absolute',
     height: RfH(56),
-    width: RfW(56),
+    width: RfH(56),
     borderRadius: 28,
     backgroundColor: Colors.orange,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cartText: {
-    marginTop: RfH(-34),
+    marginTop: RfH(-27),
     marginLeft: RfW(8),
     alignSelf: 'center',
     color: Colors.white,
     fontWeight: 'bold',
+    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
   },
 });
 export default styles;

@@ -12,8 +12,10 @@ import styles from '../styles';
 import { RfH, RfW } from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import QPointPayModal from '../components/qPointPayModal';
+import routeNames from '../../../../routes/screenNames';
 
 const myCart = () => {
+  const navigation = useNavigation();
   const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
   const [cartItems, setCartItems] = useState([
@@ -195,6 +197,11 @@ const myCart = () => {
       setRefreshList(!refreshList);
     }
   };
+
+  const payNow = () => {
+    setShowQPointPayModal(false);
+    navigation.navigate(routeNames.STUDENT.PAYMENT_METHOD);
+  };
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
       <View style={{ marginHorizontal: RfW(16) }}>
@@ -225,7 +232,7 @@ const myCart = () => {
         <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text>
         {renderCartDetails()}
         <View style={styles.buttonParentView}>
-          <Button style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+          <Button onPress={() => payNow()} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
             <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
           </Button>
         </View>
@@ -238,6 +245,7 @@ const myCart = () => {
         totalAmount={1500}
         qPoint={300}
         amountToPayAfterQPoint={900}
+        onPayNow={() => payNow()}
       />
     </View>
   );

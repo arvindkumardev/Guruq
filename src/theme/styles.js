@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   buttonPrimary: {
     backgroundColor: Colors.brandBlue2,
     marginHorizontal: RfW(56),
+    width: RfW(144),
     height: RfH(40),
     flexDirection: 'row',
     justifyContent: 'center',

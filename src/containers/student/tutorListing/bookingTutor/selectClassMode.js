@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, View, Text, ScrollView, TouchableWithoutFeedback } from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { Switch, Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { ScreenHeader, IconButtonWrapper } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Images, Colors } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 import styles from '../styles';
 
@@ -76,12 +74,14 @@ const selectClassMode = () => {
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(40) }]}>
           <Text style={[styles.compareTutorName, { marginTop: 0 }]}>Total Classes</Text>
           <View style={styles.bookingSelectorParent}>
-            <IconButtonWrapper
-              iconWidth={RfW(12)}
-              iconHeight={RfH(12)}
-              iconImage={Images.minus_blue}
-              submitFunction={() => removeClass()}
-            />
+            <TouchableWithoutFeedback onPress={() => removeClass()}>
+              <IconButtonWrapper
+                iconWidth={RfW(12)}
+                iconHeight={RfH(12)}
+                iconImage={Images.minus_blue}
+                submitFunction={() => removeClass()}
+              />
+            </TouchableWithoutFeedback>
             <Text>{numberOfClass}</Text>
             <IconButtonWrapper
               iconWidth={RfW(12)}
@@ -104,7 +104,7 @@ const selectClassMode = () => {
       <View style={styles.fabActionParent}>
         <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
           <View>
-            <IconButtonWrapper iconHeight={RfH(40)} iconImage={Images.cart_white} styling={{ alignSelf: 'center' }} />
+            <IconButtonWrapper iconHeight={RfH(32)} iconImage={Images.cart_white} styling={{ alignSelf: 'center' }} />
             <Text style={styles.cartText}>{numberOfClass}</Text>
           </View>
         </TouchableWithoutFeedback>
