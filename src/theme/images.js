@@ -86,6 +86,7 @@ const Images = {
   cart_white: require('../assets/images/cart_white.png'),
   white_plus_with_blue_back: require('../assets/images/white_plus_with_blue_back.png'),
   confirmed_booking: require('../assets/images/confirmed_booking.png'),
+  thank_you: require('../assets/images/thank_you.png'),
 };
 
 export default Images;

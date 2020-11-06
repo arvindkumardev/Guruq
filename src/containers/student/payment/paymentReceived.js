@@ -10,7 +10,7 @@ import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 
-function bookingConfirmed() {
+function paymentReceived() {
   const navigation = useNavigation();
 
   return (
@@ -23,14 +23,14 @@ function bookingConfirmed() {
           alignSelf: 'center',
           fontFamily: Fonts.semiBold,
         }}>
-        Booking Confirmed
+        Payment Received
       </Text>
       <View style={{ height: RfH(56) }} />
       <IconButtonWrapper
         styling={{ alignSelf: 'center' }}
-        iconWidth={RfW(264)}
-        iconHeight={RfH(224)}
-        iconImage={Images.confirmed_booking}
+        iconWidth={RfW(280)}
+        iconHeight={RfH(280)}
+        iconImage={Images.thank_you}
       />
       <View style={{ height: RfH(24) }} />
       <Text
@@ -52,7 +52,7 @@ function bookingConfirmed() {
         Booking ID 9E03U8W9292
       </Text>
       <Button
-        onPress={() => navigation.navigate(routeNames.STUDENT.PAYMENT_RECEIVED)}
+        onPress={() => navigation.navigate(routeNames.STUDENT.DASHBOARD)}
         style={[commonStyles.buttonPrimary, { bottom: RfH(34), position: 'absolute', alignSelf: 'center' }]}>
         <Text style={commonStyles.textButtonPrimary}>Dashboard</Text>
       </Button>
@@ -60,4 +60,4 @@ function bookingConfirmed() {
   );
 }
 
-export default bookingConfirmed;
+export default paymentReceived;

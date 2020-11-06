@@ -25,6 +25,7 @@ const NavigationRouteNames = {
     MY_CART: 'my_cart',
     PAYMENT_METHOD: 'payment_method',
     BOOKING_CONFIRMED: 'booking_confirmed',
+    PAYMENT_RECEIVED: 'payment_received',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',
