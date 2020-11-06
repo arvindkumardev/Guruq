@@ -322,8 +322,6 @@ PODS:
     - React-Core
   - RNGestureHandler (1.8.0):
     - React
-  - RNPayTm (1.0.13):
-    - React
   - RNReanimated (1.13.1):
     - React
   - RNScreens (2.11.0):
@@ -390,7 +388,6 @@ DEPENDENCIES:
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - "RNPayTm (from `../node_modules/@philly25/react-native-paytm`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -485,8 +482,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNPayTm:
-    :path: "../node_modules/@philly25/react-native-paytm"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -544,7 +539,6 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 3d1931e387248cb8f1d1d33740d4a1a82dfe622a
   RNDeviceInfo: 9b6aba9ffaed69ecb72bd13c7bcb0debf277bc9f
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
-  RNPayTm: e90982d0292290daa54768113ffd4e9d7564cf41
   RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
   RNScreens: 0e91da98ab26d5d04c7b59a9b6bd694124caf88c
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a

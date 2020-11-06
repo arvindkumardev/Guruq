@@ -1,5 +1,5 @@
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
-import React, {useRef} from 'react';
+import { Alert, NativeEventEmitter, NativeModules, Text, TouchableOpacity, View } from 'react-native';
+import React, { useRef } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Card } from 'native-base';
@@ -13,8 +13,6 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
 import PaytmTest from './paytmTest';
-
-
 
 function PaymentMethod() {
   const navigation = useNavigation();
@@ -56,8 +54,44 @@ function PaymentMethod() {
       });
   };
 
-   const initiatePaytmPayment = () => {
+  const initiatePaytmPayment = async () => {
+    const response = await fetch('http://localhost:5000/payment/initiateTransaction', {
+      method: 'GET',
+    });
 
+    const data = await response.json();
+    //
+    // .then((response) => response.json())
+    // .then((data) => {
+    // const { checksum } = response;
+
+    console.log(data);
+
+    const AllInOneSDKPlugin = NativeModules.AllInOneSDKSwiftWrapper;
+
+    const { mid } = data.paytmParams.body;
+    const { orderId } = data.paytmParams.body;
+    const { txnToken } = data.body;
+    const amount = data.paytmParams.body.txnAmount.value;
+    const callback = `https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=${orderId}`;
+    const isStaging = true;
+
+    console.log('-------------------------open Native--------', NativeModules);
+    const result = AllInOneSDKPlugin.openPaytm(mid, orderId, txnToken, amount, callback, isStaging);
+
+    console.log(result);
+
+    // instantiate the event emitter
+    const CounterEvents = new NativeEventEmitter(NativeModules.AllInOneSDKSwiftWrapper);
+
+    // subscribe to event
+    CounterEvents.addListener(
+      'responseIfNotInstalled',
+      // cf(res)
+      (res) => console.log('response received from paytm event', JSON.stringify(res))
+      // console.log("response received from paytm event", res)
+    );
+    CounterEvents.addListener('responseIfPaytmInstalled', (res) => console.log(JSON.stringify(res)));
   };
 
   const initiatePaypalPayment = () => {
@@ -135,8 +169,6 @@ function PaymentMethod() {
             <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>Paytm</Text>
             <View style={commonStyles.horizontalChildrenView} />
           </TouchableOpacity>
-
-          <PaytmTest />
         </View>
 
         <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />

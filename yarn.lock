@@ -1131,11 +1131,6 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@philly25/react-native-paytm@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@philly25/react-native-paytm/-/react-native-paytm-1.0.13.tgz#090e6ad881c67aa89e5503e129eccca18d2b7b6a"
-  integrity sha512-osY4Bv9LyMWiljcFOgMe9RsDi9sqzpfpvOG+Xp0X99Ey2dtpmhmQtDZA0C0j9goE0lMsVT3a5QS7J3nky69vyw==
-
 "@react-native-community/async-storage@^1.12.1":
   version "1.12.1"
   resolved "https://registry.npmjs.org/@react-native-community/async-storage/-/async-storage-1.12.1.tgz"

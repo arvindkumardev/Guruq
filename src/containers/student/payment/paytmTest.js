@@ -1,6 +1,5 @@
 import React from 'react';
-import { Platform, TouchableOpacity, Text } from 'react-native';
-import Paytm from '@philly25/react-native-paytm';
+import { Platform, TouchableOpacity, Text, NativeModules, NativeEventEmitter } from 'react-native';
 
 // Data received from PayTM
 const paytmConfig = {
@@ -13,80 +12,68 @@ const paytmConfig = {
 };
 
 export default class PaytmTest extends React.Component {
-  UNSAFE_componentWillMount() {
-    Paytm.addListener(Paytm.Events.PAYTM_RESPONSE, this.onPayTmResponse);
-  }
+  // UNSAFE_componentWillMount() {
+  //   Paytm.addListener(Paytm.Events.PAYTM_RESPONSE, this.onPayTmResponse);
+  // }
+  //
+  // componentWillUnmount() {
+  //   Paytm.removeListener(Paytm.Events.PAYTM_RESPONSE, this.onPayTmResponse);
+  // }
+  //
+  // onPayTmResponse = (resp) => {
+  //   console.log('I am here...resp', resp);
+  //   const { STATUS, status, response } = resp;
+  //
+  //   if (Platform.OS === 'ios') {
+  //     if (status === 'Success') {
+  //       const jsonResponse = JSON.parse(response);
+  //       const { STATUS } = jsonResponse;
+  //
+  //       if (STATUS && STATUS === 'TXN_SUCCESS') {
+  //         // Payment succeed!
+  //       }
+  //     }
+  //   } else if (STATUS && STATUS === 'TXN_SUCCESS') {
+  //     // Payment succeed!
+  //   }
+  // };
 
-  componentWillUnmount() {
-    Paytm.removeListener(Paytm.Events.PAYTM_RESPONSE, this.onPayTmResponse);
-  }
+  runTransaction = async () => {
 
-  onPayTmResponse = (resp) => {
-    console.log('I am here...resp', resp);
-    const { STATUS, status, response } = resp;
-
-    if (Platform.OS === 'ios') {
-      if (status === 'Success') {
-        const jsonResponse = JSON.parse(response);
-        const { STATUS } = jsonResponse;
-
-        if (STATUS && STATUS === 'TXN_SUCCESS') {
-          // Payment succeed!
-        }
-      }
-    } else if (STATUS && STATUS === 'TXN_SUCCESS') {
-      // Payment succeed!
-    }
-  };
-
-  runTransaction = (amount, customerId, orderId, mobile, email, checkSum, mercUnqRef) => {
-    // const callbackUrl = `${paytmConfig.callback_url}${orderId}`;
-
-    console.log('running...runTransaction');
-
-    fetch('http://localhost:5000/payment/initiateTransaction', {
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // const { checksum } = response;
-
-        console.log(data);
-
-        const details = {
-          // mode: 'Staging',
-          mid: data.MID,
-          channel: data.CHANNEL_ID,
-          industryType: data.INDUSTRY_TYPE_ID,
-          website: data.WEBSITE,
-          amount: data.TXN_AMOUNT,
-          orderId: data.ORDER_ID,
-          email: data.EMAIL,
-          phone: data.MOBILE_NO,
-          custId: data.CUST_ID,
-          callback: data.CALLBACK_URL,
-          checksumhash: data.checksum,
-          // MERC_UNQ_REF: mercUnqRef, // optional
-        };
-        //
-        // console.log(details);
-        // console.log('response.body', response.paytmParams);
-
-        // const details = {
-        //   ...response.body,
-        //   checksumhash: response.checksumhash,
-        //   checksum: response.checksumhash,
-        //   callback: `${paytmConfig.callback_url}${response.paytmParams.body.orderId}`,
-        // mode: 'Staging',
-        // };
-
-        console.log('details', details);
-
-        Paytm.startPayment(details);
-        // })
-        // .catch((error) => {
-        //   console.error(error);
-      });
+    //
+    // const details = {
+    //   mode: 'Staging',
+    //   MID: data.MID,
+    //   CHANNEL_ID: data.CHANNEL_ID,
+    //   INDUSTRY_TYPE_ID: data.INDUSTRY_TYPE_ID,
+    //   WEBSITE: data.WEBSITE,
+    //   TXN_AMOUNT: data.TXN_AMOUNT,
+    //   ORDER_ID: data.ORDER_ID,
+    //   // EMAIL: data.EMAIL,
+    //   // MOBILE_NO: data.MOBILE_NO,
+    //   CUST_ID: data.CUST_ID,
+    //   CALLBACK_URL: data.CALLBACK_URL,
+    //   CHECKSUMHASH: data.checksum,
+    // };
+    // //
+    // // console.log(details);
+    // // console.log('response.body', response.paytmParams);
+    //
+    // // const details = {
+    // //   ...response.body,
+    // //   checksumhash: response.checksumhash,
+    // //   checksum: response.checksumhash,
+    // //   callback: `${paytmConfig.callback_url}${response.paytmParams.body.orderId}`,
+    // // mode: 'Staging',
+    // // };
+    //
+    // console.log('details', details);
+    //
+    // Paytm.startPayment(details);
+    // // })
+    // // .catch((error) => {
+    // //   console.error(error);
+    // // });
   };
 
   render() {

@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "SplashScreen.h"
+#import "RCTLinkingManager.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -48,6 +49,18 @@ static void InitializeFlipper(UIApplication *application) {
   [SplashScreen show];
   
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+
+  NSString *urlString = url.absoluteString;
+  NSDictionary *userInfo =
+  [NSDictionary dictionaryWithObject:urlString forKey:@"appInvokeNotificationKey"];
+  [[NSNotificationCenter defaultCenter] postNotificationName:
+   @"appInvokeNotification" object:nil userInfo:userInfo];
+  return [RCTLinkingManager application:app openURL:url options:options];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
