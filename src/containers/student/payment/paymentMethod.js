@@ -12,7 +12,6 @@ import { RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
-import PaytmTest from './paytmTest';
 
 function PaymentMethod() {
   const navigation = useNavigation();
