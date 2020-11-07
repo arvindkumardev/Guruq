@@ -54,49 +54,65 @@ function PaymentMethod() {
   };
 
   const initiatePaytmPayment = async () => {
+    // eslint-disable-next-line no-undef
     const response = await fetch('http://localhost:5000/payment/initiatePaytmTransaction', {
       method: 'GET',
     });
 
+    // fetch('https://reactnative.dev/movies.json')
+    //     .then((response) => response.json())
+    //     .then((json) => {
+    //       return json.movies;
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+
+    console.log(response);
+
     const data = await response.json();
-    //
-    // .then((response) => response.json())
-    // .then((data) => {
-    // const { checksum } = response;
 
-    console.log(data);
+    if (data.error) {
+      Alert.alert('PayTM is not available right now, please try again later!');
+    } else {
+      //
+      // .then((response) => response.json())
+      // .then((data) => {
+      // const { checksum } = response;
 
-    const AllInOneSDKPlugin = NativeModules.AllInOneSDKSwiftWrapper;
+      console.log(data);
 
-    const { mid } = data.paytmParams.body;
-    const { orderId } = data.paytmParams.body;
-    const { txnToken } = data.body;
-    const amount = data.paytmParams.body.txnAmount.value;
-    const callback = `https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=${orderId}`;
-    const isStaging = true;
+      const AllInOneSDKPlugin = NativeModules.AllInOneSDKSwiftWrapper;
 
-    console.log('-------------------------open Native--------', NativeModules);
-    const result = AllInOneSDKPlugin.openPaytm(mid, orderId, txnToken, amount, callback, isStaging);
+      const { mid } = data.paytmParams.body;
+      const { orderId } = data.paytmParams.body;
+      const { txnToken } = data.body;
+      const amount = data.paytmParams.body.txnAmount.value;
+      const callback = `https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=${orderId}`;
+      const isStaging = true;
 
-    console.log(result);
+      console.log('-------------------------open Native--------', NativeModules);
+      const result = AllInOneSDKPlugin.openPaytm(mid, orderId, txnToken, amount, callback, isStaging);
 
-    // instantiate the event emitter
-    const CounterEvents = new NativeEventEmitter(NativeModules.AllInOneSDKSwiftWrapper);
+      console.log(result);
 
-    // subscribe to event
-    CounterEvents.addListener(
-      'responseIfNotInstalled',
-      // cf(res)
-      (res) => console.log('response received from paytm event', JSON.stringify(res))
-      // console.log("response received from paytm event", res)
-    );
-    CounterEvents.addListener('responseIfPaytmInstalled', (res) => console.log(JSON.stringify(res)));
+      // instantiate the event emitter
+      const CounterEvents = new NativeEventEmitter(NativeModules.AllInOneSDKSwiftWrapper);
+
+      // subscribe to event
+      CounterEvents.addListener(
+        'responseIfNotInstalled',
+        // cf(res)
+        (res) => console.log('response received from paytm event', JSON.stringify(res))
+        // console.log("response received from paytm event", res)
+      );
+      CounterEvents.addListener('responseIfPaytmInstalled', (res) => console.log(JSON.stringify(res)));
+    }
   };
 
   const initiatePaypalPayment = () => {
-    const clientId = 'ATyFhrGwKtQXOl6CctMYjxObRRQeys2xmBUG1uKZvgkCRtzxNdMq75Xu1p9jQiM8ez4dfkOpI9jSrAVJ';
-    const clientSecret = 'EMwjugQJWArgzPjQSMCFFqbGp2md_xmb69tCiGcP_hmdF_K1T8uJcyIUCUN2Mzf43cXAvZwBXiSnJsFy';
-
+    // const clientId = 'ATyFhrGwKtQXOl6CctMYjxObRRQeys2xmBUG1uKZvgkCRtzxNdMq75Xu1p9jQiM8ez4dfkOpI9jSrAVJ';
+    // const clientSecret = 'EMwjugQJWArgzPjQSMCFFqbGp2md_xmb69tCiGcP_hmdF_K1T8uJcyIUCUN2Mzf43cXAvZwBXiSnJsFy';
     // TODO: use Linking and inappbrowser for PayPal - https://blog.codecentric.de/en/2020/05/paypal-integration-with-react-native/
   };
 
