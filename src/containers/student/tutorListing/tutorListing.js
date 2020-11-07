@@ -134,55 +134,162 @@ function TutorListing(props) {
         <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS)}>
           <View style={[commonStyles.horizontalChildrenStartView]}>
             <View style={styles.userIconParent}>
+              <View
+                style={{
+                  // padding: RfW(8),
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  zIndex: 100,
+                  height: RfW(28),
+                  width: RfW(28),
+                  backgroundColor: 'rgba(255,255,255,0.5)',
+                  borderRadius: RfW(24),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Icon
+                  type="FontAwesome"
+                  name="heart"
+                  style={{
+                    fontSize: 15,
+                    color: item.id % 7 !== 0 ? Colors.darkGrey : Colors.orangeRed,
+                  }}
+                />
+              </View>
               <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
-            </View>
-            <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-              <Text style={styles.tutorName}>
-                {item.contactDetail.firstName} {item.contactDetail.lastName}
-              </Text>
-              {item.educationDetails.length > 0 && (
-                <Text style={styles.tutorDetails}>
-                  {titleCaseIfExists(item.educationDetails[0].degree?.degreeLevel)}
-                  {' - '}
-                  {titleCaseIfExists(item.educationDetails[0].fieldOfStudy)}
-                </Text>
-              )}
-              <Text style={styles.tutorDetails}>{item.teachingExperience} Years of Experience</Text>
-              <View style={styles.iconsView}>
+
+              {item.id % 7 === 0 && (
                 <View
                   style={{
+                    // padding: RfW(8),
+                    position: 'absolute',
+                    bottom: -5,
+                    left: 0,
+                    zIndex: 100,
+                    borderRadius: RfW(20),
                     flexDirection: 'row',
+                    justifyContent: 'center',
                     alignItems: 'center',
-                    justifyContent: 'flex-start',
-                    marginTop: RfH(4),
+                    // width: RfW(60),
+                    marginHorizontal: RfW(8),
                   }}>
-                  <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.blue_star} />
-                  <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
-                  <IconButtonWrapper
-                    iconHeight={RfH(14)}
-                    iconWidth={RfW(14)}
-                    iconImage={Images.single_user}
-                    styling={{ marginLeft: RfW(20) }}
-                  />
-                  <IconButtonWrapper
-                    iconHeight={RfH(16)}
-                    iconWidth={RfW(16)}
-                    iconImage={Images.multiple_user}
-                    styling={{ marginLeft: RfW(10) }}
-                  />
-                  <IconButtonWrapper
-                    iconHeight={RfH(16)}
-                    iconWidth={RfW(16)}
-                    iconImage={Images.user_board}
-                    styling={{ marginLeft: RfW(10) }}
-                  />
+                  <View
+                    style={{
+                      backgroundColor: Colors.orange,
+
+                      borderRadius: RfW(2),
+                      // alignSelf: 'center',
+                      // justifySelf:"center",
+                      paddingVertical: RfH(2),
+                      paddingHorizontal: RfW(4),
+                    }}>
+                    <Text
+                      style={{ fontSize: 10, textTransform: 'uppercase', color: Colors.white, fontFamily: Fonts.bold }}>
+                      Sponsored
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </View>
+            <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
+                  <Text style={styles.tutorName}>
+                    {item.contactDetail.firstName} {item.contactDetail.lastName}
+                  </Text>
+                  {item.educationDetails.length > 0 && (
+                    <Text style={styles.tutorDetails}>
+                      {titleCaseIfExists(item.educationDetails[0].degree?.degreeLevel)}
+                      {' - '}
+                      {titleCaseIfExists(item.educationDetails[0].fieldOfStudy)}
+                    </Text>
+                  )}
+                  <Text style={styles.tutorDetails}>{item.teachingExperience} Years of Experience</Text>
+                  <View style={[styles.iconsView, { marginTop: RfH(8) }]}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        marginTop: RfH(4),
+                      }}>
+                      <Icon
+                        type="FontAwesome"
+                        name="star"
+                        style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
+                      />
+                      <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
+
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {onlineBudget && (
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              marginLeft: RfW(16),
+                            }}>
+                            <Icon
+                              type="FontAwesome"
+                              name="tv"
+                              style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }}
+                            />
+                            <Text style={styles.chargeText}>₹ {onlineBudget.price}/Hr</Text>
+                          </View>
+                        )}
+                        {offlineBudget && (
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              marginLeft: RfW(16),
+                            }}>
+                            <Icon
+                              type="FontAwesome"
+                              name="home"
+                              style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }}
+                            />
+                            <Text style={styles.chargeText}>₹ {offlineBudget.price}/Hr</Text>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignSelf: 'flex-start' }}>
+                  <View style={{ alignSelf: 'flex-end', marginBottom: RfH(17) }}>
+                    <Icon
+                      type="FontAwesome"
+                      name="thumbs-up"
+                      style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }}
+                    />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconButtonWrapper
+                      iconHeight={RfH(14)}
+                      iconWidth={RfW(14)}
+                      iconImage={Images.single_user}
+                      styling={{ marginLeft: RfW(20) }}
+                    />
+                    <IconButtonWrapper
+                      iconHeight={RfH(16)}
+                      iconWidth={RfW(16)}
+                      iconImage={Images.multiple_user}
+                      styling={{ marginLeft: RfW(10) }}
+                    />
+                    <IconButtonWrapper
+                      iconHeight={RfH(16)}
+                      iconWidth={RfW(16)}
+                      iconImage={Images.user_board}
+                      styling={{ marginLeft: RfW(10) }}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-            <View>
-              <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                {onlineBudget && <Text style={styles.chargeText}>Online ₹{onlineBudget.price}/Hr</Text>}
-                {offlineBudget && <Text style={styles.chargeText}>Offline ₹{offlineBudget.price}/Hr</Text>}
+
+              <View style={{ marginHorizontal: RfW(8), marginTop: RfH(8) }}>
+                <View style={commonStyles.lineSeparator} />
+                <Text style={{ fontSize: 13, color: Colors.secondaryText }}>Free Demo Class</Text>
               </View>
             </View>
           </View>
@@ -752,7 +859,7 @@ function TutorListing(props) {
                   paddingHorizontal: RfW(16),
                   paddingVertical: RfW(10),
                 }}>
-                <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} />
+                <IconButtonWrapper iconHeight={15} iconWidth={15} iconImage={Images.filter} />
                 <Text style={styles.filterText}>Sort / Filters</Text>
               </View>
             </TouchableWithoutFeedback>

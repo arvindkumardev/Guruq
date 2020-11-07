@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   listItemParent: {
     // borderRadius: RfH(8),
-    marginBottom: RfH(17),
+    marginBottom: RfH(24),
   },
   userIconParent: {
     // flex: 0.3,
@@ -75,25 +75,26 @@ const styles = StyleSheet.create({
     borderRadius: RfH(8),
   },
   tutorName: {
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     color: Colors.primaryText,
     fontFamily: Fonts.semiBold,
   },
   tutorDetails: {
-    color: Colors.darkGrey,
-    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    color: Colors.secondaryText,
     marginTop: RfH(2),
   },
   chargeText: {
     color: Colors.black,
-    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-    fontFamily: 'SegoeUI-Semibold',
-    marginLeft: RfW(4),
+    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    // fontFamily: Fonts.semiBold,
+    // marginLeft: RfW(4),
   },
   iconsView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    flex: 1,
   },
   backButton: {
     alignSelf: 'flex-start',
