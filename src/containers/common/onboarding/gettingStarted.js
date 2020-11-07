@@ -37,9 +37,11 @@ function GettingStarted() {
           <ConnectWithTutor />
         </View>
       </Swiper>
-      <TouchableOpacity style={[commonStyles.buttonPrimary, { marginBottom: RfH(34) }]} onPress={() => goToLogin()}>
-        <Text style={commonStyles.textButtonPrimary}>Get Started</Text>
-      </TouchableOpacity>
+      <View style={{ alignSelf: 'center' }}>
+        <TouchableOpacity style={[commonStyles.buttonPrimary, { marginBottom: RfH(34) }]} onPress={() => goToLogin()}>
+          <Text style={commonStyles.textButtonPrimary}>Get Started</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

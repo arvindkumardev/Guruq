@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   bottomParent: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'stretch',
+    alignItems: 'center',
   },
   underlineView: {
     marginTop: RfH(40),

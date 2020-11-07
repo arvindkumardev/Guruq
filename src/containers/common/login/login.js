@@ -108,7 +108,7 @@ function Login() {
           style={[
             showNext ? commonStyles.buttonPrimary : commonStyles.disableButton,
             {
-              marginTop: RfH(48),
+              marginTop: RfH(44),
               alignSelf: 'center',
               width: RfW(144),
             },
