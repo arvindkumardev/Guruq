@@ -8,7 +8,7 @@ const Colors = {
   brandBlue2: '#07A6EE',
 
   primaryText: '#000000',
-  secondaryText: '#8a8a8e',
+  secondaryText: '#888888',
   borderColor: '#d9d9d9',
 
   orange: '#fcb92d',

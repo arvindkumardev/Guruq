@@ -19,12 +19,12 @@ import TutorListing from '../containers/student/tutorListing/tutorListing';
 import TutorDetails from '../containers/student/tutorListing/tutorDetails';
 import selectClassMode from '../containers/student/tutorListing/bookingTutor/selectClassMode';
 import myCart from '../containers/student/tutorListing/bookingTutor/myCart';
-import paymentMethod from '../containers/student/payment/paymentMethod';
 import bookingConfirmed from '../containers/student/payment/bookingConfirmed';
 import paymentReceived from '../containers/student/payment/paymentReceived';
 import myClasses from '../containers/student/classes/classes';
 import scheduleClass from '../containers/student/classes/scheduleClass';
 import scheduledClassDetails from '../containers/student/calendar/scheduledClassDetails';
+import PaymentMethod from '../containers/student/payment/paymentMethod';
 
 const Stack = createStackNavigator();
 
@@ -136,7 +136,7 @@ const AppStack = (props) => {
           />
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}
-            component={paymentMethod}
+            component={PaymentMethod}
             options={{ headerShown: false }}
           />
           <Stack.Screen

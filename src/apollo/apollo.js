@@ -15,8 +15,6 @@ const httpLink = new HttpLink({ uri: GRAPHQL_ENDPOINT, credentials: 'same-origin
 const authLink = setContext(async (req, { headers }) => {
   const token = await getToken();
 
-  console.log('token in apollo', token);
-
   return {
     headers: {
       ...headers,
