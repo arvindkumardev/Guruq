@@ -26,6 +26,9 @@ const NavigationRouteNames = {
     PAYMENT_METHOD: 'payment_method',
     BOOKING_CONFIRMED: 'booking_confirmed',
     PAYMENT_RECEIVED: 'payment_received',
+    MY_CLASSES: 'my_classes',
+    SCHEDULE_CLASS: 'schedule_class',
+    SCHEDULED_CLASS_DETAILS: 'scheduled_class_details',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',

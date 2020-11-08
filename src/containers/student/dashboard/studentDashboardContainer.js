@@ -23,7 +23,7 @@ function StudentDashboardContainer(props) {
 
   return (
     <SafeAreaView style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <Container>
         <View style={{ flex: 1 }}>
           {activeTab === 1 && <StudentDashboard refetchStudentOfferings={refetchStudentOfferings} />}

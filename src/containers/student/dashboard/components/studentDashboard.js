@@ -513,7 +513,9 @@ function StudentDashboard(props) {
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
-            <Text style={{ color: Colors.brandBlue2, fontSize: 15 }}>View All</Text>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CLASSES)}>
+              <Text style={{ color: Colors.brandBlue2, fontSize: 15 }}>View All</Text>
+            </TouchableWithoutFeedback>
           </View>
           <View
             style={{
