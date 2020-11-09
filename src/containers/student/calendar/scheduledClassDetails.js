@@ -6,7 +6,7 @@ import { Colors, Images } from '../../../theme';
 import { IconButtonWrapper } from '../../../components';
 import commonStyles from '../../../theme/styles';
 
-function scheduledClassDetails() {
+function ScheduledClassDetails() {
   return (
     <View>
       <View
@@ -14,13 +14,14 @@ function scheduledClassDetails() {
           height: RfH(116),
           backgroundColor: Colors.lightPurple,
           paddingTop: RfH(44),
-          paddingHorizontal: RfW(16),
+          paddingLeft: RfW(8),
+          paddingRight: RfW(16),
           flexDirection: 'row',
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
         }}>
         <IconButtonWrapper iconHeight={RfH(24)} iconImage={Images.backArrow} />
-        <View style={commonStyles.horizontalChildrenSpaceView}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { flex: 1 }]}>
           <View style={commonStyles.verticallyStretchedItemsView}>
             <Text style={commonStyles.pageTitle}>English Class</Text>
             <Text style={[commonStyles.secondaryText, { marginTop: RfH(4) }]}>CBSE | Class 9</Text>
@@ -32,8 +33,12 @@ function scheduledClassDetails() {
           </View>
         </View>
       </View>
+      <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(24) }]}>
+        <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.two_users} />
+        <Text style={[commonStyles.headingText, { marginLeft: RfW(16) }]}>Tutor</Text>
+      </View>
     </View>
   );
 }
 
-export default scheduledClassDetails;
+export default ScheduledClassDetails;

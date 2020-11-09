@@ -111,6 +111,10 @@ const styles = StyleSheet.create({
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.bold,
   },
+  headingText: {
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
+  },
   secondaryText: {
     fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
     color: Colors.darkGrey,

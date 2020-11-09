@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
 import { Colors, Images } from '../../../../theme';
@@ -108,40 +108,42 @@ const myCart = () => {
 
   const renderQPointView = () => {
     return (
-      <View
-        style={[
-          commonStyles.horizontalChildrenSpaceView,
-          {
-            borderTopWidth: 0.5,
-            borderBottomWidth: 0.5,
-            borderColor: Colors.darkGrey,
-            marginTop: RfH(32),
-            paddingVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          },
-        ]}>
-        <View style={commonStyles.horizontalChildrenStartView}>
-          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
-          <Text
-            style={[
-              styles.compareTutorName,
-              {
-                fontFamily: 'SegoeUI-Bold',
-                color: Colors.orange,
-                marginLeft: RfW(8),
-                marginTop: 0,
-              },
-            ]}>
-            Use Q Points
-          </Text>
+      <TouchableWithoutFeedback onPress={() => setShowQPointPayModal(true)}>
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            {
+              borderTopWidth: 0.5,
+              borderBottomWidth: 0.5,
+              borderColor: Colors.darkGrey,
+              marginTop: RfH(32),
+              paddingVertical: RfH(16),
+              marginHorizontal: RfW(16),
+            },
+          ]}>
+          <View style={commonStyles.horizontalChildrenStartView}>
+            <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
+            <Text
+              style={[
+                styles.compareTutorName,
+                {
+                  fontFamily: 'SegoeUI-Bold',
+                  color: Colors.orange,
+                  marginLeft: RfW(8),
+                  marginTop: 0,
+                },
+              ]}>
+              Apply Q Points
+            </Text>
+          </View>
+          <IconButtonWrapper
+            iconHeight={RfH(24)}
+            iconWidth={RfW(24)}
+            iconImage={Images.chevronRight}
+            submitFunction={() => setShowQPointPayModal(true)}
+          />
         </View>
-        <IconButtonWrapper
-          iconHeight={RfH(24)}
-          iconWidth={RfW(24)}
-          iconImage={Images.chevronRight}
-          submitFunction={() => setShowQPointPayModal(true)}
-        />
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -153,9 +155,10 @@ const myCart = () => {
           <Text style={styles.tutorDetails}>₹1200</Text>
         </View>
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={styles.tutorDetails}>Amount Payable</Text>
-          <Text style={styles.tutorDetails}>₹1200</Text>
+          <Text style={styles.tutorDetails}>Convenience charges</Text>
+          <Text style={styles.tutorDetails}>₹100</Text>
         </View>
+        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
           <Text
             style={[
@@ -231,10 +234,18 @@ const myCart = () => {
         {renderQPointView()}
         <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text>
         {renderCartDetails()}
-        <View style={styles.buttonParentView}>
-          <Button onPress={() => payNow()} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
-            <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
-          </Button>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginBottom: RfH(34) }]}>
+          <View style={{ marginTop: RfH(30) }}>
+            <Text style={styles.buttonText}>₹1300</Text>
+            <Text style={styles.buttonText}>View Details</Text>
+          </View>
+          <View style={{ marginTop: RfH(30) }}>
+            <Button
+              onPress={() => payNow()}
+              style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'flex-end', marginHorizontal: 0 }]}>
+              <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
+            </Button>
+          </View>
         </View>
       </ScrollView>
       <QPointPayModal

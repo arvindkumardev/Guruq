@@ -70,7 +70,7 @@ function Calendar() {
             />
           </View>
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.titleText}>{item.classTitle}</Text>
+            <Text style={commonStyles.headingText}>{item.classTitle}</Text>
             <Text style={commonStyles.secondaryText}>
               {item.board} | {item.class}
             </Text>
