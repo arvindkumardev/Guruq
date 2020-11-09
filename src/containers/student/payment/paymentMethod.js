@@ -1,13 +1,23 @@
-import { Alert, NativeEventEmitter, NativeModules, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import {
+  Alert,
+  NativeEventEmitter,
+  NativeModules,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  Modal,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Card } from 'native-base';
 import RazorpayCheckout from 'react-native-razorpay';
 import { useReactiveVar } from '@apollo/client';
-import { Colors, Fonts } from '../../../theme';
+import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { ScreenHeader, CustomRadioButton } from '../../../components';
+import { ScreenHeader, CustomRadioButton, IconButtonWrapper } from '../../../components';
 import { RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
@@ -16,6 +26,7 @@ import { userDetails } from '../../../apollo/cache';
 function PaymentMethod() {
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(1);
+  const [showAddressPopup, setShowAddressPopup] = useState(false);
 
   const userInfo = useReactiveVar(userDetails);
 
@@ -272,7 +283,9 @@ function PaymentMethod() {
           }}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={commonStyles.headingText}>Billing Address</Text>
-            <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>CHANGE</Text>
+            <TouchableWithoutFeedback onPress={() => setShowAddressPopup(true)}>
+              <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>CHANGE</Text>
+            </TouchableWithoutFeedback>
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
@@ -299,6 +312,52 @@ function PaymentMethod() {
           <Text>Confirm</Text>
         </Button>
       </View> */}
+        <Modal
+          animationType="slide"
+          transparent
+          visible={showAddressPopup}
+          onRequestClose={() => {
+            setShowAddressPopup(false);
+          }}>
+          <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
+          <View
+            style={{
+              bottom: 0,
+              left: 0,
+              right: 0,
+              position: 'absolute',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              alignItems: 'stretch',
+              backgroundColor: Colors.white,
+              opacity: 1,
+              paddingBottom: RfH(34),
+            }}>
+            <IconButtonWrapper
+              iconHeight={RfH(24)}
+              iconWidth={RfW(24)}
+              styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
+              iconImage={Images.cross}
+              submitFunction={() => setShowAddressPopup(false)}
+            />
+            <View style={{ padding: RfH(16) }}>
+              <View>
+                <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>Billing Address</Text>
+                <Text style={commonStyles.secondaryText}>27/14, Kamla Nagar</Text>
+                <Text style={commonStyles.secondaryText}>Delhi</Text>
+              </View>
+              <View style={{ marginTop: RfH(32) }}>
+                <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>Service Address</Text>
+                <Text style={commonStyles.secondaryText}>27/27, Kamla Nagar</Text>
+                <Text style={commonStyles.secondaryText}>Delhi</Text>
+              </View>
+            </View>
+            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(32) }]}>
+              <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.plus_blue} />
+              <Text style={{ marginLeft: RfW(8), color: Colors.brandBlue2 }}>ADD NEW ADDRESS</Text>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </View>
   );
