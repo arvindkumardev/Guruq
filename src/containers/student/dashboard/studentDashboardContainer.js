@@ -4,9 +4,8 @@ import { Button, Container, Footer, FooterTab, Thumbnail } from 'native-base';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
-import Calendar from '../calendar/calendar';
+import CalendarView from '../calendar/calendarView';
 import Classes from '../classes/classes';
-import TutorListing from '../tutorListing/tutorListing';
 import Profile from '../profile/profile';
 import { RfH, RfW } from '../../../utils/helpers';
 import StudentDashboard from './components/studentDashboard';
@@ -27,7 +26,7 @@ function StudentDashboardContainer(props) {
       <Container>
         <View style={{ flex: 1 }}>
           {activeTab === 1 && <StudentDashboard refetchStudentOfferings={refetchStudentOfferings} />}
-          {activeTab === 2 && <Calendar />}
+          {activeTab === 2 && <CalendarView />}
           {activeTab === 3 && <Classes />}
           {/* {activeTab === 4 && <TutorListing />} */}
           {activeTab === 5 && <Profile />}

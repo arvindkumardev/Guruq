@@ -104,20 +104,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
   },
   pageTitleThirdRow: {
-    fontFamily: 'SegoeUI-bold',
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
-  },
-  titleText: {
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.bold,
   },
+  titleText: {
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
+    color: Colors.primaryText,
+  },
   headingText: {
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
   },
   secondaryText: {
-    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     color: Colors.darkGrey,
+  },
+  blockHeading: {
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
+    color: Colors.primaryText,
   },
 });
 export default styles;
