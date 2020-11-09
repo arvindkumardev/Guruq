@@ -25,6 +25,8 @@ import myClasses from '../containers/student/classes/classes';
 import scheduleClass from '../containers/student/classes/scheduleClass';
 import scheduledClassDetails from '../containers/student/calendar/scheduledClassDetails';
 import PaymentMethod from '../containers/student/payment/paymentMethod';
+import cancelReason from '../containers/student/calendar/cancelReason';
+import onlineClass from '../containers/student/calendar/onlineClass';
 
 const Stack = createStackNavigator();
 
@@ -162,6 +164,16 @@ const AppStack = (props) => {
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
             component={scheduledClassDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.CANCEL_REASON}
+            component={cancelReason}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.ONLINE_CLASS}
+            component={onlineClass}
             options={{ headerShown: false }}
           />
         </>

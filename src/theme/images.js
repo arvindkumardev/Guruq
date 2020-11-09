@@ -88,6 +88,14 @@ const Images = {
   confirmed_booking: require('../assets/images/confirmed_booking.png'),
   thank_you: require('../assets/images/thank_you.png'),
   two_users: require('../assets/images/two_users.png'),
+  bell_light: require('../assets/images/bell_light.png'),
+  pin_gray: require('../assets/images/pin_gray.png'),
+  pdf: require('../assets/images/pdf.png'),
+  xls: require('../assets/images/xls.png'),
+  video: require('../assets/images/video.png'),
+  online_top_img: require('../assets/images/online_top_img.png'),
+  online_right: require('../assets/images/online_right.png'),
+  online_left: require('../assets/images/online_left.png'),
 };
 
 export default Images;

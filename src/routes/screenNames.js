@@ -29,6 +29,8 @@ const NavigationRouteNames = {
     MY_CLASSES: 'my_classes',
     SCHEDULE_CLASS: 'schedule_class',
     SCHEDULED_CLASS_DETAILS: 'scheduled_class_details',
+    CANCEL_REASON: 'cancel_reason',
+    ONLINE_CLASS: 'online_class',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',
