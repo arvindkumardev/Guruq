@@ -1,4 +1,4 @@
-import { Text, View, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, FlatList, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -13,6 +13,7 @@ import { IconButtonWrapper } from '../../../components';
 
 function CalendarView() {
   const navigation = useNavigation();
+  const [showHeader, setShowHeader] = useState(false);
   const [monthData, setMonthData] = useState([
     {
       date: 13,
@@ -107,47 +108,62 @@ function CalendarView() {
     );
   };
 
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+
+    if (scrollPosition > 30) {
+      setShowHeader(true);
+    } else {
+      setShowHeader(false);
+    }
+  };
+
   return (
     <View style={commonStyles.mainContainer}>
-      <View style={{ height: RfH(44) }} />
-
-      <Text style={commonStyles.pageTitleThirdRow}>Your Schedule</Text>
-
-      <CalendarStrip
-        calendarHeaderStyle={{
-          fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-          alignSelf: 'flex-start',
-          paddingBottom: RfH(8),
-        }}
-        highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
-        highlightDateNameStyle={{ color: Colors.brandBlue2 }}
-        disabledDateNameStyle={{ color: Colors.darkGrey }}
-        disabledDateNumberStyle={{ color: Colors.darkGrey }}
-        dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-        dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-        style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
-        calendarAnimation={{ type: 'parallel', duration: 300 }}
-        daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-        markedDates={[
-          {
-            date: new Date(),
-            dots: [
-              {
-                color: Colors.brandBlue,
-                selectedColor: Colors.brandBlue,
-              },
-            ],
-          },
-        ]}
-        onHeaderSelected={(a) => console.log(a)}
-      />
-      <FlatList
+      <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
+        {showHeader && <Text style={[commonStyles.pageTitle, { textAlign: 'center' }]}>Your Schedule</Text>}
+      </View>
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        data={monthData}
-        renderItem={({ item }) => renderListItem(item)}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingBottom: RfH(170) }}
-      />
+        onScroll={(event) => handleScroll(event)}
+        scrollEventThrottle={16}>
+        <Text style={commonStyles.pageTitleThirdRow}>Your Schedule</Text>
+        <CalendarStrip
+          calendarHeaderStyle={{
+            fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+            alignSelf: 'flex-start',
+            paddingBottom: RfH(8),
+          }}
+          highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
+          highlightDateNameStyle={{ color: Colors.brandBlue2 }}
+          disabledDateNameStyle={{ color: Colors.darkGrey }}
+          disabledDateNumberStyle={{ color: Colors.darkGrey }}
+          dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+          dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+          style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
+          calendarAnimation={{ type: 'parallel', duration: 300 }}
+          daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+          markedDates={[
+            {
+              date: new Date(),
+              dots: [
+                {
+                  color: Colors.brandBlue,
+                  selectedColor: Colors.brandBlue,
+                },
+              ],
+            },
+          ]}
+          onHeaderSelected={(a) => console.log(a)}
+        />
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={monthData}
+          renderItem={({ item }) => renderListItem(item)}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{ paddingBottom: RfH(170) }}
+        />
+      </ScrollView>
     </View>
   );
 }
