@@ -28,6 +28,7 @@ import PaymentMethod from '../containers/student/payment/paymentMethod';
 import cancelReason from '../containers/student/calendar/cancelReason';
 import onlineClass from '../containers/student/calendar/onlineClass';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
+import DetailedRating from '../containers/student/reviews/detailedRating';
 
 const Stack = createStackNavigator();
 
@@ -180,6 +181,11 @@ const AppStack = (props) => {
           <Stack.Screen
             name={NavigationRouteNames.STUDENT.RATE_AND_REVIEW}
             component={RateAndReviews}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={NavigationRouteNames.STUDENT.DETAILED_RATING}
+            component={DetailedRating}
             options={{ headerShown: false }}
           />
         </>

@@ -42,13 +42,14 @@ const dateSlotModal = (props) => {
 
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent
+      backdropOpacity={1}
       visible={visible}
       onRequestClose={() => {
         onClose(false);
       }}>
-      <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'column' }} />
       <View
         style={{
           bottom: 0,
@@ -71,13 +72,32 @@ const dateSlotModal = (props) => {
         />
         <View style={{ paddingHorizontal: RfW(16) }}>
           <CalendarStrip
-            calendarHeaderStyle={{ alignSelf: 'flex-start', paddingBottom: RfH(8) }}
+            calendarHeaderStyle={{
+              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+              alignSelf: 'flex-start',
+              paddingBottom: RfH(8),
+            }}
             highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
             highlightDateNameStyle={{ color: Colors.brandBlue2 }}
             disabledDateNameStyle={{ color: Colors.darkGrey }}
             disabledDateNumberStyle={{ color: Colors.darkGrey }}
-            dateNumberStyle={{ fontSize: RFValue(18, STANDARD_SCREEN_SIZE) }}
+            dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+            dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
             style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
+            calendarAnimation={{ type: 'parallel', duration: 300 }}
+            daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+            markedDates={[
+              {
+                date: new Date(),
+                dots: [
+                  {
+                    color: Colors.brandBlue,
+                    selectedColor: Colors.brandBlue,
+                  },
+                ],
+              },
+            ]}
+            onHeaderSelected={(a) => console.log(a)}
           />
         </View>
         <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(48) }}>

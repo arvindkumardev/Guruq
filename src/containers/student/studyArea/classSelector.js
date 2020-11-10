@@ -59,8 +59,8 @@ function ClassSelector(props) {
             {
               marginHorizontal: RfW(8),
               marginVertical: RfW(16),
-              height: RfH(100),
-              width: RfW(100),
+              // height: RfH(100),
+              // width: RfW(100),
               backgroundColor:
                 index % 4 === 0
                   ? Colors.lightOrange
@@ -69,7 +69,7 @@ function ClassSelector(props) {
                   : index % 4 === 2
                   ? Colors.lightPurple
                   : Colors.lightBlue,
-              flex: 0,
+              // flex: 0,
               justifyContent: 'center',
               alignItems: 'center',
             },
@@ -105,7 +105,7 @@ function ClassSelector(props) {
           Select your Class
         </Text>
       </View>
-      <View style={[commonStyles.verticallyStretchedItemsView, { marginTop: RfH(56) }]}>
+      <View style={[commonStyles.areaParentView, { marginTop: RfH(56) }]}>
         <FlatList
           data={
             data &&
@@ -116,7 +116,7 @@ function ClassSelector(props) {
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => renderItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
-          numColumns={3}
+          numColumns={2}
         />
         {/* {data &&
           data.offerings &&

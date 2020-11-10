@@ -324,13 +324,14 @@ function ScheduledClassDetails() {
         </View>
       </Modal>
       <Modal
-        animationType="slide"
-        transparent={false}
+        animationType="fade"
+        backdropOpacity={1}
+        transparent
         visible={showCancelClassStartedPopup}
         onRequestClose={() => {
           setShowCancelClassStartedPopup(false);
         }}>
-        <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.6 }}>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <View style={{ flex: 1 }} />
           <View
             style={{
