@@ -7,6 +7,7 @@ import CustomSearchBar from './CustomSearchBar';
 import CustomRadioButton from './CustomRadioButton';
 import CustomRangeSelector from './CustomRangeSelector';
 import ScreenHeader from './ScreenHeader';
+import DateSlotSelectorModal from './DateSlotSelectorModal';
 
 export {
   IconButtonWrapper,
@@ -17,4 +18,5 @@ export {
   CustomRadioButton,
   CustomRangeSelector,
   ScreenHeader,
+  DateSlotSelectorModal,
 };

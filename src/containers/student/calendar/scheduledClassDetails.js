@@ -5,13 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { RfH, RfW } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
-import { IconButtonWrapper } from '../../../components';
+import { IconButtonWrapper, DateSlotSelectorModal } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 
 function ScheduledClassDetails() {
   const navigation = useNavigation();
+  const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [attendees, setAttendees] = useState([
     {
       icon: Images.kushal,
@@ -99,6 +100,16 @@ function ScheduledClassDetails() {
     setShowClassStartedPopup(false);
     navigation.navigate(routeNames.STUDENT.ONLINE_CLASS);
   };
+
+  const onBackPress = () => {
+    navigation.goBack();
+  };
+
+  const openRescheduleModal = () => {
+    setShowCancelClassStartedPopup(false);
+    setShowReschedulePopup(true);
+  };
+
   return (
     <View>
       <ScrollView>
@@ -113,7 +124,7 @@ function ScheduledClassDetails() {
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
           }}>
-          <IconButtonWrapper iconHeight={RfH(24)} iconImage={Images.backArrow} />
+          <IconButtonWrapper iconHeight={RfH(24)} iconImage={Images.backArrow} submitFunction={() => onBackPress()} />
           <View style={[commonStyles.horizontalChildrenSpaceView, { flex: 1 }]}>
             <View style={commonStyles.verticallyStretchedItemsView}>
               <Text style={commonStyles.pageTitle}>English Class</Text>
@@ -364,7 +375,10 @@ function ScheduledClassDetails() {
                     Cancel Class
                   </Text>
                 </Button>
-                <Button block style={{ flex: 1, backgroundColor: Colors.brandBlue2, height: RfH(40) }}>
+                <Button
+                  onPress={() => openRescheduleModal()}
+                  block
+                  style={{ flex: 1, backgroundColor: Colors.brandBlue2, height: RfH(40) }}>
                   <Text style={commonStyles.textButtonPrimary}>Reschedule</Text>
                 </Button>
               </View>
@@ -373,6 +387,7 @@ function ScheduledClassDetails() {
           <View style={{ flex: 1 }} />
         </View>
       </Modal>
+      <DateSlotSelectorModal visible={showReschedulePopup} onClose={() => setShowReschedulePopup(false)} />
     </View>
   );
 }
