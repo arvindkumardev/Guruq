@@ -7,7 +7,7 @@ import { Calendar } from 'react-native-calendars';
 import commonStyles from '../../../theme/styles';
 import routeNames from '../../../routes/screenNames';
 import { RfH, RfW } from '../../../utils/helpers';
-import { Colors, Images } from '../../../theme';
+import { Colors, Images, Fonts } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 
@@ -121,41 +121,49 @@ function CalendarView() {
   return (
     <View style={commonStyles.mainContainer}>
       <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
-        {showHeader && <Text style={[commonStyles.pageTitle, { textAlign: 'center' }]}>Your Schedule</Text>}
+        {showHeader && (
+          <Text style={{ textAlign: 'center', fontFamily: Fonts.regular, fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }}>
+            Your Schedule
+          </Text>
+        )}
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
+        stickyHeaderIndices={[1]}
         scrollEventThrottle={16}>
         <Text style={commonStyles.pageTitleThirdRow}>Your Schedule</Text>
-        <CalendarStrip
-          calendarHeaderStyle={{
-            fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-            alignSelf: 'flex-start',
-            paddingBottom: RfH(8),
-          }}
-          highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
-          highlightDateNameStyle={{ color: Colors.brandBlue2 }}
-          disabledDateNameStyle={{ color: Colors.darkGrey }}
-          disabledDateNumberStyle={{ color: Colors.darkGrey }}
-          dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-          dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-          style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
-          calendarAnimation={{ type: 'parallel', duration: 300 }}
-          daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-          markedDates={[
-            {
-              date: new Date(),
-              dots: [
-                {
-                  color: Colors.brandBlue,
-                  selectedColor: Colors.brandBlue,
-                },
-              ],
-            },
-          ]}
-          onHeaderSelected={(a) => console.log(a)}
-        />
+        <View style={{ backgroundColor: Colors.white }}>
+          <CalendarStrip
+            calendarHeaderStyle={{
+              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+              alignSelf: 'flex-start',
+              paddingBottom: RfH(8),
+            }}
+            highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
+            highlightDateNameStyle={{ color: Colors.brandBlue2 }}
+            disabledDateNameStyle={{ color: Colors.darkGrey }}
+            disabledDateNumberStyle={{ color: Colors.darkGrey }}
+            selectedDate={new Date()}
+            dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+            dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+            style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
+            calendarAnimation={{ type: 'parallel', duration: 300 }}
+            daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+            markedDates={[
+              {
+                date: new Date(),
+                dots: [
+                  {
+                    color: Colors.brandBlue,
+                    selectedColor: Colors.brandBlue,
+                  },
+                ],
+              },
+            ]}
+            onHeaderSelected={(a) => console.log(a)}
+          />
+        </View>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={monthData}

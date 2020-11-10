@@ -12,13 +12,41 @@ import styles from '../styles';
 const selectClassMode = () => {
   const navigation = useNavigation();
   const [numberOfClass, setNumberOfClass] = useState(0);
+  const [cartItems, setCartItems] = useState(0);
+  const [amount, setAmount] = useState(0);
 
   const addClass = () => {
     setNumberOfClass(numberOfClass + 1);
+    const cls = numberOfClass + 1;
+    if (cls < 5) {
+      setAmount(100 * cls);
+    } else if (cls > 4 && cls < 10) {
+      setAmount(90 * cls);
+    } else if (cls > 9 && cls < 20) {
+      setAmount(80 * cls);
+    } else if (cls > 19) {
+      setAmount(70 * cls);
+    } else {
+      setAmount(0);
+    }
   };
 
   const removeClass = () => {
-    setNumberOfClass(numberOfClass - 1);
+    if (numberOfClass > 0) {
+      setNumberOfClass(numberOfClass - 1);
+      const cls = numberOfClass - 1;
+      if (cls < 5) {
+        setAmount(100 * cls);
+      } else if (cls > 4 && cls < 10) {
+        setAmount(90 * cls);
+      } else if (cls > 9 && cls < 20) {
+        setAmount(80 * cls);
+      } else if (cls > 19) {
+        setAmount(70 * cls);
+      } else {
+        setAmount(0);
+      }
+    }
   };
 
   return (
@@ -93,22 +121,24 @@ const selectClassMode = () => {
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(32) }]}>
           <Text style={[styles.compareTutorName, { marginTop: 0 }]}>Amount Payable</Text>
-          <Text>₹750</Text>
+          <Text>₹{amount}</Text>
         </View>
         <View style={{ alignSelf: 'center', marginTop: RfH(100) }}>
-          <Button style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+          <Button onPress={() => setCartItems(numberOfClass)} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
             <Text style={commonStyles.textButtonPrimary}>Add to Cart</Text>
           </Button>
         </View>
       </ScrollView>
-      <View style={styles.fabActionParent}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
-          <View>
-            <IconButtonWrapper iconHeight={RfH(32)} iconImage={Images.cart_white} styling={{ alignSelf: 'center' }} />
-            <Text style={styles.cartText}>{numberOfClass}</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
+      {cartItems > 0 && (
+        <View style={styles.fabActionParent}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
+            <View>
+              <IconButtonWrapper iconHeight={RfH(32)} iconImage={Images.cart_white} styling={{ alignSelf: 'center' }} />
+              <Text style={styles.cartText}>{numberOfClass}</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      )}
     </View>
   );
 };

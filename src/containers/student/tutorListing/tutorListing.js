@@ -65,24 +65,18 @@ function TutorListing(props) {
   const [maxFilterValue, setMaxFilterValue] = useState('');
   const [filterDataArray, setFilterDataArray] = useState([]);
   const [filterOptions, setFilterOptions] = useState([
-    { name: 'All Qualifications', checked: false, value: 0 },
-    { name: 'Secondary', checked: false, value: 1 },
-    { name: 'Higher Secondary', checked: false, value: 2 },
-    { name: 'Diploma', checked: false, value: 3 },
-    { name: 'Bachelors', checked: false, value: 4 },
-    { name: 'PG Diploma', checked: false, value: 5 },
-    { name: 'Masters', checked: false, value: 6 },
-    { name: 'Doctoral', checked: false, value: 7 },
-    { name: 'Other', checked: false, value: 8 },
+    { name: 'Experience', checked: true, value: 'teachingExperience' },
+    { name: 'Budget - High to Low', checked: false, value: 'budgets.price', order: 'DESC' },
+    { name: 'Budget - Low to High', checked: false, value: 'budgets.price', order: 'ASC' },
   ]);
   const [tutorsData, setTutorsData] = useState([]);
 
   const [filterItems, setFilterItems] = useState([
-    { name: 'Qualifications', checked: true },
+    { name: 'Qualifications', checked: false },
     { name: 'Experience', checked: false },
     { name: 'Price', checked: false },
     { name: 'Rating', checked: false },
-    { name: 'Sort By', checked: false },
+    { name: 'Sort By', checked: true },
     { name: 'Mode of Study', checked: false },
   ]);
 
@@ -356,7 +350,7 @@ function TutorListing(props) {
     switch (index) {
       case 0:
         options = [
-          { name: 'All Qualifications', checked: false, value: 0 },
+          { name: 'All Qualifications', checked: true, value: 0 },
           { name: 'Secondary', checked: false, value: 1 },
           { name: 'Higher Secondary', checked: false, value: 2 },
           { name: 'Diploma', checked: false, value: 3 },
@@ -768,7 +762,6 @@ function TutorListing(props) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingHorizontal: RfW(16),
-                // backgroundColor: '#ff0000'
               }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <IconButtonWrapper
@@ -816,7 +809,7 @@ function TutorListing(props) {
                   />
                 </View>
                 {/* {showBackButton && ( */}
-                <View style={{ height: RfH(54), justifyContent:"center",paddingHorizontal: RfW(0) }}>
+                <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
                   <Text style={[styles.subjectTitle, { fontSize: 20 }]}>{offering?.displayName} Tutors</Text>
                   <Text style={[styles.classText, { fontSize: 15 }]}>
                     {offering?.parentOffering?.parentOffering?.displayName}
