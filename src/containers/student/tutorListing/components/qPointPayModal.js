@@ -4,7 +4,7 @@ import { Modal, View, Text } from 'react-native';
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Colors, Images } from '../../../../theme';
+import { Colors, Fonts, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
 import commonStyles from '../../../../theme/styles';
 import { IconButtonWrapper } from '../../../../components';
@@ -17,6 +17,7 @@ const qPointPayModal = (props) => {
     onClose,
     amount,
     deductedAgaintQPoint,
+    convenienceCharge,
     totalAmount,
     amountToPayAfterQPoint,
     onPayNow,
@@ -74,7 +75,7 @@ const qPointPayModal = (props) => {
                   marginTop: 0,
                 },
               ]}>
-              Use Q Points
+              Apply Q Points
             </Text>
           </View>
           <View>
@@ -101,7 +102,7 @@ const qPointPayModal = (props) => {
           }}>
           Redeem
         </Text>
-        <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: 'SegoeUI-Bold', margin: RfH(16) }}>
+        <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold, margin: RfH(16) }}>
           CART DETAILS (4 Items)
         </Text>
         <View style={{ marginHorizontal: RfW(16) }}>
@@ -110,26 +111,27 @@ const qPointPayModal = (props) => {
             <Text style={styles.tutorDetails}>₹{amount}</Text>
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={styles.tutorDetails}>Deduction against Q points</Text>
+            <Text style={styles.tutorDetails}>Convenience Charges</Text>
+            <Text style={styles.tutorDetails}>₹{convenienceCharge}</Text>
+          </View>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={styles.tutorDetails}>Paid by Q points</Text>
             <Text style={styles.tutorDetails}>₹{deductedAgaintQPoint}</Text>
           </View>
+          <View style={[commonStyles.borderBottom, { marginVertical: RfH(16) }]} />
           <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
             <Text
-              style={[
-                styles.tutorDetails,
-                {
-                  fontFamily: 'SegoeUI-Bold',
-                },
-              ]}>
-              Total Amount
+              style={{
+                fontFamily: Fonts.bold,
+                fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+              }}>
+              To Pay
             </Text>
             <Text
-              style={[
-                styles.tutorDetails,
-                {
-                  fontFamily: 'SegoeUI-Bold',
-                },
-              ]}>
+              style={{
+                fontFamily: Fonts.bold,
+                fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+              }}>
               ₹{totalAmount}
             </Text>
           </View>
@@ -137,7 +139,7 @@ const qPointPayModal = (props) => {
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16) }]}>
           <View style={{ marginTop: RfH(30) }}>
             <Text style={styles.buttonText}>₹{amountToPayAfterQPoint}</Text>
-            <Text style={styles.buttonText}>View Details</Text>
+            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
           </View>
           <View style={{ marginTop: RfH(30) }}>
             <Button
@@ -157,6 +159,7 @@ qPointPayModal.propTypes = {
   onClose: PropTypes.func,
   amount: PropTypes.number,
   deductedAgaintQPoint: PropTypes.number,
+  convenienceCharge: PropTypes.number,
   totalAmount: PropTypes.number,
   amountToPayAfterQPoint: PropTypes.number,
   onPayNow: PropTypes.func,
@@ -168,6 +171,7 @@ qPointPayModal.defaultProps = {
   onClose: null,
   amount: 0,
   deductedAgaintQPoint: 0,
+  convenienceCharge: 0,
   totalAmount: 0,
   amountToPayAfterQPoint: 0,
   onPayNow: null,

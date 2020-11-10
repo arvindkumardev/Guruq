@@ -6,17 +6,19 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
-import { Colors, Images } from '../../../../theme';
+import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
 import styles from '../styles';
 import { RfH, RfW } from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import QPointPayModal from '../components/qPointPayModal';
+import CouponModal from '../components/couponModal';
 import routeNames from '../../../../routes/screenNames';
 
 const myCart = () => {
   const navigation = useNavigation();
   const [showQPointPayModal, setShowQPointPayModal] = useState(false);
+  const [showCouponModal, setShowCouponModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
   const [cartItems, setCartItems] = useState([
     {
@@ -147,6 +149,40 @@ const myCart = () => {
     );
   };
 
+  const renderCouponView = () => {
+    return (
+      <TouchableWithoutFeedback onPress={() => setShowCouponModal(true)}>
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            {
+              borderBottomWidth: 0.5,
+              borderColor: Colors.darkGrey,
+              paddingVertical: RfH(16),
+              marginHorizontal: RfW(16),
+            },
+          ]}>
+          <View style={commonStyles.horizontalChildrenStartView}>
+            <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
+            <Text
+              style={[
+                styles.compareTutorName,
+                {
+                  fontFamily: Fonts.semiBold,
+                  color: Colors.black,
+                  marginLeft: RfW(8),
+                  marginTop: 0,
+                },
+              ]}>
+              Apply Coupon
+            </Text>
+          </View>
+          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} />
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  };
+
   const renderCartDetails = () => {
     return (
       <View style={{ marginHorizontal: RfW(16) }}>
@@ -232,12 +268,13 @@ const myCart = () => {
           />
         </View>
         {renderQPointView()}
+        {renderCouponView()}
         <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text>
         {renderCartDetails()}
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginBottom: RfH(34) }]}>
           <View style={{ marginTop: RfH(30) }}>
             <Text style={styles.buttonText}>₹1300</Text>
-            <Text style={styles.buttonText}>View Details</Text>
+            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
           </View>
           <View style={{ marginTop: RfH(30) }}>
             <Button
@@ -253,11 +290,13 @@ const myCart = () => {
         onClose={() => setShowQPointPayModal(false)}
         amount={1200}
         deductedAgaintQPoint={300}
+        convenienceCharge={100}
         totalAmount={1500}
         qPoint={300}
         amountToPayAfterQPoint={900}
         onPayNow={() => payNow()}
       />
+      <CouponModal visible={showCouponModal} onClose={() => setShowCouponModal(false)} />
     </View>
   );
 };
