@@ -349,7 +349,7 @@ function Profile() {
               Current
             </Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
-              Version.2.5
+              Version 2.5
             </Text>
           </View>
 
@@ -362,7 +362,7 @@ function Profile() {
               Latest
             </Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
-              Version.3.0
+              Version 3.0
             </Text>
           </View>
         </View>
