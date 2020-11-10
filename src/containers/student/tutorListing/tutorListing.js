@@ -774,8 +774,8 @@ function TutorListing(props) {
                 <IconButtonWrapper
                   styling={{ marginRight: RfW(16) }}
                   iconImage={Images.backArrow}
-                  iconHeight={RfH(24)}
-                  iconWidth={RfW(24)}
+                  iconHeight={RfH(20)}
+                  iconWidth={RfW(20)}
                   submitFunction={() => onBackPress()}
                 />
                 {/* {showBackButton && ( */}
@@ -810,13 +810,13 @@ function TutorListing(props) {
                   <IconButtonWrapper
                     styling={{ marginRight: RfW(16) }}
                     iconImage={Images.backArrow}
-                    iconHeight={RfH(24)}
-                    iconWidth={RfW(24)}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfW(20)}
                     submitFunction={() => onBackPress()}
                   />
                 </View>
                 {/* {showBackButton && ( */}
-                <View style={{ height: RfH(54), paddingHorizontal: RfW(0) }}>
+                <View style={{ height: RfH(54), justifyContent:"center",paddingHorizontal: RfW(0) }}>
                   <Text style={[styles.subjectTitle, { fontSize: 20 }]}>{offering?.displayName} Tutors</Text>
                   <Text style={[styles.classText, { fontSize: 15 }]}>
                     {offering?.parentOffering?.parentOffering?.displayName}
@@ -867,23 +867,6 @@ function TutorListing(props) {
           {/* )} */}
           {/* </View> */}
         </View>
-
-        {/* <View> */}
-        {/*  <View style={{ paddingTop: RfH(0), backgroundColor: Colors.white }}> */}
-        {/*    <View style={styles.subjectTitleView}> */}
-        {/*      <View style={styles.filterParentView}> */}
-        {/*        <Text style={styles.filterText}>20 TUTORS</Text> */}
-
-        {/*        <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}> */}
-        {/*          <View style={{ flexDirection: 'row', alignItems: 'center' }}> */}
-        {/*            <IconButtonWrapper iconHeight={10} iconWidth={10} iconImage={Images.filter} /> */}
-        {/*            <Text style={styles.filterText}>Filters</Text> */}
-        {/*          </View> */}
-        {/*        </TouchableWithoutFeedback> */}
-        {/*      </View> */}
-        {/*    </View> */}
-        {/*  </View> */}
-        {/* </View> */}
 
         <View>{filtersView()}</View>
 

@@ -1,4 +1,4 @@
-import { Text, View, FlatList, ScrollView, Modal } from 'react-native';
+import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
 import { Button, CheckBox } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,8 @@ import { IconButtonWrapper } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
+import IconWrapper from '../../../components/IconWrapper';
+import styles from '../tutorListing/styles';
 
 function ScheduledClassDetails() {
   const navigation = useNavigation();
@@ -52,6 +54,8 @@ function ScheduledClassDetails() {
       date: '15 Sept',
     },
   ]);
+  const [showBackButton, setShowBackButton] = useState(false);
+
   const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
   const [showCancelClassStartedPopup, setShowCancelClassStartedPopup] = useState(false);
   const renderAttendees = (item) => {
@@ -90,6 +94,10 @@ function ScheduledClassDetails() {
     );
   };
 
+  const onBackPress = () => {
+    navigation.goBack();
+  };
+
   const goToCancelReason = () => {
     setShowCancelClassStartedPopup(false);
     navigation.navigate(routeNames.STUDENT.CANCEL_REASON);
@@ -99,42 +107,71 @@ function ScheduledClassDetails() {
     setShowClassStartedPopup(false);
     navigation.navigate(routeNames.STUDENT.ONLINE_CLASS);
   };
+
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+
+    if (scrollPosition > 100) {
+      setShowBackButton(true);
+    } else {
+      setShowBackButton(false);
+    }
+  };
+
   return (
     <View>
-      <ScrollView>
-        <View
-          style={{
-            height: RfH(116),
-            backgroundColor: Colors.lightPurple,
-            paddingTop: RfH(44),
-            paddingLeft: RfW(8),
-            paddingRight: RfW(16),
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-          }}>
-          <IconButtonWrapper iconHeight={RfH(24)} iconImage={Images.backArrow} />
-          <View style={[commonStyles.horizontalChildrenSpaceView, { flex: 1 }]}>
-            <View style={commonStyles.verticallyStretchedItemsView}>
-              <Text style={commonStyles.pageTitle}>English Class</Text>
-              <Text style={[commonStyles.secondaryText, { marginTop: RfH(4) }]}>CBSE | Class 9</Text>
-            </View>
-            <View style={{ alignSelf: 'flex-end' }}>
-              <Button
-                onPress={() => setShowClassStartedPopup(true)}
-                style={[commonStyles.buttonPrimary, { width: RfH(144), marginRight: 0 }]}>
+      <ScrollView
+        stickyHeaderIndices={[0]}
+        showsVerticalScrollIndicator={false}
+        onScroll={(event) => handleScroll(event)}
+        scrollEventThrottle={16}>
+        <View style={[styles.topView, {}]}>
+          <View
+            style={{
+              height: RfH(98),
+              marginTop: RfH(68),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingHorizontal: RfW(16),
+              backgroundColor: Colors.lightPurple,
+            }}>
+            <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+              <View style={{}}>
                 <IconButtonWrapper
-                  iconImage={Images.video}
-                  iconHeight={RfH(16)}
-                  iconWidth={RfW(16)}
-                  styling={{ alignSelf: 'center' }}
+                  styling={{ marginRight: RfW(16) }}
+                  iconImage={Images.backArrow}
+                  iconHeight={RfH(20)}
+                  iconWidth={RfW(20)}
+                  submitFunction={() => onBackPress()}
                 />
-                <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Start Class</Text>
-              </Button>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
+                  <Text style={commonStyles.pageTitle}>English Class</Text>
+                  <Text style={[commonStyles.secondaryText, { marginTop: RfH(4) }]}>CBSE | Class 9</Text>
+                </View>
+
+                <View style={{}}>
+                  <Button
+                    onPress={() => setShowClassStartedPopup(true)}
+                    style={[commonStyles.buttonPrimary, { width: RfH(116), borderRadius: 4, marginRight: 0 }]}>
+                    <IconButtonWrapper
+                      iconImage={Images.video}
+                      iconHeight={RfH(16)}
+                      iconWidth={RfW(16)}
+                      styling={{ alignSelf: 'center' }}
+                    />
+                    <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Start Class</Text>
+                  </Button>
+                </View>
+              </View>
             </View>
           </View>
         </View>
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(24) }]}>
+
+        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(54) }]}>
           <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.two_users} />
           <Text style={[commonStyles.headingText, { marginLeft: RfW(16) }]}>Tutor</Text>
         </View>
@@ -150,14 +187,9 @@ function ScheduledClassDetails() {
             <Text style={commonStyles.secondaryText}>GURUQT125744</Text>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.personal} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -165,14 +197,9 @@ function ScheduledClassDetails() {
             <Text style={commonStyles.secondaryText}>GURUQS123JEHDKI3</Text>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.calendar} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -180,14 +207,9 @@ function ScheduledClassDetails() {
             <Text style={commonStyles.secondaryText}>06:00 PM - 07:00 PM</Text>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.bell_light} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -195,14 +217,9 @@ function ScheduledClassDetails() {
             <Text style={commonStyles.secondaryText}>20 minutes before</Text>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.two_users} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -217,14 +234,9 @@ function ScheduledClassDetails() {
           renderItem={({ item, index }) => renderAttendees(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -238,14 +250,9 @@ function ScheduledClassDetails() {
           renderItem={({ item, index }) => renderAttachments(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.pin_gray} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>

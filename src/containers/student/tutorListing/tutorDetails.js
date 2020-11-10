@@ -371,8 +371,8 @@ function tutorDetails() {
             { paddingTop: RfH(44), height: RfH(155), paddingHorizontal: RfW(16), alignItems: 'flex-start' },
           ]}>
           <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
             iconImage={Images.backArrow}
             submitFunction={() => onBackPress()}
           />

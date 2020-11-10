@@ -129,7 +129,7 @@ function bookingConfirmed() {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <View style={{ height: RfH(44) }} />
-      <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
+      <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
       <View style={[commonStyles.horizontalChildrenCenterView, { marginTop: RfH(16) }]}>
         <Button
           onPress={() => setIsHistorySelected(false)}
@@ -150,15 +150,14 @@ function bookingConfirmed() {
           <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
         </Button>
       </View>
-      <View>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={classItems}
-          renderItem={({ item }) => renderClassItem(item)}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: RfH(170) }}
-        />
-      </View>
+
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={classItems}
+        renderItem={({ item }) => renderClassItem(item)}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{ paddingBottom: RfH(170) }}
+      />
     </View>
   );
 }

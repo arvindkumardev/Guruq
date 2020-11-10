@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   textButtonPrimary: {
     textAlign: 'center',
     color: Colors.white,
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
   },
   lineSeparator: {
@@ -48,6 +48,14 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: 0.5,
     // marginTop: RfH(16),
+    opacity: 0.5,
+  },
+  lineSeparatorWithMargin: {
+    flex: 1,
+    borderBottomColor: Colors.secondaryText,
+    borderBottomWidth: 0.5,
+    marginVertical: RfH(16),
+    marginHorizontal: RfH(16),
     opacity: 0.5,
   },
   topActionView: {
@@ -104,7 +112,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
   },
   pageTitleThirdRow: {
-    fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.bold,
   },
   titleText: {

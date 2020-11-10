@@ -32,13 +32,13 @@ const styles = StyleSheet.create({
   activeButtonText: {
     textAlign: 'center',
     color: Colors.brandBlue2,
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
   },
   inactiveButtonText: {
     textAlign: 'center',
     color: Colors.darkGrey,
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
   },
 });
