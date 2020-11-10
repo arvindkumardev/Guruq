@@ -365,7 +365,7 @@ function StudentDashboard(props) {
 
   const subjectModal = () => {
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent
       visible={showAllSubjects}
       onRequestClose={() => {

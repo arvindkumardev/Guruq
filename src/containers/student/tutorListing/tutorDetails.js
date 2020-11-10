@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Text, View, FlatList, ScrollView, Modal } from 'react-native';
+import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -16,7 +16,7 @@ import routeNames from '../../../routes/screenNames';
 
 function tutorDetails() {
   const navigation = useNavigation();
-  const [showDaleSlotModal, setShowDaleSlotModal] = useState(false);
+  const [showDateSlotModal, setShowDateSlotModal] = useState(false);
   const [subjects, setSubjects] = useState([
     { id: 0, name: 'English' },
     { id: 1, name: 'Physics' },
@@ -430,13 +430,15 @@ function tutorDetails() {
             borderTopWidth: 0.5,
             borderTopColor: Colors.darkGrey,
           }}>
-          <Text
-            style={[
-              styles.tutorName,
-              { marginHorizontal: RfW(16), marginVertical: RfH(16), color: Colors.brandBlue2 },
-            ]}>
-            View Availability of Classes
-          </Text>
+          <TouchableWithoutFeedback onPress={() => setShowDateSlotModal(true)}>
+            <Text
+              style={[
+                styles.tutorName,
+                { marginHorizontal: RfW(16), marginVertical: RfH(16), color: Colors.brandBlue2 },
+              ]}>
+              View Availability of Classes
+            </Text>
+          </TouchableWithoutFeedback>
         </View>
         {renderRatingsReviews()}
         <View style={{ alignSelf: 'center', marginTop: RfH(8) }}>
@@ -451,9 +453,9 @@ function tutorDetails() {
         animationType="fade"
         backdropOpacity={1}
         transparent
-        visible={showDaleSlotModal}
+        visible={showDateSlotModal}
         onRequestClose={() => {
-          setShowDaleSlotModal(false);
+          setShowDateSlotModal(false);
         }}>
         <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
         <View
@@ -474,7 +476,7 @@ function tutorDetails() {
             iconWidth={RfW(24)}
             styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
             iconImage={Images.cross}
-            submitFunction={() => setShowDaleSlotModal(false)}
+            submitFunction={() => setShowDateSlotModal(false)}
           />
           <View style={{ paddingHorizontal: RfW(16) }}>
             <CalendarStrip

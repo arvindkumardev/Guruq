@@ -62,7 +62,7 @@ function NationalityDropdown(props) {
   }, [countryData]);
 
   return (
-    <Modal visible={modalVisible} animationType="slide" onRequestClose={() => toggleModal()} transparent>
+    <Modal visible={modalVisible} animationType="fade" onRequestClose={() => toggleModal()} transparent>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <IconButtonWrapper

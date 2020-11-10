@@ -15,7 +15,7 @@ const qPointPayModal = (props) => {
 
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent
       visible={visible}
       onRequestClose={() => {

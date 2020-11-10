@@ -313,7 +313,7 @@ function PaymentMethod() {
         </Button>
       </View> */}
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent
           visible={showAddressPopup}
           onRequestClose={() => {

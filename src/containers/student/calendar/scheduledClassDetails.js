@@ -282,7 +282,7 @@ function ScheduledClassDetails() {
         </View>
       </ScrollView>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={false}
         visible={showClassStartedPopup}
         onRequestClose={() => {
