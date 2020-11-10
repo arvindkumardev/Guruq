@@ -184,14 +184,9 @@ function ScheduledClassDetails() {
             <Text style={commonStyles.secondaryText}>GURUQT125744</Text>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.personal} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -199,14 +194,9 @@ function ScheduledClassDetails() {
             <Text style={commonStyles.secondaryText}>GURUQS123JEHDKI3</Text>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.calendar} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -214,14 +204,9 @@ function ScheduledClassDetails() {
             <Text style={commonStyles.secondaryText}>06:00 PM - 07:00 PM</Text>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.bell_light} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -229,14 +214,9 @@ function ScheduledClassDetails() {
             <Text style={commonStyles.secondaryText}>20 minutes before</Text>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.two_users} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -251,14 +231,9 @@ function ScheduledClassDetails() {
           renderItem={({ item, index }) => renderAttendees(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -272,14 +247,9 @@ function ScheduledClassDetails() {
           renderItem={({ item, index }) => renderAttachments(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
-        <View
-          style={{
-            borderBottomWidth: 0.5,
-            borderBottomColor: Colors.darkGrey,
-            marginVertical: RfH(16),
-            marginHorizontal: RfW(16),
-          }}
-        />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.pin_gray} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
