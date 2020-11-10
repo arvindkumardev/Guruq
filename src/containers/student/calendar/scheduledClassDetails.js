@@ -112,7 +112,7 @@ function ScheduledClassDetails() {
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             height: RfH(116),
