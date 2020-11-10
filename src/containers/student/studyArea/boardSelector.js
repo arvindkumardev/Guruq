@@ -85,7 +85,7 @@ function BoardSelector(props) {
           Select your Board
         </Text>
       </View>
-      <View style={styles.areaParentView}>
+      <View style={[styles.areaParentView, {marginBottom: RfH(142)}]}>
         <FlatList
           data={
             data &&

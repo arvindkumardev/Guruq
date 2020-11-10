@@ -448,7 +448,8 @@ function tutorDetails() {
         </View>
       </ScrollView>
       <Modal
-        animationType="slide"
+        animationType="fade"
+        backdropOpacity={1}
         transparent
         visible={showDaleSlotModal}
         onRequestClose={() => {
@@ -477,14 +478,33 @@ function tutorDetails() {
           />
           <View style={{ paddingHorizontal: RfW(16) }}>
             <CalendarStrip
-              calendarHeaderStyle={{ alignSelf: 'flex-start', paddingBottom: RfH(8) }}
+              calendarHeaderStyle={{
+                fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                alignSelf: 'flex-start',
+                paddingBottom: RfH(8),
+              }}
               highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
               highlightDateNameStyle={{ color: Colors.brandBlue2 }}
               disabledDateNameStyle={{ color: Colors.darkGrey }}
               disabledDateNumberStyle={{ color: Colors.darkGrey }}
-              dateNumberStyle={{ fontSize: RFValue(18, STANDARD_SCREEN_SIZE) }}
-              markedDates={markedDates}
+              dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+              dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
               style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
+              calendarAnimation={{ type: 'parallel', duration: 300 }}
+              daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+              markedDates={[
+                ...markedDates,
+                {
+                  date: new Date(),
+                  dots: [
+                    {
+                      color: Colors.brandBlue,
+                      selectedColor: Colors.brandBlue,
+                    },
+                  ],
+                },
+              ]}
+              onHeaderSelected={(a) => console.log(a)}
             />
           </View>
           <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(48) }}>

@@ -110,6 +110,7 @@ function CalendarView() {
   return (
     <View style={commonStyles.mainContainer}>
       <View style={{ height: RfH(44) }} />
+
       <Text style={commonStyles.pageTitleThirdRow}>Your Schedule</Text>
 
       <CalendarStrip
