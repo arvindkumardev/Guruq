@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
   buttonPrimary: {
     backgroundColor: Colors.brandBlue2,
-    marginHorizontal: RfW(56),
+    // marginHorizontal: RfW(56),
     width: RfW(144),
     height: RfH(40),
     flexDirection: 'row',
@@ -24,9 +24,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     marginVertical: RfH(4),
-    shadowRadius: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOpacity: 0.1,
+  },
+  buttonOutlinePrimary: {
+    backgroundColor: Colors.white,
+    borderColor: Colors.brandBlue2,
+    // marginHorizontal: RfW(56),
+    width: RfW(144),
+    height: RfH(40),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    borderWidth: 0.5,
+    marginVertical: RfH(4),
+    // shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOpacity: 0.1,
   },
   disableButton: {
     backgroundColor: Colors.secondaryText,
@@ -43,6 +59,12 @@ const styles = StyleSheet.create({
     fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
   },
+  textButtonOutlinePrimary: {
+    textAlign: 'center',
+    color: Colors.brandBlue2,
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
+  },
   lineSeparator: {
     flex: 1,
     borderBottomColor: Colors.secondaryText,
@@ -55,6 +77,14 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.secondaryText,
     borderBottomWidth: 0.5,
     marginVertical: RfH(16),
+    marginHorizontal: RfH(16),
+    opacity: 0.5,
+  },
+
+  lineSeparatorWithHorizontalMargin: {
+    flex: 1,
+    borderBottomColor: Colors.secondaryText,
+    borderBottomWidth: 0.5,
     marginHorizontal: RfH(16),
     opacity: 0.5,
   },
@@ -100,7 +130,8 @@ const styles = StyleSheet.create({
   },
 
   blankViewSmall: {
-    marginTop: RfH(24),
+    // marginTop: RfH(24),
+    height: RfH(17),
   },
 
   borderTop: {

@@ -179,7 +179,12 @@ function TutorListing(props) {
                       paddingHorizontal: RfW(4),
                     }}>
                     <Text
-                      style={{ fontSize: 10, textTransform: 'uppercase', color: Colors.white, fontFamily: Fonts.bold }}>
+                      style={{
+                        fontSize: 10,
+                        textTransform: 'uppercase',
+                        color: Colors.white,
+                        fontFamily: Fonts.bold,
+                      }}>
                       Sponsored
                     </Text>
                   </View>
@@ -226,7 +231,11 @@ function TutorListing(props) {
                             <Icon
                               type="FontAwesome"
                               name="tv"
-                              style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }}
+                              style={{
+                                fontSize: 13,
+                                marginRight: RfW(4),
+                                color: Colors.darkGrey,
+                              }}
                             />
                             <Text style={styles.chargeText}>₹ {onlineBudget.price}/Hr</Text>
                           </View>
@@ -241,7 +250,11 @@ function TutorListing(props) {
                             <Icon
                               type="FontAwesome"
                               name="home"
-                              style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }}
+                              style={{
+                                fontSize: 13,
+                                marginRight: RfW(4),
+                                color: Colors.darkGrey,
+                              }}
                             />
                             <Text style={styles.chargeText}>₹ {offlineBudget.price}/Hr</Text>
                           </View>
@@ -250,7 +263,12 @@ function TutorListing(props) {
                     </View>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignSelf: 'flex-start' }}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    alignSelf: 'flex-start',
+                  }}>
                   <View style={{ alignSelf: 'flex-end', marginBottom: RfH(17) }}>
                     <Icon
                       type="FontAwesome"
@@ -791,7 +809,7 @@ function TutorListing(props) {
             <View
               style={{
                 height: RfH(98),
-                marginTop: RfH(68),
+                marginTop: RfH(88),
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
