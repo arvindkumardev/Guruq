@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   pageTitle: {
-    fontFamily: 'SegoeUI-bold',
-    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
   },
   horizontalChildrenSpaceView: {
     flexDirection: 'row',

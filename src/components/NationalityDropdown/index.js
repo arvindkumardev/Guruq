@@ -67,8 +67,8 @@ function NationalityDropdown(props) {
         <View style={styles.headerContainer}>
           <IconButtonWrapper
             iconImage={Images.backArrow}
-            iconWidth={RfW(17)}
-            iconHeight={RfH(11)}
+            iconWidth={RfW(20)}
+            iconHeight={RfH(20)}
             styling={{ justifyContent: 'center', paddingVertical: RfH(15) }}
             submitFunction={() => toggleModal()}
           />

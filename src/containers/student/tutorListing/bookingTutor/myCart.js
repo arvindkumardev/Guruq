@@ -111,18 +111,7 @@ const myCart = () => {
   const renderQPointView = () => {
     return (
       <TouchableWithoutFeedback onPress={() => setShowQPointPayModal(true)}>
-        <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            {
-              borderTopWidth: 0.5,
-              borderBottomWidth: 0.5,
-              borderColor: Colors.darkGrey,
-              marginTop: RfH(32),
-              paddingVertical: RfH(16),
-              marginHorizontal: RfW(16),
-            },
-          ]}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
           <View style={commonStyles.horizontalChildrenStartView}>
             <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
             <Text
@@ -152,16 +141,7 @@ const myCart = () => {
   const renderCouponView = () => {
     return (
       <TouchableWithoutFeedback onPress={() => setShowCouponModal(true)}>
-        <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            {
-              borderBottomWidth: 0.5,
-              borderColor: Colors.darkGrey,
-              paddingVertical: RfH(16),
-              marginHorizontal: RfW(16),
-            },
-          ]}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
           <View style={commonStyles.horizontalChildrenStartView}>
             <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
             <Text
@@ -267,11 +247,27 @@ const myCart = () => {
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         {renderQPointView()}
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         {renderCouponView()}
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
+
         <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text>
         {renderCartDetails()}
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginBottom: RfH(34) }]}>
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            {
+              marginHorizontal: RfW(16),
+              marginBottom: RfH(34),
+            },
+          ]}>
           <View style={{ marginTop: RfH(30) }}>
             <Text style={styles.buttonText}>₹1300</Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
@@ -279,7 +275,14 @@ const myCart = () => {
           <View style={{ marginTop: RfH(30) }}>
             <Button
               onPress={() => payNow()}
-              style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'flex-end', marginHorizontal: 0 }]}>
+              style={[
+                commonStyles.buttonPrimary,
+                {
+                  width: RfW(144),
+                  alignSelf: 'flex-end',
+                  marginHorizontal: 0,
+                },
+              ]}>
               <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
             </Button>
           </View>

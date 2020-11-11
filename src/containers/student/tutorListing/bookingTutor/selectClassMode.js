@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, ScrollView, TouchableWithoutFeedback, FlatList } from 'react-native';
 import { Switch, Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { ScreenHeader, IconButtonWrapper } from '../../../../components';
@@ -13,6 +13,15 @@ const selectClassMode = () => {
   const navigation = useNavigation();
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(100);
+
+  const [classPrices, setClassPrices] = useState([
+    { classes: 1, pricePerHour: 100, totalPrice: 100 },
+    { classes: 5, pricePerHour: 95, totalPrice: 475 },
+    { classes: 10, pricePerHour: 90, totalPrice: 900 },
+    { classes: 25, pricePerHour: 85, totalPrice: 2125 },
+    { classes: 50, pricePerHour: 80, totalPrice: 4000 },
+    { classes: 100, pricePerHour: 75, totalPrice: 7500 },
+  ]);
 
   const addClass = () => {
     setNumberOfClass(numberOfClass + 1);
@@ -48,23 +57,56 @@ const selectClassMode = () => {
     }
   };
 
+  const renderClasses = (item) => {
+    return (
+      <View
+        style={[
+          commonStyles.borderBottom,
+          {
+            marginTop: RfH(24),
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            paddingBottom: RfH(8),
+          },
+        ]}>
+        <View style={{}}>
+          <Text style={commonStyles.secondaryText}>{item.classes}</Text>
+        </View>
+        <View>
+          <Text style={commonStyles.secondaryText}>{item.pricePerHour}</Text>
+        </View>
+        <View>
+          <Text style={commonStyles.secondaryText}>{item.totalPrice}</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-      <ScrollView>
-        <ScreenHeader label="Book Class" homeIcon />
-        <IconButtonWrapper
-          iconWidth={RfW(95)}
-          iconHeight={RfH(100)}
-          iconImage={Images.kushal}
-          imageResizeMode="cover"
-          styling={styles.tutorIcon}
-        />
-        <Text style={styles.compareTutorName}>Gurbani Singh</Text>
-        <Text style={[styles.tutorDetails, { alignSelf: 'center' }]}>English ( Class 6-12 I CBSE)</Text>
+      <ScreenHeader label="Book Class" homeIcon />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{ height: RfH(44) }} />
+        <View style={commonStyles.horizontalChildrenStartView}>
+          <IconButtonWrapper
+            iconWidth={RfW(87)}
+            iconHeight={RfH(80)}
+            iconImage={Images.kushal}
+            imageResizeMode="cover"
+            styling={{ borderRadius: 8 }}
+          />
+          <View style={{ marginLeft: RfW(16) }}>
+            <Text style={[styles.compareTutorName, { alignSelf: 'flex-start', marginTop: 0 }]}>Gurbani Singh</Text>
+            <Text style={styles.tutorDetails}>English ( Class 6-12 I CBSE)</Text>
+            <Text style={styles.tutorDetails}>Mass Communication</Text>
+            <Text style={styles.tutorDetails}>3 years of Teaching Experience </Text>
+          </View>
+        </View>
         <Text style={[styles.compareTutorName, { alignSelf: 'flex-start' }]}>
           Select mode of class and number of Classes
         </Text>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(36), alignItems: 'flex-start' }]}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12), alignItems: 'flex-start' }]}>
           <Text style={styles.tutorDetails}>Mode of Class</Text>
           <View>
             <Switch value />
@@ -80,23 +122,19 @@ const selectClassMode = () => {
             </Text>
           </View>
         </View>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(32) }]}>
-          <Text style={{ flex: 0.3 }}>Classes</Text>
-          <View style={[commonStyles.horizontalChildrenView, { flex: 0.7 }]}>
-            <Text style={styles.classTableText}>1</Text>
-            <Text style={styles.classTableText}>5</Text>
-            <Text style={styles.classTableText}>10</Text>
-            <Text style={styles.classTableText}>20</Text>
-          </View>
+        <View
+          style={{ marginTop: RfH(16), flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+          <Text>Classes</Text>
+          <Text>Price/Hour</Text>
+          <Text>Total Price</Text>
         </View>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(32) }]}>
-          <Text style={{ flex: 0.3 }}>Total Price</Text>
-          <View style={[commonStyles.horizontalChildrenView, { flex: 0.7 }]}>
-            <Text style={styles.classTableText}>₹100</Text>
-            <Text style={styles.classTableText}>₹500</Text>
-            <Text style={styles.classTableText}>₹1000</Text>
-            <Text style={styles.classTableText}>₹2000</Text>
-          </View>
+        <View style={commonStyles.borderBottom}>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            data={classPrices}
+            renderItem={({ item, index }) => renderClasses(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(40) }]}>
           <Text style={[styles.compareTutorName, { marginTop: 0 }]}>Total Classes</Text>
@@ -118,11 +156,11 @@ const selectClassMode = () => {
             />
           </View>
         </View>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(32) }]}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
           <Text style={[styles.compareTutorName, { marginTop: 0 }]}>Amount Payable</Text>
           <Text>₹{amount}</Text>
         </View>
-        <View style={{ alignSelf: 'center', marginTop: RfH(100) }}>
+        <View style={{ alignSelf: 'center', marginTop: RfH(32), marginBottom: RfH(32) }}>
           <Button
             onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}
             style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
