@@ -29,8 +29,8 @@ function customRangeSelector(props) {
             <IconButtonWrapper
               styling={{ marginRight: RfW(16) }}
               iconImage={Images.backArrow}
-              iconHeight={RfH(24)}
-              iconWidth={RfW(24)}
+              iconHeight={RfH(20)}
+              iconWidth={RfW(20)}
               submitFunction={() => onBackPress()}
             />
           )}

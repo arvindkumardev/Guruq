@@ -1,13 +1,12 @@
-import { Text, View, FlatList, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { FlatList, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
-import { Calendar } from 'react-native-calendars';
 import commonStyles from '../../../theme/styles';
 import routeNames from '../../../routes/screenNames';
 import { RfH, RfW } from '../../../utils/helpers';
-import { Colors, Images, Fonts } from '../../../theme';
+import { Colors, Fonts, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 
@@ -122,7 +121,12 @@ function CalendarView() {
     <View style={commonStyles.mainContainer}>
       <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
         {showHeader && (
-          <Text style={{ textAlign: 'center', fontFamily: Fonts.regular, fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: Fonts.regular,
+              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+            }}>
             Your Schedule
           </Text>
         )}
@@ -147,7 +151,7 @@ function CalendarView() {
             selectedDate={new Date()}
             dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
             dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-            style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
+            style={{ height: 102, paddingTop: 20, paddingBottom: 10 }}
             calendarAnimation={{ type: 'parallel', duration: 300 }}
             daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
             markedDates={[
