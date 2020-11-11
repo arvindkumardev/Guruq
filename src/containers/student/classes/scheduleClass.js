@@ -135,8 +135,8 @@ function scheduleClass() {
         <View style={commonStyles.horizontalChildrenView}>
           <IconButtonWrapper
             iconImage={Images.backArrow}
-            iconWidth={RfW(24)}
-            iconHeight={RfH(24)}
+            iconWidth={RfW(20)}
+            iconHeight={RfH(20)}
             submitFunction={() => onBackPress()}
           />
           <Text style={[commonStyles.pageTitle, { marginLeft: RfW(16) }]}>Schedule Class</Text>

@@ -11,9 +11,8 @@ import styles from '../styles';
 
 const selectClassMode = () => {
   const navigation = useNavigation();
-  const [numberOfClass, setNumberOfClass] = useState(0);
-  const [cartItems, setCartItems] = useState(0);
-  const [amount, setAmount] = useState(0);
+  const [numberOfClass, setNumberOfClass] = useState(1);
+  const [amount, setAmount] = useState(100);
 
   const addClass = () => {
     setNumberOfClass(numberOfClass + 1);
@@ -32,7 +31,7 @@ const selectClassMode = () => {
   };
 
   const removeClass = () => {
-    if (numberOfClass > 0) {
+    if (numberOfClass > 1) {
       setNumberOfClass(numberOfClass - 1);
       const cls = numberOfClass - 1;
       if (cls < 5) {
@@ -124,21 +123,13 @@ const selectClassMode = () => {
           <Text>₹{amount}</Text>
         </View>
         <View style={{ alignSelf: 'center', marginTop: RfH(100) }}>
-          <Button onPress={() => setCartItems(numberOfClass)} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+          <Button
+            onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}
+            style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
             <Text style={commonStyles.textButtonPrimary}>Add to Cart</Text>
           </Button>
         </View>
       </ScrollView>
-      {cartItems > 0 && (
-        <View style={styles.fabActionParent}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
-            <View>
-              <IconButtonWrapper iconHeight={RfH(32)} iconImage={Images.cart_white} styling={{ alignSelf: 'center' }} />
-              <Text style={styles.cartText}>{numberOfClass}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      )}
     </View>
   );
 };

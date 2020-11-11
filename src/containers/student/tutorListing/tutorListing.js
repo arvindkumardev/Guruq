@@ -76,8 +76,8 @@ function TutorListing(props) {
     { name: 'Experience', checked: false },
     { name: 'Price', checked: false },
     { name: 'Rating', checked: false },
+    { name: 'Mode of Class', checked: false },
     { name: 'Sort By', checked: true },
-    { name: 'Mode of Study', checked: false },
   ]);
 
   // const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
