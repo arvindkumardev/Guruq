@@ -16,6 +16,9 @@ import { ADD_INTERESTED_OFFERINGS } from '../dashboard-mutation';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { isLoggedIn, userDetails } from '../../../apollo/cache';
+import IconButtonWrapper from '../../../components/IconWrapper';
+import Images from '../../../theme/images';
+import Fonts from '../../../theme/fonts';
 
 function ClassSelector(props) {
   const navigation = useNavigation();
@@ -57,11 +60,13 @@ function ClassSelector(props) {
           style={[
             styles.areaView,
             {
+              // height: RfH(54),
               marginHorizontal: RfW(8),
-              marginVertical: RfW(16),
-              // height: RfH(100),
-              // width: RfW(100),
+              marginVertical: RfW(8),
+              height: RfH(100),
+              width: RfW(100),
               backgroundColor:
+                // Colors.lightGrey,
                 index % 4 === 0
                   ? Colors.lightOrange
                   : index % 4 === 1
@@ -75,7 +80,14 @@ function ClassSelector(props) {
             },
           ]}>
           <View style={{ alignItems: 'center' }}>
-            <Text style={[styles.areaTitleOne, { marginTop: RfH(0), fontSize: RFValue(24, STANDARD_SCREEN_SIZE) }]}>
+            <Text
+              style={[
+                styles.areaTitleOne,
+                {
+                  marginTop: RfH(0),
+                  fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                },
+              ]}>
               {item.displayName}
             </Text>
           </View>
@@ -87,25 +99,25 @@ function ClassSelector(props) {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <StatusBar barStyle="dark-content" />
-      <View style={styles.helloView}>
-        <Icon
-          onPress={() => onBackPress()}
-          type="MaterialIcons"
-          name="keyboard-backspace"
-          style={{ color: Colors.primaryText }}
+      <View style={[styles.helloView]}>
+        <IconButtonWrapper
+          iconImage={Images.backArrow}
+          iconWidth={RfW(20)}
+          iconHeight={RfH(20)}
+          submitFunction={() => onBackPress()}
         />
         <Text
           style={{
-            fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-            fontFamily: 'SegoeUI-Bold',
+            fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+            fontFamily: Fonts.semiBold,
             color: Colors.primaryText,
-            marginLeft: RfH(20),
+            marginLeft: RfH(16),
             alignSelf: 'center',
           }}>
-          Select your Class
+          Select Your Level
         </Text>
       </View>
-      <View style={[commonStyles.areaParentView, { marginTop: RfH(56) }]}>
+      <View style={[commonStyles.areaParentView, { paddingTop: RfH(44), marginBottom: RfH(98) }]}>
         <FlatList
           data={
             data &&

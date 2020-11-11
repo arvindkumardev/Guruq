@@ -1,12 +1,12 @@
 /* eslint-disable no-nested-ternary */
-import { StatusBar, Text, TouchableWithoutFeedback, View, FlatList } from 'react-native';
-import { Icon, Thumbnail } from 'native-base';
-import React, { useEffect } from 'react';
+import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Icon } from 'native-base';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { RfW } from '../../../utils/helpers';
+import { RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
 import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
@@ -78,15 +78,15 @@ function StudyAreaSelector() {
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.helloView}>
-        <Icon
-          onPress={() => onBackPress()}
-          type="MaterialIcons"
-          name="keyboard-backspace"
-          style={{ color: Colors.primaryText }}
+        <IconButtonWrapper
+          iconImage={Images.backArrow}
+          iconWidth={RfW(20)}
+          iconHeight={RfH(20)}
+          submitFunction={() => onBackPress()}
         />
-        <Text style={styles.helloText}>Hello</Text>
+        {/*<Text style={styles.helloText}>Hello</Text>*/}
       </View>
-      <Text style={styles.userName}>{userInfo?.firstName}</Text>
+      {/*<Text style={styles.userName}>{userInfo?.firstName}</Text>*/}
       <Text style={styles.subHeading}>Select Your Study Area</Text>
       <Text style={styles.subHeadingText}>To help us find the best tutors for you</Text>
 

@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
     color: Colors.primaryText,
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
-    marginLeft: RfW(36),
+    // marginLeft: RfW(36),
   },
   subHeading: {
     marginTop: RfH(56),
@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
   },
   areaTitleOne: {
     marginTop: RfH(16),
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontFamily: 'SegoeUI-Semibold',
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
     textAlign: 'center',
   },
   areaTitleTwo: {
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-    fontFamily: 'SegoeUI-Semibold',
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
     textAlign: 'center',
   },
   classView: {
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   classTitle: {
-    fontSize: RFValue(36, STANDARD_SCREEN_SIZE),
-    fontFamily: 'SegoeUI-Semibold',
+    fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
     textAlign: 'center',
   },
 });

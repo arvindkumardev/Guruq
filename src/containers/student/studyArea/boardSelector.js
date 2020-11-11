@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { StatusBar, Text, TouchableWithoutFeedback, View, FlatList } from 'react-native';
-import { Icon, Thumbnail } from 'native-base';
+import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -13,6 +12,7 @@ import { IconButtonWrapper } from '../../../components';
 import styles from './style';
 import routeNames from '../../../routes/screenNames';
 import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
+import Fonts from '../../../theme/fonts';
 
 function BoardSelector(props) {
   const navigation = useNavigation();
@@ -68,24 +68,24 @@ function BoardSelector(props) {
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.helloView}>
-        <Icon
-          onPress={() => onBackPress()}
-          type="MaterialIcons"
-          name="keyboard-backspace"
-          style={{ color: Colors.primaryText }}
+        <IconButtonWrapper
+          iconImage={Images.backArrow}
+          iconWidth={RfW(20)}
+          iconHeight={RfH(20)}
+          submitFunction={() => onBackPress()}
         />
         <Text
           style={{
-            fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-            fontFamily: 'SegoeUI-Bold',
+            fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+            fontFamily: Fonts.semiBold,
             color: Colors.primaryText,
-            marginLeft: RfH(20),
+            marginLeft: RfH(16),
             alignSelf: 'center',
           }}>
-          Select your Board
+          Select Your Exam
         </Text>
       </View>
-      <View style={[styles.areaParentView, {marginBottom: RfH(142)}]}>
+      <View style={[styles.areaParentView, { marginBottom: RfH(142) }]}>
         <FlatList
           data={
             data &&
