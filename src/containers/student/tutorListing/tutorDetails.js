@@ -485,10 +485,7 @@ function tutorDetails() {
         <View>
           <TouchableWithoutFeedback onPress={() => setShowDateSlotModal(true)}>
             <Text
-              style={[
-                styles.tutorName,
-                { marginHorizontal: RfW(16), marginVertical: RfH(16), color: Colors.brandBlue2 },
-              ]}>
+              style={{ fontSize: 15, marginHorizontal: RfW(16), marginVertical: RfH(16), color: Colors.brandBlue2 }}>
               View Availability of Classes
             </Text>
           </TouchableWithoutFeedback>
