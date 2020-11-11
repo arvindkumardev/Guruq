@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View, Animated } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
@@ -761,9 +761,7 @@ function TutorListing(props) {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
-
       <Loader isLoading={loadingTutors} />
-
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
@@ -800,7 +798,6 @@ function TutorListing(props) {
                 </View>
                 {/* )} */}
               </View>
-
               <IconButtonWrapper styling={[styles.bookIcon, { height: 40 }]} iconImage={Images.book} />
             </View>
           )}

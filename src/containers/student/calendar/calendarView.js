@@ -118,7 +118,7 @@ function CalendarView() {
   };
 
   return (
-    <View style={commonStyles.mainContainer}>
+    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
         {showHeader && (
           <Text
@@ -151,7 +151,7 @@ function CalendarView() {
             selectedDate={new Date()}
             dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
             dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-            style={{ height: 102, paddingTop: 20, paddingBottom: 10 }}
+            style={showHeader ? { height: 102, paddingBottom: 10 } : { height: 102, paddingTop: 20, paddingBottom: 10 }}
             calendarAnimation={{ type: 'parallel', duration: 300 }}
             daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
             markedDates={[

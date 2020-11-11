@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { RfH, RfW } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
-import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
+import { DateSlotSelectorModal, IconButtonWrapper, RateReview } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
@@ -14,6 +14,10 @@ import styles from '../tutorListing/styles';
 function ScheduledClassDetails() {
   const navigation = useNavigation();
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
+
+  // const [startPosition, setStartPosition] = useState(new Animated.ValueXY({ x: 10, y: 450 }));
+
   const [attendees, setAttendees] = useState([
     {
       icon: Images.kushal,
@@ -112,8 +116,14 @@ function ScheduledClassDetails() {
     setShowReschedulePopup(true);
   };
 
+  // const moveView = () => {
+  //   Animated.spring(startPosition, {
+  //     toValue: { x: 250, y: 10 },
+  //   }).start();
+  // };
+
   return (
-    <View>
+    <View style={{ backgroundColor: Colors.white }}>
       <ScrollView stickyHeaderIndices={[0]} showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
         <View style={[styles.topView, {}]}>
           <View
@@ -382,6 +392,7 @@ function ScheduledClassDetails() {
         </View>
       </Modal>
       <DateSlotSelectorModal visible={showReschedulePopup} onClose={() => setShowReschedulePopup(false)} />
+      <RateReview visible={showReviewPopup} onClose={() => setShowReviewPopup(false)} />
     </View>
   );
 }

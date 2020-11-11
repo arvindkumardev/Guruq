@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback, Animated, Image } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -384,36 +384,35 @@ function tutorDetails() {
         commonStyles.mainContainer,
         { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
       ]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={[
-            styles.topView,
-            {
-              backgroundColor: Colors.white,
-              height: RfH(88),
-              paddingTop: RfH(44),
-              paddingHorizontal: RfW(16),
-              alignItems: 'center',
-            },
-          ]}>
+      <View
+        style={[
+          styles.topView,
+          {
+            backgroundColor: Colors.white,
+            height: RfH(88),
+            paddingTop: RfH(44),
+            paddingHorizontal: RfW(16),
+            alignItems: 'center',
+          },
+        ]}>
+        <IconButtonWrapper
+          iconHeight={RfH(20)}
+          iconWidth={RfW(20)}
+          iconImage={Images.backArrow}
+          submitFunction={() => onBackPress()}
+        />
+        <View style={commonStyles.horizontalChildrenStartView}>
+          <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} />
           <IconButtonWrapper
-            iconHeight={RfH(20)}
-            iconWidth={RfW(20)}
-            iconImage={Images.backArrow}
-            submitFunction={() => onBackPress()}
+            iconWidth={RfW(16)}
+            iconHeight={RfH(16)}
+            iconImage={Images.heart}
+            styling={{ marginHorizontal: RfW(16) }}
           />
-          <View style={commonStyles.horizontalChildrenStartView}>
-            <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} />
-            <IconButtonWrapper
-              iconWidth={RfW(16)}
-              iconHeight={RfH(16)}
-              iconImage={Images.heart}
-              styling={{ marginHorizontal: RfW(16) }}
-            />
-            <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} />
-          </View>
+          <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} />
         </View>
-
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             flexDirection: 'row',
