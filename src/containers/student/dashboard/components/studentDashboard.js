@@ -534,57 +534,82 @@ function StudentDashboard(props) {
               <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
             </TouchableWithoutFeedback>
           </View>
-          <View
-            style={{
-              backgroundColor: '#ceecfe',
-              borderRadius: 20,
-              marginTop: RfH(20),
-              padding: 16,
-            }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              <View style={{ flex: 0.3 }}>
-                <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
-              </View>
-              <View
-                style={{
-                  flex: 0.7,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  alignItems: 'stretch',
-                }}>
-                <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
-                  Science by Rahul Das
-                </Text>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>CBSE Class 9</Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                  <Icon
-                    type="FontAwesome"
-                    name="calendar-o"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: {} })
+            }>
+            <View
+              style={{
+                backgroundColor: '#ceecfe',
+                borderRadius: 20,
+                marginTop: RfH(20),
+                padding: 16,
+              }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+                <View style={{ flex: 0.3 }}>
+                  <Image
+                    style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }}
+                    source={Images.kushal}
                   />
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    Sunday , June 10{' '}
+                </View>
+                <View
+                  style={{
+                    flex: 0.7,
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    alignItems: 'stretch',
+                  }}>
+                  <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
+                    Science by Rahul Das
                   </Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                  <Icon
-                    type="Feather"
-                    name="clock"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>7:00-8:00 PM</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                  <Icon
-                    type="MaterialIcons"
-                    name="computer"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>Online Class</Text>
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>CBSE Class 9</Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      type="FontAwesome"
+                      name="calendar-o"
+                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                    />
+                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                      Sunday , June 10{' '}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      type="Feather"
+                      name="clock"
+                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                    />
+                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>7:00-8:00 PM</Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      type="MaterialIcons"
+                      name="computer"
+                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                    />
+                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>Online Class</Text>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
+
           <View
             style={{
               flexDirection: 'row',

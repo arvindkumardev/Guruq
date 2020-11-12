@@ -185,3 +185,6 @@ eslint settings
 
 adb -s <device name> tcp:8081 tcp:8081
 adb reverse tcp:8081 tcp:8081
+
+
+https://github.com/razorpay/react-native-razorpay/pull/297/files/ea490ff7669c629010a74f41de6c4d61a74c1c05

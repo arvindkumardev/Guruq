@@ -51,7 +51,8 @@ function CalendarView() {
 
   const renderClassItem = (item) => {
     return (
-      <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS)}>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: item })}>
         <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
           <View
             style={{

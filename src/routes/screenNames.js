@@ -8,6 +8,8 @@ const NavigationRouteNames = {
   REGISTER: 'register',
   USER_TYPE_SELECTOR: 'user_type_selector',
 
+  ONLINE_CLASS: 'online_class1',
+
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
     STUDY_AREA: 'student_study_area',

@@ -849,7 +849,7 @@ function TutorListing(props) {
             style={[
               styles.filterParentView,
               commonStyles.borderBottom,
-              { paddingLeft: RfW(16), backgroundColor: Colors.lightGrey },
+              { paddingLeft: RfW(16), backgroundColor: Colors.white },
             ]}>
             <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>
 

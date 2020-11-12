@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Card } from 'native-base';
-import RazorpayCheckout1 from 'react-native-razorpay';
+import RNRazorpayCheckout from 'react-native-razorpay';
 import { useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
@@ -48,7 +48,7 @@ function PaymentMethod() {
       },
       theme: { color: '#1E5AA0' },
     };
-    RazorpayCheckout1.open(options)
+    RNRazorpayCheckout.open(options)
       .then((data) => {
         // handle success
         Alert.alert(`Success: ${data.razorpay_payment_id}`);

@@ -1,5 +1,5 @@
 import { FlatList, Modal, ScrollView, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Button, CheckBox } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -8,15 +8,27 @@ import { Colors, Images } from '../../../theme';
 import { DateSlotSelectorModal, IconButtonWrapper, RateReview } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import routeNames from '../../../routes/screenNames';
+import NavigationRouteNames from '../../../routes/screenNames';
+
 import styles from '../tutorListing/styles';
 
-function ScheduledClassDetails() {
+function ScheduledClassDetails(props) {
   const navigation = useNavigation();
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
 
   // const [startPosition, setStartPosition] = useState(new Animated.ValueXY({ x: 10, y: 450 }));
+
+  const { route } = props;
+
+  const {classDetails} = route.params;
+
+
+  useEffect(()=>{
+    if(route && route.params&&route.params.classEnded) {
+      navigation.navigate(NavigationRouteNames.STUDENT.RATE_AND_REVIEW, {classDetails})
+    }
+  },[route]);
 
   const [attendees, setAttendees] = useState([
     {
@@ -99,12 +111,12 @@ function ScheduledClassDetails() {
 
   const goToCancelReason = () => {
     setShowCancelClassStartedPopup(false);
-    navigation.navigate(routeNames.STUDENT.CANCEL_REASON);
+    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON);
   };
 
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
-    navigation.navigate(routeNames.STUDENT.ONLINE_CLASS);
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: {}});
   };
 
   const onBackPress = () => {
