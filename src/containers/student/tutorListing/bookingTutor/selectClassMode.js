@@ -19,8 +19,6 @@ const selectClassMode = () => {
     { classes: 5, pricePerHour: 95, totalPrice: 475 },
     { classes: 10, pricePerHour: 90, totalPrice: 900 },
     { classes: 25, pricePerHour: 85, totalPrice: 2125 },
-    { classes: 50, pricePerHour: 80, totalPrice: 4000 },
-    { classes: 100, pricePerHour: 75, totalPrice: 7500 },
   ]);
 
   const addClass = () => {

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery, useLazyQuery } from '@apollo/client';
+import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
@@ -13,6 +14,7 @@ import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../..
 import { SEARCH_TUTORS } from '../tutor-query';
 import Loader from '../../../components/Loader';
 import Fonts from '../../../theme/fonts';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 function TutorListing(props) {
   const navigation = useNavigation();
@@ -313,7 +315,7 @@ function TutorListing(props) {
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
 
-    if (scrollPosition > 100) {
+    if (scrollPosition > 30) {
       setShowBackButton(true);
     } else {
       setShowBackButton(false);
@@ -789,8 +791,10 @@ function TutorListing(props) {
                 />
                 {/* {showBackButton && ( */}
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={[styles.subjectTitle, { fontSize: 17 }]}>{offering?.displayName} Tutors</Text>
-                  <Text style={[styles.classText, { fontSize: 15, marginLeft: RfW(8) }]}>
+                  <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
+                    {offering?.displayName} Tutors
+                  </Text>
+                  <Text style={[styles.classText, { fontSize: RFValue(15, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }]}>
                     {offering?.parentOffering?.parentOffering?.displayName}
                     {' | '}
                     {offering?.parentOffering?.displayName}
@@ -825,8 +829,10 @@ function TutorListing(props) {
                 </View>
                 {/* {showBackButton && ( */}
                 <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
-                  <Text style={[styles.subjectTitle, { fontSize: 20 }]}>{offering?.displayName} Tutors</Text>
-                  <Text style={[styles.classText, { fontSize: 15 }]}>
+                  <Text style={[styles.subjectTitle, { fontSize: RFValue(20, STANDARD_SCREEN_SIZE) }]}>
+                    {offering?.displayName} Tutors
+                  </Text>
+                  <Text style={[styles.classText, { fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }]}>
                     {offering?.parentOffering?.parentOffering?.displayName}
                     {' | '}
                     {offering?.parentOffering?.displayName}

@@ -58,7 +58,7 @@ function ScheduledClassDetails() {
       date: '15 Sept',
     },
   ]);
-
+  const [showBackButton, setShowBackButton] = useState(false);
   const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
   const [showCancelClassStartedPopup, setShowCancelClassStartedPopup] = useState(false);
   const renderAttendees = (item) => {
@@ -116,34 +116,35 @@ function ScheduledClassDetails() {
     setShowReschedulePopup(true);
   };
 
-  // const moveView = () => {
-  //   Animated.spring(startPosition, {
-  //     toValue: { x: 250, y: 10 },
-  //   }).start();
-  // };
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+
+    if (scrollPosition > 30) {
+      setShowBackButton(true);
+    } else {
+      setShowBackButton(false);
+    }
+  };
 
   return (
     <View style={{ backgroundColor: Colors.white }}>
-      <ScrollView stickyHeaderIndices={[0]} showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
-        <View style={[styles.topView, {}]}>
-          <View
-            style={{
-              height: RfH(98),
-              marginTop: RfH(68),
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: RfW(16),
-              backgroundColor: Colors.lightPurple,
-            }}>
+      <ScrollView
+        stickyHeaderIndices={[0]}
+        showsVerticalScrollIndicator={false}
+        onScroll={(event) => handleScroll(event)}
+        scrollEventThrottle={16}>
+        <View style={[styles.topView, showBackButton ? { height: RfH(88) } : { height: RfH(98) }]}>
+          {showBackButton && (
             <View
               style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'stretch',
+                height: RfH(44),
+                marginTop: RfH(8),
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: RfW(16),
               }}>
-              <View style={{}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <IconButtonWrapper
                   styling={{ marginRight: RfW(16) }}
                   iconImage={Images.backArrow}
@@ -151,31 +152,84 @@ function ScheduledClassDetails() {
                   iconWidth={RfW(20)}
                   submitFunction={() => onBackPress()}
                 />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
+                    English Class
+                  </Text>
+                  <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }]}>
+                    CBSE | Class 9
+                  </Text>
+                </View>
               </View>
+              <View style={{}}>
+                <Button
+                  block
+                  onPress={() => setShowClassStartedPopup(true)}
+                  style={[commonStyles.buttonPrimary, { width: RfH(116), borderRadius: 4, marginHorizontal: 0 }]}>
+                  <IconButtonWrapper
+                    iconImage={Images.video}
+                    iconHeight={RfH(16)}
+                    iconWidth={RfW(16)}
+                    styling={{ alignSelf: 'center' }}
+                  />
+                  <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Start Class</Text>
+                </Button>
+              </View>
+            </View>
+          )}
 
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
-                  <Text style={commonStyles.pageTitle}>English Class</Text>
-                  <Text style={[commonStyles.secondaryText, { marginTop: RfH(4) }]}>CBSE | Class 9</Text>
+          {!showBackButton && (
+            <View
+              style={{
+                height: RfH(98),
+                marginTop: RfH(68),
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: RfW(16),
+                backgroundColor: Colors.lightPurple,
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'stretch',
+                }}>
+                <View style={{}}>
+                  <IconButtonWrapper
+                    styling={{ marginRight: RfW(16) }}
+                    iconImage={Images.backArrow}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfW(20)}
+                    submitFunction={() => onBackPress()}
+                  />
                 </View>
 
-                <View style={{}}>
-                  <Button
-                    block
-                    onPress={() => setShowClassStartedPopup(true)}
-                    style={[commonStyles.buttonPrimary, { width: RfH(116), borderRadius: 4, marginHorizontal: 0 }]}>
-                    <IconButtonWrapper
-                      iconImage={Images.video}
-                      iconHeight={RfH(16)}
-                      iconWidth={RfW(16)}
-                      styling={{ alignSelf: 'center' }}
-                    />
-                    <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Start Class</Text>
-                  </Button>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
+                    <Text style={commonStyles.pageTitle}>English Class</Text>
+                    <Text style={[commonStyles.secondaryText, { marginTop: RfH(4) }]}>CBSE | Class 9</Text>
+                  </View>
+
+                  <View style={{}}>
+                    <Button
+                      block
+                      onPress={() => setShowClassStartedPopup(true)}
+                      style={[commonStyles.buttonPrimary, { width: RfH(116), borderRadius: 4, marginHorizontal: 0 }]}>
+                      <IconButtonWrapper
+                        iconImage={Images.video}
+                        iconHeight={RfH(16)}
+                        iconWidth={RfW(16)}
+                        styling={{ alignSelf: 'center' }}
+                      />
+                      <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Start Class</Text>
+                    </Button>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
+          )}
         </View>
 
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(54) }]}>
