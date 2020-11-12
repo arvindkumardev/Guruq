@@ -38,13 +38,12 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 // mutation {
 //   addToCart(
 //     cartCreateDto: {
-//       tutorOfferingId: 20113
-//       count: 5
+//       tutorOfferingId: 20116
+//       count: 1
 //       groupSize: 1
 //       demo: false
 //       onlineClass: false
 //       price: 500
-//       pointsRedeemed: 0
 //     }
 //   ) {
 //     id
@@ -87,10 +86,11 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 //         subArea: "CP"
 //         postalCode: 110001
 //       }
-//       itemPrice: 1200
-//       convenienceCharges: 50
-//       redeemQPoints: 0
-//       orderPayment: { amount: 1200, paymentMethod: 1 }
+//       itemPrice: 2500
+//       convenienceCharges: 100
+//       orderStatus: 1,
+//       redeemQPoints: 400,
+//       orderPayment: { amount: 2500, paymentMethod: 3 }
 //     }
 //   ) {
 //     id
@@ -110,6 +110,7 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 //       id
 //       paymentMethod
 //       paymentStatus
+//       amount
 //     }
 //     orderItems {
 //       id
@@ -120,7 +121,7 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 
 
 // mutation {
-//   makePayment(orderId: 3, paymentMethod: 6, transactionDetails: "") {
+//   makePayment(orderId:4, paymentMethod: 6, orderPaymentStatus: 1, transactionDetails: "") {
 //     id
 //     orderStatus
 //     payableAmount
@@ -137,9 +138,9 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 // mutation {
 //   scheduleClass(
 //     classesCreateDto: {
-//       orderItemId: 3
-//       startDate: "2020-11-08T15:00:00Z"
-//       endDate: "2020-11-08T16:00:00Z"
+//       orderItemId: 7
+//       startDate: "2020-11-12T15:00:00Z"
+//       endDate: "2020-11-12T16:00:00Z"
 //     }
 //   ) {
 //     id
@@ -147,7 +148,7 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 //     orderItem {
 //       id
 //     }
-//     student {
+//     students {
 //       id
 //     }
 //     tutor {

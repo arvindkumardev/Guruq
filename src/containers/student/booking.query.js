@@ -4,12 +4,32 @@
 //     offering {
 //       id
 //       name
+//       parentOffering {
+//         id
+//         name
+//         parentOffering {
+//           id
+//           name
+//         }
+//       }
 //     }
 //     tutor {
 //       id
+//       contactDetail {
+//         firstName
+//         lastName
+//       }
 //     }
 //     tutorOffering {
 //       id
+//       budgets {
+//         id
+//         price
+//         groupSize
+//         count
+//         onlineClass
+//         demo
+//       }
 //     }
 //     count
 //     groupSize
@@ -40,9 +60,11 @@
 //       id
 //     }
 //     orderStatus
+//     payableAmount
 //     orderPayment {
 //       id
 //       paymentStatus
+//       amount
 //     }
 //   }
 // }
@@ -52,16 +74,20 @@
 // query {
 //   getScheduledClasses(
 //     classesSearchDto: {
-//       studentId: 11631
-//       startDate: "2020-11-07T17:00:00Z"
-//       endDate: "2020-11-07T19:00:00Z"
+//       studentId: 19655
+//       startDate: "2020-11-09T00:00:00Z"
+//       endDate: "2020-11-15T17:00:00Z"
 //     }
 //   ) {
 //     id
 //     uuid
 //
-//     student {
+//     students {
 //       id
+//       contactDetail {
+//         firstName
+//         lastName
+//       }
 //     }
 //     tutor {
 //       id
@@ -73,6 +99,14 @@
 //     offering {
 //       id
 //       displayName
+//       parentOffering {
+//         id
+//         displayName
+//         parentOffering {
+//           id
+//           displayName
+//         }
+//       }
 //     }
 //     onlineClass
 //     demo
@@ -96,6 +130,34 @@
 //       id
 //       count
 //       availableClasses
+//       onlineClass
+//       demo
+//       count
+//       groupSize
+//
+//       offering {
+//         id
+//         name
+//         parentOffering {
+//           id
+//           name
+//           parentOffering {
+//             id
+//             name
+//           }
+//         }
+//       }
+//       tutor {
+//         id
+//         profileImage {
+//           id
+//           filename
+//         }
+//         contactDetail {
+//           firstName
+//           lastName
+//         }
+//       }
 //     }
 //     orderStatus
 //     orderPayment {
