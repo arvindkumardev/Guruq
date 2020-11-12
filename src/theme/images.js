@@ -97,6 +97,8 @@ const Images = {
   online_right: require('../assets/images/online_right.png'),
   online_left: require('../assets/images/online_left.png'),
   selected_star: require('../assets/images/selected_star.png'),
+  post_needs: require('../assets/images/post_needs.png'),
+  refer_earn: require('../assets/images/refer_earn.png'),
 };
 
 export default Images;

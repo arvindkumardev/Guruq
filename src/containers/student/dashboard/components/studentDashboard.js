@@ -871,22 +871,11 @@ function StudentDashboard(props) {
               </View>
             </View>
           </View>
-          <View style={{ marginTop: RfH(16) }}>
-            <View
-              style={{
-                position: 'absolute',
-                left: 0,
-                bottom: 0,
-                width: 0,
-                height: 0,
-                borderBottomWidth: 13,
-                borderBottomColor: 'transparent',
-                borderLeftWidth: 55,
-                borderLeftColor: Colors.lightBlue,
-                borderRightWidth: 55,
-                borderRightColor: Colors.lightBlue,
-              }}
-            />
+          <View style={{ marginTop: RfH(20) }}>
+            <Image source={Images.post_needs} />
+          </View>
+          <View>
+            <Image source={Images.refer_earn} />
           </View>
         </ScrollView>
         {subjectModal()}
