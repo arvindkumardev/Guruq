@@ -96,10 +96,18 @@ const SubjectsModal = (props) => {
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
           /> */}
+          <Text>Yes</Text>
         </View>
       </View>
     </Modal>
   );
+};
+
+SubjectsModal.defaultProps = {
+  visible: false,
+  onClose: null,
+  onSelect: null,
+  subjects: [],
 };
 
 SubjectsModal.propTypes = {
