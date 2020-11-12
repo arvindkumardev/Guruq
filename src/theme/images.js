@@ -99,6 +99,13 @@ const Images = {
   selected_star: require('../assets/images/selected_star.png'),
   post_needs: require('../assets/images/post_needs.png'),
   refer_earn: require('../assets/images/refer_earn.png'),
+
+  microphone: require('../assets/images/microphone.png'),
+  microphone_mute: require('../assets/images/microphone-mute.png'),
+  microphone_mute_white: require('../assets/images/microphone-mute-white.png'),
+  phone: require('../assets/images/phone.png'),
+  video_call: require('../assets/images/video-call.png'),
+  video_call_mute: require('../assets/images/video-call-mute.png'),
 };
 
 export default Images;

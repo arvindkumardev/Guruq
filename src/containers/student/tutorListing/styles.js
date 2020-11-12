@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
   },
   tutorDetails: {
-    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     color: Colors.secondaryText,
     marginTop: RfH(2),
   },
   chargeText: {
     color: Colors.black,
-    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     // fontFamily: Fonts.semiBold,
     // marginLeft: RfW(4),
   },

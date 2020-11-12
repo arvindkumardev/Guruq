@@ -176,7 +176,8 @@ function ScheduledClassDetails(props) {
               <View style={{}}>
                 <Button
                   block
-                  onPress={() => setShowClassStartedPopup(true)}
+                  onPress={() => goToOnlineClass()}
+                  // setShowClassStartedPopup(true)}
                   style={[commonStyles.buttonPrimary, { width: RfH(116), borderRadius: 4, marginHorizontal: 0 }]}>
                   <IconButtonWrapper
                     iconImage={Images.video}
@@ -227,7 +228,8 @@ function ScheduledClassDetails(props) {
                   <View style={{}}>
                     <Button
                       block
-                      onPress={() => setShowClassStartedPopup(true)}
+                      onPress={() => goToOnlineClass()}
+                      // setShowClassStartedPopup(true)}
                       style={[commonStyles.buttonPrimary, { width: RfH(116), borderRadius: 4, marginHorizontal: 0 }]}>
                       <IconButtonWrapper
                         iconImage={Images.video}

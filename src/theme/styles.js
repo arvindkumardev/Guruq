@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     color: Colors.primaryText,
   },
   headingText: {
-    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
   },
   secondaryText: {

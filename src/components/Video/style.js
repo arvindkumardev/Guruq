@@ -1,4 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
+import { RfW } from '../../utils/helpers';
+import Colors from '../../theme/colors';
+import Fonts from '../../theme/fonts';
 
 const dimensions = {
   width: Dimensions.get('window').width,
@@ -11,23 +14,26 @@ export default StyleSheet.create({
   },
   buttonHolder: {
     height: 100,
-    alignItems: 'center',
     flex: 1,
+    alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
   },
   button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#0093E9',
-    borderRadius: 25,
+    paddingHorizontal: 54,
+    paddingVertical: 16,
+    backgroundColor: Colors.brandBlue2,
+    borderRadius: 8,
+    marginHorizontal: RfW(8),
   },
   buttonText: {
     color: '#fff',
+    fontFamily: Fonts.semiBold,
+    fontSize: 17,
   },
   fullView: {
     width: dimensions.width,
-    height: dimensions.height - 100,
+    height: dimensions.height,
   },
   remoteContainer: {
     width: '100%',

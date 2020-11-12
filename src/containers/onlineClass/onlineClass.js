@@ -11,8 +11,8 @@ const OnlineClass = (props) => {
 
   const { classDetails } = route.params;
 
-  const callEnded = () => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: true });
+  const callEnded = (back) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: !back });
   };
 
   return <Video onCallEnd={callEnded} />;
