@@ -216,7 +216,7 @@ export default class Video extends Component<Props, State> {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <View style={{ flex: 0.8, justifyContent: 'flex-end', alignSelf: 'stretch' }}>
                 {this.state.previewVideo ? (
-                  <RtcLocalView.SurfaceView style={{ flex: 1 }} renderMode={VideoRenderMode.Hidden} mirrorMode />
+                  <RtcLocalView.SurfaceView style={{ flex: 1 }} renderMode={VideoRenderMode.Hidden} />
                 ) : (
                   <View style={{ flex: 1, backgroundColor: Colors.black }} />
                 )}
@@ -301,9 +301,10 @@ export default class Video extends Component<Props, State> {
                   <TouchableOpacity onPress={this.startCall} style={styles.button}>
                     <Text style={styles.buttonText}> Join Class </Text>
                   </TouchableOpacity>
-                  {/* <TouchableOpacity onPress={this.endCall} style={styles.button}> */}
-                  {/*  <Text style={styles.buttonText}> End Call </Text> */}
-                  {/* </TouchableOpacity> */}
+                  {/* FIXME: REMOVE ME */}
+                  <TouchableOpacity onPress={this.endCall} style={styles.button}>
+                    <Text style={styles.buttonText}> End Call </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>

@@ -39,7 +39,7 @@ export default StyleSheet.create({
     width: '100%',
     height: 150,
     position: 'absolute',
-    top: 5,
+    top: 44,
   },
   remote: {
     width: 150,
