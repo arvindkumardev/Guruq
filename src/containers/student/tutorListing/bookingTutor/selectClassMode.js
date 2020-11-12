@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableWithoutFeedback, FlatList } from 'react-native';
-import { Switch, Button } from 'native-base';
+import { View, Text, ScrollView, TouchableWithoutFeedback, FlatList, Switch } from 'react-native';
+import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { ScreenHeader, IconButtonWrapper } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
@@ -13,6 +13,7 @@ const selectClassMode = () => {
   const navigation = useNavigation();
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(100);
+  const [classMode, setClassMode] = useState(false);
 
   const [classPrices, setClassPrices] = useState([
     { classes: 1, pricePerHour: 100, totalPrice: 100 },
@@ -107,7 +108,11 @@ const selectClassMode = () => {
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12), alignItems: 'flex-start' }]}>
           <Text style={styles.tutorDetails}>Mode of Class</Text>
           <View>
-            <Switch value />
+            <Switch
+              value={classMode}
+              onValueChange={(value) => setClassMode(!classMode)}
+              style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+            />
             <Text
               style={[
                 styles.appliedFilterText,
@@ -116,7 +121,7 @@ const selectClassMode = () => {
                   alignSelf: 'center',
                 },
               ]}>
-              Online
+              {classMode ? 'Online' : 'Offline'}
             </Text>
           </View>
         </View>

@@ -845,14 +845,6 @@ function TutorListing(props) {
             </View>
           )}
 
-          {/* {!showBackButton && ( */}
-          {/*  <View style={{ padding: RfW(16) }}> */}
-          {/*    <Text style={[styles.subjectTitle, { fontSize: showBackButton ? 17 : 20 }]}>English Tutors</Text> */}
-          {/*    <Text style={styles.classText}>CBSE | Class 9</Text> */}
-          {/*  </View> */}
-          {/* )} */}
-
-          {/* {showBackButton && ( */}
           <View
             style={[
               styles.filterParentView,
@@ -878,8 +870,6 @@ function TutorListing(props) {
               </View>
             </TouchableWithoutFeedback>
           </View>
-          {/* )} */}
-          {/* </View> */}
         </View>
 
         <View>{filtersView()}</View>
