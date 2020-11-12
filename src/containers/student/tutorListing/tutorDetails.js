@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback, Animated, Image } from 'react-native';
+import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -17,6 +17,7 @@ import routeNames from '../../../routes/screenNames';
 function tutorDetails() {
   const navigation = useNavigation();
   const [showDateSlotModal, setShowDateSlotModal] = useState(false);
+  const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
   const [subjects, setSubjects] = useState([
     { id: 0, name: 'English' },
     { id: 1, name: 'Physics' },
@@ -378,6 +379,16 @@ function tutorDetails() {
     );
   };
 
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+
+    if (scrollPosition > 90) {
+      setHideTutorPersonal(true);
+    } else {
+      setHideTutorPersonal(false);
+    }
+  };
+
   return (
     <View
       style={[
@@ -412,14 +423,34 @@ function tutorDetails() {
           <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} />
         </View>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        stickyHeaderIndices={[0]}
+        showsVerticalScrollIndicator={false}
+        onScroll={(event) => handleScroll(event)}>
+        <View>
+          {hideTutorPersonal && (
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                { backgroundColor: Colors.white, paddingHorizontal: RfW(16), paddingVertical: RfH(8) },
+              ]}>
+              <IconButtonWrapper
+                iconWidth={RfW(32)}
+                iconHeight={RfH(32)}
+                iconImage={Images.kushal}
+                imageResizeMode="cover"
+                styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
+              />
+              <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>Gurbani Singh</Text>
+            </View>
+          )}
+        </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
             paddingHorizontal: RfW(16),
-            // height: RfH(54),
             marginBottom: RfH(17),
           }}>
           <IconButtonWrapper
@@ -444,7 +475,6 @@ function tutorDetails() {
             </View>
           </View>
         </View>
-
         <View style={commonStyles.lineSeparator} />
 
         {classView()}

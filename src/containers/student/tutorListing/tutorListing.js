@@ -461,7 +461,7 @@ function TutorListing(props) {
   };
 
   const selectRange = (item, index) => {
-    setSelectedFilterBubble(item);
+    setSelectedFilterBubble(item.value);
     switch (filterIndex) {
       case 1:
         filterValues.experience = item.value;
