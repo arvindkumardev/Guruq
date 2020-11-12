@@ -1,4 +1,4 @@
-import { FlatList, Text, View, StatusBar } from 'react-native';
+import { FlatList, Text, View, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, Segment } from 'native-base';
@@ -14,6 +14,7 @@ import { IconButtonWrapper } from '../../../components';
 function bookingConfirmed() {
   const navigation = useNavigation();
   const [isHistorySelected, setIsHistorySelected] = useState(false);
+  const [showHeader, setShowHeader] = useState(false);
   const [classItems, setClassItems] = useState([
     {
       tutorIcon: Images.kushal,
@@ -126,38 +127,76 @@ function bookingConfirmed() {
       </View>
     );
   };
+
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+
+    if (scrollPosition > 35) {
+      setShowHeader(true);
+    } else {
+      setShowHeader(false);
+    }
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-      <View style={{ height: RfH(44) }} />
-      <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
-      <View style={[commonStyles.horizontalChildrenCenterView, { marginTop: RfH(16) }]}>
-        <Button
-          onPress={() => setIsHistorySelected(false)}
-          small
-          block
-          bordered
-          style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
-          <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
-            Unscheduled Classes
+      <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
+        {showHeader && (
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: Fonts.regular,
+              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+              alignSelf: 'center',
+            }}>
+            My Classes
           </Text>
-        </Button>
-        <Button
-          onPress={() => setIsHistorySelected(true)}
-          small
-          block
-          bordered
-          style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
-          <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
-        </Button>
+        )}
       </View>
-
-      <FlatList
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        data={classItems}
-        renderItem={({ item }) => renderClassItem(item)}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingBottom: RfH(170) }}
-      />
+        onScroll={(event) => handleScroll(event)}
+        stickyHeaderIndices={[1]}
+        scrollEventThrottle={16}>
+        <View>
+          <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
+        </View>
+        <View>
+          <View
+            style={[
+              commonStyles.horizontalChildrenCenterView,
+              showHeader
+                ? { backgroundColor: Colors.white, paddingBottom: RfH(8) }
+                : { paddingTop: RfH(16), backgroundColor: Colors.white },
+            ]}>
+            <Button
+              onPress={() => setIsHistorySelected(false)}
+              small
+              block
+              bordered
+              style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
+              <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
+                Unscheduled Classes
+              </Text>
+            </Button>
+            <Button
+              onPress={() => setIsHistorySelected(true)}
+              small
+              block
+              bordered
+              style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
+              <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
+            </Button>
+          </View>
+        </View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={classItems}
+          renderItem={({ item }) => renderClassItem(item)}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{ paddingBottom: RfH(170) }}
+        />
+      </ScrollView>
     </View>
   );
 }

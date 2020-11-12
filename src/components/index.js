@@ -8,6 +8,7 @@ import CustomRadioButton from './CustomRadioButton';
 import CustomRangeSelector from './CustomRangeSelector';
 import ScreenHeader from './ScreenHeader';
 import DateSlotSelectorModal from './DateSlotSelectorModal';
+import RateReview from './Rate&ReviewModal';
 
 export {
   IconButtonWrapper,
@@ -19,4 +20,5 @@ export {
   CustomRangeSelector,
   ScreenHeader,
   DateSlotSelectorModal,
+  RateReview,
 };

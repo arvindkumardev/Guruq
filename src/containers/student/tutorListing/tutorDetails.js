@@ -17,6 +17,7 @@ import routeNames from '../../../routes/screenNames';
 function tutorDetails() {
   const navigation = useNavigation();
   const [showDateSlotModal, setShowDateSlotModal] = useState(false);
+  const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
   const [subjects, setSubjects] = useState([
     { id: 0, name: 'English' },
     { id: 1, name: 'Physics' },
@@ -378,49 +379,78 @@ function tutorDetails() {
     );
   };
 
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+
+    if (scrollPosition > 90) {
+      setHideTutorPersonal(true);
+    } else {
+      setHideTutorPersonal(false);
+    }
+  };
+
   return (
     <View
       style={[
         commonStyles.mainContainer,
         { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
       ]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={[
-            styles.topView,
-            {
-              backgroundColor: Colors.white,
-              height: RfH(88),
-              paddingTop: RfH(44),
-              paddingHorizontal: RfW(16),
-              alignItems: 'center',
-            },
-          ]}>
+      <View
+        style={[
+          styles.topView,
+          {
+            backgroundColor: Colors.white,
+            height: RfH(88),
+            paddingTop: RfH(44),
+            paddingHorizontal: RfW(16),
+            alignItems: 'center',
+          },
+        ]}>
+        <IconButtonWrapper
+          iconHeight={RfH(20)}
+          iconWidth={RfW(20)}
+          iconImage={Images.backArrow}
+          submitFunction={() => onBackPress()}
+        />
+        <View style={commonStyles.horizontalChildrenStartView}>
+          <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} />
           <IconButtonWrapper
-            iconHeight={RfH(20)}
-            iconWidth={RfW(20)}
-            iconImage={Images.backArrow}
-            submitFunction={() => onBackPress()}
+            iconWidth={RfW(16)}
+            iconHeight={RfH(16)}
+            iconImage={Images.heart}
+            styling={{ marginHorizontal: RfW(16) }}
           />
-          <View style={commonStyles.horizontalChildrenStartView}>
-            <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} />
-            <IconButtonWrapper
-              iconWidth={RfW(16)}
-              iconHeight={RfH(16)}
-              iconImage={Images.heart}
-              styling={{ marginHorizontal: RfW(16) }}
-            />
-            <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} />
-          </View>
+          <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} />
         </View>
-
+      </View>
+      <ScrollView
+        stickyHeaderIndices={[0]}
+        showsVerticalScrollIndicator={false}
+        onScroll={(event) => handleScroll(event)}>
+        <View>
+          {hideTutorPersonal && (
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                { backgroundColor: Colors.white, paddingHorizontal: RfW(16), paddingVertical: RfH(8) },
+              ]}>
+              <IconButtonWrapper
+                iconWidth={RfW(32)}
+                iconHeight={RfH(32)}
+                iconImage={Images.kushal}
+                imageResizeMode="cover"
+                styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
+              />
+              <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>Gurbani Singh</Text>
+            </View>
+          )}
+        </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
             paddingHorizontal: RfW(16),
-            // height: RfH(54),
             marginBottom: RfH(17),
           }}>
           <IconButtonWrapper
@@ -445,7 +475,6 @@ function tutorDetails() {
             </View>
           </View>
         </View>
-
         <View style={commonStyles.lineSeparator} />
 
         {classView()}
