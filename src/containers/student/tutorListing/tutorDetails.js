@@ -150,9 +150,9 @@ function tutorDetails() {
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
           <IconButtonWrapper
             iconHeight={RfH(40)}
-            iconWidth={RfW(40)}
+            iconWidth={RfH(40)}
             iconImage={item.icon}
-            styling={{ borderRadius: 20 }}
+            styling={{ borderRadius: RfH(20) }}
           />
           <View
             style={{

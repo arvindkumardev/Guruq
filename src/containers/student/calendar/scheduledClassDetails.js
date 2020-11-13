@@ -1,5 +1,5 @@
 import { FlatList, Modal, ScrollView, Text, View } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, CheckBox } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -21,14 +21,13 @@ function ScheduledClassDetails(props) {
 
   const { route } = props;
 
-  const {classDetails} = route.params;
+  const { classDetails } = route.params;
 
-
-  useEffect(()=>{
-    if(route && route.params&&route.params.classEnded) {
-      navigation.navigate(NavigationRouteNames.STUDENT.RATE_AND_REVIEW, {classDetails})
+  useEffect(() => {
+    if (route && route.params && route.params.classEnded) {
+      navigation.navigate(NavigationRouteNames.STUDENT.RATE_AND_REVIEW, { classDetails });
     }
-  },[route]);
+  }, [route]);
 
   const [attendees, setAttendees] = useState([
     {
@@ -116,7 +115,7 @@ function ScheduledClassDetails(props) {
 
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: {}});
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: {} });
   };
 
   const onBackPress = () => {
@@ -164,11 +163,11 @@ function ScheduledClassDetails(props) {
                   iconWidth={RfW(20)}
                   submitFunction={() => onBackPress()}
                 />
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={commonStyles.verticallyStretchedItemsView}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     English Class
                   </Text>
-                  <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }]}>
+                  <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     CBSE | Class 9
                   </Text>
                 </View>
