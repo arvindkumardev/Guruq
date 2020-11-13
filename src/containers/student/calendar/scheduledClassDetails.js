@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, CheckBox } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { RfH, RfW } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
 import { DateSlotSelectorModal, IconButtonWrapper, RateReview } from '../../../components';
@@ -349,14 +349,19 @@ function ScheduledClassDetails(props) {
           </View>
         </View>
 
-        <MapView
-          initialRegion={{
-            latitude: 28.561929,
-            longitude: 77.06681,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
+        <View style={{ marginTop: RfH(8) }}>
+          <MapView
+            style={{ flex: 1, height: 500 }}
+            liteMode
+            initialRegion={{
+              latitude: 28.561929,
+              longitude: 77.06681,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}>
+            <Marker coordinate={{ latitude: 28.561929, longitude: 77.06681 }} />
+          </MapView>
+        </View>
 
         <View style={{ marginLeft: RfW(16), marginTop: RfH(8) }}>
           <Text style={commonStyles.titleText}>Block 27</Text>
