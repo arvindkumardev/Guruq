@@ -168,14 +168,6 @@ function ScheduledClassDetails(props) {
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     English Class
                   </Text>
-                  <Text
-                    style={[
-                      styles.classText,
-                      {
-                        fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-                        marginLeft: RfW(8),
-                      },
-                    ]}>
                   <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     CBSE | Class 9
                   </Text>

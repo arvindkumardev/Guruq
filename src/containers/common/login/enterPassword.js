@@ -1,6 +1,6 @@
 import { Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -10,7 +10,7 @@ import { RfH, RfW, storeData } from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
-import { isLoggedIn, userDetails } from '../../../apollo/cache';
+import { isTokenLoading } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import MainContainer from './components/mainContainer';
 
@@ -23,36 +23,60 @@ function EnterPassword(props) {
 
   const [mobileObj, setMobileObj] = useState(route.params.mobileObj);
 
-  const [signIn, { loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
+  const [signIn, { data: signInData, error: signInError, loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, password },
-
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        if (error.errorCode === INVALID_INPUT) {
-          // incorrect username/password
-          Alert.alert('Incorrect password');
-        } else if (error.errorCode === NOT_FOUND) {
-          navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
-        }
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token).then(() => {
-          isLoggedIn(true);
-          userDetails(data.signIn);
-        });
-
-        // if (data.type === UserTypeEnum.OTHER.label) {
-        //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR);
-        // } else {
-        // set in apollo cache
-        // }
-      }
-    },
   });
+
+  //   onError: (e) => {
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //       if (error.errorCode === INVALID_INPUT) {
+  //         // incorrect username/password
+  //         Alert.alert('Incorrect password');
+  //       } else if (error.errorCode === NOT_FOUND) {
+  //         navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+  //       }
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
+  //       // .then(() => {
+  //       //   isLoggedIn(true);
+  //       //   userDetails(data.signIn);
+  //
+  //         navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+  //       // });
+  //
+  //       // if (data.type === UserTypeEnum.OTHER.label) {
+  //       // } else {
+  //       // set in apollo cache
+  //       // }
+  //     }
+  //   },
+  // });
+
+  useEffect(() => {
+    if (signInError && signInError.graphQLErrors && signInError.graphQLErrors.length > 0) {
+      const error = signInError.graphQLErrors[0].extensions.exception.response;
+      if (error.errorCode === INVALID_INPUT) {
+        // incorrect username/password
+        Alert.alert('Incorrect password');
+      } else if (error.errorCode === NOT_FOUND) {
+        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+      }
+    }
+  }, [signInError]);
+
+  useEffect(() => {
+    if (signInData && signInData.signIn) {
+      storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, signInData.signIn.token).then(() => {
+        isTokenLoading(true);
+        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+      });
+    }
+  }, [signInData]);
 
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
