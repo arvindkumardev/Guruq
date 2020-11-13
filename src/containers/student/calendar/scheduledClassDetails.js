@@ -1,8 +1,9 @@
 import { FlatList, Modal, ScrollView, Text, View } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, CheckBox } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import MapView from 'react-native-maps';
 import { RfH, RfW } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
 import { DateSlotSelectorModal, IconButtonWrapper, RateReview } from '../../../components';
@@ -21,14 +22,13 @@ function ScheduledClassDetails(props) {
 
   const { route } = props;
 
-  const {classDetails} = route.params;
+  const { classDetails } = route.params;
 
-
-  useEffect(()=>{
-    if(route && route.params&&route.params.classEnded) {
-      navigation.navigate(NavigationRouteNames.STUDENT.RATE_AND_REVIEW, {classDetails})
+  useEffect(() => {
+    if (route && route.params && route.params.classEnded) {
+      navigation.navigate(NavigationRouteNames.STUDENT.RATE_AND_REVIEW, { classDetails });
     }
-  },[route]);
+  }, [route]);
 
   const [attendees, setAttendees] = useState([
     {
@@ -116,7 +116,7 @@ function ScheduledClassDetails(props) {
 
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: {}});
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: {} });
   };
 
   const onBackPress = () => {
@@ -168,7 +168,14 @@ function ScheduledClassDetails(props) {
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     English Class
                   </Text>
-                  <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }]}>
+                  <Text
+                    style={[
+                      styles.classText,
+                      {
+                        fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                        marginLeft: RfW(8),
+                      },
+                    ]}>
                     CBSE | Class 9
                   </Text>
                 </View>
@@ -178,7 +185,14 @@ function ScheduledClassDetails(props) {
                   block
                   onPress={() => goToOnlineClass()}
                   // setShowClassStartedPopup(true)}
-                  style={[commonStyles.buttonPrimary, { width: RfH(116), borderRadius: 4, marginHorizontal: 0 }]}>
+                  style={[
+                    commonStyles.buttonPrimary,
+                    {
+                      width: RfH(116),
+                      borderRadius: 4,
+                      marginHorizontal: 0,
+                    },
+                  ]}>
                   <IconButtonWrapper
                     iconImage={Images.video}
                     iconHeight={RfH(16)}
@@ -230,7 +244,14 @@ function ScheduledClassDetails(props) {
                       block
                       onPress={() => goToOnlineClass()}
                       // setShowClassStartedPopup(true)}
-                      style={[commonStyles.buttonPrimary, { width: RfH(116), borderRadius: 4, marginHorizontal: 0 }]}>
+                      style={[
+                        commonStyles.buttonPrimary,
+                        {
+                          width: RfH(116),
+                          borderRadius: 4,
+                          marginHorizontal: 0,
+                        },
+                      ]}>
                       <IconButtonWrapper
                         iconImage={Images.video}
                         iconHeight={RfH(16)}
@@ -334,6 +355,16 @@ function ScheduledClassDetails(props) {
             <Text style={commonStyles.headingText}>Class Location </Text>
           </View>
         </View>
+
+        <MapView
+          initialRegion={{
+            latitude: 28.561929,
+            longitude: 77.06681,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+
         <View style={{ marginLeft: RfW(16), marginTop: RfH(8) }}>
           <Text style={commonStyles.titleText}>Block 27</Text>
           <Text style={{ fontSize: RFValue(12, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>

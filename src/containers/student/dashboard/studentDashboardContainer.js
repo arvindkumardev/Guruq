@@ -1,6 +1,7 @@
 import { SafeAreaView, StatusBar, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container, Footer, FooterTab, Thumbnail } from 'native-base';
+import GetLocation from 'react-native-get-location';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
@@ -19,6 +20,20 @@ function StudentDashboardContainer(props) {
   const changeTab = (number) => {
     setActiveTab(number);
   };
+
+  useEffect(() => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then((location) => {
+        console.log(location);
+      })
+      .catch((error) => {
+        const { code, message } = error;
+        console.warn(code, message);
+      });
+  });
 
   return (
     <SafeAreaView style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
@@ -69,18 +84,18 @@ function StudentDashboardContainer(props) {
               />
               <Text style={activeTab === 3 ? styles.bottomTabActive : styles.bottomText}>Classes</Text>
             </Button>
-            {/* <Button */}
-            {/*  style={{ backgroundColor: Colors.white }} */}
-            {/*  vertical */}
-            {/*  active={activeTab === 4} */}
-            {/*  onPress={() => changeTab(4)}> */}
-            {/*  <Thumbnail */}
-            {/*    square */}
-            {/*    style={{ height: RfH(16.8), width: RfW(20.8) }} */}
-            {/*    source={activeTab === 4 ? Images.tutor_active : Images.tutor_tab} */}
-            {/*  /> */}
-            {/*  <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Tutor</Text> */}
-            {/* </Button> */}
+            <Button
+              style={{ backgroundColor: Colors.white }}
+              vertical
+              active={activeTab === 4}
+              onPress={() => changeTab(4)}>
+              <Thumbnail
+                square
+                style={{ height: RfH(18), width: RfW(16) }}
+                source={activeTab === 4 ? Images.logo_yellow : Images.qpoint}
+              />
+              <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Wallet</Text>
+            </Button>
             <Button
               style={{ backgroundColor: Colors.white }}
               vertical
