@@ -841,7 +841,10 @@ function TutorListing(props) {
                 {/* )} */}
               </View>
 
-              <IconButtonWrapper styling={[styles.bookIcon, { height: 80 }]} iconImage={Images.book} />
+              <IconButtonWrapper
+                styling={[styles.bookIcon, { height: 40, alignSelf: 'flex-end' }]}
+                iconImage={Images.book}
+              />
             </View>
           )}
 
@@ -854,7 +857,9 @@ function TutorListing(props) {
             <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>
 
             <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS)}>
-              <Text style={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Compare Tutors</Text>
+              <Text style={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+                Compare Tutors
+              </Text>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>

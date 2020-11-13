@@ -164,7 +164,7 @@ function ScheduledClassDetails(props) {
                   iconWidth={RfW(20)}
                   submitFunction={() => onBackPress()}
                 />
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={commonStyles.verticallyStretchedItemsView}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     English Class
                   </Text>
@@ -176,6 +176,7 @@ function ScheduledClassDetails(props) {
                         marginLeft: RfW(8),
                       },
                     ]}>
+                  <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     CBSE | Class 9
                   </Text>
                 </View>

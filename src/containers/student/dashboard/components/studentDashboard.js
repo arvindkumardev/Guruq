@@ -617,7 +617,14 @@ function StudentDashboard(props) {
               alignItems: 'flex-end',
               marginTop: RfH(25),
             }}>
-            <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Tutors By Subjects</Text>
+            <Text
+              style={{
+                color: Colors.primaryText,
+                fontFamily: Fonts.bold,
+                fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+              }}>
+              Tutors By Subjects
+            </Text>
             <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
               <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
             </TouchableWithoutFeedback>
@@ -645,8 +652,15 @@ function StudentDashboard(props) {
               alignItems: 'flex-end',
               marginTop: RfH(25),
             }}>
-            <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Favourite Tutors</Text>
-            <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
+            <Text
+              style={{
+                color: Colors.primaryText,
+                fontFamily: Fonts.bold,
+                fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+              }}>
+              Favourite Tutors
+            </Text>
+            <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
           </View>
           <FlatList
             horizontal
