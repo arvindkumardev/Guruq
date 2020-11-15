@@ -6,12 +6,13 @@ import { useMutation } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import {removeData, removeToken, RfH, storeData} from '../../../utils/helpers';
-import routeNames from '../../../routes/screenNames';
+import { RfH, storeData } from '../../../utils/helpers';
+import NavigationRouteNames from '../../../routes/screenNames';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { isTokenLoading } from '../../../apollo/cache';
 
 function OtpVerification(props) {
   const navigation = useNavigation();
@@ -37,46 +38,71 @@ function OtpVerification(props) {
     fetchPolicy: 'no-cache',
     variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile },
     onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+      }
+    },
+  });
+
+  const [verifyPhoneNumber, { data: verifyData, error: verifyError, loading: verifyLoading }] = useMutation(
+    VERIFY_PHONE_NUMBER_MUTATION,
+    {
+      fetchPolicy: 'no-cache',
+    }
+  );
+
+  //   onError: (e) => {
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //       console.log(error);
+  //       if (error.errorCode === INVALID_INPUT) {
+  //         // incorrect username/password
+  //         Alert.alert('Invalid or Incorrect OTP');
+  //       }
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       console.log('data', data);
+  //       if (newUser) {
+  //         navigation.navigate(routeNames.REGISTER, {
+  //           countryCode: mobileObj.country.dialCode,
+  //           number: mobileObj.mobile,
+  //         });
+  //       } else {
+  //         // set token
+  //         console.log('data', data);
+  //         // removeToken();
+  //         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.verifyPhoneNumber.token);
+  //
+  //         navigation.navigate(routeNames.SET_PASSWORD);
+  //       }
+  //     }
+  //   },
+  // });
+
+  useEffect(() => {
+    if (verifyError && verifyError.graphQLErrors && verifyError.graphQLErrors.length > 0) {
+      const error = verifyError.graphQLErrors[0].extensions.exception.response;
       console.log(error);
-    },
-    onCompleted: (data) => {
-      if (data) {
-        console.log('data', data);
+      if (error.errorCode === INVALID_INPUT) {
+        // incorrect username/password
+        Alert.alert('Invalid or Incorrect OTP');
       }
-    },
-  });
+    }
+  }, [verifyError]);
 
-  const [verifyPhoneNumber, { loading: verifyLoading }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        console.log(error);
-        if (error.errorCode === INVALID_INPUT) {
-          // incorrect username/password
-          Alert.alert('Invalid or Incorrect OTP');
-        }
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        console.log('data', data);
-        if (newUser) {
-          navigation.navigate(routeNames.REGISTER, {
-            countryCode: mobileObj.country.dialCode,
-            number: mobileObj.mobile,
-          });
-        } else {
-          // set token
-          console.log('data', data);
-          // removeToken();
-          storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.verifyPhoneNumber.token);
-
-          navigation.navigate(routeNames.SET_PASSWORD);
-        }
-      }
-    },
-  });
+  useEffect(() => {
+    if (verifyData && verifyData.verifyPhoneNumber) {
+      storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, verifyData.verifyPhoneNumber.token).then(() => {
+        isTokenLoading(true);
+        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+      });
+    }
+  }, [verifyData]);
 
   useEffect(() => {
     generateOtp();

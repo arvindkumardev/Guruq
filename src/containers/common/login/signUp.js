@@ -1,6 +1,6 @@
 import { Alert, Keyboard, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
@@ -10,8 +10,9 @@ import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import { isLoggedIn, userDetails } from '../../../apollo/cache';
+import { isTokenLoading } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function SignUp(props) {
   const navigation = useNavigation();
@@ -24,27 +25,47 @@ function SignUp(props) {
 
   const { route } = props;
 
-  const [addUser, { loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
+  const [addUser, { data: addUserData, error: addUserError, loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
     fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        if (error.errorCode === DUPLICATE_FOUND) {
-          Alert.alert('Email already being used by another user, please use different email!');
-        }
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
-          isLoggedIn(true);
-          userDetails(data.signUp);
-        });
-
-        // navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR);
-      }
-    },
   });
+
+  //   onError: (e) => {
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //       if (error.errorCode === DUPLICATE_FOUND) {
+  //         Alert.alert('Email already being used by another user, please use different email!');
+  //       }
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
+  //         isLoggedIn(true);
+  //         userDetails(data.signUp);
+  //       });
+  //
+  //       // navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR);
+  //     }
+  //   },
+  // });
+
+  useEffect(() => {
+    if (addUserError && addUserError.graphQLErrors && addUserError.graphQLErrors.length > 0) {
+      const error = addUserError.graphQLErrors[0].extensions.exception.response;
+      if (error.errorCode === DUPLICATE_FOUND) {
+        Alert.alert('Email already being used by another user, please use different email!');
+      }
+    }
+  }, [addUserError]);
+
+  useEffect(() => {
+    if (addUserData && addUserData.signUp) {
+      storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, addUserData.signUp.token).then(() => {
+        isTokenLoading(true);
+        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+      });
+    }
+  }, [addUserData]);
 
   const onBackPress = () => {
     navigation.goBack();

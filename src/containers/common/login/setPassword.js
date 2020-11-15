@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
@@ -16,8 +16,10 @@ import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { isLoggedIn, userDetails } from '../../../apollo/cache';
+import { isTokenLoading } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { INVALID_INPUT } from '../../../common/errorCodes';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function SetPassword() {
   const navigation = useNavigation();
@@ -26,30 +28,53 @@ function SetPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
 
-  const [setUserPassword, { loading: setPasswordLoading }] = useMutation(SET_PASSWORD_MUTATION, {
+  const [
+    setUserPassword,
+    { data: setPasswordData, error: setPasswordError, loading: setPasswordLoading },
+  ] = useMutation(SET_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { password },
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        console.log(error);
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token).then(() => {
-          isLoggedIn(true);
-          userDetails(data.setPassword);
-        });
-
-        // if (data.type === UserTypeEnum.OTHER.label) {
-        //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR, { user: data.SetPassword });
-        // } else {
-        // set in apollo cache
-        // }
-      }
-    },
   });
+  //
+  //   onError: (e) => {
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //       console.log(error);
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token).then(() => {
+  //         isLoggedIn(true);
+  //         userDetails(data.setPassword);
+  //       });
+  //
+  //       // if (data.type === UserTypeEnum.OTHER.label) {
+  //       //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR, { user: data.SetPassword });
+  //       // } else {
+  //       // set in apollo cache
+  //       // }
+  //     }
+  //   },
+  // });
+
+  useEffect(() => {
+    if (setPasswordError && setPasswordError.graphQLErrors && setPasswordError.graphQLErrors.length > 0) {
+      const error = setPasswordError.graphQLErrors[0].extensions.exception.response;
+      if (error.errorCode === INVALID_INPUT) {
+        Alert.alert('Incorrect password');
+      }
+    }
+  }, [setPasswordError]);
+
+  useEffect(() => {
+    if (setPasswordData && setPasswordData.setPassword) {
+      storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, setPasswordData.setPassword.token).then(() => {
+        isTokenLoading(true);
+        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+      });
+    }
+  }, [setPasswordData]);
 
   const onBackPress = () => {
     navigation.goBack();
