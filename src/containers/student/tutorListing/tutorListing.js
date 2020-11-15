@@ -3,7 +3,8 @@ import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback,
 import React, { useState, useEffect } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
+
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
@@ -11,10 +12,11 @@ import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
-import { SEARCH_TUTORS } from '../tutor-query';
+import { SEARCH_TUTORS, SEARCH_FAVOURITE_TUTORS } from '../tutor-query';
 import Loader from '../../../components/Loader';
 import Fonts from '../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 
 function TutorListing(props) {
   const navigation = useNavigation();
@@ -65,6 +67,7 @@ function TutorListing(props) {
   });
   const [minFilterValue, setMinFilterValue] = useState('');
   const [maxFilterValue, setMaxFilterValue] = useState('');
+  const [refreshTutorList, setRefreshTutorList] = useState(false);
   const [filterDataArray, setFilterDataArray] = useState([]);
   const [filterOptions, setFilterOptions] = useState([
     { name: 'Experience', checked: true, value: 'teachingExperience' },
@@ -72,7 +75,7 @@ function TutorListing(props) {
     { name: 'Budget - Low to High', checked: false, value: 'budgets.price', order: 'ASC' },
   ]);
   const [tutorsData, setTutorsData] = useState([]);
-
+  const [favourites, setFavourites] = useState([]);
   const [filterItems, setFilterItems] = useState([
     { name: 'Qualifications', checked: false },
     { name: 'Experience', checked: false },
@@ -101,10 +104,70 @@ function TutorListing(props) {
     },
   });
 
+  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(SEARCH_FAVOURITE_TUTORS, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      let favTutors = [];
+      favTutors = favourites;
+      if (data) {
+        for (let i = 0; i < data.getFavouriteTutors.length; i++) {
+          favTutors.push(data.getFavouriteTutors[i].tutor.id);
+        }
+        setFavourites(favTutors);
+        setRefreshTutorList(!refreshTutorList);
+      }
+    },
+  });
+
+  const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        let fTutors = [];
+        fTutors = favourites;
+        fTutors.push(data.markFavourite.tutor.id);
+        setFavourites(fTutors);
+        setRefreshTutorList(!refreshTutorList);
+      }
+    },
+  });
+
+  const [removeFavourite, { loading: removeFavouriteLoading }] = useMutation(REMOVE_FAVOURITE, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        let fTutors = [];
+        let index = 0;
+        fTutors = favourites;
+        index = fTutors.indexOf(data.removeFromFavourite[0].tutor.id);
+        if (index !== -1) {
+          fTutors.splice(index, 1);
+          setFavourites(fTutors);
+          setRefreshTutorList(!refreshTutorList);
+        }
+      }
+    },
+  });
+
   useEffect(() => {
     getTutors({
       variables: { searchDto: filterValues },
     });
+    getFavouriteTutors();
   }, []);
 
   const onBackPress = () => {
@@ -121,13 +184,26 @@ function TutorListing(props) {
         };
   };
 
+  const markFavouriteTutor = (tutorId) => {
+    if (favourites.includes(tutorId)) {
+      removeFavourite({
+        variables: { tutorId },
+      });
+    } else {
+      markFavourite({
+        variables: { tutorId },
+      });
+    }
+  };
+
   const renderItem = (item) => {
     const onlineBudget = item.tutorOfferings && item.tutorOfferings[0].budgets.find((s) => s.onlineClass === true);
     const offlineBudget = item.tutorOfferings && item.tutorOfferings[0].budgets.find((s) => s.onlineClass === false);
 
     return (
       <View style={styles.listItemParent}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS)}>
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, { tutorData: item })}>
           <View style={[commonStyles.horizontalChildrenStartView]}>
             <View style={styles.userIconParent}>
               <View
@@ -149,8 +225,9 @@ function TutorListing(props) {
                   name="heart"
                   style={{
                     fontSize: 15,
-                    color: item.id % 7 !== 0 ? Colors.darkGrey : Colors.orangeRed,
+                    color: favourites.includes(item.id) ? Colors.orangeRed : Colors.darkGrey,
                   }}
+                  onPress={() => markFavouriteTutor(item.id)}
                 />
               </View>
               <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
@@ -303,7 +380,9 @@ function TutorListing(props) {
 
               <View style={{ marginHorizontal: RfW(8), marginTop: RfH(8) }}>
                 <View style={commonStyles.lineSeparator} />
-                <Text style={{ fontSize: 13, color: Colors.secondaryText }}>Free Demo Class</Text>
+                <Text style={{ fontSize: RFValue(13, STANDARD_SCREEN_SIZE), color: Colors.secondaryText }}>
+                  Free Demo Class
+                </Text>
               </View>
             </View>
           </View>
@@ -883,7 +962,7 @@ function TutorListing(props) {
           <FlatList
             data={tutorsData?.searchTutors?.edges}
             showsVerticalScrollIndicator={false}
-            extraData={refreshList}
+            extraData={refreshTutorList}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ paddingHorizontal: RfH(16), marginTop: RfH(34), marginBottom: RfH(34) }}

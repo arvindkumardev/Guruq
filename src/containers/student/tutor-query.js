@@ -91,72 +91,59 @@ export const SEARCH_TUTORS = gql`
   }
 `;
 
-// query {
-//   getTutorOfferings(tutorId: 3) {
-//     id
-//     freeDemo
-//     tutor {
-//       id
-//     }
-//     offerings {
-//       id
-//       level
-//       displayName
-//       parentOffering {
-//         id
-//         level
-//         displayName
-//         parentOffering {
-//           id
-//           level
-//           displayName
-//         }
-//       }
-//       rootOffering {
-//         id
-//         displayName
-//       }
-//     }
-//     budgets {
-//       id
-//       price
-//       groupSize
-//       count
-//       onlineClass
-//       demo
-//     }
-//   }
-// }
+export const GET_TUTOR_OFFERINGS = gql`
+  query GetTutorOfferings($tutorId: Float!) {
+    getTutorOfferings(tutorId: $tutorId) {
+      id
+      freeDemo
+      tutor {
+        id
+      }
+      offerings {
+        id
+        level
+        displayName
+        parentOffering {
+          id
+          level
+          displayName
+          parentOffering {
+            id
+            level
+            displayName
+          }
+        }
+        rootOffering {
+          id
+          displayName
+        }
+      }
+      budgets {
+        id
+        price
+        groupSize
+        count
+        onlineClass
+        demo
+      }
+    }
+  }
+`;
 
-// mutation {
-//   markFavourite(tutorId: 5) {
-//     id
-//     tutor {
-//       id
-//     }
-//   }
-// }
-
-// mutation {
-//   removeFromFavourite(tutorId: 5) {
-//     tutor {
-//       id
-//     }
-//   }
-// }
-
-// query {
-//   getFavouriteTutors {
-//     id
-//     tutor {
-//       id
-//       contactDetail {
-//         firstName
-//         lastName
-//       }
-//     }
-//   }
-// }
+export const SEARCH_FAVOURITE_TUTORS = gql`
+  query GetFavouriteTutors {
+    getFavouriteTutors {
+      id
+      tutor {
+        id
+        contactDetail {
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
 
 export class SearchDto {
   id: number;

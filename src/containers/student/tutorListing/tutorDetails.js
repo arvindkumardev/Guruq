@@ -1,29 +1,52 @@
 /* eslint-disable no-nested-ternary */
 import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import ProgressCircle from 'react-native-progress-circle';
 import { Button, Icon } from 'native-base';
 import CalendarStrip from 'react-native-calendar-strip';
+import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
+import { GET_TUTOR_OFFERINGS } from '../tutor-query';
 import styles from './styles';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import { IconButtonWrapper } from '../../../components';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 
-function tutorDetails() {
+function tutorDetails(props) {
   const navigation = useNavigation();
+
+  const { route } = props;
+
+  const tutorData = route?.params?.tutorData;
+
   const [showDateSlotModal, setShowDateSlotModal] = useState(false);
   const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
-  const [subjects, setSubjects] = useState([
-    { id: 0, name: 'English' },
-    { id: 1, name: 'Physics' },
-    { id: 2, name: 'Chemistry' },
-    { id: 3, name: 'Biology' },
-  ]);
+
+  const [subjects, setSubjects] = useState([]);
+  const [refreshList, setRefreshList] = useState(false);
+
+  const [getTutorOfferings, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log(data);
+        data.getTutorOfferings.map((item) => {
+          if (subjects.indexOf(item.offerings[0].displayName) === -1) {
+            subjects.push(item.offerings[0].displayName);
+          }
+        });
+        setRefreshList(!refreshList);
+      }
+    },
+  });
 
   const [reviewProgress, setReviewProgress] = useState([
     { typeName: 'Course Understanding', image: Images.understanding, percentage: 70 },
@@ -71,6 +94,12 @@ function tutorDetails() {
     '05:00 - 06:00 PM',
   ]);
 
+  useEffect(() => {
+    getTutorOfferings({
+      variables: { tutorId: tutorData.id },
+    });
+  }, []);
+
   const onBackPress = () => {
     navigation.goBack();
   };
@@ -104,7 +133,7 @@ function tutorDetails() {
             color: Colors.primaryText,
             marginTop: RfH(5),
           }}>
-          {item.name}
+          {item}
         </Text>
       </View>
     );
@@ -389,6 +418,14 @@ function tutorDetails() {
     }
   };
 
+  const getTutorImage = (tutor) => {
+    return tutor && tutor.profileImage && tutor.profileImage.filename
+      ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
+      : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
+          tutor.id % 4
+        }.png`;
+  };
+
   return (
     <View
       style={[
@@ -426,6 +463,7 @@ function tutorDetails() {
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
         onScroll={(event) => handleScroll(event)}>
         <View>
           {hideTutorPersonal && (
@@ -437,11 +475,13 @@ function tutorDetails() {
               <IconButtonWrapper
                 iconWidth={RfW(32)}
                 iconHeight={RfH(32)}
-                iconImage={Images.kushal}
+                iconImage={getTutorImage(tutorData)}
                 imageResizeMode="cover"
                 styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
               />
-              <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>Gurbani Singh</Text>
+              <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>
+                {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
+              </Text>
             </View>
           )}
         </View>
@@ -454,24 +494,32 @@ function tutorDetails() {
             marginBottom: RfH(17),
           }}>
           <IconButtonWrapper
-            iconWidth={RfW(98)}
+            iconWidth={RfH(98)}
             iconHeight={RfH(98)}
-            iconImage={Images.kushal}
+            iconImage={getTutorImage(tutorData)}
             imageResizeMode="cover"
-            styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
+            styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
           />
           <View style={{ marginLeft: RfW(16) }}>
-            <Text style={styles.tutorName}>Gurbani Singh</Text>
+            <Text style={styles.tutorName}>
+              {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
+            </Text>
             <Text style={styles.tutorDetails}>GURUQT133567</Text>
-            <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>Bachelor of Mass Communication</Text>
-            <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>3 years of Teaching Experience </Text>
+            <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
+              {titleCaseIfExists(tutorData.educationDetails[0].degree?.degreeLevel)}
+              {' - '}
+              {titleCaseIfExists(tutorData.educationDetails[0].fieldOfStudy)}
+            </Text>
+            <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
+              {tutorData.teachingExperience} years of Teaching Experience{' '}
+            </Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: RfH(8) }}>
               <Icon
                 type="FontAwesome"
                 name="star"
                 style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
               />
-              <Text style={styles.chargeText}>3.5</Text>
+              <Text style={styles.chargeText}>{tutorData.averageRating}</Text>
             </View>
           </View>
         </View>
@@ -497,6 +545,7 @@ function tutorDetails() {
               showsHorizontalScrollIndicator={false}
               numColumns={4}
               data={subjects}
+              extraData={refreshList}
               renderItem={({ item, index }) => renderSubjects(item, index)}
               keyExtractor={(item, index) => index.toString()}
             />
