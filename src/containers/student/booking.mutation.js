@@ -35,6 +35,36 @@ export const ADD_INTERESTED_OFFERINGS = gql`
   }
 `;
 
+export const ADD_TO_CART = gql`
+  mutation AddToCart($cartCreateDto: CartCreateDto!) {
+    addToCart(cartCreateDto: $cartCreateDto) {
+      id
+      offering {
+        id
+        name
+      }
+      tutor {
+        id
+      }
+      tutorOffering {
+        id
+      }
+      count
+      groupSize
+      price
+      demo
+      onlineClass
+      pointsRedeemed
+      payees {
+        id
+      }
+      promotion {
+        id
+      }
+    }
+  }
+`;
+
 // mutation {
 //   addToCart(
 //     cartCreateDto: {
@@ -71,7 +101,6 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 //     }
 //   }
 // }
-
 
 // mutation {
 //   createBooking(
@@ -118,8 +147,6 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 //   }
 // }
 
-
-
 // mutation {
 //   makePayment(orderId:4, paymentMethod: 6, orderPaymentStatus: 1, transactionDetails: "") {
 //     id
@@ -133,7 +160,6 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 //     }
 //   }
 // }
-
 
 // mutation {
 //   scheduleClass(
@@ -164,10 +190,6 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 //     endDate
 //   }
 // }
-
-
-
-
 
 export class OrderPaymentDto {
   amount: number;

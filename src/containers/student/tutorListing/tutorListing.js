@@ -213,17 +213,16 @@ function TutorListing(props) {
       bd = offlineBudget.price;
     }
 
-    console.log(item.tutorOfferings);
-    console.log(tutorOffering);
-
     return (
       <View style={styles.listItemParent}>
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
               tutorData: item,
-              parentOffering: offering?.parentOffering?.displayName,
-              parentParentOffering: offering?.parentOffering?.parentOffering?.displayName,
+              parentOffering: offering?.parentOffering?.id,
+              parentParentOffering: offering?.parentOffering?.parentOffering?.id,
+              parentOfferingName: offering?.parentOffering?.displayName,
+              parentParentOfferingName: offering?.parentOffering?.parentOffering?.displayName,
             })
           }>
           <View style={[commonStyles.horizontalChildrenStartView]}>
@@ -907,7 +906,7 @@ function TutorListing(props) {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
-      <Loader isLoading={loadingTutors} />
+      <Loader isLoading={loadingTutors || loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}

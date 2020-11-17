@@ -25,15 +25,18 @@ function tutorDetails(props) {
   const tutorData = route?.params?.tutorData;
   const parentOffering = route?.params?.parentOffering;
   const parentParentOffering = route?.params?.parentParentOffering;
+  const parentOfferingName = route?.params?.parentOfferingName;
+  const parentParentOfferingName = route?.params?.parentParentOfferingName;
 
   const [showDateSlotModal, setShowDateSlotModal] = useState(false);
   const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState({});
 
   const [subjects, setSubjects] = useState([]);
   const [refreshList, setRefreshList] = useState(false);
   const [isFreeDemo, setIsFreeDemo] = useState(false);
-
   const [priceMatrix, setPriceMatrix] = useState({});
+  const [budgets, setBudgets] = useState([]);
 
   const [getTutorOfferings, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     onError: (e) => {
@@ -43,35 +46,32 @@ function tutorDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log(data);
-        // set budget
         const pm = {};
+        const sb = {};
 
         data.getTutorOfferings.map((item) => {
-          if (subjects.indexOf(item.offering.displayName) === -1) {
-            subjects.push(item.offering.displayName);
+          if (subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
+            if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
+              if (item.freeDemo) {
+                setIsFreeDemo(true);
+              }
+              subjects.push({ id: item.offering.id, displayName: item.offering.displayName });
+              pm[`o${item.offering.id}`] = {
+                online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+                offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+              };
 
-            pm[`o${item.offering.id}`] = {
-              online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-              offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-            };
+              sb[`${item.offering.id}`] = item.budgets;
 
-            for (const b of item.budgets) {
-              pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
-            }
-          }
-          if (
-            item.offerings[1].displayName === parentOffering &&
-            item.offerings[2].displayName === parentParentOffering
-          ) {
-            if (item.freeDemo) {
-              setIsFreeDemo(true);
+              for (const b of item.budgets) {
+                pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.groupSize}`] = b.price;
+              }
             }
           }
         });
-
+        setSelectedSubject({ id: subjects[0].id, name: subjects[0].displayName });
         setPriceMatrix(pm);
-
+        setBudgets(sb);
         setRefreshList(!refreshList);
       }
     },
@@ -133,38 +133,44 @@ function tutorDetails(props) {
     navigation.goBack();
   };
 
+  const selectSubject = (item) => {
+    setSelectedSubject({ id: item.id, name: item.displayName });
+  };
+
   const renderSubjects = (item, index) => {
     return (
-      <View style={{ marginTop: RfH(20), flex: 1 }}>
-        <View
-          style={{
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: index === 0 ? Colors.lightPurple : Colors.lightGrey,
-            height: RfH(67),
-            width: RfW(70),
-            marginHorizontal: RfW(4),
-            borderRadius: RfW(8),
-          }}>
-          <IconButtonWrapper
-            iconWidth={RfW(24.5)}
-            styling={{ alignSelf: 'center' }}
-            iconHeight={RfH(34.2)}
-            iconImage={Images.book}
-          />
+      <TouchableWithoutFeedback onPress={() => selectSubject(item)}>
+        <View style={{ marginTop: RfH(20), flex: 1 }}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: item.id === selectedSubject.id ? Colors.lightPurple : Colors.lightGrey,
+              height: RfH(67),
+              width: RfW(70),
+              marginHorizontal: RfW(4),
+              borderRadius: RfW(8),
+            }}>
+            <IconButtonWrapper
+              iconWidth={RfW(24.5)}
+              styling={{ alignSelf: 'center' }}
+              iconHeight={RfH(34.2)}
+              iconImage={Images.book}
+            />
+          </View>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 12,
+              width: RfW(70),
+              color: Colors.primaryText,
+              marginTop: RfH(5),
+            }}>
+            {item.displayName}
+          </Text>
         </View>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 12,
-            width: RfW(70),
-            color: Colors.primaryText,
-            marginTop: RfH(5),
-          }}>
-          {item}
-        </Text>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -293,12 +299,11 @@ function tutorDetails(props) {
     return (
       <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfW(16) }}>
         <View>
-          <Text style={[commonStyles.titleText]}>Price Matrix - English</Text>
+          <Text style={[commonStyles.titleText]}>Price Matrix</Text>
         </View>
-        <Text>{JSON.stringify(priceMatrix)}</Text>
         <View
           style={[
-            commonStyles.horizontalChildrenSpaceView,
+            commonStyles.horizontalChildrenCenterView,
             {
               marginTop: RfH(16),
               fontFamily: Fonts.semiBold,
@@ -310,15 +315,15 @@ function tutorDetails(props) {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-evenly',
+              justifyContent: 'space-around',
               alignItems: 'center',
-              flex: 1,
+              flex: 0.6,
             }}>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>1</Text>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>5</Text>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>10</Text>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>25</Text>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>50</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>1</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>5</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>10</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>25</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>50</Text>
           </View>
         </View>
         <View
@@ -334,15 +339,25 @@ function tutorDetails(props) {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-evenly',
+              justifyContent: 'center',
               alignItems: 'center',
-              flex: 1,
+              flex: 0.6,
             }}>
-            <Text style={styles.tutorDetails}>1</Text>
-            <Text style={styles.tutorDetails}>5</Text>
-            <Text style={styles.tutorDetails}>10</Text>
-            <Text style={styles.tutorDetails}>25</Text>
-            <Text style={styles.tutorDetails}>50</Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`].online.c1}
+            </Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`].online.c5}
+            </Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`].online.c10}
+            </Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`].online.c25}
+            </Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`].online.c50}
+            </Text>
           </View>
         </View>
         <View
@@ -358,15 +373,34 @@ function tutorDetails(props) {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-evenly',
+              justifyContent: 'center',
               alignItems: 'center',
-              flex: 1,
+              flex: 0.6,
             }}>
-            <Text style={styles.tutorDetails}>1</Text>
-            <Text style={styles.tutorDetails}>5</Text>
-            <Text style={styles.tutorDetails}>10</Text>
-            <Text style={styles.tutorDetails}>25</Text>
-            <Text style={styles.tutorDetails}>50</Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`].offline.c1}
+            </Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`].offline.c5}
+            </Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix &&
+                selectedSubject &&
+                selectedSubject.id &&
+                priceMatrix[`o${selectedSubject.id}`].offline.c10}
+            </Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix &&
+                selectedSubject &&
+                selectedSubject.id &&
+                priceMatrix[`o${selectedSubject.id}`].offline.c25}
+            </Text>
+            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              {priceMatrix &&
+                selectedSubject &&
+                selectedSubject.id &&
+                priceMatrix[`o${selectedSubject.id}`].offline.c50}
+            </Text>
           </View>
         </View>
       </View>
@@ -455,6 +489,16 @@ function tutorDetails(props) {
       : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
           tutor.id % 4
         }.png`;
+  };
+
+  const goToBookClass = () => {
+    navigation.navigate(routeNames.STUDENT.SELECT_CLASS_MODE, {
+      budgetDetails: budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`],
+      tutorData,
+      parentOfferingName,
+      parentParentOfferingName,
+      selectedSubject,
+    });
   };
 
   return (
@@ -677,9 +721,7 @@ function tutorDetails(props) {
           <Text style={commonStyles.textButtonOutlinePrimary}>Book {isFreeDemo ? '[Free]' : ''} Demo</Text>
         </Button>
 
-        <Button
-          onPress={() => navigation.navigate(routeNames.STUDENT.SELECT_CLASS_MODE)}
-          style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+        <Button onPress={() => goToBookClass()} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
           <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
         </Button>
       </View>

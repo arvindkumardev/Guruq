@@ -1,38 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableWithoutFeedback, FlatList, Switch } from 'react-native';
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation } from '@apollo/client';
 import { ScreenHeader, IconButtonWrapper } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Images, Colors } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { RfH, RfW, titleCaseIfExists } from '../../../../utils/helpers';
 import routeNames from '../../../../routes/screenNames';
+import Loader from '../../../../components/Loader';
 import styles from '../styles';
+import { ADD_TO_CART } from '../../booking.mutation';
 
-const selectClassMode = () => {
+const selectClassMode = (props) => {
   const navigation = useNavigation();
+
+  const { route } = props;
+
+  const tutorData = route?.params?.tutorData;
+
+  const budgetDetails = route?.params?.budgetDetails;
+
+  const parentOfferingName = route?.params?.parentOfferingName;
+  const parentParentOfferingName = route?.params?.parentParentOfferingName;
+  const selectedSubject = route?.params?.selectedSubject;
+
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(100);
   const [classMode, setClassMode] = useState(false);
 
-  const [classPrices, setClassPrices] = useState([
-    { classes: 1, pricePerHour: 100, totalPrice: 100 },
-    { classes: 5, pricePerHour: 95, totalPrice: 475 },
-    { classes: 10, pricePerHour: 90, totalPrice: 900 },
-    { classes: 25, pricePerHour: 85, totalPrice: 2125 },
-  ]);
+  const [classPrices, setClassPrices] = useState([]);
+
+  const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        navigation.navigate(routeNames.STUDENT.MY_CART);
+      }
+    },
+  });
+
+  useEffect(() => {
+    const bdata = [];
+    for (const b of budgetDetails) {
+      if (!b.onlineClass) {
+        bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+      }
+    }
+    setClassPrices(bdata);
+  }, [budgetDetails]);
 
   const addClass = () => {
-    setNumberOfClass(numberOfClass + 1);
     const cls = numberOfClass + 1;
+    setNumberOfClass(numberOfClass + 1);
     if (cls < 5) {
       setAmount(100 * cls);
     } else if (cls > 4 && cls < 10) {
-      setAmount(90 * cls);
+      setAmount(100 * cls);
     } else if (cls > 9 && cls < 20) {
-      setAmount(80 * cls);
+      setAmount(100 * cls);
     } else if (cls > 19) {
-      setAmount(70 * cls);
+      setAmount(100 * cls);
     } else {
       setAmount(0);
     }
@@ -56,50 +89,99 @@ const selectClassMode = () => {
     }
   };
 
+  const onClassItemClick = (item) => {
+    setAmount(item.totalPrice);
+    setNumberOfClass(item.classes);
+  };
+
   const renderClasses = (item) => {
     return (
-      <View
-        style={[
-          commonStyles.borderBottom,
-          {
-            marginTop: RfH(24),
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            paddingBottom: RfH(8),
-          },
-        ]}>
-        <View style={{}}>
-          <Text style={commonStyles.secondaryText}>{item.classes}</Text>
+      <TouchableWithoutFeedback onPress={() => onClassItemClick(item)}>
+        <View
+          style={[
+            commonStyles.borderBottom,
+            {
+              marginTop: RfH(24),
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              paddingBottom: RfH(8),
+            },
+          ]}>
+          <View style={{}}>
+            <Text style={commonStyles.secondaryText}>{item.classes}</Text>
+          </View>
+          <View>
+            <Text style={commonStyles.secondaryText}>{item.pricePerHour}</Text>
+          </View>
+          <View>
+            <Text style={commonStyles.secondaryText}>{item.totalPrice}</Text>
+          </View>
         </View>
-        <View>
-          <Text style={commonStyles.secondaryText}>{item.pricePerHour}</Text>
-        </View>
-        <View>
-          <Text style={commonStyles.secondaryText}>{item.totalPrice}</Text>
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
+  };
+
+  const getTutorImage = (tutor) => {
+    return tutor && tutor.profileImage && tutor.profileImage.filename
+      ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
+      : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
+          tutor.id % 4
+        }.png`;
+  };
+
+  const changeClassMode = () => {
+    const bdata = [];
+    for (const b of budgetDetails) {
+      if (b.onlineClass === classMode) {
+        bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+      }
+    }
+    setClassPrices(bdata);
+    setClassMode(!classMode);
+  };
+
+  const onAddingIntoCart = () => {
+    const cartCreate = {
+      tutorOfferingId: tutorData.id,
+      count: numberOfClass,
+      groupSize: 1,
+      demo: false,
+      onlineClass: classMode,
+      price: amount,
+    };
+    addToCart({
+      variables: { cartCreateDto: cartCreate },
+    });
   };
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <ScreenHeader label="Book Class" homeIcon />
+      <Loader isLoading={cartLoading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ height: RfH(44) }} />
         <View style={commonStyles.horizontalChildrenStartView}>
           <IconButtonWrapper
             iconWidth={RfW(87)}
             iconHeight={RfH(80)}
-            iconImage={Images.kushal}
+            iconImage={getTutorImage(tutorData)}
             imageResizeMode="cover"
             styling={{ borderRadius: 8 }}
           />
           <View style={{ marginLeft: RfW(16) }}>
-            <Text style={[styles.compareTutorName, { alignSelf: 'flex-start', marginTop: 0 }]}>Gurbani Singh</Text>
-            <Text style={styles.tutorDetails}>English ( Class 6-12 I CBSE)</Text>
-            <Text style={styles.tutorDetails}>Mass Communication</Text>
-            <Text style={styles.tutorDetails}>3 years of Teaching Experience </Text>
+            <Text style={[styles.compareTutorName, { alignSelf: 'flex-start', marginTop: 0 }]}>
+              {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
+            </Text>
+            <Text style={styles.tutorDetails}>
+              {selectedSubject.name} ( {parentOfferingName} | {parentParentOfferingName} )
+            </Text>
+            <Text style={styles.tutorDetails}>
+              {titleCaseIfExists(tutorData.educationDetails[0].degree?.degreeLevel)}
+              {' - '}
+              {titleCaseIfExists(tutorData.educationDetails[0].fieldOfStudy)}
+            </Text>
+            <Text style={styles.tutorDetails}>{tutorData.teachingExperience} years of Teaching Experience </Text>
           </View>
         </View>
         <Text style={[styles.compareTutorName, { alignSelf: 'flex-start' }]}>
@@ -110,7 +192,7 @@ const selectClassMode = () => {
           <View>
             <Switch
               value={classMode}
-              onValueChange={(value) => setClassMode(!classMode)}
+              onValueChange={(value) => changeClassMode()}
               style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
             />
             <Text
@@ -164,9 +246,7 @@ const selectClassMode = () => {
           <Text>₹{amount}</Text>
         </View>
         <View style={{ alignSelf: 'center', marginTop: RfH(32), marginBottom: RfH(32) }}>
-          <Button
-            onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}
-            style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+          <Button onPress={() => onAddingIntoCart()} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
             <Text style={commonStyles.textButtonPrimary}>Add to Cart</Text>
           </Button>
         </View>
