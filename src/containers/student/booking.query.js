@@ -1,50 +1,54 @@
-// query {
-//   getCartItems {
-//     id
-//     offering {
-//       id
-//       name
-//       parentOffering {
-//         id
-//         name
-//         parentOffering {
-//           id
-//           name
-//         }
-//       }
-//     }
-//     tutor {
-//       id
-//       contactDetail {
-//         firstName
-//         lastName
-//       }
-//     }
-//     tutorOffering {
-//       id
-//       budgets {
-//         id
-//         price
-//         groupSize
-//         count
-//         onlineClass
-//         demo
-//       }
-//     }
-//     count
-//     groupSize
-//     price
-//     demo
-//     onlineClass
-//     pointsRedeemed
-//     payees {
-//       id
-//     }
-//     promotion {
-//       id
-//     }
-//   }
-// }
+import { gql } from '@apollo/client';
+
+export const GET_CART_ITEMS = gql`
+  query GetCartItems {
+    getCartItems {
+      id
+      offering {
+        id
+        name
+        parentOffering {
+          id
+          name
+          parentOffering {
+            id
+            name
+          }
+        }
+      }
+      tutor {
+        id
+        contactDetail {
+          firstName
+          lastName
+        }
+      }
+      tutorOffering {
+        id
+        budgets {
+          id
+          price
+          groupSize
+          count
+          onlineClass
+          demo
+        }
+      }
+      count
+      groupSize
+      price
+      demo
+      onlineClass
+      pointsRedeemed
+      payees {
+        id
+      }
+      promotion {
+        id
+      }
+    }
+  }
+`;
 
 // query {
 //   getPendingBooking {

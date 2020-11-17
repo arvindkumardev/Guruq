@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
+import { useLazyQuery } from '@apollo/client';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
@@ -14,54 +15,30 @@ import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import QPointPayModal from '../components/qPointPayModal';
 import CouponModal from '../components/couponModal';
 import routeNames from '../../../../routes/screenNames';
+import Loader from '../../../../components/Loader';
+import { GET_CART_ITEMS } from '../../booking.query';
 
 const myCart = () => {
   const navigation = useNavigation();
   const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
-  const [cartItems, setCartItems] = useState([
-    {
-      tutorIcon: Images.kushal,
-      subject: 'English Class',
-      tutor: 'Gurbani',
-      board: 'CBSE',
-      class: '9',
-      numberOfClass: 5,
-      mode: 'Online Individual Class',
-      amount: '₹ 750',
+  const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
     },
-    {
-      tutorIcon: Images.kushal,
-      subject: 'Maths Class',
-      tutor: 'Priyam',
-      board: 'CBSE',
-      class: '9',
-      numberOfClass: 1,
-      mode: 'Online Individual Class',
-      amount: '₹ 150',
+    onCompleted: (data) => {
+      setCartItems(data.getCartItems);
     },
-    {
-      tutorIcon: Images.kushal,
-      subject: 'Physics Class',
-      tutor: 'Priyam',
-      board: 'CBSE',
-      class: '9',
-      numberOfClass: 1,
-      mode: 'Online Individual Class',
-      amount: '₹ 150',
-    },
-    {
-      tutorIcon: Images.kushal,
-      subject: 'History Class',
-      tutor: 'Shipra',
-      board: 'CBSE',
-      class: '9',
-      numberOfClass: 1,
-      mode: 'Online Individual Class',
-      amount: '₹ 150',
-    },
-  ]);
+  });
+
+  useEffect(() => {
+    getCartItems();
+  }, {});
+
+  const [cartItems, setCartItems] = useState([]);
 
   const renderCartItems = (item, index) => {
     return (
@@ -75,8 +52,10 @@ const myCart = () => {
         <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <View>
-              <Text style={styles.buttonText}>{item.subject}</Text>
-              <Text style={styles.buttonText}>by {item.tutor}</Text>
+              <Text style={styles.buttonText}>{item.offering.name}</Text>
+              <Text style={styles.buttonText}>
+                by {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
+              </Text>
             </View>
             <View style={styles.bookingSelectorParent}>
               <IconButtonWrapper
@@ -85,7 +64,7 @@ const myCart = () => {
                 iconImage={Images.minus_blue}
                 submitFunction={() => removeClass(index)}
               />
-              <Text>{item.numberOfClass}</Text>
+              <Text>{item.count}</Text>
               <IconButtonWrapper
                 iconWidth={RfW(12)}
                 iconHeight={RfH(12)}
@@ -100,7 +79,7 @@ const myCart = () => {
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={styles.tutorDetails}>{item.mode}</Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: 'SegoeUI-Bold' }}>
-              {item.amount}
+              ₹{item.price}
             </Text>
           </View>
         </View>
@@ -224,6 +203,7 @@ const myCart = () => {
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
       <View style={{ marginHorizontal: RfW(16) }}>
+        <Loader isLoading={cartLoading} />
         <ScreenHeader label="My Cart" homeIcon />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -236,7 +216,7 @@ const myCart = () => {
               paddingLeft: RfW(48),
             },
           ]}>
-          <Text style={styles.appliedFilterText}>4 ITEMS</Text>
+          <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text>
         </View>
         <View style={{ marginHorizontal: RfW(16) }}>
           <FlatList

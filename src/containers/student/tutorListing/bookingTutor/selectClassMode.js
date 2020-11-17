@@ -28,7 +28,6 @@ const selectClassMode = (props) => {
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(100);
   const [classMode, setClassMode] = useState(false);
-
   const [classPrices, setClassPrices] = useState([]);
 
   const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
@@ -50,6 +49,9 @@ const selectClassMode = (props) => {
     for (const b of budgetDetails) {
       if (!b.onlineClass) {
         bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+      } else {
+        bdata.push({ classes: 0, pricePerHour: 0, totalPrice: 0 });
+        break;
       }
     }
     setClassPrices(bdata);
@@ -130,15 +132,18 @@ const selectClassMode = (props) => {
         }.png`;
   };
 
-  const changeClassMode = () => {
+  const changeClassMode = (value) => {
+    setClassMode(value);
     const bdata = [];
     for (const b of budgetDetails) {
-      if (b.onlineClass === classMode) {
+      if (b.onlineClass === value) {
         bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+      } else {
+        bdata.push({ classes: 0, pricePerHour: 0, totalPrice: 0 });
+        break;
       }
     }
     setClassPrices(bdata);
-    setClassMode(!classMode);
   };
 
   const onAddingIntoCart = () => {
@@ -192,7 +197,7 @@ const selectClassMode = (props) => {
           <View>
             <Switch
               value={classMode}
-              onValueChange={(value) => changeClassMode()}
+              onValueChange={(value) => changeClassMode(value)}
               style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
             />
             <Text
