@@ -18,6 +18,10 @@ export const GET_CART_ITEMS = gql`
       }
       tutor {
         id
+        profileImage {
+          id
+          filename
+        }
         contactDetail {
           firstName
           lastName
