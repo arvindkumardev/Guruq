@@ -19,8 +19,7 @@ export const VERIFY_PHONE_NUMBER_MUTATION = gql`
 
 export const SIGNUP_MUTATION = gql`
   mutation SignUp(
-    $countryCode: String!
-    $number: String!
+    $phoneNumber: PhoneNumberInputDto!
     $firstName: String!
     $lastName: String!
     $email: String!
@@ -29,7 +28,7 @@ export const SIGNUP_MUTATION = gql`
   ) {
     signUp(
       user: {
-        phoneNumber: { countryCode: $countryCode, number: $number }
+        phoneNumber: $phoneNumber
         firstName: $firstName
         lastName: $lastName
         email: $email

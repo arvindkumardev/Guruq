@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
+import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import { getSaveData, removeToken, RfH, RfW } from '../../../../utils/helpers';
@@ -10,9 +11,12 @@ import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
 import Fonts from '../../../../theme/fonts';
+import { userDetails } from '../../../../apollo/cache';
 
 function TutorDashboard() {
   const [userName, setUserName] = useState('');
+
+  const userInfo = useReactiveVar(userDetails);
 
   const getFirstName = async () => {
     const firstName = await getSaveData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
@@ -255,15 +259,15 @@ function TutorDashboard() {
           }}>
           <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
             <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>
-              Hi {userName}
+              Hi {userInfo.firstName}
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text>
-              <Icon
-                type="MaterialIcons"
-                name="keyboard-arrow-down"
-                style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }}
-              />
+              <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>GURUQT{userInfo.id}</Text>
+              {/* <Icon */}
+              {/*  type="MaterialIcons" */}
+              {/*  name="keyboard-arrow-down" */}
+              {/*  style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }} */}
+              {/* /> */}
             </View>
           </View>
           <View style={{ flex: 0.1, marginRight: RfW(16) }}>
@@ -286,10 +290,6 @@ function TutorDashboard() {
             <Input placeholder="Search" />
           </Item>
         </View>
-
-        <TouchableOpacity onPress={() => logout()}>
-          <Text className="h5">Logout</Text>
-        </TouchableOpacity>
 
         <View style={{ height: RfH(210), marginTop: RfH(29) }}>
           <Swiper horizontal autoplay autoplayTimeout={2}>

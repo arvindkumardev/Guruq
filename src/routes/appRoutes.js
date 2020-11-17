@@ -30,11 +30,15 @@ import onlineClass from '../containers/student/calendar/onlineClass';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
+import { UserTypeEnum } from '../common/userType.enum';
+import TutorDashboardContainer from '../containers/tutor/dashboard/tutorDashboardContainer';
+import { getStudentRoutes } from './studentAppRoutes';
+import { getTutorRoutes } from './tutorAppRoutes';
 
 const Stack = createStackNavigator();
 
 const AppStack = (props) => {
-  const { isUserLoggedIn, isUserTokenLoading, userTypeSet } = props;
+  const { isUserLoggedIn, isUserTokenLoading, userType } = props;
 
   return (
     <Stack.Navigator>
@@ -78,7 +82,7 @@ const AppStack = (props) => {
         </>
       )}
 
-      {isUserLoggedIn && !userTypeSet && (
+      {isUserLoggedIn && userType === UserTypeEnum.OTHER.label && (
         <Stack.Screen
           name={NavigationRouteNames.USER_TYPE_SELECTOR}
           component={UserTypeSelector}
@@ -86,117 +90,15 @@ const AppStack = (props) => {
         />
       )}
 
-      {isUserLoggedIn && userTypeSet && (
-        <>
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.DASHBOARD}
-            component={StudentDashboardContainer}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.STUDY_AREA}
-            component={StudyAreaSelector}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.BOARD}
-            component={BoardSelector}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.CLASS}
-            component={ClassSelector}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.PERSONAL_DETAILS}
-            component={PersonalDetails}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.COMPARE_TUTORS}
-            component={CompareTutors}
-            options={{ headerShown: false }}
-          />
+      {isUserLoggedIn &&
+        userType !== UserTypeEnum.OTHER.label &&
+        userType === UserTypeEnum.STUDENT.label &&
+        getStudentRoutes()}
 
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.TUTOR}
-            component={TutorListing}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.TUTOR_DETAILS}
-            component={TutorDetails}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.SELECT_CLASS_MODE}
-            component={selectClassMode}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.MY_CART}
-            component={myCart}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}
-            component={PaymentMethod}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
-            component={bookingConfirmed}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.PAYMENT_RECEIVED}
-            component={paymentReceived}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.MY_CLASSES}
-            component={myClasses}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.SCHEDULE_CLASS}
-            component={scheduleClass}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
-            component={scheduledClassDetails}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.CANCEL_REASON}
-            component={cancelReason}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.ONLINE_CLASS}
-            component={onlineClass}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.RATE_AND_REVIEW}
-            component={RateAndReviews}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.STUDENT.DETAILED_RATING}
-            component={DetailedRating}
-            options={{ headerShown: false }}
-          />
-
-          <Stack.Screen
-            name={NavigationRouteNames.ONLINE_CLASS}
-            component={OnlineClass}
-            options={{ headerShown: false }}
-          />
-        </>
-      )}
+      {isUserLoggedIn &&
+        userType !== UserTypeEnum.OTHER.label &&
+        userType === UserTypeEnum.TUTOR.label &&
+        getTutorRoutes()}
     </Stack.Navigator>
   );
 };

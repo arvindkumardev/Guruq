@@ -10,6 +10,7 @@ import Classes from '../classes/classes';
 import Profile from '../profile/profile';
 import { RfH, RfW } from '../../../utils/helpers';
 import StudentDashboard from './components/studentDashboard';
+import { userLocation } from '../../../apollo/cache';
 
 function StudentDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);
@@ -28,6 +29,8 @@ function StudentDashboardContainer(props) {
     })
       .then((location) => {
         console.log(location);
+
+        userLocation(location);
       })
       .catch((error) => {
         const { code, message } = error;

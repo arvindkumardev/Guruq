@@ -90,8 +90,10 @@ function SignUp(props) {
     }
     addUser({
       variables: {
-        countryCode: route.params.countryCode,
-        number: route.params.number,
+        phoneNumber: {
+          countryCode: route.params.mobileObj.country.dialCode,
+          number: route.params.mobileObj.mobile,
+        },
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         email: email.toLowerCase().trim(),
@@ -149,7 +151,14 @@ function SignUp(props) {
           </View>
           <TouchableOpacity
             onPress={() => onClickContinue()}
-            style={[commonStyles.buttonPrimary, { marginTop: RfH(48), alignSelf: 'center', width: RfW(144) }]}>
+            style={[
+              commonStyles.buttonPrimary,
+              {
+                marginTop: RfH(48),
+                alignSelf: 'center',
+                width: RfW(144),
+              },
+            ]}>
             <Text style={commonStyles.textButtonPrimary}>Submit</Text>
           </TouchableOpacity>
           <View style={{ marginTop: RfH(8) }}>

@@ -197,8 +197,24 @@ function TutorListing(props) {
   };
 
   const renderItem = (item) => {
-    const onlineBudget = item.tutorOfferings && item.tutorOfferings[0].budgets.find((s) => s.onlineClass === true);
-    const offlineBudget = item.tutorOfferings && item.tutorOfferings[0].budgets.find((s) => s.onlineClass === false);
+    const tutorOffering =
+      item.tutorOfferings && item.tutorOfferings.find((s) => s.offerings.find((o) => o.id === offering.id));
+
+    const onlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === true);
+    const offlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === false);
+
+    let bd = 0;
+
+    if (onlineBudget && offlineBudget) {
+      bd = onlineBudget.price > offlineBudget.price ? offlineBudget.price : onlineBudget.price;
+    } else if (onlineBudget) {
+      bd = onlineBudget.price;
+    } else if (offlineBudget) {
+      bd = offlineBudget.price;
+    }
+
+    console.log(item.tutorOfferings);
+    console.log(tutorOffering);
 
     return (
       <View style={styles.listItemParent}>
@@ -212,30 +228,31 @@ function TutorListing(props) {
           }>
           <View style={[commonStyles.horizontalChildrenStartView]}>
             <View style={styles.userIconParent}>
-              <View
-                style={{
-                  // padding: RfW(8),
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  zIndex: 100,
-                  height: RfW(28),
-                  width: RfW(28),
-                  backgroundColor: 'rgba(255,255,255,0.5)',
-                  borderRadius: RfW(24),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Icon
-                  type="FontAwesome"
-                  name="heart"
-                  style={{
-                    fontSize: 15,
-                    color: favourites.includes(item.id) ? Colors.orangeRed : Colors.darkGrey,
-                  }}
-                  onPress={() => markFavouriteTutor(item.id)}
-                />
-              </View>
+              {/* <TouchableWithoutFeedback onPress={() => markFavouriteTutor(item.id)}> */}
+              {/*  <View */}
+              {/*    style={{ */}
+              {/*      // padding: RfW(8), */}
+              {/*      position: 'absolute', */}
+              {/*      top: 0, */}
+              {/*      left: 0, */}
+              {/*      zIndex: 100, */}
+              {/*      height: RfW(28), */}
+              {/*      width: RfW(28), */}
+              {/*      backgroundColor: 'rgba(255,255,255,0.5)', */}
+              {/*      borderRadius: RfW(24), */}
+              {/*      justifyContent: 'center', */}
+              {/*      alignItems: 'center', */}
+              {/*    }}> */}
+              {/*    <Icon */}
+              {/*      type="FontAwesome" */}
+              {/*      name="heart" */}
+              {/*      style={{ */}
+              {/*        fontSize: 15, */}
+              {/*        color: favourites.includes(item.id) ? Colors.orangeRed : Colors.darkGrey, */}
+              {/*      }} */}
+              {/*    /> */}
+              {/*  </View> */}
+              {/* </TouchableWithoutFeedback> */}
               <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
 
               {item.id % 7 === 0 && (
@@ -283,7 +300,7 @@ function TutorListing(props) {
                     {item.contactDetail.firstName} {item.contactDetail.lastName}
                   </Text>
                   {item.educationDetails.length > 0 && (
-                    <Text style={styles.tutorDetails}>
+                    <Text style={styles.tutorDetails} numberOfLines={1}>
                       {titleCaseIfExists(item.educationDetails[0].degree?.degreeLevel)}
                       {' - '}
                       {titleCaseIfExists(item.educationDetails[0].fieldOfStudy)}
@@ -296,55 +313,76 @@ function TutorListing(props) {
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'flex-start',
-                        marginTop: RfH(4),
+                        // marginTop: RfH(4),
                       }}>
                       <Icon
                         type="FontAwesome"
-                        name="star"
+                        name={item.averageRating > 0 ? 'star' : 'star-o'}
                         style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
                       />
-                      <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
+                      {item.averageRating > 0 ? (
+                        <Text style={styles.chargeText}>{parseFloat(item.averageRating).toFixed(1)}</Text>
+                      ) : (
+                        <Text
+                          style={{
+                            color: Colors.secondaryText,
+                            fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+                          }}>
+                          NOT RATED
+                        </Text>
+                      )}
 
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {onlineBudget && (
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginLeft: RfW(16),
-                            }}>
-                            <Icon
-                              type="FontAwesome"
-                              name="tv"
-                              style={{
-                                fontSize: 13,
-                                marginRight: RfW(4),
-                                color: Colors.darkGrey,
-                              }}
-                            />
-                            <Text style={styles.chargeText}>₹ {onlineBudget.price}/Hr</Text>
-                          </View>
-                        )}
-                        {offlineBudget && (
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginLeft: RfW(16),
-                            }}>
-                            <Icon
-                              type="FontAwesome"
-                              name="home"
-                              style={{
-                                fontSize: 13,
-                                marginRight: RfW(4),
-                                color: Colors.darkGrey,
-                              }}
-                            />
-                            <Text style={styles.chargeText}>₹ {offlineBudget.price}/Hr</Text>
-                          </View>
-                        )}
-                      </View>
+                      {item.reviewCount > 0 && (
+                        <Text
+                          style={{
+                            color: Colors.secondaryText,
+                            fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                            marginLeft: RfW(8),
+                          }}>
+                          {item.reviewCount} Reviews
+                        </Text>
+                      )}
+
+                      {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}> */}
+                      {/*  {onlineBudget && ( */}
+                      {/*    <View */}
+                      {/*      style={{ */}
+                      {/*        flexDirection: 'row', */}
+                      {/*        alignItems: 'center', */}
+                      {/*        marginLeft: RfW(16), */}
+                      {/*      }}> */}
+                      {/*      <Icon */}
+                      {/*        type="FontAwesome" */}
+                      {/*        name="tv" */}
+                      {/*        style={{ */}
+                      {/*          fontSize: 13, */}
+                      {/*          marginRight: RfW(4), */}
+                      {/*          color: Colors.darkGrey, */}
+                      {/*        }} */}
+                      {/*      /> */}
+                      {/*      <Text style={styles.chargeText}>₹ {onlineBudget.price}/Hr</Text> */}
+                      {/*    </View> */}
+                      {/*  )} */}
+                      {/*  {offlineBudget && ( */}
+                      {/*    <View */}
+                      {/*      style={{ */}
+                      {/*        flexDirection: 'row', */}
+                      {/*        alignItems: 'center', */}
+                      {/*        marginLeft: RfW(16), */}
+                      {/*      }}> */}
+                      {/*      <Icon */}
+                      {/*        type="FontAwesome" */}
+                      {/*        name="home" */}
+                      {/*        style={{ */}
+                      {/*          fontSize: 13, */}
+                      {/*          marginRight: RfW(4), */}
+                      {/*          color: Colors.darkGrey, */}
+                      {/*        }} */}
+                      {/*      /> */}
+                      {/*      <Text style={styles.chargeText}>₹ {offlineBudget.price}/Hr</Text> */}
+                      {/*    </View> */}
+                      {/*  )} */}
+                      {/* </View> */}
                     </View>
                   </View>
                 </View>
@@ -354,42 +392,63 @@ function TutorListing(props) {
                     justifyContent: 'flex-end',
                     alignSelf: 'flex-start',
                   }}>
-                  <View style={{ alignSelf: 'flex-end', marginBottom: RfH(17) }}>
-                    <Icon
-                      type="FontAwesome"
-                      name="thumbs-up"
-                      style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }}
-                    />
+                  <TouchableWithoutFeedback onPress={() => markFavouriteTutor(item.id)}>
+                    <View style={{ alignSelf: 'flex-end', padding: RfW(8) }}>
+                      {/* <Icon */}
+                      {/*  type="FontAwesome" */}
+                      {/*  name="heart-o" */}
+                      {/*  style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }} */}
+                      {/* /> */}
+                      <Icon
+                        type="FontAwesome"
+                        name={favourites.includes(item.id) ? 'heart' : 'heart-o'}
+                        style={{
+                          fontSize: 15,
+                          color: favourites.includes(item.id) ? Colors.orangeRed : Colors.darkGrey,
+                        }}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+
+                  <View>
+                    <Text style={styles.chargeText}>₹ {bd}/Hr</Text>
                   </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <IconButtonWrapper
-                      iconHeight={RfH(14)}
-                      iconWidth={RfW(14)}
-                      iconImage={Images.single_user}
-                      styling={{ marginLeft: RfW(20) }}
-                    />
-                    <IconButtonWrapper
-                      iconHeight={RfH(16)}
-                      iconWidth={RfW(16)}
-                      iconImage={Images.multiple_user}
-                      styling={{ marginLeft: RfW(10) }}
-                    />
-                    <IconButtonWrapper
-                      iconHeight={RfH(16)}
-                      iconWidth={RfW(16)}
-                      iconImage={Images.user_board}
-                      styling={{ marginLeft: RfW(10) }}
-                    />
-                  </View>
+
+                  {/* <View style={{ flexDirection: 'row' }}> */}
+                  {/*  <IconButtonWrapper */}
+                  {/*    iconHeight={RfH(14)} */}
+                  {/*    iconWidth={RfW(14)} */}
+                  {/*    iconImage={Images.single_user} */}
+                  {/*    styling={{ marginLeft: RfW(20) }} */}
+                  {/*  /> */}
+                  {/*  <IconButtonWrapper */}
+                  {/*    iconHeight={RfH(16)} */}
+                  {/*    iconWidth={RfW(16)} */}
+                  {/*    iconImage={Images.multiple_user} */}
+                  {/*    styling={{ marginLeft: RfW(10) }} */}
+                  {/*  /> */}
+                  {/*  <IconButtonWrapper */}
+                  {/*    iconHeight={RfH(16)} */}
+                  {/*    iconWidth={RfW(16)} */}
+                  {/*    iconImage={Images.user_board} */}
+                  {/*    styling={{ marginLeft: RfW(10) }} */}
+                  {/*  /> */}
+                  {/* </View> */}
                 </View>
               </View>
 
-              <View style={{ marginHorizontal: RfW(8), marginTop: RfH(8) }}>
-                <View style={commonStyles.lineSeparator} />
-                <Text style={{ fontSize: RFValue(13, STANDARD_SCREEN_SIZE), color: Colors.secondaryText }}>
-                  Free Demo Class
-                </Text>
-              </View>
+              {tutorOffering?.freeDemo && (
+                <View style={{ marginHorizontal: RfW(8), marginTop: RfH(8) }}>
+                  <View style={commonStyles.lineSeparator} />
+                  <Text
+                    style={{
+                      fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+                      color: Colors.secondaryText,
+                    }}>
+                    Free Demo Class
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -879,7 +938,14 @@ function TutorListing(props) {
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     {offering?.displayName} Tutors
                   </Text>
-                  <Text style={[styles.classText, { fontSize: RFValue(15, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }]}>
+                  <Text
+                    style={[
+                      styles.classText,
+                      {
+                        fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                        marginLeft: RfW(8),
+                      },
+                    ]}>
                     {offering?.parentOffering?.parentOffering?.displayName}
                     {' | '}
                     {offering?.parentOffering?.displayName}
