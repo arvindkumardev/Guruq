@@ -84,6 +84,13 @@ const styles = StyleSheet.create({
     color: Colors.secondaryText,
     marginTop: RfH(2),
   },
+
+  classMeta: {
+    fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
+    color: Colors.secondaryText,
+    marginTop: RfH(2),
+  },
+
   chargeText: {
     color: Colors.black,
     fontSize: RFValue(15, STANDARD_SCREEN_SIZE),

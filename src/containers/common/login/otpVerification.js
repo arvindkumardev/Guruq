@@ -8,7 +8,7 @@ import Colors from '../../../theme/colors';
 import styles from './styles';
 import { RfH, storeData } from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/screenNames';
-import { INVALID_INPUT } from '../../../common/errorCodes';
+import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -91,16 +91,24 @@ function OtpVerification(props) {
       if (error.errorCode === INVALID_INPUT) {
         // incorrect username/password
         Alert.alert('Invalid or Incorrect OTP');
+      } else if (error.errorCode === NOT_FOUND) {
+        navigation.navigate(NavigationRouteNames.REGISTER, { mobileObj, newUser: true });
       }
     }
   }, [verifyError]);
 
   useEffect(() => {
     if (verifyData && verifyData.verifyPhoneNumber) {
-      storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, verifyData.verifyPhoneNumber.token).then(() => {
-        isTokenLoading(true);
-        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
-      });
+      if (newUser) {
+        navigation.navigate(NavigationRouteNames.REGISTER, {
+          countryCode: mobileObj.country.dialCode,
+          number: mobileObj.mobile,
+        });
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, verifyData.verifyPhoneNumber.token).then(() => {
+          isTokenLoading(true);
+          navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+        });
+      }
     }
   }, [verifyData]);
 

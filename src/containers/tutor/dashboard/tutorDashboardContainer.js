@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import styles from './styles';
-import TutorDashboard from './components/dashboard';
+import TutorDashboard from './components/tutorDashboard';
 
 function TutorDashboardContainer(props) {
   const navigation = useNavigation();

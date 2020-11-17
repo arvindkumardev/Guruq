@@ -15,6 +15,7 @@ import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import { IconButtonWrapper } from '../../../components';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
+import Fonts from '../../../theme/fonts';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
@@ -226,26 +227,26 @@ function tutorDetails(props) {
             name="user"
             style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
           />
-          <Text style={styles.tutorDetails}>Individual</Text>
+          <Text style={styles.classMeta}>Individual</Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>
           <Icon type="FontAwesome" name="users" style={{ fontSize: 15, marginRight: RfW(4), color: Colors.darkGrey }} />
-          <Text style={styles.tutorDetails}>Group Classes</Text>
+          <Text style={styles.classMeta}>Group Classes</Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>
           <Icon
             type="FontAwesome"
-            name="question"
+            name="dollar"
             style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
           />
-          <Text style={styles.tutorDetails}>Free Demo</Text>
+          <Text style={styles.classMeta}>Free Demo</Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>
           <Icon type="FontAwesome" name="tv" style={{ fontSize: 15, marginRight: RfW(4), color: Colors.darkGrey }} />
-          <Text style={styles.tutorDetails}>Online</Text>
+          <Text style={styles.classMeta}>Online</Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>
@@ -254,7 +255,7 @@ function tutorDetails(props) {
             name="home"
             style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
           />
-          <Text style={styles.tutorDetails}>Home Tution</Text>
+          <Text style={styles.classMeta}>Home Tution</Text>
         </View>
       </View>
     );
@@ -271,10 +272,11 @@ function tutorDetails(props) {
             commonStyles.horizontalChildrenSpaceView,
             {
               marginTop: RfH(16),
+              fontFamily: Fonts.semiBold,
             },
           ]}>
           <View style={{ flex: 0.4 }}>
-            <Text style={styles.tutorDetails}>Classes</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>Classes</Text>
           </View>
           <View
             style={{
@@ -283,11 +285,11 @@ function tutorDetails(props) {
               alignItems: 'center',
               flex: 1,
             }}>
-            <Text style={styles.tutorDetails}>1</Text>
-            <Text style={styles.tutorDetails}>5</Text>
-            <Text style={styles.tutorDetails}>10</Text>
-            <Text style={styles.tutorDetails}>25</Text>
-            <Text style={styles.tutorDetails}>50</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>1</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>5</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>10</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>25</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>50</Text>
           </View>
         </View>
         <View
@@ -441,14 +443,55 @@ function tutorDetails(props) {
             paddingTop: RfH(44),
             paddingHorizontal: RfW(16),
             alignItems: 'center',
+            justifyContent: 'flex-start',
           },
         ]}>
-        <IconButtonWrapper
-          iconHeight={RfH(20)}
-          iconWidth={RfW(20)}
-          iconImage={Images.backArrow}
-          submitFunction={() => onBackPress()}
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}>
+          <IconButtonWrapper
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
+            iconImage={Images.backArrow}
+            submitFunction={() => onBackPress()}
+          />
+
+          {hideTutorPersonal && (
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                {
+                  backgroundColor: Colors.white,
+                  paddingHorizontal: RfW(16),
+                  paddingVertical: RfH(8),
+                  justifyContent: 'center',
+                },
+              ]}>
+              <IconButtonWrapper
+                iconWidth={RfW(24)}
+                iconHeight={RfH(24)}
+                iconImage={getTutorImage(tutorData)}
+                imageResizeMode="cover"
+                styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
+              />
+              <Text
+                style={[
+                  styles.tutorName,
+                  {
+                    marginLeft: RfW(8),
+                    alignSelf: 'center',
+                  },
+                ]}>
+                {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
+              </Text>
+            </View>
+          )}
+        </View>
+
         <View style={commonStyles.horizontalChildrenStartView}>
           <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} />
           <IconButtonWrapper
@@ -461,30 +504,30 @@ function tutorDetails(props) {
         </View>
       </View>
       <ScrollView
-        stickyHeaderIndices={[0]}
+        // stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={(event) => handleScroll(event)}>
-        <View>
-          {hideTutorPersonal && (
-            <View
-              style={[
-                commonStyles.horizontalChildrenView,
-                { backgroundColor: Colors.white, paddingHorizontal: RfW(16), paddingVertical: RfH(8) },
-              ]}>
-              <IconButtonWrapper
-                iconWidth={RfW(32)}
-                iconHeight={RfH(32)}
-                iconImage={getTutorImage(tutorData)}
-                imageResizeMode="cover"
-                styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
-              />
-              <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>
-                {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
-              </Text>
-            </View>
-          )}
-        </View>
+        {/* <View> */}
+        {/*  {hideTutorPersonal && ( */}
+        {/*    <View */}
+        {/*      style={[ */}
+        {/*        commonStyles.horizontalChildrenView, */}
+        {/*        { backgroundColor: Colors.white, paddingHorizontal: RfW(16), paddingVertical: RfH(8) }, */}
+        {/*      ]}> */}
+        {/*      <IconButtonWrapper */}
+        {/*        iconWidth={RfW(32)} */}
+        {/*        iconHeight={RfH(32)} */}
+        {/*        iconImage={getTutorImage(tutorData)} */}
+        {/*        imageResizeMode="cover" */}
+        {/*        styling={{ alignSelf: 'center', borderRadius: RfW(64) }} */}
+        {/*      /> */}
+        {/*      <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}> */}
+        {/*        {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName} */}
+        {/*      </Text> */}
+        {/*    </View> */}
+        {/*  )} */}
+        {/* </View> */}
         <View
           style={{
             flexDirection: 'row',
@@ -505,11 +548,13 @@ function tutorDetails(props) {
               {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
             </Text>
             <Text style={styles.tutorDetails}>GURUQT133567</Text>
-            <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
-              {titleCaseIfExists(tutorData.educationDetails[0].degree?.degreeLevel)}
-              {' - '}
-              {titleCaseIfExists(tutorData.educationDetails[0].fieldOfStudy)}
-            </Text>
+            {tutorData.educationDetails.length > 0 && (
+              <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
+                {titleCaseIfExists(tutorData.educationDetails[0].degree?.degreeLevel)}
+                {' - '}
+                {titleCaseIfExists(tutorData.educationDetails[0].fieldOfStudy)}
+              </Text>
+            )}
             <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
               {tutorData.teachingExperience} years of Teaching Experience{' '}
             </Text>
@@ -520,6 +565,16 @@ function tutorDetails(props) {
                 style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
               />
               <Text style={styles.chargeText}>{tutorData.averageRating}</Text>
+              {tutorData.reviewCount > 0 && (
+                <Text
+                  style={{
+                    color: Colors.secondaryText,
+                    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                    marginLeft: RfW(8),
+                  }}>
+                  {tutorData.reviewCount} Reviews
+                </Text>
+              )}
             </View>
           </View>
         </View>
@@ -563,7 +618,12 @@ function tutorDetails(props) {
         <View>
           <TouchableWithoutFeedback onPress={() => setShowDateSlotModal(true)}>
             <Text
-              style={{ fontSize: 15, marginHorizontal: RfW(16), marginVertical: RfH(16), color: Colors.brandBlue2 }}>
+              style={{
+                fontSize: 15,
+                marginHorizontal: RfW(16),
+                marginVertical: RfH(16),
+                color: Colors.brandBlue2,
+              }}>
               View Availability of Classes
             </Text>
           </TouchableWithoutFeedback>

@@ -94,7 +94,7 @@ function App() {
         <AppStack
           isUserLoggedIn={isUserLoggedIn}
           isUserTokenLoading={isUserTokenLoading}
-          userTypeSet={userInfo.type !== UserTypeEnum.OTHER.label}
+          userType={userInfo.type}
           // isNetworkConnectivityError={isNetworkConnectivityError}
         />
       </NavigationContainer>

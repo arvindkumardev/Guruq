@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import RtcEngine, { RtcLocalView, RtcRemoteView, VideoRenderMode } from 'react-native-agora';
+import RtcEngine, {
+  AudioProfile,
+  AudioScenario,
+  RtcLocalView,
+  RtcRemoteView,
+  VideoRenderMode,
+} from 'react-native-agora';
 import styles from './style';
 
 import requestCameraAndAudioPermission from './permission';
@@ -40,7 +46,7 @@ export default class Video extends Component<Props, State> {
     this.state = {
       appId: '20be4eff902f4d9ea78c2f8c168556cd',
       token:
-        '00620be4eff902f4d9ea78c2f8c168556cdIACK2kadEofay+bsCjCkGCKv+GdLOUFa+wkFAoGELbRhCaaOhcgAAAAAEAApyLkYCjuuXwEAAQAKO65f',
+        '00620be4eff902f4d9ea78c2f8c168556cdIACbN3J0BxBU9J+4hz7bGaC9gIKl2dK1Odb6UBfFLOLSMKaOhcgAAAAAEADGU1aH9PKvXwEAAQDz8q9f',
       channelName: 'TESTING_AGORA_CALL_GURUQ',
       joinSucceed: false,
       peerIds: [],
@@ -81,6 +87,7 @@ export default class Video extends Component<Props, State> {
     const { appId } = this.state;
     this._engine = await RtcEngine.create(appId);
     await this._engine.enableVideo();
+    await this._engine.setAudioProfile(AudioProfile.Default, AudioScenario.Education);
 
     this._engine.addListener('Warning', (warn) => {
       console.log('Warning', warn);
@@ -145,6 +152,8 @@ export default class Video extends Component<Props, State> {
 
     // await this._engine?.joinChannel(this.state.token, this.state.channelName, null, 0);
     await this._engine.startPreview();
+
+    console.log(await this._engine.getUserInfoByUid(10));
   };
 
   togglePreview = async () => {
@@ -163,7 +172,11 @@ export default class Video extends Component<Props, State> {
    */
   startCall = async () => {
     // Join Channel using null token and channel name
-    await this._engine?.joinChannel(this.state.token, this.state.channelName, null, 0);
+    await this._engine?.joinChannel(this.state.token, this.state.channelName, null, 10);
+
+    console.log(await this._engine.getUserInfoByUid(10));
+    console.log(await this._engine.getUserInfoByUid(11));
+    console.log(await this._engine.getCallId());
   };
 
   /**
@@ -179,6 +192,10 @@ export default class Video extends Component<Props, State> {
 
   audioToggle = async () => {
     console.log('toggle audio', this.state.audioMuted, this.state.currentUserId);
+
+    console.log(await this._engine.getUserInfoByUid(10));
+    console.log(await this._engine.getUserInfoByUid(11));
+    console.log(await this._engine.getCallId());
 
     const newState = !this.state.audioMuted;
     // await this._engine.muteRemoteAudioStream(this.state.currentUserId, newState);
@@ -218,7 +235,21 @@ export default class Video extends Component<Props, State> {
                 {this.state.previewVideo ? (
                   <RtcLocalView.SurfaceView style={{ flex: 1 }} renderMode={VideoRenderMode.Hidden} />
                 ) : (
-                  <View style={{ flex: 1, backgroundColor: Colors.black }} />
+                  <View
+                    style={{ flex: 1, backgroundColor: Colors.black, justifyContent: 'center', alignItems: 'center' }}>
+                    <View
+                      style={{
+                        height: RfH(100),
+                        width: RfW(100),
+                        borderRadius: 100,
+                        backgroundColor: Colors.lightGreen,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={{ color: Colors.primaryText, fontSize: 48 }}>A</Text>
+                    </View>
+                  </View>
                 )}
 
                 <View

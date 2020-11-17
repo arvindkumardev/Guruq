@@ -10,3 +10,5 @@ export const userDetails = makeVar({});
 
 export const studentDetails = makeVar({});
 export const tutorDetails = makeVar({});
+
+export const userLocation = makeVar({});
