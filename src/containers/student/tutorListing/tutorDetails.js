@@ -50,7 +50,7 @@ function tutorDetails(props) {
         const sb = {};
 
         data.getTutorOfferings.map((item) => {
-          if (subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
+          if (item.offering && subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
             if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
               if (item.freeDemo) {
                 setIsFreeDemo(true);

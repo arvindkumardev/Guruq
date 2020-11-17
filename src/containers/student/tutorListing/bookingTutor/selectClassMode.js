@@ -181,11 +181,14 @@ const selectClassMode = (props) => {
             <Text style={styles.tutorDetails}>
               {selectedSubject.name} ( {parentOfferingName} | {parentParentOfferingName} )
             </Text>
-            <Text style={styles.tutorDetails}>
-              {titleCaseIfExists(tutorData.educationDetails[0].degree?.degreeLevel)}
-              {' - '}
-              {titleCaseIfExists(tutorData.educationDetails[0].fieldOfStudy)}
-            </Text>
+
+            {tutorData.educationDetails.length > 0 && (
+              <Text style={styles.tutorDetails}>
+                {titleCaseIfExists(tutorData.educationDetails[0].degree?.degreeLevel)}
+                {' - '}
+                {titleCaseIfExists(tutorData.educationDetails[0].fieldOfStudy)}
+              </Text>
+            )}
             <Text style={styles.tutorDetails}>{tutorData.teachingExperience} years of Teaching Experience </Text>
           </View>
         </View>

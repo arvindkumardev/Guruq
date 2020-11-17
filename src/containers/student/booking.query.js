@@ -4,6 +4,8 @@ export const GET_CART_ITEMS = gql`
   query GetCartItems {
     getCartItems {
       id
+      active
+      deleted
       offering {
         id
         name

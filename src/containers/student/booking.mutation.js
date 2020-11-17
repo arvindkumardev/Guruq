@@ -39,6 +39,8 @@ export const ADD_TO_CART = gql`
   mutation AddToCart($cartCreateDto: CartCreateDto!) {
     addToCart(cartCreateDto: $cartCreateDto) {
       id
+      active
+      deleted
       offering {
         id
         name
@@ -99,6 +101,20 @@ export const ADD_TO_CART = gql`
 //     promotion {
 //       id
 //     }
+//   }
+// }
+
+// mutation {
+//   removeFromCart(cartItemId: 10) {
+//     id
+//   }
+// }
+
+// mutation {
+//   addBackToCart(cartItemId: 10) {
+//     id
+//     active
+//     deleted
 //   }
 // }
 
