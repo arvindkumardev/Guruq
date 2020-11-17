@@ -12,7 +12,7 @@ import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
-import { SEARCH_TUTORS, SEARCH_FAVOURITE_TUTORS } from '../tutor-query';
+import { SEARCH_TUTORS, GET_FAVOURITE_TUTORS } from '../tutor-query';
 import Loader from '../../../components/Loader';
 import Fonts from '../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -104,7 +104,7 @@ function TutorListing(props) {
     },
   });
 
-  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(SEARCH_FAVOURITE_TUTORS, {
+  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -389,24 +389,62 @@ function TutorListing(props) {
                   style={{
                     flexDirection: 'column',
                     justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
                     alignSelf: 'flex-start',
                   }}>
                   <TouchableWithoutFeedback onPress={() => markFavouriteTutor(item.id)}>
-                    <View style={{ alignSelf: 'flex-end', padding: RfW(8) }}>
+                    <View
+                      style={{
+                        height: RfH(44),
+                        width: RfW(44),
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      {/* <IconButtonWrapper */}
+                      {/*  iconWidth={RfW(16)} */}
+                      {/*  iconHeight={RfH(16)} */}
+                      {/*  iconImage={Images.heart} */}
+                      {/*  styling={{ marginHorizontal: RfW(16) }} */}
+                      {/* /> */}
+                      {favourites.includes(item.id) ? (
+                        <IconButtonWrapper
+                          iconWidth={RfW(16)}
+                          iconHeight={RfH(16)}
+                          iconImage={Images.heartFilled}
+                          styling={{ marginHorizontal: RfW(16) }}
+                        />
+                      ) : (
+                        <IconButtonWrapper
+                          iconWidth={RfW(16)}
+                          iconHeight={RfH(16)}
+                          iconImage={Images.heart}
+                          styling={{ marginHorizontal: RfW(16) }}
+                        />
+                      )}
                       {/* <Icon */}
                       {/*  type="FontAwesome" */}
-                      {/*  name="heart-o" */}
-                      {/*  style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }} */}
+                      {/*  name={favourites.includes(item.id) ? 'heart' : 'heart-o'} */}
+                      {/*  style={{ */}
+                      {/*    fontSize: 17, */}
+                      {/*    color: favourites.includes(item.id) ? Colors.orangeRed : Colors.darkGrey, */}
+                      {/*  }} */}
                       {/* /> */}
-                      <Icon
-                        type="FontAwesome"
-                        name={favourites.includes(item.id) ? 'heart' : 'heart-o'}
-                        style={{
-                          fontSize: 15,
-                          color: favourites.includes(item.id) ? Colors.orangeRed : Colors.darkGrey,
-                        }}
-                      />
                     </View>
+                    {/* <View style={{ alignSelf: 'flex-end', padding: RfW(8) }}> */}
+                    {/*  /!* <Icon *!/ */}
+                    {/*  /!*  type="FontAwesome" *!/ */}
+                    {/*  /!*  name="heart-o" *!/ */}
+                    {/*  /!*  style={{ fontSize: 13, marginRight: RfW(4), color: Colors.darkGrey }} *!/ */}
+                    {/*  /!* /> *!/ */}
+                    {/*  <Icon */}
+                    {/*    type="FontAwesome" */}
+                    {/*    name={favourites.includes(item.id) ? 'heart' : 'heart-o'} */}
+                    {/*    style={{ */}
+                    {/*      fontSize: 15, */}
+                    {/*      color: favourites.includes(item.id) ? Colors.orangeRed : Colors.darkGrey, */}
+                    {/*    }} */}
+                    {/*  /> */}
+                    {/* </View> */}
                   </TouchableWithoutFeedback>
 
                   <View>

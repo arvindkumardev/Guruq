@@ -9,7 +9,7 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { GET_TUTOR_OFFERINGS } from '../tutor-query';
+import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
 import styles from './styles';
 import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import { IconButtonWrapper } from '../../../components';
@@ -37,6 +37,28 @@ function tutorDetails(props) {
   const [isFreeDemo, setIsFreeDemo] = useState(false);
   const [priceMatrix, setPriceMatrix] = useState({});
   const [budgets, setBudgets] = useState([]);
+
+  const [favourites, setFavourites] = useState([]);
+  const [compareTutors, setCompareTutors] = useState([]);
+
+  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      let favTutors = [];
+      favTutors = favourites;
+      if (data) {
+        for (let i = 0; i < data.getFavouriteTutors.length; i++) {
+          favTutors.push(data.getFavouriteTutors[i].tutor.id);
+        }
+        setFavourites(favTutors);
+        setRefreshTutorList(!refreshTutorList);
+      }
+    },
+  });
 
   const [getTutorOfferings, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     onError: (e) => {
@@ -127,6 +149,7 @@ function tutorDetails(props) {
     getTutorOfferings({
       variables: { tutorId: tutorData.id },
     });
+    getFavouriteTutors();
   }, []);
 
   const onBackPress = () => {
@@ -256,40 +279,70 @@ function tutorDetails(props) {
           paddingVertical: RfW(16),
         }}>
         <View style={{ alignItems: 'center' }}>
-          <Icon
-            type="FontAwesome"
-            name="user"
-            style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
+          {/* <Icon */}
+          {/*  type="FontAwesome" */}
+          {/*  name="user" */}
+          {/*  style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }} */}
+          {/* /> */}
+          <IconButtonWrapper
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            iconImage={Images.individual_class_filled}
+            styling={{ marginHorizontal: RfW(16) }}
           />
           <Text style={styles.classMeta}>Individual</Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          <Icon type="FontAwesome" name="users" style={{ fontSize: 15, marginRight: RfW(4), color: Colors.darkGrey }} />
+          {/* <Icon type="FontAwesome" name="users" style={{ fontSize: 15, marginRight: RfW(4), color: Colors.darkGrey }} /> */}
+          <IconButtonWrapper
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            iconImage={Images.group_class}
+            styling={{ marginHorizontal: RfW(16) }}
+          />
           <Text style={styles.classMeta}>Group Classes</Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          <Icon
-            type="FontAwesome"
-            name="dollar"
-            style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
+          {/* <Icon */}
+          {/*  type="FontAwesome" */}
+          {/*  name="dollar" */}
+          {/*  style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }} */}
+          {/* /> */}
+          <IconButtonWrapper
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            iconImage={Images.free_demo_filled}
+            styling={{ marginHorizontal: RfW(16) }}
           />
           <Text style={styles.classMeta}>Free Demo</Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          <Icon type="FontAwesome" name="tv" style={{ fontSize: 15, marginRight: RfW(4), color: Colors.darkGrey }} />
+          {/* <Icon type="FontAwesome" name="tv" style={{ fontSize: 15, marginRight: RfW(4), color: Colors.darkGrey }} /> */}
+          <IconButtonWrapper
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            iconImage={Images.online_class_filled}
+            styling={{ marginHorizontal: RfW(16) }}
+          />
           <Text style={styles.classMeta}>Online</Text>
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          <Icon
-            type="FontAwesome"
-            name="home"
-            style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
+          {/* <Icon */}
+          {/*  type="FontAwesome" */}
+          {/*  name="home" */}
+          {/*  style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }} */}
+          {/* /> */}
+          <IconButtonWrapper
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            iconImage={Images.home_tuition_filled}
+            styling={{ marginHorizontal: RfW(16) }}
           />
-          <Text style={styles.classMeta}>Home Tution</Text>
+          <Text style={styles.classMeta}>Home Tuition</Text>
         </View>
       </View>
     );
@@ -574,7 +627,13 @@ function tutorDetails(props) {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} />
+              {/* <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} /> */}
+              <IconButtonWrapper
+                iconWidth={RfW(16)}
+                iconHeight={RfH(16)}
+                iconImage={tutorData.id % 4 === 0 ? Images.checkbox : Images.checkbox_selected}
+                styling={{ marginHorizontal: RfW(16) }}
+              />
             </View>
           </TouchableWithoutFeedback>
 
@@ -589,7 +648,7 @@ function tutorDetails(props) {
               <IconButtonWrapper
                 iconWidth={RfW(16)}
                 iconHeight={RfH(16)}
-                iconImage={Images.heart}
+                iconImage={favourites.includes(tutorData.id) ? Images.heartFilled : Images.heart}
                 styling={{ marginHorizontal: RfW(16) }}
               />
             </View>

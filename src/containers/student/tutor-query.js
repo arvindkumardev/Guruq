@@ -134,7 +134,7 @@ export const GET_TUTOR_OFFERINGS = gql`
   }
 `;
 
-export const SEARCH_FAVOURITE_TUTORS = gql`
+export const GET_FAVOURITE_TUTORS = gql`
   query GetFavouriteTutors {
     getFavouriteTutors {
       id

@@ -31,6 +31,7 @@ const Images = {
   icse: require('../assets/images/icse.png'),
   ib: require('../assets/images/ib.png'),
   igcse: require('../assets/images/igcse.png'),
+  heartFilled: require('../assets/images/heart-filled.png'),
   heart: require('../assets/images/heart.png'),
   bell: require('../assets/images/bell.png'),
   qpoint: require('../assets/images/qpoint.png'),
@@ -106,6 +107,20 @@ const Images = {
   phone: require('../assets/images/phone.png'),
   video_call: require('../assets/images/video-call.png'),
   video_call_mute: require('../assets/images/video-call-mute.png'),
+
+  individual_class: require('../assets/images/individual-class.png'),
+  group_class: require('../assets/images/group-class.png'),
+  free_demo: require('../assets/images/free-demo.png'),
+  online_class: require('../assets/images/online-class.png'),
+  home_tuition: require('../assets/images/home-tuition.png'),
+  individual_class_filled: require('../assets/images/individual-class-filled.png'),
+  group_class_filled: require('../assets/images/group-class-filled.png'),
+  free_demo_filled: require('../assets/images/free-demo-filled.png'),
+  online_class_filled: require('../assets/images/online-class-filled.png'),
+  home_tuition_filled: require('../assets/images/home-tuition-filled.png'),
+
+  checkbox: require('../assets/images/checkbox.png'),
+  checkbox_selected: require('../assets/images/checkbox-selected.png'),
 };
 
 export default Images;
