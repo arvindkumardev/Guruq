@@ -30,6 +30,8 @@ function tutorDetails(props) {
   const [subjects, setSubjects] = useState([]);
   const [refreshList, setRefreshList] = useState(false);
 
+  const [priceMatrix, setPriceMatrix] = useState({});
+
   const [getTutorOfferings, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -39,11 +41,26 @@ function tutorDetails(props) {
     onCompleted: (data) => {
       if (data) {
         console.log(data);
+        // set budget
+        const pm = {};
+
         data.getTutorOfferings.map((item) => {
-          if (subjects.indexOf(item.offerings[0].displayName) === -1) {
-            subjects.push(item.offerings[0].displayName);
+          if (subjects.indexOf(item.offering.displayName) === -1) {
+            subjects.push(item.offering.displayName);
+
+            pm[`o${item.offering.id}`] = {
+              online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+              offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+            };
+
+            for (const b of item.budgets) {
+              pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
+            }
           }
         });
+
+        setPriceMatrix(pm);
+
         setRefreshList(!refreshList);
       }
     },
@@ -267,6 +284,7 @@ function tutorDetails(props) {
         <View>
           <Text style={[commonStyles.titleText]}>Price Matrix - English</Text>
         </View>
+        <Text>{JSON.stringify(priceMatrix)}</Text>
         <View
           style={[
             commonStyles.horizontalChildrenSpaceView,

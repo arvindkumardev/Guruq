@@ -99,6 +99,10 @@ export const GET_TUTOR_OFFERINGS = gql`
       tutor {
         id
       }
+      offering {
+        id
+        displayName
+      }
       offerings {
         id
         level
