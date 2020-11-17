@@ -547,7 +547,7 @@ function tutorDetails(props) {
             <Text style={styles.tutorName}>
               {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
             </Text>
-            <Text style={styles.tutorDetails}>GURUQT133567</Text>
+            <Text style={styles.tutorDetails}>GURUQT{tutorData.id}</Text>
             {tutorData.educationDetails.length > 0 && (
               <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
                 {titleCaseIfExists(tutorData.educationDetails[0].degree?.degreeLevel)}
