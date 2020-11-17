@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -566,14 +566,36 @@ function tutorDetails(props) {
         </View>
 
         <View style={commonStyles.horizontalChildrenStartView}>
-          <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} />
-          <IconButtonWrapper
-            iconWidth={RfW(16)}
-            iconHeight={RfH(16)}
-            iconImage={Images.heart}
-            styling={{ marginHorizontal: RfW(16) }}
-          />
-          <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} />
+          <TouchableWithoutFeedback onPress={() => Alert.alert('Add to Compare')}>
+            <View
+              style={{
+                height: RfH(44),
+                width: RfW(44),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.rectangle} />
+            </View>
+          </TouchableWithoutFeedback>
+
+          <TouchableWithoutFeedback onPress={() => Alert.alert('Add to Favourite')}>
+            <View
+              style={{
+                height: RfH(44),
+                width: RfW(44),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <IconButtonWrapper
+                iconWidth={RfW(16)}
+                iconHeight={RfH(16)}
+                iconImage={Images.heart}
+                styling={{ marginHorizontal: RfW(16) }}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+
+          {/* <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} /> */}
         </View>
       </View>
       <ScrollView
