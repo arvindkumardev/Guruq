@@ -203,7 +203,13 @@ function TutorListing(props) {
     return (
       <View style={styles.listItemParent}>
         <TouchableWithoutFeedback
-          onPress={() => navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, { tutorData: item })}>
+          onPress={() =>
+            navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
+              tutorData: item,
+              parentOffering: offering?.parentOffering?.displayName,
+              parentParentOffering: offering?.parentOffering?.parentOffering?.displayName,
+            })
+          }>
           <View style={[commonStyles.horizontalChildrenStartView]}>
             <View style={styles.userIconParent}>
               <View

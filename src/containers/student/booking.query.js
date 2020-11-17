@@ -46,8 +46,6 @@
 //   }
 // }
 
-
-
 // query {
 //   getPendingBooking {
 //     id
@@ -68,8 +66,6 @@
 //     }
 //   }
 // }
-
-
 
 // query {
 //   getScheduledClasses(
@@ -115,8 +111,6 @@
 //     endDate
 //   }
 // }
-
-
 
 // query {
 //   getBookings {
@@ -166,5 +160,3 @@
 //     }
 //   }
 // }
-
-

@@ -22,12 +22,15 @@ function tutorDetails(props) {
   const { route } = props;
 
   const tutorData = route?.params?.tutorData;
+  const parentOffering = route?.params?.parentOffering;
+  const parentParentOffering = route?.params?.parentParentOffering;
 
   const [showDateSlotModal, setShowDateSlotModal] = useState(false);
   const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
 
   const [subjects, setSubjects] = useState([]);
   const [refreshList, setRefreshList] = useState(false);
+  const [isFreeDemo, setIsFreeDemo] = useState(false);
 
   const [getTutorOfferings, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     onError: (e) => {
@@ -37,10 +40,17 @@ function tutorDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log(data);
         data.getTutorOfferings.map((item) => {
           if (subjects.indexOf(item.offerings[0].displayName) === -1) {
             subjects.push(item.offerings[0].displayName);
+          }
+          if (
+            item.offerings[1].displayName === parentOffering &&
+            item.offerings[2].displayName === parentParentOffering
+          ) {
+            if (item.freeDemo) {
+              setIsFreeDemo(true);
+            }
           }
         });
         setRefreshList(!refreshList);
@@ -585,7 +595,7 @@ function tutorDetails(props) {
         <Button
           onPress={() => navigation.navigate(routeNames.STUDENT.SELECT_CLASS_MODE)}
           style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
-          <Text style={commonStyles.textButtonOutlinePrimary}>Book [Free] Demo</Text>
+          <Text style={commonStyles.textButtonOutlinePrimary}>Book {isFreeDemo ? '[Free]' : ''} Demo</Text>
         </Button>
 
         <Button
