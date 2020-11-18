@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { CreateUpdateAddressDto } from '../common/graphql-types';
 
 export const ADD_INTERESTED_OFFERINGS = gql`
-  mutation CreateBooking($orderCreateDto: OrderCreateDto) {
+  mutation CreateBooking($orderCreateDto: OrderCreateDto!) {
     createBooking(orderCreateDto: $orderCreateDto) {
       id
       serviceAddress {
@@ -17,16 +17,11 @@ export const ADD_INTERESTED_OFFERINGS = gql`
         postalCode
       }
       payableAmount
-      paymentStatus
-      orderPayments {
+      orderPayment {
         id
         paymentMethod
         paymentStatus
-        payee {
-          id
-          firstName
-          lastName
-        }
+        amount
       }
       orderItems {
         id

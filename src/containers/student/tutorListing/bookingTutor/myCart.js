@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
@@ -17,13 +17,17 @@ import CouponModal from '../components/couponModal';
 import routeNames from '../../../../routes/screenNames';
 import Loader from '../../../../components/Loader';
 import { GET_CART_ITEMS } from '../../booking.query';
-import { REMOVE_CART_ITEM } from '../../booking.mutation';
+import { ADD_INTERESTED_OFFERINGS, REMOVE_CART_ITEM } from '../../booking.mutation';
 
 const myCart = () => {
   const navigation = useNavigation();
   const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [convenienceCharge, setConvenienceCharge] = useState(100);
+  const [qPoints, setQPoints] = useState(300);
+
   const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -31,7 +35,11 @@ const myCart = () => {
       }
     },
     onCompleted: (data) => {
+      for (const obj of data.getCartItems) {
+        setAmount(amount + obj.price);
+      }
       setCartItems(data.getCartItems);
+      setRefreshList(!refreshList);
     },
   });
 
@@ -49,9 +57,25 @@ const myCart = () => {
     },
   });
 
-  useEffect(() => {
-    getCartItems();
-  }, {});
+  const [createNewBooking, { loading: bookingLoading }] = useMutation(ADD_INTERESTED_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        payNow();
+      }
+    },
+  });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getCartItems();
+    }, [cartItems])
+  );
 
   const [cartItems, setCartItems] = useState([]);
 
@@ -66,6 +90,30 @@ const myCart = () => {
   const removeCartItem = (item) => {
     removeItem({
       variables: { cartItemId: item.id },
+    });
+  };
+
+  const createBooking = () => {
+    let obj = {};
+    obj = {
+      serviceAddress: { id: 258747 },
+      billingAddress: {
+        type: 6,
+        fullAddress: 'Dwarka Sector 21',
+        country: 'India',
+        state: 'Delhi',
+        city: 'New Delhi',
+        subArea: 'CP',
+        postalCode: 110001,
+      },
+      itemPrice: amount,
+      convenienceCharges: convenienceCharge,
+      orderStatus: 1,
+      redeemQPoints: qPoints,
+      orderPayment: { amount, paymentMethod: 3 },
+    };
+    createNewBooking({
+      variables: { orderCreateDto: obj },
     });
   };
 
@@ -189,11 +237,11 @@ const myCart = () => {
       <View style={{ marginHorizontal: RfW(16) }}>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={styles.tutorDetails}>Amount</Text>
-          <Text style={styles.tutorDetails}>₹1200</Text>
+          <Text style={styles.tutorDetails}>₹{amount}</Text>
         </View>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={styles.tutorDetails}>Convenience charges</Text>
-          <Text style={styles.tutorDetails}>₹100</Text>
+          <Text style={styles.tutorDetails}>₹{convenienceCharge}</Text>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
@@ -213,7 +261,7 @@ const myCart = () => {
                 fontFamily: 'SegoeUI-Bold',
               },
             ]}>
-            ₹1200
+            ₹{amount + convenienceCharge}
           </Text>
         </View>
       </View>
@@ -245,7 +293,7 @@ const myCart = () => {
 
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
-      <Loader isLoading={cartLoading || removeLoading} />
+      <Loader isLoading={cartLoading || removeLoading || bookingLoading} />
       <View style={{ marginHorizontal: RfW(16) }}>
         <ScreenHeader label="My Cart" homeIcon />
       </View>
@@ -292,12 +340,12 @@ const myCart = () => {
             },
           ]}>
           <View style={{ marginTop: RfH(30) }}>
-            <Text style={styles.buttonText}>₹1300</Text>
+            <Text style={styles.buttonText}>₹{amount + convenienceCharge}</Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
           </View>
           <View style={{ marginTop: RfH(30) }}>
             <Button
-              onPress={() => payNow()}
+              onPress={() => createBooking()}
               style={[
                 commonStyles.buttonPrimary,
                 {
@@ -314,13 +362,13 @@ const myCart = () => {
       <QPointPayModal
         visible={showQPointPayModal}
         onClose={() => setShowQPointPayModal(false)}
-        amount={1200}
-        deductedAgaintQPoint={300}
-        convenienceCharge={100}
-        totalAmount={1500}
-        qPoint={300}
-        amountToPayAfterQPoint={900}
-        onPayNow={() => payNow()}
+        amount={amount}
+        deductedAgaintQPoint={qPoints}
+        convenienceCharge={convenienceCharge}
+        totalAmount={amount + convenienceCharge}
+        qPoint={qPoints}
+        amountToPayAfterQPoint={amount + convenienceCharge - qPoints}
+        onPayNow={() => createBooking()}
       />
       <CouponModal visible={showCouponModal} onClose={() => setShowCouponModal(false)} />
     </View>
