@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    borderBottomColor: Colors.borderColor,
-    borderBottomWidth: 0.5,
+    // borderBottomColor: Colors.borderColor,
+    // borderBottomWidth: 0.5,
   },
 
   menuItemParentView: {

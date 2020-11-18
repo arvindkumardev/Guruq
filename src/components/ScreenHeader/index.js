@@ -18,11 +18,16 @@ function customRangeSelector(props) {
   };
 
   return (
-    <View>
+    <View style={{ backgroundColor: Colors.white }}>
       <View
         style={[
           commonStyles.topActionView,
-          { style, marginTop: RfH(topMargin), paddingHorizontal: RfW(horizontalPadding), height: RfH(44) },
+          {
+            style,
+            marginTop: RfH(topMargin),
+            paddingHorizontal: RfW(horizontalPadding),
+            height: RfH(44),
+          },
         ]}>
         <View style={commonStyles.horizontalChildrenView}>
           {homeIcon && (
@@ -40,6 +45,8 @@ function customRangeSelector(props) {
       {lineVisible && (
         <View style={{ borderBottomWidth: 1, borderBottomColor: Colors.darkGrey, marginTop: RfH(16), opacity: 0.3 }} />
       )}
+
+      <View style={commonStyles.lineSeparator} />
     </View>
   );
 }

@@ -184,8 +184,8 @@ const selectClassMode = (props) => {
       <ScreenHeader label="Book Class" homeIcon />
       <Loader isLoading={cartLoading} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ height: RfH(44) }} />
-        <View style={commonStyles.horizontalChildrenStartView}>
+        {/* <View style={{ height: RfH(44) }} /> */}
+        <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(16) }]}>
           <IconButtonWrapper
             iconWidth={RfW(87)}
             iconHeight={RfH(80)}
@@ -211,10 +211,11 @@ const selectClassMode = (props) => {
             <Text style={styles.tutorDetails}>{tutorData.teachingExperience} years of Teaching Experience </Text>
           </View>
         </View>
-        <Text style={[styles.compareTutorName, { alignSelf: 'flex-start' }]}>
+
+        <Text style={[styles.compareTutorName, { marginTop: RfH(16), alignSelf: 'flex-start' }]}>
           Select mode of class and number of Classes
         </Text>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12), alignItems: 'flex-start' }]}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'flex-start' }]}>
           <Text style={styles.tutorDetails}>Mode of Class</Text>
           <View style={commonStyles.horizontalChildrenCenterView}>
             {onlineClassPrices.length > 0 && (
@@ -248,7 +249,12 @@ const selectClassMode = (props) => {
           </View>
         </View>
         <View
-          style={{ marginTop: RfH(16), flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+          style={{
+            marginTop: RfH(16),
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}>
           <Text>Classes</Text>
           <Text>Price/Hour</Text>
           <Text>Total Price</Text>
@@ -265,20 +271,28 @@ const selectClassMode = (props) => {
           <Text style={[styles.compareTutorName, { marginTop: 0 }]}>Total Classes</Text>
           <View style={styles.bookingSelectorParent}>
             <TouchableWithoutFeedback onPress={() => removeClass()}>
-              <IconButtonWrapper
-                iconWidth={RfW(12)}
-                iconHeight={RfH(12)}
-                iconImage={Images.minus_blue}
-                submitFunction={() => removeClass()}
-              />
+              <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                <IconButtonWrapper
+                  iconWidth={RfW(12)}
+                  iconHeight={RfH(12)}
+                  iconImage={Images.minus_blue}
+                  // submitFunction={() => removeClass()}
+                />
+              </View>
             </TouchableWithoutFeedback>
+
             <Text>{numberOfClass}</Text>
-            <IconButtonWrapper
-              iconWidth={RfW(12)}
-              iconHeight={RfH(12)}
-              iconImage={Images.plus_blue}
-              submitFunction={() => addClass()}
-            />
+
+            <TouchableWithoutFeedback onPress={() => addClass()}>
+              <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                <IconButtonWrapper
+                  iconWidth={RfW(12)}
+                  iconHeight={RfH(12)}
+                  iconImage={Images.plus_blue}
+                  // submitFunction={() => addClass()}
+                />
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
