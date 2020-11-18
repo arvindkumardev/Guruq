@@ -180,7 +180,11 @@ const myCart = () => {
   const renderQPointView = () => {
     return (
       <TouchableWithoutFeedback onPress={() => setShowQPointPayModal(true)}>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            { backgroundColor: Colors.white, height: RfH(44), alignItems: 'center', paddingHorizontal: RfW(16) },
+          ]}>
           <View style={commonStyles.horizontalChildrenStartView}>
             <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
             <Text
@@ -210,7 +214,11 @@ const myCart = () => {
   const renderCouponView = () => {
     return (
       <TouchableWithoutFeedback onPress={() => setShowCouponModal(true)}>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            { backgroundColor: Colors.white, height: RfH(44), alignItems: 'center', paddingHorizontal: RfW(16) },
+          ]}>
           <View style={commonStyles.horizontalChildrenStartView}>
             <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
             <Text
@@ -234,17 +242,19 @@ const myCart = () => {
 
   const renderCartDetails = () => {
     return (
-      <View style={{ marginHorizontal: RfW(16) }}>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
+      <View style={{ backgroundColor: Colors.white, paddingHorizontal: RfW(16) }}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
           <Text style={styles.tutorDetails}>Amount</Text>
           <Text style={styles.tutorDetails}>₹{amount}</Text>
         </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
           <Text style={styles.tutorDetails}>Convenience charges</Text>
           <Text style={styles.tutorDetails}>₹{convenienceCharge}</Text>
         </View>
-        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
+
+        <View style={commonStyles.lineSeparator} />
+
+        <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
           <Text
             style={[
               styles.tutorDetails,
@@ -292,24 +302,24 @@ const myCart = () => {
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
+    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
       <Loader isLoading={cartLoading || removeLoading || bookingLoading} />
-      <View style={{ marginHorizontal: RfW(16) }}>
-        <ScreenHeader label="My Cart" homeIcon />
-      </View>
+      {/* <View style={{ marginHorizontal: RfW(16) }}> */}
+      <ScreenHeader label="My Cart" homeIcon horizontalPadding={16} />
+      {/* </View> */}
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={[
-            styles.itemView,
-            {
-              marginTop: RfH(8),
-              paddingVertical: RfH(8),
-              paddingLeft: RfW(48),
-            },
-          ]}>
-          <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text>
-        </View>
-        <View style={{ marginHorizontal: RfW(16) }}>
+        {/* <View */}
+        {/*  style={[ */}
+        {/*    styles.itemView, */}
+        {/*    { */}
+        {/*      marginTop: RfH(8), */}
+        {/*      paddingVertical: RfH(8), */}
+        {/*      paddingLeft: RfW(48), */}
+        {/*    }, */}
+        {/*  ]}> */}
+        {/*  <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text> */}
+        {/* </View> */}
+        <View style={{ paddingHorizontal: RfW(16), backgroundColor: Colors.white }}>
           <FlatList
             showsHorizontalScrollIndicator={false}
             data={cartItems}
@@ -319,46 +329,68 @@ const myCart = () => {
           />
         </View>
 
-        <View style={commonStyles.lineSeparatorWithMargin} />
+        <View style={commonStyles.blankViewSmall} />
 
         {renderQPointView()}
 
-        <View style={commonStyles.lineSeparatorWithMargin} />
+        <View style={commonStyles.blankViewSmall} />
 
         {renderCouponView()}
 
-        <View style={commonStyles.lineSeparatorWithMargin} />
+        <View style={commonStyles.blankViewSmall} />
 
-        <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text>
-        {renderCartDetails()}
+        {/* <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text> */}
+
         <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            {
-              marginHorizontal: RfW(16),
-              marginBottom: RfH(34),
-            },
-          ]}>
-          <View style={{ marginTop: RfH(30) }}>
-            <Text style={styles.buttonText}>₹{amount + convenienceCharge}</Text>
-            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
-          </View>
-          <View style={{ marginTop: RfH(30) }}>
-            <Button
-              onPress={() => createBooking()}
-              style={[
-                commonStyles.buttonPrimary,
-                {
-                  width: RfW(144),
-                  alignSelf: 'flex-end',
-                  marginHorizontal: 0,
-                },
-              ]}>
-              <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
-            </Button>
-          </View>
+          style={{
+            height: 44,
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={{
+              paddingHorizontal: RfW(16),
+              // marginBottom: RfW(8),
+              fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+              color: Colors.secondaryText,
+            }}>
+            CART DETAILS (4 Items)
+          </Text>
         </View>
+
+        {renderCartDetails()}
       </ScrollView>
+
+      <View
+        style={[
+          commonStyles.horizontalChildrenSpaceView,
+          {
+            alignItems: 'flex-end',
+            backgroundColor: Colors.white,
+            paddingTop: RfH(8),
+            paddingHorizontal: RfW(16),
+            paddingBottom: RfH(34),
+          },
+        ]}>
+        <View>
+          <Text style={commonStyles.headingText}>₹{amount + convenienceCharge}</Text>
+          <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
+        </View>
+        <View>
+          <Button
+            onPress={() => createBooking()}
+            style={[
+              commonStyles.buttonPrimary,
+              {
+                width: RfW(144),
+                alignSelf: 'flex-end',
+                marginHorizontal: 0,
+              },
+            ]}>
+            <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
+          </Button>
+        </View>
+      </View>
+
       <QPointPayModal
         visible={showQPointPayModal}
         onClose={() => setShowQPointPayModal(false)}
