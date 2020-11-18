@@ -77,7 +77,7 @@ function tutorDetails(props) {
               if (item.freeDemo) {
                 setIsFreeDemo(true);
               }
-              subjects.push({ id: item.offering.id, displayName: item.offering.displayName });
+              subjects.push({ id: item.offering.id, displayName: item.offering.displayName, offeringId: item.id });
               pm[`o${item.offering.id}`] = {
                 online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
                 offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
@@ -91,7 +91,7 @@ function tutorDetails(props) {
             }
           }
         });
-        setSelectedSubject({ id: subjects[0].id, name: subjects[0].displayName });
+        setSelectedSubject({ id: subjects[0].id, name: subjects[0].displayName, offeringId: subjects[0].offeringId });
         setPriceMatrix(pm);
         setBudgets(sb);
         setRefreshList(!refreshList);
@@ -157,7 +157,7 @@ function tutorDetails(props) {
   };
 
   const selectSubject = (item) => {
-    setSelectedSubject({ id: item.id, name: item.displayName });
+    setSelectedSubject({ id: item.id, name: item.displayName, offeringId: item.offeringId });
   };
 
   const renderSubjects = (item, index) => {

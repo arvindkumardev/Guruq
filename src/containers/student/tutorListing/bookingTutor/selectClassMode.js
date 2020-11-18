@@ -155,7 +155,7 @@ const selectClassMode = (props) => {
 
   const onAddingIntoCart = () => {
     const cartCreate = {
-      tutorOfferingId: selectedSubject.id,
+      tutorOfferingId: selectedSubject.offeringId,
       count: numberOfClass,
       groupSize: 1,
       demo: false,
