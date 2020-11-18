@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
-import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar, useLazyQuery } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -22,6 +22,7 @@ import SubjectsModal from './subjectsModal';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashboard-query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
+import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
@@ -33,11 +34,18 @@ function StudentDashboard(props) {
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});
 
-  const [favouriteTutor, setFavouriteTutor] = useState([
-    { name: 'Ritesh Jain', subject: 'English, Maths', imageUrl: '' },
-    { name: 'Simran Rai', subject: 'Chemistry', imageUrl: '' },
-    { name: 'Priyam', subject: 'Maths', imageUrl: '' },
-  ]);
+  const [favouriteTutor, setFavouriteTutor] = useState([]);
+
+  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      setFavouriteTutor(data.getFavouriteTutors);
+    },
+  });
 
   const { loading: loadingOfferingMasterData, error: offeringMasterError, data: offeringMasterData } = useQuery(
     GET_OFFERINGS_MASTER_DATA
@@ -81,6 +89,10 @@ function StudentDashboard(props) {
       navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
     }
   }, [offerings]);
+
+  useEffect(() => {
+    getFavouriteTutors();
+  }, [favouriteTutor]);
 
   const onOfferingSelect = (offering) => {
     setStudentOfferingModalVisible(false);
@@ -431,7 +443,9 @@ function StudentDashboard(props) {
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Thumbnail large style={{ marginTop: RfH(11) }} source={Images.kushal} />
-          <Text style={{ marginTop: 1, color: Colors.primaryText }}>{item.name}</Text>
+          <Text style={{ marginTop: 1, color: Colors.primaryText }}>
+            {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
+          </Text>
           <Text style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12, marginBottom: RfH(16) }}>
             {item.subject}
           </Text>
@@ -444,7 +458,7 @@ function StudentDashboard(props) {
     <>
       <StatusBar barStyle="dark-content" />
 
-      <Loader isLoading={loadingOfferingMasterData || loadingOfferings} />
+      <Loader isLoading={loadingOfferingMasterData || loadingOfferings || loadingFavouriteTutors} />
 
       <View style={[commonStyles.mainContainer]}>
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
