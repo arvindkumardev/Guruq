@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
@@ -17,6 +17,7 @@ import CouponModal from '../components/couponModal';
 import routeNames from '../../../../routes/screenNames';
 import Loader from '../../../../components/Loader';
 import { GET_CART_ITEMS } from '../../booking.query';
+import { REMOVE_CART_ITEM } from '../../booking.mutation';
 
 const myCart = () => {
   const navigation = useNavigation();
@@ -34,6 +35,20 @@ const myCart = () => {
     },
   });
 
+  const [removeItem, { loading: removeLoading }] = useMutation(REMOVE_CART_ITEM, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        getCartItems();
+      }
+    },
+  });
+
   useEffect(() => {
     getCartItems();
   }, {});
@@ -46,6 +61,12 @@ const myCart = () => {
       : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
           tutor.id % 4
         }.png`;
+  };
+
+  const removeCartItem = (item) => {
+    removeItem({
+      variables: { cartItemId: item.id },
+    });
   };
 
   const renderCartItems = (item, index) => {
@@ -85,10 +106,23 @@ const myCart = () => {
             {item.offering.parentOffering.parentOffering.name}, {item.offering.parentOffering.name}
           </Text>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={styles.tutorDetails}>{item.mode}</Text>
+            <Text style={styles.tutorDetails}>
+              {item.groupSize === 1 ? 'Individual' : 'Group'} {item.onlineClass ? 'online' : 'offline'} class
+            </Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: 'SegoeUI-Bold' }}>
               ₹{item.price}
             </Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <Button
+              onPress={() => removeCartItem(item)}
+              bordered
+              small
+              danger
+              block
+              style={{ paddingHorizontal: RfW(16) }}>
+              <Text style={{ color: Colors.orangeRed }}>Remove</Text>
+            </Button>
           </View>
         </View>
       </View>
@@ -210,8 +244,8 @@ const myCart = () => {
   };
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
+      <Loader isLoading={cartLoading || removeLoading} />
       <View style={{ marginHorizontal: RfW(16) }}>
-        <Loader isLoading={cartLoading} />
         <ScreenHeader label="My Cart" homeIcon />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>

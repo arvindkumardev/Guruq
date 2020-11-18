@@ -67,48 +67,13 @@ export const ADD_TO_CART = gql`
   }
 `;
 
-// mutation {
-//   addToCart(
-//     cartCreateDto: {
-//       tutorOfferingId: 20116
-//       count: 1
-//       groupSize: 1
-//       demo: false
-//       onlineClass: false
-//       price: 500
-//     }
-//   ) {
-//     id
-//     offering {
-//       id
-//       name
-//     }
-//     tutor {
-//       id
-//     }
-//     tutorOffering {
-//       id
-//     }
-//     count
-//     groupSize
-//     price
-//     demo
-//     onlineClass
-//     pointsRedeemed
-//     payees {
-//       id
-//     }
-//     promotion {
-//       id
-//     }
-//   }
-// }
-
-// mutation {
-//   removeFromCart(cartItemId: 10) {
-//     id
-//   }
-// }
+export const REMOVE_CART_ITEM = gql`
+  mutation RemoveFromCart($cartItemId: Float!) {
+    removeFromCart(cartItemId: $cartItemId) {
+      id
+    }
+  }
+`;
 
 // mutation {
 //   addBackToCart(cartItemId: 10) {

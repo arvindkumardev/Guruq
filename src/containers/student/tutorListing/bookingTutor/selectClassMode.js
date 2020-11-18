@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableWithoutFeedback, FlatList, Switch } fr
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
-import { ScreenHeader, IconButtonWrapper } from '../../../../components';
+import { ScreenHeader, IconButtonWrapper, CustomRadioButton } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Images, Colors } from '../../../../theme';
 import { RfH, RfW, titleCaseIfExists } from '../../../../utils/helpers';
@@ -28,7 +28,8 @@ const selectClassMode = (props) => {
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(100);
   const [classMode, setClassMode] = useState(false);
-  const [classPrices, setClassPrices] = useState([]);
+  const [onlineClassPrices, setOnlineClassPrices] = useState([]);
+  const [offlineClassPrices, setOfflineClassPrices] = useState([]);
 
   const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
@@ -46,15 +47,18 @@ const selectClassMode = (props) => {
 
   useEffect(() => {
     const bdata = [];
+    const odata = [];
     for (const b of budgetDetails) {
       if (!b.onlineClass) {
-        bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+        odata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+        setClassMode(false);
       } else {
-        bdata.push({ classes: 0, pricePerHour: 0, totalPrice: 0 });
-        break;
+        bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+        setClassMode(true);
       }
     }
-    setClassPrices(bdata);
+    setOnlineClassPrices(bdata);
+    setOfflineClassPrices(odata);
   }, [budgetDetails]);
 
   const addClass = () => {
@@ -133,22 +137,25 @@ const selectClassMode = (props) => {
   };
 
   const changeClassMode = (value) => {
-    setClassMode(value);
-    const bdata = [];
-    for (const b of budgetDetails) {
-      if (b.onlineClass === value) {
-        bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
-      } else {
-        bdata.push({ classes: 0, pricePerHour: 0, totalPrice: 0 });
-        break;
+    if (onlineClassPrices.length > 0 && offlineClassPrices.length > 0) {
+      setClassMode(value);
+      const bdata = [];
+      const odata = [];
+      for (const b of budgetDetails) {
+        if (!b.onlineClass) {
+          odata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+        } else {
+          bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+        }
       }
+      setOnlineClassPrices(bdata);
+      setOfflineClassPrices(odata);
     }
-    setClassPrices(bdata);
   };
 
   const onAddingIntoCart = () => {
     const cartCreate = {
-      tutorOfferingId: tutorData.id,
+      tutorOfferingId: selectedSubject.id,
       count: numberOfClass,
       groupSize: 1,
       demo: false,
@@ -197,22 +204,35 @@ const selectClassMode = (props) => {
         </Text>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12), alignItems: 'flex-start' }]}>
           <Text style={styles.tutorDetails}>Mode of Class</Text>
-          <View>
-            <Switch
-              value={classMode}
-              onValueChange={(value) => changeClassMode(value)}
-              style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
-            />
-            <Text
-              style={[
-                styles.appliedFilterText,
-                {
-                  marginTop: RfH(8),
-                  alignSelf: 'center',
-                },
-              ]}>
-              {classMode ? 'Online' : 'Offline'}
-            </Text>
+          <View style={commonStyles.horizontalChildrenCenterView}>
+            {onlineClassPrices.length > 0 && (
+              <View style={{ flexDirection: 'row' }}>
+                <CustomRadioButton enabled={classMode} submitFunction={() => changeClassMode(!classMode)} />
+                <Text
+                  style={[
+                    styles.appliedFilterText,
+                    {
+                      marginLeft: RfH(8),
+                    },
+                  ]}>
+                  Online
+                </Text>
+              </View>
+            )}
+            {offlineClassPrices.length > 0 && (
+              <View style={{ flexDirection: 'row', marginLeft: RfW(16) }}>
+                <CustomRadioButton enabled={!classMode} submitFunction={() => changeClassMode(!classMode)} />
+                <Text
+                  style={[
+                    styles.appliedFilterText,
+                    {
+                      marginLeft: RfH(8),
+                    },
+                  ]}>
+                  Offline
+                </Text>
+              </View>
+            )}
           </View>
         </View>
         <View
@@ -224,7 +244,7 @@ const selectClassMode = (props) => {
         <View style={commonStyles.borderBottom}>
           <FlatList
             showsHorizontalScrollIndicator={false}
-            data={classPrices}
+            data={classMode ? onlineClassPrices : offlineClassPrices}
             renderItem={({ item, index }) => renderClasses(item, index)}
             keyExtractor={(item, index) => index.toString()}
           />

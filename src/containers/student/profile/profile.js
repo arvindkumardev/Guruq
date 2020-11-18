@@ -109,8 +109,10 @@ function Profile() {
           <Text style={styles.actionText}>Q Points</Text>
         </View>
         <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.cart} />
-          <Text style={styles.actionText}>Cart</Text>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.cart} />
+            <Text style={styles.actionText}>Cart</Text>
+          </TouchableWithoutFeedback>
         </View>
       </View>
     );
