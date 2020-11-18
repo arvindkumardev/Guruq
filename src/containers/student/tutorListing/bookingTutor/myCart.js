@@ -84,16 +84,6 @@ const myCart = () => {
   const createBooking = () => {
     let obj = {};
     obj = {
-      serviceAddress: { id: 258747 },
-      billingAddress: {
-        type: 6,
-        fullAddress: 'Dwarka Sector 21',
-        country: 'India',
-        state: 'Delhi',
-        city: 'New Delhi',
-        subArea: 'CP',
-        postalCode: 110001,
-      },
       itemPrice: amount,
       convenienceCharges: convenienceCharge,
       orderStatus: 1,
