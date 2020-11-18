@@ -40,13 +40,21 @@ const myCart = () => {
 
   const [cartItems, setCartItems] = useState([]);
 
+  const getTutorImage = (tutor) => {
+    return tutor && tutor.profileImage && tutor.profileImage.filename
+      ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
+      : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
+          tutor.id % 4
+        }.png`;
+  };
+
   const renderCartItems = (item, index) => {
     return (
       <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
         <IconButtonWrapper
           iconHeight={RfH(90)}
           iconWidth={RfW(80)}
-          iconImage={item.tutorIcon}
+          iconImage={getTutorImage(item.tutor)}
           styling={{ flex: 0.3, borderRadius: 16 }}
         />
         <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
@@ -74,7 +82,7 @@ const myCart = () => {
             </View>
           </View>
           <Text style={styles.tutorDetails}>
-            {item.board}, Class {item.class}
+            {item.offering.parentOffering.parentOffering.name}, {item.offering.parentOffering.name}
           </Text>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={styles.tutorDetails}>{item.mode}</Text>
