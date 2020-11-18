@@ -54,36 +54,6 @@ function OtpVerification(props) {
     }
   );
 
-  //   onError: (e) => {
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //       console.log(error);
-  //       if (error.errorCode === INVALID_INPUT) {
-  //         // incorrect username/password
-  //         Alert.alert('Invalid or Incorrect OTP');
-  //       }
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     if (data) {
-  //       console.log('data', data);
-  //       if (newUser) {
-  //         navigation.navigate(routeNames.REGISTER, {
-  //           countryCode: mobileObj.country.dialCode,
-  //           number: mobileObj.mobile,
-  //         });
-  //       } else {
-  //         // set token
-  //         console.log('data', data);
-  //         // removeToken();
-  //         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.verifyPhoneNumber.token);
-  //
-  //         navigation.navigate(routeNames.SET_PASSWORD);
-  //       }
-  //     }
-  //   },
-  // });
-
   useEffect(() => {
     if (verifyError && verifyError.graphQLErrors && verifyError.graphQLErrors.length > 0) {
       const error = verifyError.graphQLErrors[0].extensions.exception.response;
@@ -104,9 +74,11 @@ function OtpVerification(props) {
           countryCode: mobileObj.country.dialCode,
           number: mobileObj.mobile,
         });
+      } else {
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, verifyData.verifyPhoneNumber.token).then(() => {
-          isTokenLoading(true);
-          navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+          // isTokenLoading(true);
+          // navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+          navigation.navigate(NavigationRouteNames.SET_PASSWORD);
         });
       }
     }

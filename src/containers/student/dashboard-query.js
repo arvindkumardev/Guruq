@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const GET_OFFERINGS_MASTER_DATA = gql`
   query GetOfferingsMasterData {
-    offerings(limit: 500) {
+    offerings {
       edges {
         id
         name

@@ -22,6 +22,7 @@ import { RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
+import Video from '../../../components/Video';
 
 function PaymentMethod() {
   const navigation = useNavigation();
@@ -128,89 +129,181 @@ function PaymentMethod() {
     // TODO: use Linking and inappbrowser for PayPal - https://blog.codecentric.de/en/2020/05/paypal-integration-with-react-native/
   };
 
-  const renderCartSummary = () => {
+  const renderOrderSummary = () => {
     return (
-      <Card style={{ borderRadius: 8, paddingHorizontal: RfW(8), paddingVertical: RfH(16) }}>
-        <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>CART SUMMARY</Text>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Amount</Text>
+      <View style={{}}>
+        <View style={commonStyles.blankViewSmall} />
+
+        <View
+          style={{
+            height: 44,
+            justifyContent: 'center',
+          }}>
           <Text
             style={{
-              fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-              color: Colors.darkGrey,
-              fontFamily: Fonts.semiBold,
+              paddingHorizontal: RfW(16),
+              // marginTop: RfW(24),
+              // marginBottom: RfW(8),
+              fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+              color: Colors.secondaryText,
             }}>
-            ₹900
+            PAYMENT SUMMARY
           </Text>
         </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            Convenience Charges
-          </Text>
-          <Text
-            style={{
-              fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-              color: Colors.darkGrey,
-              fontFamily: Fonts.semiBold,
-            }}>
-            ₹99
-          </Text>
+        <View style={{ paddingHorizontal: RfW(16), backgroundColor: Colors.white }}>
+          <View style={{}}>
+            {/* <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>ORDER SUMMARY</Text> */}
+            <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
+              <Text
+                style={{
+                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                  color: Colors.darkGrey,
+                }}>
+                Amount
+              </Text>
+              <Text
+                style={{
+                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                  color: Colors.darkGrey,
+                  fontFamily: Fonts.semiBold,
+                }}>
+                ₹900
+              </Text>
+            </View>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
+              <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                Convenience Charges
+              </Text>
+              <Text
+                style={{
+                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                  color: Colors.darkGrey,
+                  fontFamily: Fonts.semiBold,
+                }}>
+                ₹99
+              </Text>
+            </View>
+
+            <View style={commonStyles.lineSeparator} />
+
+            {/* <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(8) }]}> */}
+            {/*  <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}> */}
+            {/*    Coupon Applied */}
+            {/*  </Text> */}
+            {/*  <Text */}
+            {/*    style={{ */}
+            {/*      fontSize: RFValue(15, STANDARD_SCREEN_SIZE), */}
+            {/*      color: Colors.brandBlue2, */}
+            {/*      fontFamily: Fonts.semiBold, */}
+            {/*    }}> */}
+            {/*    -₹200 */}
+            {/*  </Text> */}
+            {/* </View> */}
+
+            <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
+              <Text
+                style={{
+                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                  color: Colors.brandBlue2,
+                }}>
+                Total Discount
+              </Text>
+
+              <Text
+                style={{
+                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                  color: Colors.brandBlue2,
+                  fontFamily: Fonts.semiBold,
+                }}>
+                -₹200
+              </Text>
+            </View>
+
+            <View style={commonStyles.lineSeparator} />
+
+            <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
+              <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                Paid by Q points
+              </Text>
+              <Text
+                style={{
+                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                  color: Colors.brandBlue2,
+                  fontFamily: Fonts.semiBold,
+                }}>
+                -₹99
+              </Text>
+            </View>
+
+            {/* <View style={commonStyles.lineSeparatorWithVerticalMargin} /> */}
+
+            {/* <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}> */}
+            {/*  <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>To Pay</Text> */}
+            {/*  <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>₹999</Text> */}
+            {/* </View> */}
+          </View>
         </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Paid by Q points</Text>
-          <Text
-            style={{
-              fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-              color: Colors.darkGrey,
-              fontFamily: Fonts.semiBold,
-            }}>
-            -₹99
-          </Text>
-        </View>
-        <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginTop: RfH(16) }} />
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>GURUQ1ST Applied</Text>
-          <Text
-            style={{
-              fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-              color: Colors.darkGrey,
-              fontFamily: Fonts.semiBold,
-            }}>
-            ₹200
-          </Text>
-        </View>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Total Discount</Text>
-          <Text
-            style={{
-              fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-              color: Colors.brandBlue2,
-              fontFamily: Fonts.semiBold,
-            }}>
-            -₹200
-          </Text>
-        </View>
-        <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginTop: RfH(16) }} />
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>To Pay</Text>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>₹999</Text>
-        </View>
-      </Card>
+      </View>
     );
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-      <ScreenHeader homeIcon label="Payment" />
+    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
+      <ScreenHeader homeIcon label="Payment" horizontalPadding={16} style={{ backgroundColor: Colors.white }} />
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ height: RfH(20) }} />
-        <View>
-          <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>
-            Payment Options
-          </Text>
-          <View style={{ marginTop: RfH(24) }}>
+        <View
+          style={[
+            // commonStyles.lineSeparator,
+            {
+              backgroundColor: Colors.white,
+              // marginTop: RfH(16),
+              // paddingVertical: RfH(16),
+              paddingHorizontal: RfH(16),
+              height: RfH(60),
+              justifyContent: 'center',
+            },
+          ]}>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={[commonStyles.headingText, { fontFamily: Fonts.regular }]}>Billing Address</Text>
+            {/* <TouchableWithoutFeedback onPress={() => setShowAddressPopup(true)}> */}
+            {/*  <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>CHANGE</Text> */}
+            {/* </TouchableWithoutFeedback> */}
+          </View>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={{ fontSize: RFValue(13, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+              27/14, Kamla Nagar, Delhi
+            </Text>
+          </View>
+        </View>
+
+        <View style={commonStyles.blankViewSmall} />
+
+        <View style={{}}>
+          <View
+            style={{
+              height: 44,
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                paddingHorizontal: RfW(16),
+                // marginBottom: RfW(8),
+                fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                color: Colors.secondaryText,
+              }}>
+              PAYMENT OPTIONS
+            </Text>
+          </View>
+          <View style={{ paddingVertical: RfH(8), paddingHorizontal: RfW(16), backgroundColor: Colors.white }}>
+            {/* <View style={{ marginTop: RfH(24) }}> */}
             <TouchableOpacity onPress={() => initiateRazorPayPayment()}>
-              <View style={commonStyles.horizontalChildrenView}>
+              <View
+                style={[
+                  commonStyles.horizontalChildrenView,
+                  commonStyles.lineSeparator,
+                  { alignItems: 'center', height: RfH(44) },
+                ]}>
                 <CustomRadioButton enabled={paymentMethod === 1} />
                 <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Online Payment</Text>
                 {/* <View style={commonStyles.horizontalChildrenView}> */}
@@ -225,140 +318,172 @@ function PaymentMethod() {
                 {/* </View> */}
               </View>
             </TouchableOpacity>
-          </View>
-          <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />
-          <View>
+            {/* </View> */}
+
+            {/* <View style={commonStyles.lineSeparatorWithVerticalMargin} /> */}
+
+            {/* <View> */}
             <TouchableOpacity onPress={() => initiatePaytmPayment()}>
-              <View style={commonStyles.horizontalChildrenView}>
+              <View
+                style={[
+                  commonStyles.horizontalChildrenView,
+                  commonStyles.lineSeparator,
+                  { alignItems: 'center', height: RfH(44) },
+                ]}>
                 <CustomRadioButton enabled={paymentMethod === 2} />
-                <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Paytm</Text>
+                <Text
+                  style={{
+                    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+                    marginLeft: RfW(8),
+                  }}>
+                  Paytm
+                </Text>
                 <View style={commonStyles.horizontalChildrenView} />
               </View>
             </TouchableOpacity>
-          </View>
+            {/* </View> */}
 
-          <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />
-          <View>
+            {/* <View style={commonStyles.lineSeparatorWithVerticalMargin} /> */}
+
+            {/* <View> */}
             <TouchableOpacity onPress={() => initiatePaypalPayment()}>
-              <View style={commonStyles.horizontalChildrenView}>
+              <View
+                style={[
+                  commonStyles.horizontalChildrenView,
+                  commonStyles.lineSeparator,
+                  { alignItems: 'center', height: RfH(44) },
+                ]}>
                 <CustomRadioButton enabled={paymentMethod === 3} />
-                <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>PayPal</Text>
+                <Text
+                  style={{
+                    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+                    marginLeft: RfW(8),
+                  }}>
+                  PayPal
+                </Text>
                 <View style={commonStyles.horizontalChildrenView} />
               </View>
             </TouchableOpacity>
-          </View>
+            {/* </View> */}
 
-          {/* <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} /> */}
-          {/* <View style={commonStyles.horizontalChildrenSpaceView}> */}
-          {/*  <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>UPI</Text> */}
-          {/*  <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.expand_gray} /> */}
-          {/* </View> */}
-          {/* <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} /> */}
-          {/* <View style={commonStyles.horizontalChildrenSpaceView}> */}
-          {/*  <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>Net Banking</Text> */}
-          {/*  <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.expand_gray} /> */}
-          {/* </View> */}
-          <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />
-          <View>
-            <View style={commonStyles.horizontalChildrenView}>
-              <CustomRadioButton enabled={paymentMethod === 4} />
-              <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Cash</Text>
-            </View>
-          </View>
-          <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />
-        </View>
-        {renderCartSummary()}
-        <View style={{ backgroundColor: Colors.lightBlue, marginTop: RfH(16), padding: RfH(8) }}>
-          <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>
-            You have saved ₹ 200.00 on the bill.
-          </Text>
-        </View>
-        <View
-          style={{
-            borderTopWidth: 0.5,
-            borderBottomWidth: 0.5,
-            borderColor: Colors.darkGrey,
-            marginTop: RfH(16),
-            paddingVertical: RfH(16),
-          }}>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.headingText}>Billing Address</Text>
-            <TouchableWithoutFeedback onPress={() => setShowAddressPopup(true)}>
-              <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>CHANGE</Text>
-            </TouchableWithoutFeedback>
-          </View>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              27/14, Kamla Nagar, Delhi
-            </Text>
-            <View />
+            {/* <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} /> */}
+            {/* <View style={commonStyles.horizontalChildrenSpaceView}> */}
+            {/*  <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>UPI</Text> */}
+            {/*  <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.expand_gray} /> */}
+            {/* </View> */}
+            {/* <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} /> */}
+            {/* <View style={commonStyles.horizontalChildrenSpaceView}> */}
+            {/*  <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>Net Banking</Text> */}
+            {/*  <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.expand_gray} /> */}
+            {/* </View> */}
+            {/* <View style={commonStyles.lineSeparatorWithVerticalMargin} /> */}
+
+            <TouchableOpacity onPress={() => console.log('cash selected')}>
+              <View style={[commonStyles.horizontalChildrenView, { alignItems: 'center', height: RfH(44) }]}>
+                <CustomRadioButton enabled={paymentMethod === 4} />
+                <Text
+                  style={{
+                    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+                    marginLeft: RfW(8),
+                  }}>
+                  Cash
+                </Text>
+              </View>
+            </TouchableOpacity>
+            {/* <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} /> */}
           </View>
         </View>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(34) }]}>
-          <View>
-            <Text style={commonStyles.headingText}>₹1300</Text>
-            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
-          </View>
-          <View>
-            <Button
-              onPress={() => navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED)}
-              style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'flex-end', marginHorizontal: 0 }]}>
-              <Text style={commonStyles.textButtonPrimary}>Make Payment</Text>
-            </Button>
-          </View>
+
+        {renderOrderSummary()}
+
+        {/* <View style={{ backgroundColor: Colors.lightBlue, margin: RfH(16), padding: RfH(16), borderRadius: RfH(8) }}> */}
+        {/*  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}> */}
+        {/*    You have saved ₹ 200.00 on the bill. */}
+        {/*  </Text> */}
+        {/* </View> */}
+      </ScrollView>
+
+      <View
+        style={[
+          commonStyles.horizontalChildrenSpaceView,
+          {
+            alignItems: 'flex-end',
+            backgroundColor: Colors.white,
+            paddingTop: RfH(8),
+            paddingHorizontal: RfW(16),
+            paddingBottom: RfH(34),
+          },
+        ]}>
+        <View>
+          <Text style={commonStyles.headingText}>₹1300</Text>
+          <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
         </View>
-        {/* <View>
+        <View>
+          <Button
+            onPress={() => navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED)}
+            style={[
+              commonStyles.buttonPrimary,
+              {
+                width: RfW(144),
+                alignSelf: 'flex-end',
+                marginHorizontal: 0,
+              },
+            ]}>
+            <Text style={commonStyles.textButtonPrimary}>Make Payment</Text>
+          </Button>
+        </View>
+      </View>
+      {/* <View>
         <Button onPress={() => navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED)}>
           <Text>Confirm</Text>
         </Button>
       </View> */}
-        <Modal
-          animationType="fade"
-          transparent
-          visible={showAddressPopup}
-          onRequestClose={() => {
-            setShowAddressPopup(false);
+      <Modal
+        animationType="fade"
+        transparent
+        visible={showAddressPopup}
+        onRequestClose={() => {
+          setShowAddressPopup(false);
+        }}>
+        <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
+        <View
+          style={{
+            bottom: 0,
+            left: 0,
+            right: 0,
+            position: 'absolute',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch',
+            backgroundColor: Colors.white,
+            opacity: 1,
+            paddingBottom: RfH(34),
           }}>
-          <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
-          <View
-            style={{
-              bottom: 0,
-              left: 0,
-              right: 0,
-              position: 'absolute',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-              backgroundColor: Colors.white,
-              opacity: 1,
-              paddingBottom: RfH(34),
-            }}>
-            <IconButtonWrapper
-              iconHeight={RfH(24)}
-              iconWidth={RfW(24)}
-              styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
-              iconImage={Images.cross}
-              submitFunction={() => setShowAddressPopup(false)}
-            />
-            <View style={{ padding: RfH(16) }}>
-              <View>
-                <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>Billing Address</Text>
-                <Text style={commonStyles.secondaryText}>27/14, Kamla Nagar</Text>
-                <Text style={commonStyles.secondaryText}>Delhi</Text>
-              </View>
-              <View style={{ marginTop: RfH(32) }}>
-                <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>Service Address</Text>
-                <Text style={commonStyles.secondaryText}>27/27, Kamla Nagar</Text>
-                <Text style={commonStyles.secondaryText}>Delhi</Text>
-              </View>
+          <IconButtonWrapper
+            iconHeight={RfH(24)}
+            iconWidth={RfW(24)}
+            styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
+            iconImage={Images.cross}
+            submitFunction={() => setShowAddressPopup(false)}
+          />
+          <View style={{ padding: RfH(16) }}>
+            <View>
+              <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>Billing Address</Text>
+              <Text style={commonStyles.secondaryText}>27/14, Kamla Nagar</Text>
+              <Text style={commonStyles.secondaryText}>Delhi</Text>
             </View>
-            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(32) }]}>
-              <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.plus_blue} />
-              <Text style={{ marginLeft: RfW(8), color: Colors.brandBlue2 }}>ADD NEW ADDRESS</Text>
+            <View style={{ marginTop: RfH(32) }}>
+              <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>Service Address</Text>
+              <Text style={commonStyles.secondaryText}>27/27, Kamla Nagar</Text>
+              <Text style={commonStyles.secondaryText}>Delhi</Text>
             </View>
           </View>
-        </Modal>
-      </ScrollView>
+          <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(32) }]}>
+            <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.plus_blue} />
+            <Text style={{ marginLeft: RfW(8), color: Colors.brandBlue2 }}>ADD NEW ADDRESS</Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

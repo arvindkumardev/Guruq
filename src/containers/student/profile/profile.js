@@ -31,6 +31,19 @@ function Profile() {
     { name: 'Parents Details', icon: Images.parent_details },
     { name: 'Education', icon: Images.education },
   ]);
+  const [myStudyData, setMyStudyData] = useState([
+    { name: 'Add Study Area', icon: Images.personal },
+    { name: 'Modify Study Area', icon: Images.home },
+  ]);
+  const [bookingData, setBookingData] = useState([
+    { name: 'Purchased History', icon: Images.personal },
+  ]);
+  const [myClassesData, setMyClassesData] = useState([
+    { name: 'Calendar', icon: Images.personal },
+    { name: 'Upcoming Classes', icon: Images.home },
+    // { name: 'Parents Details', icon: Images.parent_details },
+    // { name: 'Education', icon: Images.education },
+  ]);
   const [isStudyMenuOpen, setIsStudyMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
@@ -155,7 +168,7 @@ function Profile() {
         <View>
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-            style={[styles.userMenuParentView, commonStyles.borderTop, { height: 60 }]}>
+            style={[styles.userMenuParentView, , { height: 60 }]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
 
             <View style={styles.menuItemParentView}>
@@ -181,6 +194,9 @@ function Profile() {
             />
           </SafeAreaView>
         )}
+
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
         <View style={styles.userMenuParentView}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
           <View style={styles.menuItemParentView}>
@@ -197,6 +213,19 @@ function Profile() {
             />
           </TouchableWithoutFeedback>
         </View>
+        {isStudyMenuOpen && (
+            <SafeAreaView>
+              <FlatList
+                  data={myStudyData}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({ item }) => renderItem(item)}
+                  keyExtractor={(item, index) => index.toString()}
+              />
+            </SafeAreaView>
+        )}
+
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
         <View style={styles.userMenuParentView}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
           <View style={styles.menuItemParentView}>
@@ -213,6 +242,18 @@ function Profile() {
             />
           </TouchableWithoutFeedback>
         </View>
+        {isBookingMenuOpen && (
+            <SafeAreaView>
+              <FlatList
+                  data={bookingData}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({ item }) => renderItem(item)}
+                  keyExtractor={(item, index) => index.toString()}
+              />
+            </SafeAreaView>
+        )}
+
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         <View style={styles.userMenuParentView}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
@@ -230,10 +271,19 @@ function Profile() {
             />
           </TouchableWithoutFeedback>
         </View>
-
+        {isMyClassesMenuOpen && (
+            <SafeAreaView>
+              <FlatList
+                  data={myClassesData}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({ item }) => renderItem(item)}
+                  keyExtractor={(item, index) => index.toString()}
+              />
+            </SafeAreaView>
+        )}
         <View style={commonStyles.blankViewSmall} />
 
-        <View style={[styles.userMenuParentView, commonStyles.borderTop]}>
+        <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
           <View style={styles.menuItemParentView}>
             <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
@@ -252,7 +302,7 @@ function Profile() {
 
         <View style={commonStyles.blankViewSmall} />
 
-        <View style={[styles.userMenuParentView, commonStyles.borderTop]}>
+        <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
           <View style={styles.menuItemParentView}>
             <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
@@ -271,7 +321,7 @@ function Profile() {
 
         <View style={commonStyles.blankViewSmall} />
 
-        <View style={[styles.userMenuParentView, commonStyles.borderTop]}>
+        <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
           <View style={styles.menuItemParentView}>
             <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
@@ -287,6 +337,8 @@ function Profile() {
             iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
           />
         </View>
+
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         {isInformationMenuOpen && (
           <SafeAreaView>
@@ -318,7 +370,7 @@ function Profile() {
 
         <View style={commonStyles.blankViewSmall} />
 
-        <View style={[styles.userMenuParentView, commonStyles.borderTop]}>
+        <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />
           <View style={styles.menuItemParentView}>
             <TouchableOpacity onPress={() => logout()}>
