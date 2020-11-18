@@ -27,7 +27,8 @@ const selectClassMode = (props) => {
 
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(100);
-  const [classMode, setClassMode] = useState(false);
+  const [onlineClassMode, setOnlineClassMode] = useState(false);
+  const [offlineClassMode, setOfflineClassMode] = useState(false);
   const [onlineClassPrices, setOnlineClassPrices] = useState([]);
   const [offlineClassPrices, setOfflineClassPrices] = useState([]);
 
@@ -51,10 +52,10 @@ const selectClassMode = (props) => {
     for (const b of budgetDetails) {
       if (!b.onlineClass) {
         odata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
-        setClassMode(false);
+        setOfflineClassMode(false);
       } else {
         bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
-        setClassMode(true);
+        setOnlineClassMode(true);
       }
     }
     setOnlineClassPrices(bdata);
@@ -136,19 +137,30 @@ const selectClassMode = (props) => {
         }.png`;
   };
 
-  const changeClassMode = (value) => {
-    if (onlineClassPrices.length > 0 && offlineClassPrices.length > 0) {
-      setClassMode(value);
-      const bdata = [];
+  const changeOnlineClassMode = () => {
+    setOnlineClassMode(true);
+    setOfflineClassMode(false);
+    if (onlineClassPrices.length > 0) {
+      const odata = [];
+      for (const b of budgetDetails) {
+        if (b.onlineClass) {
+          odata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+        }
+      }
+      setOnlineClassPrices(odata);
+    }
+  };
+
+  const changeOfflineClassMode = () => {
+    setOfflineClassMode(true);
+    setOnlineClassMode(false);
+    if (offlineClassPrices.length > 0) {
       const odata = [];
       for (const b of budgetDetails) {
         if (!b.onlineClass) {
           odata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
-        } else {
-          bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
         }
       }
-      setOnlineClassPrices(bdata);
       setOfflineClassPrices(odata);
     }
   };
@@ -159,7 +171,7 @@ const selectClassMode = (props) => {
       count: numberOfClass,
       groupSize: 1,
       demo: false,
-      onlineClass: classMode,
+      onlineClass: onlineClassMode,
       price: amount,
     };
     addToCart({
@@ -207,7 +219,7 @@ const selectClassMode = (props) => {
           <View style={commonStyles.horizontalChildrenCenterView}>
             {onlineClassPrices.length > 0 && (
               <View style={{ flexDirection: 'row' }}>
-                <CustomRadioButton enabled={classMode} submitFunction={() => changeClassMode(!classMode)} />
+                <CustomRadioButton enabled={onlineClassMode} submitFunction={() => changeOnlineClassMode()} />
                 <Text
                   style={[
                     styles.appliedFilterText,
@@ -221,7 +233,7 @@ const selectClassMode = (props) => {
             )}
             {offlineClassPrices.length > 0 && (
               <View style={{ flexDirection: 'row', marginLeft: RfW(16) }}>
-                <CustomRadioButton enabled={!classMode} submitFunction={() => changeClassMode(!classMode)} />
+                <CustomRadioButton enabled={offlineClassMode} submitFunction={() => changeOfflineClassMode()} />
                 <Text
                   style={[
                     styles.appliedFilterText,
@@ -244,7 +256,7 @@ const selectClassMode = (props) => {
         <View style={commonStyles.borderBottom}>
           <FlatList
             showsHorizontalScrollIndicator={false}
-            data={classMode ? onlineClassPrices : offlineClassPrices}
+            data={onlineClassMode ? onlineClassPrices : offlineClassPrices}
             renderItem={({ item, index }) => renderClasses(item, index)}
             keyExtractor={(item, index) => index.toString()}
           />

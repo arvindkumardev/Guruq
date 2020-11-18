@@ -242,6 +242,7 @@ const myCart = () => {
     setShowQPointPayModal(false);
     navigation.navigate(routeNames.STUDENT.PAYMENT_METHOD);
   };
+
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
       <Loader isLoading={cartLoading || removeLoading} />
