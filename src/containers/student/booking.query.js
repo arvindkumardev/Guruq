@@ -57,26 +57,28 @@ export const GET_CART_ITEMS = gql`
   }
 `;
 
-// query {
-//   getPendingBooking {
-//     id
-//     uuid
-//     orderStatus
-//     owner {
-//       id
-//     }
-//     orderItems {
-//       id
-//     }
-//     orderStatus
-//     payableAmount
-//     orderPayment {
-//       id
-//       paymentStatus
-//       amount
-//     }
-//   }
-// }
+export const GET_PENDING_BOOKINGS = gql`
+  query GetPendingBooking {
+    getPendingBooking {
+      id
+      uuid
+      orderStatus
+      owner {
+        id
+      }
+      orderItems {
+        id
+      }
+      orderStatus
+      payableAmount
+      orderPayment {
+        id
+        paymentStatus
+        amount
+      }
+    }
+  }
+`;
 
 // query {
 //   getScheduledClasses(

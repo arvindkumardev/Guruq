@@ -14,7 +14,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Card } from 'native-base';
 import RNRazorpayCheckout from 'react-native-razorpay';
-import { useReactiveVar } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { ScreenHeader, CustomRadioButton, IconButtonWrapper } from '../../../components';
@@ -22,15 +22,46 @@ import { RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
+import { ADD_INTERESTED_OFFERINGS } from '../booking.mutation';
 
-function PaymentMethod() {
+function PaymentMethod(props) {
+  const { route } = props;
+
+  const bookingData = route?.params?.bookingData;
+
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(1);
+  const [discount, setDiscount] = useState(200);
   const [showAddressPopup, setShowAddressPopup] = useState(false);
 
   const userInfo = useReactiveVar(userDetails);
 
-  console.log(userInfo);
+  const [createNewBooking, { loading: bookingLoading }] = useMutation(ADD_INTERESTED_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        switch (paymentMethod) {
+          case 1:
+            initiateRazorPayPayment();
+            break;
+          case 2:
+            initiatePaytmPayment();
+            break;
+          case 3:
+            initiatePaypalPayment();
+            break;
+          default:
+            navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED);
+            break;
+        }
+      }
+    },
+  });
 
   const initiateRazorPayPayment = () => {
     const options = {
@@ -66,6 +97,7 @@ function PaymentMethod() {
   };
 
   const initiatePaytmPayment = async () => {
+    setPaymentMethod(2);
     // eslint-disable-next-line no-undef
     const response = await fetch('http://localhost:5000/payment/initiatePaytmTransaction', {
       method: 'GET',
@@ -123,6 +155,7 @@ function PaymentMethod() {
   };
 
   const initiatePaypalPayment = () => {
+    setPaymentMethod(3);
     // const clientId = 'ATyFhrGwKtQXOl6CctMYjxObRRQeys2xmBUG1uKZvgkCRtzxNdMq75Xu1p9jQiM8ez4dfkOpI9jSrAVJ';
     // const clientSecret = 'EMwjugQJWArgzPjQSMCFFqbGp2md_xmb69tCiGcP_hmdF_K1T8uJcyIUCUN2Mzf43cXAvZwBXiSnJsFy';
     // TODO: use Linking and inappbrowser for PayPal - https://blog.codecentric.de/en/2020/05/paypal-integration-with-react-native/
@@ -140,7 +173,7 @@ function PaymentMethod() {
               color: Colors.darkGrey,
               fontFamily: Fonts.semiBold,
             }}>
-            ₹900
+            ₹{parseFloat(bookingData.orderPayment.amount).toFixed(2)}
           </Text>
         </View>
         <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -153,7 +186,7 @@ function PaymentMethod() {
               color: Colors.darkGrey,
               fontFamily: Fonts.semiBold,
             }}>
-            ₹99
+            ₹{parseFloat(bookingData.convenienceCharges).toFixed(2)}
           </Text>
         </View>
         <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -164,7 +197,7 @@ function PaymentMethod() {
               color: Colors.darkGrey,
               fontFamily: Fonts.semiBold,
             }}>
-            -₹99
+            -₹{parseFloat(bookingData.redeemQPoints).toFixed(2)}
           </Text>
         </View>
         <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginTop: RfH(16) }} />
@@ -176,7 +209,7 @@ function PaymentMethod() {
               color: Colors.darkGrey,
               fontFamily: Fonts.semiBold,
             }}>
-            ₹200
+            ₹200.00
           </Text>
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
@@ -187,16 +220,27 @@ function PaymentMethod() {
               color: Colors.brandBlue2,
               fontFamily: Fonts.semiBold,
             }}>
-            -₹200
+            -₹{parseFloat(discount).toFixed(2)}
           </Text>
         </View>
         <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginTop: RfH(16) }} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>To Pay</Text>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>₹999</Text>
+          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>
+            ₹
+            {parseFloat(
+              bookingData.orderPayment.amount + bookingData.convenienceCharges - bookingData.redeemQPoints - discount
+            ).toFixed(2)}
+          </Text>
         </View>
       </Card>
     );
+  };
+
+  const makePayment = () => {
+    createNewBooking({
+      variables: { orderCreateDto: bookingData },
+    });
   };
 
   return (
@@ -209,7 +253,7 @@ function PaymentMethod() {
             Payment Options
           </Text>
           <View style={{ marginTop: RfH(24) }}>
-            <TouchableOpacity onPress={() => initiateRazorPayPayment()}>
+            <TouchableOpacity onPress={() => setPaymentMethod(1)}>
               <View style={commonStyles.horizontalChildrenView}>
                 <CustomRadioButton enabled={paymentMethod === 1} />
                 <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Online Payment</Text>
@@ -228,7 +272,7 @@ function PaymentMethod() {
           </View>
           <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />
           <View>
-            <TouchableOpacity onPress={() => initiatePaytmPayment()}>
+            <TouchableOpacity onPress={() => setPaymentMethod(2)}>
               <View style={commonStyles.horizontalChildrenView}>
                 <CustomRadioButton enabled={paymentMethod === 2} />
                 <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Paytm</Text>
@@ -239,7 +283,7 @@ function PaymentMethod() {
 
           <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />
           <View>
-            <TouchableOpacity onPress={() => initiatePaypalPayment()}>
+            <TouchableOpacity onPress={() => setPaymentMethod(3)}>
               <View style={commonStyles.horizontalChildrenView}>
                 <CustomRadioButton enabled={paymentMethod === 3} />
                 <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>PayPal</Text>
@@ -260,17 +304,19 @@ function PaymentMethod() {
           {/* </View> */}
           <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />
           <View>
-            <View style={commonStyles.horizontalChildrenView}>
-              <CustomRadioButton enabled={paymentMethod === 4} />
-              <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Cash</Text>
-            </View>
+            <TouchableWithoutFeedback onPress={() => setPaymentMethod(4)}>
+              <View style={commonStyles.horizontalChildrenView}>
+                <CustomRadioButton enabled={paymentMethod === 4} />
+                <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Cash</Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
           <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} />
         </View>
         {renderCartSummary()}
         <View style={{ backgroundColor: Colors.lightBlue, marginTop: RfH(16), padding: RfH(8) }}>
           <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>
-            You have saved ₹ 200.00 on the bill.
+            You have saved ₹ {parseFloat(discount).toFixed(2)} on the bill.
           </Text>
         </View>
         <View
@@ -296,12 +342,17 @@ function PaymentMethod() {
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(34) }]}>
           <View>
-            <Text style={commonStyles.headingText}>₹1300</Text>
+            <Text style={commonStyles.headingText}>
+              ₹
+              {parseFloat(
+                bookingData.orderPayment.amount + bookingData.convenienceCharges - bookingData.redeemQPoints - discount
+              ).toFixed(2)}
+            </Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
           </View>
           <View>
             <Button
-              onPress={() => navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED)}
+              onPress={() => makePayment()}
               style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'flex-end', marginHorizontal: 0 }]}>
               <Text style={commonStyles.textButtonPrimary}>Make Payment</Text>
             </Button>

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, FlatList } from 'react-native';
@@ -17,7 +18,7 @@ import CouponModal from '../components/couponModal';
 import routeNames from '../../../../routes/screenNames';
 import Loader from '../../../../components/Loader';
 import { GET_CART_ITEMS } from '../../booking.query';
-import { ADD_INTERESTED_OFFERINGS, REMOVE_CART_ITEM } from '../../booking.mutation';
+import { REMOVE_CART_ITEM } from '../../booking.mutation';
 
 const myCart = () => {
   const navigation = useNavigation();
@@ -26,6 +27,7 @@ const myCart = () => {
   const [refreshList, setRefreshList] = useState(false);
   const [amount, setAmount] = useState(0);
   const [convenienceCharge, setConvenienceCharge] = useState(100);
+  const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(300);
 
   const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
@@ -35,9 +37,11 @@ const myCart = () => {
       }
     },
     onCompleted: (data) => {
+      let amt = 0;
       for (const obj of data.getCartItems) {
-        setAmount(amount + obj.price);
+        amt += obj.price;
       }
+      setAmount(amt);
       setCartItems(data.getCartItems);
       setRefreshList(!refreshList);
     },
@@ -57,27 +61,11 @@ const myCart = () => {
     },
   });
 
-  const [createNewBooking, { loading: bookingLoading }] = useMutation(ADD_INTERESTED_OFFERINGS, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        payNow();
-      }
-    },
-  });
-
   useFocusEffect(
     React.useCallback(() => {
       getCartItems();
     }, [cartItems])
   );
-
-  const [cartItems, setCartItems] = useState([]);
 
   const getTutorImage = (tutor) => {
     return tutor && tutor.profileImage && tutor.profileImage.filename
@@ -110,11 +98,9 @@ const myCart = () => {
       convenienceCharges: convenienceCharge,
       orderStatus: 1,
       redeemQPoints: qPoints,
-      orderPayment: { amount, paymentMethod: 3 },
+      orderPayment: { amount, paymentMethod: 1 },
     };
-    createNewBooking({
-      variables: { orderCreateDto: obj },
-    });
+    navigation.navigate(routeNames.STUDENT.PAYMENT_METHOD, { bookingData: obj });
   };
 
   const renderCartItems = (item, index) => {
@@ -286,14 +272,9 @@ const myCart = () => {
     }
   };
 
-  const payNow = () => {
-    setShowQPointPayModal(false);
-    navigation.navigate(routeNames.STUDENT.PAYMENT_METHOD);
-  };
-
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
-      <Loader isLoading={cartLoading || removeLoading || bookingLoading} />
+      <Loader isLoading={cartLoading || removeLoading} />
       <View style={{ marginHorizontal: RfW(16) }}>
         <ScreenHeader label="My Cart" homeIcon />
       </View>
@@ -329,7 +310,9 @@ const myCart = () => {
 
         <View style={commonStyles.lineSeparatorWithMargin} />
 
-        <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text>
+        <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>
+          CART DETAILS ({cartItems.length} Items)
+        </Text>
         {renderCartDetails()}
         <View
           style={[

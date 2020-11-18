@@ -78,64 +78,26 @@ export const REMOVE_CART_ITEM = gql`
 //   }
 // }
 
-// mutation {
-//   createBooking(
-//     orderCreateDto: {
-//       serviceAddress: { id: 258747 }
-//       billingAddress: {
-//         type: 6
-//         fullAddress: "Dwarka Sector 21"
-//         country: "India"
-//         state: "Delhi"
-//         city: "New Delhi"
-//         subArea: "CP"
-//         postalCode: 110001
-//       }
-//       itemPrice: 2500
-//       convenienceCharges: 100
-//       orderStatus: 1,
-//       redeemQPoints: 400,
-//       orderPayment: { amount: 2500, paymentMethod: 3 }
-//     }
-//   ) {
-//     id
-//     serviceAddress {
-//       id
-//     }
-//     billingAddress {
-//       id
-//       country
-//       state
-//       city
-//       fullAddress
-//       postalCode
-//     }
-//     payableAmount
-//     orderPayment {
-//       id
-//       paymentMethod
-//       paymentStatus
-//       amount
-//     }
-//     orderItems {
-//       id
-//     }
-//   }
-// }
-
-// mutation {
-//   makePayment(orderId:4, paymentMethod: 6, orderPaymentStatus: 1, transactionDetails: "") {
-//     id
-//     orderStatus
-//     payableAmount
-//     orderPayment {
-//       amount
-//       id
-//       paymentStatus
-//       paymentMethod
-//     }
-//   }
-// }
+export const MAKE_PAYMENT = gql`
+  mutation MakePayment($orderId: Int!, $paymentMethod: Int!, $orderPaymentStatus: Int!, $transactionDetails: String!) {
+    makePayment(
+      orderId: $orderId
+      paymentMethod: $paymentMethod
+      orderPaymentStatus: $orderPaymentStatus
+      transactionDetails: $transactionDetails
+    ) {
+      id
+      orderStatus
+      payableAmount
+      orderPayment {
+        amount
+        id
+        paymentStatus
+        paymentMethod
+      }
+    }
+  }
+`;
 
 // mutation {
 //   scheduleClass(
