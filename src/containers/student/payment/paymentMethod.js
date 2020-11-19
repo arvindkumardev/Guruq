@@ -26,6 +26,7 @@ import { userDetails } from '../../../apollo/cache';
 import { ADD_INTERESTED_OFFERINGS, MAKE_PAYMENT } from '../booking.mutation';
 import Video from '../../../components/Video';
 import Loader from '../../../components/Loader';
+import Dash from '../../../components/Dash';
 
 function PaymentMethod(props) {
   const { route } = props;
@@ -220,9 +221,13 @@ function PaymentMethod(props) {
               </Text>
             </View>
             <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
-              <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                Convenience Charges
-              </Text>
+              <View style={{ flexDirection: 'column' }}>
+                <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+                  Convenience Charges
+                </Text>
+                <Dash dashColor={Colors.brandBlue2} />
+              </View>
+
               <Text
                 style={{
                   fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
@@ -250,13 +255,16 @@ function PaymentMethod(props) {
             {/* </View> */}
 
             <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
-              <Text
-                style={{
-                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
-                  color: Colors.brandBlue2,
-                }}>
-                Total Discount
-              </Text>
+              <View style={{ flexDirection: 'column' }}>
+                <Text
+                  style={{
+                    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                    color: Colors.brandBlue2,
+                  }}>
+                  Total Discount
+                </Text>
+                <Dash dashColor={Colors.brandBlue2} />
+              </View>
 
               <Text
                 style={{

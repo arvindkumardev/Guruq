@@ -76,7 +76,7 @@ Dash.propTypes = {
 Dash.defaultProps = {
   dashGap: 2,
   dashLength: 4,
-  dashThickness: 2,
+  dashThickness: 0.5,
   dashColor: 'black',
 };
 

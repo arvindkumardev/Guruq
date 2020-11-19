@@ -262,7 +262,14 @@ function TutorDashboard() {
               Hi {userInfo.firstName}
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>GURUQT{userInfo.id}</Text>
+              <Text
+                style={{
+                  color: Colors.secondaryText,
+                  fontSize: 16,
+                  marginTop: RfH(4),
+                }}>
+                GURUQT{userInfo.id}
+              </Text>
               {/* <Icon */}
               {/*  type="MaterialIcons" */}
               {/*  name="keyboard-arrow-down" */}

@@ -443,22 +443,30 @@ function StudentDashboard(props) {
     return (
       <View
         style={{
-          width: RfW(109),
+          width: RfW(80),
           borderRadius: 8,
-          backgroundColor: 'rgb(245,245,245)',
+          // backgroundColor: 'rgb(245,245,245)',
           marginHorizontal: RfW(10),
-          paddingHorizontal: RfW(8),
+          // paddingHorizontal: RfW(8),
           marginTop: RfH(20),
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Thumbnail large style={{ marginTop: RfH(11) }} source={getTutorImage(item.tutor)} />
-          <Text style={{ marginTop: 1, color: Colors.primaryText, textAlign: 'center' }}>
+          <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
+          <Text
+            numberOfLines={2}
+            style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
             {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
           </Text>
           <Text
-            numberOfLines={2}
+            numberOfLines={1}
             ellipsizeMode="tail"
-            style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12, marginBottom: RfH(16) }}>
+            style={{
+              marginTop: 1,
+              color: Colors.secondaryText,
+              fontSize: 13,
+              marginBottom: RfH(16),
+              textAlign: 'center',
+            }}>
             {getSubjects(item)}
           </Text>
         </View>
@@ -529,21 +537,22 @@ function StudentDashboard(props) {
               />
             </View>
           </View>
-          <View style={{ height: 44 }}>
-            <Item
-              style={{
-                backgroundColor: '#F3F4F9',
-                borderRadius: 10,
-                paddingHorizontal: RfW(10),
-                borderColor: 'transparent',
-                height: RfH(36),
-                marginTop: 4,
-                marginBottom: 4,
-              }}>
-              <Icon type="MaterialIcons" name="search" style={{ color: Colors.brandBlue2 }} />
-              <Input placeholder="Search" />
-            </Item>
-          </View>
+
+          {/* <View style={{ height: 44 }}> */}
+          {/*  <Item */}
+          {/*    style={{ */}
+          {/*      backgroundColor: '#F3F4F9', */}
+          {/*      borderRadius: 10, */}
+          {/*      paddingHorizontal: RfW(10), */}
+          {/*      borderColor: 'transparent', */}
+          {/*      height: RfH(36), */}
+          {/*      marginTop: 4, */}
+          {/*      marginBottom: 4, */}
+          {/*    }}> */}
+          {/*    <Icon type="MaterialIcons" name="search" style={{ color: Colors.brandBlue2 }} /> */}
+          {/*    <Input placeholder="Search" /> */}
+          {/*  </Item> */}
+          {/* </View> */}
 
           <View style={{ height: RfH(220), marginTop: RfH(29) }}>
             <Swiper horizontal>
