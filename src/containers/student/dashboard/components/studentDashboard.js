@@ -23,6 +23,7 @@ import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashb
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
+import { getBoxColor } from '../../../../theme/colors';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
@@ -43,7 +44,7 @@ function StudentDashboard(props) {
       }
     },
     onCompleted: (data) => {
-      setFavouriteTutor(data.getFavouriteTutors);
+      setFavouriteTutor(data.getFavouriteTutors); // .filter((s) => s.tutor.tutorOfferings.find(to=>to.offerings.find((o) => o.id === selectedOffering.id))));
     },
   });
 
@@ -150,14 +151,7 @@ function StudentDashboard(props) {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor:
-                item.id % 4 === 0
-                  ? '#E7E5F2'
-                  : item.id % 4 === 1
-                  ? '#FFF7F0'
-                  : item.id % 4 === 2
-                  ? 'rgb(230,252,231)'
-                  : 'rgb(203,231,255)',
+              backgroundColor: getBoxColor(item.id),
               height: RfH(67),
               width: RfW(70),
               marginHorizontal: RfW(4),
@@ -442,16 +436,20 @@ function StudentDashboard(props) {
   };
 
   const getSubjects = (item) => {
-    let subjects = '';
+    const subjects = [];
+
     item.tutor.tutorOfferings.map((obj) => {
-      if (
-        selectedOffering?.parentOffering?.id === obj.offerings[0].id &&
-        selectedOffering?.id === obj.offerings[1].id
-      ) {
-        subjects = `${obj.offerings[2].displayName},${subjects}`;
+      if (obj.offerings.find((o) => o.id === selectedOffering?.id)) {
+        subjects.push(obj.offerings[0].displayName);
       }
+      // if (
+      //   selectedOffering?.parentOffering?.id === obj.offerings[0].id &&
+      //   selectedOffering?.id === obj.offerings[1].id
+      // ) {
+      //   subjects = `${obj.offerings[2].displayName},${subjects}`;
+      // }
     });
-    return subjects;
+    return subjects.join(', ');
   };
 
   const renderTutors = (item) => {
@@ -467,7 +465,7 @@ function StudentDashboard(props) {
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Thumbnail large style={{ marginTop: RfH(11) }} source={getTutorImage(item.tutor)} />
-          <Text style={{ marginTop: 1, color: Colors.primaryText }}>
+          <Text style={{ marginTop: 1, color: Colors.primaryText, textAlign: 'center' }}>
             {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
           </Text>
           <Text

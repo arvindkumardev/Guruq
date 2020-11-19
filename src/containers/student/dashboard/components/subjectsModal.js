@@ -8,6 +8,7 @@ import { Colors, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
 import NavigationRouteNames from '../../../../routes/screenNames';
+import {getBoxColor} from '../../../../theme/colors';
 
 const SubjectsModal = (props) => {
   const navigation = useNavigation();
@@ -33,14 +34,7 @@ const SubjectsModal = (props) => {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor:
-                item.id % 4 === 0
-                  ? '#E7E5F2'
-                  : item.id % 4 === 1
-                  ? '#FFF7F0'
-                  : item.id % 4 === 2
-                  ? 'rgb(230,252,231)'
-                  : 'rgb(203,231,255)',
+              backgroundColor: getBoxColor(item.id),
               height: RfH(67),
               width: RfW(70),
               borderRadius: RfW(8),
