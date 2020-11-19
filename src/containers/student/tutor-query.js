@@ -140,9 +140,22 @@ export const GET_FAVOURITE_TUTORS = gql`
       id
       tutor {
         id
+        averageRating
         contactDetail {
           firstName
           lastName
+        }
+        profileImage {
+          id
+          filename
+        }
+        tutorOfferings {
+          id
+          offerings {
+            id
+            level
+            displayName
+          }
         }
       }
     }

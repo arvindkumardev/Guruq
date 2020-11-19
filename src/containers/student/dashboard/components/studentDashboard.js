@@ -125,6 +125,16 @@ function StudentDashboard(props) {
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR, { offering: subject });
   };
 
+  const getTutorImage = (tutor) => {
+    return tutor && tutor.profileImage && tutor.profileImage.filename
+      ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
+      : {
+          uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
+            tutor.id % 4
+          }.png`,
+        };
+  };
+
   const renderSubjects = (item) => {
     return (
       <View style={{ marginTop: RfH(20), flex: 1 }}>
@@ -431,6 +441,19 @@ function StudentDashboard(props) {
     );
   };
 
+  const getSubjects = (item) => {
+    let subjects = '';
+    item.tutor.tutorOfferings.map((obj) => {
+      if (
+        selectedOffering?.parentOffering?.id === obj.offerings[0].id &&
+        selectedOffering?.id === obj.offerings[1].id
+      ) {
+        subjects = `${obj.offerings[2].displayName},${subjects}`;
+      }
+    });
+    return subjects;
+  };
+
   const renderTutors = (item) => {
     return (
       <View
@@ -439,15 +462,19 @@ function StudentDashboard(props) {
           borderRadius: 8,
           backgroundColor: 'rgb(245,245,245)',
           marginHorizontal: RfW(10),
+          paddingHorizontal: RfW(8),
           marginTop: RfH(20),
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Thumbnail large style={{ marginTop: RfH(11) }} source={Images.kushal} />
+          <Thumbnail large style={{ marginTop: RfH(11) }} source={getTutorImage(item.tutor)} />
           <Text style={{ marginTop: 1, color: Colors.primaryText }}>
             {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
           </Text>
-          <Text style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12, marginBottom: RfH(16) }}>
-            {item.subject}
+          <Text
+            numberOfLines={2}
+            ellipsizeMode="tail"
+            style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12, marginBottom: RfH(16) }}>
+            {getSubjects(item)}
           </Text>
         </View>
       </View>
