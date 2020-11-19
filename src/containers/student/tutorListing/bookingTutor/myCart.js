@@ -1,3 +1,4 @@
+/* eslint-disable operator-assignment */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
@@ -228,22 +229,46 @@ const myCart = () => {
   };
 
   const addClass = (index) => {
-    let newArray = [];
-    newArray = cartItems;
-    newArray[index].count = newArray[index].count + 1;
+    const newArray = [];
+    cartItems.map((obj) => {
+      newArray.push(obj);
+    });
+    let arrayItem = {};
+    arrayItem = { ...newArray[index] };
+    const itemPrice = arrayItem.price / arrayItem.count;
+    arrayItem.count = arrayItem.count + 1;
+    arrayItem.price = arrayItem.count * itemPrice;
+    newArray[index] = arrayItem;
     setCartItems(newArray);
+    let amt = 0;
+    for (const obj of newArray) {
+      amt += obj.price;
+    }
+    setAmount(amt);
     setRefreshList(!refreshList);
   };
 
   const removeClass = (item, index) => {
-    let newArray = [];
-    newArray = cartItems;
+    const newArray = [];
+    cartItems.map((obj) => {
+      newArray.push(obj);
+    });
     if (newArray[index].count > 0) {
-      newArray[index].count = newArray[index].count - 1;
-      if (newArray[index].count === 1) {
+      let arrayItem = {};
+      arrayItem = { ...newArray[index] };
+      const itemPrice = arrayItem.price / arrayItem.count;
+      arrayItem.count = arrayItem.count - 1;
+      arrayItem.price = arrayItem.count * itemPrice;
+      newArray[index] = arrayItem;
+      setCartItems(newArray);
+      if (newArray[index].count === 0) {
         removeCartItem(item);
       }
-      setCartItems(newArray);
+      let amt = 0;
+      for (const obj of newArray) {
+        amt += obj.price;
+      }
+      setAmount(amt);
       setRefreshList(!refreshList);
     }
   };

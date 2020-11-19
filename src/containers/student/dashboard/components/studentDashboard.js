@@ -693,7 +693,7 @@ function StudentDashboard(props) {
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={favouriteTutor.getFavouriteTutors}
+            data={favouriteTutor?.getFavouriteTutors}
             renderItem={({ item }) => renderTutors(item)}
             keyExtractor={(item, index) => index.toString()}
           />
