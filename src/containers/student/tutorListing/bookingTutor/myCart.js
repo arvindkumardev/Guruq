@@ -6,7 +6,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
@@ -29,22 +29,18 @@ const myCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(300);
 
-  const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
+  const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(GET_CART_ITEMS);
+
+  useEffect(() => {
+    if (cartItemData?.getCartItems) {
+      setCartItems(cartItemData.getCartItems);
       let amt = 0;
-      for (const obj of data.getCartItems) {
+      for (const obj of cartItemData.getCartItems) {
         amt += obj.price;
       }
       setAmount(amt);
-      setCartItems(data.getCartItems);
-      setRefreshList(!refreshList);
-    },
-  });
+    }
+  }, [cartItemData?.getCartItems]);
 
   const [removeItem, { loading: removeLoading }] = useMutation(REMOVE_CART_ITEM, {
     fetchPolicy: 'no-cache',
@@ -55,16 +51,10 @@ const myCart = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        getCartItems();
+        // getCartItems();
       }
     },
   });
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getCartItems();
-    }, [cartItems])
-  );
 
   const getTutorImage = (tutor) => {
     return tutor && tutor.profileImage && tutor.profileImage.filename
@@ -113,7 +103,7 @@ const myCart = () => {
                 iconWidth={RfW(12)}
                 iconHeight={RfH(12)}
                 iconImage={Images.minus_blue}
-                submitFunction={() => removeClass(index)}
+                submitFunction={() => removeClass(item, index)}
               />
               <Text>{item.count}</Text>
               <IconButtonWrapper
@@ -134,17 +124,6 @@ const myCart = () => {
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: 'SegoeUI-Bold' }}>
               ₹{item.price}
             </Text>
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <Button
-              onPress={() => removeCartItem(item)}
-              bordered
-              small
-              danger
-              block
-              style={{ paddingHorizontal: RfW(16) }}>
-              <Text style={{ color: Colors.orangeRed }}>Remove</Text>
-            </Button>
           </View>
         </View>
       </View>
@@ -251,16 +230,19 @@ const myCart = () => {
   const addClass = (index) => {
     let newArray = [];
     newArray = cartItems;
-    newArray[index].numberOfClass = newArray[index].numberOfClass + 1;
+    newArray[index].count = newArray[index].count + 1;
     setCartItems(newArray);
     setRefreshList(!refreshList);
   };
 
-  const removeClass = (index) => {
+  const removeClass = (item, index) => {
     let newArray = [];
     newArray = cartItems;
-    if (newArray[index].numberOfClass > 0) {
-      newArray[index].numberOfClass = newArray[index].numberOfClass - 1;
+    if (newArray[index].count > 0) {
+      newArray[index].count = newArray[index].count - 1;
+      if (newArray[index].count === 1) {
+        removeCartItem(item);
+      }
       setCartItems(newArray);
       setRefreshList(!refreshList);
     }
