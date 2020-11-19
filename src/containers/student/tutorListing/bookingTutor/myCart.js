@@ -26,7 +26,6 @@ const myCart = () => {
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
   const [amount, setAmount] = useState(0);
-  const [convenienceCharge, setConvenienceCharge] = useState(100);
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(300);
 
@@ -85,7 +84,6 @@ const myCart = () => {
     let obj = {};
     obj = {
       itemPrice: amount,
-      convenienceCharges: convenienceCharge,
       orderStatus: 1,
       redeemQPoints: qPoints,
       orderPayment: { amount, paymentMethod: 1 },
@@ -223,10 +221,6 @@ const myCart = () => {
           <Text style={styles.tutorDetails}>Amount</Text>
           <Text style={styles.tutorDetails}>₹{amount}</Text>
         </View>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-          <Text style={styles.tutorDetails}>Convenience charges</Text>
-          <Text style={styles.tutorDetails}>₹{convenienceCharge}</Text>
-        </View>
 
         <View style={commonStyles.lineSeparator} />
 
@@ -247,7 +241,7 @@ const myCart = () => {
                 fontFamily: 'SegoeUI-Bold',
               },
             ]}>
-            ₹{amount + convenienceCharge}
+            ₹{amount}
           </Text>
         </View>
       </View>
@@ -324,7 +318,7 @@ const myCart = () => {
               fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
               color: Colors.secondaryText,
             }}>
-            CART DETAILS (4 Items)
+            CART DETAILS ({cartItems.length} Items)
           </Text>
         </View>
 
@@ -343,7 +337,7 @@ const myCart = () => {
           },
         ]}>
         <View>
-          <Text style={commonStyles.headingText}>₹{amount + convenienceCharge}</Text>
+          <Text style={commonStyles.headingText}>₹{amount}</Text>
           <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
         </View>
         <View>
@@ -367,10 +361,9 @@ const myCart = () => {
         onClose={() => setShowQPointPayModal(false)}
         amount={amount}
         deductedAgaintQPoint={qPoints}
-        convenienceCharge={convenienceCharge}
-        totalAmount={amount + convenienceCharge}
+        totalAmount={amount}
         qPoint={qPoints}
-        amountToPayAfterQPoint={amount + convenienceCharge - qPoints}
+        amountToPayAfterQPoint={amount - qPoints}
         onPayNow={() => createBooking()}
       />
       <CouponModal visible={showCouponModal} onClose={() => setShowCouponModal(false)} />

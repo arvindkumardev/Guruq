@@ -16,6 +16,7 @@ import { IconButtonWrapper } from '../../../components';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/fonts';
+import ClassModeSelectModal from './components/classModeSelectModal';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
@@ -25,10 +26,9 @@ function tutorDetails(props) {
   const tutorData = route?.params?.tutorData;
   const parentOffering = route?.params?.parentOffering;
   const parentParentOffering = route?.params?.parentParentOffering;
-  const parentOfferingName = route?.params?.parentOfferingName;
-  const parentParentOfferingName = route?.params?.parentParentOfferingName;
 
   const [showDateSlotModal, setShowDateSlotModal] = useState(false);
+  const [showClassModePopup, setShowClassModePopup] = useState(false);
   const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState({});
 
@@ -544,16 +544,6 @@ function tutorDetails(props) {
         }.png`;
   };
 
-  const goToBookClass = () => {
-    navigation.navigate(routeNames.STUDENT.SELECT_CLASS_MODE, {
-      budgetDetails: budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`],
-      tutorData,
-      parentOfferingName,
-      parentParentOfferingName,
-      selectedSubject,
-    });
-  };
-
   return (
     <View
       style={[
@@ -802,7 +792,7 @@ function tutorDetails(props) {
           <Text style={commonStyles.textButtonOutlinePrimary}>Book {isFreeDemo ? '[Free]' : ''} Demo</Text>
         </Button>
 
-        <Button onPress={() => goToBookClass()} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+        <Button onPress={() => setShowClassModePopup(true)} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
           <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
         </Button>
       </View>
@@ -881,6 +871,12 @@ function tutorDetails(props) {
           </View>
         </View>
       </Modal>
+      <ClassModeSelectModal
+        visible={showClassModePopup}
+        onClose={() => setShowClassModePopup(false)}
+        selectedSubject={selectedSubject}
+        budgetDetails={budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`]}
+      />
     </View>
   );
 }
