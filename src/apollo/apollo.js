@@ -8,8 +8,8 @@ import { getToken } from '../utils/helpers';
 
 const logOptions = { logger: console.log };
 
-const GRAPHQL_ENDPOINT = 'http://10.0.0.10:5000/graphql';
-// const GRAPHQL_ENDPOINT = 'http://13.229.107.165:5000/graphql';
+// const GRAPHQL_ENDPOINT = 'http://10.0.0.10:5000/graphql';
+const GRAPHQL_ENDPOINT = 'http://13.229.107.165:5000/graphql';
 
 let apolloClient = null;
 
