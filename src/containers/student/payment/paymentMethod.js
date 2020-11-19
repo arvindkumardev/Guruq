@@ -36,6 +36,7 @@ function PaymentMethod(props) {
   const [paymentMethod, setPaymentMethod] = useState(1);
   const [orderData, setOrderData] = useState({});
   const [discount, setDiscount] = useState(200);
+  const [convenienceCharges, setConvenienceCharges] = useState(100);
   const [showAddressPopup, setShowAddressPopup] = useState(false);
 
   const userInfo = useReactiveVar(userDetails);
@@ -219,19 +220,21 @@ function PaymentMethod(props) {
                 ₹{parseFloat(bookingData.orderPayment.amount).toFixed(2)}
               </Text>
             </View>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
-              <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                Convenience Charges
-              </Text>
-              <Text
-                style={{
-                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
-                  color: Colors.darkGrey,
-                  fontFamily: Fonts.semiBold,
-                }}>
-                ₹{parseFloat(bookingData.convenienceCharges).toFixed(2)}
-              </Text>
-            </View>
+            {paymentMethod === 4 && (
+              <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
+                <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                  Convenience Charges
+                </Text>
+                <Text
+                  style={{
+                    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                    color: Colors.darkGrey,
+                    fontFamily: Fonts.semiBold,
+                  }}>
+                  ₹{parseFloat(convenienceCharges).toFixed(2)}
+                </Text>
+              </View>
+            )}
 
             <View style={commonStyles.lineSeparator} />
 
@@ -307,6 +310,7 @@ function PaymentMethod(props) {
       subArea: 'CP',
       postalCode: 110001,
     };
+    bookingData.convenienceCharges = paymentMethod === 4 ? convenienceCharges : 0;
     bookingData.orderPayment.paymentMethod = paymentMethod;
     createNewBooking({
       variables: { orderCreateDto: bookingData },
@@ -496,7 +500,10 @@ function PaymentMethod(props) {
           <Text style={commonStyles.headingText}>
             ₹
             {parseFloat(
-              bookingData.orderPayment.amount + bookingData.convenienceCharges - discount - bookingData.redeemQPoints
+              bookingData.orderPayment.amount +
+                (paymentMethod === 4 ? convenienceCharges : 0) -
+                discount -
+                bookingData.redeemQPoints
             ).toFixed(2)}
           </Text>
           <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
