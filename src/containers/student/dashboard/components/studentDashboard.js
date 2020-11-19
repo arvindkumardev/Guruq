@@ -35,18 +35,9 @@ function StudentDashboard(props) {
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});
 
-  const [favouriteTutor, setFavouriteTutor] = useState([]);
-
-  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      setFavouriteTutor(data.getFavouriteTutors); // .filter((s) => s.tutor.tutorOfferings.find(to=>to.offerings.find((o) => o.id === selectedOffering.id))));
-    },
-  });
+  const { loading: loadingFavouriteTutors, error: favouriteError, data: favouriteTutor } = useQuery(
+    GET_FAVOURITE_TUTORS
+  );
 
   const { loading: loadingOfferingMasterData, error: offeringMasterError, data: offeringMasterData } = useQuery(
     GET_OFFERINGS_MASTER_DATA
@@ -90,10 +81,6 @@ function StudentDashboard(props) {
       navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
     }
   }, [offerings]);
-
-  useEffect(() => {
-    getFavouriteTutors();
-  }, [favouriteTutor]);
 
   const onOfferingSelect = (offering) => {
     setStudentOfferingModalVisible(false);
@@ -704,7 +691,7 @@ function StudentDashboard(props) {
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={favouriteTutor}
+            data={favouriteTutor?.getFavouriteTutors}
             renderItem={({ item }) => renderTutors(item)}
             keyExtractor={(item, index) => index.toString()}
           />

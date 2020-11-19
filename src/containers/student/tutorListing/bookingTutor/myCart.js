@@ -1,3 +1,4 @@
+/* eslint-disable operator-assignment */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
@@ -6,7 +7,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
@@ -26,26 +27,21 @@ const myCart = () => {
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
   const [amount, setAmount] = useState(0);
-  const [convenienceCharge, setConvenienceCharge] = useState(100);
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(300);
 
-  const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
+  const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(GET_CART_ITEMS);
+
+  useEffect(() => {
+    if (cartItemData?.getCartItems) {
+      setCartItems(cartItemData.getCartItems);
       let amt = 0;
-      for (const obj of data.getCartItems) {
+      for (const obj of cartItemData.getCartItems) {
         amt += obj.price;
       }
       setAmount(amt);
-      setCartItems(data.getCartItems);
-      setRefreshList(!refreshList);
-    },
-  });
+    }
+  }, [cartItemData?.getCartItems]);
 
   const [removeItem, { loading: removeLoading }] = useMutation(REMOVE_CART_ITEM, {
     fetchPolicy: 'no-cache',
@@ -56,16 +52,10 @@ const myCart = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        getCartItems();
+        // getCartItems();
       }
     },
   });
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getCartItems();
-    }, [cartItems])
-  );
 
   const getTutorImage = (tutor) => {
     return tutor && tutor.profileImage && tutor.profileImage.filename
@@ -85,7 +75,6 @@ const myCart = () => {
     let obj = {};
     obj = {
       itemPrice: amount,
-      convenienceCharges: convenienceCharge,
       orderStatus: 1,
       redeemQPoints: qPoints,
       orderPayment: { amount, paymentMethod: 1 },
@@ -115,7 +104,7 @@ const myCart = () => {
                 iconWidth={RfW(12)}
                 iconHeight={RfH(12)}
                 iconImage={Images.minus_blue}
-                submitFunction={() => removeClass(index)}
+                submitFunction={() => removeClass(item, index)}
               />
               <Text>{item.count}</Text>
               <IconButtonWrapper
@@ -136,17 +125,6 @@ const myCart = () => {
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: 'SegoeUI-Bold' }}>
               ₹{item.price}
             </Text>
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <Button
-              onPress={() => removeCartItem(item)}
-              bordered
-              small
-              danger
-              block
-              style={{ paddingHorizontal: RfW(16) }}>
-              <Text style={{ color: Colors.orangeRed }}>Remove</Text>
-            </Button>
           </View>
         </View>
       </View>
@@ -223,10 +201,6 @@ const myCart = () => {
           <Text style={styles.tutorDetails}>Amount</Text>
           <Text style={styles.tutorDetails}>₹{amount}</Text>
         </View>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-          <Text style={styles.tutorDetails}>Convenience charges</Text>
-          <Text style={styles.tutorDetails}>₹{convenienceCharge}</Text>
-        </View>
 
         <View style={commonStyles.lineSeparator} />
 
@@ -247,7 +221,7 @@ const myCart = () => {
                 fontFamily: 'SegoeUI-Bold',
               },
             ]}>
-            ₹{amount + convenienceCharge}
+            ₹{amount}
           </Text>
         </View>
       </View>
@@ -255,19 +229,46 @@ const myCart = () => {
   };
 
   const addClass = (index) => {
-    let newArray = [];
-    newArray = cartItems;
-    newArray[index].numberOfClass = newArray[index].numberOfClass + 1;
+    const newArray = [];
+    cartItems.map((obj) => {
+      newArray.push(obj);
+    });
+    let arrayItem = {};
+    arrayItem = { ...newArray[index] };
+    const itemPrice = arrayItem.price / arrayItem.count;
+    arrayItem.count = arrayItem.count + 1;
+    arrayItem.price = arrayItem.count * itemPrice;
+    newArray[index] = arrayItem;
     setCartItems(newArray);
+    let amt = 0;
+    for (const obj of newArray) {
+      amt += obj.price;
+    }
+    setAmount(amt);
     setRefreshList(!refreshList);
   };
 
-  const removeClass = (index) => {
-    let newArray = [];
-    newArray = cartItems;
-    if (newArray[index].numberOfClass > 0) {
-      newArray[index].numberOfClass = newArray[index].numberOfClass - 1;
+  const removeClass = (item, index) => {
+    const newArray = [];
+    cartItems.map((obj) => {
+      newArray.push(obj);
+    });
+    if (newArray[index].count > 0) {
+      let arrayItem = {};
+      arrayItem = { ...newArray[index] };
+      const itemPrice = arrayItem.price / arrayItem.count;
+      arrayItem.count = arrayItem.count - 1;
+      arrayItem.price = arrayItem.count * itemPrice;
+      newArray[index] = arrayItem;
       setCartItems(newArray);
+      if (newArray[index].count === 0) {
+        removeCartItem(item);
+      }
+      let amt = 0;
+      for (const obj of newArray) {
+        amt += obj.price;
+      }
+      setAmount(amt);
       setRefreshList(!refreshList);
     }
   };
@@ -324,7 +325,7 @@ const myCart = () => {
               fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
               color: Colors.secondaryText,
             }}>
-            CART DETAILS (4 Items)
+            CART DETAILS ({cartItems.length} Items)
           </Text>
         </View>
 
@@ -343,7 +344,7 @@ const myCart = () => {
           },
         ]}>
         <View>
-          <Text style={commonStyles.headingText}>₹{amount + convenienceCharge}</Text>
+          <Text style={commonStyles.headingText}>₹{amount}</Text>
           <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
         </View>
         <View>
@@ -367,10 +368,9 @@ const myCart = () => {
         onClose={() => setShowQPointPayModal(false)}
         amount={amount}
         deductedAgaintQPoint={qPoints}
-        convenienceCharge={convenienceCharge}
-        totalAmount={amount + convenienceCharge}
+        totalAmount={amount}
         qPoint={qPoints}
-        amountToPayAfterQPoint={amount + convenienceCharge - qPoints}
+        amountToPayAfterQPoint={amount - qPoints}
         onPayNow={() => createBooking()}
       />
       <CouponModal visible={showCouponModal} onClose={() => setShowCouponModal(false)} />

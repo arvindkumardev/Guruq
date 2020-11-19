@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, View, Text } from 'react-native';
 import { Button } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Colors, Fonts, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
@@ -17,7 +16,6 @@ const qPointPayModal = (props) => {
     onClose,
     amount,
     deductedAgaintQPoint,
-    convenienceCharge,
     totalAmount,
     amountToPayAfterQPoint,
     onPayNow,
@@ -111,10 +109,6 @@ const qPointPayModal = (props) => {
             <Text style={styles.tutorDetails}>₹{amount}</Text>
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={styles.tutorDetails}>Convenience Charges</Text>
-            <Text style={styles.tutorDetails}>₹{convenienceCharge}</Text>
-          </View>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={styles.tutorDetails}>Paid by Q points</Text>
             <Text style={styles.tutorDetails}>₹{deductedAgaintQPoint}</Text>
           </View>
@@ -159,7 +153,6 @@ qPointPayModal.propTypes = {
   onClose: PropTypes.func,
   amount: PropTypes.number,
   deductedAgaintQPoint: PropTypes.number,
-  convenienceCharge: PropTypes.number,
   totalAmount: PropTypes.number,
   amountToPayAfterQPoint: PropTypes.number,
   onPayNow: PropTypes.func,
@@ -171,7 +164,6 @@ qPointPayModal.defaultProps = {
   onClose: null,
   amount: 0,
   deductedAgaintQPoint: 0,
-  convenienceCharge: 0,
   totalAmount: 0,
   amountToPayAfterQPoint: 0,
   onPayNow: null,
