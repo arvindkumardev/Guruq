@@ -104,13 +104,14 @@ function PaymentMethod(props) {
         // handle success
         Alert.alert(`Success: ${data.razorpay_payment_id}`);
         console.log(data);
-
+        completedPayment(3, data.razorpay_payment_id);
         // create booking - with payment completed
       })
       .catch((error) => {
         // handle failure
         console.log(`Error: ${error.code} | ${error.description}`);
         console.log(error);
+        completedPayment(2, error.description);
 
         // create booking - with cancelled payment
       });
