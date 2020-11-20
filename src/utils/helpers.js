@@ -111,3 +111,21 @@ export const titleCaseIfExists = (inputString) => {
   }
   return str.join(' ').trim();
 };
+
+export const getTutorImage = (tutor) => {
+  return tutor && tutor.profileImage && tutor.profileImage.filename
+    ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
+    : {
+        uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
+          tutor.id % 4
+        }.png`,
+      };
+};
+
+export const getTutorImageUrl = (tutor) => {
+  return tutor && tutor.profileImage && tutor.profileImage.filename
+    ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
+    : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
+        tutor.id % 4
+      }.png`;
+};

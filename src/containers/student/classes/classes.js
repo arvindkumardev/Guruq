@@ -3,49 +3,22 @@ import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, Segment } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
 import { Images, Colors, Fonts } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW, getTutorImageUrl } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
+import { GET_BOOKINGS } from '../booking.query';
 
 function bookingConfirmed() {
   const navigation = useNavigation();
   const [isHistorySelected, setIsHistorySelected] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
+
   const [classItems, setClassItems] = useState([
-    {
-      tutorIcon: Images.kushal,
-      subject: 'English Class',
-      tutor: 'Gurbani Singh',
-      board: 'CBSE',
-      class: '9',
-      numberOfClass: '05',
-      mode: 'Online Individual Class',
-      tutorCode: 'GURUS52287',
-    },
-    {
-      tutorIcon: Images.kushal,
-      subject: 'Maths Class',
-      tutor: 'Priyam',
-      board: 'CBSE',
-      class: '9',
-      numberOfClass: '04',
-      mode: 'Online Individual Class',
-      tutorCode: 'GURUS52287',
-    },
-    {
-      tutorIcon: Images.kushal,
-      subject: 'Physics Class',
-      tutor: 'Priyam',
-      board: 'CBSE',
-      class: '9',
-      numberOfClass: '01',
-      mode: 'Online Individual Class',
-      tutorCode: 'GURUS52287',
-    },
     {
       tutorIcon: Images.kushal,
       subject: 'History Class',
@@ -58,14 +31,17 @@ function bookingConfirmed() {
     },
   ]);
 
+  const { loading: loadingBookings, error: bookingError, data: bookingData } = useQuery(GET_BOOKINGS);
+
   const renderClassItem = (item) => {
     return (
       <View>
         <View style={{ height: RfH(40) }} />
-        <Text style={commonStyles.headingPrimaryText}>{item.subject}</Text>
+        <Text style={commonStyles.headingPrimaryText}>{item.orderItems[0].offering.name}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item.board} | Class {item.class}
+            {item.orderItems[0]?.offering?.parentOffering?.parentOffering?.name} |{' '}
+            {item.orderItems[0].offering.parentOffering.name}
           </Text>
           {!isHistorySelected && (
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
@@ -79,7 +55,7 @@ function bookingConfirmed() {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
-                iconImage={item.tutorIcon}
+                iconImage={getTutorImageUrl(item.orderItems[0].tutor)}
               />
               <Text
                 style={{
@@ -93,12 +69,14 @@ function bookingConfirmed() {
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
                 style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold, marginTop: RfH(2) }}>
-                {item.tutor}
+                {item.orderItems[0].tutor.contactDetail.firstName} {item.orderItems[0].tutor.contactDetail.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.tutorCode}
+                GURUS{item.orderItems[0].tutor.id}
               </Text>
-              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>{item.mode}</Text>
+              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                {item.orderItems[0].onlineClass ? 'Online' : 'Offline'} Individual Class
+              </Text>
             </View>
           </View>
           <View style={commonStyles.verticallyCenterItemsView}>
@@ -107,7 +85,7 @@ function bookingConfirmed() {
                 commonStyles.headingPrimaryText,
                 { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
               ]}>
-              {item.numberOfClass}
+              {item.orderItems[0].count}
             </Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
@@ -121,7 +99,7 @@ function bookingConfirmed() {
             </Text>
           )}
           <Button
-            onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS)}
+            onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item })}
             style={[commonStyles.buttonPrimary, { alignSelf: 'flex-end', marginRight: RfH(0), marginLeft: RfW(16) }]}>
             <Text style={commonStyles.textButtonPrimary}>{isHistorySelected ? 'Renew Class' : 'Schedule Class'}</Text>
           </Button>
@@ -194,7 +172,7 @@ function bookingConfirmed() {
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={classItems}
+          data={bookingData?.getBookings}
           renderItem={({ item }) => renderClassItem(item)}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: RfH(170) }}

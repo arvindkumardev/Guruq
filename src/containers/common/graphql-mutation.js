@@ -42,7 +42,6 @@ export const SIGNUP_MUTATION = gql`
       lastName
       email
       isPasswordSet
-      isFirstTime
       isPhoneNumberVerified
       isEmailVerified
       token
@@ -63,7 +62,6 @@ export const SIGNIN_MUTATION = gql`
       lastName
       email
       isPasswordSet
-      isFirstTime
       isPhoneNumberVerified
       isEmailVerified
       token
@@ -84,7 +82,6 @@ export const SET_PASSWORD_MUTATION = gql`
       lastName
       email
       isPasswordSet
-      isFirstTime
       isPhoneNumberVerified
       isEmailVerified
       token

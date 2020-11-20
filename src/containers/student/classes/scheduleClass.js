@@ -3,14 +3,18 @@ import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
-import { RfH, RfW } from '../../../utils/helpers';
+import { getTutorImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 import { Images, Colors, Fonts } from '../../../theme';
 import BackArrow from '../../../components/BackArrow';
 
-function scheduleClass() {
+function scheduleClass(props) {
   const navigation = useNavigation();
+  const { route } = props;
+  const classData = route?.params?.classData;
+
+  console.log(classData);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -20,9 +24,12 @@ function scheduleClass() {
     return (
       <View>
         <View style={{ height: RfH(44) }} />
-        <Text style={commonStyles.headingPrimaryText}>Physics Class</Text>
+        <Text style={commonStyles.headingPrimaryText}>{classData.orderItems[0].offering.name} Class</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>CBSE | Class 9</Text>
+          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+            {classData.orderItems[0].offering.parentOffering.parentOffering.name} |{' '}
+            {classData.orderItems[0].offering.parentOffering.name}
+          </Text>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
@@ -32,17 +39,20 @@ function scheduleClass() {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
-                iconImage={Images.kushal}
+                iconImage={getTutorImageUrl(classData.orderItems[0].tutor)}
               />
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
                 style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold, marginTop: RfH(2) }}>
-                Rahul Das
+                {classData.orderItems[0].tutor.contactDetail.firstName}{' '}
+                {classData.orderItems[0].tutor.contactDetail.lastName}
               </Text>
-              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>GURUS52287</Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                Online Classes
+                GURUS{classData.orderItems[0].tutor.id}
+              </Text>
+              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                {classData.orderItems[0].onlineClass ? 'Online' : 'Offline'} Classes
               </Text>
             </View>
           </View>

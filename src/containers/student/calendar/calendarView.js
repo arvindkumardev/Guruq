@@ -3,16 +3,23 @@ import React, { useState } from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
+import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import routeNames from '../../../routes/screenNames';
 import { RfH, RfW } from '../../../utils/helpers';
 import { Colors, Fonts, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
+import { GET_SCHEDULED_CLASSES } from '../booking.query';
+import { studentDetails } from '../../../apollo/cache';
 
 function CalendarView() {
   const navigation = useNavigation();
   const [showHeader, setShowHeader] = useState(false);
+
+  const studentInfo = useReactiveVar(studentDetails);
+  console.log(studentInfo);
+
   const [monthData, setMonthData] = useState([
     {
       date: 13,
@@ -48,6 +55,19 @@ function CalendarView() {
       ],
     },
   ]);
+
+  const { loading: loadingScheduledClasses, error: scheduledClassesError, data: scheduledClassesData } = useQuery(
+    GET_SCHEDULED_CLASSES,
+    {
+      variables: {
+        classesSearchDto: {
+          studentId: studentInfo.id,
+          startDate: '2020-10-09T00:00:00Z',
+          endDate: '2020-11-19T17:00:00Z',
+        },
+      },
+    }
+  );
 
   const renderClassItem = (item) => {
     return (
