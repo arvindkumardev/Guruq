@@ -12,6 +12,7 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import NavigationRouteNames from '../../../routes/screenNames';
 
 import styles from '../tutorListing/styles';
+import BackArrow from '../../../components/BackArrow';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -84,8 +85,8 @@ function ScheduledClassDetails(props) {
             styling={{ borderRadius: RfH(22.5) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingText}>{item.studentName}</Text>
-            <Text style={commonStyles.secondaryText}>{item.studentId}</Text>
+            <Text style={commonStyles.headingPrimaryText}>{item.studentName}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.studentId}</Text>
           </View>
         </View>
         <CheckBox checked={item.joined} />
@@ -99,8 +100,8 @@ function ScheduledClassDetails(props) {
         <View style={commonStyles.horizontalChildrenStartView}>
           <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingText}>{item.chapter}</Text>
-            <Text style={commonStyles.secondaryText}>
+            <Text style={commonStyles.headingPrimaryText}>{item.chapter}</Text>
+            <Text style={commonStyles.mediumMutedText}>
               {item.size} | {item.date}
             </Text>
           </View>
@@ -157,13 +158,8 @@ function ScheduledClassDetails(props) {
                 paddingHorizontal: RfW(16),
               }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <IconButtonWrapper
-                  styling={{ marginRight: RfW(16) }}
-                  iconImage={Images.backArrow}
-                  iconHeight={RfH(20)}
-                  iconWidth={RfW(20)}
-                  submitFunction={() => onBackPress()}
-                />
+                <BackArrow action={onBackPress} />
+
                 <View style={commonStyles.verticallyStretchedItemsView}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     English Class
@@ -217,19 +213,13 @@ function ScheduledClassDetails(props) {
                   alignItems: 'stretch',
                 }}>
                 <View style={{}}>
-                  <IconButtonWrapper
-                    styling={{ marginRight: RfW(16) }}
-                    iconImage={Images.backArrow}
-                    iconHeight={RfH(20)}
-                    iconWidth={RfW(20)}
-                    submitFunction={() => onBackPress()}
-                  />
+                  <BackArrow action={onBackPress} />
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
-                    <Text style={commonStyles.pageTitle}>English Class</Text>
-                    <Text style={[commonStyles.secondaryText, { marginTop: RfH(4) }]}>CBSE | Class 9</Text>
+                    <Text style={commonStyles.headingPrimaryText}>English Class</Text>
+                    <Text style={[commonStyles.mediumMutedText, { marginTop: RfH(4) }]}>CBSE | Class 9</Text>
                   </View>
 
                   <View style={{}}>
@@ -262,7 +252,7 @@ function ScheduledClassDetails(props) {
 
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(54) }]}>
           <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.two_users} />
-          <Text style={[commonStyles.headingText, { marginLeft: RfW(16) }]}>Tutor</Text>
+          <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
         </View>
         <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(12), marginHorizontal: RfW(16) }]}>
           <IconButtonWrapper
@@ -272,8 +262,8 @@ function ScheduledClassDetails(props) {
             styling={{ borderRadius: RfH(22.5) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingText}>Simran Kaur gill</Text>
-            <Text style={commonStyles.secondaryText}>GURUQT125744</Text>
+            <Text style={commonStyles.headingPrimaryText}>Simran Kaur gill</Text>
+            <Text style={commonStyles.mediumMutedText}>GURUQT125744</Text>
           </View>
         </View>
 
@@ -282,8 +272,8 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.personal} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingText}>Class ID</Text>
-            <Text style={commonStyles.secondaryText}>GURUQS123JEHDKI3</Text>
+            <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
+            <Text style={commonStyles.mediumMutedText}>GURUQS123JEHDKI3</Text>
           </View>
         </View>
 
@@ -292,8 +282,8 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.calendar} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingText}>Friday , Sept 15</Text>
-            <Text style={commonStyles.secondaryText}>06:00 PM - 07:00 PM</Text>
+            <Text style={commonStyles.headingPrimaryText}>Friday , Sept 15</Text>
+            <Text style={commonStyles.mediumMutedText}>06:00 PM - 07:00 PM</Text>
           </View>
         </View>
 
@@ -302,8 +292,8 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.bell_light} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingText}>Notification alert</Text>
-            <Text style={commonStyles.secondaryText}>20 minutes before</Text>
+            <Text style={commonStyles.headingPrimaryText}>Notification alert</Text>
+            <Text style={commonStyles.mediumMutedText}>20 minutes before</Text>
           </View>
         </View>
 
@@ -312,8 +302,8 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.two_users} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingText}>04 Attendees</Text>
-            <Text style={commonStyles.secondaryText}>04 people about to join the Class</Text>
+            <Text style={commonStyles.headingPrimaryText}>04 Attendees</Text>
+            <Text style={commonStyles.mediumMutedText}>04 people about to join the Class</Text>
           </View>
         </View>
         <FlatList
@@ -329,7 +319,7 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingText}>Attachments</Text>
+            <Text style={commonStyles.headingPrimaryText}>Attachments</Text>
           </View>
         </View>
         <FlatList
@@ -345,7 +335,7 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper iconImage={Images.pin_gray} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingText}>Class Location </Text>
+            <Text style={commonStyles.headingPrimaryText}>Class Location </Text>
           </View>
         </View>
 
@@ -364,7 +354,7 @@ function ScheduledClassDetails(props) {
         </View>
 
         <View style={{ marginLeft: RfW(16), marginTop: RfH(8) }}>
-          <Text style={commonStyles.titleText}>Block 27</Text>
+          <Text style={commonStyles.headingPrimaryText}>Block 27</Text>
           <Text style={{ fontSize: RFValue(12, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
             Block 72, , Ashok Nagar, New Delhi, Delhi 110018, India
           </Text>
@@ -413,7 +403,7 @@ function ScheduledClassDetails(props) {
                 submitFunction={() => setShowClassStartedPopup(false)}
               />
               <View style={{ padding: RfH(16) }}>
-                <Text style={[commonStyles.secondaryText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}>
+                <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}>
                   Your class has been started. Confirm to continue.
                 </Text>
               </View>
@@ -456,7 +446,7 @@ function ScheduledClassDetails(props) {
                 submitFunction={() => setShowCancelClassStartedPopup(false)}
               />
               <View style={{ padding: RfH(16) }}>
-                <Text style={[commonStyles.secondaryText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}>
+                <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}>
                   Do you want to re-schedule your class?
                 </Text>
               </View>

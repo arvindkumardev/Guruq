@@ -22,10 +22,10 @@ function RateAndReviews() {
           iconImage={Images.kushal}
           styling={{ borderRadius: 8 }}
         />
-        <Text style={[commonStyles.titleText, { marginTop: RfH(8) }]}>Gurbani Singh</Text>
-        <Text style={commonStyles.secondaryText}>English ( Class 6-12 I CBSE)</Text>
+        <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}>Gurbani Singh</Text>
+        <Text style={commonStyles.mediumMutedText}>English ( Class 6-12 I CBSE)</Text>
         <View style={{ height: RfH(32) }} />
-        <Text style={commonStyles.secondaryText}>Rate Your Tutor</Text>
+        <Text style={commonStyles.mediumMutedText}>Rate Your Tutor</Text>
         <View style={{ height: RfH(32) }} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
           <IconButtonWrapper

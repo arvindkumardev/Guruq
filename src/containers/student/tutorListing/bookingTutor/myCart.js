@@ -377,7 +377,7 @@ const myCart = () => {
           },
         ]}>
         <View>
-          <Text style={commonStyles.headingText}>₹{amount}</Text>
+          <Text style={commonStyles.headingPrimaryText}>₹{amount}</Text>
           <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
         </View>
         <View>

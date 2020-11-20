@@ -15,6 +15,7 @@ import CustomDatePicker from '../../../components/CustomDatePicker';
 import CustomDropDown from '../../../components/CustomDropDown';
 import commonStyles from '../../../theme/styles';
 import Fonts from '../../../theme/fonts';
+import BackArrow from '../../../components/BackArrow';
 
 const { height, width } = Dimensions.get('window');
 
@@ -115,17 +116,12 @@ function PersonalDetails() {
               flexDirection: 'row',
               marginLeft: 10,
             }}>
-            <IconWrapper
-              submitFunction={() => onBackPress()}
-              iconHeight={RfH(20)}
-              iconWidth={RfW(20)}
-              iconImage={Images.backArrow}
-            />
+            <BackArrow action={onBackPress} />
             <View style={{ width: 40 }} />
             <Title
               style={{
                 fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
-                  fontFamily: Fonts.semiBold,
+                fontFamily: Fonts.semiBold,
                 color: 'rgb(25,24,24)',
               }}>
               Personal Details
@@ -137,7 +133,7 @@ function PersonalDetails() {
             <Text
               style={{
                 fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                  fontFamily: Fonts.semiBold,
+                fontFamily: Fonts.semiBold,
                 color: 'rgb(25,24,24)',
               }}>
               Edit
@@ -341,7 +337,7 @@ function PersonalDetails() {
             <Text
               style={{
                 color: '#FFFFFF',
-                  fontFamily: Fonts.semiBold,
+                fontFamily: Fonts.semiBold,
                 fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
               }}>
               Save

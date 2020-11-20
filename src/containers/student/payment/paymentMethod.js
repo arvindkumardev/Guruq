@@ -355,9 +355,9 @@ function PaymentMethod(props) {
             },
           ]}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={[commonStyles.headingText, { fontFamily: Fonts.regular }]}>Billing Address</Text>
+            <Text style={[commonStyles.headingPrimaryText, { fontFamily: Fonts.regular }]}>Billing Address</Text>
             {/* <TouchableWithoutFeedback onPress={() => setShowAddressPopup(true)}> */}
-            {/*  <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>CHANGE</Text> */}
+            {/*  <Text style={[commonStyles.headingPrimaryText, { color: Colors.brandBlue2 }]}>CHANGE</Text> */}
             {/* </TouchableWithoutFeedback> */}
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -505,7 +505,7 @@ function PaymentMethod(props) {
           },
         ]}>
         <View>
-          <Text style={commonStyles.headingText}>
+          <Text style={commonStyles.headingPrimaryText}>
             ₹
             {parseFloat(
               bookingData.orderPayment.amount +
@@ -566,14 +566,14 @@ function PaymentMethod(props) {
           />
           <View style={{ padding: RfH(16) }}>
             <View>
-              <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>Billing Address</Text>
-              <Text style={commonStyles.secondaryText}>27/14, Kamla Nagar</Text>
-              <Text style={commonStyles.secondaryText}>Delhi</Text>
+              <Text style={[commonStyles.headingPrimaryText, { color: Colors.brandBlue2 }]}>Billing Address</Text>
+              <Text style={commonStyles.mediumMutedText}>27/14, Kamla Nagar</Text>
+              <Text style={commonStyles.mediumMutedText}>Delhi</Text>
             </View>
             <View style={{ marginTop: RfH(32) }}>
-              <Text style={[commonStyles.headingText, { color: Colors.brandBlue2 }]}>Service Address</Text>
-              <Text style={commonStyles.secondaryText}>27/27, Kamla Nagar</Text>
-              <Text style={commonStyles.secondaryText}>Delhi</Text>
+              <Text style={[commonStyles.headingPrimaryText, { color: Colors.brandBlue2 }]}>Service Address</Text>
+              <Text style={commonStyles.mediumMutedText}>27/27, Kamla Nagar</Text>
+              <Text style={commonStyles.mediumMutedText}>Delhi</Text>
             </View>
           </View>
           <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(32) }]}>

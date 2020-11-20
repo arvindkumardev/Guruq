@@ -19,6 +19,7 @@ import { isLoggedIn, userDetails } from '../../../apollo/cache';
 import IconButtonWrapper from '../../../components/IconWrapper';
 import Images from '../../../theme/images';
 import Fonts from '../../../theme/fonts';
+import BackArrow from '../../../components/BackArrow';
 
 function ClassSelector(props) {
   const navigation = useNavigation();
@@ -100,12 +101,7 @@ function ClassSelector(props) {
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <StatusBar barStyle="dark-content" />
       <View style={[styles.helloView]}>
-        <IconButtonWrapper
-          iconImage={Images.backArrow}
-          iconWidth={RfW(20)}
-          iconHeight={RfH(20)}
-          submitFunction={() => onBackPress()}
-        />
+        <BackArrow action={onBackPress} />
         <Text
           style={{
             fontSize: RFValue(17, STANDARD_SCREEN_SIZE),

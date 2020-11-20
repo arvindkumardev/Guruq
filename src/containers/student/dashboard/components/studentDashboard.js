@@ -394,7 +394,7 @@ function StudentDashboard(props) {
               paddingTop: RfH(16),
             }}>
             <View style={commonStyles.horizontalChildrenSpaceView}>
-              <Text style={commonStyles.titleText}>All Subjects</Text>
+              <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
               <IconButtonWrapper
                 iconHeight={RfH(24)}
                 iconWidth={RfW(24)}

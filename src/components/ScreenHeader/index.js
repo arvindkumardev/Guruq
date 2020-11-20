@@ -8,6 +8,7 @@ import { Images, Colors } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import { IconButtonWrapper } from '..';
+import BackArrow from '../BackArrow';
 
 function customRangeSelector(props) {
   const navigation = useNavigation();
@@ -30,16 +31,8 @@ function customRangeSelector(props) {
           },
         ]}>
         <View style={commonStyles.horizontalChildrenView}>
-          {homeIcon && (
-            <IconButtonWrapper
-              styling={{ marginRight: RfW(16) }}
-              iconImage={Images.backArrow}
-              iconHeight={RfH(20)}
-              iconWidth={RfW(20)}
-              submitFunction={() => onBackPress()}
-            />
-          )}
-          <Text style={commonStyles.pageTitle}>{label}</Text>
+          {homeIcon && <BackArrow action={onBackPress} />}
+          <Text style={commonStyles.headingPrimaryText}>{label}</Text>
         </View>
       </View>
       {lineVisible && (

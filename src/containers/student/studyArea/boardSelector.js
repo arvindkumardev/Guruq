@@ -13,6 +13,7 @@ import styles from './style';
 import routeNames from '../../../routes/screenNames';
 import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
 import Fonts from '../../../theme/fonts';
+import BackArrow from '../../../components/BackArrow';
 
 function BoardSelector(props) {
   const navigation = useNavigation();
@@ -68,12 +69,7 @@ function BoardSelector(props) {
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.helloView}>
-        <IconButtonWrapper
-          iconImage={Images.backArrow}
-          iconWidth={RfW(20)}
-          iconHeight={RfH(20)}
-          submitFunction={() => onBackPress()}
-        />
+        <BackArrow action={onBackPress} />
         <Text
           style={{
             fontSize: RFValue(17, STANDARD_SCREEN_SIZE),

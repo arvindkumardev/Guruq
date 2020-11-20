@@ -39,7 +39,7 @@ function DetailedRating() {
     return (
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(20) }]}>
         <View style={{ flex: 0.5 }}>
-          <Text style={commonStyles.secondaryText}>{item.category}</Text>
+          <Text style={commonStyles.mediumMutedText}>{item.category}</Text>
         </View>
         <View style={[commonStyles.horizontalChildrenCenterView, { flex: 0.5, justifyContent: 'flex-end' }]}>
           {rating}

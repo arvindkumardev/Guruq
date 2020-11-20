@@ -17,6 +17,7 @@ import Loader from '../../../components/Loader';
 import Fonts from '../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
+import BackArrow from '../../../components/BackArrow';
 
 function TutorListing(props) {
   const navigation = useNavigation();
@@ -963,13 +964,7 @@ function TutorListing(props) {
                 paddingHorizontal: RfW(16),
               }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <IconButtonWrapper
-                  styling={{ marginRight: RfW(16) }}
-                  iconImage={Images.backArrow}
-                  iconHeight={RfH(20)}
-                  iconWidth={RfW(20)}
-                  submitFunction={() => onBackPress()}
-                />
+                <BackArrow action={onBackPress} />
                 {/* {showBackButton && ( */}
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
@@ -1007,13 +1002,7 @@ function TutorListing(props) {
               }}>
               <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
                 <View style={{}}>
-                  <IconButtonWrapper
-                    styling={{ marginRight: RfW(16) }}
-                    iconImage={Images.backArrow}
-                    iconHeight={RfH(20)}
-                    iconWidth={RfW(20)}
-                    submitFunction={() => onBackPress()}
-                  />
+                  <BackArrow action={onBackPress} />
                 </View>
                 {/* {showBackButton && ( */}
                 <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>

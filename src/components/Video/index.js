@@ -15,6 +15,7 @@ import { Colors } from '../../theme';
 import IconButtonWrapper from '../IconWrapper';
 import Images from '../../theme/images';
 import commonStyles from '../../theme/styles';
+import BackArrow from '../BackArrow';
 
 interface Props {}
 
@@ -214,6 +215,10 @@ export default class Video extends Component<Props, State> {
     this.setState({ videoMuted: newState });
   };
 
+  onBackPress = () => {
+    this.props.onCallEnd(true);
+  };
+
   render() {
     const { joinSucceed } = this.state;
 
@@ -222,13 +227,7 @@ export default class Video extends Component<Props, State> {
         {!joinSucceed && (
           <>
             <View style={{ height: 44, marginTop: 44, paddingHorizontal: 16, justifyContent: 'center' }}>
-              <IconButtonWrapper
-                styling={{ marginRight: RfW(16) }}
-                iconImage={Images.backArrow}
-                iconHeight={RfH(20)}
-                iconWidth={RfW(20)}
-                submitFunction={() => this.props.onCallEnd(true)}
-              />
+              <BackArrow action={this.onBackPress} />
             </View>
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <View style={{ flex: 0.8, justifyContent: 'flex-end', alignSelf: 'stretch' }}>
@@ -319,9 +318,9 @@ export default class Video extends Component<Props, State> {
                     <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
                   </View>
                   <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-                    <Text style={commonStyles.headingText}>Physics Class By John Smith</Text>
-                    <Text style={commonStyles.secondaryText}>CBSE | Class 9</Text>
-                    <Text style={commonStyles.secondaryText}>Nov 12, 9:30 pm</Text>
+                    <Text style={commonStyles.headingPrimaryText}>Physics Class By John Smith</Text>
+                    <Text style={commonStyles.mediumMutedText}>CBSE | Class 9</Text>
+                    <Text style={commonStyles.mediumMutedText}>Nov 12, 9:30 pm</Text>
                   </View>
                   <View>
                     <IconButtonWrapper />
