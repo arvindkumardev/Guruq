@@ -92,7 +92,7 @@ const myCart = () => {
 
   const renderCartItems = (item, index) => {
     return (
-      <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
+      <View style={commonStyles.horizontalChildrenStartView}>
         <IconButtonWrapper
           iconHeight={RfH(90)}
           iconWidth={RfW(80)}
@@ -102,7 +102,7 @@ const myCart = () => {
         <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <View>
-              <Text style={styles.buttonText}>{item?.offering?.name}</Text>
+              <Text style={styles.buttonText}>{item?.offering?.displayName}</Text>
               <Text style={styles.buttonText}>
                 by {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
               </Text>
@@ -124,7 +124,7 @@ const myCart = () => {
             </View>
           </View>
           <Text style={styles.tutorDetails}>
-            {item?.offering?.parentOffering?.parentOffering?.name}, {item?.offering?.parentOffering?.name}
+            {item?.offering?.parentOffering?.parentOffering?.displayName}, {item?.offering?.parentOffering?.displayName}
           </Text>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={styles.tutorDetails}>
@@ -310,7 +310,7 @@ const myCart = () => {
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
       <Loader isLoading={cartLoading || removeLoading} />
       {/* <View style={{ marginHorizontal: RfW(16) }}> */}
-      <ScreenHeader label="My Cart" homeIcon horizontalPadding={16} />
+      <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
       {/* </View> */}
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* <View */}
@@ -324,7 +324,7 @@ const myCart = () => {
         {/*  ]}> */}
         {/*  <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text> */}
         {/* </View> */}
-        <View style={{ paddingHorizontal: RfW(16), backgroundColor: Colors.white }}>
+        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.white }}>
           <FlatList
             showsHorizontalScrollIndicator={false}
             data={cartItems}

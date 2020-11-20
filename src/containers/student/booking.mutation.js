@@ -38,7 +38,7 @@ export const ADD_TO_CART = gql`
       deleted
       offering {
         id
-        name
+        displayName
       }
       tutor {
         id
