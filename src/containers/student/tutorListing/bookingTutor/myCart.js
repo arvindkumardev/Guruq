@@ -30,7 +30,9 @@ const myCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(300);
 
-  const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(GET_CART_ITEMS);
+  const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(GET_CART_ITEMS, {
+    fetchPolicy: 'no-cache',
+  });
 
   useEffect(() => {
     if (cartItemData?.getCartItems) {
@@ -145,7 +147,12 @@ const myCart = () => {
         <View
           style={[
             commonStyles.horizontalChildrenSpaceView,
-            { backgroundColor: Colors.white, height: RfH(44), alignItems: 'center', paddingHorizontal: RfW(16) },
+            {
+              backgroundColor: Colors.white,
+              height: RfH(44),
+              alignItems: 'center',
+              paddingHorizontal: RfW(16),
+            },
           ]}>
           <View style={commonStyles.horizontalChildrenStartView}>
             <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
@@ -179,7 +186,12 @@ const myCart = () => {
         <View
           style={[
             commonStyles.horizontalChildrenSpaceView,
-            { backgroundColor: Colors.white, height: RfH(44), alignItems: 'center', paddingHorizontal: RfW(16) },
+            {
+              backgroundColor: Colors.white,
+              height: RfH(44),
+              alignItems: 'center',
+              paddingHorizontal: RfW(16),
+            },
           ]}>
           <View style={commonStyles.horizontalChildrenStartView}>
             <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />

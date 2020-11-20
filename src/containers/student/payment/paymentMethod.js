@@ -77,7 +77,8 @@ function PaymentMethod(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED);
+        console.log(data);
+        navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, data);
       }
     },
   });
