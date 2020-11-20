@@ -80,7 +80,7 @@ export const REMOVE_CART_ITEM = gql`
 
 export const MAKE_PAYMENT = gql`
   mutation MakePayment(
-    $orderId: Int!
+    $orderId: Float!
     $paymentMethod: Float!
     $orderPaymentStatus: Float!
     $transactionDetails: String!
