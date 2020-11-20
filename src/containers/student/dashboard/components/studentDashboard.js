@@ -23,6 +23,7 @@ import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashb
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
+import { getBoxColor } from '../../../../theme/colors';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
@@ -137,14 +138,7 @@ function StudentDashboard(props) {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor:
-                item.id % 4 === 0
-                  ? '#E7E5F2'
-                  : item.id % 4 === 1
-                  ? '#FFF7F0'
-                  : item.id % 4 === 2
-                  ? 'rgb(230,252,231)'
-                  : 'rgb(203,231,255)',
+              backgroundColor: getBoxColor(item.id),
               height: RfH(67),
               width: RfW(70),
               marginHorizontal: RfW(4),
@@ -400,7 +394,7 @@ function StudentDashboard(props) {
               paddingTop: RfH(16),
             }}>
             <View style={commonStyles.horizontalChildrenSpaceView}>
-              <Text style={commonStyles.titleText}>All Subjects</Text>
+              <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
               <IconButtonWrapper
                 iconHeight={RfH(24)}
                 iconWidth={RfW(24)}
@@ -429,38 +423,50 @@ function StudentDashboard(props) {
   };
 
   const getSubjects = (item) => {
-    let subjects = '';
+    const subjects = [];
+
     item.tutor.tutorOfferings.map((obj) => {
-      if (
-        selectedOffering?.parentOffering?.id === obj.offerings[0].id &&
-        selectedOffering?.id === obj.offerings[1].id
-      ) {
-        subjects = `${obj.offerings[2].displayName},${subjects}`;
+      if (obj.offerings.find((o) => o.id === selectedOffering?.id)) {
+        subjects.push(obj.offerings[0].displayName);
       }
+      // if (
+      //   selectedOffering?.parentOffering?.id === obj.offerings[0].id &&
+      //   selectedOffering?.id === obj.offerings[1].id
+      // ) {
+      //   subjects = `${obj.offerings[2].displayName},${subjects}`;
+      // }
     });
-    return subjects;
+    return subjects.join(', ');
   };
 
   const renderTutors = (item) => {
     return (
       <View
         style={{
-          width: RfW(109),
+          width: RfW(80),
           borderRadius: 8,
-          backgroundColor: 'rgb(245,245,245)',
+          // backgroundColor: 'rgb(245,245,245)',
           marginHorizontal: RfW(10),
-          paddingHorizontal: RfW(8),
+          // paddingHorizontal: RfW(8),
           marginTop: RfH(20),
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Thumbnail large style={{ marginTop: RfH(11) }} source={getTutorImage(item.tutor)} />
-          <Text style={{ marginTop: 1, color: Colors.primaryText }}>
+          <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
+          <Text
+            numberOfLines={2}
+            style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
             {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
           </Text>
           <Text
-            numberOfLines={2}
+            numberOfLines={1}
             ellipsizeMode="tail"
-            style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12, marginBottom: RfH(16) }}>
+            style={{
+              marginTop: 1,
+              color: Colors.secondaryText,
+              fontSize: 13,
+              marginBottom: RfH(16),
+              textAlign: 'center',
+            }}>
             {getSubjects(item)}
           </Text>
         </View>
@@ -531,21 +537,22 @@ function StudentDashboard(props) {
               />
             </View>
           </View>
-          <View style={{ height: 44 }}>
-            <Item
-              style={{
-                backgroundColor: '#F3F4F9',
-                borderRadius: 10,
-                paddingHorizontal: RfW(10),
-                borderColor: 'transparent',
-                height: RfH(36),
-                marginTop: 4,
-                marginBottom: 4,
-              }}>
-              <Icon type="MaterialIcons" name="search" style={{ color: Colors.brandBlue2 }} />
-              <Input placeholder="Search" />
-            </Item>
-          </View>
+
+          {/* <View style={{ height: 44 }}> */}
+          {/*  <Item */}
+          {/*    style={{ */}
+          {/*      backgroundColor: '#F3F4F9', */}
+          {/*      borderRadius: 10, */}
+          {/*      paddingHorizontal: RfW(10), */}
+          {/*      borderColor: 'transparent', */}
+          {/*      height: RfH(36), */}
+          {/*      marginTop: 4, */}
+          {/*      marginBottom: 4, */}
+          {/*    }}> */}
+          {/*    <Icon type="MaterialIcons" name="search" style={{ color: Colors.brandBlue2 }} /> */}
+          {/*    <Input placeholder="Search" /> */}
+          {/*  </Item> */}
+          {/* </View> */}
 
           <View style={{ height: RfH(220), marginTop: RfH(29) }}>
             <Swiper horizontal>

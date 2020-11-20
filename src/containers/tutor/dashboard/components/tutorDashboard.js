@@ -43,7 +43,7 @@ function TutorDashboard() {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#E7E5F2',
+                backgroundColor: Colors.lightPurple,
                 height: RfH(67),
                 width: RfW(67),
                 borderRadius: RfW(8),
@@ -161,7 +161,7 @@ function TutorDashboard() {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#E7E5F2',
+                backgroundColor: Colors.lightPurple,
                 height: RfH(67),
                 width: RfW(67),
                 borderRadius: RfW(8),
@@ -262,7 +262,14 @@ function TutorDashboard() {
               Hi {userInfo.firstName}
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Text style={{ color: Colors.secondaryText, fontSize: 16, marginTop: RfH(4) }}>GURUQT{userInfo.id}</Text>
+              <Text
+                style={{
+                  color: Colors.secondaryText,
+                  fontSize: 16,
+                  marginTop: RfH(4),
+                }}>
+                GURUQT{userInfo.id}
+              </Text>
               {/* <Icon */}
               {/*  type="MaterialIcons" */}
               {/*  name="keyboard-arrow-down" */}

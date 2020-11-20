@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
-  pageTitle: {
-    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-    fontFamily: Fonts.semiBold,
-  },
+  // pageTitle: {
+  //   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+  //   fontFamily: Fonts.semiBold,
+  // },
   horizontalChildrenSpaceView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -153,23 +153,84 @@ const styles = StyleSheet.create({
     fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.bold,
   },
-  titleText: {
+
+  // titleText: {
+  //   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+  //   fontFamily: Fonts.semiBold,
+  //   color: Colors.primaryText,
+  // },
+  // headingText: {
+  //   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+  //   fontFamily: Fonts.semiBold,
+  //   color: Colors.primaryText,
+  // },
+  // secondaryText: {
+  //   fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+  //   color: Colors.darkGrey,
+  // },
+  // blockHeading: {
+  //   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+  //   fontFamily: Fonts.semiBold,
+  //   color: Colors.primaryText,
+  // },
+
+  // font styles
+  headingPrimaryText: {
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
     color: Colors.primaryText,
   },
-  headingText: {
+  headingMutedText: {
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
-  },
-  secondaryText: {
-    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
     color: Colors.darkGrey,
   },
-  blockHeading: {
+
+  regularPrimaryText: {
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.regular,
     color: Colors.primaryText,
+  },
+
+  regularMutedText: {
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.regular,
+    color: Colors.darkGrey,
+  },
+  mediumPrimaryText: {
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.regular,
+    color: Colors.primaryText,
+  },
+
+  mediumMutedText: {
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.regular,
+    color: Colors.darkGrey,
+  },
+
+  smallPrimaryText: {
+    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.regular,
+    color: Colors.primaryText,
+  },
+
+  smallMutedText: {
+    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.regular,
+    color: Colors.darkGrey,
+  },
+
+  xSmallPrimaryText: {
+    fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.regular,
+    color: Colors.primaryText,
+  },
+
+  xSmallMutedText: {
+    fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.regular,
+    color: Colors.darkGrey,
   },
 });
 export default styles;

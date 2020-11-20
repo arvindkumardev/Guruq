@@ -12,6 +12,7 @@ import routeNames from '../../../../routes/screenNames';
 import Loader from '../../../../components/Loader';
 import styles from '../styles';
 import { ADD_TO_CART } from '../../booking.mutation';
+import Fonts from '../../../../theme/fonts';
 
 const classModeSelectModal = (props) => {
   const { visible, onClose, budgetDetails, selectedSubject } = props;
@@ -44,10 +45,10 @@ const classModeSelectModal = (props) => {
     const odata = [];
     for (const b of budgetDetails) {
       if (!b.onlineClass) {
-        odata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+        odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
         setOfflineClassMode(false);
       } else {
-        bdata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+        bdata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
         setOnlineClassMode(true);
       }
     }
@@ -101,7 +102,8 @@ const classModeSelectModal = (props) => {
           style={[
             commonStyles.borderBottom,
             {
-              marginTop: RfH(24),
+              // marginTop: RfH(24),
+              height: RfH(44),
               flexDirection: 'row',
               justifyContent: 'space-around',
               alignItems: 'center',
@@ -109,13 +111,13 @@ const classModeSelectModal = (props) => {
             },
           ]}>
           <View style={{}}>
-            <Text style={commonStyles.secondaryText}>{item.classes}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.classes}</Text>
           </View>
           <View>
-            <Text style={commonStyles.secondaryText}>{item.pricePerHour}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.pricePerHour}</Text>
           </View>
           <View>
-            <Text style={commonStyles.secondaryText}>{item.totalPrice}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.totalPrice}</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -129,7 +131,7 @@ const classModeSelectModal = (props) => {
       const odata = [];
       for (const b of budgetDetails) {
         if (b.onlineClass) {
-          odata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+          odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
         }
       }
       setOnlineClassPrices(odata);
@@ -143,7 +145,7 @@ const classModeSelectModal = (props) => {
       const odata = [];
       for (const b of budgetDetails) {
         if (!b.onlineClass) {
-          odata.push({ classes: b.groupSize, pricePerHour: b.price, totalPrice: b.price * b.groupSize });
+          odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
         }
       }
       setOfflineClassPrices(odata);
@@ -186,12 +188,19 @@ const classModeSelectModal = (props) => {
           opacity: 1,
           paddingBottom: RfH(34),
         }}>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
-          <Text style={[commonStyles.pageTitle, { alignSelf: 'center' }]}>Book Class</Text>
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            {
+              height: RfH(44),
+              paddingHorizontal: RfW(16),
+              backgroundColor: Colors.lightBlue
+            },
+          ]}>
+          <Text style={[commonStyles.headingPrimaryText]}>Book Class</Text>
           <IconButtonWrapper
             iconHeight={RfH(24)}
             iconWidth={RfW(24)}
-            styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
             iconImage={Images.cross}
             submitFunction={() => onClose(false)}
           />
@@ -199,11 +208,18 @@ const classModeSelectModal = (props) => {
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
           <Loader isLoading={cartLoading} />
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={[styles.compareTutorName, { marginTop: RfH(16), alignSelf: 'flex-start' }]}>
+            <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(16), alignSelf: 'flex-start' }]}>
               Select mode of class and number of Classes
             </Text>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'flex-start' }]}>
-              <Text style={styles.tutorDetails}>Mode of Class</Text>
+            <View
+              style={[
+                commonStyles.horizontalChildrenSpaceView,
+                {
+                  marginTop: RfH(16),
+                  alignItems: 'flex-start',
+                },
+              ]}>
+              <Text style={commonStyles.mediumPrimaryText}>Mode of Class</Text>
               <View style={commonStyles.horizontalChildrenCenterView}>
                 {onlineClassPrices.length > 0 && (
                   <View style={{ flexDirection: 'row' }}>
@@ -254,17 +270,12 @@ const classModeSelectModal = (props) => {
                 keyExtractor={(item, index) => index.toString()}
               />
             </View>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(40) }]}>
-              <Text style={[styles.compareTutorName, { marginTop: 0 }]}>Total Classes</Text>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
+              <Text style={commonStyles.regularPrimaryText}>Total Classes</Text>
               <View style={styles.bookingSelectorParent}>
                 <TouchableWithoutFeedback onPress={() => removeClass()}>
                   <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
-                    <IconButtonWrapper
-                      iconWidth={RfW(12)}
-                      iconHeight={RfH(12)}
-                      iconImage={Images.minus_blue}
-                      // submitFunction={() => removeClass()}
-                    />
+                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                   </View>
                 </TouchableWithoutFeedback>
 
@@ -272,19 +283,14 @@ const classModeSelectModal = (props) => {
 
                 <TouchableWithoutFeedback onPress={() => addClass()}>
                   <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
-                    <IconButtonWrapper
-                      iconWidth={RfW(12)}
-                      iconHeight={RfH(12)}
-                      iconImage={Images.plus_blue}
-                      // submitFunction={() => addClass()}
-                    />
+                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                   </View>
                 </TouchableWithoutFeedback>
               </View>
             </View>
             <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-              <Text style={[styles.compareTutorName, { marginTop: 0 }]}>Amount Payable</Text>
-              <Text>₹{amount}</Text>
+              <Text style={commonStyles.regularPrimaryText}>Amount Payable</Text>
+              <Text style={commonStyles.headingPrimaryText}>₹{amount}</Text>
             </View>
             <View style={{ alignSelf: 'center', marginTop: RfH(32) }}>
               <Button onPress={() => onAddingIntoCart()} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>

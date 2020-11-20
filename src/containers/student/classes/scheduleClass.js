@@ -7,6 +7,7 @@ import { RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 import { Images, Colors, Fonts } from '../../../theme';
+import BackArrow from '../../../components/BackArrow';
 
 function scheduleClass() {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ function scheduleClass() {
     return (
       <View>
         <View style={{ height: RfH(44) }} />
-        <Text style={commonStyles.titleText}>Physics Class</Text>
+        <Text style={commonStyles.headingPrimaryText}>Physics Class</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>CBSE | Class 9</Text>
         </View>
@@ -64,7 +65,7 @@ function scheduleClass() {
               justifyContent: 'center',
               borderRadius: 8,
             }}>
-            <Text style={[commonStyles.titleText, { color: Colors.darkGrey }]}>Class 1</Text>
+            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class 1</Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey, marginTop: RfH(8) }}>
               21 Sept ' 20
             </Text>
@@ -79,7 +80,7 @@ function scheduleClass() {
               justifyContent: 'center',
               borderRadius: 8,
             }}>
-            <Text style={[commonStyles.titleText, { color: Colors.darkGrey }]}>Class 2</Text>
+            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class 2</Text>
             <IconButtonWrapper
               iconHeight={RfH(20)}
               iconWidth={RfW(24)}
@@ -99,7 +100,7 @@ function scheduleClass() {
               justifyContent: 'center',
               borderRadius: 8,
             }}>
-            <Text style={[commonStyles.titleText, { color: Colors.darkGrey }]}>Class 3</Text>
+            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class 3</Text>
             <IconButtonWrapper
               iconHeight={RfH(20)}
               iconWidth={RfW(24)}
@@ -117,7 +118,7 @@ function scheduleClass() {
               justifyContent: 'center',
               borderRadius: 8,
             }}>
-            <Text style={[commonStyles.titleText, { color: Colors.darkGrey }]}>Class 4</Text>
+            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class 4</Text>
             <IconButtonWrapper
               iconHeight={RfH(20)}
               iconWidth={RfW(24)}
@@ -133,13 +134,8 @@ function scheduleClass() {
     <View style={[commonStyles.mainContainer, { paddingTop: RfH(44), backgroundColor: Colors.white }]}>
       <View style={commonStyles.horizontalChildrenSpaceView}>
         <View style={commonStyles.horizontalChildrenView}>
-          <IconButtonWrapper
-            iconImage={Images.backArrow}
-            iconWidth={RfW(20)}
-            iconHeight={RfH(20)}
-            submitFunction={() => onBackPress()}
-          />
-          <Text style={[commonStyles.pageTitle, { marginLeft: RfW(16) }]}>Schedule Class</Text>
+          <BackArrow action={onBackPress} />
+          <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text>
         </View>
         <Text style={{ fontSize: RFValue(28, STANDARD_SCREEN_SIZE) }}>+</Text>
       </View>

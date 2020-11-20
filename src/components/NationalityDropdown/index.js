@@ -8,6 +8,7 @@ import IconButtonWrapper from '../IconWrapper';
 import Images from '../../theme/images';
 import { RfH, RfW } from '../../utils/helpers';
 import CustomSearchBar from '../CustomSearchBar';
+import BackArrow from '../BackArrow';
 
 const countryData = require('./country/countries.json').map((item) => ({ ...item, key: item.name, value: item.name }));
 
@@ -65,13 +66,7 @@ function NationalityDropdown(props) {
     <Modal visible={modalVisible} animationType="fade" onRequestClose={() => toggleModal()} transparent>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
-          <IconButtonWrapper
-            iconImage={Images.backArrow}
-            iconWidth={RfW(20)}
-            iconHeight={RfH(20)}
-            styling={{ justifyContent: 'center', paddingVertical: RfH(15) }}
-            submitFunction={() => toggleModal()}
-          />
+          <BackArrow action={toggleModal} />
           <Text style={styles.headerText}>{modalTitle}</Text>
         </View>
         <CustomSearchBar placeholder="Search..." value={searchText} onChangeText={(search) => updateSearch(search)} />

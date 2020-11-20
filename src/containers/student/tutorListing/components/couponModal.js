@@ -65,12 +65,12 @@ const qPointPayModal = (props) => {
         </View>
         <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(16) }}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.titleText}>GURUQIST</Text>
-            <Text style={[commonStyles.titleText, { color: Colors.brandBlue2 }]}>APPLY</Text>
+            <Text style={commonStyles.headingPrimaryText}>GURUQIST</Text>
+            <Text style={[commonStyles.headingPrimaryText, { color: Colors.brandBlue2 }]}>APPLY</Text>
           </View>
           <Text style={{ marginTop: RfH(16) }}>Get 20% off</Text>
           <View style={[commonStyles.borderBottom, { marginVertical: RfH(16) }]} />
-          <Text style={[commonStyles.secondaryText, { marginBottom: RfH(28) }]}>
+          <Text style={[commonStyles.mediumMutedText, { marginBottom: RfH(28) }]}>
             Use Code GURUQ1ST & get 20% off on booking your 1st class.
           </Text>
         </View>

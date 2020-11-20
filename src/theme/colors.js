@@ -20,4 +20,14 @@ const Colors = {
   lightBlue: '#e8f7fe',
 };
 
+export const getBoxColor = (id: number) => {
+  return id % 5 === 0
+    ? Colors.lightPurple
+    : id % 5 === 1
+    ? Colors.lightOrange
+    : id % 5 === 2
+    ? Colors.lightGreen
+    : Colors.skyBlue;
+};
+
 export default Colors;

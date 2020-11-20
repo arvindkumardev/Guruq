@@ -17,6 +17,7 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/fonts';
 import ClassModeSelectModal from './components/classModeSelectModal';
+import BackArrow from '../../../components/BackArrow';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
@@ -86,7 +87,7 @@ function tutorDetails(props) {
               sb[`${item.offering.id}`] = item.budgets;
 
               for (const b of item.budgets) {
-                pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.groupSize}`] = b.price;
+                pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
               }
             }
           }
@@ -352,7 +353,7 @@ function tutorDetails(props) {
     return (
       <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfW(16) }}>
         <View>
-          <Text style={[commonStyles.titleText]}>Price Matrix</Text>
+          <Text style={[commonStyles.headingPrimaryText]}>Price Matrix</Text>
         </View>
         <View
           style={[
@@ -569,12 +570,7 @@ function tutorDetails(props) {
             alignItems: 'center',
             justifyContent: 'flex-start',
           }}>
-          <IconButtonWrapper
-            iconHeight={RfH(20)}
-            iconWidth={RfW(20)}
-            iconImage={Images.backArrow}
-            submitFunction={() => onBackPress()}
-          />
+          <BackArrow action={onBackPress} />
 
           {hideTutorPersonal && (
             <View
@@ -729,7 +725,7 @@ function tutorDetails(props) {
         {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
 
         {/* <View style={{ marginHorizontal: RfW(16), marginVertical: RfH(16) }}> */}
-        {/*  <Text style={commonStyles.titleText}>Educational Qualification</Text> */}
+        {/*  <Text style={commonStyles.headingPrimaryText}>Educational Qualification</Text> */}
         {/*  <Text style={[styles.tutorDetails, { marginTop: RfH(8) }]}>Mass Communication</Text> */}
         {/* </View> */}
 

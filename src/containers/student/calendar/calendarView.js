@@ -71,11 +71,11 @@ function CalendarView() {
             />
           </View>
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingText}>{item.classTitle}</Text>
-            <Text style={commonStyles.secondaryText}>
+            <Text style={commonStyles.headingPrimaryText}>{item.classTitle}</Text>
+            <Text style={commonStyles.mediumMutedText}>
               {item.board} | {item.class}
             </Text>
-            <Text style={commonStyles.secondaryText}>{item.timing}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.timing}</Text>
           </View>
           <View>
             <IconButtonWrapper />
@@ -89,7 +89,7 @@ function CalendarView() {
     return (
       <View style={{ marginTop: RfH(32) }}>
         <View>
-          <Text style={commonStyles.titleText}>
+          <Text style={commonStyles.headingPrimaryText}>
             {item.date} {item.month}
           </Text>
         </View>

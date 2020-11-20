@@ -45,7 +45,7 @@ const dateSlotModal = (props) => {
     return (
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(20) }]}>
         <View style={{ flex: 0.5 }}>
-          <Text style={commonStyles.secondaryText}>{item.category}</Text>
+          <Text style={commonStyles.mediumMutedText}>{item.category}</Text>
         </View>
         <View style={[commonStyles.horizontalChildrenCenterView, { flex: 0.5, justifyContent: 'flex-end' }]}>
           {rating}
@@ -77,10 +77,10 @@ const dateSlotModal = (props) => {
               iconImage={Images.kushal}
               styling={{ borderRadius: 8 }}
             />
-            <Text style={[commonStyles.titleText, { marginTop: RfH(8) }]}>Gurbani Singh</Text>
-            <Text style={commonStyles.secondaryText}>English ( Class 6-12 I CBSE)</Text>
+            <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}>Gurbani Singh</Text>
+            <Text style={commonStyles.mediumMutedText}>English ( Class 6-12 I CBSE)</Text>
             <View style={{ height: RfH(32) }} />
-            <Text style={commonStyles.secondaryText}>Rate Your Tutor</Text>
+            <Text style={commonStyles.mediumMutedText}>Rate Your Tutor</Text>
             <View style={{ height: RfH(24) }} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
               <IconButtonWrapper

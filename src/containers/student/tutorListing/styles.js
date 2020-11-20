@@ -205,8 +205,8 @@ const styles = StyleSheet.create({
   compareTutorName: {
     marginTop: RfH(16),
     alignSelf: 'center',
-    fontFamily: 'SegoeUI-Semibold',
-    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.semiBold,
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
   },
   informationParentMargin: {
     paddingHorizontal: RfW(16),

@@ -62,7 +62,7 @@ function bookingConfirmed() {
     return (
       <View>
         <View style={{ height: RfH(40) }} />
-        <Text style={commonStyles.titleText}>{item.subject}</Text>
+        <Text style={commonStyles.headingPrimaryText}>{item.subject}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
             {item.board} | Class {item.class}
@@ -103,7 +103,7 @@ function bookingConfirmed() {
           </View>
           <View style={commonStyles.verticallyCenterItemsView}>
             <Text
-              style={[commonStyles.pageTitle, { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 }]}>
+              style={[commonStyles.headingPrimaryText, { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 }]}>
               {item.numberOfClass}
             </Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>

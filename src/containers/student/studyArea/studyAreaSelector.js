@@ -12,6 +12,7 @@ import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
 import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
 import { IconButtonWrapper } from '../../../components';
+import BackArrow from '../../../components/BackArrow';
 
 function StudyAreaSelector() {
   const navigation = useNavigation();
@@ -78,15 +79,10 @@ function StudyAreaSelector() {
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.helloView}>
-        <IconButtonWrapper
-          iconImage={Images.backArrow}
-          iconWidth={RfW(20)}
-          iconHeight={RfH(20)}
-          submitFunction={() => onBackPress()}
-        />
-        {/*<Text style={styles.helloText}>Hello</Text>*/}
+        <BackArrow action={onBackPress} />
+        {/* <Text style={styles.helloText}>Hello</Text> */}
       </View>
-      {/*<Text style={styles.userName}>{userInfo?.firstName}</Text>*/}
+      {/* <Text style={styles.userName}>{userInfo?.firstName}</Text> */}
       <Text style={styles.subHeading}>Select Your Study Area</Text>
       <Text style={styles.subHeadingText}>To help us find the best tutors for you</Text>
 
