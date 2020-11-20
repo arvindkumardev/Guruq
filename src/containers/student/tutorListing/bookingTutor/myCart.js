@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
-import { Modal, View, Text, FlatList } from 'react-native';
+import { Alert, View, Text, FlatList } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -52,7 +52,15 @@ const myCart = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        // getCartItems();
+        let cart = [];
+        let index = 0;
+        cart = cartItems;
+        index = cart.findIndex((obj) => obj.id === data.removeFromCart.id);
+        if (index !== -1) {
+          cart.splice(index, 1);
+          setCartItems(cart);
+          setRefreshList(!refreshList);
+        }
       }
     },
   });
@@ -88,15 +96,15 @@ const myCart = () => {
         <IconButtonWrapper
           iconHeight={RfH(90)}
           iconWidth={RfW(80)}
-          iconImage={getTutorImage(item.tutor)}
+          iconImage={getTutorImage(item?.tutor)}
           styling={{ flex: 0.3, borderRadius: 16 }}
         />
         <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <View>
-              <Text style={styles.buttonText}>{item.offering.name}</Text>
+              <Text style={styles.buttonText}>{item?.offering?.name}</Text>
               <Text style={styles.buttonText}>
-                by {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
+                by {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
               </Text>
             </View>
             <View style={styles.bookingSelectorParent}>
@@ -106,7 +114,7 @@ const myCart = () => {
                 iconImage={Images.minus_blue}
                 submitFunction={() => removeClass(item, index)}
               />
-              <Text>{item.count}</Text>
+              <Text>{item?.count}</Text>
               <IconButtonWrapper
                 iconWidth={RfW(12)}
                 iconHeight={RfH(12)}
@@ -116,14 +124,14 @@ const myCart = () => {
             </View>
           </View>
           <Text style={styles.tutorDetails}>
-            {item.offering.parentOffering.parentOffering.name}, {item.offering.parentOffering.name}
+            {item?.offering?.parentOffering?.parentOffering?.name}, {item?.offering?.parentOffering?.name}
           </Text>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={styles.tutorDetails}>
-              {item.groupSize === 1 ? 'Individual' : 'Group'} {item.onlineClass ? 'online' : 'offline'} class
+              {item.groupSize === 1 ? 'Individual' : 'Group'} {item?.onlineClass ? 'online' : 'offline'} class
             </Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: 'SegoeUI-Bold' }}>
-              ₹{item.price}
+              ₹{item?.price}
             </Text>
           </View>
         </View>
@@ -248,7 +256,7 @@ const myCart = () => {
     setRefreshList(!refreshList);
   };
 
-  const removeClass = (item, index) => {
+  const removeClassItem = (index) => {
     const newArray = [];
     cartItems.map((obj) => {
       newArray.push(obj);
@@ -261,15 +269,40 @@ const myCart = () => {
       arrayItem.price = arrayItem.count * itemPrice;
       newArray[index] = arrayItem;
       setCartItems(newArray);
-      if (newArray[index].count === 0) {
-        removeCartItem(item);
-      }
       let amt = 0;
       for (const obj of newArray) {
         amt += obj.price;
       }
       setAmount(amt);
       setRefreshList(!refreshList);
+    }
+  };
+
+  const removeAfterConfirm = (item, index) => {
+    removeClassItem(index);
+    removeCartItem(item);
+  };
+
+  const removeClass = (item, index) => {
+    if (cartItems[index].count === 1) {
+      Alert.alert(
+        'Do you want to remove item from cart?',
+        '',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => removeAfterConfirm(item, index),
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      removeClassItem(index);
     }
   };
 
