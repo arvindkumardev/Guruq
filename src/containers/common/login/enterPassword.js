@@ -28,35 +28,6 @@ function EnterPassword(props) {
     variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, password },
   });
 
-  //   onError: (e) => {
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //       if (error.errorCode === INVALID_INPUT) {
-  //         // incorrect username/password
-  //         Alert.alert('Incorrect password');
-  //       } else if (error.errorCode === NOT_FOUND) {
-  //         navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
-  //       }
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     if (data) {
-  //       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token);
-  //       // .then(() => {
-  //       //   isLoggedIn(true);
-  //       //   userDetails(data.signIn);
-  //
-  //         navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
-  //       // });
-  //
-  //       // if (data.type === UserTypeEnum.OTHER.label) {
-  //       // } else {
-  //       // set in apollo cache
-  //       // }
-  //     }
-  //   },
-  // });
-
   useEffect(() => {
     if (signInError && signInError.graphQLErrors && signInError.graphQLErrors.length > 0) {
       const error = signInError.graphQLErrors[0].extensions.exception.response;

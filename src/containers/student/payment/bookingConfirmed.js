@@ -10,7 +10,11 @@ import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 
-function bookingConfirmed() {
+function bookingConfirmed(props) {
+  const { route } = props;
+
+  const orderDetail = route?.params?.makePayment;
+
   const navigation = useNavigation();
 
   return (
@@ -49,12 +53,12 @@ function bookingConfirmed() {
           color: Colors.darkGrey,
           alignSelf: 'center',
         }}>
-        Booking ID 9E03U8W9292
+        Booking ID {orderDetail?.uuid}
       </Text>
       <Button
-        onPress={() => navigation.navigate(routeNames.STUDENT.PAYMENT_RECEIVED)}
+        onPress={() => navigation.navigate(routeNames.STUDENT.DASHBOARD)}
         style={[commonStyles.buttonPrimary, { bottom: RfH(34), position: 'absolute', alignSelf: 'center' }]}>
-        <Text style={commonStyles.textButtonPrimary}>Dashboard</Text>
+        <Text style={commonStyles.textButtonPrimary}>Go To Dashboard</Text>
       </Button>
     </View>
   );

@@ -92,6 +92,7 @@ export const MAKE_PAYMENT = gql`
       transactionDetails: $transactionDetails
     ) {
       id
+      uuid
       orderStatus
       payableAmount
       orderPayment {
