@@ -9,7 +9,7 @@ import GlobalFont from 'react-native-global-font';
 import { getToken } from './utils/helpers';
 import { isLoggedIn, isTokenLoading, userDetails } from './apollo/cache';
 import AppStack from './routes/appRoutes';
-import { initializeApollo } from './apollo/apollo';
+import initializeApollo from './apollo/apollo';
 
 const getActiveRouteName = (state) => {
   const route = state.routes[state.index];
