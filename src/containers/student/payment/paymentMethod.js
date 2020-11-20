@@ -35,7 +35,6 @@ function PaymentMethod(props) {
 
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(1);
-  const [orderData, setOrderData] = useState({});
   const [discount, setDiscount] = useState(200);
   const [convenienceCharges, setConvenienceCharges] = useState(100);
   const [showAddressPopup, setShowAddressPopup] = useState(false);
@@ -51,16 +50,15 @@ function PaymentMethod(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        setOrderData(data.createBooking);
         switch (paymentMethod) {
           case 1:
-            initiateRazorPayPayment();
+            initiateRazorPayPayment(data.createBooking.id);
             break;
           case 2:
-            initiatePaytmPayment();
+            initiatePaytmPayment(data.createBooking.id);
             break;
           case 3:
-            initiatePaypalPayment();
+            initiatePaypalPayment(data.createBooking.id);
             break;
           default:
             completedPayment(2, 'Success');
@@ -84,7 +82,7 @@ function PaymentMethod(props) {
     },
   });
 
-  const initiateRazorPayPayment = () => {
+  const initiateRazorPayPayment = (bookingOrderId) => {
     const options = {
       description: 'Credits towards class booking',
       image:
@@ -103,22 +101,17 @@ function PaymentMethod(props) {
     RNRazorpayCheckout.open(options)
       .then((data) => {
         // handle success
-        Alert.alert(`Success: ${data.razorpay_payment_id}`);
-        console.log(data);
-        completedPayment(3, data.razorpay_payment_id);
+        completedPayment(bookingOrderId, 3, data.razorpay_payment_id);
         // create booking - with payment completed
       })
       .catch((error) => {
         // handle failure
-        console.log(`Error: ${error.code} | ${error.description}`);
-        console.log(error);
-        completedPayment(2, error.description);
-
+        completedPayment(bookingOrderId, 2, error.description);
         // create booking - with cancelled payment
       });
   };
 
-  const initiatePaytmPayment = async () => {
+  const initiatePaytmPayment = async (bookingOrderId) => {
     // eslint-disable-next-line no-undef
     const response = await fetch('http://localhost:5000/payment/initiatePaytmTransaction', {
       method: 'GET',
@@ -175,7 +168,7 @@ function PaymentMethod(props) {
     }
   };
 
-  const initiatePaypalPayment = () => {
+  const initiatePaypalPayment = (bookingOrderId) => {
     // const clientId = 'ATyFhrGwKtQXOl6CctMYjxObRRQeys2xmBUG1uKZvgkCRtzxNdMq75Xu1p9jQiM8ez4dfkOpI9jSrAVJ';
     // const clientSecret = 'EMwjugQJWArgzPjQSMCFFqbGp2md_xmb69tCiGcP_hmdF_K1T8uJcyIUCUN2Mzf43cXAvZwBXiSnJsFy';
     // TODO: use Linking and inappbrowser for PayPal - https://blog.codecentric.de/en/2020/05/paypal-integration-with-react-native/
@@ -224,12 +217,12 @@ function PaymentMethod(props) {
             </View>
             {paymentMethod === 4 && (
               <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
-              <View style={{ flexDirection: 'column' }}>
-                <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
-                  Convenience Charges
-                </Text>
-                <Dash dashColor={Colors.brandBlue2} />
-              </View>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+                    Convenience Charges
+                  </Text>
+                  <Dash dashColor={Colors.brandBlue2} />
+                </View>
 
                 <Text
                   style={{
@@ -326,10 +319,10 @@ function PaymentMethod(props) {
     });
   };
 
-  const completedPayment = (status, transactionData) => {
+  const completedPayment = (orderId, status, transactionData) => {
     payment({
       variables: {
-        orderId: orderData.id,
+        orderId,
         paymentMethod,
         orderPaymentStatus: status,
         transactionDetails: transactionData,
