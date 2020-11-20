@@ -20,7 +20,6 @@ export const ME_QUERY = gql`
         number
       }
       isPasswordSet
-      isFirstTime
       isPhoneNumberVerified
       isEmailVerified
       type

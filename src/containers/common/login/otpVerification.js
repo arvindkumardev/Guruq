@@ -12,7 +12,6 @@ import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { GENERATE_OTP_MUTATION, VERIFY_PHONE_NUMBER_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { isTokenLoading } from '../../../apollo/cache';
 
 function OtpVerification(props) {
   const navigation = useNavigation();

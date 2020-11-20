@@ -2,12 +2,12 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
-import { Alert, View, Text, FlatList } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { Alert, FlatList, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
