@@ -113,6 +113,16 @@ function StudentDashboard(props) {
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR, { offering: subject });
   };
 
+  const goToTutorDetails = (item) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
+      tutorData: item.tutor,
+      parentOffering: selectedOffering?.id,
+      parentParentOffering: selectedOffering?.parentOffering?.id,
+      parentOfferingName: selectedOffering?.displayName,
+      parentParentOfferingName: selectedOffering?.parentOffering?.displayName,
+    });
+  };
+
   const getTutorImage = (tutor) => {
     return tutor && tutor.profileImage && tutor.profileImage.filename
       ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
@@ -441,36 +451,36 @@ function StudentDashboard(props) {
 
   const renderTutors = (item) => {
     return (
-      <View
-        style={{
-          width: RfW(80),
-          borderRadius: 8,
-          // backgroundColor: 'rgb(245,245,245)',
-          marginHorizontal: RfW(10),
-          // paddingHorizontal: RfW(8),
-          marginTop: RfH(20),
-        }}>
-        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
-          <Text
-            numberOfLines={2}
-            style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
-            {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
-          </Text>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={{
-              marginTop: 1,
-              color: Colors.secondaryText,
-              fontSize: 13,
-              marginBottom: RfH(16),
-              textAlign: 'center',
-            }}>
-            {getSubjects(item)}
-          </Text>
+      <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
+        <View
+          style={{
+            width: RfW(80),
+            borderRadius: 8,
+            marginHorizontal: RfW(10),
+            marginTop: RfH(20),
+          }}>
+          <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
+            <Text
+              numberOfLines={2}
+              style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
+              {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
+            </Text>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={{
+                marginTop: 1,
+                color: Colors.secondaryText,
+                fontSize: 13,
+                marginBottom: RfH(16),
+                textAlign: 'center',
+              }}>
+              {getSubjects(item)}
+            </Text>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 

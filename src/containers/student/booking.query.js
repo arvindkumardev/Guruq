@@ -80,50 +80,48 @@ export const GET_PENDING_BOOKINGS = gql`
   }
 `;
 
-// query {
-//   getScheduledClasses(
-//     classesSearchDto: {
-//       studentId: 19655
-//       startDate: "2020-11-09T00:00:00Z"
-//       endDate: "2020-11-15T17:00:00Z"
-//     }
-//   ) {
-//     id
-//     uuid
-//
-//     students {
-//       id
-//       contactDetail {
-//         firstName
-//         lastName
-//       }
-//     }
-//     tutor {
-//       id
-//       contactDetail {
-//         firstName
-//         lastName
-//       }
-//     }
-//     offering {
-//       id
-//       displayName
-//       parentOffering {
-//         id
-//         displayName
-//         parentOffering {
-//           id
-//           displayName
-//         }
-//       }
-//     }
-//     onlineClass
-//     demo
-//     status
-//     startDate
-//     endDate
-//   }
-// }
+export const GET_SCHEDULED_CLASSES = gql`
+  query GetScheduledClasses($classesSearchDto: ClassesSearchDto!) {
+    getScheduledClasses(
+      classesSearchDto: { studentId: 19655, startDate: "2020-11-09T00:00:00Z", endDate: "2020-11-15T17:00:00Z" }
+    ) {
+      id
+      uuid
+
+      students {
+        id
+        contactDetail {
+          firstName
+          lastName
+        }
+      }
+      tutor {
+        id
+        contactDetail {
+          firstName
+          lastName
+        }
+      }
+      offering {
+        id
+        displayName
+        parentOffering {
+          id
+          displayName
+          parentOffering {
+            id
+            displayName
+          }
+        }
+      }
+      onlineClass
+      demo
+      status
+      startDate
+      endDate
+    }
+  }
+`;
 
 // query {
 //   getBookings {

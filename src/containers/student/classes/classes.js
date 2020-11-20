@@ -103,7 +103,10 @@ function bookingConfirmed() {
           </View>
           <View style={commonStyles.verticallyCenterItemsView}>
             <Text
-              style={[commonStyles.headingPrimaryText, { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 }]}>
+              style={[
+                commonStyles.headingPrimaryText,
+                { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
+              ]}>
               {item.numberOfClass}
             </Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>

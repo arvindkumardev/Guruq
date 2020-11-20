@@ -140,7 +140,9 @@ export const GET_FAVOURITE_TUTORS = gql`
       id
       tutor {
         id
+        teachingExperience
         averageRating
+        reviewCount
         contactDetail {
           firstName
           lastName
@@ -156,6 +158,24 @@ export const GET_FAVOURITE_TUTORS = gql`
             level
             displayName
           }
+        }
+        educationDetails {
+          id
+          school {
+            id
+            name
+          }
+          degree {
+            id
+            name
+            degreeLevel
+          }
+          fieldOfStudy
+          subjects
+          board
+          startYear
+          endYear
+          isCurrent
         }
       }
     }
