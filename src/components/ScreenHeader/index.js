@@ -12,7 +12,7 @@ import BackArrow from '../BackArrow';
 
 function customRangeSelector(props) {
   const navigation = useNavigation();
-  const { style, label, topMargin, horizontalPadding, lineVisible, homeIcon } = props;
+  const { style, label, labelStyle, topMargin, horizontalPadding, lineVisible, homeIcon } = props;
 
   const onBackPress = () => {
     navigation.goBack();
@@ -32,7 +32,9 @@ function customRangeSelector(props) {
         ]}>
         <View style={commonStyles.horizontalChildrenView}>
           {homeIcon && <BackArrow action={onBackPress} />}
-          <Text style={commonStyles.headingPrimaryText}>{label}</Text>
+          <View style={[labelStyle, { flexDirection: 'row', justifyContent:"center" }]}>
+            <Text style={commonStyles.headingPrimaryText}>{label}</Text>
+          </View>
         </View>
       </View>
       {lineVisible && (
@@ -47,6 +49,7 @@ function customRangeSelector(props) {
 customRangeSelector.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   label: PropTypes.string,
+  labelStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   topMargin: PropTypes.number,
   horizontalPadding: PropTypes.number,
   lineVisible: PropTypes.bool,
@@ -56,6 +59,7 @@ customRangeSelector.propTypes = {
 customRangeSelector.defaultProps = {
   style: {},
   label: '',
+  labelStyle: {},
   topMargin: RfH(44),
   horizontalPadding: 0,
   lineVisible: false,

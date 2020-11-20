@@ -8,13 +8,13 @@ export const GET_CART_ITEMS = gql`
       deleted
       offering {
         id
-        name
+        displayName
         parentOffering {
           id
-          name
+          displayName
           parentOffering {
             id
-            name
+            displayName
           }
         }
       }
