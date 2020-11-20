@@ -102,7 +102,6 @@ function PaymentMethod(props) {
       .then((data) => {
         // handle success
         completedPayment(bookingOrderId, 3, data.razorpay_payment_id);
-        // create booking - with payment completed
       })
       .catch((error) => {
         // handle failure

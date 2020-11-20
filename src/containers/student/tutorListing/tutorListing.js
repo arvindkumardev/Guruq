@@ -197,6 +197,16 @@ function TutorListing(props) {
     }
   };
 
+  const goToTutorDetails = (item) => {
+    navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
+      tutorData: item,
+      parentOffering: offering?.parentOffering?.id,
+      parentParentOffering: offering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: offering?.parentOffering?.displayName,
+      parentParentOfferingName: offering?.parentOffering?.parentOffering?.displayName,
+    });
+  };
+
   const renderItem = (item) => {
     const tutorOffering =
       item.tutorOfferings && item.tutorOfferings.find((s) => s.offerings.find((o) => o.id === offering.id));
@@ -216,16 +226,7 @@ function TutorListing(props) {
 
     return (
       <View style={styles.listItemParent}>
-        <TouchableWithoutFeedback
-          onPress={() =>
-            navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
-              tutorData: item,
-              parentOffering: offering?.parentOffering?.id,
-              parentParentOffering: offering?.parentOffering?.parentOffering?.id,
-              parentOfferingName: offering?.parentOffering?.displayName,
-              parentParentOfferingName: offering?.parentOffering?.parentOffering?.displayName,
-            })
-          }>
+        <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
           <View style={[commonStyles.horizontalChildrenStartView]}>
             <View style={styles.userIconParent}>
               {/* <TouchableWithoutFeedback onPress={() => markFavouriteTutor(item.id)}> */}
