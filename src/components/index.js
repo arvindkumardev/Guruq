@@ -9,6 +9,7 @@ import CustomRangeSelector from './CustomRangeSelector';
 import ScreenHeader from './ScreenHeader';
 import DateSlotSelectorModal from './DateSlotSelectorModal';
 import RateReview from './Rate&ReviewModal';
+import PaymentMethodModal from './PaymentMethodModal';
 
 export {
   IconButtonWrapper,
@@ -21,4 +22,5 @@ export {
   ScreenHeader,
   DateSlotSelectorModal,
   RateReview,
+  PaymentMethodModal,
 };
