@@ -1,14 +1,17 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-console */
 import { FlatList, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import routeNames from '../../../routes/screenNames';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH, RfW, monthNames } from '../../../utils/helpers';
 import { Colors, Fonts, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+
 import { IconButtonWrapper } from '../../../components';
 import { GET_SCHEDULED_CLASSES } from '../booking.query';
 import { studentDetails } from '../../../apollo/cache';
@@ -18,56 +21,57 @@ function CalendarView() {
   const [showHeader, setShowHeader] = useState(false);
 
   const studentInfo = useReactiveVar(studentDetails);
-  console.log(studentInfo);
 
-  const [monthData, setMonthData] = useState([
-    {
-      date: 13,
-      month: 'September',
-      classes: [
-        {
-          classTitle: 'Physics Class by Gurbani Singh',
-          board: 'CBSE',
-          class: 'Class 9',
-          timing: '06:00 PM - 07:00 PM',
-          tutors: [{ tutor: Images.kushal }],
-        },
-      ],
-    },
-    {
-      date: 15,
-      month: 'September',
-      classes: [
-        {
-          classTitle: 'Chemistry Class by Simran',
-          board: 'CBSE',
-          class: 'Class 9',
-          timing: '06:00 PM - 07:00 PM',
-          tutors: [{ tutor: Images.kushal }],
-        },
-        {
-          classTitle: 'Physics Class by Rimmi Sinha ',
-          board: 'CBSE',
-          class: 'Class 9',
-          timing: '06:00 PM - 07:00 PM',
-          tutors: [{ tutor: Images.kushal }],
-        },
-      ],
-    },
-  ]);
+  const [monthData, setMonthData] = useState([]);
 
-  const { loading: loadingScheduledClasses, error: scheduledClassesError, data: scheduledClassesData } = useQuery(
-    GET_SCHEDULED_CLASSES,
-    {
+  const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      const array = [];
+      for (const obj of data.getScheduledClasses) {
+        const startHours = new Date(obj.startDate).getUTCHours();
+        const startMinutes = new Date(obj.startDate).getUTCMinutes();
+        const endHours = new Date(obj.endDate).getUTCHours();
+        const endMinutes = new Date(obj.endDate).getUTCMinutes();
+        const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
+          startMinutes < 10 ? `0${startMinutes}` : startMinutes
+        } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
+          endMinutes < 10 ? `0${endMinutes}` : endMinutes
+        } ${endHours < 12 ? `AM` : 'PM'}`;
+        const item = {
+          date: new Date(obj.startDate).getUTCDate(),
+          month: new Date(obj.startDate).getUTCMonth(),
+          classes: [
+            {
+              classTitle: obj.offering.displayName,
+              board: obj.offering.parentOffering.parentOffering.displayName,
+              class: obj.offering.parentOffering.displayName,
+              timing,
+              tutors: [{ tutor: Images.kushal }],
+            },
+          ],
+        };
+        array.push(item);
+      }
+      setMonthData(array);
+    },
+  });
+
+  useEffect(() => {
+    getScheduledClasses({
       variables: {
         classesSearchDto: {
           studentId: studentInfo.id,
-          startDate: '2020-10-09T00:00:00Z',
-          endDate: '2020-11-19T17:00:00Z',
+          startDate: new Date(),
+          endDate: new Date().setDate(new Date().getDate() + 1),
         },
       },
-    }
-  );
+    });
+  }, monthData);
 
   const renderClassItem = (item) => {
     return (
@@ -110,7 +114,7 @@ function CalendarView() {
       <View style={{ marginTop: RfH(32) }}>
         <View>
           <Text style={commonStyles.headingPrimaryText}>
-            {item.date} {item.month}
+            {item.date} {monthNames[item.month]}
           </Text>
         </View>
         <View>

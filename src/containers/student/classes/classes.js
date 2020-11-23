@@ -18,20 +18,15 @@ function bookingConfirmed() {
   const [isHistorySelected, setIsHistorySelected] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
 
-  const [classItems, setClassItems] = useState([
-    {
-      tutorIcon: Images.kushal,
-      subject: 'History Class',
-      tutor: 'Shipra',
-      board: 'CBSE',
-      class: '9',
-      numberOfClass: '01',
-      mode: 'Online Individual Class',
-      tutorCode: 'GURUS52287',
-    },
-  ]);
-
   const { loading: loadingBookings, error: bookingError, data: bookingData } = useQuery(GET_BOOKINGS);
+
+  const goToSchedulClasses = (item) => {
+    const classes = [];
+    for (let i = 1; i <= item.orderItems[0].availableClasses; i++) {
+      classes.push({ class: `Class ${i}`, date: '', startTime: '' });
+    }
+    navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item, classes });
+  };
 
   const renderClassItem = (item) => {
     return (
@@ -95,11 +90,11 @@ function bookingConfirmed() {
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
           {!isHistorySelected && (
             <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), textAlign: 'right', color: Colors.darkGrey }}>
-              3 Unscheduled Classses
+              {item.orderItems[0].availableClasses} Unscheduled Classses
             </Text>
           )}
           <Button
-            onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item })}
+            onPress={() => goToSchedulClasses(item)}
             style={[commonStyles.buttonPrimary, { alignSelf: 'flex-end', marginRight: RfH(0), marginLeft: RfW(16) }]}>
             <Text style={commonStyles.textButtonPrimary}>{isHistorySelected ? 'Renew Class' : 'Schedule Class'}</Text>
           </Button>
