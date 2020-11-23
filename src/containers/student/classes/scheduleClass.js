@@ -214,6 +214,7 @@ function scheduleClass(props) {
         numColumns={2}
         renderItem={({ item }) => renderClassView(item)}
         keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{ paddingBottom: RfH(34) }}
       />
       <DateSlotSelectorModal
         visible={showSlotSelector}
