@@ -1,42 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, View, FlatList, Text } from 'react-native';
+import { Modal, View, FlatList, Text, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { Button } from 'native-base';
 import { Colors, Images } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import commonStyles from '../../theme/styles';
 
 const dateSlotModal = (props) => {
   const navigation = useNavigation();
-  const [availableSlots, setAvailableSlots] = useState([
-    '09:30 - 10:30 AM',
-    '10:30 - 11:30 AM',
-    '01:30 - 02:30 PM',
-    '03:00 - 04:00 PM',
-    '04:00 - 05:00 PM',
-    '05:00 - 06:00 PM',
-  ]);
 
-  const { visible, onClose } = props;
+  const { visible, onClose, availableSlots, selectedSlot, onDateChange, onSubmit } = props;
 
-  const renderSlots = (item) => {
+  const renderSlots = (item, index) => {
+    const startHours = new Date(item.startDate).getUTCHours();
+    const startMinutes = new Date(item.startDate).getUTCMinutes();
+    const endHours = new Date(item.endDate).getUTCHours();
+    const endMinutes = new Date(item.endDate).getUTCMinutes();
     return (
-      <View
-        style={{
-          backgroundColor: Colors.lightGreen,
-          padding: 8,
-          borderRadius: 8,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginHorizontal: RfW(4),
-          marginVertical: RfH(4),
-        }}>
-        <Text style={{ alignSelf: 'center', fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>{item}</Text>
-      </View>
+      <TouchableWithoutFeedback onPress={() => selectedSlot(item, index)}>
+        <View
+          style={{
+            backgroundColor: !item.active ? Colors.lightGrey : item.selected ? Colors.lightGreen : Colors.lightBlue,
+            padding: 8,
+            borderRadius: 8,
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch',
+            marginHorizontal: RfW(4),
+            marginVertical: RfH(4),
+          }}>
+          <Text
+            style={{
+              alignSelf: 'center',
+              fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+            }}>
+            {startHours < 10 ? `0${startHours}` : startHours}:{startMinutes < 10 ? `0${startMinutes}` : startMinutes}{' '}
+            {startHours < 12 ? 'AM' : 'PM'} - {endHours < 10 ? `0${endHours}` : endHours}:
+            {endMinutes < 10 ? `0${endMinutes}` : endMinutes} {endHours < 12 ? 'AM' : 'PM'}
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -77,6 +85,7 @@ const dateSlotModal = (props) => {
               alignSelf: 'flex-start',
               paddingBottom: RfH(8),
             }}
+            selectedDate={new Date()}
             highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
             highlightDateNameStyle={{ color: Colors.brandBlue2 }}
             disabledDateNameStyle={{ color: Colors.darkGrey }}
@@ -105,12 +114,26 @@ const dateSlotModal = (props) => {
         </View>
         <View style={{ alignItems: 'center', paddingTop: RfH(24) }}>
           <FlatList
+            style={{ height: RfH(200) }}
             data={availableSlots}
-            numColumns={3}
+            numColumns={2}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => renderSlots(item)}
+            renderItem={({ item, index }) => renderSlots(item, index)}
             keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ paddingHorizontal: RfW(8) }}
           />
+        </View>
+        <View
+          style={{
+            marginTop: RfH(24),
+            marginBottom: RfH(34),
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Button onPress={() => onSubmit()} style={commonStyles.buttonPrimary} block>
+            <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
+          </Button>
         </View>
       </View>
     </Modal>
@@ -120,11 +143,19 @@ const dateSlotModal = (props) => {
 dateSlotModal.defaultProps = {
   visible: false,
   onClose: null,
+  availableSlots: [],
+  selectedSlot: null,
+  onDateChange: null,
+  onSubmit: null,
 };
 
 dateSlotModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
+  availableSlots: PropTypes.array,
+  selectedSlot: PropTypes.func,
+  onDateChange: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 export default dateSlotModal;

@@ -1,14 +1,12 @@
-// query {
-//   getAvailability(
-//     tutorAvailability: {
-//       tutorId: 45725
-//       startDate: "2020-11-01T00:00:00+05:30"
-//       endDate: "2020-11-30T00:00:00+05:30"
-//     }
-//   ) {
-//     id
-//     active
-//     startDate
-//     endDate
-//   }
-// }
+import { gql } from '@apollo/client';
+
+export const GET_AVAILABILITY = gql`
+  query GetAvailability($tutorAvailability: TutorAvailabilityDto!) {
+    getAvailability(tutorAvailability: $tutorAvailability) {
+      id
+      active
+      startDate
+      endDate
+    }
+  }
+`;

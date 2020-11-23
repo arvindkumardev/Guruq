@@ -105,35 +105,33 @@ export const MAKE_PAYMENT = gql`
   }
 `;
 
-// mutation {
-//   scheduleClass(
-//     classesCreateDto: {
-//       orderItemId: 7
-//       startDate: "2020-11-12T15:00:00Z"
-//       endDate: "2020-11-12T16:00:00Z"
-//     }
-//   ) {
-//     id
-//     uuid
-//     orderItem {
-//       id
-//     }
-//     students {
-//       id
-//     }
-//     tutor {
-//       id
-//     }
-//     offering {
-//       id
-//     }
-//     onlineClass
-//     demo
-//
-//     startDate
-//     endDate
-//   }
-// }
+export const SCHEDULE_CLASS = gql`
+  mutation ScheduleClass($classesCreateDto: ClassesCreateDto!) {
+    scheduleClass(
+      classesCreateDto: { orderItemId: 7, startDate: "2020-11-12T15:00:00Z", endDate: "2020-11-12T16:00:00Z" }
+    ) {
+      id
+      uuid
+      orderItem {
+        id
+      }
+      students {
+        id
+      }
+      tutor {
+        id
+      }
+      offering {
+        id
+      }
+      onlineClass
+      demo
+
+      startDate
+      endDate
+    }
+  }
+`;
 
 export class OrderPaymentDto {
   amount: number;

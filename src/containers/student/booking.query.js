@@ -82,9 +82,7 @@ export const GET_PENDING_BOOKINGS = gql`
 
 export const GET_SCHEDULED_CLASSES = gql`
   query GetScheduledClasses($classesSearchDto: ClassesSearchDto!) {
-    getScheduledClasses(
-      classesSearchDto: { studentId: 19655, startDate: "2020-11-09T00:00:00Z", endDate: "2020-11-15T17:00:00Z" }
-    ) {
+    getScheduledClasses(classesSearchDto: $classesSearchDto) {
       id
       uuid
 
@@ -123,51 +121,53 @@ export const GET_SCHEDULED_CLASSES = gql`
   }
 `;
 
-// query {
-//   getBookings {
-//     id
-//     uuid
-//     orderStatus
-//     owner {
-//       id
-//     }
-//     orderItems {
-//       id
-//       count
-//       availableClasses
-//       onlineClass
-//       demo
-//       count
-//       groupSize
-//
-//       offering {
-//         id
-//         name
-//         parentOffering {
-//           id
-//           name
-//           parentOffering {
-//             id
-//             name
-//           }
-//         }
-//       }
-//       tutor {
-//         id
-//         profileImage {
-//           id
-//           filename
-//         }
-//         contactDetail {
-//           firstName
-//           lastName
-//         }
-//       }
-//     }
-//     orderStatus
-//     orderPayment {
-//       id
-//       paymentStatus
-//     }
-//   }
-// }
+export const GET_BOOKINGS = gql`
+  query GetBookings {
+    getBookings {
+      id
+      uuid
+      orderStatus
+      owner {
+        id
+      }
+      orderItems {
+        id
+        count
+        availableClasses
+        onlineClass
+        demo
+        count
+        groupSize
+
+        offering {
+          id
+          name
+          parentOffering {
+            id
+            name
+            parentOffering {
+              id
+              name
+            }
+          }
+        }
+        tutor {
+          id
+          profileImage {
+            id
+            filename
+          }
+          contactDetail {
+            firstName
+            lastName
+          }
+        }
+      }
+      orderStatus
+      orderPayment {
+        id
+        paymentStatus
+      }
+    }
+  }
+`;
