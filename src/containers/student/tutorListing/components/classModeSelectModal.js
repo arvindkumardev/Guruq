@@ -19,7 +19,7 @@ const classModeSelectModal = (props) => {
   const navigation = useNavigation();
 
   const [numberOfClass, setNumberOfClass] = useState(1);
-  const [amount, setAmount] = useState(100);
+  const [amount, setAmount] = useState(0);
   const [onlineClassMode, setOnlineClassMode] = useState(false);
   const [offlineClassMode, setOfflineClassMode] = useState(false);
   const [onlineClassPrices, setOnlineClassPrices] = useState([]);
@@ -44,13 +44,21 @@ const classModeSelectModal = (props) => {
     const bdata = [];
     const odata = [];
     for (const b of budgetDetails) {
+      if (b.count === 1) {
+        setAmount(b.price);
+      }
       if (!b.onlineClass) {
         odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
-        setOfflineClassMode(false);
       } else {
         bdata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
-        setOnlineClassMode(true);
       }
+    }
+    if (bdata.length > 0) {
+      setOnlineClassMode(true);
+      setOfflineClassMode(false);
+    } else {
+      setOnlineClassMode(false);
+      setOfflineClassMode(true);
     }
     setOnlineClassPrices(bdata);
     setOfflineClassPrices(odata);
@@ -59,34 +67,50 @@ const classModeSelectModal = (props) => {
   const addClass = () => {
     const cls = numberOfClass + 1;
     setNumberOfClass(numberOfClass + 1);
-    if (cls < 5) {
-      setAmount(100 * cls);
-    } else if (cls > 4 && cls < 10) {
-      setAmount(100 * cls);
-    } else if (cls > 9 && cls < 20) {
-      setAmount(100 * cls);
-    } else if (cls > 19) {
-      setAmount(100 * cls);
-    } else {
-      setAmount(0);
+    let amt = 0;
+    for (const b of budgetDetails) {
+      if (cls < 5 && b.count < 5) {
+        amt = b.price;
+        break;
+      } else if (cls > 4 && cls < 10 && b.count > 4 && b.count < 10) {
+        amt = b.price;
+        break;
+      } else if (cls > 9 && cls < 25 && b.count > 9 && b.count < 25) {
+        amt = b.price;
+        break;
+      } else if (cls > 24 && cls < 50 && b.count > 24 && b.count < 50) {
+        amt = b.price;
+        break;
+      } else {
+        amt = b.price;
+      }
     }
+    setAmount(amt * cls);
   };
 
   const removeClass = () => {
     if (numberOfClass > 1) {
       setNumberOfClass(numberOfClass - 1);
       const cls = numberOfClass - 1;
-      if (cls < 5) {
-        setAmount(100 * cls);
-      } else if (cls > 4 && cls < 10) {
-        setAmount(90 * cls);
-      } else if (cls > 9 && cls < 20) {
-        setAmount(80 * cls);
-      } else if (cls > 19) {
-        setAmount(70 * cls);
-      } else {
-        setAmount(0);
+      let amt = 0;
+      for (const b of budgetDetails) {
+        if (cls < 5 && b.count < 5) {
+          amt = b.price;
+          break;
+        } else if (cls > 4 && cls < 10 && b.count > 4 && b.count < 10) {
+          amt = b.price;
+          break;
+        } else if (cls > 9 && cls < 25 && b.count > 9 && b.count < 25) {
+          amt = b.price;
+          break;
+        } else if (cls > 24 && cls < 50 && b.count > 24 && b.count < 50) {
+          amt = b.price;
+          break;
+        } else {
+          amt = b.price;
+        }
       }
+      setAmount(amt * cls);
     }
   };
 
@@ -134,6 +158,8 @@ const classModeSelectModal = (props) => {
           odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
         }
       }
+      setAmount(budgetDetails[0].price);
+      setNumberOfClass(1);
       setOnlineClassPrices(odata);
     }
   };
@@ -148,6 +174,8 @@ const classModeSelectModal = (props) => {
           odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
         }
       }
+      setAmount(budgetDetails[0].price);
+      setNumberOfClass(1);
       setOfflineClassPrices(odata);
     }
   };
@@ -174,6 +202,7 @@ const classModeSelectModal = (props) => {
       onRequestClose={() => {
         onClose(false);
       }}>
+      <Loader isLoading={cartLoading} />
       <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
       <View
         style={{
@@ -193,20 +222,23 @@ const classModeSelectModal = (props) => {
             commonStyles.horizontalChildrenSpaceView,
             {
               height: RfH(44),
-              paddingHorizontal: RfW(16),
-              backgroundColor: Colors.lightBlue
+              backgroundColor: Colors.lightBlue,
             },
           ]}>
-          <Text style={[commonStyles.headingPrimaryText]}>Book Class</Text>
-          <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
-            iconImage={Images.cross}
-            submitFunction={() => onClose(false)}
-          />
+          <View style={{ flex: 1 }}>
+            <Text style={[commonStyles.headingPrimaryText, { alignSelf: 'flex-end' }]}>Book Class</Text>
+          </View>
+          <View style={{ flex: 0.5, paddingHorizontal: RfW(16) }}>
+            <IconButtonWrapper
+              styling={{ alignSelf: 'flex-end' }}
+              iconHeight={RfH(24)}
+              iconWidth={RfW(24)}
+              iconImage={Images.cross}
+              submitFunction={() => onClose(false)}
+            />
+          </View>
         </View>
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-          <Loader isLoading={cartLoading} />
           <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(16), alignSelf: 'flex-start' }]}>
               Select mode of class and number of Classes
