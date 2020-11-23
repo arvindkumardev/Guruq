@@ -77,6 +77,7 @@ const dateSlotModal = (props) => {
               alignSelf: 'flex-start',
               paddingBottom: RfH(8),
             }}
+            selectedDate={new Date()}
             highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
             highlightDateNameStyle={{ color: Colors.brandBlue2 }}
             disabledDateNameStyle={{ color: Colors.darkGrey }}

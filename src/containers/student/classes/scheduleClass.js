@@ -1,11 +1,12 @@
-import { Text, View } from 'react-native';
-import React from 'react';
+/* eslint-disable no-plusplus */
+import { Text, View, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { getTutorImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { IconButtonWrapper } from '../../../components';
+import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
 import { Images, Colors, Fonts } from '../../../theme';
 import BackArrow from '../../../components/BackArrow';
 
@@ -13,12 +14,20 @@ function scheduleClass(props) {
   const navigation = useNavigation();
   const { route } = props;
   const classData = route?.params?.classData;
-
-  console.log(classData);
+  const [unscheduledClasses, setUnscheduledClasses] = useState([]);
+  const [showSlotSelector, setShowSlotSelector] = useState(false);
 
   const onBackPress = () => {
     navigation.goBack();
   };
+
+  useEffect(() => {
+    const classes = [];
+    for (let i = 1; i <= classData.orderItems[0].count; i++) {
+      classes.push({ class: `Class ${i}`, date: '', startTime: '' });
+    }
+    setUnscheduledClasses(classes);
+  }, unscheduledClasses);
 
   const renderTutorDetails = () => {
     return (
@@ -61,80 +70,35 @@ function scheduleClass(props) {
     );
   };
 
-  const renderClassView = () => {
+  const renderClassView = (item) => {
     return (
-      <View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
+      <View style={{ flex: 0.5, marginTop: RfH(16) }}>
+        <View>
           <View
             style={{
-              flex: 0.5,
               marginRight: RfW(8),
+              marginLeft: RfW(8),
               height: RfH(96),
               backgroundColor: Colors.lightGrey,
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: 8,
             }}>
-            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class 1</Text>
-            <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey, marginTop: RfH(8) }}>
-              21 Sept ' 20
-            </Text>
-          </View>
-          <View
-            style={{
-              flex: 0.5,
-              marginLeft: RfW(8),
-              height: RfH(96),
-              backgroundColor: Colors.lightBlue,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 8,
-            }}>
-            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class 2</Text>
-            <IconButtonWrapper
-              iconHeight={RfH(20)}
-              iconWidth={RfW(24)}
-              iconImage={Images.calendar}
-              styling={{ marginTop: RfH(8) }}
-            />
-          </View>
-        </View>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-          <View
-            style={{
-              flex: 0.5,
-              marginRight: RfW(8),
-              height: RfH(96),
-              backgroundColor: Colors.lightBlue,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 8,
-            }}>
-            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class 3</Text>
-            <IconButtonWrapper
-              iconHeight={RfH(20)}
-              iconWidth={RfW(24)}
-              iconImage={Images.calendar}
-              styling={{ marginTop: RfH(8) }}
-            />
-          </View>
-          <View
-            style={{
-              flex: 0.5,
-              marginLeft: RfW(8),
-              height: RfH(96),
-              backgroundColor: Colors.lightBlue,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 8,
-            }}>
-            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class 4</Text>
-            <IconButtonWrapper
-              iconHeight={RfH(20)}
-              iconWidth={RfW(24)}
-              iconImage={Images.calendar}
-              styling={{ marginTop: RfH(8) }}
-            />
+            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>{item.class}</Text>
+            {item.date === '' && (
+              <IconButtonWrapper
+                iconHeight={RfH(20)}
+                iconWidth={RfW(24)}
+                iconImage={Images.calendar}
+                styling={{ marginTop: RfH(8) }}
+                submitFunction={() => setShowSlotSelector(true)}
+              />
+            )}
+            {item.date !== '' && (
+              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey, marginTop: RfH(8) }}>
+                {item.date}
+              </Text>
+            )}
           </View>
         </View>
       </View>
@@ -151,7 +115,14 @@ function scheduleClass(props) {
       </View>
       {renderTutorDetails()}
       <View style={{ height: RfH(56) }} />
-      {renderClassView()}
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={unscheduledClasses}
+        numColumns={2}
+        renderItem={({ item }) => renderClassView(item)}
+        keyExtractor={(item, index) => index.toString()}
+      />
+      <DateSlotSelectorModal visible={showSlotSelector} onClose={() => setShowSlotSelector(false)} />
     </View>
   );
 }
