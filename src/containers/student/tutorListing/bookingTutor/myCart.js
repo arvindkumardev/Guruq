@@ -3,11 +3,11 @@
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
 import { Alert, View, Text, FlatList } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { IconButtonWrapper, PaymentMethodModal, ScreenHeader } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
@@ -16,13 +16,11 @@ import { RfH, RfW } from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import QPointPayModal from '../components/qPointPayModal';
 import CouponModal from '../components/couponModal';
-import routeNames from '../../../../routes/screenNames';
 import Loader from '../../../../components/Loader';
 import { GET_CART_ITEMS } from '../../booking.query';
 import { REMOVE_CART_ITEM } from '../../booking.mutation';
 
 const myCart = () => {
-  const navigation = useNavigation();
   const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -41,6 +39,10 @@ const myCart = () => {
   const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(GET_CART_ITEMS, {
     fetchPolicy: 'no-cache',
   });
+
+  // const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(ME_QUERY, {
+  //   fetchPolicy: 'no-cache',
+  // });
 
   useEffect(() => {
     if (cartItemData?.getCartItems) {
