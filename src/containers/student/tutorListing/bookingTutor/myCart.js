@@ -19,6 +19,7 @@ import CouponModal from '../components/couponModal';
 import Loader from '../../../../components/Loader';
 import { GET_CART_ITEMS } from '../../booking.query';
 import { REMOVE_CART_ITEM } from '../../booking.mutation';
+import { ME_QUERY } from '../../../common/graphql-query';
 
 const myCart = () => {
   const [showQPointPayModal, setShowQPointPayModal] = useState(false);
@@ -27,7 +28,7 @@ const myCart = () => {
   const [refreshList, setRefreshList] = useState(false);
   const [amount, setAmount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
-  const [qPoints, setQPoints] = useState(300);
+  const [qPoints, setQPoints] = useState(0);
 
   const [bookingData, setBookingData] = useState({
     itemPrice: amount,
@@ -40,9 +41,9 @@ const myCart = () => {
     fetchPolicy: 'no-cache',
   });
 
-  // const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(ME_QUERY, {
-  //   fetchPolicy: 'no-cache',
-  // });
+  const { loading: meLoading, error: meError, data: userData } = useQuery(ME_QUERY, {
+    fetchPolicy: 'no-cache',
+  });
 
   useEffect(() => {
     if (cartItemData?.getCartItems) {
@@ -54,6 +55,12 @@ const myCart = () => {
       setAmount(amt);
     }
   }, [cartItemData?.getCartItems]);
+
+  useEffect(() => {
+    if (userData) {
+      setQPoints(userData.me.qPoints);
+    }
+  }, []);
 
   const [removeItem, { loading: removeLoading }] = useMutation(REMOVE_CART_ITEM, {
     fetchPolicy: 'no-cache',

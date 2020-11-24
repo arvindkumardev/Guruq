@@ -1,10 +1,13 @@
+/* eslint-disable radix */
+/* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, View, FlatList, Text, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Button } from 'native-base';
+import { Button, Picker } from 'native-base';
+import { timing } from 'react-native-reanimated';
 import { Colors, Images } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
@@ -13,9 +16,14 @@ import commonStyles from '../../theme/styles';
 
 const dateSlotModal = (props) => {
   const navigation = useNavigation();
+  const [selectedTime, setSelectedTime] = useState(null);
+  const { visible, onClose, availableSlots, selectedSlot, onDateChange, onSubmit, times, selectedClassTime } = props;
 
-  const { visible, onClose, availableSlots, selectedSlot, onDateChange, onSubmit } = props;
-
+  useEffect(() => {
+    if (times) {
+      setSelectedTime(times[0]?.startTime);
+    }
+  }, [times]);
   const renderSlots = (item, index) => {
     const startHours = new Date(item.startDate).getUTCHours();
     const startMinutes = new Date(item.startDate).getUTCMinutes();
@@ -46,6 +54,11 @@ const dateSlotModal = (props) => {
         </View>
       </TouchableWithoutFeedback>
     );
+  };
+
+  const selectedStartTime = (value) => {
+    setSelectedTime(value);
+    selectedClassTime(value);
   };
 
   return (
@@ -123,6 +136,44 @@ const dateSlotModal = (props) => {
             contentContainerStyle={{ paddingHorizontal: RfW(8) }}
           />
         </View>
+        {times.length > 0 && (
+          <View>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
+              <Text style={{ fontFamily: 'SegoeUI-Bold', fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>
+                Select Start Time
+              </Text>
+              <Text style={{ fontFamily: 'SegoeUI-Bold', fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>End Time</Text>
+            </View>
+            <View style={commonStyles.horizontalChildrenSpaceView}>
+              <Picker
+                iosHeader="Start Time"
+                Header="Start Time"
+                mode="dropdown"
+                textStyle={{ color: Colors.brandBlue2 }}
+                placeholder="Select Start Time"
+                selectedValue={selectedTime}
+                onValueChange={(value) => selectedStartTime(value)}>
+                {times.map((obj, i) => {
+                  return (
+                    <Picker.Item
+                      label={`${new Date(obj.startTime).getUTCHours()}:${new Date(obj.startTime).getUTCMinutes()}`}
+                      value={obj.startTime}
+                      key={i}
+                    />
+                  );
+                })}
+              </Picker>
+              <Text style={{ marginRight: RfW(16) }}>
+                {`${new Date(
+                  new Date(selectedTime).setUTCHours(new Date(selectedTime).getUTCHours() + 1)
+                ).getUTCHours()}:${new Date(
+                  new Date(selectedTime).setUTCHours(new Date(selectedTime).getUTCHours() + 1)
+                ).getUTCMinutes()}`}
+              </Text>
+            </View>
+          </View>
+        )}
+
         <View
           style={{
             marginTop: RfH(24),
@@ -144,18 +195,22 @@ dateSlotModal.defaultProps = {
   visible: false,
   onClose: null,
   availableSlots: [],
+  times: [],
   selectedSlot: null,
   onDateChange: null,
   onSubmit: null,
+  selectedClassTime: null,
 };
 
 dateSlotModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
   availableSlots: PropTypes.array,
+  times: PropTypes.array,
   selectedSlot: PropTypes.func,
   onDateChange: PropTypes.func,
   onSubmit: PropTypes.func,
+  selectedClassTime: PropTypes.func,
 };
 
 export default dateSlotModal;

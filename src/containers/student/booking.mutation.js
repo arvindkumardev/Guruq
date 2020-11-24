@@ -133,6 +133,28 @@ export const SCHEDULE_CLASS = gql`
   }
 `;
 
+export const CHECK_COUPON = gql`
+  mutation CheckCoupon($code: String!) {
+    checkCoupon(code: $code) {
+      id
+      version
+      deleted
+      active
+      createdDate
+      updatedDate
+      m_id
+      createdBy
+      updatedBy
+      notes
+      code
+      isPercentage
+      discount
+      maxDiscount
+      expiry
+    }
+  }
+`;
+
 export class OrderPaymentDto {
   amount: number;
 

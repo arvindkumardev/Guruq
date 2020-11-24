@@ -26,6 +26,9 @@ function scheduleClass(props) {
   const [showSlotSelector, setShowSlotSelector] = useState(false);
   const [availability, setAvailability] = useState([]);
   const [selectedStartTime, setSelectedStartTime] = useState(null);
+  const [tutorClasses, setTutorClasses] = useState([]);
+  const [startTimes, setStartTimes] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedEndTime, setSelectedEndTime] = useState(null);
 
   const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY, {
@@ -37,22 +40,12 @@ function scheduleClass(props) {
     onCompleted: (data) => {
       const dateObj = [];
       for (const obj of data.getAvailability) {
-        const endSlot = new Date(obj.startDate).setUTCHours(new Date(obj.startDate).getUTCHours() + 1);
         dateObj.push({
           startDate: new Date(obj.startDate),
-          endDate: new Date(endSlot),
+          endDate: new Date(obj.endDate),
           selected: false,
           active: obj.active,
         });
-        while (new Date(obj.endDate).getUTCHours() - new Date(endSlot).getUTCHours() >= 1) {
-          dateObj.push({
-            startDate: new Date(endSlot),
-            endDate: new Date(new Date(endSlot).setUTCHours(new Date(endSlot).getUTCHours() + 1)),
-            selected: false,
-            active: obj.active,
-          });
-          endSlot = new Date(endSlot).setUTCHours(new Date(endSlot).getUTCHours() + 1);
-        }
       }
       setAvailability(dateObj);
       setShowSlotSelector(true);
@@ -69,10 +62,22 @@ function scheduleClass(props) {
     onCompleted: (data) => {
       if (data) {
         console.log(data);
+        const array = [];
+        classes.map((obj) => {
+          array.push(obj);
+        });
+        array[setSelectedIndex].date = data.scheduleClass.startDate;
+        setTutorClasses(array);
         setShowSlotSelector(false);
       }
     },
   });
+
+  useEffect(() => {
+    if (classes) {
+      setTutorClasses(classes);
+    }
+  }, [classes]);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -103,8 +108,7 @@ function scheduleClass(props) {
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
                 style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold, marginTop: RfH(2) }}>
-                {classData.orderItem?.tutor.contactDetail.firstName}{' '}
-                {classData.orderItem?.tutor.contactDetail.lastName}
+                {classData.orderItem?.tutor.contactDetail.firstName} {classData.orderItem?.tutor.contactDetail.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 GURUS{classData.orderItem?.tutor.id}
@@ -119,11 +123,13 @@ function scheduleClass(props) {
     );
   };
 
-  const showSlotPopup = () => {
+  const showSlotPopup = (index) => {
+    setSelectedIndex(index);
     getAvailability({
       variables: {
         tutorAvailability: {
-          tutorId: 45725,
+          tutorId: classData.orderItem.tutor.id,
+          // tutorId: 45725,
           startDate: new Date(),
           endDate: new Date(),
         },
@@ -131,10 +137,10 @@ function scheduleClass(props) {
     });
   };
 
-  const renderClassView = (item) => {
+  const renderClassView = (item, index) => {
     return (
       <View style={{ flex: 0.5, marginTop: RfH(16) }}>
-        <TouchableWithoutFeedback onPress={() => showSlotPopup()}>
+        <TouchableWithoutFeedback onPress={() => showSlotPopup(index)}>
           <View>
             <View
               style={{
@@ -182,8 +188,15 @@ function scheduleClass(props) {
 
   const selectedSlot = (item, index) => {
     if (item.active) {
-      setSelectedStartTime(item.startDate);
-      setSelectedEndTime(item.endDate);
+      const interval = 1;
+      const timeArray = [];
+      timeArray.push({ startTime: item.startDate });
+      let endTime = new Date(item.startDate).setUTCHours(new Date(item.startDate).getUTCHours() + interval);
+      while (endTime < new Date(item.endDate)) {
+        timeArray.push({ startTime: new Date(endTime) });
+        endTime = new Date(endTime).setUTCHours(new Date(endTime).getUTCHours() + interval);
+      }
+      setStartTimes(timeArray);
       const newArray = [];
       availability.map((obj) => {
         obj.selected = false;
@@ -195,6 +208,11 @@ function scheduleClass(props) {
       newArray[index] = arrayItem;
       setAvailability(newArray);
     }
+  };
+
+  const selectedClassTime = (value) => {
+    setSelectedStartTime(value);
+    setSelectedEndTime(new Date(new Date(value).setUTCHours(new Date(value).getUTCHours() + 1)));
   };
 
   return (
@@ -210,9 +228,9 @@ function scheduleClass(props) {
       <View style={{ height: RfH(56) }} />
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={classes}
+        data={tutorClasses}
         numColumns={2}
-        renderItem={({ item }) => renderClassView(item)}
+        renderItem={({ item, index }) => renderClassView(item, index)}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{ paddingBottom: RfH(34) }}
       />
@@ -222,6 +240,8 @@ function scheduleClass(props) {
         availableSlots={availability}
         selectedSlot={(item, index) => selectedSlot(item, index)}
         onSubmit={() => onScheduleClass()}
+        times={startTimes}
+        selectedClassTime={(value) => selectedClassTime(value)}
       />
     </View>
   );
