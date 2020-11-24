@@ -82,11 +82,11 @@ function scheduleClass(props) {
     return (
       <View>
         <View style={{ height: RfH(44) }} />
-        <Text style={commonStyles.headingPrimaryText}>{classData.orderItems[0].offering.name} Class</Text>
+        <Text style={commonStyles.headingPrimaryText}>{classData.orderItem?.offering.name} Class</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {classData.orderItems[0].offering.parentOffering.parentOffering.name} |{' '}
-            {classData.orderItems[0].offering.parentOffering.name}
+            {classData.orderItem?.offering.parentOffering.parentOffering.name} |{' '}
+            {classData.orderItem?.offering.parentOffering.name}
           </Text>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
@@ -97,20 +97,20 @@ function scheduleClass(props) {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
-                iconImage={getTutorImageUrl(classData.orderItems[0].tutor)}
+                iconImage={getTutorImageUrl(classData.orderItem?.tutor)}
               />
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
                 style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold, marginTop: RfH(2) }}>
-                {classData.orderItems[0].tutor.contactDetail.firstName}{' '}
-                {classData.orderItems[0].tutor.contactDetail.lastName}
+                {classData.orderItem?.tutor.contactDetail.firstName}{' '}
+                {classData.orderItem?.tutor.contactDetail.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUS{classData.orderItems[0].tutor.id}
+                GURUS{classData.orderItem?.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {classData.orderItems[0].onlineClass ? 'Online' : 'Offline'} Classes
+                {classData.orderItem?.onlineClass ? 'Online' : 'Offline'} Classes
               </Text>
             </View>
           </View>
@@ -172,7 +172,7 @@ function scheduleClass(props) {
     scheduleClass({
       variables: {
         classesCreateDto: {
-          orderItemId: classData.orderItems[0].id,
+          orderItemId: classData.orderItem?.id,
           startDate: selectedStartTime,
           endDate: selectedEndTime,
         },

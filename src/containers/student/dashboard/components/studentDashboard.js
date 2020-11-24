@@ -1,11 +1,11 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-plusplus */
-import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View, Modal } from 'react-native';
+import { FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Input, Item, Thumbnail } from 'native-base';
+import { Icon, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
-import { useMutation, useQuery, useReactiveVar, useLazyQuery } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -18,7 +18,6 @@ import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import StudentOfferingModal from './studentOfferingModal';
-import SubjectsModal from './subjectsModal';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashboard-query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
@@ -114,6 +113,8 @@ function StudentDashboard(props) {
   };
 
   const goToTutorDetails = (item) => {
+    console.log(item);
+    console.log(selectedOffering);
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
       tutorData: item.tutor,
       parentOffering: selectedOffering?.id,
@@ -450,6 +451,8 @@ function StudentDashboard(props) {
   };
 
   const renderTutors = (item) => {
+    console.log(item);
+
     return (
       <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
         <View

@@ -1,5 +1,5 @@
 import { FlatList, Text, View, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, Segment } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
@@ -20,23 +20,39 @@ function bookingConfirmed() {
 
   const { loading: loadingBookings, error: bookingError, data: bookingData } = useQuery(GET_BOOKINGS);
 
-  const goToSchedulClasses = (item) => {
+  const goToScheduleClasses = (item) => {
     const classes = [];
-    for (let i = 1; i <= item.orderItems[0].availableClasses; i++) {
+    for (let i = 1; i <= item.orderItem?.availableClasses; i++) {
       classes.push({ class: `Class ${i}`, date: '', startTime: '' });
     }
     navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item, classes });
   };
 
+  const [orderItems, setOrderItems] = useState([]);
+
+  useEffect(() => {
+    if (bookingData) {
+      const orderList = [];
+
+      for (const booking of bookingData.getBookings) {
+        for (const orderItem of booking.orderItems) {
+          orderList.push({ booking, orderItem });
+        }
+      }
+
+      setOrderItems(orderList);
+    }
+  }, [bookingData]);
+
   const renderClassItem = (item) => {
     return (
       <View>
         <View style={{ height: RfH(40) }} />
-        <Text style={commonStyles.headingPrimaryText}>{item.orderItems[0].offering.name}</Text>
+        <Text style={commonStyles.headingPrimaryText}>{item.orderItem?.offering.name}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item.orderItems[0]?.offering?.parentOffering?.parentOffering?.name} |{' '}
-            {item.orderItems[0].offering.parentOffering.name}
+            {item.orderItem?.offering?.parentOffering?.parentOffering?.name} |{' '}
+            {item.orderItem?.offering.parentOffering.name}
           </Text>
           {!isHistorySelected && (
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
@@ -50,7 +66,7 @@ function bookingConfirmed() {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
-                iconImage={getTutorImageUrl(item.orderItems[0].tutor)}
+                iconImage={getTutorImageUrl(item.orderItem?.tutor)}
               />
               <Text
                 style={{
@@ -63,14 +79,18 @@ function bookingConfirmed() {
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
-                style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold, marginTop: RfH(2) }}>
-                {item.orderItems[0].tutor.contactDetail.firstName} {item.orderItems[0].tutor.contactDetail.lastName}
+                style={{
+                  fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+                  fontFamily: Fonts.semiBold,
+                  marginTop: RfH(2),
+                }}>
+                {item.orderItem?.tutor.contactDetail.firstName} {item.orderItem?.tutor.contactDetail.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUS{item.orderItems[0].tutor.id}
+                GURUS{item.orderItem?.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.orderItems[0].onlineClass ? 'Online' : 'Offline'} Individual Class
+                {item.orderItem?.onlineClass ? 'Online' : 'Offline'} Individual Class
               </Text>
             </View>
           </View>
@@ -80,7 +100,7 @@ function bookingConfirmed() {
                 commonStyles.headingPrimaryText,
                 { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
               ]}>
-              {item.orderItems[0].count}
+              {item.orderItem?.count}
             </Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
@@ -89,13 +109,25 @@ function bookingConfirmed() {
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
           {!isHistorySelected && (
-            <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), textAlign: 'right', color: Colors.darkGrey }}>
-              {item.orderItems[0].availableClasses} Unscheduled Classses
+            <Text
+              style={{
+                fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+                textAlign: 'right',
+                color: Colors.darkGrey,
+              }}>
+              {item.orderItem?.availableClasses} Unscheduled Classses
             </Text>
           )}
           <Button
-            onPress={() => goToSchedulClasses(item)}
-            style={[commonStyles.buttonPrimary, { alignSelf: 'flex-end', marginRight: RfH(0), marginLeft: RfW(16) }]}>
+            onPress={() => goToScheduleClasses(item)}
+            style={[
+              commonStyles.buttonPrimary,
+              {
+                alignSelf: 'flex-end',
+                marginRight: RfH(0),
+                marginLeft: RfW(16),
+              },
+            ]}>
             <Text style={commonStyles.textButtonPrimary}>{isHistorySelected ? 'Renew Class' : 'Schedule Class'}</Text>
           </Button>
         </View>
@@ -167,7 +199,7 @@ function bookingConfirmed() {
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={bookingData?.getBookings}
+          data={orderItems}
           renderItem={({ item }) => renderClassItem(item)}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: RfH(170) }}
