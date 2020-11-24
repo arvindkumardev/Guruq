@@ -408,21 +408,12 @@ function TutorListing(props) {
                       {/*  iconImage={Images.heart} */}
                       {/*  styling={{ marginHorizontal: RfW(16) }} */}
                       {/* /> */}
-                      {favourites.includes(item.id) ? (
-                        <IconButtonWrapper
-                          iconWidth={RfW(16)}
-                          iconHeight={RfH(16)}
-                          iconImage={Images.heartFilled}
-                          styling={{ marginHorizontal: RfW(16) }}
-                        />
-                      ) : (
-                        <IconButtonWrapper
-                          iconWidth={RfW(16)}
-                          iconHeight={RfH(16)}
-                          iconImage={Images.heart}
-                          styling={{ marginHorizontal: RfW(16) }}
-                        />
-                      )}
+                      <IconButtonWrapper
+                        iconWidth={RfW(16)}
+                        iconHeight={RfH(16)}
+                        iconImage={favourites.includes(item.id) ? Images.heartFilled : Images.heart}
+                        styling={{ marginHorizontal: RfW(16) }}
+                      />
                       {/* <Icon */}
                       {/*  type="FontAwesome" */}
                       {/*  name={favourites.includes(item.id) ? 'heart' : 'heart-o'} */}

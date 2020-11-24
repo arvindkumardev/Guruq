@@ -7,8 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
-import { useMutation, useQuery } from '@apollo/client';
-import { IconButtonWrapper, ScreenHeader } from '../../../../components';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { IconButtonWrapper, PaymentMethodModal, ScreenHeader } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
 import styles from '../styles';
@@ -25,10 +25,18 @@ const myCart = () => {
   const navigation = useNavigation();
   const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   const [showCouponModal, setShowCouponModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
   const [amount, setAmount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(300);
+
+  const [bookingData, setBookingData] = useState({
+    itemPrice: amount,
+    orderStatus: 1,
+    redeemQPoints: qPoints,
+    orderPayment: { amount, paymentMethod: 1 },
+  });
 
   const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(GET_CART_ITEMS, {
     fetchPolicy: 'no-cache',
@@ -79,17 +87,6 @@ const myCart = () => {
     removeItem({
       variables: { cartItemId: item.id },
     });
-  };
-
-  const createBooking = () => {
-    let obj = {};
-    obj = {
-      itemPrice: amount,
-      orderStatus: 1,
-      redeemQPoints: qPoints,
-      orderPayment: { amount, paymentMethod: 1 },
-    };
-    navigation.navigate(routeNames.STUDENT.PAYMENT_METHOD, { bookingData: obj });
   };
 
   const renderCartItems = (item, index) => {
@@ -318,6 +315,11 @@ const myCart = () => {
     }
   };
 
+  const createBooking = () => {
+    setShowQPointPayModal(false);
+    setShowPaymentModal(true);
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
       <Loader isLoading={cartLoading || removeLoading} />
@@ -394,7 +396,7 @@ const myCart = () => {
         </View>
         <View>
           <Button
-            onPress={() => createBooking()}
+            onPress={() => setShowPaymentModal(true)}
             style={[
               commonStyles.buttonPrimary,
               {
@@ -419,6 +421,12 @@ const myCart = () => {
         onPayNow={() => createBooking()}
       />
       <CouponModal visible={showCouponModal} onClose={() => setShowCouponModal(false)} />
+      <PaymentMethodModal
+        visible={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        bookingData={bookingData}
+        amount={amount}
+      />
     </View>
   );
 };

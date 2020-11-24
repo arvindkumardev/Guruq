@@ -7,7 +7,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import ProgressCircle from 'react-native-progress-circle';
 import { Button, Icon } from 'native-base';
 import CalendarStrip from 'react-native-calendar-strip';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
@@ -19,6 +19,7 @@ import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/fonts';
 import ClassModeSelectModal from './components/classModeSelectModal';
 import BackArrow from '../../../components/BackArrow';
+import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
@@ -39,6 +40,7 @@ function tutorDetails(props) {
   const [isFreeDemo, setIsFreeDemo] = useState(false);
   const [priceMatrix, setPriceMatrix] = useState({});
   const [budgets, setBudgets] = useState([]);
+  const [isFavourite, setIsFavourite] = useState(false);
 
   const [favourites, setFavourites] = useState([]);
   const [compareTutors, setCompareTutors] = useState([]);
@@ -49,6 +51,34 @@ function tutorDetails(props) {
 
   const { loading: loadingTutorsOffering, error: offeringError, data: offeringData } = useQuery(GET_TUTOR_OFFERINGS, {
     variables: { tutorId: tutorData?.id },
+  });
+
+  const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setIsFavourite(true);
+      }
+    },
+  });
+
+  const [removeFavourite, { loading: removeFavouriteLoading }] = useMutation(REMOVE_FAVOURITE, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setIsFavourite(false);
+      }
+    },
   });
 
   const [reviewProgress, setReviewProgress] = useState([
@@ -130,15 +160,15 @@ function tutorDetails(props) {
   }, [offeringData?.getTutorOfferings]);
 
   useEffect(() => {
-    let favTutors = [];
-    favTutors = favourites;
     if (favouriteTutor) {
       for (const obj of favouriteTutor.getFavouriteTutors) {
-        favTutors.push(obj.tutor.id);
+        if (obj.tutor.id === tutorData?.id) {
+          setIsFavourite(true);
+          return;
+        }
       }
-      setFavourites(favTutors);
     }
-  }, [favourites]);
+  }, []);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -541,6 +571,18 @@ function tutorDetails(props) {
         }.png`;
   };
 
+  const markFavouriteTutor = () => {
+    if (isFavourite) {
+      removeFavourite({
+        variables: { tutorId: tutorData?.id },
+      });
+    } else {
+      markFavourite({
+        variables: { tutorId: tutorData?.id },
+      });
+    }
+  };
+
   return (
     <View
       style={[
@@ -629,8 +671,9 @@ function tutorDetails(props) {
               <IconButtonWrapper
                 iconWidth={RfW(16)}
                 iconHeight={RfH(16)}
-                iconImage={favourites.includes(tutorData.id) ? Images.heartFilled : Images.heart}
+                iconImage={isFavourite ? Images.heartFilled : Images.heart}
                 styling={{ marginHorizontal: RfW(16) }}
+                submitFunction={() => markFavouriteTutor()}
               />
             </View>
           </TouchableWithoutFeedback>
@@ -643,26 +686,6 @@ function tutorDetails(props) {
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={(event) => handleScroll(event)}>
-        {/* <View> */}
-        {/*  {hideTutorPersonal && ( */}
-        {/*    <View */}
-        {/*      style={[ */}
-        {/*        commonStyles.horizontalChildrenView, */}
-        {/*        { backgroundColor: Colors.white, paddingHorizontal: RfW(16), paddingVertical: RfH(8) }, */}
-        {/*      ]}> */}
-        {/*      <IconButtonWrapper */}
-        {/*        iconWidth={RfW(32)} */}
-        {/*        iconHeight={RfH(32)} */}
-        {/*        iconImage={getTutorImage(tutorData)} */}
-        {/*        imageResizeMode="cover" */}
-        {/*        styling={{ alignSelf: 'center', borderRadius: RfW(64) }} */}
-        {/*      /> */}
-        {/*      <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}> */}
-        {/*        {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName} */}
-        {/*      </Text> */}
-        {/*    </View> */}
-        {/*  )} */}
-        {/* </View> */}
         <View
           style={{
             flexDirection: 'row',
