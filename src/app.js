@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider, useReactiveVar } from '@apollo/client';
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
-import { useReactiveVar } from '@apollo/client';
-import initializeApollo from './apollo/apollo';
+
 import { getToken } from './utils/helpers';
 import { isLoggedIn, isTokenLoading, userDetails } from './apollo/cache';
 import AppStack from './routes/appRoutes';
-import { UserTypeEnum } from './common/userType.enum';
+import initializeApollo from './apollo/apollo';
 
 const getActiveRouteName = (state) => {
   const route = state.routes[state.index];
@@ -89,15 +89,17 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
-        <StatusBar barStyle="dark-content" />
-        <AppStack
-          isUserLoggedIn={isUserLoggedIn}
-          isUserTokenLoading={isUserTokenLoading}
-          userType={userInfo.type}
-          // isNetworkConnectivityError={isNetworkConnectivityError}
-        />
-      </NavigationContainer>
+      <ApolloHooksProvider client={client}>
+        <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
+          <StatusBar barStyle="dark-content" />
+          <AppStack
+            isUserLoggedIn={isUserLoggedIn}
+            isUserTokenLoading={isUserTokenLoading}
+            userType={userInfo.type}
+            // isNetworkConnectivityError={isNetworkConnectivityError}
+          />
+        </NavigationContainer>
+      </ApolloHooksProvider>
     </ApolloProvider>
   );
 }

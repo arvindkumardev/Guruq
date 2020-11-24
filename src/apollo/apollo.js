@@ -1,14 +1,11 @@
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createHttpLink } from 'apollo-link-http';
-import { LoggingLink } from 'apollo-logger';
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+
+import { setContext } from '@apollo/client/link/context';
+
 import apolloLogger from 'apollo-link-logger';
-import { setContext } from 'apollo-link-context';
 import { getToken } from '../utils/helpers';
 
-const logOptions = { logger: console.log };
-
-// const GRAPHQL_ENDPOINT = 'http://10.0.0.10:5000/graphql';
+// const GRAPHQL_ENDPOINT = 'http://10.0.0.11:5000/graphql';
 const GRAPHQL_ENDPOINT = 'http://13.229.107.165:5000/graphql';
 
 let apolloClient = null;
@@ -28,9 +25,9 @@ const link = authLink.concat(httpLink);
 
 const cache = new InMemoryCache();
 
-function createApolloClient(fetchOptions = {}) {
+function createApolloClient() {
   return new ApolloClient({
-    link: authLink.concat(apolloLogger).concat(new LoggingLink(logOptions)).concat(link),
+    link: authLink.concat(apolloLogger).concat(link),
     cache,
   });
 }

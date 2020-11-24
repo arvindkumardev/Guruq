@@ -26,6 +26,7 @@ export const ME_QUERY = gql`
       role {
         name
       }
+      qPoints
     }
   }
 `;
