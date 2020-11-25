@@ -126,7 +126,7 @@ const qPointPayModal = (props) => {
                 fontFamily: Fonts.bold,
                 fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
               }}>
-              ₹{totalAmount}
+              ₹{totalAmount - deductedAgaintQPoint}
             </Text>
           </View>
         </View>

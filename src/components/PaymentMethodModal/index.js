@@ -28,11 +28,10 @@ import Loader from '../Loader';
 import Dash from '../Dash';
 
 const PaymentMethod = (props) => {
-  const { visible, onClose, bookingData, amount } = props;
+  const { visible, onClose, bookingData, amount, discount, deductedAgaintQPoint } = props;
 
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(1);
-  const [discount, setDiscount] = useState(200);
   const [convenienceCharges, setConvenienceCharges] = useState(100);
 
   const userInfo = useReactiveVar(userDetails);
@@ -281,7 +280,7 @@ const PaymentMethod = (props) => {
                   color: Colors.brandBlue2,
                   fontFamily: Fonts.semiBold,
                 }}>
-                -₹{parseFloat(bookingData.redeemQPoints).toFixed(2)}
+                -₹{parseFloat(deductedAgaintQPoint).toFixed(2)}
               </Text>
             </View>
 
@@ -467,7 +466,7 @@ const PaymentMethod = (props) => {
               <Text style={commonStyles.headingPrimaryText}>
                 ₹
                 {parseFloat(
-                  amount + (paymentMethod === 4 ? convenienceCharges : 0) - discount - bookingData.redeemQPoints
+                  amount + (paymentMethod === 4 ? convenienceCharges : 0) - discount - deductedAgaintQPoint
                 ).toFixed(2)}
               </Text>
               <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
@@ -500,6 +499,8 @@ PaymentMethod.defaultProps = {
   onClose: null,
   bookingData: {},
   amount: 0,
+  discount: 0,
+  deductedAgaintQPoint: 0,
 };
 
 PaymentMethod.propTypes = {
@@ -507,6 +508,8 @@ PaymentMethod.propTypes = {
   onClose: PropTypes.func,
   bookingData: PropTypes.object,
   amount: PropTypes.number,
+  discount: PropTypes.number,
+  deductedAgaintQPoint: PropTypes.number,
 };
 
 export default PaymentMethod;

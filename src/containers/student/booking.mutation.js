@@ -140,12 +140,6 @@ export const CHECK_COUPON = gql`
       version
       deleted
       active
-      createdDate
-      updatedDate
-      m_id
-      createdBy
-      updatedBy
-      notes
       code
       isPercentage
       discount

@@ -13,28 +13,8 @@ import { CHECK_COUPON } from '../../booking.mutation';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 
 const qPointPayModal = (props) => {
-  const { visible, onClose, availableCoupons } = props;
+  const { visible, onClose, availableCoupons, checkCoupon } = props;
   const [couponCode, setCouponCode] = useState('');
-
-  const [checkCouponCode, { loading: couponLoading }] = useMutation(CHECK_COUPON, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        console.log(data);
-      }
-    },
-  });
-
-  const checkCoupon = () => {
-    checkCouponCode({
-      variables: { code: couponCode },
-    });
-  };
 
   return (
     <Modal
@@ -69,11 +49,11 @@ const qPointPayModal = (props) => {
             iconImage={Images.cross}
             submitFunction={() => onClose(false)}
           />
-          <View style={{ marginHorizontal: RfW(16) }}>
-            <Item underline={false}>
+          <View style={[commonStyles.horizontalChildrenView, { marginHorizontal: RfW(16), marginBottom: RfH(8) }]}>
+            <Item underline={false} style={{ flex: 1 }}>
               <Input
                 placeholder="Enter Coupon Code"
-                onChange={(text) => setCouponCode(text)}
+                onChangeText={(text) => setCouponCode(text)}
                 style={{
                   backgroundColor: Colors.white,
                   borderRadius: 8,
@@ -82,19 +62,17 @@ const qPointPayModal = (props) => {
                 }}
               />
             </Item>
-            <TouchableWithoutFeedback onPress={() => checkCoupon()}>
-              <Text
-                style={{
-                  alignSelf: 'flex-end',
-                  marginRight: RfW(16),
-                  marginTop: RfH(-30),
-                  marginBottom: RfH(16),
-                  color: Colors.brandBlue2,
-                  zIndex: 5,
-                }}>
-                APPLY
-              </Text>
-            </TouchableWithoutFeedback>
+            <View>
+              <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => checkCoupon(couponCode)}>
+                <Text
+                  style={{
+                    marginLeft: RfW(16),
+                    color: Colors.brandBlue2,
+                  }}>
+                  APPLY
+                </Text>
+              </TouchableWithoutFeedback>
+            </View>
           </View>
 
           <View
@@ -133,7 +111,9 @@ const qPointPayModal = (props) => {
               ]}>
               GURUQ
             </Text>
-            <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2 }]}>APPLY</Text>
+            <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => checkCoupon()}>
+              <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2 }]}>APPLY</Text>
+            </TouchableWithoutFeedback>
           </View>
           <View style={[commonStyles.borderBottom, { marginVertical: RfH(16) }]} />
         </View>
@@ -146,12 +126,14 @@ qPointPayModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
   availableCoupons: PropTypes.array,
+  checkCoupon: PropTypes.func,
 };
 
 qPointPayModal.defaultProps = {
   visible: false,
   onClose: null,
   availableCoupons: [],
+  checkCoupon: null,
 };
 
 export default qPointPayModal;

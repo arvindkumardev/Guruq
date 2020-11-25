@@ -18,7 +18,7 @@ import QPointPayModal from '../components/qPointPayModal';
 import CouponModal from '../components/couponModal';
 import Loader from '../../../../components/Loader';
 import { GET_CART_ITEMS } from '../../booking.query';
-import { REMOVE_CART_ITEM } from '../../booking.mutation';
+import { CHECK_COUPON, REMOVE_CART_ITEM } from '../../booking.mutation';
 import { ME_QUERY } from '../../../common/graphql-query';
 
 const myCart = () => {
@@ -27,6 +27,7 @@ const myCart = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
   const [amount, setAmount] = useState(0);
+  const [discount, setDiscount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(0);
 
@@ -44,6 +45,41 @@ const myCart = () => {
   const { loading: meLoading, error: meError, data: userData } = useQuery(ME_QUERY, {
     fetchPolicy: 'no-cache',
   });
+
+  const [checkCouponCode, { loading: couponLoading }] = useMutation(CHECK_COUPON, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        if (!data.checkCoupon.isPercentage) {
+          if (data.checkCoupon.maxDiscount >= data.checkCoupon.discount) {
+            setDiscount(data.checkCoupon.discount);
+          } else {
+            setDiscount(data.checkCoupon.maxDiscount);
+          }
+        } else {
+          let discountedAmount = 0;
+          discountedAmount = (amount * data.checkCoupon.discount) / 100;
+          if (data.checkCoupon.maxDiscount >= discountedAmount) {
+            setDiscount(discountedAmount);
+          } else {
+            setDiscount(data.checkCoupon.maxDiscount);
+          }
+        }
+        setShowCouponModal(false);
+      }
+    },
+  });
+
+  const checkCoupon = (couponCode) => {
+    checkCouponCode({
+      variables: { code: couponCode },
+    });
+  };
 
   useEffect(() => {
     if (cartItemData?.getCartItems) {
@@ -429,12 +465,18 @@ const myCart = () => {
         amountToPayAfterQPoint={amount - qPoints}
         onPayNow={() => createBooking()}
       />
-      <CouponModal visible={showCouponModal} onClose={() => setShowCouponModal(false)} />
+      <CouponModal
+        visible={showCouponModal}
+        onClose={() => setShowCouponModal(false)}
+        checkCoupon={(couponCode) => checkCoupon(couponCode)}
+      />
       <PaymentMethodModal
         visible={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
         bookingData={bookingData}
         amount={amount}
+        deductedAgaintQPoint={qPoints}
+        discount={discount}
       />
     </View>
   );
