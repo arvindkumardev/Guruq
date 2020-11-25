@@ -1,5 +1,15 @@
 /* eslint-disable no-plusplus */
-import { FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View, Animated } from 'react-native';
+import {
+  FlatList,
+  Modal,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+  Animated,
+  Alert,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
@@ -92,6 +102,16 @@ function TutorListing(props) {
   //     searchDto: filterValues,
   //   },
   // });
+
+  const openCompareTutor = async () => {
+    let compareArray = [];
+    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
+    if (compareArray.length === 2) {
+      setShowCompareModal(true);
+    } else {
+      Alert.alert('Add tutors before compare');
+    }
+  };
 
   const checkCompare = async () => {
     let compareArray = [];
@@ -1038,7 +1058,7 @@ function TutorListing(props) {
             ]}>
             <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>
 
-            <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS)}>
+            <TouchableWithoutFeedback onPress={() => openCompareTutor()}>
               <Text style={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
                 Compare Tutors
               </Text>
