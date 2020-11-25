@@ -243,7 +243,6 @@ const myCart = () => {
             <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
               <Text style={commonStyles.secondaryText}>400 Available Points</Text>
               <Text style={commonStyles.regularPrimaryText}>₹ Number Picker</Text>
-
             </View>
           </View>
         )}
