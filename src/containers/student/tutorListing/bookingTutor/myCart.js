@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
-import { Alert, View, Text, FlatList } from 'react-native';
+import { Alert, FlatList, Text, View, TextInput, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -30,6 +30,8 @@ const myCart = () => {
   const [discount, setDiscount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(0);
+
+  const [applyQPoints, setApplyQPoints] = useState(false);
 
   const [bookingData, setBookingData] = useState({
     itemPrice: amount,
@@ -183,9 +185,13 @@ const myCart = () => {
     );
   };
 
+  const enableApplyQPoints = () => {
+    setApplyQPoints(!applyQPoints);
+  };
+
   const renderQPointView = () => {
     return (
-      <TouchableWithoutFeedback onPress={() => setShowQPointPayModal(true)}>
+      <View>
         <View
           style={[
             commonStyles.horizontalChildrenSpaceView,
@@ -197,34 +203,73 @@ const myCart = () => {
             },
           ]}>
           <View style={commonStyles.horizontalChildrenStartView}>
-            <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
+            {/* <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} /> */}
             <Text
               style={[
-                styles.compareTutorName,
+                commonStyles.mediumPrimaryText,
                 {
-                  fontFamily: 'SegoeUI-Bold',
-                  color: Colors.orange,
-                  marginLeft: RfW(8),
-                  marginTop: 0,
+                  fontFamily: Fonts.semiBold,
                 },
               ]}>
               Apply Q Points
             </Text>
           </View>
+
           <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
-            iconImage={Images.chevronRight}
-            submitFunction={() => setShowQPointPayModal(true)}
+            iconWidth={RfW(20)}
+            iconHeight={RfH(20)}
+            iconImage={applyQPoints ? Images.checkbox_selected : Images.checkbox}
+            // styling={{ marginHorizontal: RfW(16) }}
+            submitFunction={() => enableApplyQPoints()}
           />
+
+          {/* <IconButtonWrapper */}
+          {/*  iconHeight={RfH(24)} */}
+          {/*  iconWidth={RfW(24)} */}
+          {/*  iconImage={Images.chevronRight} */}
+          {/*  submitFunction={() => setShowQPointPayModal(true)} */}
+          {/* /> */}
         </View>
-      </TouchableWithoutFeedback>
+
+        {applyQPoints && (
+          <View
+            style={{
+              backgroundColor: Colors.white,
+              height: RfH(44),
+              paddingHorizontal: RfW(16),
+            }}>
+            <View style={commonStyles.lineSeparator} />
+
+            <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
+              <Text style={commonStyles.secondaryText}>400 Available Points</Text>
+              <Text style={commonStyles.regularPrimaryText}>₹ Number Picker</Text>
+
+            </View>
+          </View>
+        )}
+      </View>
     );
   };
 
   const renderCouponView = () => {
     return (
-      <TouchableWithoutFeedback onPress={() => setShowCouponModal(true)}>
+      <TouchableWithoutFeedback>
+        <View
+          style={{
+            height: 44,
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={[
+              commonStyles.mediumMutedText,
+              {
+                paddingHorizontal: RfW(16),
+              },
+            ]}>
+            COUPONS
+          </Text>
+        </View>
+
         <View
           style={[
             commonStyles.horizontalChildrenSpaceView,
@@ -235,22 +280,56 @@ const myCart = () => {
               paddingHorizontal: RfW(16),
             },
           ]}>
-          <View style={commonStyles.horizontalChildrenStartView}>
-            <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} />
-            <Text
-              style={[
-                styles.compareTutorName,
-                {
-                  fontFamily: Fonts.semiBold,
-                  color: Colors.black,
-                  marginLeft: RfW(8),
-                  marginTop: 0,
-                },
-              ]}>
-              Apply Coupon
-            </Text>
+          <View
+            style={[
+              commonStyles.horizontalChildrenStartView,
+              {
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              },
+            ]}>
+            {/* <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} /> */}
+            {/* <Text */}
+            {/*  style={[ */}
+            {/*    commonStyles.regularPrimaryText, */}
+            {/*    { */}
+            {/*      fontFamily: Fonts.semiBold, */}
+            {/*    }, */}
+            {/*  ]}> */}
+            {/*  Apply Coupon */}
+            {/* </Text> */}
+            <TextInput
+              style={{ height: 40, flex: 1, borderColor: Colors.borderColor, borderWidth: 0.5, fontSize: 17 }}
+            />
+            <TouchableWithoutFeedback
+              onPress={() => Alert.alert('hi!')}
+              style={{
+                // width: RfW(144),
+                //   backgroundColor: "#ff0000",
+                color: Colors.brandBlue2,
+                // width: 60,
+                height: 40,
+                marginLeft: 16,
+                // padding: 16
+              }}>
+              <Text style={[commonStyles.textButtonPrimary, { color: Colors.brandBlue2 }]}>Apply</Text>
+            </TouchableWithoutFeedback>
           </View>
-          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} />
+          {/* <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} /> */}
+        </View>
+
+        <View
+          style={{
+            backgroundColor: Colors.white,
+            height: RfH(44),
+            paddingHorizontal: RfW(16),
+          }}>
+          {/* <View style={commonStyles.lineSeparator} /> */}
+
+          <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
+            <Text style={commonStyles.secondaryText}>GURUQ2020</Text>
+            <Text style={commonStyles.regularPrimaryText}>₹150</Text>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -260,31 +339,22 @@ const myCart = () => {
     return (
       <View style={{ backgroundColor: Colors.white, paddingHorizontal: RfW(16) }}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-          <Text style={styles.tutorDetails}>Amount</Text>
-          <Text style={styles.tutorDetails}>₹{amount}</Text>
+          <Text style={commonStyles.mediumPrimaryText}>Amount</Text>
+          <Text style={commonStyles.mediumPrimaryText}>₹{amount}</Text>
         </View>
 
         <View style={commonStyles.lineSeparator} />
 
         <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-          <Text
-            style={[
-              styles.tutorDetails,
-              {
-                fontFamily: 'SegoeUI-Bold',
-              },
-            ]}>
-            Total Amount
-          </Text>
-          <Text
-            style={[
-              styles.tutorDetails,
-              {
-                fontFamily: 'SegoeUI-Bold',
-              },
-            ]}>
-            ₹{amount}
-          </Text>
+          <Text style={commonStyles.mediumPrimaryText}>GURUQ2020 Applied</Text>
+          <Text style={commonStyles.mediumPrimaryText}>₹150</Text>
+        </View>
+
+        <View style={commonStyles.lineSeparator} />
+
+        <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
+          <Text style={commonStyles.regularPrimaryText}>Total Amount</Text>
+          <Text style={commonStyles.regularPrimaryText}>₹{amount}</Text>
         </View>
       </View>
     );
