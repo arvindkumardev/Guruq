@@ -61,7 +61,7 @@ function PaymentMethod(props) {
             initiatePaypalPayment(data.createBooking.id);
             break;
           default:
-            completedPayment(2, 'Success');
+            completedPayment(2, '');
             break;
         }
       }
@@ -102,11 +102,11 @@ function PaymentMethod(props) {
     RNRazorpayCheckout.open(options)
       .then((data) => {
         // handle success
-        completedPayment(bookingOrderId, 3, data.razorpay_payment_id);
+        completedPayment(bookingOrderId, 1, data.razorpay_payment_id);
       })
       .catch((error) => {
         // handle failure
-        completedPayment(bookingOrderId, 2, error.description);
+        completedPayment(bookingOrderId, 3, error.description);
         // create booking - with cancelled payment
       });
   };

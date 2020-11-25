@@ -15,6 +15,7 @@ export const AUTH_TOKEN = 'AUTH_TOKEN';
 export const LOCAL_STORAGE_DATA_KEY = {
   USER_TOKEN: 'userToken',
   ONBOARDING_SHOWN: 'onboarding_shown',
+  COMPARE_TUTOR_ID: 'compare_tutors',
   // FIRST_NAME: 'firstName',
   // LAST_NAME: 'lastName',
 };

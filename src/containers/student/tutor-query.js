@@ -56,7 +56,12 @@ export const SEARCH_TUTORS = gql`
         }
         experienceDetails {
           id
-          institution
+          institution {
+            name
+            address {
+              city
+            }
+          }
         }
         documents {
           id

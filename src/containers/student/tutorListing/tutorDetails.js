@@ -12,9 +12,9 @@ import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
 import styles from './styles';
-import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
-import { IconButtonWrapper } from '../../../components';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { RfH, RfW, storeData, titleCaseIfExists, getSaveData, removeData } from '../../../utils/helpers';
+import { CompareModal, IconButtonWrapper } from '../../../components';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/fonts';
 import ClassModeSelectModal from './components/classModeSelectModal';
@@ -41,9 +41,9 @@ function tutorDetails(props) {
   const [priceMatrix, setPriceMatrix] = useState({});
   const [budgets, setBudgets] = useState([]);
   const [isFavourite, setIsFavourite] = useState(false);
+  const [showCompareModal, setShowCompareModal] = useState(false);
 
   const [favourites, setFavourites] = useState([]);
-  const [compareTutors, setCompareTutors] = useState([]);
 
   const { loading: loadingFavouriteTutors, error: favouriteError, data: favouriteTutor } = useQuery(
     GET_FAVOURITE_TUTORS
@@ -170,8 +170,46 @@ function tutorDetails(props) {
     }
   }, []);
 
+  const checkCompare = async () => {
+    let compareArray = [];
+    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
+    if (compareArray.length === 2) {
+      setShowCompareModal(true);
+    }
+  };
+
+  useEffect(() => {
+    checkCompare();
+  }, []);
+
   const onBackPress = () => {
     navigation.goBack();
+  };
+
+  const addToCompare = async () => {
+    let compareArray = [];
+    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
+    if (compareArray == null) {
+      const newArray = [];
+      newArray.push(tutorData);
+      await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
+      storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(newArray)).then(() => {
+        Alert.alert('Added to compare');
+      });
+    } else if (compareArray.length < 2) {
+      if (compareArray[0].id === tutorData?.id) {
+        Alert.alert('Already added to compare');
+      } else {
+        compareArray.push(tutorData);
+        await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
+        storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(compareArray)).then(() => {
+          setShowCompareModal(true);
+        });
+      }
+    } else {
+      setShowCompareModal(true);
+      Alert.alert('Please remove other tutor from compare');
+    }
   };
 
   const selectSubject = (item) => {
@@ -643,7 +681,7 @@ function tutorDetails(props) {
         </View>
 
         <View style={commonStyles.horizontalChildrenStartView}>
-          <TouchableWithoutFeedback onPress={() => Alert.alert('Add to Compare')}>
+          <TouchableWithoutFeedback onPress={() => addToCompare()}>
             <View
               style={{
                 height: RfH(44),
@@ -891,6 +929,8 @@ function tutorDetails(props) {
         selectedSubject={selectedSubject}
         budgetDetails={budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`]}
       />
+
+      {showCompareModal && <CompareModal visible={showCompareModal} onClose={() => setShowCompareModal(false)} />}
     </View>
   );
 }

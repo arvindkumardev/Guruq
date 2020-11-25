@@ -10,6 +10,7 @@ import ScreenHeader from './ScreenHeader';
 import DateSlotSelectorModal from './DateSlotSelectorModal';
 import RateReview from './Rate&ReviewModal';
 import PaymentMethodModal from './PaymentMethodModal';
+import CompareModal from './CompareModal';
 
 export {
   IconButtonWrapper,
@@ -23,4 +24,5 @@ export {
   DateSlotSelectorModal,
   RateReview,
   PaymentMethodModal,
+  CompareModal,
 };

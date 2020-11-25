@@ -8,20 +8,21 @@ import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
+import { getSaveData, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
-import { CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
+import { CompareModal, CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
 import { SEARCH_TUTORS, GET_FAVOURITE_TUTORS } from '../tutor-query';
 import Loader from '../../../components/Loader';
 import Fonts from '../../../theme/fonts';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import BackArrow from '../../../components/BackArrow';
 
 function TutorListing(props) {
   const navigation = useNavigation();
   const [isTutor, setIsTutor] = useState(true);
+  const [showCompareModal, setShowCompareModal] = useState(false);
 
   const { route } = props;
 
@@ -91,6 +92,18 @@ function TutorListing(props) {
   //     searchDto: filterValues,
   //   },
   // });
+
+  const checkCompare = async () => {
+    let compareArray = [];
+    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
+    if (compareArray.length === 2) {
+      setShowCompareModal(true);
+    }
+  };
+
+  useEffect(() => {
+    checkCompare();
+  }, []);
 
   const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
     onError: (e) => {
@@ -1060,6 +1073,8 @@ function TutorListing(props) {
         </View>
       </ScrollView>
       {showFilterModel()}
+
+      {showCompareModal && <CompareModal visible={showCompareModal} onClose={() => setShowCompareModal(false)} />}
     </View>
   );
 }

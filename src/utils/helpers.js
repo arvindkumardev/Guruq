@@ -126,7 +126,7 @@ export const getTutorImageUrl = (tutor) => {
   return tutor && tutor.profileImage && tutor.profileImage.filename
     ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
     : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-        tutor.id % 4
+        tutor?.id % 4
       }.png`;
 };
 
