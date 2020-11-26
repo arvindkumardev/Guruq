@@ -70,7 +70,7 @@ function tutorDetails(props) {
   // const { loading: , error: offeringError, data:  } = useQuery(, {
   //   variables: { tutorId: tutorData?.id },
   // });
-  const [offeringData, setOfferingData] = useState([]);
+  // const [offeringData, setOfferingData] = useState([]);
 
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
@@ -101,7 +101,11 @@ function tutorDetails(props) {
               if (item.freeDemo) {
                 classData[`${item.offering.id}`].freeDemo = true;
               }
-              subjects.push({ id: item.offering.id, displayName: item.offering.displayName, offeringId: item.id });
+              subjects.push({
+                id: item.offering.id,
+                displayName: item.offering.displayName,
+                offeringId: item.id,
+              });
               pm[`o${item.offering.id}`] = {
                 online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
                 offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
@@ -126,7 +130,11 @@ function tutorDetails(props) {
           }
         });
         setClassDetails(classData);
-        setSelectedSubject({ id: subjects[0].id, name: subjects[0].displayName, offeringId: subjects[0].offeringId });
+        setSelectedSubject({
+          id: subjects[0].id,
+          name: subjects[0].displayName,
+          offeringId: subjects[0].offeringId,
+        });
         setPriceMatrix(pm);
         setBudgets(sb);
         setRefreshList(!refreshList);
@@ -217,14 +225,15 @@ function tutorDetails(props) {
 
   useEffect(() => {
     if (favouriteTutors) {
-      for (let i = 0; i < favouriteTutors.length; i++) {
-        if (favouriteTutors[i].tutor.id === tutorData?.id) {
-          setIsFavourite(true);
-          return;
-        }
-      }
+      setIsFavourite(favouriteTutors.find((ft) => ft?.tutor?.id === tutorData?.id));
+      // for (let i = 0; i < favouriteTutors.length; i++) {
+      //   if (favouriteTutors[i].tutor.id === tutorData?.id) {
+      //     setIsFavourite(true);
+      //     return;
+      //   }
+      // }
     }
-  }, []);
+  }, [favouriteTutors]);
 
   const onBackPress = () => {
     navigation.goBack();

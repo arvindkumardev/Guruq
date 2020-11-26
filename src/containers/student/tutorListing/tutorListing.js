@@ -191,7 +191,7 @@ function TutorListing(props) {
         setFavourites(favTutors);
         setRefreshTutorList(!refreshTutorList);
       }
-    }, [])
+    }, [favouriteTutors])
   );
 
   useFocusEffect(
