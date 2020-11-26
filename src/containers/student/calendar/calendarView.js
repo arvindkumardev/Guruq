@@ -1,3 +1,4 @@
+/* eslint-disable react/no-typos */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
 import { FlatList, ScrollView, Text, TouchableWithoutFeedback, View, Image } from 'react-native';
@@ -7,6 +8,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
 import { Button } from 'native-base';
+import PropTypes from 'prop-types';
 import commonStyles from '../../../theme/styles';
 import routeNames from '../../../routes/screenNames';
 import { RfH, RfW, monthNames } from '../../../utils/helpers';
@@ -17,10 +19,11 @@ import { IconButtonWrapper } from '../../../components';
 import { GET_SCHEDULED_CLASSES } from '../booking.query';
 import { studentDetails } from '../../../apollo/cache';
 
-function CalendarView() {
+function CalendarView(props) {
   const navigation = useNavigation();
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
+  const { changeTab } = props;
 
   const studentInfo = useReactiveVar(studentDetails);
 
@@ -167,7 +170,7 @@ function CalendarView() {
         <View>
           <Image
             source={Images.empty_schedule}
-            style={{ margin: RfH(56), alignSelf: 'center', height: RfH(264), width: RfW(224), marginBottom: RfH(32) }}
+            style={{ margin: RfH(56), alignSelf: 'center', height: RfH(280), width: RfW(224), marginBottom: RfH(32) }}
           />
           <Text
             style={[
@@ -184,7 +187,7 @@ function CalendarView() {
             Looks like you have not scheduled any class yet.
           </Text>
           <View style={{ height: RfH(64) }} />
-          <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+          <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]} onPress={() => changeTab(3)}>
             <Text style={commonStyles.textButtonPrimary}>Schedule Now</Text>
           </Button>
         </View>
@@ -242,5 +245,13 @@ function CalendarView() {
     </View>
   );
 }
+
+CalendarView.propTypes = {
+  changeTab: PropTypes.func,
+};
+
+CalendarView.defaultProps = {
+  changeTab: null,
+};
 
 export default CalendarView;

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const MARK_FAVOURITE = gql`
-  mutation MarkFavourite($tutorId: Int!) {
-    markFavourite(tutorId: $tutorId) {
+  mutation MarkFavourite($tutorFavourite: CreateTutorFavouriteDto!) {
+    markFavourite(tutorFavourite: $tutorFavourite) {
       id
       tutor {
         id
@@ -12,8 +12,8 @@ export const MARK_FAVOURITE = gql`
 `;
 
 export const REMOVE_FAVOURITE = gql`
-  mutation RemoveFromFavourite($tutorId: Int!) {
-    removeFromFavourite(tutorId: $tutorId) {
+  mutation RemoveFromFavourite($tutorFavourite: CreateTutorFavouriteDto!) {
+    removeFromFavourite(tutorFavourite: $tutorFavourite) {
       tutor {
         id
       }
