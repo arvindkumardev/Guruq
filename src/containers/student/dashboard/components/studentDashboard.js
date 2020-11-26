@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Icon, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../../theme/styles';
@@ -103,6 +103,13 @@ function StudentDashboard(props) {
     getFavouriteTutors();
     getInterestedOfferings();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getFavouriteTutors();
+      getInterestedOfferings();
+    }, [])
+  );
 
   const [markInterestedOffering] = useMutation(MARK_INTERESTED_OFFERING_SELECTED, {
     fetchPolicy: 'no-cache',
