@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -113,18 +113,6 @@ function TutorListing(props) {
     }
   };
 
-  const checkCompare = async () => {
-    let compareArray = [];
-    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
-    if (compareArray.length === 2) {
-      setShowCompareModal(true);
-    }
-  };
-
-  useEffect(() => {
-    checkCompare();
-  }, []);
-
   const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -138,24 +126,29 @@ function TutorListing(props) {
     },
   });
 
-  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      let favTutors = [];
-      favTutors = favourites;
-      if (data) {
-        for (let i = 0; i < data.getFavouriteTutors.length; i++) {
-          favTutors.push(data.getFavouriteTutors[i].tutor.id);
-        }
-        setFavourites(favTutors);
-        setRefreshTutorList(!refreshTutorList);
-      }
-    },
-  });
+  const { loading: loadingFavouriteTutors, error: favouriteError, data: favouriteTutor } = useQuery(
+    GET_FAVOURITE_TUTORS
+  );
+
+  // const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
+  //   onError: (e) => {
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     let favTutors = [];
+  //     favTutors = favourites;
+  //     if (data) {
+  //       for (let i = 0; i < data.getFavouriteTutors.length; i++) {
+  //         favTutors.push(data.getFavouriteTutors[i].tutor.id);
+  //       }
+  //       setFavourites(favTutors);
+  //       setRefreshTutorList(!refreshTutorList);
+  //     }
+  //     console.log(favourites);
+  //   },
+  // });
 
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
@@ -197,12 +190,33 @@ function TutorListing(props) {
     },
   });
 
-  useEffect(() => {
-    getTutors({
-      variables: { searchDto: filterValues },
-    });
-    getFavouriteTutors();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const favTutors = [];
+      if (favouriteTutor) {
+        for (let i = 0; i < favouriteTutor.getFavouriteTutors.length; i++) {
+          favTutors.push(favouriteTutor.getFavouriteTutors[i].tutor.id);
+        }
+        setFavourites(favTutors);
+        setRefreshTutorList(!refreshTutorList);
+      }
+    }, [])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getTutors({
+        variables: { searchDto: filterValues },
+      });
+    }, [])
+  );
+
+  // useEffect(() => {
+  //   getTutors({
+  //     variables: { searchDto: filterValues },
+  //   });
+  //   getFavouriteTutors();
+  // }, []);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -221,11 +235,11 @@ function TutorListing(props) {
   const markFavouriteTutor = (tutorId) => {
     if (favourites.includes(tutorId)) {
       removeFavourite({
-        variables: { tutorId },
+        variables: { tutorFavourite: { tutor: { id: tutorId } } },
       });
     } else {
       markFavourite({
-        variables: { tutorId },
+        variables: { tutorFavourite: { tutor: { id: tutorId } } },
       });
     }
   };

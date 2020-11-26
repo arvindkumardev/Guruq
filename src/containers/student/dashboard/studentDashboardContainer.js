@@ -44,7 +44,7 @@ function StudentDashboardContainer(props) {
       <Container>
         <View style={{ flex: 1 }}>
           {activeTab === 1 && <StudentDashboard refetchStudentOfferings={refetchStudentOfferings} />}
-          {activeTab === 2 && <CalendarView />}
+          {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
           {activeTab === 3 && <Classes />}
           {/* {activeTab === 4 && <TutorListing />} */}
           {activeTab === 5 && <Profile />}
