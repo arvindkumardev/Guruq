@@ -22,6 +22,7 @@ import ClassModeSelectModal from './components/classModeSelectModal';
 import BackArrow from '../../../components/BackArrow';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import { GET_AVAILABILITY } from '../class.query';
+import { ADD_TO_CART } from '../booking.mutation';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
@@ -64,14 +65,10 @@ function tutorDetails(props) {
       }
     },
   });
+
   useEffect(() => {
     getFavouriteTutors();
   }, []);
-
-  // const { loading: , error: offeringError, data:  } = useQuery(, {
-  //   variables: { tutorId: tutorData?.id },
-  // });
-  // const [offeringData, setOfferingData] = useState([]);
 
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
@@ -142,6 +139,7 @@ function tutorDetails(props) {
       }
     },
   });
+
   useEffect(() => {
     getTutorOffering();
   }, []);
@@ -199,30 +197,6 @@ function tutorDetails(props) {
       description: 'The sessions with tutors stimulate the mind & bring in being at school feeling as well.',
     },
   ]);
-
-  const [markedDates, setMarkedDates] = useState([
-    {
-      date: ['03/11/2020'],
-      dots: [
-        {
-          color: Colors.brandBlue2,
-        },
-      ],
-    },
-  ]);
-
-  const [availableSlots, setAvailableSlots] = useState([
-    '09:30 - 10:30 AM',
-    '10:30 - 11:30 AM',
-    '01:30 - 02:30 PM',
-    '03:00 - 04:00 PM',
-    '04:00 - 05:00 PM',
-    '05:00 - 06:00 PM',
-  ]);
-
-  // useEffect(() => {
-  //
-  // }, [offeringData]);
 
   useEffect(() => {
     if (favouriteTutors) {
@@ -700,24 +674,6 @@ function tutorDetails(props) {
     );
   };
 
-  const renderSlots = (item) => {
-    return (
-      <View
-        style={{
-          backgroundColor: Colors.lightGreen,
-          padding: 8,
-          borderRadius: 8,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginHorizontal: RfW(4),
-          marginVertical: RfH(4),
-        }}>
-        <Text style={{ alignSelf: 'center', fontSize: RFValue(14, STANDARD_SCREEN_SIZE) }}>{item}</Text>
-      </View>
-    );
-  };
-
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
 
@@ -748,6 +704,35 @@ function tutorDetails(props) {
     }
   };
 
+  const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        navigation.navigate(routeNames.STUDENT.MY_CART);
+      }
+    },
+  });
+
+  const onAddingIntoCart = () => {
+    console.log(budgets);
+    // const cartCreate = {
+    //   tutorOfferingId: selectedSubject.id,
+    //   count: 1,
+    //   groupSize: 1,
+    //   demo: true,
+    //   onlineClass: classDetails[`${selectedSubject.id}`]?.online,
+    //   price: 500,
+    // };
+    // addToCart({
+    //   variables: { cartCreateDto: cartCreate },
+    // });
+  };
+
   return (
     <View
       style={[
@@ -755,7 +740,9 @@ function tutorDetails(props) {
         { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
       ]}>
       <Loader
-        isLoading={loadingFavouriteTutors || loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading}
+        isLoading={
+          loadingFavouriteTutors || loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading || cartLoading
+        }
       />
       <View
         style={[
@@ -980,9 +967,7 @@ function tutorDetails(props) {
           marginTop: RfH(8),
           paddingHorizontal: RfW(16),
         }}>
-        <Button
-          onPress={() => navigation.navigate(routeNames.STUDENT.SELECT_CLASS_MODE)}
-          style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
+        <Button onPress={() => onAddingIntoCart()} style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
           <Text style={commonStyles.textButtonOutlinePrimary}>Book {isFreeDemo ? '[Free]' : ''} Demo</Text>
         </Button>
 
@@ -995,11 +980,6 @@ function tutorDetails(props) {
         visible={showDateSlotModal}
         onClose={() => setShowDateSlotModal(false)}
         tutorId={tutorData?.id}
-        // availableSlots={availability}
-        // selectedSlot={(item, index) => selectedSlot(item, index)}
-        // onSubmit={() => onScheduleClass()}
-        // times={startTimes}
-        // selectedClassTime={(value) => selectedClassTime(value)}
       />
 
       <ClassModeSelectModal
