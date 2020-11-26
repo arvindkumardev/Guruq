@@ -88,7 +88,7 @@ function tutorDetails(props) {
         const sb = {};
         const classData = {};
 
-          data?.getTutorOfferings?.map((item) => {
+        data?.getTutorOfferings?.map((item) => {
           if (item.offering && subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
             if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
               classData[`${item.offering.id}`] = {
@@ -214,38 +214,6 @@ function tutorDetails(props) {
   // useEffect(() => {
   //
   // }, [offeringData]);
-
-  useEffect(() => {
-    if (offeringData) {
-      const pm = {};
-      const sb = {};
-
-      offeringData?.getTutorOfferings?.map((item) => {
-        if (item.offering && subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
-          if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
-            if (item.freeDemo) {
-              setIsFreeDemo(true);
-            }
-            subjects.push({ id: item.offering.id, displayName: item.offering.displayName, offeringId: item.id });
-            pm[`o${item.offering.id}`] = {
-              online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-              offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-            };
-
-            sb[`${item.offering.id}`] = item.budgets;
-
-            for (const b of item.budgets) {
-              pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
-            }
-          }
-        }
-      });
-      setSelectedSubject({ id: subjects[0].id, name: subjects[0].displayName, offeringId: subjects[0].offeringId });
-      setPriceMatrix(pm);
-      setBudgets(sb);
-      setRefreshList(!refreshList);
-    }
-  }, [offeringData?.getTutorOfferings]);
 
   useEffect(() => {
     if (favouriteTutors) {
