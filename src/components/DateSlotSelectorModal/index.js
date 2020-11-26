@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable radix */
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
@@ -8,29 +9,71 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, Picker } from 'native-base';
 import { timing } from 'react-native-reanimated';
+import { useLazyQuery } from '@apollo/client';
 import { Colors, Images } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import commonStyles from '../../theme/styles';
+import { GET_AVAILABILITY } from '../../containers/student/class.query';
 
 const dateSlotModal = (props) => {
   const navigation = useNavigation();
   const [selectedTime, setSelectedTime] = useState(null);
-  const { visible, onClose, availableSlots, selectedSlot, onDateChange, onSubmit, times, selectedClassTime } = props;
+  const [availability, setAvailability] = useState([]);
+  const { visible, onClose, selectedSlot, onDateChange, onSubmit, times, selectedClassTime, tutorId } = props;
+
+  const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      const dateObj = [];
+      for (const obj of data.getAvailability) {
+        dateObj.push({
+          startDate: new Date(obj.startDate),
+          endDate: new Date(obj.endDate),
+          selected: false,
+          active: obj.active,
+        });
+      }
+      setAvailability(dateObj);
+    },
+  });
+
+  useEffect(() => {
+    getAvailability({
+      variables: {
+        tutorAvailability: {
+          tutorId,
+          startDate: new Date(),
+          endDate: new Date(),
+        },
+      },
+    });
+  }, []);
 
   useEffect(() => {
     if (times) {
       setSelectedTime(times[0]?.startTime);
     }
   }, [times]);
+
+  const selectedClassSlot = (item, index) => {
+    if (selectedSlot) {
+      selectedSlot(item, index);
+    }
+  };
+
   const renderSlots = (item, index) => {
     const startHours = new Date(item.startDate).getUTCHours();
     const startMinutes = new Date(item.startDate).getUTCMinutes();
     const endHours = new Date(item.endDate).getUTCHours();
     const endMinutes = new Date(item.endDate).getUTCMinutes();
     return (
-      <TouchableWithoutFeedback onPress={() => selectedSlot(item, index)}>
+      <TouchableWithoutFeedback onPress={() => selectedClassSlot(item, index)}>
         <View
           style={{
             backgroundColor: !item.active ? Colors.lightGrey : item.selected ? Colors.lightGreen : Colors.lightBlue,
@@ -128,7 +171,7 @@ const dateSlotModal = (props) => {
         <View style={{ alignItems: 'center', paddingTop: RfH(24) }}>
           <FlatList
             style={{ height: RfH(200) }}
-            data={availableSlots}
+            data={availability}
             numColumns={2}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => renderSlots(item, index)}
@@ -173,19 +216,20 @@ const dateSlotModal = (props) => {
             </View>
           </View>
         )}
-
-        <View
-          style={{
-            marginTop: RfH(24),
-            marginBottom: RfH(34),
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Button onPress={() => onSubmit()} style={commonStyles.buttonPrimary} block>
-            <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
-          </Button>
-        </View>
+        {onSubmit && (
+          <View
+            style={{
+              marginTop: RfH(24),
+              marginBottom: RfH(34),
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Button onPress={() => onSubmit()} style={commonStyles.buttonPrimary} block>
+              <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
+            </Button>
+          </View>
+        )}
       </View>
     </Modal>
   );
@@ -194,23 +238,23 @@ const dateSlotModal = (props) => {
 dateSlotModal.defaultProps = {
   visible: false,
   onClose: null,
-  availableSlots: [],
   times: [],
   selectedSlot: null,
   onDateChange: null,
   onSubmit: null,
   selectedClassTime: null,
+  tutorId: 0,
 };
 
 dateSlotModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
-  availableSlots: PropTypes.array,
   times: PropTypes.array,
   selectedSlot: PropTypes.func,
   onDateChange: PropTypes.func,
   onSubmit: PropTypes.func,
   selectedClassTime: PropTypes.func,
+  tutorId: PropTypes.number,
 };
 
 export default dateSlotModal;

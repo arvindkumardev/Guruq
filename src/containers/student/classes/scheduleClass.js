@@ -24,33 +24,33 @@ function scheduleClass(props) {
   const classes = route?.params?.classes;
 
   const [showSlotSelector, setShowSlotSelector] = useState(false);
-  const [availability, setAvailability] = useState([]);
+  // const [availability, setAvailability] = useState([]);
   const [selectedStartTime, setSelectedStartTime] = useState(null);
   const [tutorClasses, setTutorClasses] = useState([]);
   const [startTimes, setStartTimes] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedEndTime, setSelectedEndTime] = useState(null);
 
-  const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY, {
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      const dateObj = [];
-      for (const obj of data.getAvailability) {
-        dateObj.push({
-          startDate: new Date(obj.startDate),
-          endDate: new Date(obj.endDate),
-          selected: false,
-          active: obj.active,
-        });
-      }
-      setAvailability(dateObj);
-      setShowSlotSelector(true);
-    },
-  });
+  // const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY, {
+  //   onError: (e) => {
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     const dateObj = [];
+  //     for (const obj of data.getAvailability) {
+  //       dateObj.push({
+  //         startDate: new Date(obj.startDate),
+  //         endDate: new Date(obj.endDate),
+  //         selected: false,
+  //         active: obj.active,
+  //       });
+  //     }
+  //     setAvailability(dateObj);
+  //     setShowSlotSelector(true);
+  //   },
+  // });
 
   const [scheduleClass, { loading: scheduleLoading }] = useMutation(SCHEDULE_CLASS, {
     fetchPolicy: 'no-cache',
@@ -125,16 +125,7 @@ function scheduleClass(props) {
 
   const showSlotPopup = (index) => {
     setSelectedIndex(index);
-    getAvailability({
-      variables: {
-        tutorAvailability: {
-          tutorId: classData.orderItem.tutor.id,
-          // tutorId: 45725,
-          startDate: new Date(),
-          endDate: new Date(),
-        },
-      },
-    });
+    setShowSlotSelector(true);
   };
 
   const renderClassView = (item, index) => {
@@ -237,7 +228,7 @@ function scheduleClass(props) {
       <DateSlotSelectorModal
         visible={showSlotSelector}
         onClose={() => setShowSlotSelector(false)}
-        availableSlots={availability}
+        tutorId={classData.orderItem.tutor.id}
         selectedSlot={(item, index) => selectedSlot(item, index)}
         onSubmit={() => onScheduleClass()}
         times={startTimes}

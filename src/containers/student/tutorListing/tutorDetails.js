@@ -14,13 +14,14 @@ import Loader from '../../../components/Loader';
 import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
 import styles from './styles';
 import { RfH, RfW, storeData, titleCaseIfExists, getSaveData, removeData } from '../../../utils/helpers';
-import { CompareModal, IconButtonWrapper } from '../../../components';
+import { CompareModal, DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/fonts';
 import ClassModeSelectModal from './components/classModeSelectModal';
 import BackArrow from '../../../components/BackArrow';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
+import { GET_AVAILABILITY } from '../class.query';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
@@ -990,80 +991,17 @@ function tutorDetails(props) {
         </Button>
       </View>
 
-      <Modal
-        animationType="fade"
-        backdropOpacity={1}
-        transparent
+      <DateSlotSelectorModal
         visible={showDateSlotModal}
-        onRequestClose={() => {
-          setShowDateSlotModal(false);
-        }}>
-        <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
-        <View
-          style={{
-            bottom: 0,
-            left: 0,
-            right: 0,
-            position: 'absolute',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'stretch',
-            backgroundColor: Colors.white,
-            opacity: 1,
-            paddingBottom: RfH(34),
-          }}>
-          <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
-            styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
-            iconImage={Images.cross}
-            submitFunction={() => setShowDateSlotModal(false)}
-          />
-          <View style={{ paddingHorizontal: RfW(16) }}>
-            <CalendarStrip
-              calendarHeaderStyle={{
-                fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-                alignSelf: 'flex-start',
-                paddingBottom: RfH(8),
-              }}
-              highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
-              highlightDateNameStyle={{ color: Colors.brandBlue2 }}
-              disabledDateNameStyle={{ color: Colors.darkGrey }}
-              disabledDateNumberStyle={{ color: Colors.darkGrey }}
-              dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-              dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-              style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
-              calendarAnimation={{ type: 'parallel', duration: 300 }}
-              daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-              markedDates={[
-                ...markedDates,
-                {
-                  date: new Date(),
-                  dots: [
-                    {
-                      color: Colors.brandBlue,
-                      selectedColor: Colors.brandBlue,
-                    },
-                  ],
-                },
-              ]}
-              onHeaderSelected={(a) => console.log(a)}
-            />
-          </View>
-          <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(48) }}>
-            <Text style={{ fontFamily: 'SegoeUI-Bold', fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>Select Slot</Text>
-          </View>
-          <View style={{ alignItems: 'center', paddingTop: RfH(24) }}>
-            <FlatList
-              data={availableSlots}
-              numColumns={3}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderSlots(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setShowDateSlotModal(false)}
+        tutorId={tutorData?.id}
+        // availableSlots={availability}
+        // selectedSlot={(item, index) => selectedSlot(item, index)}
+        // onSubmit={() => onScheduleClass()}
+        // times={startTimes}
+        // selectedClassTime={(value) => selectedClassTime(value)}
+      />
+
       <ClassModeSelectModal
         visible={showClassModePopup}
         onClose={() => setShowClassModePopup(false)}
