@@ -97,16 +97,12 @@ function TutorListing(props) {
     { name: 'Sort By', checked: true },
   ]);
 
-  // const { loading: loadingTutors, error: errorTutors, data: tutorsData } = useQuery(SEARCH_TUTORS, {
-  //   variables: {
-  //     searchDto: filterValues,
-  //   },
-  // });
-
   const openCompareTutor = async () => {
     let compareArray = [];
     compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
-    if (compareArray.length === 2) {
+    if (compareArray == null) {
+      Alert.alert('Add tutors before compare');
+    } else if (compareArray.length === 2) {
       setShowCompareModal(true);
     } else {
       Alert.alert('Add tutors before compare');
@@ -129,26 +125,6 @@ function TutorListing(props) {
   const { loading: loadingFavouriteTutors, error: favouriteError, data: favouriteTutor } = useQuery(
     GET_FAVOURITE_TUTORS
   );
-
-  // const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
-  //   onError: (e) => {
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     let favTutors = [];
-  //     favTutors = favourites;
-  //     if (data) {
-  //       for (let i = 0; i < data.getFavouriteTutors.length; i++) {
-  //         favTutors.push(data.getFavouriteTutors[i].tutor.id);
-  //       }
-  //       setFavourites(favTutors);
-  //       setRefreshTutorList(!refreshTutorList);
-  //     }
-  //     console.log(favourites);
-  //   },
-  // });
 
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
@@ -210,13 +186,6 @@ function TutorListing(props) {
       });
     }, [])
   );
-
-  // useEffect(() => {
-  //   getTutors({
-  //     variables: { searchDto: filterValues },
-  //   });
-  //   getFavouriteTutors();
-  // }, []);
 
   const onBackPress = () => {
     navigation.goBack();

@@ -170,18 +170,6 @@ function tutorDetails(props) {
     }
   }, []);
 
-  const checkCompare = async () => {
-    let compareArray = [];
-    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
-    if (compareArray.length === 2) {
-      setShowCompareModal(true);
-    }
-  };
-
-  useEffect(() => {
-    checkCompare();
-  }, []);
-
   const onBackPress = () => {
     navigation.goBack();
   };
