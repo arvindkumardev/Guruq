@@ -216,19 +216,20 @@ const dateSlotModal = (props) => {
             </View>
           </View>
         )}
-
-        <View
-          style={{
-            marginTop: RfH(24),
-            marginBottom: RfH(34),
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Button onPress={() => onSubmit()} style={commonStyles.buttonPrimary} block>
-            <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
-          </Button>
-        </View>
+        {onSubmit && (
+          <View
+            style={{
+              marginTop: RfH(24),
+              marginBottom: RfH(34),
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Button onPress={() => onSubmit()} style={commonStyles.buttonPrimary} block>
+              <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
+            </Button>
+          </View>
+        )}
       </View>
     </Modal>
   );

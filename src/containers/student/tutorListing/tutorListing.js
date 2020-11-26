@@ -546,7 +546,7 @@ function TutorListing(props) {
     filterArr[index].checked = !filterArr[index].checked;
     switch (filterIndex) {
       case 0:
-        // filterValues.qualification = filterArr[index].name;
+        filterValues.qualification = item.name;
         filterValues.degreeLevel = item.value;
         break;
       case 2:
@@ -1088,7 +1088,18 @@ function TutorListing(props) {
           </View>
         </View>
 
-        <View>{filtersView()}</View>
+        <View>
+          {filterValues.qualification === '' &&
+          filterValues.experience === '' &&
+          filterValues.price === '' &&
+          filterValues.averageRating === 0 &&
+          filterValues.sortBy === '' &&
+          filterValues.teachingMode === '' ? (
+            <View />
+          ) : (
+            filtersView()
+          )}
+        </View>
 
         <View>
           <FlatList
