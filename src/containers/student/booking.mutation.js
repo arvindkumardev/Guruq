@@ -106,7 +106,7 @@ export const MAKE_PAYMENT = gql`
 `;
 
 export const SCHEDULE_CLASS = gql`
-  mutation ScheduleClass($classesCreateDto: ClassesCreateDto!) {
+  mutation ScheduleClass($classesCreateDto: CreateUpdateClassesDto!) {
     scheduleClass(
       classesCreateDto: { orderItemId: 7, startDate: "2020-11-12T15:00:00Z", endDate: "2020-11-12T16:00:00Z" }
     ) {

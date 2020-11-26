@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const SCHEDULE_CLASS = gql`
-  mutation ScheduleClass($classesCreateDto: ClassesCreateDto!) {
+  mutation ScheduleClass($classesCreateDto: CreateUpdateClassesDto!) {
     scheduleClass(classesCreateDto: $classesCreateDto) {
       id
       uuid
