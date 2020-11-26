@@ -114,14 +114,7 @@ const StudentOfferingModal = (props) => {
               block
               style={{ flex: 0.5, backgroundColor: Colors.brandBlue2, marginRight: RfW(4) }}
               onPress={() => onSelect(selectedOffering)}>
-              <Text
-                style={{
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: 'SegoeUI-Semibold',
-                }}>
-                Select
-              </Text>
+              <Text style={[commonStyles.headingPrimaryText, { color: Colors.white }]}>Select</Text>
             </Button>
             <Button
               bordered
@@ -132,9 +125,7 @@ const StudentOfferingModal = (props) => {
                 marginLeft: RfW(4),
               }}
               onPress={() => addStudyArea()}>
-              <Text style={{ color: Colors.brandBlue2, fontSize: 16, fontFamily: 'SegoeUI-Semibold' }}>
-                Add study area
-              </Text>
+              <Text style={[commonStyles.headingPrimaryText, { color: Colors.brandBlue2 }]}>Add study area</Text>
             </Button>
           </View>
         </View>
