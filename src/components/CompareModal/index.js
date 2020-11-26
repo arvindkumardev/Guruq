@@ -15,13 +15,12 @@ import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
 
 const compareModal = (props) => {
   const navigation = useNavigation();
-  const { visible, onClose } = props;
+  const { visible, onClose, removeFromCompare } = props;
   const [tutorData, setTutorData] = useState([]);
 
   const checkCompare = async () => {
     let compareArray = [];
     compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
-    console.log(compareArray);
     setTutorData(compareArray);
   };
 
@@ -34,33 +33,33 @@ const compareModal = (props) => {
     navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS);
   };
 
-  const removeFromCompare = async (index) => {
-    let compareArray = [];
-    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
-    compareArray.splice(index, 1);
-    await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
-    if (compareArray.length > 0) {
-      storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(compareArray)).then(() => {});
-    }
-    onClose(false);
-  };
-
   const renderTutorView = (item, index) => {
     return (
       <View style={commonStyles.verticallyStretchedItemsView}>
-        <IconButtonWrapper
-          iconWidth={RfH(18)}
-          iconHeight={RfH(18)}
-          iconImage={Images.cross}
-          styling={styles.crossIcon}
-          submitFunction={() => removeFromCompare(index)}
-        />
-        <IconButtonWrapper
-          iconWidth={RfH(70)}
-          iconHeight={RfH(70)}
-          iconImage={getTutorImageUrl(item)}
-          styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
-        />
+        {item && (
+          <IconButtonWrapper
+            iconWidth={RfH(18)}
+            iconHeight={RfH(18)}
+            iconImage={Images.cross}
+            styling={styles.crossIcon}
+            submitFunction={() => removeFromCompare(index)}
+          />
+        )}
+        {item ? (
+          <IconButtonWrapper
+            iconWidth={RfH(70)}
+            iconHeight={RfH(70)}
+            iconImage={getTutorImageUrl(item)}
+            styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
+          />
+        ) : (
+          <IconButtonWrapper
+            iconWidth={RfH(70)}
+            iconHeight={RfH(70)}
+            iconImage={Images.profile}
+            styling={{ alignSelf: 'center', borderRadius: RfH(12), marginTop: RfH(48) }}
+          />
+        )}
         <Text style={styles.compareTutorName}>
           {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
         </Text>
@@ -109,17 +108,19 @@ const compareModal = (props) => {
           <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[0], 0)}</View>
           <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[1], 1)}</View>
         </View>
-        <View
-          style={{
-            marginTop: RfH(24),
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Button style={commonStyles.buttonPrimary} block onPress={() => goToCompareView()}>
-            <Text style={commonStyles.textButtonPrimary}>Compare</Text>
-          </Button>
-        </View>
+        {tutorData.length === 2 && (
+          <View
+            style={{
+              marginTop: RfH(24),
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Button style={commonStyles.buttonPrimary} block onPress={() => goToCompareView()}>
+              <Text style={commonStyles.textButtonPrimary}>Compare</Text>
+            </Button>
+          </View>
+        )}
       </View>
     </Modal>
   );
@@ -128,11 +129,13 @@ const compareModal = (props) => {
 compareModal.defaultProps = {
   visible: false,
   onClose: null,
+  removeFromCompare: null,
 };
 
 compareModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
+  removeFromCompare: PropTypes.func,
 };
 
 export default compareModal;

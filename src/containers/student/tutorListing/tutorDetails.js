@@ -10,6 +10,7 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { useQuery, useMutation } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
+import Loader from '../../../components/Loader';
 import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
 import styles from './styles';
 import { RfH, RfW, storeData, titleCaseIfExists, getSaveData, removeData } from '../../../utils/helpers';
@@ -39,7 +40,9 @@ function tutorDetails(props) {
   const [refreshList, setRefreshList] = useState(false);
   const [isFreeDemo, setIsFreeDemo] = useState(false);
   const [priceMatrix, setPriceMatrix] = useState({});
+  const [classDetails, setClassDetails] = useState({});
   const [budgets, setBudgets] = useState([]);
+  const [compareData, setCompareData] = useState([]);
   const [isFavourite, setIsFavourite] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
 
@@ -131,12 +134,20 @@ function tutorDetails(props) {
     if (offeringData) {
       const pm = {};
       const sb = {};
+      const classData = {};
 
       offeringData?.getTutorOfferings?.map((item) => {
         if (item.offering && subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
           if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
+            classData[`${item.offering.id}`] = {
+              individual: false,
+              groupClass: false,
+              freeDemo: false,
+              online: false,
+              homeTution: false,
+            };
             if (item.freeDemo) {
-              setIsFreeDemo(true);
+              classData[`${item.offering.id}`].freeDemo = true;
             }
             subjects.push({ id: item.offering.id, displayName: item.offering.displayName, offeringId: item.id });
             pm[`o${item.offering.id}`] = {
@@ -148,10 +159,21 @@ function tutorDetails(props) {
 
             for (const b of item.budgets) {
               pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
+              if (b.groupSize === 1) {
+                classData[`${item.offering.id}`].individual = true;
+              } else {
+                classData[`${item.offering.id}`].groupClass = true;
+              }
+              if (b.onlineClass) {
+                classData[`${item.offering.id}`].online = true;
+              } else {
+                classData[`${item.offering.id}`].homeTution = true;
+              }
             }
           }
         }
       });
+      setClassDetails(classData);
       setSelectedSubject({ id: subjects[0].id, name: subjects[0].displayName, offeringId: subjects[0].offeringId });
       setPriceMatrix(pm);
       setBudgets(sb);
@@ -174,6 +196,18 @@ function tutorDetails(props) {
     navigation.goBack();
   };
 
+  const checkCompare = async () => {
+    let compareArray = [];
+    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
+    if (compareArray) {
+      setCompareData(compareArray);
+    }
+  };
+
+  useEffect(() => {
+    checkCompare();
+  }, []);
+
   const addToCompare = async () => {
     let compareArray = [];
     compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
@@ -182,22 +216,35 @@ function tutorDetails(props) {
       newArray.push(tutorData);
       await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
       storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(newArray)).then(() => {
-        Alert.alert('Added to compare');
+        setShowCompareModal(true);
+        setCompareData(newArray);
       });
     } else if (compareArray.length < 2) {
       if (compareArray[0].id === tutorData?.id) {
-        Alert.alert('Already added to compare');
+        setShowCompareModal(true);
       } else {
         compareArray.push(tutorData);
         await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
         storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(compareArray)).then(() => {
           setShowCompareModal(true);
+          setCompareData(compareArray);
         });
       }
     } else {
       setShowCompareModal(true);
-      Alert.alert('Please remove other tutor from compare');
     }
+  };
+
+  const removeFromCompare = async (index) => {
+    let compareArray = [];
+    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
+    compareArray.splice(index, 1);
+    await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
+    if (compareArray.length > 0) {
+      storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(compareArray)).then(() => {});
+    }
+    setCompareData(compareArray);
+    setShowCompareModal(false);
   };
 
   const selectSubject = (item) => {
@@ -325,7 +372,11 @@ function tutorDetails(props) {
           <IconButtonWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
-            iconImage={Images.individual_class_filled}
+            iconImage={
+              classDetails && selectedSubject && selectedSubject.id && classDetails[`${selectedSubject.id}`]?.individual
+                ? Images.individual_class_filled
+                : Images.individual_class
+            }
             styling={{ marginHorizontal: RfW(16) }}
           />
           <Text style={styles.classMeta}>Individual</Text>
@@ -336,7 +387,11 @@ function tutorDetails(props) {
           <IconButtonWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
-            iconImage={Images.group_class}
+            iconImage={
+              classDetails && selectedSubject && selectedSubject.id && classDetails[`${selectedSubject.id}`]?.groupClass
+                ? Images.group_class_filled
+                : Images.group_class
+            }
             styling={{ marginHorizontal: RfW(16) }}
           />
           <Text style={styles.classMeta}>Group Classes</Text>
@@ -351,7 +406,11 @@ function tutorDetails(props) {
           <IconButtonWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
-            iconImage={Images.free_demo_filled}
+            iconImage={
+              classDetails && selectedSubject && selectedSubject.id && classDetails[`${selectedSubject.id}`]?.freeDemo
+                ? Images.free_demo_filled
+                : Images.free_demo
+            }
             styling={{ marginHorizontal: RfW(16) }}
           />
           <Text style={styles.classMeta}>Free Demo</Text>
@@ -362,7 +421,11 @@ function tutorDetails(props) {
           <IconButtonWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
-            iconImage={Images.online_class_filled}
+            iconImage={
+              classDetails && selectedSubject && selectedSubject.id && classDetails[`${selectedSubject.id}`]?.online
+                ? Images.online_class_filled
+                : Images.online_class
+            }
             styling={{ marginHorizontal: RfW(16) }}
           />
           <Text style={styles.classMeta}>Online</Text>
@@ -377,7 +440,11 @@ function tutorDetails(props) {
           <IconButtonWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
-            iconImage={Images.home_tuition_filled}
+            iconImage={
+              classDetails && selectedSubject && selectedSubject.id && classDetails[`${selectedSubject.id}`]?.homeTution
+                ? Images.home_tuition_filled
+                : Images.home_tuition
+            }
             styling={{ marginHorizontal: RfW(16) }}
           />
           <Text style={styles.classMeta}>Home Tuition</Text>
@@ -417,98 +484,126 @@ function tutorDetails(props) {
             <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>50</Text>
           </View>
         </View>
-        <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            {
-              marginTop: RfH(16),
-            },
-          ]}>
-          <View style={{ flex: 0.4 }}>
-            <Text style={styles.tutorDetails}>Online Classes</Text>
-          </View>
+        {priceMatrix &&
+        selectedSubject &&
+        selectedSubject.id &&
+        priceMatrix[`o${selectedSubject.id}`]?.online.c1 === 0 &&
+        priceMatrix[`o${selectedSubject.id}`]?.online.c5 === 0 &&
+        priceMatrix[`o${selectedSubject.id}`]?.online.c10 === 0 &&
+        priceMatrix[`o${selectedSubject.id}`]?.online.c25 === 0 &&
+        priceMatrix[`o${selectedSubject.id}`]?.online.c50 === 0 ? (
+          <View />
+        ) : (
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 0.6,
-            }}>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`]?.online.c1}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`]?.online.c5}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.online.c10}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.online.c25}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.online.c50}
-            </Text>
+            style={[
+              commonStyles.horizontalChildrenSpaceView,
+              {
+                marginTop: RfH(16),
+              },
+            ]}>
+            <View style={{ flex: 0.4 }}>
+              <Text style={styles.tutorDetails}>Online Classes</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 0.6,
+              }}>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.online.c1}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.online.c5}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.online.c10}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.online.c25}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.online.c50}
+              </Text>
+            </View>
           </View>
-        </View>
-        <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            {
-              marginTop: RfH(16),
-            },
-          ]}>
-          <View style={{ flex: 0.4 }}>
-            <Text style={styles.tutorDetails}>Home Tutions</Text>
-          </View>
+        )}
+        {priceMatrix &&
+        selectedSubject &&
+        selectedSubject.id &&
+        priceMatrix[`o${selectedSubject.id}`]?.offline.c1 === 0 &&
+        priceMatrix[`o${selectedSubject.id}`]?.offline.c5 === 0 &&
+        priceMatrix[`o${selectedSubject.id}`]?.offline.c10 === 0 &&
+        priceMatrix[`o${selectedSubject.id}`]?.offline.c25 === 0 &&
+        priceMatrix[`o${selectedSubject.id}`]?.offline.c50 === 0 ? (
+          <View />
+        ) : (
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 0.6,
-            }}>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c1}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c5}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c10}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c25}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c50}
-            </Text>
+            style={[
+              commonStyles.horizontalChildrenSpaceView,
+              {
+                marginTop: RfH(16),
+              },
+            ]}>
+            <View style={{ flex: 0.4 }}>
+              <Text style={styles.tutorDetails}>Home Tutions</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 0.6,
+              }}>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.offline.c1}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.offline.c5}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.offline.c10}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.offline.c25}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.offline.c50}
+              </Text>
+            </View>
           </View>
-        </View>
+        )}
       </View>
     );
   };
@@ -600,11 +695,11 @@ function tutorDetails(props) {
   const markFavouriteTutor = () => {
     if (isFavourite) {
       removeFavourite({
-        variables: { tutorId: tutorData?.id },
+        variables: { tutorFavourite: { tutor: { id: tutorData?.id } } },
       });
     } else {
       markFavourite({
-        variables: { tutorId: tutorData?.id },
+        variables: { tutorFavourite: { tutor: { id: tutorData?.id } } },
       });
     }
   };
@@ -615,6 +710,9 @@ function tutorDetails(props) {
         commonStyles.mainContainer,
         { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
       ]}>
+      <Loader
+        isLoading={loadingFavouriteTutors || loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading}
+      />
       <View
         style={[
           styles.topView,
@@ -680,7 +778,9 @@ function tutorDetails(props) {
               <IconButtonWrapper
                 iconWidth={RfW(16)}
                 iconHeight={RfH(16)}
-                iconImage={tutorData.id % 4 === 0 ? Images.checkbox : Images.checkbox_selected}
+                iconImage={
+                  compareData.some((item) => item.id === tutorData.id) ? Images.checkbox_selected : Images.checkbox
+                }
                 styling={{ marginHorizontal: RfW(16) }}
               />
             </View>
@@ -745,10 +845,20 @@ function tutorDetails(props) {
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: RfH(8) }}>
               <Icon
                 type="FontAwesome"
-                name="star"
+                name={tutorData.averageRating > 0 ? 'star' : 'star-o'}
                 style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
               />
-              <Text style={styles.chargeText}>{tutorData.averageRating}</Text>
+              {tutorData.averageRating > 0 ? (
+                <Text style={styles.chargeText}>{parseFloat(tutorData.averageRating).toFixed(1)}</Text>
+              ) : (
+                <Text
+                  style={{
+                    color: Colors.secondaryText,
+                    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+                  }}>
+                  NOT RATED
+                </Text>
+              )}
               {tutorData.reviewCount > 0 && (
                 <Text
                   style={{
@@ -918,7 +1028,13 @@ function tutorDetails(props) {
         budgetDetails={budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`]}
       />
 
-      {showCompareModal && <CompareModal visible={showCompareModal} onClose={() => setShowCompareModal(false)} />}
+      {showCompareModal && (
+        <CompareModal
+          visible={showCompareModal}
+          onClose={() => setShowCompareModal(false)}
+          removeFromCompare={(index) => removeFromCompare(index)}
+        />
+      )}
     </View>
   );
 }
