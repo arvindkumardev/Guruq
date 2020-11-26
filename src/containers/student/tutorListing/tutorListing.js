@@ -142,6 +142,12 @@ function TutorListing(props) {
     getFavouriteTutors();
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      getFavouriteTutors();
+    }, [])
+  );
+
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
