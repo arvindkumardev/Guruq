@@ -123,6 +123,8 @@ const Images = {
   checkbox_selected: require('../assets/images/checkbox-selected.png'),
 
   empty_cart: require('../assets/images/empty-cart.png'),
+  empty_classes: require('../assets/images/no-classes.png'),
+  empty_schedule: require('../assets/images/no-schedule.png'),
 };
 
 export default Images;

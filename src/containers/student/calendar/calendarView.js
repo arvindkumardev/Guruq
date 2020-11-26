@@ -1,11 +1,12 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
-import { FlatList, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { FlatList, ScrollView, Text, TouchableWithoutFeedback, View, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
+import { Button } from 'native-base';
 import commonStyles from '../../../theme/styles';
 import routeNames from '../../../routes/screenNames';
 import { RfH, RfW, monthNames } from '../../../utils/helpers';
@@ -19,6 +20,7 @@ import { studentDetails } from '../../../apollo/cache';
 function CalendarView() {
   const navigation = useNavigation();
   const [showHeader, setShowHeader] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const studentInfo = useReactiveVar(studentDetails);
 
@@ -58,6 +60,11 @@ function CalendarView() {
         array.push(item);
       }
       setMonthData(array);
+      if (array.length > 0) {
+        setIsEmpty(false);
+      } else {
+        setIsEmpty(true);
+      }
     },
   });
 
@@ -156,51 +163,82 @@ function CalendarView() {
           </Text>
         )}
       </View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        onScroll={(event) => handleScroll(event)}
-        stickyHeaderIndices={[1]}
-        scrollEventThrottle={16}>
-        <Text style={commonStyles.pageTitleThirdRow}>Your Schedule</Text>
-        <View style={{ backgroundColor: Colors.white }}>
-          <CalendarStrip
-            calendarHeaderStyle={{
-              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-              alignSelf: 'flex-start',
-              paddingBottom: RfH(8),
-            }}
-            highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
-            highlightDateNameStyle={{ color: Colors.brandBlue2 }}
-            disabledDateNameStyle={{ color: Colors.darkGrey }}
-            disabledDateNumberStyle={{ color: Colors.darkGrey }}
-            selectedDate={new Date()}
-            dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-            dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-            style={showHeader ? { height: 102, paddingBottom: 10 } : { height: 102, paddingTop: 20, paddingBottom: 10 }}
-            calendarAnimation={{ type: 'parallel', duration: 300 }}
-            daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-            markedDates={[
-              {
-                date: new Date(),
-                dots: [
-                  {
-                    color: Colors.brandBlue,
-                    selectedColor: Colors.brandBlue,
-                  },
-                ],
-              },
-            ]}
-            onHeaderSelected={(a) => console.log(a)}
+      {isEmpty ? (
+        <View>
+          <Image
+            source={Images.empty_schedule}
+            style={{ margin: RfH(56), alignSelf: 'center', height: RfH(264), width: RfW(224), marginBottom: RfH(32) }}
           />
+          <Text
+            style={[
+              commonStyles.pageTitleThirdRow,
+              { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+            ]}>
+            You Haven't scheduled class
+          </Text>
+          <Text
+            style={[
+              commonStyles.regularMutedText,
+              { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
+            ]}>
+            Looks like you have not scheduled any class yet.
+          </Text>
+          <View style={{ height: RfH(64) }} />
+          <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+            <Text style={commonStyles.textButtonPrimary}>Schedule Now</Text>
+          </Button>
         </View>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={monthData}
-          renderItem={({ item }) => renderListItem(item)}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: RfH(170) }}
-        />
-      </ScrollView>
+      ) : (
+        <View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            onScroll={(event) => handleScroll(event)}
+            stickyHeaderIndices={[1]}
+            scrollEventThrottle={16}>
+            <Text style={commonStyles.pageTitleThirdRow}>Your Schedule</Text>
+            <View style={{ backgroundColor: Colors.white }}>
+              <CalendarStrip
+                calendarHeaderStyle={{
+                  fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                  alignSelf: 'flex-start',
+                  paddingBottom: RfH(8),
+                }}
+                highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
+                highlightDateNameStyle={{ color: Colors.brandBlue2 }}
+                disabledDateNameStyle={{ color: Colors.darkGrey }}
+                disabledDateNumberStyle={{ color: Colors.darkGrey }}
+                selectedDate={new Date()}
+                dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+                dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+                style={
+                  showHeader ? { height: 102, paddingBottom: 10 } : { height: 102, paddingTop: 20, paddingBottom: 10 }
+                }
+                calendarAnimation={{ type: 'parallel', duration: 300 }}
+                daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+                markedDates={[
+                  {
+                    date: new Date(),
+                    dots: [
+                      {
+                        color: Colors.brandBlue,
+                        selectedColor: Colors.brandBlue,
+                      },
+                    ],
+                  },
+                ]}
+                onHeaderSelected={(a) => console.log(a)}
+              />
+            </View>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={monthData}
+              renderItem={({ item }) => renderListItem(item)}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{ paddingBottom: RfH(170) }}
+            />
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 }
