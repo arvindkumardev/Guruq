@@ -7,7 +7,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import ProgressCircle from 'react-native-progress-circle';
 import { Button, Icon } from 'native-base';
 import CalendarStrip from 'react-native-calendar-strip';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
@@ -43,15 +43,81 @@ function tutorDetails(props) {
   const [isFavourite, setIsFavourite] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
 
-  const [favourites, setFavourites] = useState([]);
+  const [favouriteTutors, setFavouriteTutors] = useState([]);
 
-  const { loading: loadingFavouriteTutors, error: favouriteError, data: favouriteTutor } = useQuery(
-    GET_FAVOURITE_TUTORS
-  );
+  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
 
-  const { loading: loadingTutorsOffering, error: offeringError, data: offeringData } = useQuery(GET_TUTOR_OFFERINGS, {
-    variables: { tutorId: tutorData?.id },
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setFavouriteTutors(data?.getFavouriteTutors);
+      }
+    },
   });
+  useEffect(() => {
+    getFavouriteTutors();
+  }, []);
+
+  // const { loading: , error: offeringError, data:  } = useQuery(, {
+  //   variables: { tutorId: tutorData?.id },
+  // });
+  const [offeringData, setOfferingData] = useState([]);
+
+  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    variables: { tutorId: tutorData?.id },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data && data.getTutorOfferings) {
+        const pm = {};
+        const sb = {};
+
+        data?.getTutorOfferings?.map((item) => {
+          if (item.offering && subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
+            if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
+              if (item.freeDemo) {
+                setIsFreeDemo(true);
+              }
+              subjects.push({
+                id: item.offering.id,
+                displayName: item.offering.displayName,
+                offeringId: item.id,
+              });
+              pm[`o${item.offering.id}`] = {
+                online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+                offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+              };
+
+              sb[`${item.offering.id}`] = item.budgets;
+
+              for (const b of item.budgets) {
+                pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
+              }
+            }
+          }
+        });
+        setSelectedSubject({ id: subjects[0].id, name: subjects[0].displayName, offeringId: subjects[0].offeringId });
+        setPriceMatrix(pm);
+        setBudgets(sb);
+        setRefreshList(!refreshList);
+      }
+    },
+  });
+  useEffect(() => {
+    getTutorOffering();
+  }, []);
 
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
@@ -127,42 +193,14 @@ function tutorDetails(props) {
     '05:00 - 06:00 PM',
   ]);
 
-  useEffect(() => {
-    if (offeringData) {
-      const pm = {};
-      const sb = {};
-
-      offeringData?.getTutorOfferings?.map((item) => {
-        if (item.offering && subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
-          if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
-            if (item.freeDemo) {
-              setIsFreeDemo(true);
-            }
-            subjects.push({ id: item.offering.id, displayName: item.offering.displayName, offeringId: item.id });
-            pm[`o${item.offering.id}`] = {
-              online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-              offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-            };
-
-            sb[`${item.offering.id}`] = item.budgets;
-
-            for (const b of item.budgets) {
-              pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
-            }
-          }
-        }
-      });
-      setSelectedSubject({ id: subjects[0].id, name: subjects[0].displayName, offeringId: subjects[0].offeringId });
-      setPriceMatrix(pm);
-      setBudgets(sb);
-      setRefreshList(!refreshList);
-    }
-  }, [offeringData?.getTutorOfferings]);
+  // useEffect(() => {
+  //
+  // }, [offeringData]);
 
   useEffect(() => {
-    if (favouriteTutor) {
-      for (const obj of favouriteTutor.getFavouriteTutors) {
-        if (obj.tutor.id === tutorData?.id) {
+    if (favouriteTutors) {
+      for (let i = 0; i < favouriteTutors.length; i++) {
+        if (favouriteTutors[i].tutor.id === tutorData?.id) {
           setIsFavourite(true);
           return;
         }

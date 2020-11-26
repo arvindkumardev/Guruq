@@ -5,8 +5,8 @@ import { setContext } from '@apollo/client/link/context';
 import apolloLogger from 'apollo-link-logger';
 import { getToken } from '../utils/helpers';
 
-// const GRAPHQL_ENDPOINT = 'http://10.0.0.11:5000/graphql';
-const GRAPHQL_ENDPOINT = 'http://13.229.107.165:5000/graphql';
+const GRAPHQL_ENDPOINT = 'http://10.0.0.5:5000/graphql';
+// const GRAPHQL_ENDPOINT = 'http://13.229.107.165:5000/graphql';
 
 let apolloClient = null;
 

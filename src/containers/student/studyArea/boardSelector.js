@@ -3,7 +3,7 @@ import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { useQuery } from '@apollo/client';
+import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { Colors, Images } from '../../../theme';
@@ -11,9 +11,9 @@ import { RfH, RfW } from '../../../utils/helpers';
 import { IconButtonWrapper } from '../../../components';
 import styles from './style';
 import routeNames from '../../../routes/screenNames';
-import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
 import Fonts from '../../../theme/fonts';
 import BackArrow from '../../../components/BackArrow';
+import { offeringsMasterData } from '../../../apollo/cache';
 
 function BoardSelector(props) {
   const navigation = useNavigation();
@@ -21,7 +21,7 @@ function BoardSelector(props) {
   const { route } = props;
   const { studyArea } = route.params;
 
-  const { loading, error, data } = useQuery(GET_OFFERINGS_MASTER_DATA);
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
 
   const onClick = (s) => {
     navigation.navigate(routeNames.STUDENT.CLASS, { board: s });
@@ -83,12 +83,7 @@ function BoardSelector(props) {
       </View>
       <View style={[styles.areaParentView, { marginBottom: RfH(142) }]}>
         <FlatList
-          data={
-            data &&
-            data.offerings &&
-            data.offerings.edges &&
-            data.offerings.edges.filter((s) => s?.parentOffering?.id === studyArea.id)
-          }
+          data={offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === studyArea.id)}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => renderItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
