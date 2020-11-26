@@ -18,7 +18,7 @@ import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { getSaveData, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
+import { getSaveData, removeData, RfH, RfW, storeData, titleCaseIfExists } from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CompareModal, CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
@@ -102,10 +102,8 @@ function TutorListing(props) {
     compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
     if (compareArray == null) {
       Alert.alert('Add tutors before compare');
-    } else if (compareArray.length === 2) {
-      setShowCompareModal(true);
     } else {
-      Alert.alert('Add tutors before compare');
+      setShowCompareModal(true);
     }
   };
 
@@ -228,6 +226,17 @@ function TutorListing(props) {
         variables: { tutorFavourite: { tutor: { id: tutorId } } },
       });
     }
+  };
+
+  const removeFromCompare = async (index) => {
+    let compareArray = [];
+    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
+    compareArray.splice(index, 1);
+    await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
+    if (compareArray.length > 0) {
+      storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(compareArray)).then(() => {});
+    }
+    setShowCompareModal(false);
   };
 
   const goToTutorDetails = (item) => {
@@ -1094,7 +1103,13 @@ function TutorListing(props) {
       </ScrollView>
       {showFilterModel()}
 
-      {showCompareModal && <CompareModal visible={showCompareModal} onClose={() => setShowCompareModal(false)} />}
+      {showCompareModal && (
+        <CompareModal
+          visible={showCompareModal}
+          onClose={() => setShowCompareModal(false)}
+          removeFromCompare={(index) => removeFromCompare(index)}
+        />
+      )}
     </View>
   );
 }
