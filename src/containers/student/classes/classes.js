@@ -1,17 +1,18 @@
-import { FlatList, Text, View, ScrollView, Image } from 'react-native';
+import { FlatList, Image, ScrollView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Button, Segment } from 'native-base';
+import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
-import { Images, Colors, Fonts } from '../../../theme';
+import { useQuery } from '@apollo/client';
+import { Colors, Fonts, Images } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
-import { RfH, RfW, getTutorImageUrl } from '../../../utils/helpers';
+import { getTutorImageUrl, RfH, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
-import { GET_BOOKINGS } from '../booking.query';
+import { SEARCH_BOOKINGS } from '../booking.query';
+import { OrderStatus } from '../enums';
 
 function bookingConfirmed() {
   const navigation = useNavigation();
@@ -19,7 +20,13 @@ function bookingConfirmed() {
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
-  const { loading: loadingBookings, error: bookingError, data: bookingData } = useQuery(GET_BOOKINGS);
+  const { loading: loadingBookings, error: bookingError, data: bookingData } = useQuery(SEARCH_BOOKINGS, {
+    variables: {
+      bookingSearchDto: {
+        orderStatus: OrderStatus.COMPLETE.label,
+      },
+    },
+  });
 
   const goToScheduleClasses = (item) => {
     const classes = [];
@@ -32,9 +39,9 @@ function bookingConfirmed() {
   const [orderItems, setOrderItems] = useState([]);
 
   useEffect(() => {
-    if (bookingData?.getBookings.length > 0) {
+    if (bookingData?.searchBookings.length > 0) {
       const orderList = [];
-      for (const booking of bookingData.getBookings) {
+      for (const booking of bookingData.searchBookings) {
         for (const orderItem of booking.orderItems) {
           orderList.push({ booking, orderItem });
         }
@@ -167,7 +174,13 @@ function bookingConfirmed() {
         <View>
           <Image
             source={Images.empty_classes}
-            style={{ margin: RfH(56), alignSelf: 'center', height: RfH(264), width: RfW(280), marginBottom: RfH(32) }}
+            style={{
+              margin: RfH(56),
+              alignSelf: 'center',
+              height: RfH(264),
+              width: RfW(280),
+              marginBottom: RfH(32),
+            }}
           />
           <Text
             style={[

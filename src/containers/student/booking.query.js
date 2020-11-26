@@ -57,9 +57,9 @@ export const GET_CART_ITEMS = gql`
   }
 `;
 
-export const GET_PENDING_BOOKINGS = gql`
-  query GetPendingBooking {
-    getPendingBooking {
+export const SEARCH_BOOKINGS = gql`
+  query SearchBookings($bookingSearchDto: BookingSearchDto!) {
+    searchBookings(searchDto: $bookingSearchDto) {
       id
       uuid
       orderStatus
@@ -68,13 +68,41 @@ export const GET_PENDING_BOOKINGS = gql`
       }
       orderItems {
         id
+        count
+        availableClasses
+        onlineClass
+        demo
+        count
+        groupSize
+
+        offering {
+          id
+          name
+          parentOffering {
+            id
+            name
+            parentOffering {
+              id
+              name
+            }
+          }
+        }
+        tutor {
+          id
+          profileImage {
+            id
+            filename
+          }
+          contactDetail {
+            firstName
+            lastName
+          }
+        }
       }
       orderStatus
-      payableAmount
       orderPayment {
         id
         paymentStatus
-        amount
       }
     }
   }
