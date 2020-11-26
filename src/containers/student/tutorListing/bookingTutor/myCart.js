@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Text, View, TextInput, Switch } from 'react-native';
+import { Alert, FlatList, Text, View, TextInput, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -26,6 +26,7 @@ const myCart = () => {
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
   const [amount, setAmount] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
@@ -84,13 +85,16 @@ const myCart = () => {
   };
 
   useEffect(() => {
-    if (cartItemData?.getCartItems) {
+    if (cartItemData?.getCartItems.length > 0) {
       setCartItems(cartItemData.getCartItems);
       let amt = 0;
       for (const obj of cartItemData.getCartItems) {
         amt += obj.price;
       }
       setAmount(amt);
+      setIsEmpty(false);
+    } else {
+      setIsEmpty(true);
     }
   }, [cartItemData?.getCartItems]);
 
@@ -440,89 +444,116 @@ const myCart = () => {
       {/* <View style={{ marginHorizontal: RfW(16) }}> */}
       <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
       {/* </View> */}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <View */}
-        {/*  style={[ */}
-        {/*    styles.itemView, */}
-        {/*    { */}
-        {/*      marginTop: RfH(8), */}
-        {/*      paddingVertical: RfH(8), */}
-        {/*      paddingLeft: RfW(48), */}
-        {/*    }, */}
-        {/*  ]}> */}
-        {/*  <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text> */}
-        {/* </View> */}
-        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.white }}>
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            data={cartItems}
-            extraData={refreshList}
-            renderItem={({ item, index }) => renderCartItems(item, index)}
-            keyExtractor={(item, index) => index.toString()}
+      {isEmpty ? (
+        <View>
+          <Image
+            source={Images.empty_cart}
+            style={{ margin: RfH(56), alignSelf: 'center', height: RfH(264), width: RfW(248), marginBottom: RfH(32) }}
           />
-        </View>
-
-        <View style={commonStyles.blankViewSmall} />
-
-        {renderQPointView()}
-
-        <View style={commonStyles.blankViewSmall} />
-
-        {renderCouponView()}
-
-        <View style={commonStyles.blankViewSmall} />
-
-        {/* <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text> */}
-
-        <View
-          style={{
-            height: 44,
-            justifyContent: 'center',
-          }}>
           <Text
-            style={{
-              paddingHorizontal: RfW(16),
-              // marginBottom: RfW(8),
-              fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
-              color: Colors.secondaryText,
-            }}>
-            CART DETAILS ({cartItems.length} Items)
+            style={[
+              commonStyles.pageTitleThirdRow,
+              { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+            ]}>
+            Your cart is empty
+          </Text>
+          <Text
+            style={[
+              commonStyles.regularMutedText,
+              { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
+            ]}>
+            Looks like you haven't made your choice yet.....
           </Text>
         </View>
-
-        {renderCartDetails()}
-      </ScrollView>
-
-      <View
-        style={[
-          commonStyles.horizontalChildrenSpaceView,
-          {
-            alignItems: 'flex-end',
-            backgroundColor: Colors.white,
-            paddingTop: RfH(8),
-            paddingHorizontal: RfW(16),
-            paddingBottom: RfH(34),
-          },
-        ]}>
+      ) : (
         <View>
-          <Text style={commonStyles.headingPrimaryText}>₹{amount}</Text>
-          <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>View Details</Text>
-        </View>
-        <View>
-          <Button
-            onPress={() => setShowPaymentModal(true)}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {/* <View */}
+            {/*  style={[ */}
+            {/*    styles.itemView, */}
+            {/*    { */}
+            {/*      marginTop: RfH(8), */}
+            {/*      paddingVertical: RfH(8), */}
+            {/*      paddingLeft: RfW(48), */}
+            {/*    }, */}
+            {/*  ]}> */}
+            {/*  <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text> */}
+            {/* </View> */}
+            <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.white }}>
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                data={cartItems}
+                extraData={refreshList}
+                renderItem={({ item, index }) => renderCartItems(item, index)}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
+
+            <View style={commonStyles.blankViewSmall} />
+
+            {renderQPointView()}
+
+            <View style={commonStyles.blankViewSmall} />
+
+            {renderCouponView()}
+
+            <View style={commonStyles.blankViewSmall} />
+
+            {/* <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text> */}
+
+            <View
+              style={{
+                height: 44,
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  paddingHorizontal: RfW(16),
+                  // marginBottom: RfW(8),
+                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                  color: Colors.secondaryText,
+                }}>
+                CART DETAILS ({cartItems.length} Items)
+              </Text>
+            </View>
+
+            {renderCartDetails()}
+          </ScrollView>
+
+          <View
             style={[
-              commonStyles.buttonPrimary,
+              commonStyles.horizontalChildrenSpaceView,
               {
-                width: RfW(144),
-                alignSelf: 'flex-end',
-                marginHorizontal: 0,
+                alignItems: 'flex-end',
+                backgroundColor: Colors.white,
+                paddingTop: RfH(8),
+                paddingHorizontal: RfW(16),
+                paddingBottom: RfH(34),
               },
             ]}>
-            <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
-          </Button>
+            <View>
+              <Text style={commonStyles.headingPrimaryText}>₹{amount}</Text>
+              <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+                View Details
+              </Text>
+            </View>
+            <View>
+              <Button
+                onPress={() => setShowPaymentModal(true)}
+                style={[
+                  commonStyles.buttonPrimary,
+                  {
+                    width: RfW(144),
+                    alignSelf: 'flex-end',
+                    marginHorizontal: 0,
+                  },
+                ]}>
+                <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
+              </Button>
+            </View>
+          </View>
         </View>
-      </View>
+      )}
 
       <QPointPayModal
         visible={showQPointPayModal}

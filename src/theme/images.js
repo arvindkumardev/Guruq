@@ -121,6 +121,8 @@ const Images = {
 
   checkbox: require('../assets/images/checkbox.png'),
   checkbox_selected: require('../assets/images/checkbox-selected.png'),
+
+  empty_cart: require('../assets/images/empty-cart.png'),
 };
 
 export default Images;
