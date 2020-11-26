@@ -1,16 +1,14 @@
 /* eslint-disable no-nested-ternary */
 import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
-import { Icon } from 'native-base';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfW } from '../../../utils/helpers';
 import styles from './style';
 import routeNames from '../../../routes/screenNames';
-import { userDetails } from '../../../apollo/cache';
-import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
+import { offeringsMasterData, userDetails } from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
 import BackArrow from '../../../components/BackArrow';
 
@@ -19,12 +17,7 @@ function StudyAreaSelector() {
 
   const userInfo = useReactiveVar(userDetails);
 
-  const { loading, error, data } = useQuery(GET_OFFERINGS_MASTER_DATA);
-
-  // useEffect(()=>{
-  //
-  //   data.map();
-  // },[data]);
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -88,7 +81,7 @@ function StudyAreaSelector() {
 
       <View style={styles.areaParentView}>
         <FlatList
-          data={data && data.offerings && data.offerings.edges && data.offerings.edges.filter((s) => s.level === 0)}
+          data={offeringMasterData && offeringMasterData.filter((s) => s.level === 0)}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => renderItem(item, index)}
           keyExtractor={(item, index) => index.toString()}

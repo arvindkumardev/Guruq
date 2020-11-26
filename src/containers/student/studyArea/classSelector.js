@@ -1,23 +1,17 @@
 /* eslint-disable no-nested-ternary */
-import { Alert, StatusBar, Text, TouchableWithoutFeedback, View, FlatList } from 'react-native';
-import { Icon } from 'native-base';
+import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors } from '../../../theme';
-import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { RfH, RfW, storeData } from '../../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
-import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
-import routeNames from '../../../routes/screenNames';
-import { ADD_INTERESTED_OFFERINGS } from '../dashboard-mutation';
-import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import NavigationRouteNames from '../../../routes/screenNames';
-import { isLoggedIn, userDetails } from '../../../apollo/cache';
-import IconButtonWrapper from '../../../components/IconWrapper';
-import Images from '../../../theme/images';
+import { ADD_INTERESTED_OFFERINGS } from '../dashboard-mutation';
+import { offeringsMasterData } from '../../../apollo/cache';
 import Fonts from '../../../theme/fonts';
 import BackArrow from '../../../components/BackArrow';
 
@@ -27,7 +21,7 @@ function ClassSelector(props) {
   const { route } = props;
   const { board } = route.params;
 
-  const { loading, error, data } = useQuery(GET_OFFERINGS_MASTER_DATA);
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
 
   const [addInterestedOffering, { loading: addOfferingLoading }] = useMutation(ADD_INTERESTED_OFFERINGS, {
     fetchPolicy: 'no-cache',
@@ -115,12 +109,7 @@ function ClassSelector(props) {
       </View>
       <View style={[commonStyles.areaParentView, { paddingTop: RfH(44), marginBottom: RfH(98) }]}>
         <FlatList
-          data={
-            data &&
-            data.offerings &&
-            data.offerings.edges &&
-            data.offerings.edges.filter((s) => s?.parentOffering?.id === board.id)
-          }
+          data={offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === board.id)}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => renderItem(item, index)}
           keyExtractor={(item, index) => index.toString()}

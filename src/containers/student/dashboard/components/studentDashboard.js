@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
-import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -13,12 +13,12 @@ import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
-import { userDetails } from '../../../../apollo/cache';
+import { offeringsMasterData, userDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import StudentOfferingModal from './studentOfferingModal';
-import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashboard-query';
+import { GET_INTERESTED_OFFERINGS } from '../../dashboard-query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
@@ -26,7 +26,10 @@ import { getBoxColor } from '../../../../theme/colors';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
+
   const userInfo = useReactiveVar(userDetails);
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
+
   const [showAllSubjects, setShowAllSubjects] = useState(false);
 
   const { refetchStudentOfferings } = props;
@@ -34,18 +37,72 @@ function StudentDashboard(props) {
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});
 
-  const { loading: loadingFavouriteTutors, error: favouriteError, data: favouriteTutor } = useQuery(
-    GET_FAVOURITE_TUTORS
-  );
+  // const [
+  //   ,
+  //   { loading: , error: favouriteError, data: favouriteTutor },
+  // ] = useLazyQuery();
 
-  const { loading: loadingOfferingMasterData, error: offeringMasterError, data: offeringMasterData } = useQuery(
-    GET_OFFERINGS_MASTER_DATA
-  );
+  const [favouriteTutors, setFavouriteTutors] = useState([]);
+  const [interestedOfferings, setInterestedOfferings] = useState({});
 
-  const { loading: loadingOfferings, error: offeringError, data: offerings, refetch: _refetchOffering } = useQuery(
-    GET_INTERESTED_OFFERINGS
-  );
-  const refetchOffering = (args) => _refetchOffering(args);
+  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setFavouriteTutors(data?.getFavouriteTutors);
+      }
+    },
+  });
+
+  const [getInterestedOfferings, { loading: interestedOfferingsLoading }] = useLazyQuery(GET_INTERESTED_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+
+        console.log(error);
+        navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
+      }
+    },
+    onCompleted: (data) => {
+      if (data && data.getInterestedOfferings && data.getInterestedOfferings.length > 0) {
+        console.log(
+          'data.getInterestedOfferings.find((s) => s.selected)',
+          data.getInterestedOfferings.find((s) => s.selected)
+        );
+
+        setInterestedOfferings(data.getInterestedOfferings);
+
+        const selectedOffering = data.getInterestedOfferings.find((s) => s.selected);
+        setSelectedOffering(selectedOffering ? selectedOffering.offering : {});
+      } else {
+        navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
+      }
+    },
+  });
+
+  // const [
+  //   ,
+  //   {
+  //     loading: ,
+  //     error: interestedOfferingsError,
+  //     data: interestedOfferings,
+  //     refetch: _refetchInterestedOffering,
+  //   },
+  // ] = useLazyQuery();
+  // const refetchInterestedOffering = (args) => _refetchInterestedOffering(args);
+
+  useEffect(() => {
+    getFavouriteTutors();
+    getInterestedOfferings();
+  }, []);
 
   const [markInterestedOffering] = useMutation(MARK_INTERESTED_OFFERING_SELECTED, {
     fetchPolicy: 'no-cache',
@@ -56,30 +113,37 @@ function StudentDashboard(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        if (refetchOffering) {
-          refetchOffering({ fetchPolicy: 'network-only' });
-        }
+        getInterestedOfferings({ fetchPolicy: 'network-only' });
       }
     },
   });
 
-  useEffect(() => {
-    console.log(offeringError);
-    if (offeringError && offeringError.graphQLErrors && offeringError.graphQLErrors.length > 0) {
-      navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
-    }
-  }, [offeringError]);
+  // useEffect(() => {
+  //   console.log(interestedOfferingsError);
+  //   if (
+  //     interestedOfferingsError &&
+  //     interestedOfferingsError.graphQLErrors &&
+  //     interestedOfferingsError.graphQLErrors.length > 0
+  //   ) {
+  //     navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
+  //   }
+  // }, [interestedOfferingsError]);
 
-  useEffect(() => {
-    console.log(offerings);
-
-    if (offerings && offerings.getInterestedOfferings.length > 0) {
-      const selectedOffering = offerings.getInterestedOfferings.find((s) => s.selected);
-      setSelectedOffering(selectedOffering ? selectedOffering.offering : {});
-    } else if (!loadingOfferings && offerings.getInterestedOfferings.length === 0) {
-      navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
-    }
-  }, [offerings]);
+  // useEffect(() => {
+  //   console.log(interestedOfferings);
+  //
+  //   if (
+  //     interestedOfferings &&
+  //     interestedOfferings.getInterestedOfferings &&
+  //     interestedOfferings.getInterestedOfferings.length > 0
+  //   ) {
+  //     const selectedOffering = interestedOfferings.getInterestedOfferings.find((s) => s.selected);
+  //     console.log('interestedOfferings.getInterestedOfferings.find((s) => s.selected)', selectedOffering);
+  //     setSelectedOffering(selectedOffering ? selectedOffering.offering : {});
+  //   } else if (!interestedOfferingsLoading && interestedOfferings.getInterestedOfferings.length === 0) {
+  //     navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
+  //   }
+  // }, [interestedOfferings]);
 
   const onOfferingSelect = (offering) => {
     setStudentOfferingModalVisible(false);
@@ -95,17 +159,15 @@ function StudentDashboard(props) {
   };
 
   useEffect(() => {
-    if (refetchOffering) {
-      refetchOffering({ fetchPolicy: 'network-only' });
-    }
+    getInterestedOfferings({ fetchPolicy: 'network-only' });
     // console.log('refetchStudentOfferings', refetchStudentOfferings);
   }, [refetchStudentOfferings]);
 
-  useEffect(() => {
-    // refetch everything
-
-    console.log('selectedOffering updated', selectedOffering);
-  }, [selectedOffering]);
+  // useEffect(() => {
+  //   // refetch everything
+  //
+  //   console.log('selectedOffering updated', selectedOffering);
+  // }, [selectedOffering]);
 
   const gotoTutors = (subject) => {
     setShowAllSubjects(false);
@@ -418,10 +480,7 @@ function StudentDashboard(props) {
               showsHorizontalScrollIndicator={false}
               numColumns={4}
               data={
-                offeringMasterData &&
-                offeringMasterData.offerings &&
-                offeringMasterData.offerings.edges &&
-                offeringMasterData.offerings.edges.filter((s) => s?.parentOffering?.id === selectedOffering?.id)
+                offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id)
               }
               renderItem={({ item }) => renderSubjects(item)}
               keyExtractor={(item, index) => index.toString()}
@@ -491,7 +550,7 @@ function StudentDashboard(props) {
     <>
       <StatusBar barStyle="dark-content" />
 
-      <Loader isLoading={loadingOfferingMasterData || loadingOfferings || loadingFavouriteTutors} />
+      <Loader isLoading={interestedOfferingsLoading || loadingFavouriteTutors} />
 
       <View style={[commonStyles.mainContainer]}>
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -683,11 +742,7 @@ function StudentDashboard(props) {
               numColumns={4}
               data={
                 offeringMasterData &&
-                offeringMasterData.offerings &&
-                offeringMasterData.offerings.edges &&
-                offeringMasterData.offerings.edges
-                  .filter((s) => s?.parentOffering?.id === selectedOffering?.id)
-                  .slice(0, 8)
+                offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id).slice(0, 8)
               }
               renderItem={({ item }) => renderSubjects(item)}
               keyExtractor={(item, index) => index.toString()}
@@ -713,7 +768,7 @@ function StudentDashboard(props) {
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={favouriteTutor?.getFavouriteTutors}
+            data={favouriteTutors}
             renderItem={({ item }) => renderTutors(item)}
             keyExtractor={(item, index) => index.toString()}
           />
@@ -972,18 +1027,8 @@ function StudentDashboard(props) {
         onClose={setStudentOfferingModalVisible}
         visible={studentOfferingModalVisible}
         onSelect={onOfferingSelect}
-        offerings={offerings && offerings.getInterestedOfferings}
+        offerings={interestedOfferings && interestedOfferings.getInterestedOfferings}
       />
-      {/* <SubjectsModal
-        onClose={setShowAllSubjects(false)}
-        visible={showAllSubjects}
-        subjects={
-          offeringMasterData &&
-          offeringMasterData.offerings &&
-          offeringMasterData.offerings.edges &&
-          offeringMasterData.offerings.edges.filter((s) => s?.parentOffering?.id === selectedOffering?.id)
-        }
-      /> */}
     </>
   );
 }

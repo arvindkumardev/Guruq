@@ -6,17 +6,41 @@ import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { Colors } from '../../../theme';
 import { GET_CURRENT_STUDENT_QUERY, GET_CURRENT_TUTOR_QUERY, ME_QUERY } from '../graphql-query';
-import { isLoggedIn, isTokenLoading, studentDetails, tutorDetails, userDetails } from '../../../apollo/cache';
+import {
+  isLoggedIn,
+  isTokenLoading,
+  offeringsMasterData,
+  studentDetails,
+  tutorDetails,
+  userDetails,
+} from '../../../apollo/cache';
 import { UserTypeEnum } from '../../../common/userType.enum';
 import Loader from '../../../components/Loader';
+import { GET_OFFERINGS_MASTER_DATA } from '../../student/dashboard-query';
 
 function SplashScreen() {
   const { error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
+
+  const [
+    getOfferingMasterData,
+    { loading: loadingOfferingMasterData, error: offeringMasterError, data: offeringMasterData },
+  ] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, { fetchPolicy: 'no-cache' });
 
   const [getCurrentStudent, { data: currentStudent }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
     fetchPolicy: 'no-cache',
   });
   const [getCurrentTutor, { data: currentTutor }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, { fetchPolicy: 'no-cache' });
+
+  useEffect(() => {
+    if (offeringMasterData && offeringMasterData.offerings && offeringMasterData.offerings.edges) {
+      offeringsMasterData(offeringMasterData && offeringMasterData.offerings && offeringMasterData.offerings.edges);
+
+      // after fetching this, push the user to dashboard
+      isLoggedIn(true);
+      isTokenLoading(false);
+      userDetails(data.me);
+    }
+  }, [offeringMasterData]);
 
   useEffect(() => {
     if (error) {
@@ -28,9 +52,8 @@ function SplashScreen() {
 
   useEffect(() => {
     if (data) {
-      isLoggedIn(true);
-      isTokenLoading(false);
-      userDetails(data.me);
+
+      getOfferingMasterData();
 
       if (data.me.type === UserTypeEnum.STUDENT.label) {
         getCurrentStudent();

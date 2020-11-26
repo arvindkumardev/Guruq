@@ -120,9 +120,26 @@ function TutorListing(props) {
     },
   });
 
-  const { loading: loadingFavouriteTutors, error: favouriteError, data: favouriteTutor } = useQuery(
-    GET_FAVOURITE_TUTORS
-  );
+  const [favouriteTutors, setFavouriteTutors] = useState([]);
+
+  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setFavouriteTutors(data?.getFavouriteTutors);
+      }
+    },
+  });
+  useEffect(() => {
+    getFavouriteTutors();
+  }, []);
 
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
@@ -167,14 +184,14 @@ function TutorListing(props) {
   useFocusEffect(
     React.useCallback(() => {
       const favTutors = [];
-      if (favouriteTutor) {
-        for (let i = 0; i < favouriteTutor.getFavouriteTutors.length; i++) {
-          favTutors.push(favouriteTutor.getFavouriteTutors[i].tutor.id);
+      if (favouriteTutors) {
+        for (let i = 0; i < favouriteTutors.length; i++) {
+          favTutors.push(favouriteTutors[i].tutor.id);
         }
         setFavourites(favTutors);
         setRefreshTutorList(!refreshTutorList);
       }
-    }, [])
+    }, [favouriteTutors])
   );
 
   useFocusEffect(
