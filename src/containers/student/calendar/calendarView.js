@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
 import { Button } from 'native-base';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import commonStyles from '../../../theme/styles';
 import routeNames from '../../../routes/screenNames';
 import { RfH, RfW, monthNames } from '../../../utils/helpers';
@@ -76,12 +77,12 @@ function CalendarView(props) {
       variables: {
         classesSearchDto: {
           studentId: studentInfo.id,
-          startDate: new Date(),
-          endDate: new Date().setDate(new Date().getDate() + 1),
+          startDate: moment().toDate(),
+          endDate: moment().endOf('day').toDate(),
         },
       },
     });
-  }, monthData);
+  }, [monthData]);
 
   const renderClassItem = (item) => {
     return (
@@ -170,7 +171,13 @@ function CalendarView(props) {
         <View>
           <Image
             source={Images.empty_schedule}
-            style={{ margin: RfH(56), alignSelf: 'center', height: RfH(280), width: RfW(224), marginBottom: RfH(32) }}
+            style={{
+              margin: RfH(56),
+              alignSelf: 'center',
+              height: RfH(280),
+              width: RfW(224),
+              marginBottom: RfH(32),
+            }}
           />
           <Text
             style={[
@@ -214,7 +221,13 @@ function CalendarView(props) {
                 dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
                 dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
                 style={
-                  showHeader ? { height: 102, paddingBottom: 10 } : { height: 102, paddingTop: 20, paddingBottom: 10 }
+                  showHeader
+                    ? { height: 102, paddingBottom: 10 }
+                    : {
+                        height: 102,
+                        paddingTop: 20,
+                        paddingBottom: 10,
+                      }
                 }
                 calendarAnimation={{ type: 'parallel', duration: 300 }}
                 daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
