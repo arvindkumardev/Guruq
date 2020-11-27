@@ -646,7 +646,7 @@ function tutorDetails(props) {
         </View>
         <View>
           <Ratings
-            ratings={3.5}
+            ratings={tutorData.averageRating}
             containerStyle={[
               commonStyles.horizontalChildrenView,
               { marginVertical: RfH(16), marginHorizontal: RfW(16) },
