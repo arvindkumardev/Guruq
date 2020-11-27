@@ -13,7 +13,9 @@ function ratings(props) {
     const arr = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= ratings) {
-        arr.push(Images.golden_star);
+        arr.push(Images.star_orange);
+      } else if (i > ratings && i < ratings + 1) {
+        arr.push(Images.star_half_orange);
       } else {
         arr.push(Images.grey_star);
       }

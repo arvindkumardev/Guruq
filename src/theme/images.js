@@ -125,6 +125,8 @@ const Images = {
   empty_cart: require('../assets/images/empty-cart.png'),
   empty_classes: require('../assets/images/no-classes.png'),
   empty_schedule: require('../assets/images/no-schedule.png'),
+  star_half_orange: require('../assets/images/star-half-orange.png'),
+  star_orange: require('../assets/images/star-orange.png'),
 };
 
 export default Images;
