@@ -10,6 +10,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, Picker } from 'native-base';
 import { timing } from 'react-native-reanimated';
 import { useLazyQuery } from '@apollo/client';
+import moment from 'moment';
 import { Colors, Images } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
@@ -43,16 +44,20 @@ const dateSlotModal = (props) => {
     },
   });
 
-  useEffect(() => {
+  const getAvailabilityData = (date) => {
     getAvailability({
       variables: {
         tutorAvailability: {
           tutorId,
-          startDate: new Date(),
-          endDate: new Date(),
+          startDate: moment(date).toDate(),
+          endDate: moment(date).endOf('day').toDate(),
         },
       },
     });
+  };
+
+  useEffect(() => {
+    getAvailabilityData(new Date());
   }, []);
 
   useEffect(() => {
@@ -163,6 +168,7 @@ const dateSlotModal = (props) => {
               },
             ]}
             onHeaderSelected={(a) => console.log(a)}
+            onDateSelected={(d) => getAvailabilityData(d)}
           />
         </View>
         <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(48) }}>

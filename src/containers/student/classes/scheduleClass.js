@@ -8,6 +8,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import moment from 'moment';
 import commonStyles from '../../../theme/styles';
 import { getTutorImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -24,7 +25,7 @@ function scheduleClass(props) {
   const classes = route?.params?.classes;
 
   const [showSlotSelector, setShowSlotSelector] = useState(false);
-  // const [availability, setAvailability] = useState([]);
+  const [availability, setAvailability] = useState([]);
   const [selectedStartTime, setSelectedStartTime] = useState(null);
   const [tutorClasses, setTutorClasses] = useState([]);
   const [startTimes, setStartTimes] = useState([]);
@@ -107,7 +108,11 @@ function scheduleClass(props) {
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
-                style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold, marginTop: RfH(2) }}>
+                style={{
+                  fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+                  fontFamily: Fonts.semiBold,
+                  marginTop: RfH(2),
+                }}>
                 {classData.orderItem?.tutor.contactDetail.firstName} {classData.orderItem?.tutor.contactDetail.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
@@ -154,7 +159,11 @@ function scheduleClass(props) {
               )}
               {item.date !== '' && (
                 <Text
-                  style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey, marginTop: RfH(8) }}>
+                  style={{
+                    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+                    color: Colors.darkGrey,
+                    marginTop: RfH(8),
+                  }}>
                   {item.date}
                 </Text>
               )}
@@ -203,7 +212,9 @@ function scheduleClass(props) {
 
   const selectedClassTime = (value) => {
     setSelectedStartTime(value);
-    setSelectedEndTime(new Date(new Date(value).setUTCHours(new Date(value).getUTCHours() + 1)));
+    setSelectedEndTime(moment(value).endOf('day').toDate());
+
+    console.log(value, moment(value).endOf('day').toDate());
   };
 
   return (
@@ -213,7 +224,7 @@ function scheduleClass(props) {
           <BackArrow action={onBackPress} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text>
         </View>
-        <Text style={{ fontSize: RFValue(28, STANDARD_SCREEN_SIZE) }}>+</Text>
+        {/*<Text style={{ fontSize: RFValue(28, STANDARD_SCREEN_SIZE) }}>+</Text>*/}
       </View>
       {renderTutorDetails()}
       <View style={{ height: RfH(56) }} />
