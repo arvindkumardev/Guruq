@@ -11,6 +11,7 @@ import DateSlotSelectorModal from './DateSlotSelectorModal';
 import RateReview from './Rate&ReviewModal';
 import PaymentMethodModal from './PaymentMethodModal';
 import CompareModal from './CompareModal';
+import Ratings from './Ratings';
 
 export {
   IconButtonWrapper,
@@ -25,4 +26,5 @@ export {
   RateReview,
   PaymentMethodModal,
   CompareModal,
+  Ratings,
 };

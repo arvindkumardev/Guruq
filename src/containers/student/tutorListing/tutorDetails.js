@@ -14,7 +14,7 @@ import Loader from '../../../components/Loader';
 import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
 import styles from './styles';
 import { RfH, RfW, storeData, titleCaseIfExists, getSaveData, removeData } from '../../../utils/helpers';
-import { CompareModal, DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
+import { CompareModal, DateSlotSelectorModal, IconButtonWrapper, Ratings } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/fonts';
@@ -644,22 +644,21 @@ function tutorDetails(props) {
         <View>
           <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Rating and Reviews</Text>
         </View>
-        <View style={[commonStyles.horizontalChildrenView, { marginVertical: RfH(16), marginHorizontal: RfW(16) }]}>
-          <IconButtonWrapper iconHeight={RfH(23)} iconWidth={RfW(23)} iconImage={Images.golden_star} />
-          <IconButtonWrapper iconHeight={RfH(23)} iconWidth={RfW(23)} iconImage={Images.golden_star} />
-          <IconButtonWrapper iconHeight={RfH(23)} iconWidth={RfW(23)} iconImage={Images.golden_star} />
-          <IconButtonWrapper iconHeight={RfH(23)} iconWidth={RfW(23)} iconImage={Images.golden_star} />
-          <IconButtonWrapper iconHeight={RfH(23)} iconWidth={RfW(23)} iconImage={Images.golden_star} />
-          <Text
-            style={[
+        <View>
+          <Ratings
+            ratings={3.5}
+            containerStyle={[
+              commonStyles.horizontalChildrenView,
+              { marginVertical: RfH(16), marginHorizontal: RfW(16) },
+            ]}
+            textStyle={[
               styles.tutorName,
               {
                 marginHorizontal: RfW(16),
                 fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
               },
-            ]}>
-            {parseFloat(5).toFixed(1)}
-          </Text>
+            ]}
+          />
         </View>
         <View style={{ paddingHorizontal: RfW(16) }}>
           <FlatList
