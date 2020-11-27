@@ -107,6 +107,8 @@ const Images = {
   phone: require('../assets/images/phone.png'),
   video_call: require('../assets/images/video-call.png'),
   video_call_mute: require('../assets/images/video-call-mute.png'),
+  camera_switch: require('../assets/images/camera-switch.png'),
+  speaker: require('../assets/images/speaker.png'),
 
   individual_class: require('../assets/images/individual-class.png'),
   group_class: require('../assets/images/group-class.png'),
@@ -128,6 +130,9 @@ const Images = {
   star_half_orange: require('../assets/images/start-half-orange-o.png'),
   star_orange: require('../assets/images/star-orange.png'),
   star_unfilled: require('../assets/images/star-o.png'),
+
+  vertical_dots: require('../assets/images/vertical-dots.png'),
+  horizontal_dots: require('../assets/images/horizontal-dots.png'),
 };
 
 export default Images;

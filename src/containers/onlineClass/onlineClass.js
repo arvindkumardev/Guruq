@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
+import { useReactiveVar } from '@apollo/client';
 import Video from '../../components/Video';
-import NavigationRouteNames from '../../routes/screenNames';
+import { userDetails } from '../../apollo/cache';
 
 const OnlineClass = (props) => {
   const navigation = useNavigation();
@@ -10,12 +10,15 @@ const OnlineClass = (props) => {
   const { route } = props;
 
   const { classDetails } = route.params;
+  const userInfo = useReactiveVar(userDetails);
+
+  console.log('userInfo', userInfo);
 
   const callEnded = (back) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: !back });
+    // navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: !back });
   };
 
-  return <Video onCallEnd={callEnded} />;
+  return <Video onCallEnd={callEnded} userInfo={userInfo} />;
 };
 
 OnlineClass.propTypes = {};

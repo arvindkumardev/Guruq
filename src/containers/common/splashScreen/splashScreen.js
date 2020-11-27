@@ -52,7 +52,6 @@ function SplashScreen() {
 
   useEffect(() => {
     if (data) {
-
       getOfferingMasterData();
 
       if (data.me.type === UserTypeEnum.STUDENT.label) {
@@ -64,14 +63,14 @@ function SplashScreen() {
   }, [data]);
 
   useEffect(() => {
-    if (currentStudent && currentStudent.id > 0) {
-      studentDetails(currentStudent);
+    if (currentStudent && currentStudent?.getCurrentStudent) {
+      studentDetails(currentStudent?.getCurrentStudent);
     }
   }, [currentStudent]);
 
   useEffect(() => {
-    if (currentTutor && currentTutor.id > 0) {
-      tutorDetails(currentTutor);
+    if (currentTutor && currentTutor?.getCurrentTutor) {
+      tutorDetails(currentTutor?.getCurrentTutor);
     }
   }, [currentTutor]);
 

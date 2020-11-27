@@ -39,11 +39,11 @@ export default StyleSheet.create({
     width: '100%',
     height: 150,
     position: 'absolute',
-    top: 44,
+    bottom: 100,
   },
   remote: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
     marginHorizontal: 2.5,
   },
   noUserText: {

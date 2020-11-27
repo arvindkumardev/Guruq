@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import RtcEngine, {
   AudioProfile,
   AudioScenario,
@@ -37,6 +46,7 @@ interface State {
   audioStates: [];
   videoStates: [];
   previewVideo: true;
+  showDetailedActions: true;
 }
 
 export default class Video extends Component<Props, State> {
@@ -47,8 +57,8 @@ export default class Video extends Component<Props, State> {
     this.state = {
       appId: '20be4eff902f4d9ea78c2f8c168556cd',
       token:
-        '00620be4eff902f4d9ea78c2f8c168556cdIACbN3J0BxBU9J+4hz7bGaC9gIKl2dK1Odb6UBfFLOLSMKaOhcgAAAAAEADGU1aH9PKvXwEAAQDz8q9f',
-      channelName: 'TESTING_AGORA_CALL_GURUQ',
+        '00620be4eff902f4d9ea78c2f8c168556cdIAAytjVj37B306Kvk4AbaukadE4NHueLJy2dEjdu125RHJWfxlgAAAAAEAA1BQ7X1gjCXwEAAQDWCMJf',
+      channelName: 'DUMMY_CLASS',
       joinSucceed: false,
       peerIds: [],
       currentUserId: '',
@@ -57,6 +67,8 @@ export default class Video extends Component<Props, State> {
       audioStates: [],
       videoStates: [],
       previewVideo: true,
+
+      showDetailedActions: true,
     };
     if (Platform.OS === 'android') {
       // Request required permissions from Android
@@ -154,7 +166,7 @@ export default class Video extends Component<Props, State> {
     // await this._engine?.joinChannel(this.state.token, this.state.channelName, null, 0);
     await this._engine.startPreview();
 
-    console.log(await this._engine.getUserInfoByUid(10));
+    // console.log(await this._engine.getUserInfoByUid(10));
   };
 
   togglePreview = async () => {
@@ -173,11 +185,11 @@ export default class Video extends Component<Props, State> {
    */
   startCall = async () => {
     // Join Channel using null token and channel name
-    await this._engine?.joinChannel(this.state.token, this.state.channelName, null, 10);
+    await this._engine?.joinChannel(this.state.token, this.state.channelName, null, this.props.userInfo.id);
 
-    console.log(await this._engine.getUserInfoByUid(10));
-    console.log(await this._engine.getUserInfoByUid(11));
-    console.log(await this._engine.getCallId());
+    // console.log(await this._engine.getUserInfoByUid(10));
+    // console.log(await this._engine.getUserInfoByUid(11));
+    // console.log(await this._engine.getCallId());
   };
 
   /**
@@ -194,9 +206,9 @@ export default class Video extends Component<Props, State> {
   audioToggle = async () => {
     console.log('toggle audio', this.state.audioMuted, this.state.currentUserId);
 
-    console.log(await this._engine.getUserInfoByUid(10));
-    console.log(await this._engine.getUserInfoByUid(11));
-    console.log(await this._engine.getCallId());
+    // console.log(await this._engine.getUserInfoByUid(10));
+    // console.log(await this._engine.getUserInfoByUid(11));
+    // console.log(await this._engine.getCallId());
 
     const newState = !this.state.audioMuted;
     // await this._engine.muteRemoteAudioStream(this.state.currentUserId, newState);
@@ -219,11 +231,17 @@ export default class Video extends Component<Props, State> {
     this.props.onCallEnd(true);
   };
 
+  toggleDetailedActions = async () => {
+    this.setState({ showDetailedActions: !this.state.showDetailedActions });
+  };
+
   render() {
     const { joinSucceed } = this.state;
 
     return (
       <View style={styles.max}>
+        <StatusBar barStyle="light-content" />
+
         {!joinSucceed && (
           <>
             <View style={{ height: 44, marginTop: 44, paddingHorizontal: 16, justifyContent: 'center' }}>
@@ -235,13 +253,18 @@ export default class Video extends Component<Props, State> {
                   <RtcLocalView.SurfaceView style={{ flex: 1 }} renderMode={VideoRenderMode.Hidden} />
                 ) : (
                   <View
-                    style={{ flex: 1, backgroundColor: Colors.black, justifyContent: 'center', alignItems: 'center' }}>
+                    style={{
+                      flex: 1,
+                      backgroundColor: '#444444',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
                     <View
                       style={{
                         height: RfH(100),
                         width: RfW(100),
                         borderRadius: 100,
-                        backgroundColor: Colors.lightGreen,
+                        backgroundColor: Colors.lightBlue,
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -262,10 +285,10 @@ export default class Video extends Component<Props, State> {
                   <TouchableOpacity onPress={this.togglePreview} style={{ marginHorizontal: RfW(8) }}>
                     <View
                       style={{
-                        width: 44,
-                        height: 44,
-                        backgroundColor: this.state.videoMuted ? Colors.white : Colors.darkGrey,
-                        borderRadius: 44,
+                        width: 54,
+                        height: 54,
+                        backgroundColor: this.state.videoMuted ? Colors.white : '#222222',
+                        borderRadius: 54,
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
@@ -280,10 +303,10 @@ export default class Video extends Component<Props, State> {
                   <TouchableOpacity onPress={this.audioToggle} style={{ marginHorizontal: RfW(8) }}>
                     <View
                       style={{
-                        width: 44,
-                        height: 44,
-                        backgroundColor: this.state.audioMuted ? Colors.white : Colors.darkGrey,
-                        borderRadius: 44,
+                        width: 54,
+                        height: 54,
+                        backgroundColor: this.state.audioMuted ? Colors.white : '#222222',
+                        borderRadius: 54,
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
@@ -348,75 +371,216 @@ export default class Video extends Component<Props, State> {
 
   _renderVideos = () => {
     return (
-      <View style={styles.fullView}>
-        <RtcLocalView.SurfaceView
-          style={styles.max}
-          channelId={this.state.channelName}
-          renderMode={VideoRenderMode.Hidden}
-        />
+      <View style={[styles.fullView, { backgroundColor: '#222222' }]}>
+        <View style={[commonStyles.blankViewSmall, { height: 44 }]} />
 
-        <View
-          style={{
-            flexDirection: 'row',
-            position: 'absolute',
-            bottom: 34,
-            left: 0,
-            right: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <TouchableOpacity onPress={this.endCall} style={{ marginHorizontal: RfW(8) }}>
-            <View
-              style={{
-                width: 54,
-                height: 54,
-                backgroundColor: Colors.orangeRed,
-                borderRadius: 54,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <IconButtonWrapper iconImage={Images.phone} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={this.videoToggle} style={{ marginHorizontal: RfW(8) }}>
-            <View
-              style={{
-                width: 44,
+        {this.state.showDetailedActions && (
+          <View
+            style={[
+              commonStyles.regularPrimaryText,
+              {
                 height: 44,
-                backgroundColor: this.state.videoMuted ? Colors.white : Colors.darkGrey,
-                borderRadius: 44,
-                justifyContent: 'center',
+                marginTop: 16,
+                color: Colors.white,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 alignItems: 'center',
-              }}>
-              <IconButtonWrapper
-                iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-              />
+                paddingHorizontal: 16,
+                top: 0,
+                zIndex: 2,
+              },
+            ]}>
+            <View style={{ flex: 1 }}>
+              <Text style={[commonStyles.headingPrimaryText, { color: Colors.white }]}>
+                Mathematics by Roshan Singh
+              </Text>
             </View>
-          </TouchableOpacity>
 
-          <TouchableOpacity onPress={this.audioToggle} style={{ marginHorizontal: RfW(8) }}>
-            <View
-              style={{
-                width: 44,
-                height: 44,
-                backgroundColor: this.state.audioMuted ? Colors.white : Colors.darkGrey,
-                borderRadius: 44,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <IconButtonWrapper
-                iconImage={this.state.audioMuted ? Images.microphone_mute : Images.microphone}
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-              />
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+              <TouchableOpacity onPress={() => Alert.alert('camera switch')}>
+                <View
+                  style={{
+                    width: 44,
+                    height: 44,
+                    // backgroundColor: '#222222',
+                    borderRadius: 44,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <IconButtonWrapper iconImage={Images.camera_switch} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => Alert.alert('speaker')} style={{ marginHorizontal: RfW(8) }}>
+                <View
+                  style={{
+                    width: 44,
+                    height: 44,
+                    // backgroundColor: '#222222',
+                    borderRadius: 44,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <IconButtonWrapper iconImage={Images.speaker} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        )}
 
-        {this._renderRemoteVideos()}
+        {this.state.peerIds.length <= 1 && (
+          <View style={{ width: 100, height: 160, top: 16, left: 20, borderRadius: 20, zIndex: 2 }}>
+            {!this.state.videoMuted ? (
+              <RtcLocalView.SurfaceView
+                style={styles.max}
+                channelId={this.state.channelName}
+                renderMode={VideoRenderMode.Hidden}
+              />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: '#222222',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    height: RfH(60),
+                    width: RfW(60),
+                    borderRadius: 60,
+                    backgroundColor: Colors.lightBlue,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{ color: Colors.primaryText, fontSize: 48 }}>{this.props.userInfo.firstName[0]}</Text>
+                </View>
+              </View>
+            )}
+
+            {this.state.audioMuted && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  zIndex: 1,
+                }}>
+                <IconButtonWrapper iconImage={Images.microphone_mute_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              </View>
+            )}
+          </View>
+        )}
+
+        {this.state.peerIds.length === 0 && (
+          <View
+            style={{
+              paddingHorizontal: RfW(16),
+              position: 'absolute',
+              bottom: '40%',
+              left: 0,
+              right: 0,
+              zIndex: 2,
+            }}>
+            <Text
+              style={[
+                commonStyles.headingPrimaryText,
+                {
+                  color: Colors.white,
+                  fontSize: 20,
+                  marginBottom: 16,
+                },
+              ]}>
+              You're the first one here
+            </Text>
+            <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
+              Wait for other members to join the class.
+            </Text>
+          </View>
+        )}
+
+        {this.state.showDetailedActions && (
+          <View
+            style={{
+              flexDirection: 'row',
+              position: 'absolute',
+              bottom: 44,
+              left: 0,
+              right: 0,
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 2,
+            }}>
+            <TouchableOpacity onPress={this.endCall} style={{ marginHorizontal: RfW(8) }}>
+              <View
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: Colors.orangeRed,
+                  borderRadius: 60,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingBottom: 8,
+                }}>
+                <IconButtonWrapper iconImage={Images.phone} iconWidth={RfW(28)} iconHeight={RfH(28)} />
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={this.videoToggle} style={{ marginHorizontal: RfW(8) }}>
+              <View
+                style={{
+                  width: 48,
+                  height: 48,
+                  backgroundColor: this.state.videoMuted ? Colors.white : '#444444',
+                  borderRadius: 48,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <IconButtonWrapper
+                  iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
+                  iconWidth={RfW(24)}
+                  iconHeight={RfH(24)}
+                />
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={this.audioToggle} style={{ marginHorizontal: RfW(8) }}>
+              <View
+                style={{
+                  width: 48,
+                  height: 48,
+                  backgroundColor: this.state.audioMuted ? Colors.white : '#444444',
+                  borderRadius: 48,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <IconButtonWrapper
+                  iconImage={this.state.audioMuted ? Images.microphone_mute : Images.microphone}
+                  iconWidth={RfW(24)}
+                  iconHeight={RfH(24)}
+                />
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={this.audioToggle} style={{ marginHorizontal: RfW(8) }}>
+              <View
+                style={{
+                  width: 48,
+                  height: 48,
+                  backgroundColor: '#444444',
+                  borderRadius: 48,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <IconButtonWrapper iconImage={Images.vertical_dots} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {this.state.peerIds.length > 1 ? this._renderRemoteVideos() : this._renderRemoteVideo()}
       </View>
     );
   };
@@ -425,26 +589,67 @@ export default class Video extends Component<Props, State> {
     const { peerIds } = this.state;
     return (
       <ScrollView style={styles.remoteContainer} contentContainerStyle={{ paddingHorizontal: 2.5 }} horizontal>
+        <View style={{ width: 120, height: 120, borderRadius: 20 }}>
+          <RtcLocalView.SurfaceView
+            style={styles.max}
+            channelId={this.state.channelName}
+            renderMode={VideoRenderMode.Hidden}
+          />
+        </View>
+
         {peerIds.map((value, index, array) => {
           const audioItem = this.state.audioStates.find((s) => s.uid === value);
           const videoItem = this.state.videoStates.find((s) => s.uid === value);
 
+          console.log('videoItem', videoItem, peerIds);
           return (
             <>
               {videoItem && videoItem.status ? (
                 <RtcRemoteView.SurfaceView
-                  style={styles.remote}
+                  // style={styles.remyesote}
+                  style={[styles.remote, { borderRadius: 20 }]}
                   uid={value}
                   channelId={this.state.channelName}
                   renderMode={VideoRenderMode.Hidden}
                   zOrderMediaOverlay
                 />
               ) : (
-                <View style={[styles.remote, { backgroundColor: Colors.black }]} />
+                <View
+                  style={[
+                    styles.remote,
+                    {
+                      flex: 1,
+                      backgroundColor: '#444444',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    },
+                  ]}>
+                  <View
+                    style={{
+                      height: RfH(60),
+                      width: RfW(60),
+                      borderRadius: 100,
+                      backgroundColor: Colors.lightBlue,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginBottom: 8,
+                    }}>
+                    <Text style={{ color: Colors.primaryText, fontSize: 48 }}>{this.props.userInfo.firstName[0]}</Text>
+                  </View>
+                  <Text>{this.props.userInfo.firstName}</Text>
+                </View>
               )}
 
               {audioItem && !audioItem.status && (
-                <View style={{ flexDirection: 'row', position: 'absolute', bottom: 8, right: 8 }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    // bottom: 8,
+                    right: 8,
+                    zIndex: 1,
+                  }}>
                   <IconButtonWrapper
                     iconImage={Images.microphone_mute_white}
                     iconWidth={RfW(24)}
@@ -456,6 +661,76 @@ export default class Video extends Component<Props, State> {
           );
         })}
       </ScrollView>
+    );
+  };
+
+  _renderRemoteVideo = () => {
+    const { peerIds } = this.state;
+
+    const value = peerIds[0];
+    const audioItem = this.state.audioStates.find((s) => s.uid === value);
+    const videoItem = this.state.videoStates.find((s) => s.uid === value);
+
+    console.log('videoItem', videoItem, peerIds);
+
+    return (
+      <>
+        {value && (
+          <View style={[styles.fullView, { position: 'absolute', top: 0 }]}>
+            <TouchableWithoutFeedback onPress={this.toggleDetailedActions}>
+              {videoItem && videoItem.status ? (
+                <RtcRemoteView.SurfaceView
+                  // style={styles.remyesote}
+                  style={[styles.max, { borderRadius: 20 }]}
+                  uid={value}
+                  channelId={this.state.channelName}
+                  renderMode={VideoRenderMode.Hidden}
+                  zOrderMediaOverlay
+                />
+              ) : (
+                <View
+                  style={[
+                    // styles.remote,
+                    {
+                      flex: 1,
+                      backgroundColor: '#444444',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    },
+                  ]}>
+                  <View
+                    style={{
+                      height: RfH(60),
+                      width: RfW(60),
+                      borderRadius: 100,
+                      backgroundColor: Colors.lightBlue,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginBottom: 8,
+                    }}>
+                    <Text style={{ color: Colors.primaryText, fontSize: 48 }}>A</Text>
+                  </View>
+                  <Text>{this.props.userInfo.firstName}</Text>
+                </View>
+              )}
+            </TouchableWithoutFeedback>
+
+            {!this.state.showDetailedActions && audioItem && !audioItem.status && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  position: 'absolute',
+                  bottom: 60,
+                  left: 16,
+                  zIndex: 1,
+                }}>
+                <IconButtonWrapper iconImage={Images.microphone_mute_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              </View>
+            )}
+          </View>
+        )}
+      </>
     );
   };
 }
