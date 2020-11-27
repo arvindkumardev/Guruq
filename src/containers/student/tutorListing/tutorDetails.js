@@ -46,6 +46,7 @@ function tutorDetails(props) {
   const [budgets, setBudgets] = useState([]);
   const [compareData, setCompareData] = useState([]);
   const [isFavourite, setIsFavourite] = useState(false);
+  const [isDemo, setIsDemo] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
 
   const [favouriteTutors, setFavouriteTutors] = useState([]);
@@ -105,14 +106,18 @@ function tutorDetails(props) {
                 offeringId: item.id,
               });
               pm[`o${item.offering.id}`] = {
-                online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-                offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+                online: { demo: 0, c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+                offline: { demo: 0, c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
               };
 
               sb[`${item.offering.id}`] = item.budgets;
 
               for (const b of item.budgets) {
-                pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
+                if (b.demo) {
+                  pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'].demo = b.price;
+                } else {
+                  pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
+                }
                 if (b.groupSize === 1) {
                   classData[`${item.offering.id}`].individual = true;
                 } else {
@@ -201,12 +206,6 @@ function tutorDetails(props) {
   useEffect(() => {
     if (favouriteTutors) {
       setIsFavourite(favouriteTutors.find((ft) => ft?.tutor?.id === tutorData?.id));
-      // for (let i = 0; i < favouriteTutors.length; i++) {
-      //   if (favouriteTutors[i].tutor.id === tutorData?.id) {
-      //     setIsFavourite(true);
-      //     return;
-      //   }
-      // }
     }
   }, [favouriteTutors]);
 
@@ -485,7 +484,7 @@ function tutorDetails(props) {
               fontFamily: Fonts.semiBold,
             },
           ]}>
-          <View style={{ flex: 0.4 }}>
+          <View style={{ flex: 0.3 }}>
             <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>Classes</Text>
           </View>
           <View
@@ -493,13 +492,14 @@ function tutorDetails(props) {
               flexDirection: 'row',
               justifyContent: 'space-around',
               alignItems: 'center',
-              flex: 0.6,
+              flex: 0.7,
             }}>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>1</Text>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>5</Text>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>10</Text>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>25</Text>
-            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>50</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>Demo</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>1</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>5</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>10</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>25</Text>
+            <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>50</Text>
           </View>
         </View>
         {priceMatrix &&
@@ -519,7 +519,7 @@ function tutorDetails(props) {
                 marginTop: RfH(16),
               },
             ]}>
-            <View style={{ flex: 0.4 }}>
+            <View style={{ flex: 0.3 }}>
               <Text style={styles.tutorDetails}>Online Classes</Text>
             </View>
             <View
@@ -527,33 +527,39 @@ function tutorDetails(props) {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                flex: 0.6,
+                flex: 0.7,
               }}>
               <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.online.demo}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
                   priceMatrix[`o${selectedSubject.id}`]?.online.c1}
               </Text>
-              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
                   priceMatrix[`o${selectedSubject.id}`]?.online.c5}
               </Text>
-              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
                   priceMatrix[`o${selectedSubject.id}`]?.online.c10}
               </Text>
-              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
                   priceMatrix[`o${selectedSubject.id}`]?.online.c25}
               </Text>
-              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
@@ -579,7 +585,7 @@ function tutorDetails(props) {
                 marginTop: RfH(16),
               },
             ]}>
-            <View style={{ flex: 0.4 }}>
+            <View style={{ flex: 0.3 }}>
               <Text style={styles.tutorDetails}>Home Tutions</Text>
             </View>
             <View
@@ -587,33 +593,39 @@ function tutorDetails(props) {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                flex: 0.6,
+                flex: 0.7,
               }}>
               <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
+                  priceMatrix[`o${selectedSubject.id}`]?.offline.demo}
+              </Text>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
+                {priceMatrix &&
+                  selectedSubject &&
+                  selectedSubject.id &&
                   priceMatrix[`o${selectedSubject.id}`]?.offline.c1}
               </Text>
-              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
                   priceMatrix[`o${selectedSubject.id}`]?.offline.c5}
               </Text>
-              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
                   priceMatrix[`o${selectedSubject.id}`]?.offline.c10}
               </Text>
-              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
                   priceMatrix[`o${selectedSubject.id}`]?.offline.c25}
               </Text>
-              <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
+              <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
                 {priceMatrix &&
                   selectedSubject &&
                   selectedSubject.id &&
@@ -704,33 +716,9 @@ function tutorDetails(props) {
     }
   };
 
-  const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        navigation.navigate(routeNames.STUDENT.MY_CART);
-      }
-    },
-  });
-
-  const onAddingIntoCart = () => {
-    console.log(budgets);
-    // const cartCreate = {
-    //   tutorOfferingId: selectedSubject.id,
-    //   count: 1,
-    //   groupSize: 1,
-    //   demo: true,
-    //   onlineClass: classDetails[`${selectedSubject.id}`]?.online,
-    //   price: 500,
-    // };
-    // addToCart({
-    //   variables: { cartCreateDto: cartCreate },
-    // });
+  const openClassModeModal = (demo) => {
+    setIsDemo(demo);
+    setShowClassModePopup(true);
   };
 
   return (
@@ -740,9 +728,7 @@ function tutorDetails(props) {
         { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
       ]}>
       <Loader
-        isLoading={
-          loadingFavouriteTutors || loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading || cartLoading
-        }
+        isLoading={loadingFavouriteTutors || loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading}
       />
       <View
         style={[
@@ -967,11 +953,13 @@ function tutorDetails(props) {
           marginTop: RfH(8),
           paddingHorizontal: RfW(16),
         }}>
-        <Button onPress={() => onAddingIntoCart()} style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
+        <Button
+          onPress={() => openClassModeModal(true)}
+          style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
           <Text style={commonStyles.textButtonOutlinePrimary}>Book {isFreeDemo ? '[Free]' : ''} Demo</Text>
         </Button>
 
-        <Button onPress={() => setShowClassModePopup(true)} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+        <Button onPress={() => openClassModeModal(false)} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
           <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
         </Button>
       </View>
@@ -981,13 +969,15 @@ function tutorDetails(props) {
         onClose={() => setShowDateSlotModal(false)}
         tutorId={tutorData?.id}
       />
-
-      <ClassModeSelectModal
-        visible={showClassModePopup}
-        onClose={() => setShowClassModePopup(false)}
-        selectedSubject={selectedSubject}
-        budgetDetails={budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`]}
-      />
+      {showClassModePopup && (
+        <ClassModeSelectModal
+          visible={showClassModePopup}
+          onClose={() => setShowClassModePopup(false)}
+          selectedSubject={selectedSubject}
+          demo={isDemo}
+          budgetDetails={budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`]}
+        />
+      )}
 
       {showCompareModal && (
         <CompareModal

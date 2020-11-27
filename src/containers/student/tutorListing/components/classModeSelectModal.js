@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, ScrollView, TouchableWithoutFeedback, FlatList, Modal } from 'react-native';
@@ -15,13 +16,14 @@ import { ADD_TO_CART } from '../../booking.mutation';
 import Fonts from '../../../../theme/fonts';
 
 const classModeSelectModal = (props) => {
-  const { visible, onClose, budgetDetails, selectedSubject } = props;
+  const { visible, onClose, budgetDetails, selectedSubject, demo } = props;
   const navigation = useNavigation();
 
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(0);
   const [onlineClassMode, setOnlineClassMode] = useState(false);
   const [offlineClassMode, setOfflineClassMode] = useState(false);
+  const [refreshList, setRefreshList] = useState(false);
   const [onlineClassPrices, setOnlineClassPrices] = useState([]);
   const [offlineClassPrices, setOfflineClassPrices] = useState([]);
 
@@ -43,14 +45,42 @@ const classModeSelectModal = (props) => {
   useEffect(() => {
     const bdata = [];
     const odata = [];
-    for (const b of budgetDetails) {
-      if (b.count === 1) {
-        setAmount(b.price);
-      }
-      if (!b.onlineClass) {
-        odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
+    if (demo) {
+      if (budgetDetails.find((ob) => ob?.demo === true)) {
+        for (const obj of budgetDetails) {
+          if (obj.demo) {
+            setAmount(obj.price);
+            if (!obj.onlineClass) {
+              odata.push({ classes: obj.count, pricePerHour: obj.price, totalPrice: obj.price * obj.count });
+            } else {
+              bdata.push({ classes: obj.count, pricePerHour: obj.price, totalPrice: obj.price * obj.count });
+            }
+          }
+        }
       } else {
-        bdata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
+        for (const obj of budgetDetails) {
+          if (obj.count === 1) {
+            setAmount(obj.price);
+            if (!obj.onlineClass) {
+              odata.push({ classes: obj.count, pricePerHour: obj.price, totalPrice: obj.price * obj.count });
+            } else {
+              bdata.push({ classes: obj.count, pricePerHour: obj.price, totalPrice: obj.price * obj.count });
+            }
+          }
+        }
+      }
+    } else {
+      for (const b of budgetDetails) {
+        if (!b.demo && b.count === 1) {
+          setAmount(b.price);
+        }
+        if (!b.demo) {
+          if (!b.onlineClass) {
+            odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
+          } else {
+            bdata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
+          }
+        }
       }
     }
     if (bdata.length > 0) {
@@ -62,6 +92,7 @@ const classModeSelectModal = (props) => {
     }
     setOnlineClassPrices(bdata);
     setOfflineClassPrices(odata);
+    setRefreshList(!refreshList);
   }, [budgetDetails]);
 
   const addClass = () => {
@@ -226,7 +257,7 @@ const classModeSelectModal = (props) => {
             },
           ]}>
           <View style={{ flex: 1 }}>
-            <Text style={[commonStyles.headingPrimaryText, { alignSelf: 'flex-end' }]}>Book Class</Text>
+            <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Book Class</Text>
           </View>
           <View style={{ flex: 0.5, paddingHorizontal: RfW(16) }}>
             <IconButtonWrapper
@@ -298,28 +329,31 @@ const classModeSelectModal = (props) => {
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 data={onlineClassMode ? onlineClassPrices : offlineClassPrices}
+                extraData={refreshList}
                 renderItem={({ item, index }) => renderClasses(item, index)}
                 keyExtractor={(item, index) => index.toString()}
               />
             </View>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-              <Text style={commonStyles.regularPrimaryText}>Total Classes</Text>
-              <View style={styles.bookingSelectorParent}>
-                <TouchableWithoutFeedback onPress={() => removeClass()}>
-                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
-                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
-                  </View>
-                </TouchableWithoutFeedback>
+            {!demo && (
+              <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
+                <Text style={commonStyles.regularPrimaryText}>Total Classes</Text>
+                <View style={styles.bookingSelectorParent}>
+                  <TouchableWithoutFeedback onPress={() => removeClass()}>
+                    <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                      <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
+                    </View>
+                  </TouchableWithoutFeedback>
 
-                <Text>{numberOfClass}</Text>
+                  <Text>{numberOfClass}</Text>
 
-                <TouchableWithoutFeedback onPress={() => addClass()}>
-                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
-                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
-                  </View>
-                </TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback onPress={() => addClass()}>
+                    <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                      <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
+                    </View>
+                  </TouchableWithoutFeedback>
+                </View>
               </View>
-            </View>
+            )}
             <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
               <Text style={commonStyles.regularPrimaryText}>Amount Payable</Text>
               <Text style={commonStyles.headingPrimaryText}>₹{amount}</Text>
@@ -341,6 +375,7 @@ classModeSelectModal.propTypes = {
   onClose: PropTypes.func,
   budgetDetails: PropTypes.array,
   selectedSubject: PropTypes.object,
+  demo: PropTypes.bool,
 };
 
 classModeSelectModal.defaultProps = {
@@ -348,6 +383,7 @@ classModeSelectModal.defaultProps = {
   onClose: null,
   budgetDetails: [],
   selectedSubject: {},
+  demo: false,
 };
 
 export default classModeSelectModal;
