@@ -10,7 +10,7 @@ const BackArrow = (props) => {
     <IconButtonWrapper
       iconHeight={RfH(32)}
       iconWidth={RfW(32)}
-      iconImage={Images.backArrow}
+      iconImage={Images.backArrow_white}
       submitFunction={() => action()}
     />
   );

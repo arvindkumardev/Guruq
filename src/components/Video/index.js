@@ -47,6 +47,7 @@ interface State {
   videoStates: [];
   previewVideo: true;
   showDetailedActions: true;
+  selectedUid: '';
 }
 
 export default class Video extends Component<Props, State> {
@@ -69,6 +70,7 @@ export default class Video extends Component<Props, State> {
       previewVideo: true,
 
       showDetailedActions: true,
+      selectedUid: '',
     };
     if (Platform.OS === 'android') {
       // Request required permissions from Android
@@ -119,8 +121,10 @@ export default class Video extends Component<Props, State> {
         this.setState({
           // Add peer ID to state array
           peerIds: [...peerIds, uid],
+          selectedUid: uid,
         });
       }
+
       this.setState({ currentUserId: uid });
     });
 
@@ -228,159 +232,29 @@ export default class Video extends Component<Props, State> {
   };
 
   onBackPress = () => {
+    const { navigation } = this.props;
+
     this.props.onCallEnd(true);
+    navigation.goBack();
   };
 
   toggleDetailedActions = async () => {
     this.setState({ showDetailedActions: !this.state.showDetailedActions });
   };
 
-  render() {
-    const { joinSucceed } = this.state;
-
-    return (
-      <View style={styles.max}>
-        <StatusBar barStyle="light-content" />
-
-        {!joinSucceed && (
-          <>
-            <View style={{ height: 44, marginTop: 44, paddingHorizontal: 16, justifyContent: 'center' }}>
-              <BackArrow action={this.onBackPress} />
-            </View>
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{ flex: 0.8, justifyContent: 'flex-end', alignSelf: 'stretch' }}>
-                {this.state.previewVideo ? (
-                  <RtcLocalView.SurfaceView style={{ flex: 1 }} renderMode={VideoRenderMode.Hidden} />
-                ) : (
-                  <View
-                    style={{
-                      flex: 1,
-                      backgroundColor: '#444444',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        height: RfH(100),
-                        width: RfW(100),
-                        borderRadius: 100,
-                        backgroundColor: Colors.lightBlue,
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Text style={{ color: Colors.primaryText, fontSize: 48 }}>A</Text>
-                    </View>
-                  </View>
-                )}
-
-                <View
-                  style={{
-                    marginTop: RfH(-70),
-                    marginBottom: 34,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <TouchableOpacity onPress={this.togglePreview} style={{ marginHorizontal: RfW(8) }}>
-                    <View
-                      style={{
-                        width: 54,
-                        height: 54,
-                        backgroundColor: this.state.videoMuted ? Colors.white : '#222222',
-                        borderRadius: 54,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <IconButtonWrapper
-                        iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
-                        iconWidth={RfW(24)}
-                        iconHeight={RfH(24)}
-                      />
-                    </View>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity onPress={this.audioToggle} style={{ marginHorizontal: RfW(8) }}>
-                    <View
-                      style={{
-                        width: 54,
-                        height: 54,
-                        backgroundColor: this.state.audioMuted ? Colors.white : '#222222',
-                        borderRadius: 54,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <IconButtonWrapper
-                        iconImage={this.state.audioMuted ? Images.microphone_mute : Images.microphone}
-                        iconWidth={RfW(24)}
-                        iconHeight={RfH(24)}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  flex: 0.5,
-                  backgroundColor: Colors.lightPurple,
-                  // paddingTop: RfH(44),
-                  justifyContent: 'flex-start',
-                  alignSelf: 'stretch',
-                }}>
-                <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
-                  <View
-                    style={{
-                      height: RfH(72),
-                      width: RfW(72),
-                      backgroundColor: Colors.lightPurple,
-                      borderRadius: 8,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
-                  </View>
-                  <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-                    <Text style={commonStyles.headingPrimaryText}>Physics Class By John Smith</Text>
-                    <Text style={commonStyles.mediumMutedText}>CBSE | Class 9</Text>
-                    <Text style={commonStyles.mediumMutedText}>Nov 12, 9:30 pm</Text>
-                  </View>
-                  <View>
-                    <IconButtonWrapper />
-                  </View>
-                </View>
-
-                <View style={styles.buttonHolder}>
-                  <TouchableOpacity onPress={this.startCall} style={styles.button}>
-                    <Text style={styles.buttonText}> Join Class </Text>
-                  </TouchableOpacity>
-                  {/* FIXME: REMOVE ME */}
-                  <TouchableOpacity onPress={this.endCall} style={styles.button}>
-                    <Text style={styles.buttonText}> End Call </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </>
-        )}
-
-        {joinSucceed && this._renderVideos()}
-      </View>
-    );
-  }
-
   _renderVideos = () => {
     return (
       <View style={[styles.fullView, { backgroundColor: '#222222' }]}>
-        <View style={[commonStyles.blankViewSmall, { height: 44 }]} />
+        {/*<View style={[commonStyles.blankViewSmall, { height: 44 }]} />*/}
 
         {this.state.showDetailedActions && (
           <View
             style={[
               commonStyles.regularPrimaryText,
               {
-                height: 44,
-                marginTop: 16,
+                height: 88,
+                paddingTop: 44,
+                // marginTop: 16,
                 color: Colors.white,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -388,6 +262,7 @@ export default class Video extends Component<Props, State> {
                 paddingHorizontal: 16,
                 top: 0,
                 zIndex: 2,
+                backgroundColor: Colors.brandBlue2,
               },
             ]}>
             <View style={{ flex: 1 }}>
@@ -429,7 +304,7 @@ export default class Video extends Component<Props, State> {
         )}
 
         {this.state.peerIds.length <= 1 && (
-          <View style={{ width: 100, height: 160, top: 16, left: 20, borderRadius: 20, zIndex: 2 }}>
+          <View style={{ width: 100, height: 150, top: 16, left: 20, borderRadius: 20, zIndex: 2 }}>
             {!this.state.videoMuted ? (
               <RtcLocalView.SurfaceView
                 style={styles.max}
@@ -580,7 +455,8 @@ export default class Video extends Component<Props, State> {
           </View>
         )}
 
-        {this.state.peerIds.length > 1 ? this._renderRemoteVideos() : this._renderRemoteVideo()}
+        {this.state.peerIds.length > 1 && this._renderRemoteVideos()}
+        {this._renderRemoteVideo()}
       </View>
     );
   };
@@ -588,101 +464,124 @@ export default class Video extends Component<Props, State> {
   _renderRemoteVideos = () => {
     const { peerIds } = this.state;
     return (
-      <ScrollView style={styles.remoteContainer} contentContainerStyle={{ paddingHorizontal: 2.5 }} horizontal>
-        <View style={{ width: 120, height: 120, borderRadius: 20 }}>
+      <ScrollView
+        style={[styles.remoteContainer, { bottom: this.state.showDetailedActions ? 100 : 44 }]}
+        contentContainerStyle={{ paddingHorizontal: 2.5 }}
+        horizontal>
+        <View style={{ width: 80, height: 120, borderRadius: 20 }}>
           <RtcLocalView.SurfaceView
             style={styles.max}
             channelId={this.state.channelName}
             renderMode={VideoRenderMode.Hidden}
           />
+
+          {this.state.audioMuted && (
+            <View
+              style={{
+                flexDirection: 'row',
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                zIndex: 1,
+              }}>
+              <IconButtonWrapper iconImage={Images.microphone_mute_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+            </View>
+          )}
         </View>
 
-        {peerIds.map((value, index, array) => {
-          const audioItem = this.state.audioStates.find((s) => s.uid === value);
-          const videoItem = this.state.videoStates.find((s) => s.uid === value);
+        {peerIds
+          .filter((uid) => uid !== this.state.selectedUid)
+          .map((value, index, array) => {
+            const audioItem = this.state.audioStates.find((s) => s.uid === value);
+            const videoItem = this.state.videoStates.find((s) => s.uid === value);
 
-          console.log('videoItem', videoItem, peerIds);
-          return (
-            <>
-              {videoItem && videoItem.status ? (
-                <RtcRemoteView.SurfaceView
-                  // style={styles.remyesote}
-                  style={[styles.remote, { borderRadius: 20 }]}
-                  uid={value}
-                  channelId={this.state.channelName}
-                  renderMode={VideoRenderMode.Hidden}
-                  zOrderMediaOverlay
-                />
-              ) : (
-                <View
-                  style={[
-                    styles.remote,
-                    {
-                      flex: 1,
-                      backgroundColor: '#444444',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    },
-                  ]}>
+            console.log('videoItem', videoItem, peerIds);
+            return (
+              <>
+                <TouchableWithoutFeedback onPress={() => this.setState({ selectedUid: value })}>
+                  {videoItem && videoItem.status ? (
+                    <RtcRemoteView.SurfaceView
+                      // style={styles.remyesote}
+                      style={[styles.remote, { borderRadius: 20 }]}
+                      uid={value}
+                      channelId={this.state.channelName}
+                      renderMode={VideoRenderMode.Hidden}
+                      zOrderMediaOverlay
+                    />
+                  ) : (
+                    <View
+                      style={[
+                        styles.remote,
+                        {
+                          flex: 1,
+                          backgroundColor: '#444444',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        },
+                      ]}>
+                      <View
+                        style={{
+                          height: RfH(60),
+                          width: RfW(60),
+                          borderRadius: 100,
+                          backgroundColor: Colors.lightBlue,
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginBottom: 8,
+                        }}>
+                        <Text style={{ color: Colors.primaryText, fontSize: 48 }}>
+                          {this.props.userInfo.firstName[0]}
+                        </Text>
+                      </View>
+                      <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>
+                        {this.props.userInfo.firstName}
+                      </Text>
+                    </View>
+                  )}
+                </TouchableWithoutFeedback>
+                {audioItem && !audioItem.status && (
                   <View
                     style={{
-                      height: RfH(60),
-                      width: RfW(60),
-                      borderRadius: 100,
-                      backgroundColor: Colors.lightBlue,
                       flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginBottom: 8,
+                      position: 'absolute',
+                      // bottom: 8,
+                      right: 8,
+                      zIndex: 2,
                     }}>
-                    <Text style={{ color: Colors.primaryText, fontSize: 48 }}>{this.props.userInfo.firstName[0]}</Text>
+                    <IconButtonWrapper
+                      iconImage={Images.microphone_mute_white}
+                      iconWidth={RfW(24)}
+                      iconHeight={RfH(24)}
+                    />
                   </View>
-                  <Text>{this.props.userInfo.firstName}</Text>
-                </View>
-              )}
-
-              {audioItem && !audioItem.status && (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    position: 'absolute',
-                    // bottom: 8,
-                    right: 8,
-                    zIndex: 1,
-                  }}>
-                  <IconButtonWrapper
-                    iconImage={Images.microphone_mute_white}
-                    iconWidth={RfW(24)}
-                    iconHeight={RfH(24)}
-                  />
-                </View>
-              )}
-            </>
-          );
-        })}
+                )}
+              </>
+            );
+          })}
       </ScrollView>
     );
   };
 
   _renderRemoteVideo = () => {
-    const { peerIds } = this.state;
+    const { peerIds, selectedUid } = this.state;
 
-    const value = peerIds[0];
-    const audioItem = this.state.audioStates.find((s) => s.uid === value);
-    const videoItem = this.state.videoStates.find((s) => s.uid === value);
+    // const value = selectedUid;
+    const audioItem = this.state.audioStates.find((s) => s.uid === selectedUid);
+    const videoItem = this.state.videoStates.find((s) => s.uid === selectedUid);
 
     console.log('videoItem', videoItem, peerIds);
 
     return (
       <>
-        {value && (
+        {selectedUid ? (
           <View style={[styles.fullView, { position: 'absolute', top: 0 }]}>
             <TouchableWithoutFeedback onPress={this.toggleDetailedActions}>
               {videoItem && videoItem.status ? (
                 <RtcRemoteView.SurfaceView
                   // style={styles.remyesote}
                   style={[styles.max, { borderRadius: 20 }]}
-                  uid={value}
+                  uid={selectedUid}
                   channelId={this.state.channelName}
                   renderMode={VideoRenderMode.Hidden}
                   zOrderMediaOverlay
@@ -693,15 +592,15 @@ export default class Video extends Component<Props, State> {
                     // styles.remote,
                     {
                       flex: 1,
-                      backgroundColor: '#444444',
+                      backgroundColor: '#222222',
                       justifyContent: 'center',
                       alignItems: 'center',
                     },
                   ]}>
                   <View
                     style={{
-                      height: RfH(60),
-                      width: RfW(60),
+                      height: RfH(100),
+                      width: RfW(100),
                       borderRadius: 100,
                       backgroundColor: Colors.lightBlue,
                       flexDirection: 'row',
@@ -711,26 +610,177 @@ export default class Video extends Component<Props, State> {
                     }}>
                     <Text style={{ color: Colors.primaryText, fontSize: 48 }}>A</Text>
                   </View>
-                  <Text>{this.props.userInfo.firstName}</Text>
+                  <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
+                    {this.props.userInfo.firstName}
+                  </Text>
                 </View>
               )}
             </TouchableWithoutFeedback>
 
-            {!this.state.showDetailedActions && audioItem && !audioItem.status && (
+            {audioItem && !audioItem.status && (
               <View
-                style={{
-                  flexDirection: 'row',
-                  position: 'absolute',
-                  bottom: 60,
-                  left: 16,
-                  zIndex: 1,
-                }}>
-                <IconButtonWrapper iconImage={Images.microphone_mute_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                style={
+                  this.state.peerIds.length <= 1
+                    ? {
+                        flexDirection: 'row',
+                        position: 'absolute',
+                        bottom: this.state.showDetailedActions ? 120 : 44,
+                        left: 16,
+                        zIndex: 1,
+                      }
+                    : {
+                        flexDirection: 'row',
+                        position: 'absolute',
+                        top: this.state.showDetailedActions ? 120 : 60,
+                        left: 16,
+                        zIndex: 1,
+                      }
+                }>
+                <IconButtonWrapper iconImage={Images.microphone_mute_white} iconWidth={RfW(20)} iconHeight={RfH(20)} />
+                <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white, paddingHorizontal: 8 }]}>
+                  Arun
+                </Text>
               </View>
             )}
           </View>
+        ) : (
+          <></>
         )}
       </>
     );
   };
+
+  render() {
+    const { joinSucceed } = this.state;
+
+    return (
+      <View style={[styles.max, {backgroundColor: Colors.brandBlue2,}]}>
+        <StatusBar barStyle="light-content" />
+
+        {!joinSucceed && (
+          <>
+            <View style={{ height: 44, marginTop: 44, paddingHorizontal: 16, justifyContent: 'center' }}>
+              <BackArrow action={this.onBackPress} />
+            </View>
+            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ flex: 1, justifyContent: 'flex-end', alignSelf: 'stretch' }}>
+                {this.state.previewVideo ? (
+                  <RtcLocalView.SurfaceView style={{ flex: 1 }} renderMode={VideoRenderMode.Hidden} />
+                ) : (
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: '#444444',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        height: RfH(100),
+                        width: RfW(100),
+                        borderRadius: 100,
+                        backgroundColor: Colors.lightBlue,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={{ color: Colors.primaryText, fontSize: 48 }}>A</Text>
+                    </View>
+                  </View>
+                )}
+
+                <View
+                  style={{
+                    marginTop: RfH(-100),
+                    marginBottom: RfH(34),
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity onPress={this.togglePreview} style={{ marginHorizontal: RfW(8) }}>
+                    <View
+                      style={{
+                        width: RfW(54),
+                        height: RfH(54),
+                        backgroundColor: this.state.videoMuted ? Colors.white : '#222222',
+                        borderRadius: 54,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <IconButtonWrapper
+                        iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
+                        iconWidth={RfW(24)}
+                        iconHeight={RfH(24)}
+                      />
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={this.audioToggle} style={{ marginHorizontal: RfW(8) }}>
+                    <View
+                      style={{
+                        width: RfW(54),
+                        height: RfH(54),
+                        backgroundColor: this.state.audioMuted ? Colors.white : '#222222',
+                        borderRadius: 54,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <IconButtonWrapper
+                        iconImage={this.state.audioMuted ? Images.microphone_mute : Images.microphone}
+                        iconWidth={RfW(24)}
+                        iconHeight={RfH(24)}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  flex: 0.5,
+                  backgroundColor: Colors.lightPurple,
+                  // paddingTop: RfH(44),
+                  justifyContent: 'flex-start',
+                  alignSelf: 'stretch',
+                }}>
+                <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
+                  <View
+                    style={{
+                      height: RfH(72),
+                      width: RfW(72),
+                      backgroundColor: Colors.lightPurple,
+                      borderRadius: 8,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
+                  </View>
+                  <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+                    <Text style={commonStyles.headingPrimaryText}>Physics Class By John Smith</Text>
+                    <Text style={commonStyles.mediumMutedText}>CBSE | Class 9</Text>
+                    <Text style={commonStyles.mediumMutedText}>Nov 12, 9:30 pm</Text>
+                  </View>
+                  <View>
+                    <IconButtonWrapper />
+                  </View>
+                </View>
+
+                <View style={styles.buttonHolder}>
+                  <TouchableOpacity onPress={this.startCall} style={styles.button}>
+                    <Text style={styles.buttonText}> Join Class </Text>
+                  </TouchableOpacity>
+                  {/* FIXME: REMOVE ME */}
+                  <TouchableOpacity onPress={this.endCall} style={styles.button}>
+                    <Text style={styles.buttonText}> End Call </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </>
+        )}
+
+        {joinSucceed && this._renderVideos()}
+      </View>
+    );
+  }
 }

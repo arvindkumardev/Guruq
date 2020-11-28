@@ -7,6 +7,7 @@ const Images = {
   chevronRight: require('../assets/images/ic_chevron_right.png'),
   searchIcon: require('../assets/images/searchGlyph.png'),
   backArrow: require('../assets/images/back-arrow.png'),
+  backArrow_white: require('../assets/images/back-arrow-white.png'),
   expand: require('../assets/images/expand.png'),
   check: require('../assets/images/check.png'),
   student: require('../assets/images/student.png'),

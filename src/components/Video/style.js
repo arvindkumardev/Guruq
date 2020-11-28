@@ -40,11 +40,12 @@ export default StyleSheet.create({
     height: 150,
     position: 'absolute',
     bottom: 100,
+    zIndex: 2,
   },
   remote: {
     width: 120,
     height: 120,
-    marginHorizontal: 2.5,
+    marginHorizontal: 8,
   },
   noUserText: {
     paddingHorizontal: 10,
