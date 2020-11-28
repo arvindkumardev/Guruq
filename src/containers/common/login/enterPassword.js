@@ -44,7 +44,7 @@ function EnterPassword(props) {
     if (signInData && signInData.signIn) {
       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, signInData.signIn.token).then(() => {
         isTokenLoading(true);
-        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+        // navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
       });
     }
   }, [signInData]);
