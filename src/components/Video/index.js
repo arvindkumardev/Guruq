@@ -369,131 +369,6 @@ export default class Video extends Component<Props, State> {
           </View>
         )}
 
-        {this.state.peerIds.length === 0 && (
-          <View
-            style={{
-              paddingHorizontal: RfW(16),
-              position: 'absolute',
-              bottom: '40%',
-              left: 0,
-              right: 0,
-              zIndex: 2,
-            }}>
-            <Text
-              style={[
-                commonStyles.headingPrimaryText,
-                {
-                  color: Colors.white,
-                  fontSize: 20,
-                  marginBottom: 16,
-                },
-              ]}>
-              You're the first one here
-            </Text>
-            <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
-              Wait for other members to join the class.
-            </Text>
-          </View>
-        )}
-
-        {this.state.showDetailedActions && (
-          <View
-            style={{
-              flexDirection: 'row',
-              position: 'absolute',
-              bottom: 44,
-              left: 0,
-              right: 0,
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 2,
-            }}>
-            <TouchableWithoutFeedback onPress={this.videoToggle}>
-              <View
-                style={{
-                  width: 48,
-                  height: 48,
-                  backgroundColor: this.state.videoMuted ? Colors.white : '#444444',
-                  borderRadius: 48,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginHorizontal: RfW(8),
-                }}>
-                <IconButtonWrapper
-                  iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
-                  iconWidth={RfW(24)}
-                  iconHeight={RfH(24)}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback onPress={this.audioToggle}>
-              <View
-                style={{
-                  width: 48,
-                  height: 48,
-                  backgroundColor: this.state.audioMuted ? Colors.white : '#444444',
-                  borderRadius: 48,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginHorizontal: RfW(8),
-                }}>
-                <IconButtonWrapper
-                  iconImage={this.state.audioMuted ? Images.microphone_mute : Images.microphone}
-                  iconWidth={RfW(24)}
-                  iconHeight={RfH(24)}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback onPress={this.endCall}>
-              <View
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: Colors.orangeRed,
-                  borderRadius: 60,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingBottom: 8,
-                  marginHorizontal: RfW(8),
-                }}>
-                <IconButtonWrapper iconImage={Images.phone} iconWidth={RfW(28)} iconHeight={RfH(28)} />
-              </View>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback onPress={this.audioToggle}>
-              <View
-                style={{
-                  width: 48,
-                  height: 48,
-                  backgroundColor: '#444444',
-                  borderRadius: 48,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginHorizontal: RfW(8),
-                }}>
-                <IconButtonWrapper iconImage={Images.vertical_dots} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-              </View>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback onPress={this.audioToggle}>
-              <View
-                style={{
-                  width: 48,
-                  height: 48,
-                  backgroundColor: '#444444',
-                  borderRadius: 48,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginHorizontal: RfW(8),
-                }}>
-                <IconButtonWrapper iconImage={Images.vertical_dots} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        )}
-
         {this.state.showDetailedActions && (
           <View
             style={{
@@ -618,8 +493,36 @@ export default class Video extends Component<Props, State> {
           </View>
         )}
 
-        {this.state.peerIds.length > 1 && this._renderRemoteVideos()}
-        {this._renderRemoteVideo()}
+        {this.state.peerIds.length > 1 ? (
+          this._renderRemoteVideos()
+        ) : this.state.peerIds.length >= 1 ? (
+          this._renderRemoteVideo()
+        ) : (
+          <View
+            style={{
+              paddingHorizontal: RfW(16),
+              position: 'absolute',
+              bottom: '40%',
+              left: 0,
+              right: 0,
+              zIndex: 2,
+            }}>
+            <Text
+              style={[
+                commonStyles.headingPrimaryText,
+                {
+                  color: Colors.white,
+                  fontSize: 20,
+                  marginBottom: 16,
+                },
+              ]}>
+              You're the first one here
+            </Text>
+            <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
+              Wait for other members to join the class.
+            </Text>
+          </View>
+        )}
       </View>
     );
   };
@@ -793,11 +696,9 @@ export default class Video extends Component<Props, State> {
                       alignItems: 'center',
                       marginBottom: 8,
                     }}>
-                    <Text style={{ color: Colors.primaryText, fontSize: 48 }}>A</Text>
+                    <Text style={{ color: Colors.primaryText, fontSize: 48 }}>R</Text>
                   </View>
-                  <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
-                    {this.props.userInfo.firstName}
-                  </Text>
+                  <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>Remote</Text>
                 </View>
               )}
             </TouchableWithoutFeedback>
