@@ -24,7 +24,7 @@ const Images = {
   dna: require('../assets/images/dna.png'),
   kushal: require('../assets/images/kushal.png'),
   home: require('../assets/images/home.png'),
-  home_active: require('../assets/images/home_active.png'),
+  home_active: require('../assets/images/home-active.png'),
   calendar: require('../assets/images/calendar.png'),
   classes: require('../assets/images/classes.png'),
   tutor_tab: require('../assets/images/tutor_tab.png'),
@@ -45,10 +45,11 @@ const Images = {
   education: require('../assets/images/education.png'),
   cross: require('../assets/images/cross.png'),
   radio: require('../assets/images/radio.png'),
-  calendar_active: require('../assets/images/calendar_active.png'),
-  classes_active: require('../assets/images/classes_active.png'),
+  calendar_active: require('../assets/images/calendar-active.png'),
+  classes_active: require('../assets/images/classes-active.png'),
   tutor_active: require('../assets/images/tutor_active.png'),
   user_active: require('../assets/images/user_active.png'),
+  profile_active: require('../assets/images/profile-active.png'),
   aboutGuru: require('../assets/images/about_guru.png'),
   bookingDetails: require('../assets/images/booking_details.png'),
   refFriend: require('../assets/images/referFriend.png'),
@@ -140,6 +141,9 @@ const Images = {
   horizontal_dots: require('../assets/images/horizontal-dots.png'),
 
   arrow_down: require('../assets/images/arrow-down.png'),
+
+  wallet_active: require('../assets/images/wallet-active.png'),
+  wallet: require('../assets/images/wallet.png'),
 };
 
 export default Images;

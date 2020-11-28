@@ -771,9 +771,6 @@ export default class Video extends Component<Props, State> {
                         alignItems: 'center',
                       }}>
                       <Text style={{ color: Colors.primaryText, fontSize: 48 }}>A</Text>
-                      <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>
-                        {this.props.userInfo.firstName}
-                      </Text>
                     </View>
                   </View>
                 )}

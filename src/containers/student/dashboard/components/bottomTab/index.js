@@ -54,7 +54,7 @@ function BottomTab(props) {
           active={activeTab === 4}
           onPress={() => changeTab(4)}>
           <Image
-            source={activeTab === 4 ? Images.logo_yellow : Images.qpoint}
+            source={activeTab === 4 ? Images.wallet_active : Images.wallet}
             style={styles.iconStyle}
             resizeMode="contain"
           />
@@ -67,7 +67,7 @@ function BottomTab(props) {
           active={activeTab === 5}
           onPress={() => changeTab(5)}>
           <Image
-            source={activeTab === 5 ? Images.user_active : Images.profile}
+            source={activeTab === 5 ? Images.profile_active : Images.profile}
             style={styles.iconStyle}
             resizeMode="contain"
           />
