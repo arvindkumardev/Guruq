@@ -37,6 +37,8 @@ function LoginCheck() {
 
   useEffect(() => {
     if (data) {
+      userDetails(data.me);
+
       userType(data.me.type);
 
       if (data.me.type === UserTypeEnum.STUDENT.label) {

@@ -49,7 +49,7 @@ export default class Video extends Component<Props, State> {
     this.state = {
       appId: '20be4eff902f4d9ea78c2f8c168556cd',
       token:
-        '00620be4eff902f4d9ea78c2f8c168556cdIACKmafJm/AJJNKJbFRTJfj4MnYdaaruGVTg/BPQaz7a55WfxlgAAAAAEAA1BQ7XukvDXwEAAQC4S8Nf',
+        '00620be4eff902f4d9ea78c2f8c168556cdIADrLe1fOmnKczvkci/7ToKB7B/ZkKCxt4Hl9rs1Qc4prZWfxlgAAAAAEAA1BQ7X7GnDXwEAAQDracNf',
       channelName: 'DUMMY_CLASS',
       joinSucceed: false,
       peerIds: [],
