@@ -1,19 +1,9 @@
 /* eslint-disable no-plusplus */
-import {
-  FlatList,
-  Modal,
-  ScrollView,
-  StatusBar,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  Animated,
-  Alert,
-} from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { Alert, FlatList, Modal, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { Button, Icon, Thumbnail } from 'native-base';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
@@ -22,7 +12,7 @@ import { getSaveData, removeData, RfH, RfW, storeData, titleCaseIfExists } from 
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CompareModal, CustomRadioButton, CustomRangeSelector, IconButtonWrapper } from '../../../components';
-import { SEARCH_TUTORS, GET_FAVOURITE_TUTORS } from '../tutor-query';
+import { GET_FAVOURITE_TUTORS, SEARCH_TUTORS } from '../tutor-query';
 import Loader from '../../../components/Loader';
 import Fonts from '../../../theme/fonts';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -108,7 +98,9 @@ function TutorListing(props) {
   };
 
   const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
+    variables: { searchDto: filterValues },
     onError: (e) => {
+      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
@@ -139,14 +131,16 @@ function TutorListing(props) {
   });
 
   useEffect(() => {
+    getTutors();
     getFavouriteTutors();
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getFavouriteTutors();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getTutors( );
+  //     getFavouriteTutors();
+  //   }, [])
+  // );
 
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
@@ -188,26 +182,18 @@ function TutorListing(props) {
     },
   });
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const favTutors = [];
-      if (favouriteTutors) {
-        for (let i = 0; i < favouriteTutors.length; i++) {
-          favTutors.push(favouriteTutors[i].tutor.id);
-        }
-        setFavourites(favTutors);
-        setRefreshTutorList(!refreshTutorList);
-      }
-    }, [favouriteTutors])
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getTutors({
-        variables: { searchDto: filterValues },
-      });
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const favTutors = [];
+  //     if (favouriteTutors) {
+  //       for (let i = 0; i < favouriteTutors.length; i++) {
+  //         favTutors.push(favouriteTutors[i].tutor.id);
+  //       }
+  //       setFavourites(favTutors);
+  //       setRefreshTutorList(!refreshTutorList);
+  //     }
+  //   }, [favouriteTutors])
+  // );
 
   const onBackPress = () => {
     navigation.goBack();
@@ -744,9 +730,7 @@ function TutorListing(props) {
   const applyFilters = () => {
     setShowFilterPopup(false);
     setIsFilterApplied(true);
-    getTutors({
-      variables: { searchDto: filterValues },
-    });
+    getTutors();
     setRefreshList(!refreshList);
   };
 
@@ -873,9 +857,7 @@ function TutorListing(props) {
         break;
     }
     setFilterValues(filterValues);
-    getTutors({
-      variables: { searchDto: filterValues },
-    });
+    getTutors();
     setRefreshList(!refreshList);
   };
 
