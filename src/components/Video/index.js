@@ -245,7 +245,7 @@ export default class Video extends Component<Props, State> {
   _renderVideos = () => {
     return (
       <View style={[styles.fullView, { backgroundColor: '#222222' }]}>
-        {/*<View style={[commonStyles.blankViewSmall, { height: 44 }]} />*/}
+        {/* <View style={[commonStyles.blankViewSmall, { height: 44 }]} /> */}
 
         {this.state.showDetailedActions && (
           <View
@@ -266,12 +266,13 @@ export default class Video extends Component<Props, State> {
               },
             ]}>
             <View style={{ flex: 1 }}>
-              <Text style={[commonStyles.headingPrimaryText, { color: Colors.white }]}>
-                Mathematics by Roshan Singh
+              <Text style={[commonStyles.headingPrimaryText, { color: Colors.white }]} numberOfLines={1}>
+                Class 10 Mathematics by Roshan Singh
               </Text>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginLeft: RfW(8) }}>
               <TouchableOpacity onPress={() => Alert.alert('camera switch')}>
                 <View
                   style={{
@@ -286,7 +287,7 @@ export default class Video extends Component<Props, State> {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => Alert.alert('speaker')} style={{ marginHorizontal: RfW(8) }}>
+              <TouchableOpacity onPress={() => Alert.alert('speaker')} style={{ marginLeft: RfW(8) }}>
                 <View
                   style={{
                     width: 44,
@@ -299,6 +300,23 @@ export default class Video extends Component<Props, State> {
                   <IconButtonWrapper iconImage={Images.speaker} iconWidth={RfW(24)} iconHeight={RfH(24)} />
                 </View>
               </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.endCall} style={{ marginLeft: RfW(16) }}>
+                <View
+                    style={{
+                      // width: 44,
+                      height: 24,
+                      // backgroundColor: '#222222',
+                      paddingHorizontal: 8,
+                      borderRadius: 4,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: Colors.orangeRed
+                    }}>
+                  <Text style={[commonStyles.headingPrimaryText,{fontSize: 15,color:Colors.white}]}>End Call</Text>
+                </View>
+              </TouchableOpacity>
+
             </View>
           </View>
         )}
@@ -388,21 +406,6 @@ export default class Video extends Component<Props, State> {
               alignItems: 'center',
               zIndex: 2,
             }}>
-            <TouchableOpacity onPress={this.endCall} style={{ marginHorizontal: RfW(8) }}>
-              <View
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: Colors.orangeRed,
-                  borderRadius: 60,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingBottom: 8,
-                }}>
-                <IconButtonWrapper iconImage={Images.phone} iconWidth={RfW(28)} iconHeight={RfH(28)} />
-              </View>
-            </TouchableOpacity>
-
             <TouchableOpacity onPress={this.videoToggle} style={{ marginHorizontal: RfW(8) }}>
               <View
                 style={{
@@ -439,6 +442,21 @@ export default class Video extends Component<Props, State> {
               </View>
             </TouchableOpacity>
 
+            <TouchableOpacity onPress={this.endCall} style={{ marginHorizontal: RfW(8) }}>
+              <View
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: Colors.orangeRed,
+                  borderRadius: 60,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingBottom: 8,
+                }}>
+                <IconButtonWrapper iconImage={Images.phone} iconWidth={RfW(28)} iconHeight={RfH(28)} />
+              </View>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={this.audioToggle} style={{ marginHorizontal: RfW(8) }}>
               <View
                 style={{
@@ -452,6 +470,126 @@ export default class Video extends Component<Props, State> {
                 <IconButtonWrapper iconImage={Images.vertical_dots} iconWidth={RfW(24)} iconHeight={RfH(24)} />
               </View>
             </TouchableOpacity>
+
+            <TouchableOpacity onPress={this.audioToggle} style={{ marginHorizontal: RfW(8) }}>
+              <View
+                style={{
+                  width: 48,
+                  height: 48,
+                  backgroundColor: '#444444',
+                  borderRadius: 48,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <IconButtonWrapper iconImage={Images.vertical_dots} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {this.state.showDetailedActions && (
+          <View
+            style={{
+              flexDirection: 'row',
+              position: 'absolute',
+              bottom: 0,
+              paddingBottom: 34,
+              paddingTop: 8,
+              left: 0,
+              right: 0,
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 2,
+              backgroundColor: Colors.brandBlue2,
+            }}>
+            <View style={{flex:1,  height: 54, flexDirection:"row", alignItems:'flex-end', justifyContent:"space-evenly"}}>
+              <TouchableOpacity onPress={this.videoToggle} style={{   flex:1,
+                // width: 48,
+                // flex:1,
+                height: 54,
+                // backgroundColor: this.state.videoMuted ? Colors.white : '#444444',
+                // borderRadius: 48,
+                justifyContent: 'center',
+                alignItems: 'center',}}>
+
+                  <IconButtonWrapper
+                      iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
+                      iconWidth={RfW(24)}
+                      iconHeight={RfH(24)}
+                  />
+                <Text style={[commonStyles.xSmallPrimaryText, {marginTop:RfH(8),color:Colors.white}]}>Video</Text>
+
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.audioToggle} style={{   flex:1, }}>
+                <View
+                    style={{
+                      // width: 48,
+
+                      height: 54,
+                      // backgroundColor: this.state.audioMuted ? Colors.white : '#444444',
+                      // borderRadius: 48,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                  <IconButtonWrapper
+                      iconImage={this.state.audioMuted ? Images.microphone_mute : Images.microphone}
+                      iconWidth={RfW(24)}
+                      iconHeight={RfH(24)}
+                  />
+                  <Text style={[commonStyles.xSmallPrimaryText, {marginTop:RfH(8),color:Colors.white}]}>Audio</Text>
+
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.endCall} style={{     flex:1,}}>
+                <View
+                    style={{
+                      // width: 60,
+                       height: 54,
+                      // backgroundColor: Colors.orangeRed,
+                      // borderRadius: 60,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingBottom: 8,
+                    }}>
+                  <IconButtonWrapper iconImage={Images.share_screen} iconWidth={RfW(28)} iconHeight={RfH(28)} />
+                  <Text style={[commonStyles.xSmallPrimaryText, {marginTop:RfH(8),color:Colors.white}]}>End Call</Text>
+
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.audioToggle} style={{    flex:1, }}>
+                <View
+                    style={{
+                      // width: 48,
+                       height: 54,
+                      // backgroundColor: '#444444',
+                      // borderRadius: 48,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                  <IconButtonWrapper iconImage={Images.messaging_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                  <Text style={[commonStyles.xSmallPrimaryText, {marginTop:RfH(8),color:Colors.white}]}>Messaging</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.audioToggle} style={{   flex:1, }}>
+                <View
+                    style={{
+                      // width: 48,
+                       height: 54,
+                      // backgroundColor: '#444444',
+                      // borderRadius: 48,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                  <IconButtonWrapper iconImage={Images.vertical_dots} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                  <Text style={[commonStyles.xSmallPrimaryText, {marginTop:RfH(8),color:Colors.white}]}>More</Text>
+
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
 
@@ -654,7 +792,7 @@ export default class Video extends Component<Props, State> {
     const { joinSucceed } = this.state;
 
     return (
-      <View style={[styles.max, {backgroundColor: Colors.brandBlue2,}]}>
+      <View style={[styles.max, { backgroundColor: Colors.brandBlue2 }]}>
         <StatusBar barStyle="light-content" />
 
         {!joinSucceed && (

@@ -110,6 +110,8 @@ const Images = {
   video_call_mute: require('../assets/images/video-call-mute.png'),
   camera_switch: require('../assets/images/camera-switch.png'),
   speaker: require('../assets/images/speaker.png'),
+  messaging_white: require('../assets/images/messaging-white.png'),
+  share_screen: require('../assets/images/share-screen.png'),
 
   individual_class: require('../assets/images/individual-class.png'),
   group_class: require('../assets/images/group-class.png'),
