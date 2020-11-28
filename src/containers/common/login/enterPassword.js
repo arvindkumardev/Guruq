@@ -2,7 +2,7 @@ import { Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
@@ -10,9 +10,10 @@ import { RfH, RfW, storeData } from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
-import { isTokenLoading } from '../../../apollo/cache';
+import { isLoggedIn, isTokenLoading, userType } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import MainContainer from './components/mainContainer';
+import LoginCheck from './loginCheck';
 
 function EnterPassword(props) {
   const { route } = props;
@@ -20,6 +21,7 @@ function EnterPassword(props) {
   const navigation = useNavigation();
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
+  const isUserLoggedIn = useReactiveVar(isLoggedIn);
 
   const [mobileObj, setMobileObj] = useState(route.params.mobileObj);
 
@@ -43,8 +45,7 @@ function EnterPassword(props) {
   useEffect(() => {
     if (signInData && signInData.signIn) {
       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, signInData.signIn.token).then(() => {
-        isTokenLoading(true);
-        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+        isLoggedIn(true);
       });
     }
   }, [signInData]);
@@ -83,6 +84,7 @@ function EnterPassword(props) {
 
   return (
     <MainContainer isLoading={signInLoading || forgotPasswordLoading} onBackPress={onBackPress}>
+      {isUserLoggedIn && <LoginCheck />}
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.contentMarginTop}>
           <Text style={styles.title}>Welcome back!</Text>

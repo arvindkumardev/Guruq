@@ -9,7 +9,7 @@ import { clearAllLocalStorage, removeData, removeToken, RfH, RfW, storeData } fr
 import IconWrapper from '../../../components/IconWrapper';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { isLoggedIn, studentDetails, tutorDetails, userDetails } from '../../../apollo/cache';
+import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../apollo/cache';
 
 import routeNames from '../../../routes/screenNames';
 import Fonts from '../../../theme/fonts';
@@ -35,9 +35,7 @@ function Profile() {
     { name: 'Add Study Area', icon: Images.personal },
     { name: 'Modify Study Area', icon: Images.home },
   ]);
-  const [bookingData, setBookingData] = useState([
-    { name: 'Purchased History', icon: Images.personal },
-  ]);
+  const [bookingData, setBookingData] = useState([{ name: 'Purchased History', icon: Images.personal }]);
   const [myClassesData, setMyClassesData] = useState([
     { name: 'Calendar', icon: Images.personal },
     { name: 'Upcoming Classes', icon: Images.home },
@@ -64,6 +62,7 @@ function Profile() {
         removeToken().then(() => {
           // set in apollo cache
           isLoggedIn(false);
+          userType('');
           userDetails({});
 
           studentDetails({});
@@ -214,14 +213,14 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
         {isStudyMenuOpen && (
-            <SafeAreaView>
-              <FlatList
-                  data={myStudyData}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({ item }) => renderItem(item)}
-                  keyExtractor={(item, index) => index.toString()}
-              />
-            </SafeAreaView>
+          <SafeAreaView>
+            <FlatList
+              data={myStudyData}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => renderItem(item)}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </SafeAreaView>
         )}
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
@@ -243,14 +242,14 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
         {isBookingMenuOpen && (
-            <SafeAreaView>
-              <FlatList
-                  data={bookingData}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({ item }) => renderItem(item)}
-                  keyExtractor={(item, index) => index.toString()}
-              />
-            </SafeAreaView>
+          <SafeAreaView>
+            <FlatList
+              data={bookingData}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => renderItem(item)}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </SafeAreaView>
         )}
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
@@ -272,14 +271,14 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
         {isMyClassesMenuOpen && (
-            <SafeAreaView>
-              <FlatList
-                  data={myClassesData}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({ item }) => renderItem(item)}
-                  keyExtractor={(item, index) => index.toString()}
-              />
-            </SafeAreaView>
+          <SafeAreaView>
+            <FlatList
+              data={myClassesData}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => renderItem(item)}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </SafeAreaView>
         )}
         <View style={commonStyles.blankViewSmall} />
 

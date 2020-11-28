@@ -2,7 +2,7 @@ import { Alert, Keyboard, ScrollView, Text, TouchableOpacity, TouchableWithoutFe
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
@@ -10,9 +10,9 @@ import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import { isTokenLoading } from '../../../apollo/cache';
+import { isLoggedIn } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import NavigationRouteNames from '../../../routes/screenNames';
+import LoginCheck from './loginCheck';
 
 function SignUp(props) {
   const navigation = useNavigation();
@@ -22,6 +22,7 @@ function SignUp(props) {
   const [password, setPassword] = useState('');
   const [referCode, setReferCode] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
+  const isUserLoggedIn = useReactiveVar(isLoggedIn);
 
   const { route } = props;
 
@@ -61,8 +62,7 @@ function SignUp(props) {
   useEffect(() => {
     if (addUserData && addUserData.signUp) {
       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, addUserData.signUp.token).then(() => {
-        isTokenLoading(true);
-        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+        isLoggedIn(true);
       });
     }
   }, [addUserData]);
@@ -105,6 +105,7 @@ function SignUp(props) {
 
   return (
     <MainContainer isLoading={addUserLoading} onBackPress={onBackPress}>
+      {isUserLoggedIn && <LoginCheck />}
       <ScrollView>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.contentMarginTop}>

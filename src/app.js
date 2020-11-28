@@ -7,7 +7,7 @@ import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 
 import { getToken } from './utils/helpers';
-import { isLoggedIn, isTokenLoading, userDetails } from './apollo/cache';
+import {isLoggedIn, isTokenLoading, userDetails, userType} from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
 
@@ -27,6 +27,7 @@ function App() {
   const isUserLoggedIn = useReactiveVar(isLoggedIn);
   const isUserTokenLoading = useReactiveVar(isTokenLoading);
   const userInfo = useReactiveVar(userDetails);
+  const userTypeVal = useReactiveVar(userType);
   // const isNetworkConnectivityError = useReactiveVar(networkConnectivityError);
 
   // const netInfo = useNetInfo({
@@ -95,7 +96,7 @@ function App() {
           <AppStack
             isUserLoggedIn={isUserLoggedIn}
             isUserTokenLoading={isUserTokenLoading}
-            userType={userInfo.type}
+            userType={userTypeVal}
             // isNetworkConnectivityError={isNetworkConnectivityError}
           />
         </NavigationContainer>

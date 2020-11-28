@@ -10,21 +10,22 @@ import {
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { isTokenLoading } from '../../../apollo/cache';
+import { isLoggedIn } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { INVALID_INPUT } from '../../../common/errorCodes';
-import NavigationRouteNames from '../../../routes/screenNames';
+import LoginCheck from './loginCheck';
 
 function SetPassword() {
   const navigation = useNavigation();
   const [hidePassword, setHidePassword] = useState(true);
   const [password, setPassword] = useState('');
+  const isUserLoggedIn = useReactiveVar(isLoggedIn);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
 
@@ -70,8 +71,7 @@ function SetPassword() {
   useEffect(() => {
     if (setPasswordData && setPasswordData.setPassword) {
       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, setPasswordData.setPassword.token).then(() => {
-        isTokenLoading(true);
-        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+        isLoggedIn(true);
       });
     }
   }, [setPasswordData]);
@@ -90,7 +90,8 @@ function SetPassword() {
 
   return (
     <MainContainer isLoading={setPasswordLoading} onBackPress={onBackPress}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      {isUserLoggedIn && <LoginCheck />}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.contentMarginTop}>
           <Text style={styles.title}>Set Password</Text>
           <Text style={styles.subtitle}>Enter the new password and submit</Text>
@@ -126,7 +127,7 @@ function SetPassword() {
             </View>
           </View>
           <TouchableOpacity
-            onPress={() => onClickContinue()}
+            onPress={onClickContinue}
             style={[
               commonStyles.buttonPrimary,
               {
