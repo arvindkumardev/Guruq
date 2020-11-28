@@ -1,9 +1,10 @@
 import React from 'react';
-import { Image, TextInput, TouchableOpacity, View } from 'react-native';
+import {TextInput, View} from 'react-native';
 import PropTypes from 'prop-types';
-import { isEmpty } from 'lodash';
-import { Images } from '../../theme';
-import { RfH, RfW } from '../../utils/helpers';
+import {isEmpty} from 'lodash';
+import {Icon} from 'native-base';
+import {Images} from '../../theme';
+import {RfH, RfW} from '../../utils/helpers';
 import IconButtonWrapper from '../IconWrapper';
 import styles from './style';
 
@@ -23,15 +24,7 @@ function CustomSearchBar(props) {
         onChangeText={onChangeText}
       />
       {!isEmpty(value) && (
-        <TouchableOpacity
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          activeOpacity={1}
-          onPress={() => onChangeText('')}>
-          <Image source={Images.clear} style={styles.iconStyle} />
-        </TouchableOpacity>
+        <Icon onPress={() => onChangeText('')} style={styles.iconStyle} type="Entypo" name="cross" />
       )}
     </View>
   );

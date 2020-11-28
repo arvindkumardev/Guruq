@@ -9,34 +9,40 @@ import Loader from '../../../../components/Loader';
 import { RfH, RfW } from '../../../../utils/helpers';
 
 function MainContainer(props) {
-  const { isLoading, onBackPress } = props;
+  const { isLoading, onBackPress, isBackButtonVisible } = props;
 
   return (
-    <View
-      style={[
-        commonStyles.mainContainer,
-        { paddingTop: RfH(44), paddingHorizontal: 0, backgroundColor: Colors.brandBlue },
-      ]}>
-      <Loader isLoading={isLoading} />
-      <StatusBar barStyle="light-content" />
-      <View style={{ paddingHorizontal: RfW(16) }}>
-        <Icon onPress={() => onBackPress()} type="MaterialIcons" name="keyboard-backspace" style={styles.backIcon} />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View
+        style={[
+          commonStyles.mainContainer,
+          { paddingTop: RfH(44), paddingHorizontal: 0, backgroundColor: Colors.brandBlue },
+        ]}>
+        <Loader isLoading={isLoading} />
+        <StatusBar barStyle="light-content" />
+        {isBackButtonVisible && (
+          <View style={{ paddingHorizontal: RfW(16),width:'20%'}}>
+            <Icon onPress={onBackPress} type="MaterialIcons" name="keyboard-backspace" style={styles.backIcon} />
+          </View>
+        )}
+        <View style={{ flex: 1 }} />
+
+        <KeyboardAvoidingView behavior="padding">
+          <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>{props.children}</View>
+        </KeyboardAvoidingView>
       </View>
-      <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={{ flex: 1 }} />
-        </TouchableWithoutFeedback>
-      </View>
-      <KeyboardAvoidingView behavior="padding">
-        <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>{props.children}</View>
-      </KeyboardAvoidingView>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 MainContainer.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   onBackPress: PropTypes.func.isRequired,
+  isBackButtonVisible: PropTypes.bool,
+};
+
+MainContainer.defaultProps = {
+  isBackButtonVisible: true,
 };
 
 export default MainContainer;

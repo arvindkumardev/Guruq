@@ -4,26 +4,25 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
-import { isLoggedIn, isTokenLoading, userType } from '../../../apollo/cache';
+import { isLoggedIn } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import MainContainer from './components/mainContainer';
 import LoginCheck from './loginCheck';
 
 function EnterPassword(props) {
   const { route } = props;
-
   const navigation = useNavigation();
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
   const isUserLoggedIn = useReactiveVar(isLoggedIn);
-
-  const [mobileObj, setMobileObj] = useState(route.params.mobileObj);
+  const { mobileObj } = route.params;
 
   const [signIn, { data: signInData, error: signInError, loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
     fetchPolicy: 'no-cache',
@@ -34,7 +33,6 @@ function EnterPassword(props) {
     if (signInError && signInError.graphQLErrors && signInError.graphQLErrors.length > 0) {
       const error = signInError.graphQLErrors[0].extensions.exception.response;
       if (error.errorCode === INVALID_INPUT) {
-        // incorrect username/password
         Alert.alert('Incorrect password');
       } else if (error.errorCode === NOT_FOUND) {
         navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
@@ -94,23 +92,24 @@ function EnterPassword(props) {
 
       <View style={styles.bottomCard}>
         <View>
-          <Item floatingLabel style={{}}>
+          <Item floatingLabel>
             <Label style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>Password</Label>
             <Input secureTextEntry={hidePassword} onChangeText={(text) => setPassword(text)} />
-            <Icon
-              type="Entypo"
-              name={hidePassword ? 'eye' : 'eye-with-line'}
-              onPress={() => setHidePassword(!hidePassword)}
-              style={styles.eyeIcon}
-            />
+            {!isEmpty(password) && (
+              <Icon
+                type="Entypo"
+                name={hidePassword ? 'eye' : 'eye-with-line'}
+                onPress={() => setHidePassword(!hidePassword)}
+                style={styles.eyeIcon}
+              />
+            )}
           </Item>
-          <TouchableOpacity onPress={() => onForgotPasswordClick()}>
+          <TouchableOpacity onPress={onForgotPasswordClick}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
-        {/* )} */}
         <TouchableOpacity
-          onPress={() => signIn()}
+          onPress={signIn}
           style={[
             password ? commonStyles.buttonPrimary : commonStyles.disableButton,
             {

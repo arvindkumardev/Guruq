@@ -104,16 +104,13 @@ function OtpVerification(props) {
 
   return (
     <MainContainer isLoading={verifyLoading || otpLoading} onBackPress={onBackPress}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.contentMarginTop}>
-          <Text style={styles.title}>OTP Verification</Text>
-          <Text style={styles.otpNumber}>We have sent a Verification code at</Text>
-          <Text style={[styles.otpNumber, { marginBottom: RfH(40), marginTop: RfH(6) }]}>
-            +{mobileObj.country.dialCode}-{mobileObj.mobile}
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
-
+      <View style={styles.contentMarginTop}>
+        <Text style={styles.title}>OTP Verification</Text>
+        <Text style={styles.otpNumber}>We have sent a Verification code at</Text>
+        <Text style={[styles.otpNumber, { marginBottom: RfH(30), marginTop: RfH(3) }]}>
+          +{mobileObj.country.dialCode}-{mobileObj.mobile}
+        </Text>
+      </View>
       <View style={styles.bottomCard}>
         <View style={[styles.setPasswordView, { paddingHorizontal: 64 }]}>
           <View>

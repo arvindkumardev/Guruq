@@ -13,6 +13,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: RfW(8),
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 0.5,
+    borderColor: Colors.secondaryText,
   },
   textStyle: {
     marginLeft: RfW(3),
@@ -37,6 +39,9 @@ const styles = StyleSheet.create({
     color: 'rgba(60, 60, 67, 0.6)',
     flex: 1,
     padding: 0,
+  },
+  iconStyle: {
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
   },
 });
 

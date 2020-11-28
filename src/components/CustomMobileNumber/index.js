@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
+import { Icon } from 'native-base';
 import styles from './style';
 import { Colors, Images } from '../../theme';
 import { inputs } from '../../utils/constants';
@@ -54,7 +55,7 @@ function CustomMobileNumber(props) {
             {isCountryCodeLabel && <Text style={[inputLabelStyle, error && { color: '#818181' }]} />}
             <TouchableOpacity
               onPress={() => setShowModal(true)}
-              style={[styles.textInputInnerContainer, textInputStyle, { height: RfH(34) }]}>
+              style={[styles.textInputInnerContainer, textInputStyle, { height: RfH(40) }]}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <IconButtonWrapper
                   iconImage={!isEmpty(country) && getFlag(country.iso2)}
@@ -98,12 +99,12 @@ function CustomMobileNumber(props) {
               />
 
               {showClearButton && !isEmpty(value.mobile) && isFocussed && (
-                <TouchableOpacity
-                  style={styles.iconContainer}
-                  activeOpacity={1}
-                  onPress={() => onChangeHandler({ country, mobile: '' })}>
-                  <Image source={Images.clear} style={styles.iconStyle} />
-                </TouchableOpacity>
+                <Icon
+                  onPress={() => onChangeHandler({ country, mobile: '' })}
+                  style={styles.iconStyle}
+                  type="Entypo"
+                  name="circle-with-cross"
+                />
               )}
             </View>
           </View>

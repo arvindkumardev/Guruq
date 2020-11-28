@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   },
   buttonPrimary: {
     backgroundColor: Colors.brandBlue2,
-    // marginHorizontal: RfW(56),
     width: RfW(144),
     height: RfH(40),
     flexDirection: 'row',
@@ -24,9 +23,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     marginVertical: RfH(4),
-    // shadowRadius: 4,
-    // shadowColor: '#000',
-    // shadowOpacity: 0.1,
   },
   buttonOutlinePrimary: {
     backgroundColor: Colors.white,
@@ -46,11 +42,12 @@ const styles = StyleSheet.create({
   },
   disableButton: {
     backgroundColor: Colors.secondaryText,
-    height: RfH(46),
+    height: RfH(40),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
+    marginVertical: RfH(4),
     width: RfW(144),
   },
   textButtonPrimary: {
