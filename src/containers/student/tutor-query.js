@@ -178,8 +178,8 @@ export const GET_FAVOURITE_TUTORS = gql`
           fieldOfStudy
           subjects
           board
-          startYear
-          endYear
+          startDate
+          endDate
           isCurrent
         }
       }
