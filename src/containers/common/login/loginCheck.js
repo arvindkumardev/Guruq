@@ -2,24 +2,20 @@ import { View } from 'react-native';
 import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { useLazyQuery } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
 import { GET_CURRENT_STUDENT_QUERY, GET_CURRENT_TUTOR_QUERY, ME_QUERY } from '../graphql-query';
 import {
   isLoggedIn,
+  isSplashScreenVisible,
   isTokenLoading,
-  offeringsMasterData,
   studentDetails,
   tutorDetails,
   userDetails,
   userType,
 } from '../../../apollo/cache';
 import { UserTypeEnum } from '../../../common/userType.enum';
-import { GET_OFFERINGS_MASTER_DATA } from '../../student/dashboard-query';
-import NavigationRouteNames from '../../../routes/screenNames';
 
 function LoginCheck() {
   const { error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
-  const navigation = useNavigation();
 
   const [getCurrentStudent, { data: currentStudent }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
     fetchPolicy: 'no-cache',
@@ -31,7 +27,7 @@ function LoginCheck() {
       isLoggedIn(false);
       isTokenLoading(false);
       userDetails({});
-      navigation.navigate(NavigationRouteNames.GETTING_STARTED);
+      isSplashScreenVisible(false);
     }
   }, [error]);
 
@@ -52,16 +48,16 @@ function LoginCheck() {
   useEffect(() => {
     if (currentStudent && currentStudent?.getCurrentStudent) {
       studentDetails(currentStudent?.getCurrentStudent);
-
       isLoggedIn(true);
+      isSplashScreenVisible(false);
     }
   }, [currentStudent]);
 
   useEffect(() => {
     if (currentTutor && currentTutor?.getCurrentTutor) {
       tutorDetails(currentTutor?.getCurrentTutor);
-
       isLoggedIn(true);
+      isSplashScreenVisible(false);
     }
   }, [currentTutor]);
 

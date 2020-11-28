@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
+import AsyncStorage from '@react-native-community/async-storage';
 import NavigationRouteNames from './screenNames';
 import Login from '../containers/common/login/login';
 import OtpVerification from '../containers/common/login/otpVerification';
@@ -13,11 +14,19 @@ import GettingStarted from '../containers/common/onboarding/gettingStarted';
 import { UserTypeEnum } from '../common/userType.enum';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
+import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
 
 const Stack = createStackNavigator();
 
 const AppStack = (props) => {
-  const { isUserLoggedIn, userType } = props;
+  const { isUserLoggedIn, userType, showSplashScreen } = props;
+  const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
+
+  useEffect(() => {
+    AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then((val) => {
+      setIsGettingStartedVisible(isEmpty(val));
+    });
+  }, []);
 
   const getLoggedInRoutes = () => {
     if (userType === UserTypeEnum.OTHER.label) {
@@ -43,16 +52,20 @@ const AppStack = (props) => {
         getLoggedInRoutes()
       ) : (
         <>
-          <Stack.Screen
-            name={NavigationRouteNames.SPLASH_SCREEN}
-            component={SplashScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.GETTING_STARTED}
-            component={GettingStarted}
-            options={{ headerShown: false }}
-          />
+          {showSplashScreen && (
+            <Stack.Screen
+              name={NavigationRouteNames.SPLASH_SCREEN}
+              component={SplashScreen}
+              options={{ headerShown: false }}
+            />
+          )}
+          {isGettingStartedVisible && (
+            <Stack.Screen
+              name={NavigationRouteNames.GETTING_STARTED}
+              component={GettingStarted}
+              options={{ headerShown: false }}
+            />
+          )}
           <Stack.Screen name={NavigationRouteNames.LOGIN} component={Login} options={{ headerShown: false }} />
           <Stack.Screen
             name={NavigationRouteNames.ENTER_PASSWORD}
