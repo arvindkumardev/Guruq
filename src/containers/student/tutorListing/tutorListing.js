@@ -100,6 +100,7 @@ function TutorListing(props) {
   const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
     variables: { searchDto: filterValues },
     onError: (e) => {
+      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }

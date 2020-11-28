@@ -81,8 +81,8 @@ export const SEARCH_TUTORS = gql`
           fieldOfStudy
           subjects
           board
-          startYear
-          endYear
+          startDate
+          endDate
           isCurrent
         }
       }
