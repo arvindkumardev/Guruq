@@ -1034,7 +1034,7 @@ function StudentDashboard(props) {
         onClose={setStudentOfferingModalVisible}
         visible={studentOfferingModalVisible}
         onSelect={onOfferingSelect}
-        offerings={interestedOfferings && interestedOfferings.getInterestedOfferings}
+        offerings={interestedOfferings}
       />
     </>
   );
