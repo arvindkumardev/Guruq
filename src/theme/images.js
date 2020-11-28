@@ -108,6 +108,7 @@ const Images = {
   phone: require('../assets/images/phone.png'),
   video_call: require('../assets/images/video-call.png'),
   video_call_mute: require('../assets/images/video-call-mute.png'),
+  video_call_mute_white: require('../assets/images/video-call-mute-white.png'),
   camera_switch: require('../assets/images/camera-switch.png'),
   speaker: require('../assets/images/speaker.png'),
   messaging_white: require('../assets/images/messaging-white.png'),
@@ -136,6 +137,8 @@ const Images = {
 
   vertical_dots: require('../assets/images/vertical-dots.png'),
   horizontal_dots: require('../assets/images/horizontal-dots.png'),
+
+  arrow_down: require('../assets/images/arrow-down.png'),
 };
 
 export default Images;

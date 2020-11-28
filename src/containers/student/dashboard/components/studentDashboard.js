@@ -18,7 +18,7 @@ import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import StudentOfferingModal from './studentOfferingModal';
-import { GET_INTERESTED_OFFERINGS } from '../../dashboard-query';
+import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashboard-query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
@@ -37,10 +37,21 @@ function StudentDashboard(props) {
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});
 
-  // const [
-  //   ,
-  //   { loading: , error: favouriteError, data: favouriteTutor },
-  // ] = useLazyQuery();
+  const [
+    getOfferingMasterData,
+    { loading: loadingOfferingMasterData, error: offeringMasterError, data: offeringData },
+  ] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, { fetchPolicy: 'no-cache' });
+
+  useEffect(() => {
+    getOfferingMasterData();
+  }, []);
+  useEffect(() => {
+    if (offeringData && offeringData.offerings && offeringData.offerings.edges) {
+      offeringsMasterData(offeringData.offerings.edges);
+
+      // after fetching this, push the user to dashboard
+    }
+  }, [offeringData]);
 
   const [favouriteTutors, setFavouriteTutors] = useState([]);
   const [interestedOfferings, setInterestedOfferings] = useState({});
