@@ -21,26 +21,10 @@ function LoginCheck() {
   const { error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
   const navigation = useNavigation();
 
-  const [
-    getOfferingMasterData,
-    { loading: loadingOfferingMasterData, error: offeringMasterError, data: offeringMasterData },
-  ] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, { fetchPolicy: 'no-cache' });
-
   const [getCurrentStudent, { data: currentStudent }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
     fetchPolicy: 'no-cache',
   });
   const [getCurrentTutor, { data: currentTutor }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, { fetchPolicy: 'no-cache' });
-
-  useEffect(() => {
-    if (offeringMasterData && offeringMasterData.offerings && offeringMasterData.offerings.edges) {
-      offeringsMasterData(offeringMasterData && offeringMasterData.offerings && offeringMasterData.offerings.edges);
-
-      // after fetching this, push the user to dashboard
-
-      isLoggedIn(true);
-      isTokenLoading(false);
-    }
-  }, [offeringMasterData]);
 
   useEffect(() => {
     if (error) {
@@ -53,8 +37,8 @@ function LoginCheck() {
 
   useEffect(() => {
     if (data) {
-      getOfferingMasterData();
       userType(data.me.type);
+
       if (data.me.type === UserTypeEnum.STUDENT.label) {
         getCurrentStudent();
       } else if (data.me.type === UserTypeEnum.TUTOR.label) {
@@ -66,12 +50,16 @@ function LoginCheck() {
   useEffect(() => {
     if (currentStudent && currentStudent?.getCurrentStudent) {
       studentDetails(currentStudent?.getCurrentStudent);
+
+      isLoggedIn(true);
     }
   }, [currentStudent]);
 
   useEffect(() => {
     if (currentTutor && currentTutor?.getCurrentTutor) {
       tutorDetails(currentTutor?.getCurrentTutor);
+
+      isLoggedIn(true);
     }
   }, [currentTutor]);
 
