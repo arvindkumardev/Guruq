@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { isEmpty } from 'lodash';
 import NavigationRouteNames from './screenNames';
 import Login from '../containers/common/login/login';
 import OtpVerification from '../containers/common/login/otpVerification';
@@ -16,20 +17,37 @@ import { getTutorRoutes } from './tutorAppRoutes';
 const Stack = createStackNavigator();
 
 const AppStack = (props) => {
-  const { isUserLoggedIn, isUserTokenLoading, userType } = props;
+  const { isUserLoggedIn, userType } = props;
+
+  const getLoggedInRoutes = () => {
+    if (userType === UserTypeEnum.OTHER.label) {
+      return (
+        <Stack.Screen
+          name={NavigationRouteNames.USER_TYPE_SELECTOR}
+          component={UserTypeSelector}
+          options={{ headerShown: false }}
+        />
+      );
+    }
+    if (userType === UserTypeEnum.STUDENT.label) {
+      return getStudentRoutes();
+    }
+    if (userType === UserTypeEnum.TUTOR.label) {
+      return getTutorRoutes();
+    }
+  };
 
   return (
     <Stack.Navigator>
-      {isUserTokenLoading && (
-        <Stack.Screen
-          name={NavigationRouteNames.SPLASH_SCREEN}
-          component={SplashScreen}
-          options={{ headerShown: false }}
-        />
-      )}
-
-      {!isUserTokenLoading && !isUserLoggedIn && (
+      {isUserLoggedIn && !isEmpty(userType) ? (
+        getLoggedInRoutes()
+      ) : (
         <>
+          <Stack.Screen
+            name={NavigationRouteNames.SPLASH_SCREEN}
+            component={SplashScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name={NavigationRouteNames.GETTING_STARTED}
             component={GettingStarted}
@@ -59,24 +77,6 @@ const AppStack = (props) => {
           />
         </>
       )}
-
-      {isUserLoggedIn && userType === UserTypeEnum.OTHER.label && (
-        <Stack.Screen
-          name={NavigationRouteNames.USER_TYPE_SELECTOR}
-          component={UserTypeSelector}
-          options={{ headerShown: false }}
-        />
-      )}
-
-      {isUserLoggedIn &&
-        userType !== UserTypeEnum.OTHER.label &&
-        userType === UserTypeEnum.STUDENT.label &&
-        getStudentRoutes()}
-
-      {isUserLoggedIn &&
-        userType !== UserTypeEnum.OTHER.label &&
-        userType === UserTypeEnum.TUTOR.label &&
-        getTutorRoutes()}
     </Stack.Navigator>
   );
 };
