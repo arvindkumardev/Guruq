@@ -1,9 +1,10 @@
 /* eslint-disable no-dupe-keys */
 /* eslint-disable global-require */
 const Images = {
-  onboarding1: require('../assets/images/tutorDetail5.png'),
-  onboarding2: require('../assets/images/onboarding2.png'),
-  onboarding3: require('../assets/images/onboarding3.png'),
+  onBoardingFirst: require('../assets/images/tutorDetail5.png'),
+  onBoardingSecond: require('../assets/images/onboarding2.png'),
+  onBoardingThird: require('../assets/images/onboarding3.png'),
+  splashScreen: require('../assets/images/splash_image.png'),
   chevronRight: require('../assets/images/ic_chevron_right.png'),
   searchIcon: require('../assets/images/searchGlyph.png'),
   backArrow: require('../assets/images/back-arrow.png'),

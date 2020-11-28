@@ -4,6 +4,8 @@ export const isTokenLoading = makeVar(true);
 
 export const isLoggedIn = makeVar(false);
 
+export const isSplashScreenVisible = makeVar(true);
+
 export const userType = makeVar('');
 
 export const networkConnectivityError = makeVar(false);

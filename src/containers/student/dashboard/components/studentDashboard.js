@@ -460,55 +460,53 @@ function StudentDashboard(props) {
     );
   };
 
-  const subjectModal = () => {
-    return (
-      <Modal
-        animationType="fade"
-        transparent
-        visible={showAllSubjects}
-        onRequestClose={() => {
-          setShowAllSubjects(false);
-        }}>
-        <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
-          <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
-          <View
-            style={{
-              bottom: 0,
-              left: 0,
-              right: 0,
-              position: 'absolute',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-              backgroundColor: Colors.white,
-              paddingHorizontal: RfW(16),
-              paddingTop: RfH(16),
-            }}>
-            <View style={commonStyles.horizontalChildrenSpaceView}>
-              <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
-              <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
-                styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
-                iconImage={Images.cross}
-                submitFunction={() => setShowAllSubjects(false)}
-              />
-            </View>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              numColumns={4}
-              data={
-                offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id)
-              }
-              renderItem={({ item }) => renderSubjects(item)}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: RfH(34) }}
+  const subjectModal = () => (
+    <Modal
+      animationType="fade"
+      transparent
+      visible={showAllSubjects}
+      onRequestClose={() => {
+        setShowAllSubjects(false);
+      }}>
+      <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
+        <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
+        <View
+          style={{
+            bottom: 0,
+            left: 0,
+            right: 0,
+            position: 'absolute',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch',
+            backgroundColor: Colors.white,
+            paddingHorizontal: RfW(16),
+            paddingTop: RfH(16),
+          }}>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
+            <IconButtonWrapper
+              iconHeight={RfH(24)}
+              iconWidth={RfW(24)}
+              styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
+              iconImage={Images.cross}
+              submitFunction={() => setShowAllSubjects(false)}
             />
           </View>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            numColumns={4}
+            data={
+              offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id)
+            }
+            renderItem={({ item }) => renderSubjects(item)}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ paddingBottom: RfH(34) }}
+          />
         </View>
-      </Modal>
-    );
-  };
+      </View>
+    </Modal>
+  );
 
   const getSubjects = (item) => {
     const subjects = [];
@@ -527,42 +525,38 @@ function StudentDashboard(props) {
     return subjects.join(', ');
   };
 
-  const renderTutors = (item) => {
-    console.log(item);
-
-    return (
-      <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
-        <View
-          style={{
-            width: RfW(80),
-            borderRadius: 8,
-            marginHorizontal: RfW(10),
-            marginTop: RfH(20),
-          }}>
-          <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
-            <Text
-              numberOfLines={2}
-              style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
-              {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
-            </Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={{
-                marginTop: 1,
-                color: Colors.secondaryText,
-                fontSize: 13,
-                marginBottom: RfH(16),
-                textAlign: 'center',
-              }}>
-              {getSubjects(item)}
-            </Text>
-          </View>
+  const renderTutors = (item) => (
+    <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
+      <View
+        style={{
+          width: RfW(80),
+          borderRadius: 8,
+          marginHorizontal: RfW(10),
+          marginTop: RfH(20),
+        }}>
+        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
+          <Text
+            numberOfLines={2}
+            style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
+            {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
+          </Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={{
+              marginTop: 1,
+              color: Colors.secondaryText,
+              fontSize: 13,
+              marginBottom: RfH(16),
+              textAlign: 'center',
+            }}>
+            {getSubjects(item)}
+          </Text>
         </View>
-      </TouchableWithoutFeedback>
-    );
-  };
+      </View>
+    </TouchableWithoutFeedback>
+  );
 
   return (
     <>

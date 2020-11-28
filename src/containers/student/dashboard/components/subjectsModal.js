@@ -1,14 +1,14 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, Modal, Text, View } from 'react-native';
+import { Modal, Text, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { Colors, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
 import NavigationRouteNames from '../../../../routes/screenNames';
-import {getBoxColor} from '../../../../theme/colors';
+import { getBoxColor } from '../../../../theme/colors';
 
 const SubjectsModal = (props) => {
   const navigation = useNavigation();
