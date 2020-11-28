@@ -1,16 +1,9 @@
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Alert, KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useReactiveVar } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
@@ -81,7 +74,11 @@ function SetPassword() {
   };
 
   const onClickContinue = () => {
-    if (password === confirmPassword) {
+    if (isEmpty(password)) {
+      Alert.alert('Please enter the password!');
+    } else if (isEmpty(confirmPassword)) {
+      Alert.alert('Please enter the confirm password!');
+    } else if (password === confirmPassword) {
       setUserPassword();
     } else {
       Alert.alert('Password mismatch!');
@@ -91,12 +88,10 @@ function SetPassword() {
   return (
     <MainContainer isLoading={setPasswordLoading} onBackPress={onBackPress}>
       {isUserLoggedIn && <LoginCheck />}
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.contentMarginTop}>
-          <Text style={styles.title}>Set Password</Text>
-          <Text style={styles.subtitle}>Enter the new password and submit</Text>
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={styles.contentMarginTop}>
+        <Text style={styles.title}>Set Password</Text>
+        <Text style={styles.subtitle}>Enter the new password and submit</Text>
+      </View>
 
       <KeyboardAvoidingView>
         <View style={styles.bottomCard}>
@@ -128,8 +123,9 @@ function SetPassword() {
           </View>
           <TouchableOpacity
             onPress={onClickContinue}
+            disabled={isEmpty(password) || isEmpty(confirmPassword)}
             style={[
-              commonStyles.buttonPrimary,
+              isEmpty(password) || isEmpty(confirmPassword) ? commonStyles.disableButton : commonStyles.buttonPrimary,
               {
                 marginTop: RfH(48),
                 alignSelf: 'center',

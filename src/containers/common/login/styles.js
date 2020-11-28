@@ -12,14 +12,13 @@ const styles = StyleSheet.create({
     fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
     color: Colors.white,
     marginHorizontal: spacePX,
-    marginBottom: RfH(16),
+    marginBottom: RfH(10),
   },
   subtitle: {
     // fontFamily: 'SegoeUI',
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     marginHorizontal: spacePX,
     color: Colors.white,
-    marginBottom: RfH(40),
   },
   otpNumber: {
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -45,11 +44,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: cardRadiusMedium,
     borderTopRightRadius: cardRadiusMedium,
   },
-  bottomParent: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
   underlineView: {
     marginTop: RfH(40),
     borderBottomWidth: 0.5,
@@ -69,6 +63,7 @@ const styles = StyleSheet.create({
   eyeIcon: {
     fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
     color: '#818181',
+    paddingBottom: RfH(8),
   },
   clearIcon: {
     flex: 0.05,
@@ -98,7 +93,7 @@ const styles = StyleSheet.create({
   },
 
   contentMarginTop: {
-    marginTop: RfH(36),
+    marginBottom: RfH(30),
   },
 });
 export default styles;
