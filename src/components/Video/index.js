@@ -16,6 +16,8 @@ import IconButtonWrapper from '../IconWrapper';
 import Images from '../../theme/images';
 import commonStyles from '../../theme/styles';
 import BackArrow from '../BackArrow';
+import ClassDetailsModal from './classDetailsModal';
+import VideoMessagingModal from './videoMessagingModal';
 
 interface Props {}
 
@@ -39,6 +41,7 @@ interface State {
   previewVideo: true;
   showDetailedActions: true;
   selectedUid: '';
+  showClassDetails: false;
   showMessageBox: false;
 }
 
@@ -50,7 +53,7 @@ export default class Video extends Component<Props, State> {
     this.state = {
       appId: '20be4eff902f4d9ea78c2f8c168556cd',
       token:
-        '00620be4eff902f4d9ea78c2f8c168556cdIADrLe1fOmnKczvkci/7ToKB7B/ZkKCxt4Hl9rs1Qc4prZWfxlgAAAAAEAA1BQ7X7GnDXwEAAQDracNf',
+        '00620be4eff902f4d9ea78c2f8c168556cdIACE9c7l0XbO1t8oqNcFICYyJrBHTTewT7OhD9FpDIYZEJWfxlgAAAAAEAA1BQ7Xg2HEXwEAAQCBYcRf',
       channelName: 'DUMMY_CLASS',
       joinSucceed: false,
       peerIds: [],
@@ -64,6 +67,7 @@ export default class Video extends Component<Props, State> {
       showDetailedActions: true,
       selectedUid: '',
 
+      showClassDetails: false,
       showMessageBox: false,
     };
     if (Platform.OS === 'android') {
@@ -236,6 +240,14 @@ export default class Video extends Component<Props, State> {
     this.setState({ showDetailedActions: !this.state.showDetailedActions });
   };
 
+  toggleMessageBox = () => {
+    this.setState({ showMessageBox: !this.state.showMessageBox });
+  };
+
+  toggleClassDetails = () => {
+    this.setState({ showClassDetails: !this.state.showClassDetails });
+  };
+
   _renderVideos = () => {
     return (
       <View style={[styles.fullView, { backgroundColor: '#222222' }]}>
@@ -259,14 +271,16 @@ export default class Video extends Component<Props, State> {
                 backgroundColor: Colors.brandBlue2,
               },
             ]}>
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              <IconButtonWrapper iconImage={Images.arrow_down} iconWidth={RfW(20)} iconHeight={RfH(20)} />
-              <Text
-                style={[commonStyles.headingPrimaryText, { marginLeft: RfW(8), color: Colors.white }]}
-                numberOfLines={1}>
-                Class 10 Mathematics by Roshan Singh
-              </Text>
-            </View>
+            <TouchableWithoutFeedback onPress={this.toggleClassDetails}>
+              <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                <IconButtonWrapper iconImage={Images.arrow_down} iconWidth={RfW(20)} iconHeight={RfH(20)} />
+                <Text
+                  style={[commonStyles.headingPrimaryText, { marginLeft: RfW(8), color: Colors.white }]}
+                  numberOfLines={1}>
+                  Class 10 Mathematics by Roshan Singh
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
 
             <View
               style={{
@@ -434,7 +448,7 @@ export default class Video extends Component<Props, State> {
                   />
                   <Text
                     style={[
-                      commonStyles.xSmallPrimaryText,
+                      commonStyles.smallPrimaryText,
                       {
                         marginTop: RfH(8),
                         color: Colors.white,
@@ -463,7 +477,7 @@ export default class Video extends Component<Props, State> {
                   />
                   <Text
                     style={[
-                      commonStyles.xSmallPrimaryText,
+                      commonStyles.smallPrimaryText,
                       {
                         marginTop: RfH(8),
                         color: Colors.white,
@@ -484,12 +498,12 @@ export default class Video extends Component<Props, State> {
                     // borderRadius: 60,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    paddingBottom: 8,
+                    // paddingBottom: 8,
                   }}>
-                  <IconButtonWrapper iconImage={Images.share_screen} iconWidth={RfW(28)} iconHeight={RfH(28)} />
+                  <IconButtonWrapper iconImage={Images.share_screen} iconWidth={RfW(24)} iconHeight={RfH(24)} />
                   <Text
                     style={[
-                      commonStyles.xSmallPrimaryText,
+                      commonStyles.smallPrimaryText,
                       {
                         marginTop: RfH(8),
                         color: Colors.white,
@@ -500,7 +514,7 @@ export default class Video extends Component<Props, State> {
                 </View>
               </TouchableWithoutFeedback>
 
-              <TouchableWithoutFeedback onPress={this.audioToggle}>
+              <TouchableWithoutFeedback onPress={this.toggleMessageBox}>
                 <View
                   style={{
                     // width: 48,
@@ -514,7 +528,7 @@ export default class Video extends Component<Props, State> {
                   <IconButtonWrapper iconImage={Images.messaging_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
                   <Text
                     style={[
-                      commonStyles.xSmallPrimaryText,
+                      commonStyles.smallPrimaryText,
                       {
                         marginTop: RfH(8),
                         color: Colors.white,
@@ -539,7 +553,7 @@ export default class Video extends Component<Props, State> {
                   <IconButtonWrapper iconImage={Images.vertical_dots} iconWidth={RfW(24)} iconHeight={RfH(24)} />
                   <Text
                     style={[
-                      commonStyles.xSmallPrimaryText,
+                      commonStyles.smallPrimaryText,
                       {
                         marginTop: RfH(8),
                         color: Colors.white,
@@ -581,6 +595,9 @@ export default class Video extends Component<Props, State> {
             </Text>
           </View>
         )}
+
+        <ClassDetailsModal visible={this.state.showClassDetails} onClose={this.toggleClassDetails} />
+        <VideoMessagingModal visible={this.state.showMessageBox} onClose={this.toggleMessageBox} />
       </View>
     );
   };

@@ -8,7 +8,7 @@ import Images from '../../theme/images';
 import IconButtonWrapper from '../IconWrapper';
 import Fonts from '../../theme/fonts';
 
-const ClassDetailsModal = (props) => {
+const VideoMessagingModal = (props) => {
   const navigation = useNavigation();
 
   const { visible, onClose } = props;
@@ -21,7 +21,8 @@ const ClassDetailsModal = (props) => {
       onRequestClose={() => {
         onClose(false);
       }}>
-      <View style={{ flex: 1, paddingBottom: 34, backgroundColor: 'transparent', flexDirection: 'column' }}>
+      <View
+        style={{ flex: 1, paddingBottom: 34, height: '90%', backgroundColor: 'transparent', flexDirection: 'column' }}>
         <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
         <View
           style={{
@@ -43,7 +44,7 @@ const ClassDetailsModal = (props) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={{ color: Colors.primaryText, fontSize: 18, fontFamily: Fonts.semiBold }}>Class Details</Text>
+            <Text style={{ color: Colors.primaryText, fontSize: 18, fontFamily: Fonts.semiBold }}>Messages</Text>
             <TouchableOpacity onPress={() => onClose(false)}>
               <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
             </TouchableOpacity>
@@ -51,9 +52,7 @@ const ClassDetailsModal = (props) => {
 
           <View style={{ height: 8 }} />
 
-          <View>
-            <Text></Text>
-          </View>
+          <Text>Messages goes here.....</Text>
 
           <View style={{ height: 34 }} />
         </View>
@@ -62,9 +61,9 @@ const ClassDetailsModal = (props) => {
   );
 };
 
-ClassDetailsModal.propTypes = {
+VideoMessagingModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
 };
 
-export default ClassDetailsModal;
+export default VideoMessagingModal;
