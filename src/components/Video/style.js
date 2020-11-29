@@ -3,7 +3,7 @@ import { RfW } from '../../utils/helpers';
 import Colors from '../../theme/colors';
 import Fonts from '../../theme/fonts';
 
-const dimensions = {
+export const dimensions = {
   width: Dimensions.get('window').width,
   height: Dimensions.get('window').height,
 };
