@@ -119,6 +119,7 @@ const Images = {
   video_call_mute_white: require('../assets/images/video-call-mute-white.png'),
   camera_switch: require('../assets/images/camera-switch.png'),
   speaker: require('../assets/images/speaker.png'),
+  speaker_enabled: require('../assets/images/speaker-enabled.png'),
   messaging_white: require('../assets/images/messaging-white.png'),
   share_screen: require('../assets/images/share-screen.png'),
 

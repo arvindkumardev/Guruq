@@ -35,6 +35,7 @@ interface State {
   peerIds: number[];
   currentUserId: '';
   audioMuted: false;
+  speakerPhoneEnabled: false;
   videoMuted: false;
   audioStates: [];
   videoStates: [];
@@ -59,6 +60,7 @@ export default class Video extends Component<Props, State> {
       peerIds: [],
       currentUserId: '',
       audioMuted: false,
+      speakerPhoneEnabled: false,
       videoMuted: false,
       audioStates: [],
       videoStates: [],
@@ -205,6 +207,20 @@ export default class Video extends Component<Props, State> {
     this.props.onCallEnd();
   };
 
+  switchCamera = async () => {
+    await this._engine?.switchCamera();
+
+    await this._engine.setEnableSpeakerphone(true);
+  };
+
+  toggleSpeakerPhone = async () => {
+    const speakerState = !this.state.speakerPhoneEnabled;
+
+    this.setState({ speakerPhoneEnabled: speakerState });
+
+    await this._engine.setEnableSpeakerphone(speakerState);
+  };
+
   audioToggle = async () => {
     console.log('toggle audio', this.state.audioMuted, this.state.currentUserId);
 
@@ -275,7 +291,7 @@ export default class Video extends Component<Props, State> {
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <IconButtonWrapper iconImage={Images.arrow_down} iconWidth={RfW(20)} iconHeight={RfH(20)} />
                 <Text
-                  style={[commonStyles.headingPrimaryText, { marginLeft: RfW(8), color: Colors.white }]}
+                  style={[commonStyles.regularPrimaryText, { marginLeft: RfW(8), color: Colors.white }]}
                   numberOfLines={1}>
                   Class 10 Mathematics by Roshan Singh
                 </Text>
@@ -289,7 +305,7 @@ export default class Video extends Component<Props, State> {
                 alignItems: 'center',
                 marginLeft: RfW(24),
               }}>
-              <TouchableWithoutFeedback onPress={() => Alert.alert('camera switch')}>
+              <TouchableWithoutFeedback onPress={this.switchCamera}>
                 <View
                   style={{
                     width: 44,
@@ -302,7 +318,7 @@ export default class Video extends Component<Props, State> {
                 </View>
               </TouchableWithoutFeedback>
 
-              <TouchableWithoutFeedback onPress={() => Alert.alert('speaker')}>
+              <TouchableWithoutFeedback onPress={this.toggleSpeakerPhone}>
                 <View
                   style={{
                     width: 44,
@@ -313,7 +329,11 @@ export default class Video extends Component<Props, State> {
                     alignItems: 'center',
                     marginLeft: RfW(8),
                   }}>
-                  <IconButtonWrapper iconImage={Images.speaker} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                  <IconButtonWrapper
+                    iconImage={this.state.speakerPhoneEnabled ? Images.speaker_enabled : Images.speaker}
+                    iconWidth={RfW(24)}
+                    iconHeight={RfH(24)}
+                  />
                 </View>
               </TouchableWithoutFeedback>
 
