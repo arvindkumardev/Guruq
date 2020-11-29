@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import emojiUtils from 'emoji-utils';
 import Colors from '../../theme/colors';
@@ -10,13 +9,10 @@ import Images from '../../theme/images';
 import IconButtonWrapper from '../IconWrapper';
 import Fonts from '../../theme/fonts';
 import { dimensions } from './style';
-import Chats from './Chats';
 import messages from './messages';
 import SlackMessage from './SlackMessage';
 
 const VideoMessagingModal = (props) => {
-  const navigation = useNavigation();
-
   const { visible, onClose } = props;
 
   const [chatMessages, setChatMessages] = useState(messages);

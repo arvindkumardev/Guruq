@@ -62,7 +62,6 @@ function TutorListing(props) {
   };
 
   const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
-    variables: { searchDto: filterValues },
     onError: (e) => {
       console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -70,6 +69,7 @@ function TutorListing(props) {
       }
     },
     onCompleted: (data) => {
+      console.log(data);
       if (data) {
         setTutorsData(data);
       }
@@ -91,7 +91,7 @@ function TutorListing(props) {
   });
 
   useEffect(() => {
-    getTutors();
+    getTutors({ variables: { searchDto: filterValues } });
     getFavouriteTutors();
   }, []);
 
@@ -181,7 +181,7 @@ function TutorListing(props) {
 
   useEffect(() => {
     if (filterValues) {
-      getTutors();
+      getTutors({ variables: { searchDto: filterValues } });
     }
   }, [filterValues]);
 
