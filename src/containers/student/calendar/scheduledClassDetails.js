@@ -192,7 +192,7 @@ function ScheduledClassDetails(props) {
                     commonStyles.buttonPrimary,
                     {
                       height: 36,
-                      width: RfH(116),
+                      width: RfH(100),
                       borderRadius: 4,
                       marginHorizontal: 0,
                     },
@@ -203,7 +203,7 @@ function ScheduledClassDetails(props) {
                     iconWidth={RfW(16)}
                     styling={{ alignSelf: 'center' }}
                   />
-                  <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Start Class</Text>
+                  <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
                 </Button>
               </View>
             </View>
@@ -245,7 +245,7 @@ function ScheduledClassDetails(props) {
                       style={[
                         commonStyles.buttonPrimary,
                         {
-                          width: RfH(116),
+                          width: RfH(100),
                           borderRadius: 4,
                           marginHorizontal: 0,
                         },
@@ -256,7 +256,7 @@ function ScheduledClassDetails(props) {
                         iconWidth={RfW(16)}
                         styling={{ alignSelf: 'center' }}
                       />
-                      <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Start Class</Text>
+                      <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
                     </Button>
                   </View>
                 </View>
