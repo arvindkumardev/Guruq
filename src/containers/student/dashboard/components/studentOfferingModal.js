@@ -98,7 +98,7 @@ const StudentOfferingModal = (props) => {
             style={{}}
           />
 
-          <View style={{ height: 24 }} />
+          <View style={{ height: 34 }} />
 
           <View
             style={{

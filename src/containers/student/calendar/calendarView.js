@@ -82,7 +82,7 @@ function CalendarView(props) {
         },
       },
     });
-  }, [monthData]);
+  }, []);
 
   const renderClassItem = (item) => {
     return (

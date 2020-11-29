@@ -24,8 +24,9 @@ const Images = {
   dna: require('../assets/images/dna.png'),
   kushal: require('../assets/images/kushal.png'),
   home: require('../assets/images/home.png'),
-  home_active: require('../assets/images/home_active.png'),
+  home_active: require('../assets/images/home-active.png'),
   calendar: require('../assets/images/calendar.png'),
+  calendar_icon: require('../assets/images/calendar-icon.png'),
   classes: require('../assets/images/classes.png'),
   tutor_tab: require('../assets/images/tutor_tab.png'),
   profile: require('../assets/images/profile.png'),
@@ -45,10 +46,11 @@ const Images = {
   education: require('../assets/images/education.png'),
   cross: require('../assets/images/cross.png'),
   radio: require('../assets/images/radio.png'),
-  calendar_active: require('../assets/images/calendar_active.png'),
-  classes_active: require('../assets/images/classes_active.png'),
+  calendar_active: require('../assets/images/calendar-active.png'),
+  classes_active: require('../assets/images/classes-active.png'),
   tutor_active: require('../assets/images/tutor_active.png'),
   user_active: require('../assets/images/user_active.png'),
+  profile_active: require('../assets/images/profile-active.png'),
   aboutGuru: require('../assets/images/about_guru.png'),
   bookingDetails: require('../assets/images/booking_details.png'),
   refFriend: require('../assets/images/referFriend.png'),
@@ -91,10 +93,10 @@ const Images = {
   confirmed_booking: require('../assets/images/confirmed_booking.png'),
   thank_you: require('../assets/images/thank_you.png'),
   two_users: require('../assets/images/two_users.png'),
-  bell_light: require('../assets/images/bell_light.png'),
-  pin_gray: require('../assets/images/pin_gray.png'),
-  pdf: require('../assets/images/pdf.png'),
-  xls: require('../assets/images/xls.png'),
+  attendees: require('../assets/images/attendees.png'),
+  tutor_icon: require('../assets/images/tutor-icon.png'),
+  pin: require('../assets/images/pin.png'),
+  attachment: require('../assets/images/attachment.png'),
   video: require('../assets/images/video.png'),
   online_top_img: require('../assets/images/online_top_img.png'),
   online_right: require('../assets/images/online_right.png'),
@@ -102,6 +104,11 @@ const Images = {
   selected_star: require('../assets/images/selected_star.png'),
   post_needs: require('../assets/images/post_needs.png'),
   refer_earn: require('../assets/images/refer_earn.png'),
+
+  pdf: require('../assets/images/pdf.png'),
+  png: require('../assets/images/png.png'),
+  jpg: require('../assets/images/jpg.png'),
+  txt: require('../assets/images/txt.png'),
 
   microphone: require('../assets/images/microphone.png'),
   microphone_mute: require('../assets/images/microphone-mute.png'),
@@ -140,6 +147,9 @@ const Images = {
   horizontal_dots: require('../assets/images/horizontal-dots.png'),
 
   arrow_down: require('../assets/images/arrow-down.png'),
+
+  wallet_active: require('../assets/images/wallet-active.png'),
+  wallet: require('../assets/images/wallet.png'),
 };
 
 export default Images;
