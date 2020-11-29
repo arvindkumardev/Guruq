@@ -19,7 +19,7 @@ function customRangeSelector(props) {
   };
 
   const getIndex = () => {
-    const selIndex = dataValue.findIndex((item) => item.value === activeIndex);
+    const selIndex = dataValue.findIndex((item) => item.id === activeIndex);
     setSelectedIndex(selIndex);
   };
 
