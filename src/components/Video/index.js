@@ -18,6 +18,7 @@ import commonStyles from '../../theme/styles';
 import BackArrow from '../BackArrow';
 import ClassDetailsModal from './classDetailsModal';
 import VideoMessagingModal from './videoMessagingModal';
+import VideoMoreAction from './videoMoreAction';
 
 interface Props {}
 
@@ -44,6 +45,7 @@ interface State {
   selectedUid: '';
   showClassDetails: false;
   showMessageBox: false;
+  showMoreActions: false;
 }
 
 export default class Video extends Component<Props, State> {
@@ -71,6 +73,7 @@ export default class Video extends Component<Props, State> {
 
       showClassDetails: false,
       showMessageBox: false,
+      showMoreActions: false,
     };
     if (Platform.OS === 'android') {
       // Request required permissions from Android
@@ -262,6 +265,10 @@ export default class Video extends Component<Props, State> {
 
   toggleClassDetails = () => {
     this.setState({ showClassDetails: !this.state.showClassDetails });
+  };
+
+  toggleMoreAction = () => {
+    this.setState({ showMoreActions: !this.state.showMoreActions });
   };
 
   _renderVideos = () => {
@@ -559,7 +566,7 @@ export default class Video extends Component<Props, State> {
                 </View>
               </TouchableWithoutFeedback>
 
-              <TouchableWithoutFeedback onPress={this.audioToggle}>
+              <TouchableWithoutFeedback onPress={this.toggleMoreAction}>
                 <View
                   style={{
                     // width: 48,
@@ -618,6 +625,7 @@ export default class Video extends Component<Props, State> {
 
         <ClassDetailsModal visible={this.state.showClassDetails} onClose={this.toggleClassDetails} />
         <VideoMessagingModal visible={this.state.showMessageBox} onClose={this.toggleMessageBox} />
+        <VideoMoreAction visible={this.state.showMoreActions} onClose={this.toggleMoreAction} />
       </View>
     );
   };

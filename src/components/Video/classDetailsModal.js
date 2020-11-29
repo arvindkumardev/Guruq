@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import Colors from '../../theme/colors';
-import { RfW, RfH } from '../../utils/helpers';
+import { RfH, RfW } from '../../utils/helpers';
 import Images from '../../theme/images';
 import IconButtonWrapper from '../IconWrapper';
 import Fonts from '../../theme/fonts';
+import commonStyles from '../../theme/styles';
 
 const ClassDetailsModal = (props) => {
-  const navigation = useNavigation();
-
   const { visible, onClose } = props;
 
   return (
@@ -52,7 +50,7 @@ const ClassDetailsModal = (props) => {
           <View style={{ height: 8 }} />
 
           <View>
-            <Text></Text>
+            <Text style={commonStyles.headingPrimaryText}>CBSE - Class 10 - Mathematics</Text>
           </View>
 
           <View style={{ height: 34 }} />
