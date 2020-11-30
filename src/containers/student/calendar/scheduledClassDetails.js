@@ -131,7 +131,7 @@ function ScheduledClassDetails(props) {
 
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: {} });
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails });
   };
 
   const onBackPress = () => {

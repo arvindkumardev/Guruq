@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View, Alert } from 'react-native';
+import { Platform, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import RtcEngine, {
   AudioProfile,
   AudioScenario,
@@ -10,12 +10,12 @@ import RtcEngine, {
 import styles from './style';
 
 import requestCameraAndAudioPermission from './permission';
-import { RfH, RfW } from '../../utils/helpers';
-import { Colors } from '../../theme';
-import IconButtonWrapper from '../IconWrapper';
-import Images from '../../theme/images';
-import commonStyles from '../../theme/styles';
-import BackArrow from '../BackArrow';
+import { RfH, RfW } from '../../../utils/helpers';
+import { Colors } from '../../../theme';
+import IconButtonWrapper from '../../../components/IconWrapper';
+import Images from '../../../theme/images';
+import commonStyles from '../../../theme/styles';
+import BackArrow from '../../../components/BackArrow';
 import ClassDetailsModal from './classDetailsModal';
 import VideoMessagingModal from './videoMessagingModal';
 import VideoMoreAction from './videoMoreAction';
@@ -48,16 +48,17 @@ interface State {
   showMoreActions: false;
 }
 
+const appId = '20be4eff902f4d9ea78c2f8c168556cd';
+
 export default class Video extends Component<Props, State> {
   _engine: RtcEngine;
 
   constructor(props) {
     super(props);
     this.state = {
-      appId: '20be4eff902f4d9ea78c2f8c168556cd',
-      token:
-        '00620be4eff902f4d9ea78c2f8c168556cdIACE9c7l0XbO1t8oqNcFICYyJrBHTTewT7OhD9FpDIYZEJWfxlgAAAAAEAA1BQ7Xg2HEXwEAAQCBYcRf',
-      channelName: 'DUMMY_CLASS',
+      appId,
+      token: this.props.token,
+      channelName: this.props.channelName,
       joinSucceed: false,
       peerIds: [],
       currentUserId: '',
@@ -252,7 +253,8 @@ export default class Video extends Component<Props, State> {
     const { navigation } = this.props;
 
     this.props.onCallEnd(true);
-    navigation.goBack();
+
+    this.props.onPressBack();
   };
 
   toggleDetailedActions = async () => {
@@ -536,7 +538,7 @@ export default class Video extends Component<Props, State> {
                         color: Colors.white,
                       },
                     ]}>
-                    Share Screen
+                    Share
                   </Text>
                 </View>
               </TouchableWithoutFeedback>

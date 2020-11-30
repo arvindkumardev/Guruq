@@ -6723,9 +6723,9 @@ react-native-calendar-strip@^2.0.9:
     recyclerlistview "^3.0.0"
 
 react-native-calendars@^1.403.0:
-  version "1.491.0"
-  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.491.0.tgz#0b9f1faca3cf34c0e8c2b5439d9981b739a7a04b"
-  integrity sha512-48e7Cqf7xaQjDQnUwfuLtg0oyq66l/O/QxPXkjE30mT0zU69Z4yJm18oeVBAj7is4ka9ZhkMtKfk1IwCtxk08Q==
+  version "1.505.0"
+  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.505.0.tgz#0eba6b4229e1ecf66aba015bd9e3b1b0b6cb86f3"
+  integrity sha512-U5+Lu7osqNByyAhCapH3TDLBNHDIv7lNA5T9eLnY+LFw8olJkM7WDlLFLpE+RTXcMY1hLI6GjaSg9o5Qpyz3cQ==
   dependencies:
     hoist-non-react-statics "^3.3.1"
     immutable "^4.0.0-rc.12"

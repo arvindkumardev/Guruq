@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { isNumber, isEmpty } from 'lodash';
-import { Dimensions ,Alert} from 'react-native';
+import { Dimensions, Alert } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
 
@@ -112,22 +112,10 @@ export const titleCaseIfExists = (inputString) => {
   return str.join(' ').trim();
 };
 
-export const getTutorImage = (tutor) => {
-  return tutor && tutor.profileImage && tutor.profileImage.filename
-    ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
-    : {
-        uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-          tutor.id % 4
-        }.png`,
-      };
-};
-
-export const getTutorImageUrl = (tutor) => {
-  return tutor && tutor.profileImage && tutor.profileImage.filename
-    ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
-    : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-        tutor?.id % 4
-      }.png`;
+export const getUserImageUrl = (filename, gender, id) => {
+  return filename
+    ? `https://guruq.in/api/${filename}`
+    : `https://guruq.in/guruq-new/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
 };
 
 export const alertBox = (

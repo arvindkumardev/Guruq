@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import Colors from '../../theme/colors';
-import { RfH, RfW } from '../../utils/helpers';
-import Images from '../../theme/images';
-import IconButtonWrapper from '../IconWrapper';
-import commonStyles from '../../theme/styles';
+import Colors from '../../../theme/colors';
+import { RfH, RfW } from '../../../utils/helpers';
+import Images from '../../../theme/images';
+import IconButtonWrapper from '../../../components/IconWrapper';
+import commonStyles from '../../../theme/styles';
 
 const VideoMoreAction = (props) => {
   const { visible, onClose } = props;

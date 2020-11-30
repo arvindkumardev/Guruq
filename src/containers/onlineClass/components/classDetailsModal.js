@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
-import Colors from '../../theme/colors';
-import { RfH, RfW } from '../../utils/helpers';
-import Images from '../../theme/images';
-import IconButtonWrapper from '../IconWrapper';
-import Fonts from '../../theme/fonts';
-import commonStyles from '../../theme/styles';
+import Colors from '../../../theme/colors';
+import { RfH, RfW } from '../../../utils/helpers';
+import Images from '../../../theme/images';
+import IconButtonWrapper from '../../../components/IconWrapper';
+import Fonts from '../../../theme/fonts';
+import commonStyles from '../../../theme/styles';
 
 const ClassDetailsModal = (props) => {
   const { visible, onClose } = props;

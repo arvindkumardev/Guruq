@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import { RfW } from '../../utils/helpers';
-import Colors from '../../theme/colors';
-import Fonts from '../../theme/fonts';
+import { RfW } from '../../../utils/helpers';
+import Colors from '../../../theme/colors';
+import Fonts from '../../../theme/fonts';
 
 export const dimensions = {
   width: Dimensions.get('window').width,

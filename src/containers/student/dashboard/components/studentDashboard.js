@@ -11,7 +11,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
 import { offeringsMasterData, userDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
@@ -205,13 +205,7 @@ function StudentDashboard(props) {
   };
 
   const getTutorImage = (tutor) => {
-    return tutor && tutor.profileImage && tutor.profileImage.filename
-      ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
-      : {
-          uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-            tutor.id % 4
-          }.png`,
-        };
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
   };
 
   const renderSubjects = (item) => {
@@ -656,7 +650,7 @@ function StudentDashboard(props) {
 
           <TouchableWithoutFeedback
             onPress={() =>
-              navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: {} })
+              navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: {uuid:"DUMMY_CLASS"} })
             }>
             <View
               style={{

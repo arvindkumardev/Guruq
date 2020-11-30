@@ -8,7 +8,15 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { getSaveData, removeData, RfH, RfW, storeData, titleCaseIfExists } from '../../../utils/helpers';
+import {
+  getSaveData,
+  getUserImageUrl,
+  removeData,
+  RfH,
+  RfW,
+  storeData,
+  titleCaseIfExists,
+} from '../../../utils/helpers';
 import styles from './styles';
 import routeNames from '../../../routes/screenNames';
 import { CompareModal, IconButtonWrapper } from '../../../components';
@@ -153,13 +161,7 @@ function TutorListing(props) {
   };
 
   const getTutorImage = (tutor) => {
-    return tutor && tutor.profileImage && tutor.profileImage.filename
-      ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
-      : {
-          uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-            tutor.id % 4
-          }.png`,
-        };
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
   };
 
   const markFavouriteTutor = (tutorId) => {
