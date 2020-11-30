@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 
+// FIXME: add filtering
 export const NEW_CHAT_MESSAGE = gql`
   subscription {
     chatMessageSent {
