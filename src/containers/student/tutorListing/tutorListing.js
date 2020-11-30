@@ -93,7 +93,7 @@ function TutorListing(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        setFavourites(!isEmpty(data?.getFavouriteTutors) && data.getFavouriteTutors.map((item) => item?.tutor?.id));
+        setFavourites(!isEmpty(data?.getFavouriteTutors) ? data.getFavouriteTutors.map((item) => item?.tutor?.id) : []);
       }
     },
   });

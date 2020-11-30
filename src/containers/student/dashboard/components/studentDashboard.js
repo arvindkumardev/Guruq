@@ -650,7 +650,9 @@ function StudentDashboard(props) {
 
           <TouchableWithoutFeedback
             onPress={() =>
-              navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: {uuid:"DUMMY_CLASS"} })
+              navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, {
+                classDetails: { uuid: 'DUMMY_CLASS' },
+              })
             }>
             <View
               style={{

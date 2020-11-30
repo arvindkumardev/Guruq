@@ -60,7 +60,8 @@
     "react-native-section-alphabet-list": "^1.0.1",
     "react-native-splash-screen": "3.0.6",
     "react-native-swiper": "^1.6.0",
-    "react-navigation": "^4.4.2"
+    "react-navigation": "^4.4.2",
+    "subscriptions-transport-ws": "^0.9.18"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",

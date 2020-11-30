@@ -30,8 +30,6 @@ interface Props {}
  */
 interface State {
   appId: string;
-  token: string;
-  channelName: string;
   joinSucceed: boolean;
   peerIds: number[];
   currentUserId: '';
@@ -57,8 +55,6 @@ export default class Video extends Component<Props, State> {
     super(props);
     this.state = {
       appId,
-      token: this.props.token,
-      channelName: this.props.channelName,
       joinSucceed: false,
       peerIds: [],
       currentUserId: '',
@@ -92,10 +88,10 @@ export default class Video extends Component<Props, State> {
   componentWillUnmount() {
     console.log('stopping video');
 
-    // this._engine?.leaveChannel().then(()=>{
-    //   this.setState({ peerIds: [], joinSucceed: false });
-    //   this.startCall();
-    // });
+    this._engine?.leaveChannel().then(() => {
+      this.setState({ peerIds: [], joinSucceed: false });
+      // this.startCall();
+    });
   }
 
   /**
@@ -171,7 +167,7 @@ export default class Video extends Component<Props, State> {
       });
     });
 
-    // await this._engine?.joinChannel(this.state.token, this.state.channelName, null, 0);
+    // await this._engine?.joinChannel(this.props.token, this.props.channelName, null, 0);
     await this._engine.startPreview();
 
     // console.log(await this._engine.getUserInfoByUid(10));
@@ -192,8 +188,10 @@ export default class Video extends Component<Props, State> {
    * @description Function to start the call
    */
   startCall = async () => {
+    console.log('state', this.state);
+    console.log('this.props', this.props);
     // Join Channel using null token and channel name
-    await this._engine?.joinChannel(this.state.token, this.state.channelName, null, this.props.userInfo.id);
+    await this._engine?.joinChannel(this.props.token, this.props.channelName, null, this.props.userInfo.id);
 
     // console.log(await this._engine.getUserInfoByUid(10));
     // console.log(await this._engine.getUserInfoByUid(11));
@@ -388,7 +386,7 @@ export default class Video extends Component<Props, State> {
             {!this.state.videoMuted ? (
               <RtcLocalView.SurfaceView
                 style={styles.max}
-                channelId={this.state.channelName}
+                channelId={this.props.channelName}
                 renderMode={VideoRenderMode.Hidden}
               />
             ) : (
@@ -626,7 +624,11 @@ export default class Video extends Component<Props, State> {
         )}
 
         <ClassDetailsModal visible={this.state.showClassDetails} onClose={this.toggleClassDetails} />
-        <VideoMessagingModal visible={this.state.showMessageBox} onClose={this.toggleMessageBox} />
+        <VideoMessagingModal
+          visible={this.state.showMessageBox}
+          onClose={this.toggleMessageBox}
+          channelName={this.props.channelName}
+        />
         <VideoMoreAction visible={this.state.showMoreActions} onClose={this.toggleMoreAction} />
       </View>
     );
@@ -643,7 +645,7 @@ export default class Video extends Component<Props, State> {
           {!this.state.videoMuted ? (
             <RtcLocalView.SurfaceView
               style={styles.max}
-              channelId={this.state.channelName}
+              channelId={this.props.channelName}
               renderMode={VideoRenderMode.Hidden}
             />
           ) : (
@@ -707,7 +709,7 @@ export default class Video extends Component<Props, State> {
                       // style={styles.remyesote}
                       style={[styles.remote, { borderRadius: 20 }]}
                       uid={value}
-                      channelId={this.state.channelName}
+                      channelId={this.props.channelName}
                       renderMode={VideoRenderMode.Hidden}
                       zOrderMediaOverlay
                     />
@@ -781,7 +783,7 @@ export default class Video extends Component<Props, State> {
                   // style={styles.remyesote}
                   style={[styles.max, { borderRadius: 20 }]}
                   uid={selectedUid}
-                  channelId={this.state.channelName}
+                  channelId={this.props.channelName}
                   renderMode={VideoRenderMode.Hidden}
                   zOrderMediaOverlay
                 />
@@ -888,7 +890,13 @@ export default class Video extends Component<Props, State> {
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
-                      <Text style={{ color: Colors.primaryText, fontSize: 48 }}>A</Text>
+                      <Text
+                        style={{
+                          color: Colors.primaryText,
+                          fontSize: 48,
+                        }}>
+                        {this.props.userInfo.firstName[0]}
+                      </Text>
                     </View>
                   </View>
                 )}

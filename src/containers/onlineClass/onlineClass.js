@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { studentDetails, tutorDetails, userDetails } from '../../apollo/cache';
-import { getUserImageUrl } from '../../utils/helpers';
-import { UserTypeEnum } from '../../common/userType.enum';
+import { userDetails } from '../../apollo/cache';
 import Video from './components/Video';
 import Loader from '../../components/Loader';
 import { GET_AGORA_RTC_TOKEN } from './onlineClass.query';
+import { GET_AVAILABILITY } from '../student/class.query';
 
 const OnlineClass = (props) => {
   const navigation = useNavigation();
@@ -15,34 +14,34 @@ const OnlineClass = (props) => {
 
   const { classDetails } = route.params;
   const userInfo = useReactiveVar(userDetails);
-  const participantInfo =
-    userInfo.type === UserTypeEnum.STUDENT ? useReactiveVar(studentDetails) : useReactiveVar(tutorDetails);
 
-  const user = {
-    uuid: participantInfo.uuid,
-    firstName: userInfo.firstName,
-    lastName: userInfo.lastName,
-    profileImage: getUserImageUrl(
-      participantInfo?.profileImage?.filename,
-      participantInfo?.contactDetail?.gender,
-      participantInfo.id
-    ),
-  };
+  const [token, setToken] = useState('');
 
   console.log('userInfo', userInfo);
-  console.log('user', user);
+  console.log('classDetails', classDetails);
 
-  const [getToken, { data, loading }] = useLazyQuery(GET_AGORA_RTC_TOKEN);
+  const [getToken, { loading }] = useLazyQuery(GET_AGORA_RTC_TOKEN, {
+    onError: (e) => {
+      console.log(e);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      setToken(data?.generateAgoraRTCToken);
+    },
+  });
+
   useEffect(() => {
-    getToken();
+    getToken({ variables: { channelName: classDetails.uuid, userId: userInfo.id } });
   }, []);
   useFocusEffect(
     React.useCallback(() => {
-      getToken();
+      getToken({ variables: { channelName: classDetails.uuid, userId: userInfo.id } });
     }, [])
   );
 
-  const callEnded = (back) => {
+  const callEnded = () => {
     // navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: !back });
   };
 
@@ -56,9 +55,10 @@ const OnlineClass = (props) => {
     <Video
       onCallEnd={callEnded}
       onPressBack={onPressBack}
-      userInfo={user}
+      classDetails={classDetails}
+      userInfo={userInfo}
       channelName={classDetails?.uuid}
-      token={data?.generateAgoraRTCToken}
+      token={token}
     />
   );
 };

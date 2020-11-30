@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import emojiUtils from 'emoji-utils';
+import { useLazyQuery, useMutation, useSubscription } from '@apollo/client';
 import Colors from '../../../theme/colors';
 import { RfH, RfW } from '../../../utils/helpers';
 import Images from '../../../theme/images';
@@ -10,6 +11,7 @@ import IconButtonWrapper from '../../../components/IconWrapper';
 import Fonts from '../../../theme/fonts';
 import { dimensions } from './style';
 import SlackMessage from '../../../components/Chat/SlackMessage';
+import { GET_CHAT_MESSAGES, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
 
 const messages = [
   {
@@ -120,13 +122,98 @@ const messages = [
 ];
 
 const VideoMessagingModal = (props) => {
-  const { visible, onClose } = props;
+  const { visible, onClose, channelName } = props;
 
   const [chatMessages, setChatMessages] = useState(messages);
 
-  const onSend = (newMessages = []) => {
-    setChatMessages(GiftedChat.append(chatMessages, newMessages));
+  const getMessageToRender = (message) => {
+    return {
+      ...message,
+      _id: message.id,
+      createdAt: message.createdDate,
+      user: { _id: message.createdBy.id, name: `${message.createdBy.firstName} ${message.createdBy.lastName}` },
+    };
   };
+
+  const [sendMessage, { loading: loadingSendMessage }] = useMutation(SEND_CHAT_MESSAGE, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      console.log(data);
+      if (data && data?.sendChatMessage) {
+        const message = data.sendChatMessage;
+        setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+      }
+    },
+  });
+
+  const [getChatMessages, { loading: loadingGetChatMessage, refetch: fetchMessages }] = useLazyQuery(
+    GET_CHAT_MESSAGES,
+    {
+      fetchPolicy: 'no-cache',
+      onError: (e) => {
+        console.log(e);
+        if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+          const error = e.graphQLErrors[0].extensions.exception.response;
+        }
+      },
+      onCompleted: (data) => {
+        console.log(data);
+        if (data) {
+          if (data?.getChatMessages) {
+            setChatMessages(
+              GiftedChat.append(
+                chatMessages,
+                data.getChatMessages.map((message) => getMessageToRender(message))
+              )
+            );
+          }
+        }
+      },
+    }
+  );
+  useEffect(() => {
+    getChatMessages({ variables: { channelName: props.channelName } });
+  }, []);
+
+  const { loading: loadingNewMessageEvent } = useSubscription(NEW_CHAT_MESSAGE, {
+    onSubscriptionData: ({ subscriptionData: { data } }) => {
+      console.log(data);
+      if (data && data?.chatMessageSent) {
+        const message = data.chatMessageSent;
+        setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+      }
+    },
+  });
+
+  const onSend = (newMessages = []) => {
+    console.log(newMessages);
+
+    sendMessage({
+      variables: {
+        chatMessageDto: {
+          channel: channelName,
+          text: newMessages[0].text,
+        },
+      },
+    });
+  };
+
+  // fetch chat messages in app startup
+  // useEffect(() => {}, [initialMessages]);
+
+  // handles new message subscription event
+  // useEffect(() => {
+  //   console.log(newMessageEvent);
+  //   if (newMessageEvent?.chatMessageSent) {
+  //     setChatMessages([...chatMessages, newMessageEvent.chatMessageSent]);
+  //   }
+  // }, [newMessageEvent]);
 
   const renderMessage = (props) => {
     const {
@@ -186,7 +273,14 @@ const VideoMessagingModal = (props) => {
               borderBottomColor: Colors.borderColor,
               borderBottomWidth: 0.5,
             }}>
-            <Text style={{ color: Colors.primaryText, fontSize: 18, fontFamily: Fonts.semiBold }}>Messages</Text>
+            <Text
+              style={{
+                color: Colors.primaryText,
+                fontSize: 18,
+                fontFamily: Fonts.semiBold,
+              }}>
+              Messages
+            </Text>
             <TouchableOpacity onPress={() => onClose(false)}>
               <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
             </TouchableOpacity>
@@ -218,6 +312,7 @@ const VideoMessagingModal = (props) => {
 VideoMessagingModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
+  channelName: PropTypes.string,
 };
 
 export default VideoMessagingModal;

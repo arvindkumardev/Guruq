@@ -1,12 +1,12 @@
 /* eslint-disable radix */
 /* eslint-disable react/no-array-index-key */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, View, Text } from 'react-native';
+import { Modal, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { Colors, Images } from '../../theme';
-import { getSaveData, getTutorImageUrl, removeData, RfH, RfW, storeData } from '../../utils/helpers';
+import { getSaveData, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
 import routeNames from '../../routes/screenNames';
 import commonStyles from '../../theme/styles';
@@ -33,6 +33,10 @@ const compareModal = (props) => {
     navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS);
   };
 
+  const getTutorImage = (tutor) => {
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
+  };
+
   const renderTutorView = (item, index) => {
     return (
       <View style={commonStyles.verticallyStretchedItemsView}>
@@ -49,7 +53,7 @@ const compareModal = (props) => {
           <IconButtonWrapper
             iconWidth={RfH(70)}
             iconHeight={RfH(70)}
-            iconImage={getTutorImageUrl(item)}
+            iconImage={getTutorImage(item)}
             styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
           />
         ) : (

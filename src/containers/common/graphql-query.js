@@ -26,6 +26,9 @@ export const ME_QUERY = gql`
       role {
         name
       }
+      profileImage {
+        filename
+      }
       qPoints
     }
   }
@@ -35,6 +38,7 @@ export const GET_CURRENT_STUDENT_QUERY = gql`
   query GetCurrentStudent {
     getCurrentStudent {
       id
+      uuid
       contactDetail {
         firstName
         lastName
@@ -44,6 +48,9 @@ export const GET_CURRENT_STUDENT_QUERY = gql`
         }
         email
       }
+      profileImage {
+        filename
+      }
     }
   }
 `;
@@ -52,6 +59,7 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
   query GetCurrentTutor {
     getCurrentTutor {
       id
+      uuid
       contactDetail {
         firstName
         lastName
@@ -60,6 +68,9 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
           number
         }
         email
+      }
+      profileImage {
+        filename
       }
     }
   }

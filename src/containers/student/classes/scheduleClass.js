@@ -2,20 +2,19 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-const-assign */
 /* eslint-disable no-plusplus */
-import { Text, View, FlatList } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import moment from 'moment';
 import commonStyles from '../../../theme/styles';
-import { getTutorImageUrl, RfH, RfW } from '../../../utils/helpers';
+import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
-import { Images, Colors, Fonts } from '../../../theme';
+import { Colors, Fonts, Images } from '../../../theme';
 import BackArrow from '../../../components/BackArrow';
-import { GET_AVAILABILITY } from '../class.query';
 import { SCHEDULE_CLASS } from '../class.mutation';
 
 function scheduleClass(props) {
@@ -84,6 +83,10 @@ function scheduleClass(props) {
     navigation.goBack();
   };
 
+  const getTutorImage = (tutor) => {
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
+  };
+
   const renderTutorDetails = () => {
     return (
       <View>
@@ -103,7 +106,7 @@ function scheduleClass(props) {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
-                iconImage={getTutorImageUrl(classData.orderItem?.tutor)}
+                iconImage={getTutorImage(classData.orderItem?.tutor)}
               />
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
@@ -224,7 +227,7 @@ function scheduleClass(props) {
           <BackArrow action={onBackPress} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text>
         </View>
-        {/*<Text style={{ fontSize: RFValue(28, STANDARD_SCREEN_SIZE) }}>+</Text>*/}
+        {/* <Text style={{ fontSize: RFValue(28, STANDARD_SCREEN_SIZE) }}>+</Text> */}
       </View>
       {renderTutorDetails()}
       <View style={{ height: RfH(56) }} />
