@@ -8,6 +8,7 @@ import ProgressCircle from 'react-native-progress-circle';
 import { Button, Icon } from 'native-base';
 import CalendarStrip from 'react-native-calendar-strip';
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
+// import { Rating } from 'react-native-ratings';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import Loader from '../../../components/Loader';
@@ -645,7 +646,7 @@ function tutorDetails(props) {
           <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Rating and Reviews</Text>
         </View>
         <View>
-          <Ratings
+          {/* <Ratings
             ratings={tutorData.averageRating}
             containerStyle={[
               commonStyles.horizontalChildrenView,
@@ -658,7 +659,8 @@ function tutorDetails(props) {
                 fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
               },
             ]}
-          />
+          /> */}
+          {/* <Rating showRating onFinishRating={this.ratingCompleted} style={{ paddingVertical: 10 }} /> */}
         </View>
         <View style={{ paddingHorizontal: RfW(16) }}>
           <FlatList

@@ -1,3 +1,5 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable radix */
 /* eslint-disable operator-assignment */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
@@ -6,7 +8,7 @@ import { Alert, FlatList, Text, View, TextInput, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Button } from 'native-base';
+import { Button, Picker } from 'native-base';
 import { useMutation, useQuery } from '@apollo/client';
 import { IconButtonWrapper, PaymentMethodModal, ScreenHeader } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
@@ -28,11 +30,17 @@ const myCart = () => {
   const [refreshList, setRefreshList] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [amount, setAmount] = useState(0);
-  const [discount, setDiscount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(0);
+  const [qPointsRedeem, setQPointsRedeem] = useState(0);
+  const [qPointsArray, setQPointsArray] = useState([]);
 
   const [applyQPoints, setApplyQPoints] = useState(false);
+  const [applyCoupons, setApplyCoupons] = useState(false);
+  const [appliedCouponCode, setAppliedCouponCode] = useState('');
+  const [appliedCouponValue, setAppliedCouponValue] = useState('');
+
+  const [couponCode, setCouponCode] = useState('');
 
   const [bookingData, setBookingData] = useState({
     itemPrice: amount,
@@ -60,20 +68,21 @@ const myCart = () => {
       if (data) {
         if (!data.checkCoupon.isPercentage) {
           if (data.checkCoupon.maxDiscount >= data.checkCoupon.discount) {
-            setDiscount(data.checkCoupon.discount);
+            setAppliedCouponValue(data.checkCoupon.discount);
           } else {
-            setDiscount(data.checkCoupon.maxDiscount);
+            setAppliedCouponValue(data.checkCoupon.maxDiscount);
           }
         } else {
           let discountedAmount = 0;
           discountedAmount = (amount * data.checkCoupon.discount) / 100;
           if (data.checkCoupon.maxDiscount >= discountedAmount) {
-            setDiscount(discountedAmount);
+            setAppliedCouponValue(discountedAmount);
           } else {
-            setDiscount(data.checkCoupon.maxDiscount);
+            setAppliedCouponValue(data.checkCoupon.maxDiscount);
           }
         }
-        setShowCouponModal(false);
+        setAppliedCouponCode(data.checkCoupon.code);
+        setApplyCoupons(true);
       }
     },
   });
@@ -85,16 +94,18 @@ const myCart = () => {
   };
 
   useEffect(() => {
-    if (cartItemData?.getCartItems.length > 0) {
-      setCartItems(cartItemData.getCartItems);
-      let amt = 0;
-      for (const obj of cartItemData.getCartItems) {
-        amt += obj.price;
+    if (cartItemData) {
+      if (cartItemData?.getCartItems.length > 0) {
+        setCartItems(cartItemData.getCartItems);
+        let amt = 0;
+        for (const obj of cartItemData.getCartItems) {
+          amt += obj.price;
+        }
+        setAmount(amt);
+        setIsEmpty(false);
+      } else {
+        setIsEmpty(true);
       }
-      setAmount(amt);
-      setIsEmpty(false);
-    } else {
-      setIsEmpty(true);
     }
   }, [cartItemData?.getCartItems]);
 
@@ -158,19 +169,21 @@ const myCart = () => {
               </Text>
             </View>
             <View style={styles.bookingSelectorParent}>
-              <IconButtonWrapper
-                iconWidth={RfW(12)}
-                iconHeight={RfH(12)}
-                iconImage={Images.minus_blue}
-                submitFunction={() => removeClass(item, index)}
-              />
-              <Text>{item?.count}</Text>
-              <IconButtonWrapper
-                iconWidth={RfW(12)}
-                iconHeight={RfH(12)}
-                iconImage={Images.plus_blue}
-                submitFunction={() => addClass(index)}
-              />
+              <View style={styles.bookingSelectorParent}>
+                <TouchableWithoutFeedback onPress={() => removeClass(item, index)}>
+                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
+                  </View>
+                </TouchableWithoutFeedback>
+
+                <Text>{item?.count}</Text>
+
+                <TouchableWithoutFeedback onPress={() => addClass(index)}>
+                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
             </View>
           </View>
           <Text style={styles.tutorDetails}>
@@ -190,7 +203,25 @@ const myCart = () => {
   };
 
   const enableApplyQPoints = () => {
+    if (qPoints > 0) {
+      const arr = [];
+      for (let i = 0; i <= qPoints; i += 5) {
+        if (i === 0) {
+          arr.push(1);
+        } else {
+          arr.push(i);
+        }
+      }
+      if (qPoints % 5 !== 0) {
+        arr.push(qPoints);
+      }
+      setQPointsArray(arr);
+    }
     setApplyQPoints(!applyQPoints);
+  };
+
+  const selectQPoints = (value) => {
+    setQPointsRedeem(value);
   };
 
   const renderQPointView = () => {
@@ -245,13 +276,41 @@ const myCart = () => {
             <View style={commonStyles.lineSeparator} />
 
             <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-              <Text style={commonStyles.secondaryText}>400 Available Points</Text>
-              <Text style={commonStyles.regularPrimaryText}>₹ Number Picker</Text>
+              <Text style={commonStyles.secondaryText}>{qPoints} Available Points</Text>
+              <View
+                style={[
+                  commonStyles.horizontalChildrenView,
+                  { borderWidth: 1, borderColor: Colors.borderColor, paddingLeft: RfW(8), borderRadius: 8 },
+                ]}>
+                <View style={{ borderRightColor: Colors.lightGrey, borderRightWidth: 1 }}>
+                  <Text style={commonStyles.regularPrimaryText}>₹ </Text>
+                </View>
+                <Picker
+                  iosHeader="Select QPoints"
+                  Header="Select QPoints"
+                  style={{ height: RfH(36), width: RfW(80), alignItems: 'center' }}
+                  mode="dialog"
+                  textStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }}
+                  placeholder={qPointsRedeem}
+                  selectedValue={qPointsRedeem}
+                  onValueChange={(value) => selectQPoints(value)}>
+                  {qPointsArray.map((obj, i) => {
+                    return <Picker.Item label={obj} value={obj} key={i} />;
+                  })}
+                </Picker>
+              </View>
             </View>
           </View>
         )}
       </View>
     );
+  };
+
+  const removeCoupon = () => {
+    setAppliedCouponCode('');
+    setAppliedCouponValue('');
+    setCouponCode('');
+    setApplyCoupons(false);
   };
 
   const renderCouponView = () => {
@@ -272,68 +331,87 @@ const myCart = () => {
             COUPONS
           </Text>
         </View>
-
-        <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            {
-              backgroundColor: Colors.white,
-              height: RfH(44),
-              alignItems: 'center',
-              paddingHorizontal: RfW(16),
-            },
-          ]}>
+        {!applyCoupons && (
           <View
             style={[
-              commonStyles.horizontalChildrenStartView,
+              commonStyles.horizontalChildrenSpaceView,
               {
-                justifyContent: 'space-between',
+                backgroundColor: Colors.white,
                 alignItems: 'center',
+                paddingHorizontal: RfW(16),
               },
             ]}>
-            {/* <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(16)} iconImage={Images.logo_yellow} /> */}
-            {/* <Text */}
-            {/*  style={[ */}
-            {/*    commonStyles.regularPrimaryText, */}
-            {/*    { */}
-            {/*      fontFamily: Fonts.semiBold, */}
-            {/*    }, */}
-            {/*  ]}> */}
-            {/*  Apply Coupon */}
-            {/* </Text> */}
-            <TextInput
-              style={{ height: 40, flex: 1, borderColor: Colors.borderColor, borderWidth: 0.5, fontSize: 17 }}
-            />
-            <TouchableWithoutFeedback
-              onPress={() => Alert.alert('hi!')}
-              style={{
-                // width: RfW(144),
-                //   backgroundColor: "#ff0000",
-                color: Colors.brandBlue2,
-                // width: 60,
-                height: 40,
-                marginLeft: 16,
-                // padding: 16
-              }}>
-              <Text style={[commonStyles.textButtonPrimary, { color: Colors.brandBlue2 }]}>Apply</Text>
-            </TouchableWithoutFeedback>
+            <View
+              style={[
+                commonStyles.horizontalChildrenStartView,
+                {
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                },
+              ]}>
+              <TextInput
+                style={{
+                  flex: 1,
+                  height: RfH(40),
+                  borderColor: Colors.borderColor,
+                  borderWidth: 0.5,
+                  fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                  marginVertical: 4,
+                  paddingLeft: 8,
+                }}
+                placeholder="Enter coupon code"
+                value={couponCode}
+                onChangeText={(text) => setCouponCode(text)}
+              />
+              <TouchableWithoutFeedback
+                onPress={() => checkCoupon(couponCode)}
+                style={{
+                  color: Colors.brandBlue2,
+                  height: RfH(48),
+                  marginLeft: RfW(16),
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={[
+                    commonStyles.textButtonPrimary,
+                    { color: Colors.brandBlue2, fontSize: RFValue(17, STANDARD_SCREEN_SIZE) },
+                  ]}>
+                  APPLY
+                </Text>
+              </TouchableWithoutFeedback>
+            </View>
           </View>
-          {/* <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} /> */}
-        </View>
+        )}
 
-        <View
-          style={{
-            backgroundColor: Colors.white,
-            height: RfH(44),
-            paddingHorizontal: RfW(16),
-          }}>
-          {/* <View style={commonStyles.lineSeparator} /> */}
-
-          <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-            <Text style={commonStyles.secondaryText}>GURUQ2020</Text>
-            <Text style={commonStyles.regularPrimaryText}>₹150</Text>
+        {applyCoupons && (
+          <View
+            style={{
+              backgroundColor: Colors.white,
+              paddingHorizontal: RfW(16),
+            }}>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { alignItems: 'center', marginVertical: RfH(16) }]}>
+              <View>
+                <Text style={commonStyles.secondaryText}>{appliedCouponCode}</Text>
+                <Text style={commonStyles.smallMutedText}>Offer applied on the bill</Text>
+              </View>
+              <TouchableWithoutFeedback onPress={() => removeCoupon()}>
+                <View
+                  style={{
+                    height: RfH(24),
+                    width: RfH(24),
+                    borderRadius: RfH(12),
+                    backgroundColor: Colors.lightGrey,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.cross} />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
           </View>
-        </View>
+        )}
       </TouchableWithoutFeedback>
     );
   };
@@ -345,19 +423,22 @@ const myCart = () => {
           <Text style={commonStyles.mediumPrimaryText}>Amount</Text>
           <Text style={commonStyles.mediumPrimaryText}>₹{amount}</Text>
         </View>
+        {applyCoupons && (
+          <View>
+            <View style={commonStyles.lineSeparator} />
 
-        <View style={commonStyles.lineSeparator} />
-
-        <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-          <Text style={commonStyles.mediumPrimaryText}>GURUQ2020 Applied</Text>
-          <Text style={commonStyles.mediumPrimaryText}>₹150</Text>
-        </View>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
+              <Text style={commonStyles.mediumPrimaryText}>{appliedCouponCode}</Text>
+              <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2 }]}>-₹{appliedCouponValue}</Text>
+            </View>
+          </View>
+        )}
 
         <View style={commonStyles.lineSeparator} />
 
         <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
           <Text style={commonStyles.regularPrimaryText}>Total Amount</Text>
-          <Text style={commonStyles.regularPrimaryText}>₹{amount}</Text>
+          <Text style={commonStyles.regularPrimaryText}>₹{amount - (appliedCouponValue + qPointsRedeem)}</Text>
         </View>
       </View>
     );
@@ -440,118 +521,129 @@ const myCart = () => {
 
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
-      <Loader isLoading={cartLoading || removeLoading} />
+      <Loader isLoading={cartLoading || removeLoading || couponLoading} />
       {/* <View style={{ marginHorizontal: RfW(16) }}> */}
       <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
       {/* </View> */}
-      {isEmpty ? (
-        <View>
-          <Image
-            source={Images.empty_cart}
-            style={{ margin: RfH(56), alignSelf: 'center', height: RfH(264), width: RfW(248), marginBottom: RfH(32) }}
-          />
-          <Text
-            style={[
-              commonStyles.pageTitleThirdRow,
-              { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
-            ]}>
-            Your cart is empty
-          </Text>
-          <Text
-            style={[
-              commonStyles.regularMutedText,
-              { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
-            ]}>
-            Looks like you haven't made your choice yet.....
-          </Text>
-        </View>
+      {cartLoading ? (
+        <View style={{ backgroundColor: Colors.lightGrey }} />
       ) : (
         <View>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {/* <View */}
-            {/*  style={[ */}
-            {/*    styles.itemView, */}
-            {/*    { */}
-            {/*      marginTop: RfH(8), */}
-            {/*      paddingVertical: RfH(8), */}
-            {/*      paddingLeft: RfW(48), */}
-            {/*    }, */}
-            {/*  ]}> */}
-            {/*  <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text> */}
-            {/* </View> */}
-            <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.white }}>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                data={cartItems}
-                extraData={refreshList}
-                renderItem={({ item, index }) => renderCartItems(item, index)}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </View>
-
-            <View style={commonStyles.blankViewSmall} />
-
-            {renderQPointView()}
-
-            <View style={commonStyles.blankViewSmall} />
-
-            {renderCouponView()}
-
-            <View style={commonStyles.blankViewSmall} />
-
-            {/* <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text> */}
-
-            <View
-              style={{
-                height: 44,
-                justifyContent: 'center',
-              }}>
-              <Text
-                style={{
-                  paddingHorizontal: RfW(16),
-                  // marginBottom: RfW(8),
-                  fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
-                  color: Colors.secondaryText,
-                }}>
-                CART DETAILS ({cartItems.length} Items)
-              </Text>
-            </View>
-
-            {renderCartDetails()}
-          </ScrollView>
-
-          <View
-            style={[
-              commonStyles.horizontalChildrenSpaceView,
-              {
-                alignItems: 'flex-end',
-                backgroundColor: Colors.white,
-                paddingTop: RfH(8),
-                paddingHorizontal: RfW(16),
-                paddingBottom: RfH(34),
-              },
-            ]}>
+          {!isEmpty ? (
             <View>
-              <Text style={commonStyles.headingPrimaryText}>₹{amount}</Text>
-              <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
-                View Details
-              </Text>
-            </View>
-            <View>
-              <Button
-                onPress={() => setShowPaymentModal(true)}
+              <ScrollView showsVerticalScrollIndicator={false}>
+                {/* <View */}
+                {/*  style={[ */}
+                {/*    styles.itemView, */}
+                {/*    { */}
+                {/*      marginTop: RfH(8), */}
+                {/*      paddingVertical: RfH(8), */}
+                {/*      paddingLeft: RfW(48), */}
+                {/*    }, */}
+                {/*  ]}> */}
+                {/*  <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text> */}
+                {/* </View> */}
+                <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.white }}>
+                  <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    data={cartItems}
+                    extraData={refreshList}
+                    renderItem={({ item, index }) => renderCartItems(item, index)}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </View>
+
+                <View style={commonStyles.blankViewSmall} />
+
+                {renderQPointView()}
+
+                <View style={commonStyles.blankViewSmall} />
+
+                {renderCouponView()}
+
+                <View style={commonStyles.blankViewSmall} />
+
+                {/* <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text> */}
+
+                <View
+                  style={{
+                    height: 44,
+                    justifyContent: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      paddingHorizontal: RfW(16),
+                      // marginBottom: RfW(8),
+                      fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                      color: Colors.secondaryText,
+                    }}>
+                    CART DETAILS ({cartItems.length} Items)
+                  </Text>
+                </View>
+
+                {renderCartDetails()}
+              </ScrollView>
+              <View
                 style={[
-                  commonStyles.buttonPrimary,
+                  commonStyles.horizontalChildrenSpaceView,
                   {
-                    width: RfW(144),
-                    alignSelf: 'flex-end',
-                    marginHorizontal: 0,
+                    alignItems: 'flex-end',
+                    backgroundColor: Colors.white,
+                    paddingTop: RfH(8),
+                    paddingHorizontal: RfW(16),
+                    paddingBottom: RfH(34),
                   },
                 ]}>
-                <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
-              </Button>
+                <View>
+                  <Text style={commonStyles.headingPrimaryText}>₹{amount - (appliedCouponValue + qPointsRedeem)}</Text>
+                  <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+                    View Details
+                  </Text>
+                </View>
+                <View>
+                  <Button
+                    onPress={() => setShowPaymentModal(true)}
+                    style={[
+                      commonStyles.buttonPrimary,
+                      {
+                        width: RfW(144),
+                        alignSelf: 'flex-end',
+                        marginHorizontal: 0,
+                      },
+                    ]}>
+                    <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
+                  </Button>
+                </View>
+              </View>
             </View>
-          </View>
+          ) : (
+            <View>
+              <Image
+                source={Images.empty_cart}
+                style={{
+                  margin: RfH(56),
+                  alignSelf: 'center',
+                  height: RfH(264),
+                  width: RfW(248),
+                  marginBottom: RfH(32),
+                }}
+              />
+              <Text
+                style={[
+                  commonStyles.pageTitleThirdRow,
+                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                ]}>
+                Your cart is empty
+              </Text>
+              <Text
+                style={[
+                  commonStyles.regularMutedText,
+                  { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
+                ]}>
+                Looks like you haven't made your choice yet.....
+              </Text>
+            </View>
+          )}
         </View>
       )}
 
@@ -575,8 +667,8 @@ const myCart = () => {
         onClose={() => setShowPaymentModal(false)}
         bookingData={bookingData}
         amount={amount}
-        deductedAgaintQPoint={qPoints}
-        discount={discount}
+        deductedAgaintQPoint={qPointsRedeem}
+        discount={appliedCouponValue + qPointsRedeem}
       />
     </View>
   );
