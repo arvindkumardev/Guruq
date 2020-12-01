@@ -64,7 +64,8 @@ function bookingConfirmed() {
         <Text style={commonStyles.headingPrimaryText}>{item.orderItem?.offering.name}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item.orderItem?.offering?.parentOffering?.parentOffering?.name} |{' '}
+            {item.orderItem?.offering?.parentOffering?.parentOffering?.name}
+            {' | '}
             {item.orderItem?.offering.parentOffering.name}
           </Text>
           {!isHistorySelected && (
