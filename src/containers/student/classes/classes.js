@@ -225,7 +225,15 @@ function bookingConfirmed() {
             </View>
           ) : (
             <View>
-              {isEmpty ? (
+              {!isEmpty ? (
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  data={orderItems}
+                  renderItem={({ item }) => renderClassItem(item)}
+                  keyExtractor={(item, index) => index.toString()}
+                  contentContainerStyle={{ paddingBottom: RfH(170) }}
+                />
+              ) : (
                 <View>
                   <Image
                     source={Images.empty_classes}
@@ -256,14 +264,6 @@ function bookingConfirmed() {
                     <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
                   </Button>
                 </View>
-              ) : (
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={orderItems}
-                  renderItem={({ item }) => renderClassItem(item)}
-                  keyExtractor={(item, index) => index.toString()}
-                  contentContainerStyle={{ paddingBottom: RfH(170) }}
-                />
               )}
             </View>
           )}
