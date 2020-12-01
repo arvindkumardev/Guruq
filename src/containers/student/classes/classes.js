@@ -175,75 +175,76 @@ function bookingConfirmed() {
           </Text>
         )}
       </View>
-      {isEmpty ? (
-        <View>
-          <Image
-            source={Images.empty_classes}
-            style={{
-              margin: RfH(56),
-              alignSelf: 'center',
-              height: RfH(264),
-              width: RfW(280),
-              marginBottom: RfH(32),
-            }}
-          />
-          <Text
-            style={[
-              commonStyles.pageTitleThirdRow,
-              { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
-            ]}>
-            No class found
-          </Text>
-          <Text
-            style={[
-              commonStyles.regularMutedText,
-              { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
-            ]}>
-            Looks like you haven't booked any class.
-          </Text>
-          <View style={{ height: RfH(64) }} />
-          <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-            <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
-          </Button>
-        </View>
-      ) : (
-        <View>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            onScroll={(event) => handleScroll(event)}
-            stickyHeaderIndices={[1]}
-            scrollEventThrottle={16}>
-            <View>
-              <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
+
+      <View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          onScroll={(event) => handleScroll(event)}
+          stickyHeaderIndices={[1]}
+          scrollEventThrottle={16}>
+          <View>
+            <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
+          </View>
+          <View>
+            <View
+              style={[
+                commonStyles.horizontalChildrenCenterView,
+                showHeader
+                  ? { backgroundColor: Colors.white, paddingBottom: RfH(8) }
+                  : { paddingTop: RfH(16), backgroundColor: Colors.white },
+              ]}>
+              <Button
+                onPress={() => setIsHistorySelected(false)}
+                small
+                block
+                bordered
+                style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
+                <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
+                  Unscheduled Classes
+                </Text>
+              </Button>
+              <Button
+                onPress={() => setIsHistorySelected(true)}
+                small
+                block
+                bordered
+                style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
+                <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
+              </Button>
             </View>
+          </View>
+          {isEmpty ? (
             <View>
-              <View
+              <Image
+                source={Images.empty_classes}
+                style={{
+                  margin: RfH(56),
+                  alignSelf: 'center',
+                  height: RfH(200),
+                  width: RfW(216),
+                  marginBottom: RfH(32),
+                }}
+              />
+              <Text
                 style={[
-                  commonStyles.horizontalChildrenCenterView,
-                  showHeader
-                    ? { backgroundColor: Colors.white, paddingBottom: RfH(8) }
-                    : { paddingTop: RfH(16), backgroundColor: Colors.white },
+                  commonStyles.pageTitleThirdRow,
+                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
                 ]}>
-                <Button
-                  onPress={() => setIsHistorySelected(false)}
-                  small
-                  block
-                  bordered
-                  style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
-                  <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
-                    Unscheduled Classes
-                  </Text>
-                </Button>
-                <Button
-                  onPress={() => setIsHistorySelected(true)}
-                  small
-                  block
-                  bordered
-                  style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
-                  <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
-                </Button>
-              </View>
+                No class found
+              </Text>
+              <Text
+                style={[
+                  commonStyles.regularMutedText,
+                  { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
+                ]}>
+                Looks like you haven't booked any class.
+              </Text>
+              <View style={{ height: RfH(40) }} />
+              <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+                <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
+              </Button>
             </View>
+          ) : (
             <FlatList
               showsVerticalScrollIndicator={false}
               data={orderItems}
@@ -251,9 +252,9 @@ function bookingConfirmed() {
               keyExtractor={(item, index) => index.toString()}
               contentContainerStyle={{ paddingBottom: RfH(170) }}
             />
-          </ScrollView>
-        </View>
-      )}
+          )}
+        </ScrollView>
+      </View>
     </View>
   );
 }

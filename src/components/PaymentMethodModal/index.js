@@ -210,7 +210,7 @@ const PaymentMethod = (props) => {
                 ₹{parseFloat(amount).toFixed(2)}
               </Text>
             </View>
-            {paymentMethod === 4 && (
+            {paymentMethod === 6 && (
               <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
                 <View style={{ flexDirection: 'column' }}>
                   <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
@@ -396,14 +396,14 @@ const PaymentMethod = (props) => {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPaymentMethod(2)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(4)}>
                   <View
                     style={[
                       commonStyles.horizontalChildrenView,
                       commonStyles.lineSeparator,
                       { alignItems: 'center', height: RfH(44) },
                     ]}>
-                    <CustomRadioButton enabled={paymentMethod === 2} submitFunction={() => setPaymentMethod(2)} />
+                    <CustomRadioButton enabled={paymentMethod === 4} submitFunction={() => setPaymentMethod(4)} />
                     <Text
                       style={{
                         fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -414,14 +414,14 @@ const PaymentMethod = (props) => {
                     <View style={commonStyles.horizontalChildrenView} />
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPaymentMethod(3)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(5)}>
                   <View
                     style={[
                       commonStyles.horizontalChildrenView,
                       commonStyles.lineSeparator,
                       { alignItems: 'center', height: RfH(44) },
                     ]}>
-                    <CustomRadioButton enabled={paymentMethod === 3} submitFunction={() => setPaymentMethod(3)} />
+                    <CustomRadioButton enabled={paymentMethod === 5} submitFunction={() => setPaymentMethod(5)} />
                     <Text
                       style={{
                         fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -432,9 +432,9 @@ const PaymentMethod = (props) => {
                     <View style={commonStyles.horizontalChildrenView} />
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPaymentMethod(4)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(6)}>
                   <View style={[commonStyles.horizontalChildrenView, { alignItems: 'center', height: RfH(44) }]}>
-                    <CustomRadioButton enabled={paymentMethod === 4} submitFunction={() => setPaymentMethod(4)} />
+                    <CustomRadioButton enabled={paymentMethod === 6} submitFunction={() => setPaymentMethod(6)} />
                     <Text
                       style={{
                         fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -466,7 +466,7 @@ const PaymentMethod = (props) => {
               <Text style={commonStyles.headingPrimaryText}>
                 ₹
                 {parseFloat(
-                  amount + (paymentMethod === 4 ? convenienceCharges : 0) - discount - deductedAgaintQPoint
+                  amount + (paymentMethod === 6 ? convenienceCharges : 0) - discount - deductedAgaintQPoint
                 ).toFixed(2)}
               </Text>
               <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>

@@ -168,84 +168,84 @@ function CalendarView(props) {
           </Text>
         )}
       </View>
-      {isEmpty ? (
-        <View>
-          <Image
-            source={Images.empty_schedule}
-            style={{
-              margin: RfH(56),
-              alignSelf: 'center',
-              height: RfH(280),
-              width: RfW(224),
-              marginBottom: RfH(32),
-            }}
-          />
-          <Text
-            style={[
-              commonStyles.pageTitleThirdRow,
-              { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
-            ]}>
-            You Haven't scheduled class
-          </Text>
-          <Text
-            style={[
-              commonStyles.regularMutedText,
-              { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
-            ]}>
-            Looks like you have not scheduled any class yet.
-          </Text>
-          <View style={{ height: RfH(64) }} />
-          <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]} onPress={() => changeTab(3)}>
-            <Text style={commonStyles.textButtonPrimary}>Schedule Now</Text>
-          </Button>
-        </View>
-      ) : (
-        <View>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            onScroll={(event) => handleScroll(event)}
-            stickyHeaderIndices={[1]}
-            scrollEventThrottle={16}>
-            <Text style={commonStyles.pageTitleThirdRow}>Your Schedule</Text>
-            <View style={{ backgroundColor: Colors.white }}>
-              <CalendarStrip
-                calendarHeaderStyle={{
-                  fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-                  alignSelf: 'flex-start',
-                  paddingBottom: RfH(8),
+      <View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          onScroll={(event) => handleScroll(event)}
+          stickyHeaderIndices={[1]}
+          scrollEventThrottle={16}>
+          <Text style={commonStyles.pageTitleThirdRow}>Your Schedule</Text>
+          <View style={{ backgroundColor: Colors.white }}>
+            <CalendarStrip
+              calendarHeaderStyle={{
+                fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                alignSelf: 'flex-start',
+                paddingBottom: RfH(8),
+              }}
+              highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
+              highlightDateNameStyle={{ color: Colors.brandBlue2 }}
+              disabledDateNameStyle={{ color: Colors.darkGrey }}
+              disabledDateNumberStyle={{ color: Colors.darkGrey }}
+              selectedDate={new Date()}
+              dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+              dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+              style={
+                showHeader
+                  ? { height: 102, paddingBottom: 10 }
+                  : {
+                      height: 102,
+                      paddingTop: 20,
+                      paddingBottom: 10,
+                    }
+              }
+              calendarAnimation={{ type: 'parallel', duration: 300 }}
+              daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+              markedDates={[
+                {
+                  date: new Date(),
+                  dots: [
+                    {
+                      color: Colors.brandBlue,
+                      selectedColor: Colors.brandBlue,
+                    },
+                  ],
+                },
+              ]}
+              onHeaderSelected={(a) => console.log(a)}
+            />
+          </View>
+          {isEmpty ? (
+            <View>
+              <Image
+                source={Images.empty_schedule}
+                style={{
+                  margin: RfH(56),
+                  alignSelf: 'center',
+                  height: RfH(200),
+                  width: RfW(164),
+                  marginBottom: RfH(32),
                 }}
-                highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
-                highlightDateNameStyle={{ color: Colors.brandBlue2 }}
-                disabledDateNameStyle={{ color: Colors.darkGrey }}
-                disabledDateNumberStyle={{ color: Colors.darkGrey }}
-                selectedDate={new Date()}
-                dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-                dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-                style={
-                  showHeader
-                    ? { height: 102, paddingBottom: 10 }
-                    : {
-                        height: 102,
-                        paddingTop: 20,
-                        paddingBottom: 10,
-                      }
-                }
-                calendarAnimation={{ type: 'parallel', duration: 300 }}
-                daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-                markedDates={[
-                  {
-                    date: new Date(),
-                    dots: [
-                      {
-                        color: Colors.brandBlue,
-                        selectedColor: Colors.brandBlue,
-                      },
-                    ],
-                  },
-                ]}
-                onHeaderSelected={(a) => console.log(a)}
               />
+              <Text
+                style={[
+                  commonStyles.pageTitleThirdRow,
+                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                ]}>
+                You Haven't scheduled class
+              </Text>
+              <Text
+                style={[
+                  commonStyles.regularMutedText,
+                  { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
+                ]}>
+                Looks like you have not scheduled any class yet.
+              </Text>
+              <View style={{ height: RfH(40) }} />
+              <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]} onPress={() => changeTab(3)}>
+                <Text style={commonStyles.textButtonPrimary}>Schedule Now</Text>
+              </Button>
             </View>
+          ) : (
             <FlatList
               showsVerticalScrollIndicator={false}
               data={monthData}
@@ -253,9 +253,9 @@ function CalendarView(props) {
               keyExtractor={(item, index) => index.toString()}
               contentContainerStyle={{ paddingBottom: RfH(170) }}
             />
-          </ScrollView>
-        </View>
-      )}
+          )}
+        </ScrollView>
+      </View>
     </View>
   );
 }
