@@ -5,12 +5,12 @@ import { RfH, RfW } from '../../utils/helpers';
 import { Images } from '../../theme';
 
 const BackArrow = (props) => {
-  const { action } = props;
+  const { action, whiteArrow } = props;
   return (
     <IconButtonWrapper
       iconHeight={RfH(32)}
       iconWidth={RfW(32)}
-      iconImage={Images.backArrow}
+      iconImage={whiteArrow ? Images.backArrow_white : Images.backArrow}
       submitFunction={() => action()}
     />
   );
@@ -18,6 +18,7 @@ const BackArrow = (props) => {
 
 BackArrow.propTypes = {
   action: PropTypes.func.isRequired,
+  whiteArrow: PropTypes.bool,
 };
 
 export default BackArrow;

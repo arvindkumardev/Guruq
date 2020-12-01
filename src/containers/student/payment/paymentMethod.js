@@ -1,30 +1,28 @@
 /* eslint-disable no-use-before-define */
 import {
   Alert,
+  Modal,
   NativeEventEmitter,
   NativeModules,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
-  Modal,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Card } from 'native-base';
+import { Button } from 'native-base';
 import RNRazorpayCheckout from 'react-native-razorpay';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { ScreenHeader, CustomRadioButton, IconButtonWrapper } from '../../../components';
+import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../components';
 import { RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
 import { userDetails } from '../../../apollo/cache';
 import { ADD_INTERESTED_OFFERINGS, MAKE_PAYMENT } from '../booking.mutation';
-import Video from '../../../components/Video';
 import Loader from '../../../components/Loader';
 import Dash from '../../../components/Dash';
 

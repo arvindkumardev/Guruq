@@ -6,7 +6,7 @@ import Images from '../../../../theme/images';
 function FindTutors() {
   return (
     <View style={styles.swipeChild}>
-      <Image resizeMode="stretch" style={styles.centerImage} source={Images.onboarding2} />
+      <Image resizeMode="stretch" style={styles.centerImage} source={Images.onBoardingSecond} />
       <Text style={styles.title}>Find Best Tutors</Text>
       <Text style={styles.subtitle}>Find the list of best tutors.</Text>
     </View>

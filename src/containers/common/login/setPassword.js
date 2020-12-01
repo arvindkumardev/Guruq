@@ -1,30 +1,24 @@
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Alert, KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { isTokenLoading } from '../../../apollo/cache';
+import { isLoggedIn } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { INVALID_INPUT } from '../../../common/errorCodes';
-import NavigationRouteNames from '../../../routes/screenNames';
+import LoginCheck from './loginCheck';
 
 function SetPassword() {
   const navigation = useNavigation();
   const [hidePassword, setHidePassword] = useState(true);
   const [password, setPassword] = useState('');
+  const isUserLoggedIn = useReactiveVar(isLoggedIn);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
 
@@ -70,8 +64,7 @@ function SetPassword() {
   useEffect(() => {
     if (setPasswordData && setPasswordData.setPassword) {
       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, setPasswordData.setPassword.token).then(() => {
-        isTokenLoading(true);
-        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+        isLoggedIn(true);
       });
     }
   }, [setPasswordData]);
@@ -81,7 +74,11 @@ function SetPassword() {
   };
 
   const onClickContinue = () => {
-    if (password === confirmPassword) {
+    if (isEmpty(password)) {
+      Alert.alert('Please enter the password!');
+    } else if (isEmpty(confirmPassword)) {
+      Alert.alert('Please enter the confirm password!');
+    } else if (password === confirmPassword) {
       setUserPassword();
     } else {
       Alert.alert('Password mismatch!');
@@ -90,12 +87,11 @@ function SetPassword() {
 
   return (
     <MainContainer isLoading={setPasswordLoading} onBackPress={onBackPress}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.contentMarginTop}>
-          <Text style={styles.title}>Set Password</Text>
-          <Text style={styles.subtitle}>Enter the new password and submit</Text>
-        </View>
-      </TouchableWithoutFeedback>
+      {isUserLoggedIn && <LoginCheck />}
+      <View style={styles.contentMarginTop}>
+        <Text style={styles.title}>Set Password</Text>
+        <Text style={styles.subtitle}>Enter the new password and submit</Text>
+      </View>
 
       <KeyboardAvoidingView>
         <View style={styles.bottomCard}>
@@ -126,9 +122,10 @@ function SetPassword() {
             </View>
           </View>
           <TouchableOpacity
-            onPress={() => onClickContinue()}
+            onPress={onClickContinue}
+            disabled={isEmpty(password) || isEmpty(confirmPassword)}
             style={[
-              commonStyles.buttonPrimary,
+              isEmpty(password) || isEmpty(confirmPassword) ? commonStyles.disableButton : commonStyles.buttonPrimary,
               {
                 marginTop: RfH(48),
                 alignSelf: 'center',

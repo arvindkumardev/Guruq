@@ -22,11 +22,12 @@ const styles = StyleSheet.create({
     paddingTop: RfH(9),
     paddingBottom: RfH(14),
     paddingHorizontal: RfW(15),
+    // // borderBottomWidth: 0.3,
+    // borderBottomColor: Colors.secondaryText,
   },
   headerText: {
     flex: 1,
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-    fontFamily: 'SegoeUI-Semibold',
     fontStyle: 'normal',
     color: Colors.black,
     textAlign: 'center',

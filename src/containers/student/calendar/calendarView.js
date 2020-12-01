@@ -53,6 +53,7 @@ function CalendarView(props) {
           month: new Date(obj.startDate).getUTCMonth(),
           classes: [
             {
+              uuid: obj.uuid,
               classTitle: obj.offering.displayName,
               board: obj.offering.parentOffering.parentOffering.displayName,
               class: obj.offering.parentOffering.displayName,
@@ -82,7 +83,7 @@ function CalendarView(props) {
         },
       },
     });
-  }, [monthData]);
+  }, []);
 
   const renderClassItem = (item) => {
     return (

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
-import { getTutorImageUrl, RfH, RfW } from '../../../utils/helpers';
+import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -53,6 +53,10 @@ function bookingConfirmed() {
     }
   }, [bookingData]);
 
+  const getTutorImage = (tutor) => {
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
+  };
+
   const renderClassItem = (item) => {
     return (
       <View>
@@ -75,7 +79,7 @@ function bookingConfirmed() {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
-                iconImage={getTutorImageUrl(item.orderItem?.tutor)}
+                iconImage={getTutorImage(item.orderItem?.tutor)}
               />
               <Text
                 style={{

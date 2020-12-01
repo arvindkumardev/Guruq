@@ -63,11 +63,11 @@ function NationalityDropdown(props) {
   }, [countryData]);
 
   return (
-    <Modal visible={modalVisible} animationType="fade" onRequestClose={() => toggleModal()} transparent>
+    <Modal visible={modalVisible} animationType="fade" onRequestClose={toggleModal} transparent>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <BackArrow action={toggleModal} />
-          <Text style={styles.headerText}>{modalTitle}</Text>
+          <Text style={styles.headerText}>Select country</Text>
         </View>
         <CustomSearchBar placeholder="Search..." value={searchText} onChangeText={(search) => updateSearch(search)} />
         <AlphabetList

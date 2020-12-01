@@ -1,13 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { ApolloProvider, useReactiveVar } from '@apollo/client';
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
+import React, {useEffect, useRef} from 'react';
+import {ApolloProvider, useReactiveVar} from '@apollo/client';
+import {ApolloProvider as ApolloHooksProvider} from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
-import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {StatusBar} from 'react-native';
 import GlobalFont from 'react-native-global-font';
-
-import { getToken } from './utils/helpers';
-import { isLoggedIn, isTokenLoading, userDetails } from './apollo/cache';
+import {clearAllLocalStorage, getToken} from './utils/helpers';
+import {isLoggedIn, isTokenLoading, userType,isSplashScreenVisible} from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
 
@@ -26,7 +25,9 @@ function App() {
 
   const isUserLoggedIn = useReactiveVar(isLoggedIn);
   const isUserTokenLoading = useReactiveVar(isTokenLoading);
-  const userInfo = useReactiveVar(userDetails);
+  const showSplashScreen = useReactiveVar(isSplashScreenVisible);
+  // const userInfo = useReactiveVar(userDetails);
+  const userTypeVal = useReactiveVar(userType);
   // const isNetworkConnectivityError = useReactiveVar(networkConnectivityError);
 
   // const netInfo = useNetInfo({
@@ -55,19 +56,16 @@ function App() {
     GlobalFont.applyGlobal('SegoeUI');
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
+    // clearAllLocalStorage()
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken;
-
       try {
         userToken = await getToken();
-
         console.log('userToken', userToken);
-
         if (userToken) {
           console.log('I am here...');
-
           isLoggedIn(true);
         }
       } catch (e) {
@@ -75,7 +73,6 @@ function App() {
         isLoggedIn(false);
       } finally {
         SplashScreen.hide();
-        // isTokenLoading(false);
       }
     };
 
@@ -83,8 +80,7 @@ function App() {
   }, []);
 
   const onStateChangeHandle = async (state) => {
-    const currentRouteName = getActiveRouteName(state);
-    routeNameRef.current = currentRouteName;
+    routeNameRef.current = getActiveRouteName(state);
   };
 
   return (
@@ -95,7 +91,8 @@ function App() {
           <AppStack
             isUserLoggedIn={isUserLoggedIn}
             isUserTokenLoading={isUserTokenLoading}
-            userType={userInfo.type}
+            userType={userTypeVal}
+            showSplashScreen={showSplashScreen}
             // isNetworkConnectivityError={isNetworkConnectivityError}
           />
         </NavigationContainer>

@@ -14,7 +14,15 @@ import { Colors, Images } from '../../../theme';
 import Loader from '../../../components/Loader';
 import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
 import styles from './styles';
-import { RfH, RfW, storeData, titleCaseIfExists, getSaveData, removeData } from '../../../utils/helpers';
+import {
+  RfH,
+  RfW,
+  storeData,
+  titleCaseIfExists,
+  getSaveData,
+  removeData,
+  getUserImageUrl,
+} from '../../../utils/helpers';
 import { CompareModal, DateSlotSelectorModal, IconButtonWrapper, Ratings } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import routeNames from '../../../routes/screenNames';
@@ -698,11 +706,7 @@ function tutorDetails(props) {
   };
 
   const getTutorImage = (tutor) => {
-    return tutor && tutor.profileImage && tutor.profileImage.filename
-      ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
-      : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-          tutor.id % 4
-        }.png`;
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
   };
 
   const markFavouriteTutor = () => {

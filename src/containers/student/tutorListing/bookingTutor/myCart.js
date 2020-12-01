@@ -14,7 +14,7 @@ import { IconButtonWrapper, PaymentMethodModal, ScreenHeader } from '../../../..
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
 import styles from '../styles';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import QPointPayModal from '../components/qPointPayModal';
 import CouponModal from '../components/couponModal';
@@ -138,11 +138,7 @@ const myCart = () => {
   });
 
   const getTutorImage = (tutor) => {
-    return tutor && tutor.profileImage && tutor.profileImage.filename
-      ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
-      : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-          tutor.id % 4
-        }.png`;
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
   };
 
   const removeCartItem = (item) => {

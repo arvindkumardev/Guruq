@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { isNumber } from 'lodash';
-import { Dimensions } from 'react-native';
+import { isNumber, isEmpty } from 'lodash';
+import { Dimensions, Alert } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
 
@@ -112,22 +112,46 @@ export const titleCaseIfExists = (inputString) => {
   return str.join(' ').trim();
 };
 
-export const getTutorImage = (tutor) => {
-  return tutor && tutor.profileImage && tutor.profileImage.filename
-    ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
-    : {
-        uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-          tutor.id % 4
-        }.png`,
-      };
+export const getUserImageUrl = (filename, gender, id) => {
+  return filename
+    ? `https://guruq.in/api/${filename}`
+    : `https://guruq.in/guruq-new/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
 };
 
-export const getTutorImageUrl = (tutor) => {
-  return tutor && tutor.profileImage && tutor.profileImage.filename
-    ? `https://guruq.in/api/${tutor?.profileImage?.filename}`
-    : `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-        tutor?.id % 4
-      }.png`;
+export const alertBox = (
+  alertTitle = '',
+  alertMsg = '',
+  config = {
+    positiveText: 'OK',
+    cancelable: true,
+  }
+) => {
+  let configuration = [
+    {
+      text: config.positiveText, // Key to show string like "Ok" etc. i.e. positive response text
+      onPress: config.onPositiveClick, // Key that contains function that executes on click of above text button
+    },
+  ];
+  if (config.middleText && !isEmpty(config.middleText)) {
+    configuration = [
+      ...configuration,
+      {
+        text: config.middleText, // Key to show string like "Cancel" etc. i.e. negative response text
+        onPress: config.onMiddleClick, // Key that contains function that executes on click of above text button
+      },
+    ];
+  }
+  if (config.negativeText && !isEmpty(config.negativeText)) {
+    configuration = [
+      ...configuration,
+      {
+        text: config.negativeText, // Key to show string like "Cancel" etc. i.e. negative response text
+        onPress: config.onNegativeClick, // Key that contains function that executes on click of above text button
+        style: 'destructive',
+      },
+    ];
+  }
+  Alert.alert(alertTitle, alertMsg, configuration, { cancelable: config.cancelable });
 };
 
 export const monthNames = [

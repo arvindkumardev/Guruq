@@ -11,14 +11,14 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
 import { offeringsMasterData, userDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import StudentOfferingModal from './studentOfferingModal';
-import { GET_INTERESTED_OFFERINGS } from '../../dashboard-query';
+import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashboard-query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
@@ -37,10 +37,21 @@ function StudentDashboard(props) {
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});
 
-  // const [
-  //   ,
-  //   { loading: , error: favouriteError, data: favouriteTutor },
-  // ] = useLazyQuery();
+  const [
+    getOfferingMasterData,
+    { loading: loadingOfferingMasterData, error: offeringMasterError, data: offeringData },
+  ] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, { fetchPolicy: 'no-cache' });
+
+  useEffect(() => {
+    getOfferingMasterData();
+  }, []);
+  useEffect(() => {
+    if (offeringData && offeringData.offerings && offeringData.offerings.edges) {
+      offeringsMasterData(offeringData.offerings.edges);
+
+      // after fetching this, push the user to dashboard
+    }
+  }, [offeringData]);
 
   const [favouriteTutors, setFavouriteTutors] = useState([]);
   const [interestedOfferings, setInterestedOfferings] = useState({});
@@ -194,13 +205,7 @@ function StudentDashboard(props) {
   };
 
   const getTutorImage = (tutor) => {
-    return tutor && tutor.profileImage && tutor.profileImage.filename
-      ? { uri: `https://guruq.in/api/${tutor?.profileImage?.filename}` }
-      : {
-          uri: `https://guruq.in/guruq-new/images/avatars/${tutor?.contactDetail?.gender === 'MALE' ? 'm' : 'f'}${
-            tutor.id % 4
-          }.png`,
-        };
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
   };
 
   const renderSubjects = (item) => {
@@ -449,55 +454,53 @@ function StudentDashboard(props) {
     );
   };
 
-  const subjectModal = () => {
-    return (
-      <Modal
-        animationType="fade"
-        transparent
-        visible={showAllSubjects}
-        onRequestClose={() => {
-          setShowAllSubjects(false);
-        }}>
-        <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
-          <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
-          <View
-            style={{
-              bottom: 0,
-              left: 0,
-              right: 0,
-              position: 'absolute',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-              backgroundColor: Colors.white,
-              paddingHorizontal: RfW(16),
-              paddingTop: RfH(16),
-            }}>
-            <View style={commonStyles.horizontalChildrenSpaceView}>
-              <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
-              <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
-                styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
-                iconImage={Images.cross}
-                submitFunction={() => setShowAllSubjects(false)}
-              />
-            </View>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              numColumns={4}
-              data={
-                offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id)
-              }
-              renderItem={({ item }) => renderSubjects(item)}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: RfH(34) }}
+  const subjectModal = () => (
+    <Modal
+      animationType="fade"
+      transparent
+      visible={showAllSubjects}
+      onRequestClose={() => {
+        setShowAllSubjects(false);
+      }}>
+      <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
+        <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
+        <View
+          style={{
+            bottom: 0,
+            left: 0,
+            right: 0,
+            position: 'absolute',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch',
+            backgroundColor: Colors.white,
+            paddingHorizontal: RfW(16),
+            paddingTop: RfH(16),
+          }}>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
+            <IconButtonWrapper
+              iconHeight={RfH(24)}
+              iconWidth={RfW(24)}
+              styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
+              iconImage={Images.cross}
+              submitFunction={() => setShowAllSubjects(false)}
             />
           </View>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            numColumns={4}
+            data={
+              offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id)
+            }
+            renderItem={({ item }) => renderSubjects(item)}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ paddingBottom: RfH(34) }}
+          />
         </View>
-      </Modal>
-    );
-  };
+      </View>
+    </Modal>
+  );
 
   const getSubjects = (item) => {
     const subjects = [];
@@ -516,42 +519,38 @@ function StudentDashboard(props) {
     return subjects.join(', ');
   };
 
-  const renderTutors = (item) => {
-    console.log(item);
-
-    return (
-      <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
-        <View
-          style={{
-            width: RfW(80),
-            borderRadius: 8,
-            marginHorizontal: RfW(10),
-            marginTop: RfH(20),
-          }}>
-          <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
-            <Text
-              numberOfLines={2}
-              style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
-              {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
-            </Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={{
-                marginTop: 1,
-                color: Colors.secondaryText,
-                fontSize: 13,
-                marginBottom: RfH(16),
-                textAlign: 'center',
-              }}>
-              {getSubjects(item)}
-            </Text>
-          </View>
+  const renderTutors = (item) => (
+    <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
+      <View
+        style={{
+          width: RfW(80),
+          borderRadius: 8,
+          marginHorizontal: RfW(10),
+          marginTop: RfH(20),
+        }}>
+        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
+          <Text
+            numberOfLines={2}
+            style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
+            {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
+          </Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={{
+              marginTop: 1,
+              color: Colors.secondaryText,
+              fontSize: 13,
+              marginBottom: RfH(16),
+              textAlign: 'center',
+            }}>
+            {getSubjects(item)}
+          </Text>
         </View>
-      </TouchableWithoutFeedback>
-    );
-  };
+      </View>
+    </TouchableWithoutFeedback>
+  );
 
   return (
     <>
@@ -651,7 +650,9 @@ function StudentDashboard(props) {
 
           <TouchableWithoutFeedback
             onPress={() =>
-              navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: {} })
+              navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, {
+                classDetails: { uuid: 'DUMMY_CLASS' },
+              })
             }>
             <View
               style={{
@@ -1034,7 +1035,7 @@ function StudentDashboard(props) {
         onClose={setStudentOfferingModalVisible}
         visible={studentOfferingModalVisible}
         onSelect={onOfferingSelect}
-        offerings={interestedOfferings && interestedOfferings.getInterestedOfferings}
+        offerings={interestedOfferings}
       />
     </>
   );

@@ -1,8 +1,8 @@
-import { Alert, Keyboard, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
@@ -10,9 +10,9 @@ import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import { isTokenLoading } from '../../../apollo/cache';
+import { isLoggedIn } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import NavigationRouteNames from '../../../routes/screenNames';
+import LoginCheck from './loginCheck';
 
 function SignUp(props) {
   const navigation = useNavigation();
@@ -22,32 +22,13 @@ function SignUp(props) {
   const [password, setPassword] = useState('');
   const [referCode, setReferCode] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
+  const isUserLoggedIn = useReactiveVar(isLoggedIn);
 
   const { route } = props;
 
   const [addUser, { data: addUserData, error: addUserError, loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
     fetchPolicy: 'no-cache',
   });
-
-  //   onError: (e) => {
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //       if (error.errorCode === DUPLICATE_FOUND) {
-  //         Alert.alert('Email already being used by another user, please use different email!');
-  //       }
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     if (data) {
-  //       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
-  //         isLoggedIn(true);
-  //         userDetails(data.signUp);
-  //       });
-  //
-  //       // navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR);
-  //     }
-  //   },
-  // });
 
   useEffect(() => {
     if (addUserError && addUserError.graphQLErrors && addUserError.graphQLErrors.length > 0) {
@@ -61,8 +42,7 @@ function SignUp(props) {
   useEffect(() => {
     if (addUserData && addUserData.signUp) {
       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, addUserData.signUp.token).then(() => {
-        isTokenLoading(true);
-        navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
+        isLoggedIn(true);
       });
     }
   }, [addUserData]);
@@ -105,14 +85,12 @@ function SignUp(props) {
 
   return (
     <MainContainer isLoading={addUserLoading} onBackPress={onBackPress}>
+      {isUserLoggedIn && <LoginCheck />}
       <ScrollView>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={styles.contentMarginTop}>
-            <Text style={styles.title}>Create Account</Text>
-            <Text style={styles.subtitle}>Sign Up to get started</Text>
-          </View>
-        </TouchableWithoutFeedback>
-
+        <View style={styles.contentMarginTop}>
+          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.subtitle}>Sign Up to get started</Text>
+        </View>
         <View style={styles.bottomCard}>
           <View style={styles.setPasswordView}>
             <View>
@@ -133,14 +111,12 @@ function SignUp(props) {
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
                 <Label>Password</Label>
                 <Input secureTextEntry={hidePassword} onChangeText={(text) => setPassword(text)} />
-                {/* {password && ( */}
                 <Icon
                   type="Entypo"
                   name={hidePassword ? 'eye' : 'eye-with-line'}
                   onPress={() => setHidePassword(!hidePassword)}
                   style={styles.eyeIcon}
                 />
-                {/* )} */}
               </Item>
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
                 <Label>Referral Code</Label>
@@ -150,7 +126,7 @@ function SignUp(props) {
             </View>
           </View>
           <TouchableOpacity
-            onPress={() => onClickContinue()}
+            onPress={onClickContinue}
             style={[
               commonStyles.buttonPrimary,
               {

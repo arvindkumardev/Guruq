@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { RfH, RfW } from '../../utils/helpers';
+import Colors from "../../theme/colors";
 
 const styles = StyleSheet.create({
   textInputContainer: {
@@ -18,25 +19,27 @@ const styles = StyleSheet.create({
   textInputInnerContainer: {
     flexDirection: 'row',
     marginTop: RfH(4),
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: RfH(12),
+    borderBottomWidth: 0.5,
+    borderColor: Colors.secondaryText,
   },
   mobileInputInnerContainer: {
     flexDirection: 'row',
     marginTop: RfH(4),
     justifyContent: 'space-between',
-    height: RfH(34),
+    height: RfH(40),
+    borderBottomWidth: 0.5,
+    borderColor: Colors.secondaryText,
   },
   iconContainer: {
     paddingHorizontal: RfH(10),
     justifyContent: 'center',
-    paddingRight: RfW(5),
   },
   iconStyle: {
-    width: RfW(20.3),
-    height: RfH(15.3),
-    resizeMode: 'contain',
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    alignSelf: 'center',
   },
   errorTextStyle: {
     fontSize: RFValue(15, STANDARD_SCREEN_SIZE),

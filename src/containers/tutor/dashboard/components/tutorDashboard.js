@@ -6,12 +6,13 @@ import Swiper from 'react-native-swiper';
 import { useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { getSaveData, removeToken, RfH, RfW } from '../../../../utils/helpers';
+import { clearAllLocalStorage, getSaveData, removeToken, RfH, RfW } from '../../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
 import Fonts from '../../../../theme/fonts';
-import { userDetails } from '../../../../apollo/cache';
+import { isLoggedIn, studentDetails, tutorDetails, userDetails } from '../../../../apollo/cache';
+import initializeApollo from '../../../../apollo/apollo';
 
 function TutorDashboard() {
   const [userName, setUserName] = useState('');
@@ -246,6 +247,22 @@ function TutorDashboard() {
     );
   };
 
+  const client = initializeApollo();
+  const logout = () => {
+    clearAllLocalStorage().then(() => {
+      client.cache.reset().then(() => {
+        removeToken().then(() => {
+          // set in apollo cache
+          isLoggedIn(false);
+          userDetails({});
+
+          studentDetails({});
+          tutorDetails({});
+        });
+      });
+    });
+  };
+
   return (
     <ScrollView>
       <StatusBar barStyle="dark-content" />
@@ -308,6 +325,11 @@ function TutorDashboard() {
             </View>
           </Swiper>
         </View>
+
+        <TouchableOpacity onPress={() => logout()}>
+          <Text className="h5">Logout</Text>
+        </TouchableOpacity>
+
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
           <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>

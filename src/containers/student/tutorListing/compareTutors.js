@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import { Images, Colors } from '../../../theme';
-import { getSaveData, getTutorImageUrl, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { getSaveData, getUserImageUrl, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
@@ -24,6 +24,10 @@ function compareTutors() {
     navigation.goBack();
   };
 
+  const getTutorImage = (tutor) => {
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
+  };
+
   const renderTutorView = (item, index) => {
     return (
       <View style={commonStyles.verticallyStretchedItemsView}>
@@ -37,7 +41,7 @@ function compareTutors() {
         <IconButtonWrapper
           iconWidth={RfH(70)}
           iconHeight={RfH(70)}
-          iconImage={getTutorImageUrl(item)}
+          iconImage={getTutorImage(item)}
           styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
         />
         <Text style={styles.compareTutorName}>

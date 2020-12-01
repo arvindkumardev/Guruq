@@ -1,23 +1,20 @@
-import { Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Icon } from 'native-base';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
-import { RfH, RfW } from '../../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../../utils/constants';
 import { CustomMobileNumber } from '../../../components';
 import routeNames from '../../../routes/screenNames';
 import { CHECK_USER_QUERY } from '../graphql-query';
 import { NOT_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
+import { RfH } from '../../../utils/helpers';
 
 function Login() {
   const navigation = useNavigation();
-  const [showNext, setShowNext] = useState(false);
-  const [showClear, setShowClear] = useState(false);
-
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
@@ -44,19 +41,10 @@ function Login() {
     },
   });
 
-  const onBackPress = () => {
-    navigation.goBack();
-  };
-
-  const onSubmitEditing = () => {
-    setShowNext(true);
-  };
-
   const onClickContinue = () => {
     if (mobileObj.mobile) {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
-
       checkUser({
         variables: { countryCode, number },
       });
@@ -65,56 +53,30 @@ function Login() {
     }
   };
 
-  const clearMobileNumber = () => {
-    setMobileObj({ mobile: '', country: IND_COUNTRY_OBJ });
-    setShowClear(false);
-  };
-
   return (
-    <MainContainer isLoading={checkUserLoading} onBackPress={onBackPress}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.contentMarginTop}>
-          <Text style={styles.title}>Login/ Sign Up</Text>
-          <Text style={styles.subtitle}>Enter your phone number to continue</Text>
-        </View>
-      </TouchableWithoutFeedback>
-
+    <MainContainer isLoading={checkUserLoading} isBackButtonVisible={false}>
+      <View style={styles.contentMarginTop}>
+        <Text style={styles.title}>Login/ Sign Up</Text>
+        <Text style={styles.subtitle}>Enter your phone number to continue</Text>
+      </View>
       <View style={styles.bottomCard}>
-        <View style={styles.bottomParent}>
-          <View style={{ flex: 1 }}>
-            <CustomMobileNumber
-              value={mobileObj}
-              topMargin={0}
-              onChangeHandler={(m) => {
-                setMobileObj(m);
-                setShowClear(true);
-                setShowNext(true);
-              }}
-              returnKeyType="done"
-              refKey="mobileNumber"
-              placeholder="Mobile number"
-              onSubmitEditing={() => onSubmitEditing()}
-            />
-          </View>
-          {showClear && (
-            <Icon onPress={() => clearMobileNumber()} style={styles.clearIcon} type="Entypo" name="circle-with-cross" />
-          )}
+        <CustomMobileNumber
+          value={mobileObj}
+          topMargin={0}
+          onChangeHandler={(m) => setMobileObj(m)}
+          returnKeyType="done"
+          refKey="mobileNumber"
+          placeholder="Mobile number"
+          onSubmitEditing={onClickContinue}
+          label={' '}
+        />
+        <View style={{ alignItems: 'center', marginTop: RfH(100) }}>
+          <TouchableOpacity
+            onPress={onClickContinue}
+            style={[!isEmpty(mobileObj.mobile) ? commonStyles.buttonPrimary : commonStyles.disableButton]}>
+            <Text style={commonStyles.textButtonPrimary}>Continue</Text>
+          </TouchableOpacity>
         </View>
-
-        <View style={styles.underlineView} />
-
-        <TouchableOpacity
-          onPress={() => onClickContinue()}
-          style={[
-            showNext ? commonStyles.buttonPrimary : commonStyles.disableButton,
-            {
-              marginTop: RfH(44),
-              alignSelf: 'center',
-              width: RfW(144),
-            },
-          ]}>
-          <Text style={commonStyles.textButtonPrimary}>Continue</Text>
-        </TouchableOpacity>
       </View>
     </MainContainer>
   );
