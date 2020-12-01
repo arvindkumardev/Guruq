@@ -55,7 +55,7 @@ const cache = new InMemoryCache();
 
 function createApolloClient() {
   return new ApolloClient({
-    link: splitLink.concat(apolloLogger),
+    link: apolloLogger.concat(splitLink),
     cache,
   });
 }
