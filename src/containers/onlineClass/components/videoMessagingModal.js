@@ -96,17 +96,6 @@ const VideoMessagingModal = (props) => {
     });
   };
 
-  // fetch chat messages in app startup
-  // useEffect(() => {}, [initialMessages]);
-
-  // handles new message subscription event
-  // useEffect(() => {
-  //   console.log(newMessageEvent);
-  //   if (newMessageEvent?.chatMessageSent) {
-  //     setChatMessages([...chatMessages, newMessageEvent.chatMessageSent]);
-  //   }
-  // }, [newMessageEvent]);
-
   const renderMessage = (props) => {
     const {
       currentMessage: { text: currText },
