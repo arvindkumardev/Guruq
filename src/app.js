@@ -1,12 +1,12 @@
-import React, {useEffect, useRef} from 'react';
-import {ApolloProvider, useReactiveVar} from '@apollo/client';
-import {ApolloProvider as ApolloHooksProvider} from '@apollo/react-hooks';
+import React, { useEffect, useRef } from 'react';
+import { ApolloProvider, useReactiveVar } from '@apollo/client';
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
-import {NavigationContainer} from '@react-navigation/native';
-import {StatusBar} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
-import {clearAllLocalStorage, getToken} from './utils/helpers';
-import {isLoggedIn, isTokenLoading, userType,isSplashScreenVisible} from './apollo/cache';
+import { clearAllLocalStorage, getToken } from './utils/helpers';
+import { isLoggedIn, isTokenLoading, userType, isSplashScreenVisible } from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
 
@@ -56,26 +56,26 @@ function App() {
     GlobalFont.applyGlobal('SegoeUI');
   }, []);
 
-  useEffect(async () => {
+  const bootstrapAsync = async () => {
+    let userToken;
+    try {
+      userToken = await getToken();
+      console.log('userToken', userToken);
+      if (userToken) {
+        console.log('I am here...');
+        isLoggedIn(true);
+      }
+    } catch (e) {
+      // Restoring token failed
+      isLoggedIn(false);
+    } finally {
+      SplashScreen.hide();
+    }
+  };
+
+  useEffect(() => {
     // clearAllLocalStorage()
     // Fetch the token from storage then navigate to our appropriate place
-    const bootstrapAsync = async () => {
-      let userToken;
-      try {
-        userToken = await getToken();
-        console.log('userToken', userToken);
-        if (userToken) {
-          console.log('I am here...');
-          isLoggedIn(true);
-        }
-      } catch (e) {
-        // Restoring token failed
-        isLoggedIn(false);
-      } finally {
-        SplashScreen.hide();
-      }
-    };
-
     bootstrapAsync();
   }, []);
 

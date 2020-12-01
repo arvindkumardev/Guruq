@@ -8,7 +8,7 @@ import ProgressCircle from 'react-native-progress-circle';
 import { Button, Icon } from 'native-base';
 import CalendarStrip from 'react-native-calendar-strip';
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
-// import { Rating } from 'react-native-ratings';
+import { Rating } from 'react-native-ratings';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import Loader from '../../../components/Loader';
@@ -458,11 +458,6 @@ function tutorDetails(props) {
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          {/* <Icon */}
-          {/*  type="FontAwesome" */}
-          {/*  name="home" */}
-          {/*  style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }} */}
-          {/* /> */}
           <IconButtonWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
@@ -654,21 +649,13 @@ function tutorDetails(props) {
           <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Rating and Reviews</Text>
         </View>
         <View>
-          {/* <Ratings
-            ratings={tutorData.averageRating}
-            containerStyle={[
-              commonStyles.horizontalChildrenView,
-              { marginVertical: RfH(16), marginHorizontal: RfW(16) },
-            ]}
-            textStyle={[
-              styles.tutorName,
-              {
-                marginHorizontal: RfW(16),
-                fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-              },
-            ]}
-          /> */}
-          {/* <Rating showRating onFinishRating={this.ratingCompleted} style={{ paddingVertical: 10 }} /> */}
+          <Rating
+            style={{ paddingVertical: RfH(16), alignSelf: 'flex-start', marginHorizontal: RfW(16) }}
+            imageSize={30}
+            ratingCount={5}
+            readonly
+            startingValue={tutorData.averageRating}
+          />
         </View>
         <View style={{ paddingHorizontal: RfW(16) }}>
           <FlatList
