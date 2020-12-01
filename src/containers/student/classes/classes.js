@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { FlatList, Image, ScrollView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -13,6 +14,7 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 import { SEARCH_BOOKINGS } from '../booking.query';
 import { OrderStatus } from '../enums';
+import Loader from '../../../components/Loader';
 
 function bookingConfirmed() {
   const navigation = useNavigation();
@@ -39,15 +41,19 @@ function bookingConfirmed() {
   const [orderItems, setOrderItems] = useState([]);
 
   useEffect(() => {
-    if (bookingData?.searchBookings.length > 0) {
-      const orderList = [];
-      for (const booking of bookingData.searchBookings) {
-        for (const orderItem of booking.orderItems) {
-          orderList.push({ booking, orderItem });
+    if (bookingData) {
+      if (bookingData?.searchBookings.length > 0) {
+        const orderList = [];
+        for (const booking of bookingData.searchBookings) {
+          for (const orderItem of booking.orderItems) {
+            orderList.push({ booking, orderItem });
+          }
         }
+        setOrderItems(orderList);
+        setIsEmpty(false);
+      } else {
+        setIsEmpty(true);
       }
-      setOrderItems(orderList);
-      setIsEmpty(false);
     } else {
       setIsEmpty(true);
     }
@@ -213,45 +219,53 @@ function bookingConfirmed() {
               </Button>
             </View>
           </View>
-          {isEmpty ? (
-            <View>
-              <Image
-                source={Images.empty_classes}
-                style={{
-                  margin: RfH(56),
-                  alignSelf: 'center',
-                  height: RfH(200),
-                  width: RfW(216),
-                  marginBottom: RfH(32),
-                }}
-              />
-              <Text
-                style={[
-                  commonStyles.pageTitleThirdRow,
-                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
-                ]}>
-                No class found
-              </Text>
-              <Text
-                style={[
-                  commonStyles.regularMutedText,
-                  { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
-                ]}>
-                Looks like you haven't booked any class.
-              </Text>
-              <View style={{ height: RfH(40) }} />
-              <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-                <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
-              </Button>
+          {loadingBookings ? (
+            <View style={{ backgroundColor: Colors.lightGrey }}>
+              <Loader isLoading={loadingBookings} />
             </View>
           ) : (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={orderItems}
-              renderItem={({ item }) => renderClassItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: RfH(170) }}
-            />
+            <View>
+              {isEmpty ? (
+                <View>
+                  <Image
+                    source={Images.empty_classes}
+                    style={{
+                      margin: RfH(56),
+                      alignSelf: 'center',
+                      height: RfH(200),
+                      width: RfW(216),
+                      marginBottom: RfH(32),
+                    }}
+                  />
+                  <Text
+                    style={[
+                      commonStyles.pageTitleThirdRow,
+                      { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                    ]}>
+                    No class found
+                  </Text>
+                  <Text
+                    style={[
+                      commonStyles.regularMutedText,
+                      { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
+                    ]}>
+                    Looks like you haven't booked any class.
+                  </Text>
+                  <View style={{ height: RfH(40) }} />
+                  <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+                    <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
+                  </Button>
+                </View>
+              ) : (
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  data={orderItems}
+                  renderItem={({ item }) => renderClassItem(item)}
+                  keyExtractor={(item, index) => index.toString()}
+                  contentContainerStyle={{ paddingBottom: RfH(170) }}
+                />
+              )}
+            </View>
           )}
         </ScrollView>
       </View>

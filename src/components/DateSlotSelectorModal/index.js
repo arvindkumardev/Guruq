@@ -31,6 +31,7 @@ const dateSlotModal = (props) => {
       }
     },
     onCompleted: (data) => {
+      setAvailability([]);
       const dateObj = [];
       for (const obj of data.getAvailability) {
         dateObj.push({
@@ -132,13 +133,16 @@ const dateSlotModal = (props) => {
           opacity: 1,
           paddingBottom: RfH(34),
         }}>
-        <IconButtonWrapper
-          iconHeight={RfH(24)}
-          iconWidth={RfW(24)}
-          styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
-          iconImage={Images.cross}
-          submitFunction={() => onClose(false)}
-        />
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>
+          <Text style={commonStyles.headingPrimaryText}>Available Slots</Text>
+          <IconButtonWrapper
+            iconHeight={RfH(24)}
+            iconWidth={RfW(24)}
+            styling={{ alignSelf: 'flex-end' }}
+            iconImage={Images.cross}
+            submitFunction={() => onClose(false)}
+          />
+        </View>
         <View style={{ paddingHorizontal: RfW(16) }}>
           <CalendarStrip
             calendarHeaderStyle={{

@@ -6,7 +6,7 @@ import { FlatList, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import moment from 'moment';
 import commonStyles from '../../../theme/styles';
@@ -16,12 +16,15 @@ import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
 import BackArrow from '../../../components/BackArrow';
 import { SCHEDULE_CLASS } from '../class.mutation';
+import { GET_SCHEDULED_CLASSES } from '../booking.query';
 
 function scheduleClass(props) {
   const navigation = useNavigation();
   const { route } = props;
   const classData = route?.params?.classData;
   const classes = route?.params?.classes;
+
+  console.log(classData);
 
   const [showSlotSelector, setShowSlotSelector] = useState(false);
   const [availability, setAvailability] = useState([]);
@@ -30,27 +33,6 @@ function scheduleClass(props) {
   const [startTimes, setStartTimes] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedEndTime, setSelectedEndTime] = useState(null);
-
-  // const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY, {
-  //   onError: (e) => {
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     const dateObj = [];
-  //     for (const obj of data.getAvailability) {
-  //       dateObj.push({
-  //         startDate: new Date(obj.startDate),
-  //         endDate: new Date(obj.endDate),
-  //         selected: false,
-  //         active: obj.active,
-  //       });
-  //     }
-  //     setAvailability(dateObj);
-  //     setShowSlotSelector(true);
-  //   },
-  // });
 
   const [scheduleClass, { loading: scheduleLoading }] = useMutation(SCHEDULE_CLASS, {
     fetchPolicy: 'no-cache',
@@ -78,6 +60,55 @@ function scheduleClass(props) {
       setTutorClasses(classes);
     }
   }, [classes]);
+
+  const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      const array = [];
+      for (const obj of data.getScheduledClasses) {
+        const startHours = new Date(obj.startDate).getUTCHours();
+        const startMinutes = new Date(obj.startDate).getUTCMinutes();
+        const endHours = new Date(obj.endDate).getUTCHours();
+        const endMinutes = new Date(obj.endDate).getUTCMinutes();
+        const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
+          startMinutes < 10 ? `0${startMinutes}` : startMinutes
+        } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
+          endMinutes < 10 ? `0${endMinutes}` : endMinutes
+        } ${endHours < 12 ? `AM` : 'PM'}`;
+        const item = {
+          date: new Date(obj.startDate).getUTCDate(),
+          month: new Date(obj.startDate).getUTCMonth(),
+          classes: [
+            {
+              uuid: obj.uuid,
+              classTitle: obj.offering.displayName,
+              board: obj.offering.parentOffering.parentOffering.displayName,
+              class: obj.offering.parentOffering.displayName,
+              timing,
+              tutors: [{ tutor: Images.kushal }],
+            },
+          ],
+        };
+        array.push(item);
+      }
+    },
+  });
+
+  useEffect(() => {
+    getScheduledClasses({
+      variables: {
+        classesSearchDto: {
+          orderItemId: classData.orderItem.id,
+          startDate: moment().toDate(),
+          endDate: moment().endOf('day').toDate(),
+        },
+      },
+    });
+  }, []);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -193,11 +224,13 @@ function scheduleClass(props) {
     if (item.active) {
       const interval = 1;
       const timeArray = [];
-      timeArray.push({ startTime: item.startDate });
+      timeArray.push({
+        startTime: new Date(item.startDate).setUTCMinutes(new Date(item.startDate).getUTCMinutes() + 15),
+      });
       let endTime = new Date(item.startDate).setUTCHours(new Date(item.startDate).getUTCHours() + interval);
       while (endTime < new Date(item.endDate)) {
-        timeArray.push({ startTime: new Date(endTime) });
-        endTime = new Date(endTime).setUTCHours(new Date(endTime).getUTCHours() + interval);
+        timeArray.push({ startTime: new Date(endTime).setUTCMinutes(new Date(endTime).getUTCMinutes() + 15) });
+        endTime = new Date(endTime).setUTCMinutes(new Date(endTime).getUTCMinutes() + 15);
       }
       setStartTimes(timeArray);
       const newArray = [];

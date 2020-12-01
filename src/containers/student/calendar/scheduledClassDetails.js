@@ -19,8 +19,6 @@ function ScheduledClassDetails(props) {
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
 
-  // const [startPosition, setStartPosition] = useState(new Animated.ValueXY({ x: 10, y: 450 }));
-
   const { route } = props;
 
   const { classDetails } = route.params;
@@ -176,10 +174,10 @@ function ScheduledClassDetails(props) {
 
                 <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                    English Class
+                    {classDetails?.classTitle}
                   </Text>
                   <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                    CBSE | Class 9
+                    {`${classDetails.board} | ${classDetails.class}`}
                   </Text>
                 </View>
               </View>
@@ -233,8 +231,12 @@ function ScheduledClassDetails(props) {
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
-                    <Text style={commonStyles.headingPrimaryText}>English Class</Text>
-                    <Text style={[commonStyles.mediumMutedText, { marginTop: RfH(4) }]}>CBSE | Class 9</Text>
+                    <Text style={commonStyles.headingPrimaryText}>{classDetails?.classTitle}</Text>
+                    <Text
+                      style={[
+                        commonStyles.mediumMutedText,
+                        { marginTop: RfH(4) },
+                      ]}>{`${classDetails.board} | ${classDetails.class}`}</Text>
                   </View>
 
                   <View style={{}}>

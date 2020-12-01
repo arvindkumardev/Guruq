@@ -56,7 +56,7 @@ const PaymentMethod = (props) => {
             initiatePaypalPayment(data.createBooking.id);
             break;
           default:
-            completedPayment(data.createBooking.id, 2, '');
+            completedPayment(data.createBooking.id, 1, '');
             break;
         }
       }
