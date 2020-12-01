@@ -49,14 +49,14 @@ const PaymentMethod = (props) => {
           case 1:
             initiateRazorPayPayment(data.createBooking.id);
             break;
-          case 2:
+          case 4:
             initiatePaytmPayment(data.createBooking.id);
             break;
-          case 3:
+          case 5:
             initiatePaypalPayment(data.createBooking.id);
             break;
           default:
-            completedPayment(data.createBooking.id, 3, 'Success');
+            completedPayment(data.createBooking.id, 2, '');
             break;
         }
       }
@@ -319,10 +319,12 @@ const PaymentMethod = (props) => {
   const completedPayment = (orderId, status, transactionData) => {
     payment({
       variables: {
-        orderId,
-        paymentMethod,
-        orderPaymentStatus: status,
-        transactionDetails: transactionData,
+        paymentDetails: {
+          orderId,
+          paymentMethod,
+          paymentStatus: status,
+          transactionDetails: transactionData,
+        },
       },
     });
   };

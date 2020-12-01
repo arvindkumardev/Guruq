@@ -79,18 +79,8 @@ export const REMOVE_CART_ITEM = gql`
 // }
 
 export const MAKE_PAYMENT = gql`
-  mutation MakePayment(
-    $orderId: Float!
-    $paymentMethod: Float!
-    $orderPaymentStatus: Float!
-    $transactionDetails: String!
-  ) {
-    makePayment(
-      orderId: $orderId
-      paymentMethod: $paymentMethod
-      orderPaymentStatus: $orderPaymentStatus
-      transactionDetails: $transactionDetails
-    ) {
+  mutation MakePayment($paymentDetails: PaymentDto!) {
+    makePayment(paymentDetails: $paymentDetails) {
       id
       uuid
       orderStatus
