@@ -331,10 +331,12 @@ const PaymentMethod = (props) => {
   const completedPayment = (orderId, status, transactionData) => {
     payment({
       variables: {
-        orderId,
-        paymentMethod,
-        orderPaymentStatus: status,
-        transactionDetails: transactionData,
+        paymentDetails: {
+          orderId,
+          paymentMethod,
+          paymentStatus: status,
+          transactionDetails: transactionData,
+        },
       },
     });
   };
