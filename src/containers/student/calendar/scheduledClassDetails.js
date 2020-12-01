@@ -1,23 +1,31 @@
+/* eslint-disable no-restricted-syntax */
 import { FlatList, Modal, ScrollView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Button, CheckBox } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import MapView, { Marker } from 'react-native-maps';
+import { useMutation } from '@apollo/client';
+import moment from 'moment';
 import { RfH, RfW } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
-import { DateSlotSelectorModal, IconButtonWrapper, RateReview } from '../../../components';
+import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import NavigationRouteNames from '../../../routes/screenNames';
 
 import styles from '../tutorListing/styles';
 import BackArrow from '../../../components/BackArrow';
+import { SCHEDULE_CLASS } from '../booking.mutation';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
-  const [showReviewPopup, setShowReviewPopup] = useState(false);
+  const [attendees, setAttendees] = useState([]);
+  const [startTimes, setStartTimes] = useState([]);
+  const [availability, setAvailability] = useState([]);
+  const [selectedEndTime, setSelectedEndTime] = useState(null);
+  const [selectedStartTime, setSelectedStartTime] = useState(null);
 
   const { route } = props;
 
@@ -29,32 +37,21 @@ function ScheduledClassDetails(props) {
     }
   }, [route]);
 
-  const attendees = [
-    {
-      icon: Images.kushal,
-      studentName: 'Sheena ',
-      studentId: 'GURUQS4528',
-      joined: true,
-    },
-    {
-      icon: Images.kushal,
-      studentName: 'Tanushree Dutta ',
-      studentId: 'GURUQS4528',
-      joined: false,
-    },
-    {
-      icon: Images.kushal,
-      studentName: 'Trasha Hemani ',
-      studentId: 'GURUQS4528',
-      joined: false,
-    },
-    {
-      icon: Images.kushal,
-      studentName: 'Xavi Marique ',
-      studentId: 'GURUQS4528',
-      joined: false,
-    },
-  ];
+  useEffect(() => {
+    const array = [];
+    if (classDetails?.classData?.students) {
+      for (const obj of classDetails?.classData?.students) {
+        const item = {
+          icon: Images.kushal,
+          studentName: obj.contactDetail.firstName,
+          studentId: obj.contactDetail.lastName,
+          joined: true,
+        };
+        array.push(item);
+      }
+      setAttendees(array);
+    }
+  }, classDetails?.classData?.students);
 
   const attachments = [
     {
@@ -124,7 +121,7 @@ function ScheduledClassDetails(props) {
 
   const goToCancelReason = () => {
     setShowCancelClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON);
+    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId: classDetails.classData.id });
   };
 
   const goToOnlineClass = () => {
@@ -149,6 +146,64 @@ function ScheduledClassDetails(props) {
     } else {
       setShowBackButton(false);
     }
+  };
+
+  const [scheduleClass, { loading: scheduleLoading }] = useMutation(SCHEDULE_CLASS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log(data);
+        setShowReschedulePopup(false);
+      }
+    },
+  });
+
+  const selectedSlot = (item, index) => {
+    if (item.active) {
+      const interval = 1;
+      const timeArray = [];
+      timeArray.push({
+        startTime: new Date(item.startDate).setUTCMinutes(new Date(item.startDate).getUTCMinutes() + 15),
+      });
+      let endTime = new Date(item.startDate).setUTCHours(new Date(item.startDate).getUTCHours() + interval);
+      while (endTime < new Date(item.endDate)) {
+        timeArray.push({ startTime: new Date(endTime).setUTCMinutes(new Date(endTime).getUTCMinutes() + 15) });
+        endTime = new Date(endTime).setUTCMinutes(new Date(endTime).getUTCMinutes() + 15);
+      }
+      setStartTimes(timeArray);
+      const newArray = [];
+      availability.map((obj) => {
+        obj.selected = false;
+        newArray.push(obj);
+      });
+      let arrayItem = {};
+      arrayItem = { ...newArray[index] };
+      arrayItem.selected = !arrayItem.selected;
+      newArray[index] = arrayItem;
+      setAvailability(newArray);
+    }
+  };
+
+  const selectedClassTime = (value) => {
+    setSelectedStartTime(value);
+    setSelectedEndTime(moment(value).endOf('day').toDate());
+  };
+
+  const onScheduleClass = () => {
+    scheduleClass({
+      variables: {
+        classesCreateDto: {
+          orderItemId: classDetails?.classData?.orderItem?.id,
+          startDate: selectedStartTime,
+          endDate: selectedEndTime,
+        },
+      },
+    });
   };
 
   return (
@@ -280,8 +335,11 @@ function ScheduledClassDetails(props) {
             styling={{ borderRadius: RfH(48) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>Simran Kaur gill</Text>
-            <Text style={commonStyles.mediumMutedText}>GURUQT125744</Text>
+            <Text style={commonStyles.headingPrimaryText}>
+              {classDetails?.classData?.tutor?.contactDetail?.firstName}{' '}
+              {classDetails.classData.tutor.contactDetail.lastName}
+            </Text>
+            <Text style={commonStyles.mediumMutedText}>GURUQT{classDetails.classData.tutor.id}</Text>
           </View>
         </View>
 
@@ -290,8 +348,10 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>Friday , Sept 15</Text>
-            <Text style={commonStyles.mediumMutedText}>06:00 PM - 07:00 PM</Text>
+            <Text style={commonStyles.headingPrimaryText}>
+              {new Date(classDetails?.classData?.startDate).toDateString()}
+            </Text>
+            <Text style={commonStyles.mediumMutedText}>{classDetails.timing}</Text>
           </View>
         </View>
 
@@ -311,7 +371,7 @@ function ScheduledClassDetails(props) {
           <IconButtonWrapper iconImage={Images.attendees} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
-            <Text style={commonStyles.mediumMutedText}>4 participants to join the Class</Text>
+            <Text style={commonStyles.mediumMutedText}>{attendees.length} participants to join the Class</Text>
           </View>
         </View>
         <FlatList
@@ -324,7 +384,7 @@ function ScheduledClassDetails(props) {
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 44 }]}>
+        {/* <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 44 }]}>
           <IconButtonWrapper iconImage={Images.attachment} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Attachments</Text>
@@ -339,7 +399,7 @@ function ScheduledClassDetails(props) {
           keyExtractor={(item, index) => index.toString()}
         />
 
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
 
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(24)} iconHeight={RfH(24)} />
@@ -378,7 +438,11 @@ function ScheduledClassDetails(props) {
           <IconButtonWrapper iconImage={Images.personal} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
-            <Text style={commonStyles.mediumMutedText}>GURUQC2011257263</Text>
+            <Text style={commonStyles.mediumMutedText}>
+              GURUQC{new Date().getUTCFullYear().toString().substring(2, 4)}
+              {new Date().getUTCMonth()}
+              {classDetails?.classData?.id}
+            </Text>
           </View>
         </View>
 
@@ -500,8 +564,15 @@ function ScheduledClassDetails(props) {
           <View style={{ flex: 1 }} />
         </View>
       </Modal>
-      <DateSlotSelectorModal visible={showReschedulePopup} onClose={() => setShowReschedulePopup(false)} />
-      <RateReview visible={showReviewPopup} onClose={() => setShowReviewPopup(false)} />
+      <DateSlotSelectorModal
+        visible={showReschedulePopup}
+        onClose={() => setShowReschedulePopup(false)}
+        tutorId={classDetails?.classData?.tutor?.id}
+        selectedSlot={(item, index) => selectedSlot(item, index)}
+        onSubmit={() => onScheduleClass()}
+        times={startTimes}
+        selectedClassTime={(value) => selectedClassTime(value)}
+      />
     </View>
   );
 }

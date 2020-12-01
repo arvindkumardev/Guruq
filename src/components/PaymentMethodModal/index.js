@@ -1,18 +1,18 @@
 /* eslint-disable no-use-before-define */
 import {
   Alert,
+  Modal,
   NativeEventEmitter,
   NativeModules,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
-  Modal,
 } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Card } from 'native-base';
+import { Button } from 'native-base';
 import PropTypes from 'prop-types';
 import RNRazorpayCheckout from 'react-native-razorpay';
 import { useMutation, useReactiveVar } from '@apollo/client';
@@ -24,14 +24,14 @@ import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import routeNames from '../../routes/screenNames';
 import { userDetails } from '../../apollo/cache';
 import { ADD_INTERESTED_OFFERINGS, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
-import Loader from '../Loader';
 import Dash from '../Dash';
+import { OrderPaymentStatusEnum, PaymentMethodEnum } from './paymentMethod.enum';
 
 const PaymentMethod = (props) => {
   const { visible, onClose, bookingData, amount, discount, deductedAgaintQPoint } = props;
 
   const navigation = useNavigation();
-  const [paymentMethod, setPaymentMethod] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState(PaymentMethodEnum.ONLINE.value);
   const [convenienceCharges, setConvenienceCharges] = useState(100);
 
   const userInfo = useReactiveVar(userDetails);
@@ -39,24 +39,28 @@ const PaymentMethod = (props) => {
   const [createNewBooking, { loading: bookingLoading }] = useMutation(ADD_INTERESTED_OFFERINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
+      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
     },
     onCompleted: (data) => {
+      console.log('paymentMethod', paymentMethod);
       if (data) {
         switch (paymentMethod) {
-          case 1:
+          case PaymentMethodEnum.ONLINE.value:
             initiateRazorPayPayment(data.createBooking.id);
             break;
-          case 4:
+          case PaymentMethodEnum.PAYTM.value:
             initiatePaytmPayment(data.createBooking.id);
             break;
-          case 5:
+          case PaymentMethodEnum.PAYPAL.value:
             initiatePaypalPayment(data.createBooking.id);
             break;
+          case PaymentMethodEnum.CASH.value:
+            completedPayment(data.createBooking.id, OrderPaymentStatusEnum.COMPLETE.value, 'Success');
+            break;
           default:
-            completedPayment(data.createBooking.id, 1, '');
             break;
         }
       }
@@ -66,11 +70,13 @@ const PaymentMethod = (props) => {
   const [payment, { loading: paymentLoading }] = useMutation(MAKE_PAYMENT, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
+      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
     },
     onCompleted: (data) => {
+      console.log(data);
       if (data) {
         onClose(false);
         navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, data);
@@ -79,6 +85,7 @@ const PaymentMethod = (props) => {
   });
 
   const initiateRazorPayPayment = (bookingOrderId) => {
+    console.log('initiateRazorPayPayment', bookingOrderId);
     const options = {
       description: 'Credits towards class booking',
       image:
@@ -97,11 +104,11 @@ const PaymentMethod = (props) => {
     RNRazorpayCheckout.open(options)
       .then((data) => {
         // handle success
-        completedPayment(bookingOrderId, 3, data.razorpay_payment_id);
+        completedPayment(bookingOrderId, OrderPaymentStatusEnum.COMPLETE.value, data.razorpay_payment_id);
       })
       .catch((error) => {
         // handle failure
-        completedPayment(bookingOrderId, 2, error.description);
+        completedPayment(bookingOrderId, OrderPaymentStatusEnum.FAILED.value, error.description);
         // create booking - with cancelled payment
       });
   };
@@ -210,7 +217,7 @@ const PaymentMethod = (props) => {
                 ₹{parseFloat(amount).toFixed(2)}
               </Text>
             </View>
-            {paymentMethod === 6 && (
+            {paymentMethod === PaymentMethodEnum.PAYTM.value && (
               <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
                 <View style={{ flexDirection: 'column' }}>
                   <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
@@ -307,10 +314,14 @@ const PaymentMethod = (props) => {
       subArea: 'CP',
       postalCode: 110001,
     };
-    bookingData.convenienceCharges = paymentMethod === 4 ? convenienceCharges : 0;
+    bookingData.convenienceCharges = paymentMethod === PaymentMethodEnum.PAYTM.value ? convenienceCharges : 0;
     bookingData.orderPayment.paymentMethod = paymentMethod;
     bookingData.orderPayment.amount = amount;
     bookingData.itemPrice = amount;
+
+    // hide the payment popup
+    props.hidePaymentPopup();
+
     createNewBooking({
       variables: { orderCreateDto: bookingData },
     });
@@ -357,7 +368,12 @@ const PaymentMethod = (props) => {
           <IconButtonWrapper
             iconHeight={RfH(24)}
             iconWidth={RfW(24)}
-            styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16), marginBottom: RfH(16) }}
+            styling={{
+              alignSelf: 'flex-end',
+              marginRight: RfW(16),
+              marginTop: RfH(16),
+              marginBottom: RfH(16),
+            }}
             iconImage={Images.cross}
             submitFunction={() => onClose(false)}
           />
@@ -383,29 +399,40 @@ const PaymentMethod = (props) => {
                   PAYMENT OPTIONS
                 </Text>
               </View>
-              <View style={{ paddingVertical: RfH(8), paddingHorizontal: RfW(16), backgroundColor: Colors.white }}>
+              <View
+                style={{
+                  paddingVertical: RfH(8),
+                  paddingHorizontal: RfW(16),
+                  backgroundColor: Colors.white,
+                }}>
                 {/* <View style={{ marginTop: RfH(24) }}> */}
-                <TouchableOpacity onPress={() => setPaymentMethod(1)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.ONLINE.value)}>
                   <View
                     style={[
                       commonStyles.horizontalChildrenView,
                       commonStyles.lineSeparator,
                       { alignItems: 'center', height: RfH(44) },
                     ]}>
-                    <CustomRadioButton enabled={paymentMethod === 1} submitFunction={() => setPaymentMethod(1)} />
+                    <CustomRadioButton
+                      enabled={paymentMethod === PaymentMethodEnum.ONLINE.value}
+                      submitFunction={() => setPaymentMethod(PaymentMethodEnum.ONLINE.value)}
+                    />
                     <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>
                       Online Payment
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPaymentMethod(4)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.PAYTM.value)}>
                   <View
                     style={[
                       commonStyles.horizontalChildrenView,
                       commonStyles.lineSeparator,
                       { alignItems: 'center', height: RfH(44) },
                     ]}>
-                    <CustomRadioButton enabled={paymentMethod === 4} submitFunction={() => setPaymentMethod(4)} />
+                    <CustomRadioButton
+                      enabled={paymentMethod === PaymentMethodEnum.PAYTM.value}
+                      submitFunction={() => setPaymentMethod(PaymentMethodEnum.PAYTM.value)}
+                    />
                     <Text
                       style={{
                         fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -416,14 +443,17 @@ const PaymentMethod = (props) => {
                     <View style={commonStyles.horizontalChildrenView} />
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPaymentMethod(5)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.PAYPAL.value)}>
                   <View
                     style={[
                       commonStyles.horizontalChildrenView,
                       commonStyles.lineSeparator,
                       { alignItems: 'center', height: RfH(44) },
                     ]}>
-                    <CustomRadioButton enabled={paymentMethod === 5} submitFunction={() => setPaymentMethod(5)} />
+                    <CustomRadioButton
+                      enabled={paymentMethod === PaymentMethodEnum.PAYPAL.value}
+                      submitFunction={() => setPaymentMethod(PaymentMethodEnum.PAYPAL.value)}
+                    />
                     <Text
                       style={{
                         fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -434,9 +464,19 @@ const PaymentMethod = (props) => {
                     <View style={commonStyles.horizontalChildrenView} />
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPaymentMethod(6)}>
-                  <View style={[commonStyles.horizontalChildrenView, { alignItems: 'center', height: RfH(44) }]}>
-                    <CustomRadioButton enabled={paymentMethod === 6} submitFunction={() => setPaymentMethod(6)} />
+                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.CASH.value)}>
+                  <View
+                    style={[
+                      commonStyles.horizontalChildrenView,
+                      {
+                        alignItems: 'center',
+                        height: RfH(44),
+                      },
+                    ]}>
+                    <CustomRadioButton
+                      enabled={paymentMethod === PaymentMethodEnum.CASH.value}
+                      submitFunction={() => setPaymentMethod(PaymentMethodEnum.CASH.value)}
+                    />
                     <Text
                       style={{
                         fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -468,7 +508,10 @@ const PaymentMethod = (props) => {
               <Text style={commonStyles.headingPrimaryText}>
                 ₹
                 {parseFloat(
-                  amount + (paymentMethod === 6 ? convenienceCharges : 0) - discount - deductedAgaintQPoint
+                  amount +
+                    (paymentMethod === PaymentMethodEnum.CASH.value ? convenienceCharges : 0) -
+                    discount -
+                    deductedAgaintQPoint
                 ).toFixed(2)}
               </Text>
               <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
@@ -512,6 +555,7 @@ PaymentMethod.propTypes = {
   amount: PropTypes.number,
   discount: PropTypes.number,
   deductedAgaintQPoint: PropTypes.number,
+  hidePaymentPopup: PropTypes.func,
 };
 
 export default PaymentMethod;

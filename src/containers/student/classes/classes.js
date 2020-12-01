@@ -32,8 +32,8 @@ function bookingConfirmed() {
 
   const goToScheduleClasses = (item) => {
     const classes = [];
-    for (let i = 1; i <= item.orderItem?.availableClasses; i++) {
-      classes.push({ class: `Class ${i}`, date: '', startTime: '' });
+    for (let i = 1; i <= item.orderItem?.count; i++) {
+      classes.push({ class: `${i}`, date: '', startTime: '' });
     }
     navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item, classes });
   };

@@ -1,11 +1,12 @@
 import { Image, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Images, Colors } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { RfH, RfW } from '../../../utils/helpers';
-import { IconButtonWrapper, ScreenHeader } from '../../../components';
+import { IconButtonWrapper, RateReview, ScreenHeader } from '../../../components';
 
 function OnlineClass() {
+  const [showReviewPopup, setShowReviewPopup] = useState(true);
   return (
     <View style={{ flex: 1 }}>
       <Image style={{ flex: 1 }} source={Images.online_top_img} />
@@ -75,6 +76,7 @@ function OnlineClass() {
           />
         </View>
       </View>
+      <RateReview visible={showReviewPopup} onClose={() => setShowReviewPopup(false)} />
     </View>
   );
 }

@@ -25,3 +25,12 @@ export const SCHEDULE_CLASS = gql`
     }
   }
 `;
+
+export const CANCEL_CLASS = gql`
+  mutation CancelClass($classesId: Float!) {
+    cancelClass(classesId: $classesId) {
+      id
+      status
+    }
+  }
+`;

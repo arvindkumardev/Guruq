@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-const-assign */
@@ -17,14 +18,13 @@ import { Colors, Fonts, Images } from '../../../theme';
 import BackArrow from '../../../components/BackArrow';
 import { SCHEDULE_CLASS } from '../class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../booking.query';
+import Loader from '../../../components/Loader';
 
 function scheduleClass(props) {
   const navigation = useNavigation();
   const { route } = props;
   const classData = route?.params?.classData;
   const classes = route?.params?.classes;
-
-  console.log(classData);
 
   const [showSlotSelector, setShowSlotSelector] = useState(false);
   const [availability, setAvailability] = useState([]);
@@ -43,13 +43,12 @@ function scheduleClass(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log(data);
-        const array = [];
-        classes.map((obj) => {
-          array.push(obj);
-        });
-        array[setSelectedIndex].date = data.scheduleClass.startDate;
-        setTutorClasses(array);
+        // const array = [];
+        // classes.map((obj) => {
+        //   array.push(obj);
+        // });
+        // array[selectedIndex].date = new Date(data.scheduleClass.startDate).toDateString();
+        // setTutorClasses(array);
         setShowSlotSelector(false);
       }
     },
@@ -69,32 +68,15 @@ function scheduleClass(props) {
     },
     onCompleted: (data) => {
       const array = [];
-      for (const obj of data.getScheduledClasses) {
-        const startHours = new Date(obj.startDate).getUTCHours();
-        const startMinutes = new Date(obj.startDate).getUTCMinutes();
-        const endHours = new Date(obj.endDate).getUTCHours();
-        const endMinutes = new Date(obj.endDate).getUTCMinutes();
-        const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
-          startMinutes < 10 ? `0${startMinutes}` : startMinutes
-        } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
-          endMinutes < 10 ? `0${endMinutes}` : endMinutes
-        } ${endHours < 12 ? `AM` : 'PM'}`;
-        const item = {
-          date: new Date(obj.startDate).getUTCDate(),
-          month: new Date(obj.startDate).getUTCMonth(),
-          classes: [
-            {
-              uuid: obj.uuid,
-              classTitle: obj.offering.displayName,
-              board: obj.offering.parentOffering.parentOffering.displayName,
-              class: obj.offering.parentOffering.displayName,
-              timing,
-              tutors: [{ tutor: Images.kushal }],
-            },
-          ],
-        };
-        array.push(item);
+      classes.map((obj) => {
+        array.push(obj);
+      });
+      for (let i = 0; i < data.getScheduledClasses.length; i++) {
+        if (parseInt(array[i].class) === i + 1) {
+          array[i].date = new Date(data.getScheduledClasses[i].startDate).toDateString();
+        }
       }
+      setTutorClasses(array);
     },
   });
 
@@ -162,27 +144,30 @@ function scheduleClass(props) {
     );
   };
 
-  const showSlotPopup = (index) => {
-    setSelectedIndex(index);
-    setShowSlotSelector(true);
+  const showSlotPopup = (item, index) => {
+    if (!item.date) {
+      setSelectedIndex(index);
+      setShowSlotSelector(true);
+    }
   };
 
   const renderClassView = (item, index) => {
     return (
       <View style={{ flex: 0.5, marginTop: RfH(16) }}>
-        <TouchableWithoutFeedback onPress={() => showSlotPopup(index)}>
+        {/* { scheduledClasses.includes(item.)} */}
+        <TouchableWithoutFeedback onPress={() => showSlotPopup(item, index)}>
           <View>
             <View
               style={{
                 marginRight: RfW(8),
                 marginLeft: RfW(8),
                 height: RfH(96),
-                backgroundColor: Colors.lightGrey,
+                backgroundColor: !item.date ? Colors.lightBlue : Colors.lightGrey,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 8,
               }}>
-              <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>{item.class}</Text>
+              <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class {item.class}</Text>
               {item.date === '' && (
                 <IconButtonWrapper
                   iconHeight={RfH(20)}
@@ -249,12 +234,11 @@ function scheduleClass(props) {
   const selectedClassTime = (value) => {
     setSelectedStartTime(value);
     setSelectedEndTime(moment(value).endOf('day').toDate());
-
-    console.log(value, moment(value).endOf('day').toDate());
   };
 
   return (
     <View style={[commonStyles.mainContainer, { paddingTop: RfH(44), backgroundColor: Colors.white }]}>
+      <Loader isLoading={scheduleLoading || loadingScheduledClasses} />
       <View style={commonStyles.horizontalChildrenSpaceView}>
         <View style={commonStyles.horizontalChildrenView}>
           <BackArrow action={onBackPress} />

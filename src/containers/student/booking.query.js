@@ -140,11 +140,18 @@ export const GET_SCHEDULED_CLASSES = gql`
           }
         }
       }
+      orderItem {
+        id
+      }
       onlineClass
       demo
       status
       startDate
       endDate
+      address {
+        id
+        fullAddress
+      }
     }
   }
 `;

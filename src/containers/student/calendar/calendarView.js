@@ -59,6 +59,7 @@ function CalendarView(props) {
               class: obj.offering.parentOffering.displayName,
               timing,
               tutors: [{ tutor: Images.kushal }],
+              classData: obj,
             },
           ],
         };
@@ -154,6 +155,18 @@ function CalendarView(props) {
     }
   };
 
+  const getScheduledClassesbyDay = (date) => {
+    getScheduledClasses({
+      variables: {
+        classesSearchDto: {
+          studentId: studentInfo.id,
+          startDate: moment(date).toDate(),
+          endDate: moment(date).endOf('day').toDate(),
+        },
+      },
+    });
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
@@ -212,6 +225,7 @@ function CalendarView(props) {
                 },
               ]}
               onHeaderSelected={(a) => console.log(a)}
+              onDateSelected={(d) => getScheduledClassesbyDay(d)}
             />
           </View>
           {isEmpty ? (

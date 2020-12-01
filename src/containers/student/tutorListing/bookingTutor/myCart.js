@@ -665,6 +665,7 @@ const myCart = () => {
         amount={amount}
         deductedAgaintQPoint={qPointsRedeem}
         discount={appliedCouponValue + qPointsRedeem}
+        hidePaymentPopup={()=>setShowPaymentModal(false)}
       />
     </View>
   );
