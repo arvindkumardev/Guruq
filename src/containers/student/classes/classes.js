@@ -72,7 +72,7 @@ function bookingConfirmed() {
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
             {item.orderItem?.offering?.parentOffering?.parentOffering?.name}
             {' | '}
-            {item.orderItem?.offering.parentOffering.name}
+            {item.orderItem?.offering?.parentOffering?.name}
           </Text>
           {!isHistorySelected && (
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
