@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { FlatList, Modal, ScrollView, Text, View } from 'react-native';
+import { Alert, FlatList, Modal, ScrollView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Button, CheckBox } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +17,7 @@ import NavigationRouteNames from '../../../routes/screenNames';
 import styles from '../tutorListing/styles';
 import BackArrow from '../../../components/BackArrow';
 import { SCHEDULE_CLASS } from '../booking.mutation';
+import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -153,6 +154,9 @@ function ScheduledClassDetails(props) {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === DUPLICATE_FOUND) {
+          Alert.alert(error.message);
+        }
       }
     },
     onCompleted: (data) => {
