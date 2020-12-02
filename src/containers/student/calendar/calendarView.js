@@ -170,16 +170,7 @@ function CalendarView(props) {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
-        {showHeader && (
-          <Text
-            style={{
-              textAlign: 'center',
-              fontFamily: Fonts.regular,
-              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-            }}>
-            Your Schedule
-          </Text>
-        )}
+        {showHeader && <Text style={commonStyles.headingPrimaryText}>Your Schedule</Text>}
       </View>
       <View>
         <ScrollView

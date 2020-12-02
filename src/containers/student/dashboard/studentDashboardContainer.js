@@ -12,6 +12,7 @@ import StudentDashboard from './components/studentDashboard';
 import { userLocation } from '../../../apollo/cache';
 import BottomTab from './components/bottomTab';
 import { alertBox } from '../../../utils/helpers';
+import Wallet from '../wallet/wallet';
 
 function StudentDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);
@@ -64,7 +65,7 @@ function StudentDashboardContainer(props) {
           {activeTab === 1 && <StudentDashboard refetchStudentOfferings={refetchStudentOfferings} />}
           {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
           {activeTab === 3 && <Classes />}
-          {/* {activeTab === 4 && <TutorListing />} */}
+           {activeTab === 4 && <Wallet />}
           {activeTab === 5 && <Profile />}
         </View>
         <BottomTab activeTab={activeTab} changeTab={changeTab} />

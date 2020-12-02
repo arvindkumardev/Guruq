@@ -72,7 +72,7 @@ function bookingConfirmed() {
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
             {item.orderItem?.offering?.parentOffering?.parentOffering?.name}
             {' | '}
-            {item.orderItem?.offering.parentOffering.name}
+            {item.orderItem?.offering?.parentOffering?.name}
           </Text>
           {!isHistorySelected && (
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
@@ -86,6 +86,7 @@ function bookingConfirmed() {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
+                imageResizeMode="cover"
                 iconImage={getTutorImage(item.orderItem?.tutor)}
               />
               <Text
@@ -171,104 +172,102 @@ function bookingConfirmed() {
       <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
         {showHeader && (
           <Text
-            style={{
-              textAlign: 'center',
-              fontFamily: Fonts.regular,
-              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-              alignSelf: 'center',
-            }}>
+            style={[
+              commonStyles.headingPrimaryText,
+              {
+                alignSelf: 'center',
+              },
+            ]}>
             My Classes
           </Text>
         )}
       </View>
 
-      <View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          onScroll={(event) => handleScroll(event)}
-          stickyHeaderIndices={[1]}
-          scrollEventThrottle={16}>
-          <View>
-            <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        onScroll={(event) => handleScroll(event)}
+        stickyHeaderIndices={[1]}
+        scrollEventThrottle={16}>
+        <View>
+          <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
+        </View>
+        <View>
+          <View
+            style={[
+              commonStyles.horizontalChildrenCenterView,
+              showHeader
+                ? { backgroundColor: Colors.white, paddingBottom: RfH(8) }
+                : { paddingTop: RfH(16), backgroundColor: Colors.white },
+            ]}>
+            <Button
+              onPress={() => setIsHistorySelected(false)}
+              small
+              block
+              bordered
+              style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
+              <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
+                Unscheduled Classes
+              </Text>
+            </Button>
+            <Button
+              onPress={() => setIsHistorySelected(true)}
+              small
+              block
+              bordered
+              style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
+              <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
+            </Button>
           </View>
-          <View>
-            <View
-              style={[
-                commonStyles.horizontalChildrenCenterView,
-                showHeader
-                  ? { backgroundColor: Colors.white, paddingBottom: RfH(8) }
-                  : { paddingTop: RfH(16), backgroundColor: Colors.white },
-              ]}>
-              <Button
-                onPress={() => setIsHistorySelected(false)}
-                small
-                block
-                bordered
-                style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
-                <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
-                  Unscheduled Classes
-                </Text>
-              </Button>
-              <Button
-                onPress={() => setIsHistorySelected(true)}
-                small
-                block
-                bordered
-                style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
-                <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
-              </Button>
-            </View>
+        </View>
+        {loadingBookings ? (
+          <View style={{ backgroundColor: Colors.lightGrey }}>
+            <Loader isLoading={loadingBookings} />
           </View>
-          {loadingBookings ? (
-            <View style={{ backgroundColor: Colors.lightGrey }}>
-              <Loader isLoading={loadingBookings} />
-            </View>
-          ) : (
-            <View>
-              {!isEmpty ? (
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={orderItems}
-                  renderItem={({ item }) => renderClassItem(item)}
-                  keyExtractor={(item, index) => index.toString()}
-                  contentContainerStyle={{ paddingBottom: RfH(170) }}
+        ) : (
+          <View>
+            {!isEmpty ? (
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={orderItems}
+                renderItem={({ item }) => renderClassItem(item)}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={{ paddingBottom: RfH(170) }}
+              />
+            ) : (
+              <View>
+                <Image
+                  source={Images.empty_classes}
+                  style={{
+                    margin: RfH(56),
+                    alignSelf: 'center',
+                    height: RfH(200),
+                    width: RfW(216),
+                    marginBottom: RfH(32),
+                  }}
                 />
-              ) : (
-                <View>
-                  <Image
-                    source={Images.empty_classes}
-                    style={{
-                      margin: RfH(56),
-                      alignSelf: 'center',
-                      height: RfH(200),
-                      width: RfW(216),
-                      marginBottom: RfH(32),
-                    }}
-                  />
-                  <Text
-                    style={[
-                      commonStyles.pageTitleThirdRow,
-                      { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
-                    ]}>
-                    No class found
-                  </Text>
-                  <Text
-                    style={[
-                      commonStyles.regularMutedText,
-                      { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
-                    ]}>
-                    Looks like you haven't booked any class.
-                  </Text>
-                  <View style={{ height: RfH(40) }} />
-                  <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-                    <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
-                  </Button>
-                </View>
-              )}
-            </View>
-          )}
-        </ScrollView>
-      </View>
+                <Text
+                  style={[
+                    commonStyles.pageTitleThirdRow,
+                    { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                  ]}>
+                  No class found
+                </Text>
+                <Text
+                  style={[
+                    commonStyles.regularMutedText,
+                    { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
+                  ]}>
+                  Looks like you haven't booked any class.
+                </Text>
+                <View style={{ height: RfH(40) }} />
+                <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+                  <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
+                </Button>
+              </View>
+            )}
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 }

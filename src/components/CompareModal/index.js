@@ -54,6 +54,7 @@ const compareModal = (props) => {
             iconWidth={RfH(70)}
             iconHeight={RfH(70)}
             iconImage={getTutorImage(item)}
+            imageResizeMode="cover"
             styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
           />
         ) : (
