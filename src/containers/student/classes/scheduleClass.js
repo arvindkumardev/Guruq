@@ -26,6 +26,8 @@ function scheduleClass(props) {
   const classData = route?.params?.classData;
   const classes = route?.params?.classes;
 
+  console.log(classData);
+
   const [showSlotSelector, setShowSlotSelector] = useState(false);
   const [availability, setAvailability] = useState([]);
   const [selectedStartTime, setSelectedStartTime] = useState(null);
@@ -84,7 +86,7 @@ function scheduleClass(props) {
     getScheduledClasses({
       variables: {
         classesSearchDto: {
-          orderItemId: classData.orderItem.id,
+          orderItemId: classData.id,
           startDate: moment().toDate(),
           endDate: moment().endOf('day').toDate(),
         },
@@ -104,11 +106,10 @@ function scheduleClass(props) {
     return (
       <View>
         <View style={{ height: RfH(44) }} />
-        <Text style={commonStyles.headingPrimaryText}>{classData.orderItem?.offering.name} Class</Text>
+        <Text style={commonStyles.headingPrimaryText}>{classData?.offering?.name} Class</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {classData.orderItem?.offering.parentOffering.parentOffering.name} |{' '}
-            {classData.orderItem?.offering.parentOffering.name}
+            {classData?.offering?.parentOffering?.parentOffering?.name} | {classData?.offering?.parentOffering?.name}
           </Text>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
@@ -120,7 +121,7 @@ function scheduleClass(props) {
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
                 imageResizeMode="cover"
-                iconImage={getTutorImage(classData.orderItem?.tutor)}
+                iconImage={getTutorImage(classData?.tutor)}
               />
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
@@ -130,13 +131,13 @@ function scheduleClass(props) {
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
                 }}>
-                {classData.orderItem?.tutor.contactDetail.firstName} {classData.orderItem?.tutor.contactDetail.lastName}
+                {classData?.tutor?.contactDetail?.firstName} {classData?.tutor?.contactDetail?.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUS{classData.orderItem?.tutor.id}
+                GURUS{classData?.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {classData.orderItem?.onlineClass ? 'Online' : 'Offline'} Classes
+                {classData?.onlineClass ? 'Online' : 'Offline'} Classes
               </Text>
             </View>
           </View>
@@ -198,7 +199,7 @@ function scheduleClass(props) {
     scheduleClass({
       variables: {
         classesCreateDto: {
-          orderItemId: classData.orderItem?.id,
+          orderItemId: classData?.id,
           startDate: selectedStartTime,
           endDate: selectedEndTime,
         },
@@ -260,7 +261,7 @@ function scheduleClass(props) {
       <DateSlotSelectorModal
         visible={showSlotSelector}
         onClose={() => setShowSlotSelector(false)}
-        tutorId={classData.orderItem.tutor.id}
+        tutorId={classData?.tutor?.id}
         selectedSlot={(item, index) => selectedSlot(item, index)}
         onSubmit={() => onScheduleClass()}
         times={startTimes}

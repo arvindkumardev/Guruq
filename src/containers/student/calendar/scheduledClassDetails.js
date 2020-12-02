@@ -161,7 +161,6 @@ function ScheduledClassDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log(data);
         setShowReschedulePopup(false);
       }
     },

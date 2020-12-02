@@ -53,17 +53,21 @@ function bookingConfirmed() {
       variables: {
         bookingSearchDto: {
           orderStatus: OrderStatus.COMPLETE.label,
+          showHistory: false,
+          showWithAvailableClasses: true,
         },
       },
     });
   }, []);
 
   const goToScheduleClasses = (item) => {
-    const classes = [];
-    for (let i = 1; i <= item.count; i++) {
-      classes.push({ class: `${i}`, date: '', startTime: '' });
+    if (!isHistorySelected) {
+      const classes = [];
+      for (let i = 1; i <= item.count; i++) {
+        classes.push({ class: `${i}`, date: '', startTime: '' });
+      }
+      navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item, classes });
     }
-    navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item, classes });
   };
 
   const getTutorImage = (tutor) => {
@@ -174,6 +178,32 @@ function bookingConfirmed() {
     }
   };
 
+  const onUnscheduledClicked = () => {
+    searchOrderItems({
+      variables: {
+        bookingSearchDto: {
+          orderStatus: OrderStatus.COMPLETE.label,
+          showHistory: false,
+          showWithAvailableClasses: true,
+        },
+      },
+    });
+    setIsHistorySelected(false);
+  };
+
+  const onHistoryClicked = () => {
+    searchOrderItems({
+      variables: {
+        bookingSearchDto: {
+          orderStatus: OrderStatus.COMPLETE.label,
+          showHistory: true,
+          showWithAvailableClasses: false,
+        },
+      },
+    });
+    setIsHistorySelected(true);
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
@@ -207,7 +237,7 @@ function bookingConfirmed() {
                 : { paddingTop: RfH(16), backgroundColor: Colors.white },
             ]}>
             <Button
-              onPress={() => setIsHistorySelected(false)}
+              onPress={() => onUnscheduledClicked()}
               small
               block
               bordered
@@ -217,7 +247,7 @@ function bookingConfirmed() {
               </Text>
             </Button>
             <Button
-              onPress={() => setIsHistorySelected(true)}
+              onPress={() => onHistoryClicked()}
               small
               block
               bordered
