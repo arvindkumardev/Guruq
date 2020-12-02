@@ -7,7 +7,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import MapView, { Marker } from 'react-native-maps';
 import { useMutation } from '@apollo/client';
 import moment from 'moment';
-import { RfH, RfW } from '../../../utils/helpers';
+import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
 import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
 import commonStyles from '../../../theme/styles';
@@ -332,7 +332,7 @@ function ScheduledClassDetails(props) {
         </View>
         <View style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}>
           <IconButtonWrapper
-            iconImage={Images.kushal}
+            iconImage={getUserImageUrl(classDetails?.classData?.tutor)}
             iconHeight={RfH(48)}
             iconWidth={RfH(48)}
             styling={{ borderRadius: RfH(48) }}

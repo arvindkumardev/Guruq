@@ -970,9 +970,18 @@ export default class Video extends Component<Props, State> {
                     <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
                   </View>
                   <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-                    <Text style={commonStyles.headingPrimaryText}>Physics Class By John Smith</Text>
-                    <Text style={commonStyles.mediumMutedText}>CBSE | Class 9</Text>
-                    <Text style={commonStyles.mediumMutedText}>Nov 12, 9:30 pm</Text>
+                    <Text style={commonStyles.headingPrimaryText}>
+                      {this.props.classDetails?.classTitle} By{' '}
+                      {this.props.classDetails?.classData?.tutor?.contactDetail?.firstName}{' '}
+                      {this.props.classDetails.classData.tutor.contactDetail.lastName}
+                    </Text>
+                    <Text
+                      style={
+                        commonStyles.mediumMutedText
+                      }>{`${this.props.classDetails.board} | ${this.props.classDetails.class}`}</Text>
+                    <Text style={commonStyles.mediumMutedText}>
+                      {new Date(this.props.classDetails?.classData?.startDate).toDateString()}
+                    </Text>
                   </View>
                   <View>
                     <IconButtonWrapper />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { userDetails } from '../../apollo/cache';
@@ -6,9 +7,11 @@ import Video from './components/Video';
 import Loader from '../../components/Loader';
 import { GET_AGORA_RTC_TOKEN } from './onlineClass.query';
 import { GET_AVAILABILITY } from '../student/class.query';
+import { RateReview } from '../../components';
 
 const OnlineClass = (props) => {
   const navigation = useNavigation();
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
 
   const { route } = props;
 
@@ -42,6 +45,7 @@ const OnlineClass = (props) => {
   );
 
   const callEnded = () => {
+    setShowReviewPopup(true);
     // navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: !back });
   };
 
@@ -52,14 +56,19 @@ const OnlineClass = (props) => {
   return loading ? (
     <Loader />
   ) : (
-    <Video
-      onCallEnd={callEnded}
-      onPressBack={onPressBack}
-      classDetails={classDetails}
-      userInfo={userInfo}
-      channelName={classDetails?.uuid}
-      token={token}
-    />
+    <View style={{ flex: 1 }}>
+      <Video
+        onCallEnd={callEnded}
+        onPressBack={onPressBack}
+        classDetails={classDetails}
+        userInfo={userInfo}
+        channelName={classDetails?.uuid}
+        token={token}
+      />
+      {showReviewPopup && (
+        <RateReview visible={showReviewPopup} onClose={() => setShowReviewPopup(false)} classDetails={classDetails} />
+      )}
+    </View>
   );
 };
 

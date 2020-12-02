@@ -6,52 +6,95 @@ import { Modal, View, FlatList, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Textarea, Button } from 'native-base';
+import { AirbnbRating, Rating } from 'react-native-ratings';
+import { useMutation } from '@apollo/client';
 import { Colors, Images } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { ADD_REVIEW } from '../../containers/student/tutor-mutation';
+import Loader from '../Loader';
 
 const dateSlotModal = (props) => {
   const navigation = useNavigation();
   const [ratings, setRatings] = useState([
-    { category: 'Course Understanding', rating: 4 },
-    { category: 'Helpfullness', rating: 4 },
-    { category: 'Teaching Methodology', rating: 4 },
-    { category: 'Accessibility', rating: 4 },
-    { category: 'Improvement in results', rating: 4 },
-    { category: 'Professionalism & Attitude', rating: 4 },
+    { category: 'Course Understanding', rating: 0 },
+    { category: 'Helpfullness', rating: 0 },
+    { category: 'Teaching Methodology', rating: 0 },
+    { category: 'Accessibility', rating: 0 },
+    { category: 'Improvement in results', rating: 0 },
+    { category: 'Professionalism & Attitude', rating: 0 },
   ]);
+  const [rate, setRate] = useState(0);
+  const [review, setReview] = useState('');
 
-  const { visible, onClose } = props;
+  const { visible, onClose, classDetails } = props;
 
-  const renderRatings = (item) => {
-    const rating = [];
-    for (let i = 1; i <= 5; i++) {
-      if (i <= item.rating) {
-        rating.push(
-          <View>
-            <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.golden_star} />
-          </View>
-        );
-      } else {
-        rating.push(
-          <View>
-            <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.grey_star} />
-          </View>
-        );
+  const [addReview, { loading: reviewLoading }] = useMutation(ADD_REVIEW, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
       }
-    }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log(data);
+      }
+    },
+  });
+
+  const setlistRating = (item, index, rate) => {
+    const array = [];
+    ratings.map((obj) => {
+      array.push(obj);
+    });
+    array[index].rating = rate;
+    setRatings(array);
+  };
+
+  const renderRatings = (item, index) => {
     return (
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(20) }]}>
         <View style={{ flex: 0.5 }}>
           <Text style={commonStyles.mediumMutedText}>{item.category}</Text>
         </View>
         <View style={[commonStyles.horizontalChildrenCenterView, { flex: 0.5, justifyContent: 'flex-end' }]}>
-          {rating}
+          <AirbnbRating
+            count={5}
+            showRating={false}
+            defaultRating={item.rating}
+            size={20}
+            onFinishRating={(rate) => setlistRating(item, index, rate)}
+          />
         </View>
       </View>
     );
+  };
+
+  const ratingCompleted = (d) => {
+    setRate(d);
+  };
+
+  const onAddReview = () => {
+    addReview({
+      variables: {
+        review: {
+          tutor: {
+            id: classDetails?.tutor?.id,
+          },
+          courseUnderstanding: ratings[0].rating,
+          helpfulness: ratings[1].rating,
+          professionalAttitude: ratings[5].rating,
+          teachingMethodology: ratings[2].rating,
+          accessibility: ratings[3].rating,
+          resultImprovement: ratings[4].rating,
+          overallRating: rate,
+          text: review,
+        },
+      },
+    });
   };
 
   return (
@@ -69,6 +112,7 @@ const dateSlotModal = (props) => {
           commonStyles.verticallyStretchedItemsView,
           { backgroundColor: Colors.white, paddingTop: RfH(32), height: '95%' },
         ]}>
+        <Loader isLoading={reviewLoading} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={commonStyles.verticallyCenterItemsView}>
             <IconButtonWrapper
@@ -77,41 +121,23 @@ const dateSlotModal = (props) => {
               iconImage={Images.kushal}
               styling={{ borderRadius: 8 }}
             />
-            <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}>Gurbani Singh</Text>
-            <Text style={commonStyles.mediumMutedText}>English ( Class 6-12 I CBSE)</Text>
+            <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}>
+              {classDetails?.classData?.tutor?.contactDetail?.firstName}{' '}
+              {classDetails.classData.tutor.contactDetail.lastName}
+            </Text>
+            <Text style={commonStyles.mediumMutedText}>
+              {classDetails?.classTitle} ( {`${classDetails.class} | ${classDetails.board}`})
+            </Text>
             <View style={{ height: RfH(32) }} />
             <Text style={commonStyles.mediumMutedText}>Rate Your Tutor</Text>
             <View style={{ height: RfH(24) }} />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconHeight={RfH(42)}
-                iconWidth={RfW(42)}
-                iconImage={Images.golden_star}
-                styling={{ marginHorizontal: RfW(8) }}
-              />
-              <IconButtonWrapper
-                iconHeight={RfH(42)}
-                iconWidth={RfW(42)}
-                iconImage={Images.golden_star}
-                styling={{ marginHorizontal: RfW(8) }}
-              />
-              <IconButtonWrapper
-                iconHeight={RfH(42)}
-                iconWidth={RfW(42)}
-                iconImage={Images.golden_star}
-                styling={{ marginHorizontal: RfW(8) }}
-              />
-              <IconButtonWrapper
-                iconHeight={RfH(42)}
-                iconWidth={RfW(42)}
-                iconImage={Images.golden_star}
-                styling={{ marginHorizontal: RfW(8) }}
-              />
-              <IconButtonWrapper
-                iconHeight={RfH(42)}
-                iconWidth={RfW(42)}
-                iconImage={Images.grey_star}
-                styling={{ marginHorizontal: RfW(8) }}
+            <View>
+              <AirbnbRating
+                count={5}
+                showRating={false}
+                defaultRating={0}
+                size={40}
+                onFinishRating={(r) => ratingCompleted(r)}
               />
             </View>
           </View>
@@ -137,9 +163,16 @@ const dateSlotModal = (props) => {
             <View style={{ marginTop: RfH(32) }}>
               <Text>Write a Review</Text>
             </View>
-            <Textarea rowSpan={3} bordered style={{ borderRadius: 8, backgroundColor: Colors.lightGrey }} />
+            <Textarea
+              rowSpan={3}
+              value={review}
+              onChangeText={(text) => setReview(text)}
+              bordered
+              style={{ borderRadius: 8, backgroundColor: Colors.lightGrey }}
+            />
             <Button
               block
+              onPress={() => onAddReview()}
               style={[
                 commonStyles.buttonPrimary,
                 { marginHorizontal: 0, alignSelf: 'center', marginVertical: RfH(34) },
@@ -156,11 +189,13 @@ const dateSlotModal = (props) => {
 dateSlotModal.defaultProps = {
   visible: false,
   onClose: null,
+  classDetails: null,
 };
 
 dateSlotModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
+  classDetails: PropTypes.object,
 };
 
 export default dateSlotModal;

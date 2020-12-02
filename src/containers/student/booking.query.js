@@ -170,6 +170,10 @@ export const GET_SCHEDULED_CLASSES = gql`
 
       students {
         id
+        profileImage {
+          id
+          filename
+        }
         contactDetail {
           firstName
           lastName
@@ -177,6 +181,10 @@ export const GET_SCHEDULED_CLASSES = gql`
       }
       tutor {
         id
+        profileImage {
+          id
+          filename
+        }
         contactDetail {
           firstName
           lastName

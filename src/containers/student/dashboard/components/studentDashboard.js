@@ -1,10 +1,13 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-undef */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-plusplus */
-import { FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
+import moment from 'moment';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -13,7 +16,7 @@ import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import { getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
-import { offeringsMasterData, userDetails } from '../../../../apollo/cache';
+import { offeringsMasterData, userDetails, studentDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
@@ -23,12 +26,15 @@ import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
 import { getBoxColor } from '../../../../theme/colors';
+import { GET_SCHEDULED_CLASSES } from '../../booking.query';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
 
   const userInfo = useReactiveVar(userDetails);
   const offeringMasterData = useReactiveVar(offeringsMasterData);
+
+  const studentInfo = useReactiveVar(studentDetails);
 
   const [showAllSubjects, setShowAllSubjects] = useState(false);
 
@@ -55,6 +61,7 @@ function StudentDashboard(props) {
 
   const [favouriteTutors, setFavouriteTutors] = useState([]);
   const [interestedOfferings, setInterestedOfferings] = useState({});
+  const [upcomingClasses, setUpcomingClasses] = useState([]);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
@@ -193,8 +200,6 @@ function StudentDashboard(props) {
   };
 
   const goToTutorDetails = (item) => {
-    console.log(item);
-    console.log(selectedOffering);
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
       tutorData: item.tutor,
       parentOffering: selectedOffering?.id,
@@ -552,6 +557,136 @@ function StudentDashboard(props) {
     </TouchableWithoutFeedback>
   );
 
+  const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      const array = [];
+      for (const obj of data.getScheduledClasses) {
+        const startHours = new Date(obj.startDate).getUTCHours();
+        const startMinutes = new Date(obj.startDate).getUTCMinutes();
+        const endHours = new Date(obj.endDate).getUTCHours();
+        const endMinutes = new Date(obj.endDate).getUTCMinutes();
+        const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
+          startMinutes < 10 ? `0${startMinutes}` : startMinutes
+        } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
+          endMinutes < 10 ? `0${endMinutes}` : endMinutes
+        } ${endHours < 12 ? `AM` : 'PM'}`;
+        const item = {
+          startDate: obj.startDate,
+          uuid: obj.uuid,
+          classTitle: obj.offering.displayName,
+          board: obj.offering.parentOffering.parentOffering.displayName,
+          class: obj.offering.parentOffering.displayName,
+          timing,
+          classData: obj,
+        };
+        array.push(item);
+      }
+      setUpcomingClasses(array);
+    },
+  });
+
+  useEffect(() => {
+    getScheduledClasses({
+      variables: {
+        classesSearchDto: {
+          studentId: studentInfo.id,
+          startDate: moment().toDate(),
+          endDate: moment().endOf('day').toDate(),
+        },
+      },
+    });
+  }, []);
+
+  const renderUpcomingClasses = (item) => {
+    return (
+      <View style={{ flex: 1 }}>
+        <TouchableWithoutFeedback
+          onPress={() =>
+            navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: item })
+          }>
+          <View
+            style={{
+              backgroundColor: Colors.lightBlue,
+              borderRadius: 20,
+              marginTop: RfH(20),
+              padding: RfH(16),
+              width: Dimensions.get('window').width - 32,
+            }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+              <View style={{ flex: 0.3 }}>
+                <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
+              </View>
+              <View
+                style={{
+                  flex: 0.7,
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'stretch',
+                  marginLeft: RfW(8),
+                }}>
+                <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
+                  {item.classTitle} by {item.classData?.tutor?.contactDetail?.firstName}{' '}
+                  {item.classData?.tutor?.contactDetail?.lastName}
+                </Text>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                  {`${item.board} | ${item.class}`}
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    type="FontAwesome"
+                    name="calendar-o"
+                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                  />
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                    {new Date(item.startDate).toDateString()}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    type="Feather"
+                    name="clock"
+                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                  />
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>{item.timing}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="computer"
+                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                  />
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                    {item.classData.onlineClass ? 'Online' : 'Offline'} Class
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -643,87 +778,20 @@ function StudentDashboard(props) {
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.RATE_AND_REVIEW)}>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.UPCOMING_CLASSES)}>
               <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
             </TouchableWithoutFeedback>
           </View>
-
-          <TouchableWithoutFeedback
-            onPress={() =>
-              navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, {
-                classDetails: { uuid: 'DUMMY_CLASS' },
-              })
-            }>
-            <View
-              style={{
-                backgroundColor: '#ceecfe',
-                borderRadius: 20,
-                marginTop: RfH(20),
-                padding: 16,
-              }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-                <View style={{ flex: 0.3 }}>
-                  <Image
-                    style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }}
-                    source={Images.kushal}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 0.7,
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                    alignItems: 'stretch',
-                  }}>
-                  <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
-                    Science by Rahul Das
-                  </Text>
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>CBSE Class 9</Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}>
-                    <Icon
-                      type="FontAwesome"
-                      name="calendar-o"
-                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                    />
-                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                      Sunday , June 10{' '}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}>
-                    <Icon
-                      type="Feather"
-                      name="clock"
-                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                    />
-                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>7:00-8:00 PM</Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}>
-                    <Icon
-                      type="MaterialIcons"
-                      name="computer"
-                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                    />
-                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>Online Class</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
+          <View>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={upcomingClasses}
+              renderItem={({ item }) => renderUpcomingClasses(item)}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
 
           <View
             style={{

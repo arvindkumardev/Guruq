@@ -20,3 +20,20 @@ export const REMOVE_FAVOURITE = gql`
     }
   }
 `;
+
+export const ADD_REVIEW = gql`
+  mutation AddReview($review: CreateUpdateReviewDto!) {
+    addReview(review: $review) {
+      id
+      courseUnderstanding
+      helpfulness
+      professionalAttitude
+      teachingMethodology
+      accessibility
+      resultImprovement
+      overallRating
+      text
+      tutor
+    }
+  }
+`;
