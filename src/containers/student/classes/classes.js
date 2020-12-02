@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
 import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
@@ -12,7 +12,7 @@ import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
-import { SEARCH_BOOKINGS } from '../booking.query';
+import { SEARCH_ORDER_ITEMS } from '../booking.query';
 import { OrderStatus } from '../enums';
 import Loader from '../../../components/Loader';
 
@@ -22,42 +22,49 @@ function bookingConfirmed() {
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
-  const { loading: loadingBookings, error: bookingError, data: bookingData } = useQuery(SEARCH_BOOKINGS, {
-    variables: {
-      bookingSearchDto: {
-        orderStatus: OrderStatus.COMPLETE.label,
-      },
-    },
-  });
-
-  const goToScheduleClasses = (item) => {
-    const classes = [];
-    for (let i = 1; i <= item.orderItem?.count; i++) {
-      classes.push({ class: `${i}`, date: '', startTime: '' });
-    }
-    navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item, classes });
-  };
-
   const [orderItems, setOrderItems] = useState([]);
 
-  useEffect(() => {
-    if (bookingData) {
-      if (bookingData?.searchBookings.length > 0) {
-        const orderList = [];
-        for (const booking of bookingData.searchBookings) {
-          for (const orderItem of booking.orderItems) {
-            orderList.push({ booking, orderItem });
-          }
-        }
-        setOrderItems(orderList);
+  const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
+    onError: (e) => {
+      console.log(e);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+      setIsEmpty(true);
+    },
+    onCompleted: (data) => {
+      if (data && data?.searchOrderItems && data?.searchOrderItems.edges.length > 0) {
+        // const orderList = [];
+        // for (const booking of data.searchBookings) {
+        //   for (const orderItem of booking.orderItems) {
+        //     orderList.push({ booking, orderItem });
+        //   }
+        // }
+        setOrderItems(data?.searchOrderItems.edges);
         setIsEmpty(false);
       } else {
         setIsEmpty(true);
       }
-    } else {
-      setIsEmpty(true);
+    },
+  });
+
+  useEffect(() => {
+    searchOrderItems({
+      variables: {
+        bookingSearchDto: {
+          orderStatus: OrderStatus.COMPLETE.label,
+        },
+      },
+    });
+  }, []);
+
+  const goToScheduleClasses = (item) => {
+    const classes = [];
+    for (let i = 1; i <= item.count; i++) {
+      classes.push({ class: `${i}`, date: '', startTime: '' });
     }
-  }, [bookingData]);
+    navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item, classes });
+  };
 
   const getTutorImage = (tutor) => {
     return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
@@ -67,12 +74,12 @@ function bookingConfirmed() {
     return (
       <View>
         <View style={{ height: RfH(40) }} />
-        <Text style={commonStyles.headingPrimaryText}>{item.orderItem?.offering.name}</Text>
+        <Text style={commonStyles.headingPrimaryText}>{item.offering.name}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item.orderItem?.offering?.parentOffering?.parentOffering?.name}
+            {item.offering?.parentOffering?.parentOffering?.name}
             {' | '}
-            {item.orderItem?.offering?.parentOffering?.name}
+            {item.offering?.parentOffering?.name}
           </Text>
           {!isHistorySelected && (
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
@@ -87,7 +94,7 @@ function bookingConfirmed() {
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
                 imageResizeMode="cover"
-                iconImage={getTutorImage(item.orderItem?.tutor)}
+                iconImage={getTutorImage(item.tutor)}
               />
               <Text
                 style={{
@@ -105,13 +112,13 @@ function bookingConfirmed() {
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
                 }}>
-                {item.orderItem?.tutor.contactDetail.firstName} {item.orderItem?.tutor.contactDetail.lastName}
+                {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUS{item.orderItem?.tutor.id}
+                GURUS{item.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.orderItem?.onlineClass ? 'Online' : 'Offline'} Individual Class
+                {item.onlineClass ? 'Online' : 'Offline'} Individual Class
               </Text>
             </View>
           </View>
@@ -121,7 +128,7 @@ function bookingConfirmed() {
                 commonStyles.headingPrimaryText,
                 { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
               ]}>
-              {item.orderItem?.count}
+              {item.count}
             </Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
@@ -136,7 +143,7 @@ function bookingConfirmed() {
                 textAlign: 'right',
                 color: Colors.darkGrey,
               }}>
-              {item.orderItem?.availableClasses} Unscheduled Classses
+              {item.availableClasses} Unscheduled Classses
             </Text>
           )}
           <Button

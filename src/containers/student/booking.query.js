@@ -60,13 +60,59 @@ export const GET_CART_ITEMS = gql`
 export const SEARCH_BOOKINGS = gql`
   query SearchBookings($bookingSearchDto: BookingSearchDto!) {
     searchBookings(searchDto: $bookingSearchDto) {
-      id
-      uuid
-      orderStatus
-      owner {
+      edged {
         id
+        uuid
+        orderStatus
+        owner {
+          id
+        }
+        orderItems {
+          id
+          count
+          availableClasses
+          onlineClass
+          demo
+          count
+          groupSize
+
+          offering {
+            id
+            name
+            parentOffering {
+              id
+              name
+              parentOffering {
+                id
+                name
+              }
+            }
+          }
+          tutor {
+            id
+            profileImage {
+              id
+              filename
+            }
+            contactDetail {
+              firstName
+              lastName
+            }
+          }
+        }
+        orderStatus
+        orderPayment {
+          id
+          paymentStatus
+        }
       }
-      orderItems {
+    }
+  }
+`;
+export const SEARCH_ORDER_ITEMS = gql`
+  query SearchOrderItems($bookingSearchDto: BookingSearchDto!) {
+    searchOrderItems(searchDto: $bookingSearchDto) {
+      edges {
         id
         count
         availableClasses
@@ -98,11 +144,19 @@ export const SEARCH_BOOKINGS = gql`
             lastName
           }
         }
-      }
-      orderStatus
-      orderPayment {
-        id
-        paymentStatus
+        order {
+          id
+          uuid
+          orderStatus
+          owner {
+            id
+          }
+          orderStatus
+          orderPayment {
+            id
+            paymentStatus
+          }
+        }
       }
     }
   }
