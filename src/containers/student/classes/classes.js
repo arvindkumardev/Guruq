@@ -86,6 +86,7 @@ function bookingConfirmed() {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
+                imageResizeMode="cover"
                 iconImage={getTutorImage(item.orderItem?.tutor)}
               />
               <Text

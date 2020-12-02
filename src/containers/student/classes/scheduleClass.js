@@ -119,6 +119,7 @@ function scheduleClass(props) {
                 styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
+                imageResizeMode="cover"
                 iconImage={getTutorImage(classData.orderItem?.tutor)}
               />
             </View>

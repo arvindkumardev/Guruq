@@ -153,6 +153,7 @@ const myCart = () => {
         <IconButtonWrapper
           iconHeight={RfH(90)}
           iconWidth={RfW(80)}
+          imageResizeMode="cover"
           iconImage={getTutorImage(item?.tutor)}
           styling={{ flex: 0.3, borderRadius: 16 }}
         />
