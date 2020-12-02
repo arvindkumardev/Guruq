@@ -12,10 +12,9 @@ import commonStyles from '../../../theme/styles';
 import styles from './styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
-import { SEARCH_BOOKINGS, SEARCH_ORDER_ITEMS } from '../booking.query';
+import { SEARCH_ORDER_ITEMS } from '../booking.query';
 import { OrderStatus } from '../enums';
 import Loader from '../../../components/Loader';
-import { GET_AGORA_RTC_TOKEN } from '../../onlineClass/onlineClass.query';
 
 function bookingConfirmed() {
   const navigation = useNavigation();
