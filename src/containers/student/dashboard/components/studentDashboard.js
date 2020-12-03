@@ -38,7 +38,7 @@ function StudentDashboard(props) {
 
   const [showAllSubjects, setShowAllSubjects] = useState(false);
 
-  const { refetchStudentOfferings } = props;
+  const { refetchStudentOfferings, changeTab } = props;
 
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});
@@ -802,7 +802,7 @@ function StudentDashboard(props) {
                 <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                   Upcoming Classes
                 </Text>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.CALENDAR)}>
+                <TouchableWithoutFeedback onPress={() => changeTab(2)}>
                   <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                     View All
                   </Text>
@@ -1143,10 +1143,12 @@ function StudentDashboard(props) {
 
 StudentDashboard.propTypes = {
   refetchStudentOfferings: PropTypes.bool,
+  changeTab: PropTypes.func,
 };
 
 StudentDashboard.defaultProps = {
   refetchStudentOfferings: false,
+  changeTab: null,
 };
 
 export default StudentDashboard;
