@@ -106,10 +106,10 @@ function scheduleClass(props) {
     return (
       <View>
         <View style={{ height: RfH(44) }} />
-        <Text style={commonStyles.headingPrimaryText}>{classData?.offering?.name} Class</Text>
+        <Text style={commonStyles.headingPrimaryText}>{classData?.offering?.displayName} Class</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {classData?.offering?.parentOffering?.parentOffering?.name} | {classData?.offering?.parentOffering?.name}
+            {classData?.offering?.parentOffering?.parentOffering?.displayName} | {classData?.offering?.parentOffering?.displayName}
           </Text>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
@@ -134,7 +134,7 @@ function scheduleClass(props) {
                 {classData?.tutor?.contactDetail?.firstName} {classData?.tutor?.contactDetail?.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUS{classData?.tutor.id}
+                GURUQS{classData?.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 {classData?.onlineClass ? 'Online' : 'Offline'} Classes

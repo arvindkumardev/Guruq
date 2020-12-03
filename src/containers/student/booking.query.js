@@ -124,12 +124,15 @@ export const SEARCH_ORDER_ITEMS = gql`
         offering {
           id
           name
+          displayName
           parentOffering {
             id
             name
+            displayName
             parentOffering {
               id
               name
+              displayName
             }
           }
         }

@@ -78,12 +78,12 @@ function bookingConfirmed() {
     return (
       <View>
         <View style={{ height: RfH(40) }} />
-        <Text style={commonStyles.headingPrimaryText}>{item.offering.name}</Text>
+        <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item.offering?.parentOffering?.parentOffering?.name}
+            {item.offering?.parentOffering?.parentOffering?.displayName}
             {' | '}
-            {item.offering?.parentOffering?.name}
+            {item.offering?.parentOffering?.displayName}
           </Text>
           {!isHistorySelected && (
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>

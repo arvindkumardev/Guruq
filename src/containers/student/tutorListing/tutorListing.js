@@ -275,7 +275,7 @@ function TutorListing(props) {
       <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
-            <Thumbnail  square style={styles.userIcon} source={getTutorImage(item)} />
+            <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
             {item.id % 7 === 0 && (
               <View
                 style={{

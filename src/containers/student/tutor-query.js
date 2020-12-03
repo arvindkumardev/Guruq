@@ -91,6 +91,7 @@ export const SEARCH_TUTORS = gql`
         limit
         size
         count
+        totalPages
       }
     }
   }
