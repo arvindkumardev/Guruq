@@ -776,22 +776,30 @@ function StudentDashboard(props) {
               </View>
             </Swiper>
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-            <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
-            <TouchableWithoutFeedback
-              onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.UPCOMING_CLASSES)}>
-              <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
-            </TouchableWithoutFeedback>
-          </View>
-          <View>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={upcomingClasses}
-              renderItem={({ item }) => renderUpcomingClasses(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
+          {upcomingClasses.length > 0 && (
+            <View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                  Upcoming Classes
+                </Text>
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.UPCOMING_CLASSES)}>
+                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                    View All
+                  </Text>
+                </TouchableWithoutFeedback>
+              </View>
+              <View>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={upcomingClasses}
+                  renderItem={({ item }) => renderUpcomingClasses(item)}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+            </View>
+          )}
 
           <View
             style={{
@@ -824,30 +832,35 @@ function StudentDashboard(props) {
               keyExtractor={(item, index) => index.toString()}
             />
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              marginTop: RfH(25),
-            }}>
-            <Text
-              style={{
-                color: Colors.primaryText,
-                fontFamily: Fonts.bold,
-                fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-              }}>
-              Favourite Tutors
-            </Text>
-            <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
-          </View>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={favouriteTutors}
-            renderItem={({ item }) => renderTutors(item)}
-            keyExtractor={(item, index) => index.toString()}
-          />
+          {favouriteTutors.length > 0 && (
+            <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-end',
+                  marginTop: RfH(25),
+                }}>
+                <Text
+                  style={{
+                    color: Colors.primaryText,
+                    fontFamily: Fonts.bold,
+                    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                  }}>
+                  Favourite Tutors
+                </Text>
+                <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
+              </View>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={favouriteTutors}
+                renderItem={({ item }) => renderTutors(item)}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
+          )}
+
           <View
             style={{
               flexDirection: 'row',
