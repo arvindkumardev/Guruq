@@ -971,16 +971,15 @@ export default class Video extends Component<Props, State> {
                   </View>
                   <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
                     <Text style={commonStyles.headingPrimaryText}>
-                      {this.props.classDetails?.classTitle} By{' '}
-                      {this.props.classDetails?.classData?.tutor?.contactDetail?.firstName}{' '}
-                      {this.props.classDetails.classData.tutor.contactDetail.lastName}
+                      {this.props.classDetails?.classTitle} By {this.props.classData?.tutor?.contactDetail?.firstName}{' '}
+                      {this.props.classData.tutor.contactDetail.lastName}
                     </Text>
                     <Text
                       style={
                         commonStyles.mediumMutedText
                       }>{`${this.props.classDetails.board} | ${this.props.classDetails.class}`}</Text>
                     <Text style={commonStyles.mediumMutedText}>
-                      {new Date(this.props.classDetails?.classData?.startDate).toDateString()}
+                      {new Date(this.props.classData?.startDate).toDateString()}
                     </Text>
                   </View>
                   <View>

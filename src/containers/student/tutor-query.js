@@ -188,6 +188,21 @@ export const GET_FAVOURITE_TUTORS = gql`
   }
 `;
 
+export const GET_AVERAGE_RATINGS = gql`
+  query GetAverageRating($reviewSearchDto: ReviewSearchDto!) {
+    getAverageRating(reviewSearchDto: $reviewSearchDto) {
+      courseUnderstanding
+      helpfulness
+      professionalAttitude
+      teachingMethodology
+      accessibility
+      resultImprovement
+      overallRating
+      text
+    }
+  }
+`;
+
 export class SearchDto {
   id: number;
 

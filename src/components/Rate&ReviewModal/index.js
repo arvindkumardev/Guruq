@@ -29,7 +29,7 @@ const dateSlotModal = (props) => {
   const [rate, setRate] = useState(0);
   const [review, setReview] = useState('');
 
-  const { visible, onClose, classDetails } = props;
+  const { visible, onClose, classDetails, classData } = props;
 
   const [addReview, { loading: reviewLoading }] = useMutation(ADD_REVIEW, {
     fetchPolicy: 'no-cache',
@@ -41,7 +41,7 @@ const dateSlotModal = (props) => {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log(data);
+        onClose(false);
       }
     },
   });
@@ -83,10 +83,10 @@ const dateSlotModal = (props) => {
       variables: {
         review: {
           tutor: {
-            id: classDetails?.tutors[0].tutor,
+            id: classData.tutor.id,
           },
           classes: {
-            id: classDetails.classData.id,
+            id: classDetails.id,
           },
           courseUnderstanding: ratings[0].rating,
           helpfulness: ratings[1].rating,
@@ -126,8 +126,7 @@ const dateSlotModal = (props) => {
               styling={{ borderRadius: 8 }}
             />
             <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}>
-              {classDetails?.classData?.tutor?.contactDetail?.firstName}{' '}
-              {classDetails.classData.tutor.contactDetail.lastName}
+              {classData?.tutor?.contactDetail?.firstName} {classData.tutor.contactDetail.lastName}
             </Text>
             <Text style={commonStyles.mediumMutedText}>
               {classDetails?.classTitle} ( {`${classDetails.class} | ${classDetails.board}`})
@@ -194,12 +193,14 @@ dateSlotModal.defaultProps = {
   visible: false,
   onClose: null,
   classDetails: null,
+  classData: null,
 };
 
 dateSlotModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
   classDetails: PropTypes.object,
+  classData: PropTypes.object,
 };
 
 export default dateSlotModal;

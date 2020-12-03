@@ -58,8 +58,7 @@ function CalendarView(props) {
               board: obj.offering.parentOffering.parentOffering.displayName,
               class: obj.offering.parentOffering.displayName,
               timing,
-              tutors: [{ tutor: Images.kushal }],
-              classData: obj,
+              id: obj.id,
             },
           ],
         };

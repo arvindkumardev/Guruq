@@ -12,7 +12,7 @@ import { Rating } from 'react-native-ratings';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import Loader from '../../../components/Loader';
-import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
+import { GET_AVERAGE_RATINGS, GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
 import styles from './styles';
 import {
   RfH,
@@ -185,6 +185,25 @@ function tutorDetails(props) {
       }
     },
   });
+
+  const [getAverageRating, { loading: ratingLoading }] = useLazyQuery(GET_AVERAGE_RATINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log(data);
+      }
+    },
+  });
+
+  useEffect(() => {
+    getAverageRating({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
+  }, []);
 
   const [reviewProgress, setReviewProgress] = useState([
     { typeName: 'Course Understanding', image: Images.understanding, percentage: 70 },

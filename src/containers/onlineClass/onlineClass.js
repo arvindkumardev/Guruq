@@ -6,8 +6,8 @@ import { userDetails } from '../../apollo/cache';
 import Video from './components/Video';
 import Loader from '../../components/Loader';
 import { GET_AGORA_RTC_TOKEN } from './onlineClass.query';
-import { GET_AVAILABILITY } from '../student/class.query';
 import { RateReview } from '../../components';
+import NavigationRouteNames from '../../routes/screenNames';
 
 const OnlineClass = (props) => {
   const navigation = useNavigation();
@@ -15,7 +15,7 @@ const OnlineClass = (props) => {
 
   const { route } = props;
 
-  const { classDetails } = route.params;
+  const { classDetails, classData } = route.params;
   const userInfo = useReactiveVar(userDetails);
 
   const [token, setToken] = useState('');
@@ -53,6 +53,11 @@ const OnlineClass = (props) => {
     navigation.goBack();
   };
 
+  const onClose = () => {
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: true });
+    setShowReviewPopup(false);
+  };
+
   return loading ? (
     <Loader />
   ) : (
@@ -61,12 +66,18 @@ const OnlineClass = (props) => {
         onCallEnd={callEnded}
         onPressBack={onPressBack}
         classDetails={classDetails}
+        classData={classData}
         userInfo={userInfo}
         channelName={classDetails?.uuid}
         token={token}
       />
       {showReviewPopup && (
-        <RateReview visible={showReviewPopup} onClose={() => setShowReviewPopup(false)} classDetails={classDetails} />
+        <RateReview
+          visible={showReviewPopup}
+          onClose={() => onClose()}
+          classDetails={classDetails}
+          classData={classData}
+        />
       )}
     </View>
   );

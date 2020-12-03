@@ -5,7 +5,7 @@ import { Button, CheckBox } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import MapView, { Marker } from 'react-native-maps';
-import { useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import moment from 'moment';
 import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
@@ -18,6 +18,8 @@ import styles from '../tutorListing/styles';
 import BackArrow from '../../../components/BackArrow';
 import { SCHEDULE_CLASS } from '../booking.mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
+import { GET_CLASS_DETAILS } from '../class.query';
+import Loader from '../../../components/Loader';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -27,21 +29,19 @@ function ScheduledClassDetails(props) {
   const [availability, setAvailability] = useState([]);
   const [selectedEndTime, setSelectedEndTime] = useState(null);
   const [selectedStartTime, setSelectedStartTime] = useState(null);
+  const [showBackButton, setShowBackButton] = useState(false);
+  const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
+  const [showCancelClassStartedPopup, setShowCancelClassStartedPopup] = useState(false);
+  const [classData, setClassData] = useState({});
 
   const { route } = props;
 
   const { classDetails } = route.params;
 
   useEffect(() => {
-    if (route && route.params && route.params.classEnded) {
-      navigation.navigate(NavigationRouteNames.STUDENT.RATE_AND_REVIEW, { classDetails });
-    }
-  }, [route]);
-
-  useEffect(() => {
     const array = [];
-    if (classDetails?.classData?.students) {
-      for (const obj of classDetails?.classData?.students) {
+    if (classData?.students) {
+      for (const obj of classData?.students) {
         const item = {
           icon: Images.kushal,
           studentName: obj.contactDetail.firstName,
@@ -52,7 +52,7 @@ function ScheduledClassDetails(props) {
       }
       setAttendees(array);
     }
-  }, classDetails?.classData?.students);
+  }, classData?.students);
 
   const attachments = [
     {
@@ -81,9 +81,26 @@ function ScheduledClassDetails(props) {
     },
   ];
 
-  const [showBackButton, setShowBackButton] = useState(false);
-  const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
-  const [showCancelClassStartedPopup, setShowCancelClassStartedPopup] = useState(false);
+  const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setClassData(data.getClassDetails);
+      }
+    },
+  });
+
+  useEffect(() => {
+    console.log(classDetails);
+    getClassDetails({ variables: { classId: classDetails.id } });
+  }, []);
+
   const renderAttendees = (item) => {
     return (
       <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
@@ -122,12 +139,12 @@ function ScheduledClassDetails(props) {
 
   const goToCancelReason = () => {
     setShowCancelClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId: classDetails.classData.id });
+    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId: classDetails.id });
   };
 
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails });
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails, classData });
   };
 
   const onBackPress = () => {
@@ -201,7 +218,7 @@ function ScheduledClassDetails(props) {
     scheduleClass({
       variables: {
         classesCreateDto: {
-          orderItemId: classDetails?.classData?.orderItem?.id,
+          orderItemId: classData?.orderItem?.id,
           startDate: selectedStartTime,
           endDate: selectedEndTime,
         },
@@ -211,6 +228,7 @@ function ScheduledClassDetails(props) {
 
   return (
     <View style={{ backgroundColor: Colors.white }}>
+      <Loader isLoading={classDetailsLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
@@ -332,17 +350,16 @@ function ScheduledClassDetails(props) {
         </View>
         <View style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}>
           <IconButtonWrapper
-            iconImage={getUserImageUrl(classDetails?.classData?.tutor)}
+            iconImage={getUserImageUrl(classData?.tutor)}
             iconHeight={RfH(48)}
             iconWidth={RfH(48)}
             styling={{ borderRadius: RfH(48) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.headingPrimaryText}>
-              {classDetails?.classData?.tutor?.contactDetail?.firstName}{' '}
-              {classDetails.classData.tutor.contactDetail.lastName}
+              {classData?.tutor?.contactDetail?.firstName} {classData?.tutor?.contactDetail?.lastName}
             </Text>
-            <Text style={commonStyles.mediumMutedText}>GURUQT{classDetails.classData.tutor.id}</Text>
+            <Text style={commonStyles.mediumMutedText}>GURUQT{classData?.tutor?.id}</Text>
           </View>
         </View>
 
@@ -351,9 +368,7 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>
-              {new Date(classDetails?.classData?.startDate).toDateString()}
-            </Text>
+            <Text style={commonStyles.headingPrimaryText}>{new Date(classData?.startDate).toDateString()}</Text>
             <Text style={commonStyles.mediumMutedText}>{classDetails.timing}</Text>
           </View>
         </View>
@@ -570,7 +585,7 @@ function ScheduledClassDetails(props) {
       <DateSlotSelectorModal
         visible={showReschedulePopup}
         onClose={() => setShowReschedulePopup(false)}
-        tutorId={classDetails?.classData?.tutor?.id}
+        tutorId={classData?.tutor?.id}
         selectedSlot={(item, index) => selectedSlot(item, index)}
         onSubmit={() => onScheduleClass()}
         times={startTimes}
