@@ -1,3 +1,5 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 import AsyncStorage from '@react-native-community/async-storage';
 import { isNumber, isEmpty } from 'lodash';
 import { Dimensions, Alert } from 'react-native';

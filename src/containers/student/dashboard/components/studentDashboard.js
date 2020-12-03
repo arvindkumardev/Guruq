@@ -534,7 +534,13 @@ function StudentDashboard(props) {
           marginTop: RfH(20),
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Thumbnail large style={{ width: 80, height: 80 }} source={getTutorImage(item.tutor)} />
+          <IconButtonWrapper
+            iconWidth={RfH(98)}
+            iconHeight={RfH(98)}
+            iconImage={getTutorImage(item.tutor)}
+            imageResizeMode="cover"
+            styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
+          />
           <Text
             numberOfLines={2}
             style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>

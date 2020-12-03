@@ -108,7 +108,8 @@ const PaymentMethod = (props) => {
       })
       .catch((error) => {
         // handle failure
-        completedPayment(bookingOrderId, OrderPaymentStatusEnum.FAILED.value, error.description);
+        onClose(false);
+        // completedPayment(bookingOrderId, OrderPaymentStatusEnum.FAILED.value, error.description);
         // create booking - with cancelled payment
       });
   };

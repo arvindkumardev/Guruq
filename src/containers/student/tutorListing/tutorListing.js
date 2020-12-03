@@ -10,6 +10,7 @@ import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import {
   getSaveData,
+  getUserImage,
   getUserImageUrl,
   removeData,
   RfH,
@@ -275,7 +276,13 @@ function TutorListing(props) {
       <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
-            <Thumbnail square style={styles.userIcon} source={getTutorImage(item)} />
+            <IconButtonWrapper
+              iconWidth={RfW(24)}
+              iconHeight={RfH(24)}
+              iconImage={getTutorImage(item)}
+              imageResizeMode="cover"
+              styling={styles.userIcon}
+            />
             {item.id % 7 === 0 && (
               <View
                 style={{
