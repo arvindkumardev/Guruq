@@ -26,6 +26,7 @@ import { userDetails } from '../../apollo/cache';
 import { ADD_INTERESTED_OFFERINGS, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
 import Dash from '../Dash';
 import { OrderPaymentStatusEnum, PaymentMethodEnum } from './paymentMethod.enum';
+import styles from '../../theme/styles';
 
 const PaymentMethod = (props) => {
   const { visible, onClose, bookingData, amount, discount, deductedAgaintQPoint } = props;
@@ -33,6 +34,7 @@ const PaymentMethod = (props) => {
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(PaymentMethodEnum.ONLINE.value);
   const [convenienceCharges, setConvenienceCharges] = useState(100);
+  const [paymentStatus, setPaymentStatus] = useState(OrderPaymentStatusEnum.FAILED.value);
 
   const userInfo = useReactiveVar(userDetails);
 
@@ -76,10 +78,11 @@ const PaymentMethod = (props) => {
       }
     },
     onCompleted: (data) => {
-      console.log(data);
       if (data) {
         onClose(false);
-        navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, data);
+        if (OrderPaymentStatusEnum.COMPLETE.value) {
+          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, data);
+        }
       }
     },
   });
@@ -108,8 +111,7 @@ const PaymentMethod = (props) => {
       })
       .catch((error) => {
         // handle failure
-        onClose(false);
-        // completedPayment(bookingOrderId, OrderPaymentStatusEnum.FAILED.value, error.description);
+        completedPayment(bookingOrderId, OrderPaymentStatusEnum.FAILED.value, error.description);
         // create booking - with cancelled payment
       });
   };
@@ -329,6 +331,7 @@ const PaymentMethod = (props) => {
   };
 
   const completedPayment = (orderId, status, transactionData) => {
+    setPaymentStatus(status);
     payment({
       variables: {
         paymentDetails: {

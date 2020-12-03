@@ -210,7 +210,7 @@ function StudentDashboard(props) {
   };
 
   const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
   };
 
   const renderSubjects = (item) => {
@@ -626,7 +626,13 @@ function StudentDashboard(props) {
             }}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
               <View style={{ flex: 0.3 }}>
-                <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
+                <IconButtonWrapper
+                  iconWidth={RfH(98)}
+                  iconHeight={RfH(98)}
+                  iconImage={getTutorImage(item.classData.tutor)}
+                  imageResizeMode="cover"
+                  styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
+                />
               </View>
               <View
                 style={{

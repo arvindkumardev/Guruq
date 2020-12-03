@@ -39,6 +39,7 @@ export const GET_CLASS_DETAILS = gql`
         contactDetail {
           firstName
           lastName
+          gender
         }
       }
       tutor {
@@ -50,6 +51,7 @@ export const GET_CLASS_DETAILS = gql`
         contactDetail {
           firstName
           lastName
+          gender
         }
       }
       startDate

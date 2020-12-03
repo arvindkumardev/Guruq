@@ -43,9 +43,11 @@ function ScheduledClassDetails(props) {
     if (classData?.students) {
       for (const obj of classData?.students) {
         const item = {
-          icon: Images.kushal,
-          studentName: obj.contactDetail.firstName,
-          studentId: obj.contactDetail.lastName,
+          id: obj?.id,
+          filePath: obj?.profileImage?.filePath,
+          studentName: obj?.contactDetail?.firstName,
+          studentId: obj?.contactDetail?.lastName,
+          gender: obj?.contactDetail?.gender,
           joined: true,
         };
         array.push(item);
@@ -101,12 +103,18 @@ function ScheduledClassDetails(props) {
     getClassDetails({ variables: { classId: classDetails.id } });
   }, []);
 
+  const getStudentImageUrl = (filename, gender, id) => {
+    return filename
+      ? `https://guruq.in/api/${filename}`
+      : `https://guruq.in/guruq-new/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
+  };
+
   const renderAttendees = (item) => {
     return (
       <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
         <View style={commonStyles.horizontalChildrenView}>
           <IconButtonWrapper
-            iconImage={item.icon}
+            iconImage={getStudentImageUrl(item.filePath, item.gender, item.id)}
             iconHeight={RfH(45)}
             iconWidth={RfH(45)}
             styling={{ borderRadius: RfH(22.5) }}
@@ -145,6 +153,10 @@ function ScheduledClassDetails(props) {
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
     navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails, classData });
+  };
+
+  const getTutorImage = (tutor) => {
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
   };
 
   const onBackPress = () => {
@@ -350,7 +362,7 @@ function ScheduledClassDetails(props) {
         </View>
         <View style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}>
           <IconButtonWrapper
-            iconImage={getUserImageUrl(classData?.tutor)}
+            iconImage={getTutorImage(classData?.tutor)}
             iconHeight={RfH(48)}
             iconWidth={RfH(48)}
             styling={{ borderRadius: RfH(48) }}

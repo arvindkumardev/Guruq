@@ -180,6 +180,7 @@ export const GET_SCHEDULED_CLASSES = gql`
         contactDetail {
           firstName
           lastName
+          gender
         }
       }
       tutor {
@@ -191,6 +192,7 @@ export const GET_SCHEDULED_CLASSES = gql`
         contactDetail {
           firstName
           lastName
+          gender
         }
       }
       offering {
