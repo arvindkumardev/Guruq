@@ -35,7 +35,6 @@ const NavigationRouteNames = {
     RATE_AND_REVIEW: 'rate and review',
     DETAILED_RATING: 'detailed rating',
     COMPARE_MODAL: 'compare_modal',
-    UPCOMING_CLASSES: 'upcoming_classes',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',

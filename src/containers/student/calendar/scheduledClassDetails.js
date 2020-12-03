@@ -193,8 +193,8 @@ function ScheduledClassDetails(props) {
   };
 
   const selectedClassTime = (value) => {
-    setSelectedStartTime(value);
-    setSelectedEndTime(moment(value).endOf('day').toDate());
+    setSelectedStartTime(moment.utc(value).format('YYYY-MM-DD hh:mm:ss'));
+    setSelectedEndTime(moment.utc(value).add(1, 'hours').format('YYYY-MM-DD hh:mm:ss'));
   };
 
   const onScheduleClass = () => {

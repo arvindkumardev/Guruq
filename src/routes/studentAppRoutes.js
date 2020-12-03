@@ -21,7 +21,7 @@ import onlineClass from '../containers/student/calendar/onlineClass';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
-import UpcomingClasses from '../containers/student/dashboard/upcomingClasses';
+import CalendarView from '../containers/student/calendar/calendarView';
 
 const Stack = createStackNavigator();
 
@@ -121,8 +121,8 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.UPCOMING_CLASSES}
-        component={UpcomingClasses}
+        name={NavigationRouteNames.STUDENT.CALENDAR}
+        component={CalendarView}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.ONLINE_CLASS} component={OnlineClass} options={{ headerShown: false }} />

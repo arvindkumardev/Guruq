@@ -615,7 +615,8 @@ function StudentDashboard(props) {
               borderRadius: 20,
               marginTop: RfH(20),
               padding: RfH(16),
-              width: Dimensions.get('window').width - 32,
+              width: Dimensions.get('window').width - RfW(54),
+              marginRight: RfW(8),
             }}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
               <View style={{ flex: 0.3 }}>
@@ -768,11 +769,30 @@ function StudentDashboard(props) {
           {/* </View> */}
 
           <View style={{ height: RfH(220), marginTop: RfH(29) }}>
-            <Swiper horizontal>
-              <View>
-                <View style={{ height: RfH(185), backgroundColor: '#ceecfe', borderRadius: 20 }}>
-                  <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(317)} iconImage={Images.dash_img} />
-                </View>
+            <Swiper horizontal style={{ overflow: 'visible' }}>
+              <View
+                style={{
+                  backgroundColor: '#ceecfe',
+                  borderRadius: 20,
+                  marginRight: 8,
+                }}>
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img} />
+              </View>
+              <View
+                style={{
+                  backgroundColor: '#ceecfe',
+                  borderRadius: 20,
+                  marginRight: 8,
+                }}>
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img} />
+              </View>
+              <View
+                style={{
+                  backgroundColor: '#ceecfe',
+                  borderRadius: 20,
+                  marginRight: 8,
+                }}>
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img} />
               </View>
             </Swiper>
           </View>
@@ -782,8 +802,7 @@ function StudentDashboard(props) {
                 <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                   Upcoming Classes
                 </Text>
-                <TouchableWithoutFeedback
-                  onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.UPCOMING_CLASSES)}>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.CALENDAR)}>
                   <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                     View All
                   </Text>

@@ -45,12 +45,12 @@ function scheduleClass(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        // const array = [];
-        // classes.map((obj) => {
-        //   array.push(obj);
-        // });
-        // array[selectedIndex].date = new Date(data.scheduleClass.startDate).toDateString();
-        // setTutorClasses(array);
+        const array = [];
+        classes.map((obj) => {
+          array.push(obj);
+        });
+        array[selectedIndex].date = new Date(data.scheduleClass.startDate).toDateString();
+        setTutorClasses(array);
         setShowSlotSelector(false);
       }
     },
@@ -109,7 +109,8 @@ function scheduleClass(props) {
         <Text style={commonStyles.headingPrimaryText}>{classData?.offering?.displayName} Class</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {classData?.offering?.parentOffering?.parentOffering?.displayName} | {classData?.offering?.parentOffering?.displayName}
+            {classData?.offering?.parentOffering?.parentOffering?.displayName} |{' '}
+            {classData?.offering?.parentOffering?.displayName}
           </Text>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
@@ -234,8 +235,8 @@ function scheduleClass(props) {
   };
 
   const selectedClassTime = (value) => {
-    setSelectedStartTime(value);
-    setSelectedEndTime(moment(value).endOf('day').toDate());
+    setSelectedStartTime(moment.utc(value).format('YYYY-MM-DD hh:mm:ss'));
+    setSelectedEndTime(moment.utc(value).add(1, 'hours').format('YYYY-MM-DD hh:mm:ss'));
   };
 
   return (

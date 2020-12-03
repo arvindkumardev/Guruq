@@ -34,6 +34,7 @@ const dateSlotModal = (props) => {
   const [addReview, { loading: reviewLoading }] = useMutation(ADD_REVIEW, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
+      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
@@ -82,7 +83,10 @@ const dateSlotModal = (props) => {
       variables: {
         review: {
           tutor: {
-            id: classDetails?.tutor?.id,
+            id: classDetails?.tutors[0].tutor,
+          },
+          classes: {
+            id: classDetails.classData.id,
           },
           courseUnderstanding: ratings[0].rating,
           helpfulness: ratings[1].rating,
