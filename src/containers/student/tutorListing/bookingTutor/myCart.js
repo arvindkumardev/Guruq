@@ -149,7 +149,7 @@ const myCart = () => {
 
   const renderCartItems = (item, index) => {
     return (
-      <View style={commonStyles.horizontalChildrenStartView}>
+      <View style={[commonStyles.horizontalChildrenStartView, { marginBottom: RfH(16) }]}>
         <IconButtonWrapper
           iconHeight={RfH(90)}
           iconWidth={RfW(80)}
@@ -666,7 +666,7 @@ const myCart = () => {
         amount={amount}
         deductedAgaintQPoint={qPointsRedeem}
         discount={appliedCouponValue + qPointsRedeem}
-        hidePaymentPopup={()=>setShowPaymentModal(false)}
+        hidePaymentPopup={() => setShowPaymentModal(false)}
       />
     </View>
   );

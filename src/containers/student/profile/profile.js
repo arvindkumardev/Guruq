@@ -131,7 +131,7 @@ function Profile() {
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
+    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
       <StatusBar barStyle="dark-content" />
       <ScrollView
         stickyHeaderIndices={[0]}
@@ -140,7 +140,7 @@ function Profile() {
         scrollEventThrottle={16}>
         <View style={{ height: 44 }} />
         <View style={{ paddingHorizontal: RfW(16), height: 54 }}>
-          <Text style={styles.myProfileText}>My Profile</Text>
+          <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
         </View>
         <View
           style={{
@@ -162,8 +162,10 @@ function Profile() {
             </View>
           </View>
         </View>
+        <View style={commonStyles.lineSeparator} />
         {renderActionIcons()}
-        <View style={commonStyles.blankViewSmall} />
+
+        <View style={commonStyles.blankGreyViewSmall} />
         <View>
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
@@ -280,7 +282,7 @@ function Profile() {
             />
           </SafeAreaView>
         )}
-        <View style={commonStyles.blankViewSmall} />
+        <View style={commonStyles.blankGreyViewSmall} />
 
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
@@ -299,7 +301,7 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
 
-        <View style={commonStyles.blankViewSmall} />
+        <View style={commonStyles.blankGreyViewSmall} />
 
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
@@ -318,7 +320,7 @@ function Profile() {
           />
         </View>
 
-        <View style={commonStyles.blankViewSmall} />
+        <View style={commonStyles.blankGreyViewSmall} />
 
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
@@ -367,7 +369,7 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
 
-        <View style={commonStyles.blankViewSmall} />
+        <View style={commonStyles.blankGreyViewSmall} />
 
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />

@@ -138,6 +138,11 @@ const styles = StyleSheet.create({
     height: RfH(17),
   },
 
+  blankGreyViewSmall: {
+    backgroundColor: Colors.lightGrey,
+    height: RfH(17),
+  },
+
   borderTop: {
     borderTopColor: Colors.borderColor,
     borderTopWidth: 0.5,
