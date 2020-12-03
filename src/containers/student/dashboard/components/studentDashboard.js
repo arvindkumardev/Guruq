@@ -608,7 +608,7 @@ function StudentDashboard(props) {
     });
   }, []);
 
-  const renderUpcomingClasses = (item) => {
+  const renderUpcomingClasses = (item, index) => {
     return (
       <View style={{ flex: 1 }}>
         <TouchableWithoutFeedback
@@ -621,7 +621,7 @@ function StudentDashboard(props) {
               borderRadius: 20,
               marginTop: RfH(20),
               padding: RfH(16),
-              width: Dimensions.get('window').width - RfW(54),
+              width: index === 0 ? Dimensions.get('window').width - RfW(32) : Dimensions.get('window').width - RfW(54),
               marginRight: RfW(8),
             }}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
@@ -825,7 +825,7 @@ function StudentDashboard(props) {
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   data={upcomingClasses}
-                  renderItem={({ item }) => renderUpcomingClasses(item)}
+                  renderItem={({ item, index }) => renderUpcomingClasses(item, index)}
                   keyExtractor={(item, index) => index.toString()}
                 />
               </View>
