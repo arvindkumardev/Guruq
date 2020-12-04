@@ -19,12 +19,11 @@ function customRangeSelector(props) {
   };
 
   return (
-    <View style={{ backgroundColor: Colors.white }}>
+    <View style={style}>
       <View
         style={[
           commonStyles.topActionView,
           {
-            style,
             marginTop: RfH(topMargin),
             paddingHorizontal: RfW(horizontalPadding),
             height: RfH(44),
@@ -32,16 +31,12 @@ function customRangeSelector(props) {
         ]}>
         <View style={commonStyles.horizontalChildrenView}>
           {homeIcon && <BackArrow action={onBackPress} />}
-          <View style={[labelStyle, { flexDirection: 'row', justifyContent:"center" }]}>
+          <View style={[labelStyle, { flexDirection: 'row', justifyContent: 'center' }]}>
             <Text style={commonStyles.headingPrimaryText}>{label}</Text>
           </View>
         </View>
       </View>
-      {lineVisible && (
-        <View style={{ borderBottomWidth: 1, borderBottomColor: Colors.darkGrey, marginTop: RfH(16), opacity: 0.3 }} />
-      )}
-
-      <View style={commonStyles.lineSeparator} />
+      {lineVisible && <View style={commonStyles.lineSeparator} />}
     </View>
   );
 }
@@ -57,12 +52,12 @@ customRangeSelector.propTypes = {
 };
 
 customRangeSelector.defaultProps = {
-  style: {},
+  style: { backgroundColor: Colors.white },
   label: '',
   labelStyle: {},
   topMargin: RfH(44),
   horizontalPadding: 0,
-  lineVisible: false,
+  lineVisible: true,
   homeIcon: false,
 };
 

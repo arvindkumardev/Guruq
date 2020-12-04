@@ -117,6 +117,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  horizontalChildrenEqualSpaceView: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
   horizontalChildrenCenterView: {
     flexDirection: 'row',
     justifyContent: 'center',

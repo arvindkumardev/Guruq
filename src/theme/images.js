@@ -151,6 +151,11 @@ const Images = {
 
   wallet_active: require('../assets/images/wallet-active.png'),
   wallet: require('../assets/images/wallet.png'),
+
+  refer: require('../assets/images/refer.png'),
+  refer_one: require('../assets/images/refer_one.png'),
+  refer_two: require('../assets/images/refer_two.png'),
+  refer_three: require('../assets/images/refer_three.png'),
 };
 
 export default Images;
