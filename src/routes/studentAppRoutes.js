@@ -22,6 +22,7 @@ import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import CalendarView from '../containers/student/calendar/calendarView';
+import FavouriteTutors from '../containers/student/dashboard/favouriteTutors';
 
 const Stack = createStackNavigator();
 
@@ -126,6 +127,11 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.ONLINE_CLASS} component={OnlineClass} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.FAVOURITE_TUTOR}
+        component={FavouriteTutors}
+        options={{ headerShown: false }}
+      />
     </>
   );
 };

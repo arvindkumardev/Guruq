@@ -880,7 +880,12 @@ function StudentDashboard(props) {
                   }}>
                   Favourite Tutors
                 </Text>
-                <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}>
+                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                    View All
+                  </Text>
+                </TouchableWithoutFeedback>
               </View>
               <FlatList
                 horizontal
