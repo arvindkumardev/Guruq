@@ -535,8 +535,8 @@ function StudentDashboard(props) {
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <IconButtonWrapper
-            iconWidth={RfH(98)}
-            iconHeight={RfH(98)}
+            iconWidth={RfH(80)}
+            iconHeight={RfH(80)}
             iconImage={getTutorImage(item.tutor)}
             imageResizeMode="cover"
             styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
