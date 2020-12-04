@@ -12,7 +12,7 @@ import { Rating } from 'react-native-ratings';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import Loader from '../../../components/Loader';
-import { GET_AVERAGE_RATINGS, GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS } from '../tutor-query';
+import { GET_AVERAGE_RATINGS, GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS, SEARCH_REVIEW } from '../tutor-query';
 import styles from './styles';
 import {
   RfH,
@@ -238,26 +238,41 @@ function tutorDetails(props) {
     },
   });
 
+  const [userReviews, setUserReviews] = useState([]);
+
+  const [searchReview, { loading: reviewLoading }] = useLazyQuery(SEARCH_REVIEW, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const review = [];
+        for (const obj of data.searchReview.edges) {
+          const item = {
+            name: `${obj.createdBy.firstName} ${obj.createdBy.lastName}`,
+            icon: obj.createdBy,
+            rating: obj.overallRating,
+            date: new Date(obj.createdDate).toDateString(),
+            description: obj.text,
+          };
+          review.push(item);
+        }
+        setUserReviews(review);
+      }
+    },
+  });
+
+  useEffect(() => {
+    searchReview({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
+  }, []);
+
   useEffect(() => {
     getAverageRating({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
   }, []);
-
-  const [userReviews, setUserReviews] = useState([
-    {
-      name: 'Simranpreet',
-      icon: Images.user,
-      rating: 5,
-      date: '20 Aug',
-      description: 'The sessions with tutors stimulate the mind & bring in being at school feeling as well.',
-    },
-    {
-      name: 'Usman Saif',
-      icon: Images.kushal,
-      rating: 5,
-      date: '18 Aug',
-      description: 'The sessions with tutors stimulate the mind & bring in being at school feeling as well.',
-    },
-  ]);
 
   useEffect(() => {
     if (favouriteTutors) {
@@ -396,7 +411,11 @@ function tutorDetails(props) {
           <IconButtonWrapper
             iconHeight={RfH(40)}
             iconWidth={RfH(40)}
-            iconImage={item.icon}
+            iconImage={getUserImageUrl(
+              item?.createdBy?.profileImage?.filename,
+              item?.createdBy?.gender,
+              item?.createdBy?.id
+            )}
             styling={{ borderRadius: RfH(20) }}
           />
           <View
@@ -718,7 +737,6 @@ function tutorDetails(props) {
 
         <View style={{ marginBottom: RfH(34) }}>
           <FlatList
-            // vertical
             data={userReviews}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderReviews(item)}

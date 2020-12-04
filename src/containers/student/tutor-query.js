@@ -202,6 +202,34 @@ export const GET_AVERAGE_RATINGS = gql`
   }
 `;
 
+export const SEARCH_REVIEW = gql`
+  query SearchReview($reviewSearchDto: ReviewSearchDto!) {
+    searchReview(reviewSearchDto: $reviewSearchDto) {
+      edges {
+        id
+        courseUnderstanding
+        helpfulness
+        professionalAttitude
+        teachingMethodology
+        accessibility
+        resultImprovement
+        overallRating
+        text
+        createdDate
+        createdBy {
+          id
+          firstName
+          lastName
+          gender
+          profileImage {
+            filename
+          }
+        }
+      }
+    }
+  }
+`;
+
 export class SearchDto {
   id: number;
 
