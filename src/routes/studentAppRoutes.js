@@ -23,6 +23,7 @@ import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import CalendarView from '../containers/student/calendar/calendarView';
 import FavouriteTutors from '../containers/student/dashboard/favouriteTutors';
+import ReferEarn from '../containers/referAndEarn/referEarn';
 
 const Stack = createStackNavigator();
 
@@ -132,6 +133,7 @@ export const getStudentRoutes = () => {
         component={FavouriteTutors}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
     </>
   );
 };

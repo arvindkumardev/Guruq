@@ -7,6 +7,7 @@ const NavigationRouteNames = {
   SET_PASSWORD: 'set_password',
   REGISTER: 'register',
   USER_TYPE_SELECTOR: 'user_type_selector',
+  REFER_EARN: 'refer_and_earn',
 
   ONLINE_CLASS: 'online_class1',
 

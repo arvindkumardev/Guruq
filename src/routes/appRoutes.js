@@ -15,6 +15,7 @@ import { UserTypeEnum } from '../common/userType.enum';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
 import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
+import ReferEarn from '../containers/referAndEarn/referEarn';
 
 const Stack = createStackNavigator();
 
@@ -31,11 +32,13 @@ const AppStack = (props) => {
   const getLoggedInRoutes = () => {
     if (userType === UserTypeEnum.OTHER.label) {
       return (
-        <Stack.Screen
-          name={NavigationRouteNames.USER_TYPE_SELECTOR}
-          component={UserTypeSelector}
-          options={{ headerShown: false }}
-        />
+        <>
+          <Stack.Screen
+            name={NavigationRouteNames.USER_TYPE_SELECTOR}
+            component={UserTypeSelector}
+            options={{ headerShown: false }}
+          />
+        </>
       );
     }
     if (userType === UserTypeEnum.STUDENT.label) {

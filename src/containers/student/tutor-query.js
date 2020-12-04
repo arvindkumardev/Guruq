@@ -198,7 +198,6 @@ export const GET_AVERAGE_RATINGS = gql`
       accessibility
       resultImprovement
       overallRating
-      text
     }
   }
 `;

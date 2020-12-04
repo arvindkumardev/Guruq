@@ -57,7 +57,7 @@ function tutorDetails(props) {
   const [isFavourite, setIsFavourite] = useState(false);
   const [isDemo, setIsDemo] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
-
+  const [overallRating, setOverallRating] = useState(0);
   const [favouriteTutors, setFavouriteTutors] = useState([]);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
@@ -186,6 +186,19 @@ function tutorDetails(props) {
     },
   });
 
+  const [reviewProgress, setReviewProgress] = useState([
+    { typeName: 'Course Understanding', image: Images.understanding, percentage: 0 },
+    { typeName: 'Helpfulness', image: Images.chat, percentage: 0 },
+    { typeName: 'Professional Attitude', image: Images.professional, percentage: 0 },
+    { typeName: 'Teaching Methodology', image: Images.methodology, percentage: 0 },
+    { typeName: 'Accessibility', image: Images.thumb_range, percentage: 0 },
+    { typeName: 'Improvement in Results', image: Images.stats, percentage: 0 },
+  ]);
+
+  const getPercentage = (value) => {
+    return value * 20;
+  };
+
   const [getAverageRating, { loading: ratingLoading }] = useLazyQuery(GET_AVERAGE_RATINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -196,7 +209,31 @@ function tutorDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log(data);
+        const ratingArray = [];
+        reviewProgress.map((obj) => {
+          ratingArray.push(obj);
+        });
+        if (data.getAverageRating.courseUnderstanding) {
+          ratingArray[0].percentage = getPercentage(data.getAverageRating.courseUnderstanding);
+        }
+        if (data.getAverageRating.helpfulness) {
+          ratingArray[1].percentage = getPercentage(data.getAverageRating.helpfulness);
+        }
+        if (data.getAverageRating.professionalAttitude) {
+          ratingArray[2].percentage = getPercentage(data.getAverageRating.professionalAttitude);
+        }
+        if (data.getAverageRating.teachingMethodology) {
+          ratingArray[3].percentage = getPercentage(data.getAverageRating.teachingMethodology);
+        }
+        if (data.getAverageRating.accessibility) {
+          ratingArray[4].percentage = getPercentage(data.getAverageRating.accessibility);
+        }
+        if (data.getAverageRating.resultImprovement) {
+          ratingArray[5].percentage = getPercentage(data.getAverageRating.resultImprovement);
+        }
+        if (data.getAverageRating.overallRating) {
+          setOverallRating(data.getAverageRating.overallRating);
+        }
       }
     },
   });
@@ -204,15 +241,6 @@ function tutorDetails(props) {
   useEffect(() => {
     getAverageRating({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
   }, []);
-
-  const [reviewProgress, setReviewProgress] = useState([
-    { typeName: 'Course Understanding', image: Images.understanding, percentage: 70 },
-    { typeName: 'Helpfulness', image: Images.chat, percentage: 60 },
-    { typeName: 'Professional Attitude', image: Images.professional, percentage: 100 },
-    { typeName: 'Teaching Methodology', image: Images.methodology, percentage: 90 },
-    { typeName: 'Accessibility', image: Images.thumb_range, percentage: 70 },
-    { typeName: 'Improvement in Results', image: Images.stats, percentage: 90 },
-  ]);
 
   const [userReviews, setUserReviews] = useState([
     {
@@ -673,7 +701,7 @@ function tutorDetails(props) {
             imageSize={30}
             ratingCount={5}
             readonly
-            startingValue={tutorData.averageRating}
+            startingValue={overallRating}
           />
         </View>
         <View style={{ paddingHorizontal: RfW(16) }}>
