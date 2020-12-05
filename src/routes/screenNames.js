@@ -8,6 +8,7 @@ const NavigationRouteNames = {
   REGISTER: 'register',
   USER_TYPE_SELECTOR: 'user_type_selector',
   REFER_EARN: 'refer_and_earn',
+  POST_TUTION_NEEDS: 'post_your_tution_needs',
 
   ONLINE_CLASS: 'online_class1',
 

@@ -10,7 +10,7 @@ import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
 
-function ReferEarn(props) {
+function ReferEarn() {
   const navigation = useNavigation();
 
   return (
