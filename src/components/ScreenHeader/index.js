@@ -12,7 +12,17 @@ import BackArrow from '../BackArrow';
 
 function customRangeSelector(props) {
   const navigation = useNavigation();
-  const { style, label, labelStyle, topMargin, horizontalPadding, lineVisible, homeIcon } = props;
+  const {
+    style,
+    label,
+    labelStyle,
+    topMargin,
+    horizontalPadding,
+    lineVisible,
+    homeIcon,
+    showRightIcon,
+    rightIcon,
+  } = props;
 
   const onBackPress = () => {
     navigation.goBack();
@@ -29,10 +39,15 @@ function customRangeSelector(props) {
             height: RfH(44),
           },
         ]}>
-        <View style={commonStyles.horizontalChildrenView}>
-          {homeIcon && <BackArrow action={onBackPress} />}
-          <View style={[labelStyle, { flexDirection: 'row', justifyContent: 'center' }]}>
-            <Text style={commonStyles.headingPrimaryText}>{label}</Text>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { flex: 1 }]}>
+          <View style={commonStyles.horizontalChildrenView}>
+            {homeIcon && <BackArrow action={onBackPress} />}
+            <View style={[labelStyle, { flexDirection: 'row', justifyContent: 'center' }]}>
+              <Text style={commonStyles.headingPrimaryText}>{label}</Text>
+            </View>
+          </View>
+          <View>
+            {showRightIcon && <IconButtonWrapper iconImage={rightIcon} iconWidth={RfW(20)} iconHeight={RfH(20)} />}
           </View>
         </View>
       </View>
@@ -49,6 +64,8 @@ customRangeSelector.propTypes = {
   horizontalPadding: PropTypes.number,
   lineVisible: PropTypes.bool,
   homeIcon: PropTypes.bool,
+  showRightIcon: PropTypes.bool,
+  rightIcon: PropTypes.string,
 };
 
 customRangeSelector.defaultProps = {
@@ -59,6 +76,8 @@ customRangeSelector.defaultProps = {
   horizontalPadding: 0,
   lineVisible: true,
   homeIcon: false,
+  showRightIcon: false,
+  rightIcon: null,
 };
 
 export default customRangeSelector;

@@ -1138,9 +1138,11 @@ function StudentDashboard(props) {
               </View>
             </View>
           </View>
-          <View style={{ marginTop: RfH(20) }}>
-            <Image source={Images.post_needs} />
-          </View>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.POST_TUTION_NEEDS)}>
+            <View style={{ marginTop: RfH(20) }}>
+              <Image source={Images.post_needs} />
+            </View>
+          </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}>
             <View>
               <Image source={Images.refer_earn} />
