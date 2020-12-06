@@ -8,7 +8,7 @@ import CustomRadioButton from './CustomRadioButton';
 import CustomRangeSelector from './CustomRangeSelector';
 import ScreenHeader from './ScreenHeader';
 import DateSlotSelectorModal from './DateSlotSelectorModal';
-import RateReview from './Rate&ReviewModal';
+import RateReview from './ReviewModal';
 import PaymentMethodModal from './PaymentMethodModal';
 import CompareModal from './CompareModal';
 import Ratings from './Ratings';

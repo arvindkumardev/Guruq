@@ -14,6 +14,8 @@ export const GET_AVAILABILITY = gql`
 export const GET_CLASS_DETAILS = gql`
   query GetClassDetails($classId: Float!) {
     getClassDetails(classId: $classId) {
+      id
+      createdDate
       uuid
       offering {
         id

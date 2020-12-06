@@ -36,6 +36,8 @@ function ScheduledClassDetails(props) {
 
   const { route } = props;
 
+  // FIXME: only get id of class and full object
+  // use the classData everywhere for showing information
   const { classDetails } = route.params;
 
   useEffect(() => {
@@ -55,33 +57,6 @@ function ScheduledClassDetails(props) {
       setAttendees(array);
     }
   }, classData?.students);
-
-  const attachments = [
-    {
-      icon: Images.pdf,
-      chapter: 'Chapter 01.pdf',
-      size: '15 KB',
-      date: '15 Sept',
-    },
-    {
-      icon: Images.png,
-      chapter: 'Chapter 01.png',
-      size: '15 KB',
-      date: '15 Sept',
-    },
-    {
-      icon: Images.jpg,
-      chapter: 'Chapter 01.jpg',
-      size: '15 KB',
-      date: '15 Sept',
-    },
-    {
-      icon: Images.txt,
-      chapter: 'Chapter 01.txt',
-      size: '15 KB',
-      date: '15 Sept',
-    },
-  ];
 
   const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -152,7 +127,7 @@ function ScheduledClassDetails(props) {
 
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails, classData });
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData });
   };
 
   const getTutorImage = (tutor) => {

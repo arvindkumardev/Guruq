@@ -16,7 +16,7 @@ import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { ADD_REVIEW } from '../../containers/student/tutor-mutation';
 import Loader from '../Loader';
 
-const dateSlotModal = (props) => {
+const ReviewModal = (props) => {
   const navigation = useNavigation();
   const [ratings, setRatings] = useState([
     { category: 'Course Understanding', rating: 0 },
@@ -29,7 +29,7 @@ const dateSlotModal = (props) => {
   const [rate, setRate] = useState(0);
   const [review, setReview] = useState('');
 
-  const { visible, onClose, classDetails, classData } = props;
+  const { visible, onClose, classDetails } = props;
 
   const [addReview, { loading: reviewLoading }] = useMutation(ADD_REVIEW, {
     fetchPolicy: 'no-cache',
@@ -83,7 +83,7 @@ const dateSlotModal = (props) => {
       variables: {
         review: {
           tutor: {
-            id: classData.tutor.id,
+            id: classDetails.tutor.id,
           },
           classes: {
             id: classDetails.id,
@@ -126,10 +126,10 @@ const dateSlotModal = (props) => {
               styling={{ borderRadius: 8 }}
             />
             <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}>
-              {classData?.tutor?.contactDetail?.firstName} {classData.tutor.contactDetail.lastName}
+              {classDetails?.tutor?.contactDetail?.firstName} {classDetails.tutor.contactDetail.lastName}
             </Text>
             <Text style={commonStyles.mediumMutedText}>
-              {classDetails?.classTitle} ( {`${classDetails.class} | ${classDetails.board}`})
+              {`${classDetails?.offering?.displayName} (${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName})`}
             </Text>
             <View style={{ height: RfH(32) }} />
             <Text style={commonStyles.mediumMutedText}>Rate Your Tutor</Text>
@@ -189,18 +189,16 @@ const dateSlotModal = (props) => {
   );
 };
 
-dateSlotModal.defaultProps = {
+ReviewModal.defaultProps = {
   visible: false,
   onClose: null,
   classDetails: null,
-  classData: null,
 };
 
-dateSlotModal.propTypes = {
+ReviewModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
   classDetails: PropTypes.object,
-  classData: PropTypes.object,
 };
 
-export default dateSlotModal;
+export default ReviewModal;
