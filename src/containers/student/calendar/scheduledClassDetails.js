@@ -24,7 +24,7 @@ import Loader from '../../../components/Loader';
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
-  const [attendees, setAttendees] = useState([]);
+  // const [attendees, setAttendees] = useState([]);
   const [startTimes, setStartTimes] = useState([]);
   const [availability, setAvailability] = useState([]);
   const [selectedEndTime, setSelectedEndTime] = useState(null);
@@ -40,23 +40,23 @@ function ScheduledClassDetails(props) {
   // use the classData everywhere for showing information
   const { classDetails } = route.params;
 
-  useEffect(() => {
-    const array = [];
-    if (classData?.students) {
-      for (const obj of classData?.students) {
-        const item = {
-          id: obj?.id,
-          filePath: obj?.profileImage?.filePath,
-          studentName: obj?.contactDetail?.firstName,
-          studentId: obj?.contactDetail?.lastName,
-          gender: obj?.contactDetail?.gender,
-          joined: true,
-        };
-        array.push(item);
-      }
-      setAttendees(array);
-    }
-  }, classData?.students);
+  // useEffect(() => {
+  //   const array = [];
+  //   if (classData?.students) {
+  //     for (const obj of classData?.students) {
+  //       const item = {
+  //         id: obj?.id,
+  //         filePath: obj?.profileImage?.filePath,
+  //         studentName: obj?.contactDetail?.firstName,
+  //         studentId: obj?.contactDetail?.lastName,
+  //         gender: obj?.contactDetail?.gender,
+  //         joined: true,
+  //       };
+  //       array.push(item);
+  //     }
+  //     setAttendees(array);
+  //   }
+  // }, [classData]);
 
   const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -89,14 +89,16 @@ function ScheduledClassDetails(props) {
       <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
         <View style={commonStyles.horizontalChildrenView}>
           <IconButtonWrapper
-            iconImage={getStudentImageUrl(item.filePath, item.gender, item.id)}
+            iconImage={getStudentImageUrl(item?.profileImage?.filename, item?.contactDetail?.gender, item.id)}
             iconHeight={RfH(45)}
             iconWidth={RfH(45)}
             styling={{ borderRadius: RfH(22.5) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>{item.studentName}</Text>
-            <Text style={commonStyles.mediumMutedText}>{item.studentId}</Text>
+            <Text style={commonStyles.headingPrimaryText}>
+              {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
+            </Text>
+            <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
           </View>
         </View>
         <CheckBox checked={item.joined} />
@@ -376,13 +378,15 @@ function ScheduledClassDetails(props) {
           <IconButtonWrapper iconImage={Images.attendees} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
-            <Text style={commonStyles.mediumMutedText}>{attendees.length} participants to join the Class</Text>
+            <Text style={commonStyles.mediumMutedText}>
+              {classData?.students?.length} participants to join the Class
+            </Text>
           </View>
         </View>
         <FlatList
           style={{ marginBottom: RfH(16), marginLeft: 40 }}
           showsHorizontalScrollIndicator={false}
-          data={attendees}
+          data={classData?.students}
           renderItem={({ item, index }) => renderAttendees(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
@@ -406,35 +410,39 @@ function ScheduledClassDetails(props) {
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
 
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-          <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>Class Location </Text>
-          </View>
-        </View>
-        <View style={{ paddingHorizontal: RfW(16) }}>
-          <Text style={commonStyles.headingPrimaryText}>Block 27</Text>
-          <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            Block 72, , Ashok Nagar, New Delhi, Delhi 110018, India
-          </Text>
-          <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            Landmark : Monga Sweets
-          </Text>
-        </View>
+        {classData.address && (
+          <>
+            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
+              <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+                <Text style={commonStyles.headingPrimaryText}>Class Location </Text>
+              </View>
+            </View>
+            <View style={{ paddingHorizontal: RfW(16) }}>
+              <Text style={commonStyles.headingPrimaryText}>Block 27</Text>
+              <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                Block 72, , Ashok Nagar, New Delhi, Delhi 110018, India
+              </Text>
+              <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                Landmark : Monga Sweets
+              </Text>
+            </View>
 
-        <View style={{ marginTop: RfH(16) }}>
-          <MapView
-            style={{ flex: 1, height: 300 }}
-            liteMode
-            initialRegion={{
-              latitude: 28.561929,
-              longitude: 77.06681,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}>
-            <Marker coordinate={{ latitude: 28.561929, longitude: 77.06681 }} />
-          </MapView>
-        </View>
+            <View style={{ marginTop: RfH(16) }}>
+              <MapView
+                style={{ flex: 1, height: 300 }}
+                liteMode
+                initialRegion={{
+                  latitude: 28.561929,
+                  longitude: 77.06681,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}>
+                <Marker coordinate={{ latitude: 28.561929, longitude: 77.06681 }} />
+              </MapView>
+            </View>
+          </>
+        )}
 
         {/* <View style={[commonStyles.lineSeparator, { marginTop: 16, marginBottom: 8 }]} /> */}
 

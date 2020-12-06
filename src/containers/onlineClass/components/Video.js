@@ -217,7 +217,7 @@ export default class Video extends Component<Props, State> {
   switchCamera = async () => {
     await this._engine?.switchCamera();
 
-    await this._engine.setEnableSpeakerphone(true);
+    // await this._engine.setEnableSpeakerphone(true);
   };
 
   toggleSpeakerPhone = async () => {
