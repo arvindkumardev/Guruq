@@ -25,6 +25,7 @@ import CalendarView from '../containers/student/calendar/calendarView';
 import FavouriteTutors from '../containers/student/dashboard/favouriteTutors';
 import ReferEarn from '../containers/referAndEarn/referEarn';
 import PostTutionNeeds from '../containers/tutionNeeds/postTutionNeeds';
+import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetails';
 
 const Stack = createStackNavigator();
 
@@ -138,6 +139,11 @@ export const getStudentRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.POST_TUTION_NEEDS}
         component={PostTutionNeeds}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.POST_TUTION_NEED_DETAILS}
+        component={PostTutionNeedDetails}
         options={{ headerShown: false }}
       />
     </>

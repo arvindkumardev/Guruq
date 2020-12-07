@@ -9,6 +9,7 @@ const NavigationRouteNames = {
   USER_TYPE_SELECTOR: 'user_type_selector',
   REFER_EARN: 'refer_and_earn',
   POST_TUTION_NEEDS: 'post_your_tution_needs',
+  POST_TUTION_NEED_DETAILS: 'post_your_tution_need_details',
 
   ONLINE_CLASS: 'online_class1',
 

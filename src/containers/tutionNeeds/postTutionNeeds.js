@@ -9,6 +9,7 @@ import commonStyles from '../../theme/styles';
 import styles from './styles';
 import { ScreenHeader } from '../../components';
 import { offeringsMasterData } from '../../apollo/cache';
+import routeNames from '../../routes/screenNames';
 
 function PostTutionNeeds() {
   const navigation = useNavigation();
@@ -181,6 +182,7 @@ function PostTutionNeeds() {
         </View>
       </ScrollView>
       <Button
+        onPress={() => navigation.navigate(routeNames.POST_TUTION_NEED_DETAILS)}
         block
         style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginBottom: RfH(34), marginTop: RfH(8) }]}>
         <Text style={commonStyles.textButtonPrimary}>Submit</Text>
