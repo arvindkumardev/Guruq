@@ -78,7 +78,7 @@ function ReferEarn() {
           </Text>
           <Text
             style={[commonStyles.mediumPrimaryText, { width: RfW(100), textAlign: 'center', alignSelf: 'flex-start' }]}>
-            Successful Sign Ups
+            Successful Sign-Ups
           </Text>
           <Text
             style={[commonStyles.mediumPrimaryText, { width: RfW(100), textAlign: 'center', alignSelf: 'flex-start' }]}>
@@ -93,9 +93,6 @@ function ReferEarn() {
           <Button style={commonStyles.buttonOutlinePrimary}>
             <Text style={{ color: Colors.brandBlue2 }}>GURU38875</Text>
           </Button>
-        </View>
-        <View>
-          <Text style={{ textAlign: 'center', color: Colors.brandBlue2 }}>Tap to Copy</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: RfH(36) }}>
           <Button warning block style={{ width: RfW(166) }}>

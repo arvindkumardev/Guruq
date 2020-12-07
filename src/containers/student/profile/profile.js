@@ -73,7 +73,7 @@ function Profile() {
   };
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
-      navigation.navigate(routeNames.STUDENT.PERSONAL_DETAILS);
+      navigation.navigate(routeNames.STUDENT.WEB_VIEW_PAGES);
       // setIsPersonalMenuOpen(false)
       //  alert('ok')
     } else {

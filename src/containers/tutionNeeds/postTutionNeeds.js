@@ -17,6 +17,7 @@ function PostTutionNeeds() {
   const [selectedStudyArea, setSelectedStudyArea] = useState(null);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [selectedClass, setSelectedClass] = useState(null);
+  const [selectedDetails, setSelectedDetails] = useState({});
   const [selectedSubjects, setSelectedSubjects] = useState([]);
 
   const renderArea = (item) => {
@@ -160,15 +161,19 @@ function PostTutionNeeds() {
     );
   };
 
+  const goToOtherDetails = () => {
+    const obj = {
+      studyArea: selectedStudyArea,
+      board: selectedBoard,
+      class: selectedClass,
+      subject: selectedSubjects,
+    };
+    navigation.navigate(routeNames.POST_TUTION_NEED_DETAILS, { subjectData: obj });
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader
-        homeIcon
-        label="Post your tution needs"
-        showRightIcon
-        rightIcon={Images.moreInformation}
-        horizontalPadding={RfW(16)}
-      />
+      <ScreenHeader homeIcon label="Post your tution needs" horizontalPadding={RfW(16)} />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: RfH(16) }}>
         <View style={{ height: RfH(44) }} />
         <View style={{ marginHorizontal: RfW(16) }}>
@@ -182,10 +187,10 @@ function PostTutionNeeds() {
         </View>
       </ScrollView>
       <Button
-        onPress={() => navigation.navigate(routeNames.POST_TUTION_NEED_DETAILS)}
+        onPress={() => goToOtherDetails()}
         block
         style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginBottom: RfH(34), marginTop: RfH(8) }]}>
-        <Text style={commonStyles.textButtonPrimary}>Submit</Text>
+        <Text style={commonStyles.textButtonPrimary}>Next</Text>
       </Button>
     </View>
   );

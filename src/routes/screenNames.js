@@ -10,6 +10,7 @@ const NavigationRouteNames = {
   REFER_EARN: 'refer_and_earn',
   POST_TUTION_NEEDS: 'post_your_tution_needs',
   POST_TUTION_NEED_DETAILS: 'post_your_tution_need_details',
+  WEB_VIEW_PAGES: 'web_view_pages',
 
   ONLINE_CLASS: 'online_class1',
 
