@@ -28,6 +28,9 @@ import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
 import { getBoxColor } from '../../../../theme/colors';
 import { GET_SCHEDULED_CLASSES } from '../../booking.query';
 
+import { WebView } from 'react-native-webview';
+
+
 function StudentDashboard(props) {
   const navigation = useNavigation();
 

@@ -15,7 +15,7 @@ const OnlineClass = (props) => {
 
   const { route } = props;
 
-  const { classDetails, classData } = route.params;
+  const { classDetails } = route.params;
   const userInfo = useReactiveVar(userDetails);
 
   const [token, setToken] = useState('');
@@ -66,18 +66,12 @@ const OnlineClass = (props) => {
         onCallEnd={callEnded}
         onPressBack={onPressBack}
         classDetails={classDetails}
-        classData={classData}
         userInfo={userInfo}
         channelName={classDetails?.uuid}
         token={token}
       />
       {showReviewPopup && (
-        <RateReview
-          visible={showReviewPopup}
-          onClose={() => onClose()}
-          classDetails={classDetails}
-          classData={classData}
-        />
+        <RateReview visible={showReviewPopup} onClose={() => onClose()} classDetails={classDetails} />
       )}
     </View>
   );

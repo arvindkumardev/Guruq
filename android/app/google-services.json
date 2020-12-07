@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "716496455490",
+    "firebase_url": "https://guruq-7f7a2.firebaseio.com",
+    "project_id": "guruq-7f7a2",
+    "storage_bucket": "guruq-7f7a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716496455490:android:54db239da8ce4fbf4aeadb",
+        "android_client_info": {
+          "package_name": "com.guruq"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "716496455490-454qo20g45d8lgrbni6m4u3las1bjpq0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_Nm6NtJncE243WCp1zuZcm5zDt5ziARI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "716496455490-454qo20g45d8lgrbni6m4u3las1bjpq0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

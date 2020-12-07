@@ -19,6 +19,7 @@ import BackArrow from '../../../components/BackArrow';
 import ClassDetailsModal from './classDetailsModal';
 import VideoMessagingModal from './videoMessagingModal';
 import VideoMoreAction from './videoMoreAction';
+import Whiteboard from './whiteboard';
 
 interface Props {}
 
@@ -44,6 +45,8 @@ interface State {
   showClassDetails: false;
   showMessageBox: false;
   showMoreActions: false;
+
+  whiteboardEnabled: false;
 }
 
 const appId = '20be4eff902f4d9ea78c2f8c168556cd';
@@ -71,6 +74,8 @@ export default class Video extends Component<Props, State> {
       showClassDetails: false,
       showMessageBox: false,
       showMoreActions: false,
+
+      whiteboardEnabled: false,
     };
     if (Platform.OS === 'android') {
       // Request required permissions from Android
@@ -212,7 +217,7 @@ export default class Video extends Component<Props, State> {
   switchCamera = async () => {
     await this._engine?.switchCamera();
 
-    await this._engine.setEnableSpeakerphone(true);
+    // await this._engine.setEnableSpeakerphone(true);
   };
 
   toggleSpeakerPhone = async () => {
@@ -269,6 +274,10 @@ export default class Video extends Component<Props, State> {
 
   toggleMoreAction = () => {
     this.setState({ showMoreActions: !this.state.showMoreActions });
+  };
+
+  toggleWhiteboard = () => {
+    this.setState({ whiteboardEnabled: !this.state.whiteboardEnabled });
   };
 
   _renderVideos = () => {
@@ -515,7 +524,7 @@ export default class Video extends Component<Props, State> {
                 </View>
               </TouchableWithoutFeedback>
 
-              <TouchableWithoutFeedback onPress={this.endCall}>
+              <TouchableWithoutFeedback onPress={this.toggleWhiteboard}>
                 <View
                   style={{
                     // width: 60,
@@ -777,45 +786,48 @@ export default class Video extends Component<Props, State> {
       <>
         {selectedUid ? (
           <View style={[styles.fullView, { position: 'absolute', top: 0 }]}>
-            <TouchableWithoutFeedback onPress={this.toggleDetailedActions}>
-              {videoItem && videoItem.status ? (
-                <RtcRemoteView.SurfaceView
-                  // style={styles.remyesote}
-                  style={[styles.max, { borderRadius: 20 }]}
-                  uid={selectedUid}
-                  channelId={this.props.channelName}
-                  renderMode={VideoRenderMode.Hidden}
-                  zOrderMediaOverlay
-                />
-              ) : (
-                <View
-                  style={[
-                    // styles.remote,
-                    {
-                      flex: 1,
-                      backgroundColor: '#222222',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    },
-                  ]}>
+            {this.state.whiteboardEnabled ? (
+              <Whiteboard uuid={this.props.classDetails.uuid} />
+            ) : (
+              <TouchableWithoutFeedback onPress={this.toggleDetailedActions}>
+                {videoItem && videoItem.status ? (
+                  <RtcRemoteView.SurfaceView
+                    // style={styles.remyesote}
+                    style={[styles.max, { borderRadius: 20 }]}
+                    uid={selectedUid}
+                    channelId={this.props.channelName}
+                    renderMode={VideoRenderMode.Hidden}
+                    zOrderMediaOverlay
+                  />
+                ) : (
                   <View
-                    style={{
-                      height: RfH(100),
-                      width: RfW(100),
-                      borderRadius: 100,
-                      backgroundColor: Colors.lightBlue,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginBottom: 8,
-                    }}>
-                    <Text style={{ color: Colors.primaryText, fontSize: 48 }}>R</Text>
+                    style={[
+                      // styles.remote,
+                      {
+                        flex: 1,
+                        backgroundColor: '#222222',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      },
+                    ]}>
+                    <View
+                      style={{
+                        height: RfH(100),
+                        width: RfW(100),
+                        borderRadius: 100,
+                        backgroundColor: Colors.lightBlue,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginBottom: 8,
+                      }}>
+                      <Text style={{ color: Colors.primaryText, fontSize: 48 }}>R</Text>
+                    </View>
+                    <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>Remote</Text>
                   </View>
-                  <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>Remote</Text>
-                </View>
-              )}
-            </TouchableWithoutFeedback>
-
+                )}
+              </TouchableWithoutFeedback>
+            )}
             {audioItem && !audioItem.status && (
               <View
                 style={
@@ -971,15 +983,13 @@ export default class Video extends Component<Props, State> {
                   </View>
                   <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
                     <Text style={commonStyles.headingPrimaryText}>
-                      {this.props.classDetails?.classTitle} By {this.props.classData?.tutor?.contactDetail?.firstName}{' '}
-                      {this.props.classData.tutor.contactDetail.lastName}
+                      {`${this.props.classDetails?.offering?.displayName} by ${this.props.classDetails?.tutor?.contactDetail?.firstName} ${this.props.classDetails?.tutor?.contactDetail?.lastName}`}
                     </Text>
-                    <Text
-                      style={
-                        commonStyles.mediumMutedText
-                      }>{`${this.props.classDetails.board} | ${this.props.classDetails.class}`}</Text>
                     <Text style={commonStyles.mediumMutedText}>
-                      {new Date(this.props.classData?.startDate).toDateString()}
+                      {`${this.props.classDetails?.offering?.parentOffering?.displayName} | ${this.props.classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+                    </Text>
+                    <Text style={commonStyles.mediumMutedText}>
+                      {new Date(this.props.classDetails?.startDate).toDateString()}
                     </Text>
                   </View>
                   <View>
