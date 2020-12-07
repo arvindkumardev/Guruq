@@ -5,6 +5,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
+import { Root } from 'native-base';
 import { clearAllLocalStorage, getToken } from './utils/helpers';
 import { isLoggedIn, isTokenLoading, userType, isSplashScreenVisible } from './apollo/cache';
 import AppStack from './routes/appRoutes';
@@ -88,13 +89,15 @@ function App() {
       <ApolloHooksProvider client={client}>
         <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
           <StatusBar barStyle="dark-content" />
-          <AppStack
-            isUserLoggedIn={isUserLoggedIn}
-            isUserTokenLoading={isUserTokenLoading}
-            userType={userTypeVal}
-            showSplashScreen={showSplashScreen}
-            // isNetworkConnectivityError={isNetworkConnectivityError}
-          />
+          <Root>
+            <AppStack
+              isUserLoggedIn={isUserLoggedIn}
+              isUserTokenLoading={isUserTokenLoading}
+              userType={userTypeVal}
+              showSplashScreen={showSplashScreen}
+              // isNetworkConnectivityError={isNetworkConnectivityError}
+            />
+          </Root>
         </NavigationContainer>
       </ApolloHooksProvider>
     </ApolloProvider>

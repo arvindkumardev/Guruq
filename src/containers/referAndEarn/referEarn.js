@@ -1,8 +1,9 @@
 import { Image, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Button, Icon } from 'native-base';
+import { Button, Icon, Toast } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import Clipboard from '@react-native-community/clipboard';
 import { Images, Colors, Fonts } from '../../theme';
 import routeNames from '../../routes/screenNames';
 import { RfH, RfW } from '../../utils/helpers';
@@ -12,6 +13,7 @@ import { IconButtonWrapper, ScreenHeader } from '../../components';
 
 function ReferEarn() {
   const navigation = useNavigation();
+  const [referCode, setReferCode] = useState('GURU38875');
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
@@ -90,8 +92,16 @@ function ReferEarn() {
           <Text style={{ textAlign: 'center' }}>Your Referral Code</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: RfH(8) }}>
-          <Button style={commonStyles.buttonOutlinePrimary}>
-            <Text style={{ color: Colors.brandBlue2 }}>GURU38875</Text>
+          <Button
+            style={commonStyles.buttonOutlinePrimary}
+            onPress={() => {
+              Clipboard.setString(referCode);
+              Toast.show({
+                text: 'Copied to clipboard',
+                type: 'success',
+              });
+            }}>
+            <Text style={{ color: Colors.brandBlue2 }}>{referCode}</Text>
           </Button>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: RfH(36) }}>

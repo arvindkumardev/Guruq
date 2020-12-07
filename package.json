@@ -16,6 +16,7 @@
     "@apollo/client": "^3.2.7",
     "@apollo/react-hooks": "^4.0.0",
     "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/datetimepicker": "^3.0.4",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/netinfo": "^5.9.7",
