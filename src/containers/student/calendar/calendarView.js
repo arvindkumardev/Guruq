@@ -12,13 +12,14 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import commonStyles from '../../../theme/styles';
 import routeNames from '../../../routes/screenNames';
-import { RfH, RfW, monthNames } from '../../../utils/helpers';
+import { RfH, RfW, monthNames, getSubjectIcons } from '../../../utils/helpers';
 import { Colors, Fonts, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 import { IconButtonWrapper } from '../../../components';
 import { GET_SCHEDULED_CLASSES } from '../booking.query';
 import { studentDetails } from '../../../apollo/cache';
+import { getBoxColor } from '../../../theme/colors';
 
 function CalendarView(props) {
   const navigation = useNavigation();
@@ -94,16 +95,16 @@ function CalendarView(props) {
             style={{
               height: RfH(72),
               width: RfW(72),
-              backgroundColor: Colors.lightPurple,
+              backgroundColor: getBoxColor(item.classTitle),
               borderRadius: 8,
               alignItems: 'center',
               justifyContent: 'center',
             }}>
             <IconButtonWrapper
-              iconHeight={RfH(48)}
-              iconWidth={RfW(32)}
+              iconHeight={RfH(56)}
+              iconWidth={RfW(48)}
               styling={{ alignSelf: 'center' }}
-              iconImage={Images.book}
+              iconImage={getSubjectIcons(item.classTitle)}
             />
           </View>
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>

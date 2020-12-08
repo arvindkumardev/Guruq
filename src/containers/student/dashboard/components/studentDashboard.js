@@ -12,9 +12,10 @@ import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { WebView } from 'react-native-webview';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
+import { getUserImageUrl, RfH, RfW, getSubjectIcons } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
 import { offeringsMasterData, userDetails, studentDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
@@ -27,9 +28,6 @@ import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
 import { getBoxColor } from '../../../../theme/colors';
 import { GET_SCHEDULED_CLASSES } from '../../booking.query';
-
-import { WebView } from 'react-native-webview';
-
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
@@ -231,17 +229,17 @@ function StudentDashboard(props) {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: getBoxColor(item.id),
+              backgroundColor: getBoxColor(item.displayName),
               height: RfH(67),
               width: RfW(70),
               marginHorizontal: RfW(4),
               borderRadius: RfW(8),
             }}>
             <IconButtonWrapper
-              iconWidth={RfW(24.5)}
+              iconWidth={RfW(40)}
               styling={{ alignSelf: 'center' }}
-              iconHeight={RfH(34.2)}
-              iconImage={Images.book}
+              iconHeight={RfH(40)}
+              iconImage={getSubjectIcons(item.displayName)}
             />
           </View>
           <Text
@@ -1143,12 +1141,18 @@ function StudentDashboard(props) {
           </View>
           <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.POST_TUTION_NEEDS)}>
             <View style={{ marginTop: RfH(20) }}>
-              <Image source={Images.post_needs} />
+              <Image
+                style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}
+                source={Images.post_needs}
+              />
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}>
             <View>
-              <Image source={Images.refer_earn} />
+              <Image
+                style={{ width: Dimensions.get('window').width - 32, height: RfH(184) }}
+                source={Images.refer_earn}
+              />
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>

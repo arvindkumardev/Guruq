@@ -2,13 +2,14 @@ import { Text, View, FlatList, TouchableWithoutFeedback, ScrollView } from 'reac
 import React, { useState } from 'react';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useReactiveVar } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { Images, Colors } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import styles from './styles';
 import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../components';
-import { offeringsMasterData } from '../../apollo/cache';
+import { CREATE_STUDENT_PYTN } from './pytn.mutation';
+import routeNames from '../../routes/screenNames';
 
 function PostTutionNeedDetails(props) {
   const { route } = props;
@@ -17,9 +18,63 @@ function PostTutionNeedDetails(props) {
   const navigation = useNavigation();
   const [noOfCllasses, setNoOfCllasses] = useState(1);
   const [maxPrice, setMaxPrice] = useState('');
+  const [minPrice, setMinPrice] = useState('');
   const [isOnline, setIsOnline] = useState(true);
   const [isIndividual, setIsIndividual] = useState(true);
   const [noOfGroupClasses, setNoOfGroupClasses] = useState(2);
+
+  const [createPYTN, { loading: pytnLoading }] = useMutation(CREATE_STUDENT_PYTN, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        navigation.navigate(routeNames.TUTION_NEEDS_LISTING);
+      }
+    },
+  });
+
+  const submitPYTN = () => {
+    const offeringArray = [];
+    subjectData?.subject?.map((obj) => {
+      offeringArray.push({ id: obj?.id });
+    });
+    createPYTN({
+      variables: {
+        studentPYTNDto: {
+          offerings: offeringArray,
+          count: noOfCllasses,
+          groupSize: noOfGroupClasses,
+          onlineClass: isOnline,
+          minPrice: parseFloat(minPrice),
+          maxPrice: parseFloat(maxPrice),
+        },
+      },
+    });
+  };
+
+  const addNoOfClass = () => {
+    setNoOfCllasses(noOfCllasses + 1);
+  };
+
+  const removeNoOfClass = () => {
+    if (noOfCllasses > 1) {
+      setNoOfCllasses(noOfCllasses - 1);
+    }
+  };
+
+  const addNoOfGroupClass = () => {
+    setNoOfGroupClasses(noOfGroupClasses + 1);
+  };
+
+  const removeNoOfGroupClass = () => {
+    if (noOfGroupClasses > 2) {
+      setNoOfGroupClasses(noOfGroupClasses - 1);
+    }
+  };
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
@@ -44,13 +99,23 @@ function PostTutionNeedDetails(props) {
         <View>
           <TouchableWithoutFeedback onPress={() => setIsOnline(true)}>
             <View style={commonStyles.horizontalChildrenView}>
-              <CustomRadioButton iconWidth={RfW(20)} iconHeight={RfH(20)} enabled={isOnline} />
+              <CustomRadioButton
+                iconWidth={RfW(20)}
+                iconHeight={RfH(20)}
+                enabled={isOnline}
+                submitFunction={() => setIsOnline(true)}
+              />
               <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Online Class</Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={() => setIsOnline(false)}>
             <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(16) }]}>
-              <CustomRadioButton iconWidth={RfW(20)} iconHeight={RfH(20)} enabled={!isOnline} />
+              <CustomRadioButton
+                iconWidth={RfW(20)}
+                iconHeight={RfH(20)}
+                enabled={!isOnline}
+                submitFunction={() => setIsOnline(false)}
+              />
               <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Home Tution</Text>
             </View>
           </TouchableWithoutFeedback>
@@ -61,14 +126,24 @@ function PostTutionNeedDetails(props) {
         <View>
           <TouchableWithoutFeedback onPress={() => setIsIndividual(true)}>
             <View style={commonStyles.horizontalChildrenView}>
-              <CustomRadioButton iconWidth={RfW(20)} iconHeight={RfH(20)} enabled={isIndividual} />
+              <CustomRadioButton
+                iconWidth={RfW(20)}
+                iconHeight={RfH(20)}
+                enabled={isIndividual}
+                submitFunction={() => setIsIndividual(true)}
+              />
               <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Individual Class</Text>
             </View>
           </TouchableWithoutFeedback>
           <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
             <TouchableWithoutFeedback onPress={() => setIsIndividual(false)}>
               <View style={commonStyles.horizontalChildrenView}>
-                <CustomRadioButton iconWidth={RfW(20)} iconHeight={RfH(20)} enabled={!isIndividual} />
+                <CustomRadioButton
+                  iconWidth={RfW(20)}
+                  iconHeight={RfH(20)}
+                  enabled={!isIndividual}
+                  submitFunction={() => setIsIndividual(false)}
+                />
                 <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Group Class</Text>
               </View>
             </TouchableWithoutFeedback>
@@ -76,7 +151,7 @@ function PostTutionNeedDetails(props) {
               <View>
                 <View style={styles.bookingSelectorParent}>
                   <View style={styles.bookingSelectorParent}>
-                    <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => removeNoOfGroupClass()}>
                       <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
                         <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                       </View>
@@ -84,7 +159,7 @@ function PostTutionNeedDetails(props) {
 
                     <Text>{noOfGroupClasses}</Text>
 
-                    <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => addNoOfGroupClass()}>
                       <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
                         <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                       </View>
@@ -101,7 +176,7 @@ function PostTutionNeedDetails(props) {
         <View>
           <View style={styles.bookingSelectorParent}>
             <View style={styles.bookingSelectorParent}>
-              <TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => removeNoOfClass()}>
                 <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
                   <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                 </View>
@@ -109,7 +184,7 @@ function PostTutionNeedDetails(props) {
 
               <Text>{noOfCllasses}</Text>
 
-              <TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => addNoOfClass()}>
                 <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
                   <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                 </View>
@@ -122,7 +197,7 @@ function PostTutionNeedDetails(props) {
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Item floatingLabel style={{ flex: 0.5 }}>
-            <Input placeholder="Min Price" value={maxPrice} onChangeText={(text) => setMaxPrice(text)} />
+            <Input placeholder="Min Price" value={minPrice} onChangeText={(text) => setMinPrice(text)} />
           </Item>
           <Item floatingLabel style={{ flex: 0.5, marginLeft: RfW(8) }}>
             <Input placeholder="Max Price" value={maxPrice} onChangeText={(text) => setMaxPrice(text)} />
@@ -131,6 +206,7 @@ function PostTutionNeedDetails(props) {
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
       </ScrollView>
       <Button
+        onPress={() => submitPYTN()}
         block
         style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginBottom: RfH(34), marginTop: RfH(8) }]}>
         <Text style={commonStyles.textButtonPrimary}>Submit</Text>

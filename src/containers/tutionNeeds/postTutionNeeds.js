@@ -17,7 +17,6 @@ function PostTutionNeeds() {
   const [selectedStudyArea, setSelectedStudyArea] = useState(null);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [selectedClass, setSelectedClass] = useState(null);
-  const [selectedDetails, setSelectedDetails] = useState({});
   const [selectedSubjects, setSelectedSubjects] = useState([]);
 
   const renderArea = (item) => {
@@ -169,6 +168,7 @@ function PostTutionNeeds() {
       subject: selectedSubjects,
     };
     navigation.navigate(routeNames.POST_TUTION_NEED_DETAILS, { subjectData: obj });
+    // navigation.navigate(routeNames.TUTION_NEEDS_LISTING, { subjectData: obj });
   };
 
   return (
@@ -186,12 +186,14 @@ function PostTutionNeeds() {
           {selectedClass && renderSubjects()}
         </View>
       </ScrollView>
-      <Button
-        onPress={() => goToOtherDetails()}
-        block
-        style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginBottom: RfH(34), marginTop: RfH(8) }]}>
-        <Text style={commonStyles.textButtonPrimary}>Next</Text>
-      </Button>
+      {selectedSubjects.length > 0 && (
+        <Button
+          onPress={() => goToOtherDetails()}
+          block
+          style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginBottom: RfH(34), marginTop: RfH(8) }]}>
+          <Text style={commonStyles.textButtonPrimary}>Next</Text>
+        </Button>
+      )}
     </View>
   );
 }

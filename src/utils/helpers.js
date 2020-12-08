@@ -1,3 +1,4 @@
+/* eslint-disable no-const-assign */
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import AsyncStorage from '@react-native-community/async-storage';
@@ -5,6 +6,8 @@ import { isNumber, isEmpty } from 'lodash';
 import { Dimensions, Alert } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+import SubjectIcons from '../theme/subjectIcons';
+import Images from '../theme/images';
 
 let token;
 
@@ -170,3 +173,75 @@ export const monthNames = [
   'November',
   'December',
 ];
+
+export const getSubjectIcons = (name) => {
+  let icon = '';
+  switch (name) {
+    case 'Accounts':
+      icon = SubjectIcons.accounts;
+      break;
+    case 'Chemistry':
+      icon = SubjectIcons.chemistry;
+      break;
+    case 'Civics':
+      icon = SubjectIcons.civics;
+      break;
+    case 'Computer Science':
+      icon = SubjectIcons.computer_science;
+      break;
+    case 'Dna':
+      icon = SubjectIcons.dna;
+      break;
+    case 'Hindi':
+      icon = SubjectIcons.hindi;
+      break;
+    case 'Geography':
+      icon = SubjectIcons.geography;
+      break;
+    case 'English':
+      icon = SubjectIcons.english;
+      break;
+    case 'Engineering':
+      icon = SubjectIcons.engineering;
+      break;
+    case 'Economics':
+      icon = SubjectIcons.economics;
+      break;
+    case 'History':
+      icon = SubjectIcons.history;
+      break;
+    case 'Law':
+      icon = SubjectIcons.law;
+      break;
+    case 'Mathematics':
+      icon = SubjectIcons.maths;
+      break;
+    case 'Medical':
+      icon = SubjectIcons.medical;
+      break;
+    case 'Physical Education':
+      icon = SubjectIcons.physical_education;
+      break;
+    case 'Sociology':
+      icon = SubjectIcons.sociology;
+      break;
+    case 'Sanskrit':
+      icon = SubjectIcons.sanskrit;
+      break;
+    case 'Psychology':
+      icon = SubjectIcons.psychology;
+      break;
+    case 'Political Science':
+      icon = SubjectIcons.political_science;
+      break;
+    case 'Physics':
+      icon = SubjectIcons.physics;
+      break;
+    case 'ssc-govt':
+      icon = SubjectIcons.ssc_govt;
+      break;
+    default:
+      icon = Images.book;
+  }
+  return icon;
+};

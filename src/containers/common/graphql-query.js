@@ -38,7 +38,6 @@ export const GET_CURRENT_STUDENT_QUERY = gql`
   query GetCurrentStudent {
     getCurrentStudent {
       id
-      uuid
       contactDetail {
         firstName
         lastName
@@ -59,7 +58,6 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
   query GetCurrentTutor {
     getCurrentTutor {
       id
-      uuid
       contactDetail {
         firstName
         lastName
