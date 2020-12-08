@@ -5,6 +5,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { introspectionFromSchema } from 'graphql';
 import { Colors, Fonts, Images } from '../../theme';
 import routeNames from '../../routes/screenNames';
 import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
@@ -59,7 +60,10 @@ function TutionNeedsListing() {
     return (
       <View>
         <View style={{ height: RfH(40) }} />
-        <Text style={commonStyles.headingPrimaryText}>{item.studyArea}</Text>
+        <View style={commonStyles.horizontalChildrenSpaceView}>
+          <Text style={commonStyles.headingPrimaryText}>{item.studyArea}</Text>
+          <Text style={commonStyles.headingPrimaryText}>₹ {`${item.minPrice}-${item.maxPrice}`}</Text>
+        </View>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
             {item.board}
