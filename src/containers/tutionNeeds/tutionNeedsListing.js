@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../theme';
 import routeNames from '../../routes/screenNames';
-import { getUserImageUrl, RfH, RfW } from '../../utils/helpers';
+import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
@@ -20,7 +20,19 @@ function TutionNeedsListing() {
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const studentInfo = useReactiveVar(studentDetails);
 
-  const [orderItems, setOrderItems] = useState([]);
+  const [orderItems, setOrderItems] = useState([
+    {
+      studyArea: 'School Education',
+      minPrice: 200,
+      maxPrice: 700,
+      board: 'CBSE',
+      class: 'Class 10',
+      count: 2,
+      groupSize: 1,
+      onlineClass: false,
+      subject: 'Mathematics',
+    },
+  ]);
 
   const [getTutionNeeds, { loading: loadingTutionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
     onError: (e) => {
@@ -47,19 +59,16 @@ function TutionNeedsListing() {
     return (
       <View>
         <View style={{ height: RfH(40) }} />
-        <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName}</Text>
+        <Text style={commonStyles.headingPrimaryText}>{item.studyArea}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item.offering?.parentOffering?.parentOffering?.displayName}
+            {item.board}
             {' | '}
-            {item.offering?.parentOffering?.displayName}
+            {item.class}
           </Text>
-          {!isHistorySelected && (
-            <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
-          )}
         </View>
-        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
+        <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
           <View style={commonStyles.horizontalChildrenStartView}>
             <View style={commonStyles.verticallyStretchedItemsView}>
               <IconButtonWrapper
@@ -67,16 +76,8 @@ function TutionNeedsListing() {
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
                 imageResizeMode="cover"
-                iconImage={getTutorImage(item.tutor)}
+                iconImage={getSubjectIcons(item.subject)}
               />
-              <Text
-                style={{
-                  marginTop: RfH(4),
-                  fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
-                  textAlign: 'center',
-                }}>
-                Detail
-              </Text>
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
@@ -85,13 +86,13 @@ function TutionNeedsListing() {
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
                 }}>
-                {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
+                {item.subject}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUS{item.tutor.id}
+                {item.groupSize > 1 ? 'Group' : 'Individual'} Class
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online' : 'Offline'} Individual Class
+                {item.onlineClass ? 'Online Class' : 'Home Tution'}
               </Text>
             </View>
           </View>
@@ -107,32 +108,11 @@ function TutionNeedsListing() {
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
           </View>
         </View>
-        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          {!isHistorySelected && (
-            <Text
-              style={{
-                fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                textAlign: 'right',
-                color: Colors.darkGrey,
-              }}>
-              {item.availableClasses} Unscheduled Classses
-            </Text>
-          )}
-          <Button
-            onPress={() => goToScheduleClasses(item)}
-            style={[
-              commonStyles.buttonPrimary,
-              {
-                alignSelf: 'flex-end',
-                marginRight: RfH(0),
-                marginLeft: RfW(16),
-              },
-            ]}>
-            <Text style={commonStyles.textButtonPrimary}>{isHistorySelected ? 'Renew Class' : 'Schedule Class'}</Text>
-          </Button>
+        <View style={[commonStyles.lineSeparator, { marginTop: RfH(16) }]} />
+        <View style={{ marginVertical: RfH(16) }}>
+          <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
         </View>
-        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5 }} />
+        <View style={commonStyles.lineSeparator} />
       </View>
     );
   };
@@ -141,7 +121,7 @@ function TutionNeedsListing() {
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader homeIcon label="Tution Details" horizontalPadding={RfW(16)} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
+        <View style={{ paddingHorizontal: RfW(16) }}>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={orderItems}
