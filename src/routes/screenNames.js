@@ -12,6 +12,7 @@ const NavigationRouteNames = {
   POST_TUTION_NEED_DETAILS: 'post_your_tution_need_details',
   WEB_VIEW_PAGES: 'web_view_pages',
   TUTION_NEEDS_LISTING: 'tution_needs_listing',
+  TUTION_NEEDS_HISTORY: 'tution_needs_history',
 
   ONLINE_CLASS: 'online_class1',
 

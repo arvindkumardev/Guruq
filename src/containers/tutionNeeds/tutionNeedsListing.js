@@ -52,10 +52,6 @@ function TutionNeedsListing() {
     getTutionNeeds({ variables: { searchDto: { id: 105068, offering: { id: 249 } } } });
   }, []);
 
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
-  };
-
   const renderClassItem = (item) => {
     return (
       <View>
@@ -76,7 +72,6 @@ function TutionNeedsListing() {
           <View style={commonStyles.horizontalChildrenStartView}>
             <View style={commonStyles.verticallyStretchedItemsView}>
               <IconButtonWrapper
-                styling={{ borderRadius: RfH(32) }}
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
                 imageResizeMode="cover"
