@@ -27,6 +27,8 @@ import ReferEarn from '../containers/referAndEarn/referEarn';
 import PostTutionNeeds from '../containers/tutionNeeds/postTutionNeeds';
 import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetails';
 import WebViewPages from '../containers/student/profile/webViewPages';
+import TutionNeedsListing from '../containers/tutionNeeds/tutionNeedsListing';
+import TutionNeedsHistory from '../containers/tutionNeeds/TutionNeedsHistory';
 
 const Stack = createStackNavigator();
 
@@ -150,6 +152,16 @@ export const getStudentRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.WEB_VIEW_PAGES}
         component={WebViewPages}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTION_NEEDS_LISTING}
+        component={TutionNeedsListing}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTION_NEEDS_HISTORY}
+        component={TutionNeedsHistory}
         options={{ headerShown: false }}
       />
     </>

@@ -1,4 +1,4 @@
-import { Image, Text, View } from 'react-native';
+import { Share, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, Icon, Toast } from 'native-base';
@@ -14,6 +14,23 @@ import { IconButtonWrapper, ScreenHeader } from '../../components';
 function ReferEarn() {
   const navigation = useNavigation();
   const [referCode, setReferCode] = useState('GURU38875');
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Your referral code is ${referCode}. Use this code to register in GuruQ.`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          navigation.navigate(routeNames.STUDENT.DASHBOARD);
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {}
+  };
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
@@ -105,7 +122,7 @@ function ReferEarn() {
           </Button>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: RfH(36) }}>
-          <Button warning block style={{ width: RfW(166) }}>
+          <Button warning block style={{ width: RfW(166) }} onPress={() => onShare()}>
             <Icon type="Entypo" name="share" style={{ fontSize: 16 }} />
             <Text
               style={{ color: Colors.white, fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>

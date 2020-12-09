@@ -21,14 +21,76 @@ const Colors = {
   lightBlue: '#e8f7fe',
 };
 
-export const getBoxColor = (id: number) => {
-  return id % 5 === 0
-    ? Colors.lightPurple
-    : id % 5 === 1
-    ? Colors.lightOrange
-    : id % 5 === 2
-    ? Colors.lightGreen
-    : Colors.skyBlue;
+export const getBoxColor = (name) => {
+  let icon = '';
+  switch (name) {
+    case 'Accounts':
+      icon = Colors.lightGreen;
+      break;
+    case 'Chemistry':
+      icon = Colors.lightGreen;
+      break;
+    case 'Civics':
+      icon = Colors.lightPurple;
+      break;
+    case 'Computer Science':
+      icon = Colors.lightGreen;
+      break;
+    case 'Dna':
+      icon = Colors.lightBlue;
+      break;
+    case 'Hindi':
+      icon = Colors.lightBlue;
+      break;
+    case 'Geography':
+      icon = Colors.lightOrange;
+      break;
+    case 'English':
+      icon = Colors.lightPurple;
+      break;
+    case 'Engineering':
+      icon = Colors.lightPurple;
+      break;
+    case 'Economics':
+      icon = Colors.lightBlue;
+      break;
+    case 'History':
+      icon = Colors.lightBlue;
+      break;
+    case 'Law':
+      icon = Colors.lightPurple;
+      break;
+    case 'Mathematics':
+      icon = Colors.lightGreen;
+      break;
+    case 'Medical':
+      icon = Colors.lightPurple;
+      break;
+    case 'Physical Education':
+      icon = Colors.lightOrange;
+      break;
+    case 'Sociology':
+      icon = Colors.lightOrange;
+      break;
+    case 'Sanskrit':
+      icon = Colors.lightGreen;
+      break;
+    case 'Psychology':
+      icon = Colors.lightOrange;
+      break;
+    case 'Political Science':
+      icon = Colors.lightGreen;
+      break;
+    case 'Physics':
+      icon = Colors.lightOrange;
+      break;
+    case 'ssc-govt':
+      icon = Colors.lightGreen;
+      break;
+    default:
+      icon = Colors.lightPurple;
+  }
+  return icon;
 };
 
 export default Colors;

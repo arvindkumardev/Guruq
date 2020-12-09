@@ -22,6 +22,7 @@ import {
   getSaveData,
   removeData,
   getUserImageUrl,
+  getSubjectIcons,
 } from '../../../utils/helpers';
 import { CompareModal, DateSlotSelectorModal, IconButtonWrapper, Ratings } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -32,6 +33,7 @@ import BackArrow from '../../../components/BackArrow';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import { GET_AVAILABILITY } from '../class.query';
 import { ADD_TO_CART } from '../booking.mutation';
+import { getBoxColor } from '../../../theme/colors';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
@@ -95,7 +97,6 @@ function tutorDetails(props) {
         const pm = {};
         const sb = {};
         const classData = {};
-
         data?.getTutorOfferings?.map((item) => {
           if (item.offering && subjects.findIndex((obj) => obj.id === item.offering.id) === -1) {
             if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
@@ -348,17 +349,17 @@ function tutorDetails(props) {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: item.id === selectedSubject.id ? Colors.lightPurple : Colors.lightGrey,
+              backgroundColor: getBoxColor(item.displayName),
               height: RfH(67),
               width: RfW(70),
               marginHorizontal: RfW(4),
               borderRadius: RfW(8),
             }}>
             <IconButtonWrapper
-              iconWidth={RfW(24.5)}
+              iconWidth={RfW(48)}
               styling={{ alignSelf: 'center' }}
-              iconHeight={RfH(34.2)}
-              iconImage={Images.book}
+              iconHeight={RfH(56)}
+              iconImage={getSubjectIcons(item.displayName)}
             />
           </View>
           <Text
