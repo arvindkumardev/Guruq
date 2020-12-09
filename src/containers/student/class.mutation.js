@@ -27,7 +27,7 @@ export const SCHEDULE_CLASS = gql`
 `;
 
 export const CANCEL_CLASS = gql`
-  mutation CancelClass($classesId: Float!) {
+  mutation CancelClass($classesId: Int!) {
     cancelClass(classesId: $classesId) {
       id
       status

@@ -12,7 +12,7 @@ export const GET_AVAILABILITY = gql`
 `;
 
 export const GET_CLASS_DETAILS = gql`
-  query GetClassDetails($classId: Float!) {
+  query GetClassDetails($classId: Int!) {
     getClassDetails(classId: $classId) {
       id
       createdDate
@@ -66,7 +66,14 @@ export const GET_CLASS_DETAILS = gql`
       attendeeLink
       address {
         id
+        city
+        state
+        country
         fullAddress
+        location {
+          latitude
+          longitude
+        }
       }
     }
   }

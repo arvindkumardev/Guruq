@@ -59,7 +59,14 @@ export const SEARCH_TUTORS = gql`
           institution {
             name
             address {
+              id
               city
+              state
+              country
+              location {
+                latitude
+                longitude
+              }
             }
           }
         }
@@ -98,7 +105,7 @@ export const SEARCH_TUTORS = gql`
 `;
 
 export const GET_TUTOR_OFFERINGS = gql`
-  query GetTutorOfferings($tutorId: Float!) {
+  query GetTutorOfferings($tutorId: Int!) {
     getTutorOfferings(tutorId: $tutorId) {
       id
       freeDemo
