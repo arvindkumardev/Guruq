@@ -6,6 +6,7 @@ import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { introspectionFromSchema } from 'graphql';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Colors, Fonts, Images } from '../../theme';
 import routeNames from '../../routes/screenNames';
 import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
@@ -21,19 +22,7 @@ function TutionNeedsListing() {
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const studentInfo = useReactiveVar(studentDetails);
 
-  const [orderItems, setOrderItems] = useState([
-    {
-      studyArea: 'School Education',
-      minPrice: 200,
-      maxPrice: 700,
-      board: 'CBSE',
-      class: 'Class 10',
-      count: 2,
-      groupSize: 1,
-      onlineClass: false,
-      subject: 'Mathematics',
-    },
-  ]);
+  const [orderItems, setOrderItems] = useState([]);
 
   const [getTutionNeeds, { loading: loadingTutionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
     onError: (e) => {
@@ -43,7 +32,7 @@ function TutionNeedsListing() {
     },
     onCompleted: (data) => {
       if (data) {
-        setOrderItems(data.StudentPYTNConnection.edges);
+        setOrderItems(data?.searchStudentPYTN?.edges);
       }
     },
   });
@@ -54,71 +43,81 @@ function TutionNeedsListing() {
 
   const renderClassItem = (item) => {
     return (
-      <View>
-        <View style={{ height: RfH(40) }} />
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={commonStyles.headingPrimaryText}>{item.studyArea}</Text>
-          <Text style={commonStyles.headingPrimaryText}>₹ {`${item.minPrice}-${item.maxPrice}`}</Text>
-        </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item.board}
-            {' | '}
-            {item.class}
-          </Text>
-        </View>
-        <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-          <View style={commonStyles.horizontalChildrenStartView}>
-            <View style={commonStyles.verticallyStretchedItemsView}>
-              <IconButtonWrapper
-                iconWidth={RfH(64)}
-                iconHeight={RfH(64)}
-                imageResizeMode="cover"
-                iconImage={getSubjectIcons(item.subject)}
-              />
-            </View>
-            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-              <Text
-                style={{
-                  fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                  fontFamily: Fonts.semiBold,
-                  marginTop: RfH(2),
-                }}>
-                {item.subject}
-              </Text>
-              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.groupSize > 1 ? 'Group' : 'Individual'} Class
-              </Text>
-              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online Class' : 'Home Tution'}
-              </Text>
-            </View>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTION_NEEDS_HISTORY, { data: item })}>
+        <View>
+          <View style={{ height: RfH(40) }} />
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={commonStyles.headingPrimaryText}>{item?.offering?.rootOffering?.displayName}</Text>
+            <Text style={commonStyles.headingPrimaryText}>₹ {`${item.minPrice}-${item.maxPrice}`}</Text>
           </View>
-          <View style={commonStyles.verticallyCenterItemsView}>
-            <Text
-              style={[
-                commonStyles.headingPrimaryText,
-                { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
-              ]}>
-              {item.count}
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+              {item?.offering?.parentOffering?.parentOffering?.displayName}
+              {' | '}
+              {item?.offering?.parentOffering?.displayName}
             </Text>
-            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>
-            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
           </View>
+          <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
+            <View style={commonStyles.horizontalChildrenStartView}>
+              <View style={commonStyles.verticallyStretchedItemsView}>
+                <IconButtonWrapper
+                  iconWidth={RfH(64)}
+                  iconHeight={RfH(64)}
+                  imageResizeMode="cover"
+                  iconImage={getSubjectIcons(item?.offering?.displayName)}
+                />
+              </View>
+              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+                <Text
+                  style={{
+                    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+                    fontFamily: Fonts.semiBold,
+                    marginTop: RfH(2),
+                  }}>
+                  {item?.offering?.displayName}
+                </Text>
+                <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                  {item.groupSize > 1 ? 'Group' : 'Individual'} Class
+                </Text>
+                <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                  {item.onlineClass ? 'Online Class' : 'Home Tution'}
+                </Text>
+              </View>
+            </View>
+            <View style={commonStyles.verticallyCenterItemsView}>
+              <Text
+                style={[
+                  commonStyles.headingPrimaryText,
+                  { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
+                ]}>
+                {item.count}
+              </Text>
+              <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>
+              <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
+            </View>
+          </View>
+          <View style={[commonStyles.lineSeparator, { marginTop: RfH(16) }]} />
+          <View style={{ marginVertical: RfH(16) }}>
+            <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
+          </View>
+          <View style={commonStyles.lineSeparator} />
         </View>
-        <View style={[commonStyles.lineSeparator, { marginTop: RfH(16) }]} />
-        <View style={{ marginVertical: RfH(16) }}>
-          <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
-        </View>
-        <View style={commonStyles.lineSeparator} />
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader homeIcon label="Tution Details" horizontalPadding={RfW(16)} />
+      <Loader isLoading={loadingTutionNeeds} />
+      <ScreenHeader
+        homeIcon
+        label="Tution Details"
+        horizontalPadding={RfW(16)}
+        rightIcon={Images.moreInformation}
+        showRightIcon
+        onRightIconClick={() => navigation.navigate(routeNames.POST_TUTION_NEEDS)}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ paddingHorizontal: RfW(16) }}>
           <FlatList

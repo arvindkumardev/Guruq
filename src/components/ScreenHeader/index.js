@@ -22,6 +22,7 @@ function customRangeSelector(props) {
     homeIcon,
     showRightIcon,
     rightIcon,
+    onRightIconClick,
   } = props;
 
   const onBackPress = () => {
@@ -47,7 +48,14 @@ function customRangeSelector(props) {
             </View>
           </View>
           <View>
-            {showRightIcon && <IconButtonWrapper iconImage={rightIcon} iconWidth={RfW(20)} iconHeight={RfH(20)} />}
+            {showRightIcon && (
+              <IconButtonWrapper
+                iconImage={rightIcon}
+                iconWidth={RfW(20)}
+                iconHeight={RfH(20)}
+                submitFunction={() => onRightIconClick()}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -66,6 +74,7 @@ customRangeSelector.propTypes = {
   homeIcon: PropTypes.bool,
   showRightIcon: PropTypes.bool,
   rightIcon: PropTypes.string,
+  onRightIconClick: PropTypes.func,
 };
 
 customRangeSelector.defaultProps = {
@@ -78,6 +87,7 @@ customRangeSelector.defaultProps = {
   homeIcon: false,
   showRightIcon: false,
   rightIcon: null,
+  onRightIconClick: null,
 };
 
 export default customRangeSelector;

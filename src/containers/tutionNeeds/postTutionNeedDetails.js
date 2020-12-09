@@ -10,6 +10,7 @@ import styles from './styles';
 import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../components';
 import { CREATE_STUDENT_PYTN } from './pytn.mutation';
 import routeNames from '../../routes/screenNames';
+import Loader from '../../components/Loader';
 
 function PostTutionNeedDetails(props) {
   const { route } = props;
@@ -78,6 +79,7 @@ function PostTutionNeedDetails(props) {
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
+      <Loader isLoading={pytnLoading} />
       <ScreenHeader homeIcon label="Post your tution needs" horizontalPadding={RfW(16)} />
       <ScrollView
         showsVerticalScrollIndicator={false}

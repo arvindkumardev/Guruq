@@ -2,51 +2,39 @@
 import { FlatList, ScrollView, Text, View, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Button, Icon } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../theme';
-import routeNames from '../../routes/screenNames';
 import { getSubjectIcons, getUserImageUrl, RfH, RfW, titleCaseIfExists } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
 import Loader from '../../components/Loader';
-import { GET_TUTION_NEED_LISTING } from './pytn.query';
 import styles from './styles';
 import { offeringsMasterData, studentDetails } from '../../apollo/cache';
 
-function TutionNeedsHistory() {
+function TutionNeedsHistory(props) {
+  const { route } = props;
+
+  const classData = route?.params?.data;
   const navigation = useNavigation();
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const studentInfo = useReactiveVar(studentDetails);
   const [tutorData, setTutorData] = useState([]);
-
-  const [orderItem, setOrderItem] = useState({
-    studyArea: 'School Education',
-    minPrice: 200,
-    maxPrice: 700,
-    board: 'CBSE',
-    class: 'Class 10',
-    count: 2,
-    groupSize: 1,
-    onlineClass: false,
-    subject: 'Mathematics',
-  });
 
   const renderClassItem = () => {
     return (
       <View>
         <View style={{ height: RfH(40) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={commonStyles.headingPrimaryText}>{orderItem.studyArea}</Text>
-          <Text style={commonStyles.headingPrimaryText}>₹ {`${orderItem.minPrice}-${orderItem.maxPrice}`}</Text>
+          <Text style={commonStyles.headingPrimaryText}>{classData?.offering?.rootOffering?.displayName}</Text>
+          <Text style={commonStyles.headingPrimaryText}>₹ {`${classData.minPrice}-${classData.maxPrice}`}</Text>
         </View>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {orderItem.board}
+            {classData?.offering?.parentOffering?.parentOffering?.displayName}
             {' | '}
-            {orderItem.class}
+            {classData?.offering?.parentOffering?.displayName}
           </Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
@@ -57,7 +45,7 @@ function TutionNeedsHistory() {
                 iconWidth={RfH(64)}
                 iconHeight={RfH(64)}
                 imageResizeMode="cover"
-                iconImage={getSubjectIcons(orderItem.subject)}
+                iconImage={getSubjectIcons(classData?.offering?.displayName)}
               />
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
@@ -67,13 +55,13 @@ function TutionNeedsHistory() {
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
                 }}>
-                {orderItem.subject}
+                {classData?.offering?.displayName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {orderItem.groupSize > 1 ? 'Group' : 'Individual'} Class
+                {classData.groupSize > 1 ? 'Group' : 'Individual'} Class
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {orderItem.onlineClass ? 'Online Class' : 'Home Tution'}
+                {classData.onlineClass ? 'Online Class' : 'Home Tution'}
               </Text>
             </View>
           </View>
@@ -83,7 +71,7 @@ function TutionNeedsHistory() {
                 commonStyles.headingPrimaryText,
                 { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
               ]}>
-              {orderItem.count}
+              {classData.count}
             </Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
