@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import { CreateUpdateAddressDto } from '../common/graphql-types';
 
-export const ADD_INTERESTED_OFFERINGS = gql`
+export const CREATE_BOOKING = gql`
   mutation CreateBooking($orderCreateDto: OrderCreateDto!) {
     createBooking(orderCreateDto: $orderCreateDto) {
       id

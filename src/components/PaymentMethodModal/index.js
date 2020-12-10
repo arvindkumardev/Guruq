@@ -23,7 +23,7 @@ import { RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import routeNames from '../../routes/screenNames';
 import { userDetails } from '../../apollo/cache';
-import { ADD_INTERESTED_OFFERINGS, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
+import { CREATE_BOOKING, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
 import Dash from '../Dash';
 import { OrderPaymentStatusEnum, PaymentMethodEnum } from './paymentMethod.enum';
 import styles from '../../theme/styles';
@@ -38,7 +38,7 @@ const PaymentMethod = (props) => {
 
   const userInfo = useReactiveVar(userDetails);
 
-  const [createNewBooking, { loading: bookingLoading }] = useMutation(ADD_INTERESTED_OFFERINGS, {
+  const [createNewBooking, { loading: bookingLoading }] = useMutation(CREATE_BOOKING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
