@@ -217,7 +217,9 @@ export const GET_SCHEDULED_CLASSES = gql`
       endDate
       address {
         id
-        fullAddress
+        city
+        state
+        country
       }
     }
   }

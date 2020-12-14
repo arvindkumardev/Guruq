@@ -59,7 +59,14 @@ export const SEARCH_TUTORS = gql`
           institution {
             name
             address {
+              id
               city
+              state
+              country
+              location {
+                latitude
+                longitude
+              }
             }
           }
         }

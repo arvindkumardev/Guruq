@@ -7,14 +7,33 @@ export const ADD_INTERESTED_OFFERINGS = gql`
       id
       serviceAddress {
         id
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        landmark
+        fullAddress
+        location {
+          latitude
+          longitude
+        }
       }
       billingAddress {
         id
-        country
-        state
+        street
+        subArea
         city
-        fullAddress
+        state
+        country
         postalCode
+        landmark
+        fullAddress
+        location {
+          latitude
+          longitude
+        }
       }
       payableAmount
       orderPayment {
@@ -63,7 +82,7 @@ export const ADD_TO_CART = gql`
 `;
 
 export const REMOVE_CART_ITEM = gql`
-  mutation RemoveFromCart($cartItemId: Float!) {
+  mutation RemoveFromCart($cartItemId: Int!) {
     removeFromCart(cartItemId: $cartItemId) {
       id
     }
