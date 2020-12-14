@@ -1,259 +1,253 @@
-import { Alert, FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+/* eslint-disable import/no-duplicates */
+/* eslint-disable no-restricted-syntax */
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { Icon, Input, Item, Thumbnail } from 'native-base';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { Col, Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
-import { useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { RFValue } from 'react-native-responsive-fontsize';
+import moment from 'moment';
+import { dropRightWhile } from 'lodash';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { clearAllLocalStorage, getSaveData, removeToken, RfH, RfW } from '../../../../utils/helpers';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
+import { clearAllLocalStorage, getSubjectIcons, removeToken, RfH, RfW } from '../../../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
 import Fonts from '../../../../theme/fonts';
-import { isLoggedIn, studentDetails, tutorDetails, userDetails } from '../../../../apollo/cache';
+import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../../apollo/cache';
+import NavigationRouteNames from '../../../../routes/screenNames';
+import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
+import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
+import { getBoxColor } from '../../../../theme/colors';
 import initializeApollo from '../../../../apollo/apollo';
 
 function TutorDashboard() {
-  const [userName, setUserName] = useState('');
+  const navigation = useNavigation();
+  const [searchLocation, setSearchLocation] = useState('');
+  const [upcomingClasses, setUpcomingClasses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [refreshSubjectList, setRefreshSubjectList] = useState(false);
+  const client = initializeApollo();
 
+  const tutorInfo = useReactiveVar(tutorDetails);
   const userInfo = useReactiveVar(userDetails);
 
-  const getFirstName = async () => {
-    const firstName = await getSaveData(LOCAL_STORAGE_DATA_KEY.FIRST_NAME);
-    setUserName(firstName);
-  };
-
-  useEffect(() => {
-    getFirstName();
+  const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      const array = [];
+      for (const obj of data.getScheduledClasses) {
+        const startHours = new Date(obj.startDate).getUTCHours();
+        const startMinutes = new Date(obj.startDate).getUTCMinutes();
+        const endHours = new Date(obj.endDate).getUTCHours();
+        const endMinutes = new Date(obj.endDate).getUTCMinutes();
+        const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
+          startMinutes < 10 ? `0${startMinutes}` : startMinutes
+        } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
+          endMinutes < 10 ? `0${endMinutes}` : endMinutes
+        } ${endHours < 12 ? `AM` : 'PM'}`;
+        const item = {
+          startDate: obj.startDate,
+          uuid: obj.uuid,
+          classTitle: obj.offering.displayName,
+          board: obj.offering.parentOffering.parentOffering.displayName,
+          class: obj.offering.parentOffering.displayName,
+          timing,
+          classData: obj,
+        };
+        array.push(item);
+      }
+      setUpcomingClasses(array);
+    },
   });
 
-  const [favouriteTutor, setFavouriteTutor] = useState([
-    { name: 'Ritesh Jain', subject: 'English, Maths', imageUrl: '' },
-    { name: 'Simran Rai', subject: 'Chemistry', imageUrl: '' },
-    { name: 'Priyam', subject: 'Maths', imageUrl: '' },
-  ]);
+  useEffect(() => {
+    getScheduledClasses({
+      variables: {
+        classesSearchDto: {
+          studentId: tutorInfo.id,
+          startDate: moment().toDate(),
+          endDate: moment().endOf('day').toDate(),
+        },
+      },
+    });
+  }, []);
 
-  const renderSubjects = () => {
+  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    variables: { tutorId: tutorInfo?.id },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        data?.getTutorOfferings?.map((item) => {
+          if (item.offering && subjects.findIndex((obj) => obj.offering.id === item.offering.id) === -1) {
+            subjects.push(item);
+          }
+        });
+        setRefreshSubjectList(!refreshSubjectList);
+      }
+    },
+  });
+
+  useEffect(() => {
+    getTutorOffering();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getTutorOffering();
+    }, [])
+  );
+
+  const renderUpcomingClasses = (item, index) => {
     return (
-      <View style={{ marginTop: RfH(20) }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: Colors.lightPurple,
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.book}
-              />
+      <View style={{ flex: 1 }}>
+        <TouchableWithoutFeedback>
+          <View
+            style={{
+              backgroundColor: Colors.lightBlue,
+              borderRadius: 20,
+              marginTop: RfH(20),
+              padding: RfH(16),
+              marginRight: RfW(8),
+            }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+              <View style={{ flex: 0.3 }}>
+                <IconButtonWrapper
+                  iconWidth={RfH(98)}
+                  iconHeight={RfH(98)}
+                  iconImage={getTutorImage(item.classData.tutor)}
+                  imageResizeMode="cover"
+                  styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
+                />
+              </View>
+              <View
+                style={{
+                  flex: 0.7,
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'stretch',
+                  marginLeft: RfW(8),
+                }}>
+                <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
+                  {item.classTitle} by {item.classData?.tutor?.contactDetail?.firstName}{' '}
+                  {item.classData?.tutor?.contactDetail?.lastName}
+                </Text>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                  {`${item.board} | ${item.class}`}
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    type="FontAwesome"
+                    name="calendar-o"
+                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                  />
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                    {new Date(item.startDate).toDateString()}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    type="Feather"
+                    name="clock"
+                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                  />
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>{item.timing}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="computer"
+                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                  />
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                    {item.classData.onlineClass ? 'Online' : 'Offline'} Class
+                  </Text>
+                </View>
+              </View>
             </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              English
-            </Text>
           </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#FFF7F0',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.physics}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Physics
-            </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgb(230,252,231)',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.beaker}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Chemistry
-            </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgb(203,231,255)',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.dna}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Biology
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            marginTop: RfH(20),
-          }}>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgb(230,252,231)',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.math}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Maths
-            </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: Colors.lightPurple,
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.civic}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Civics
-            </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgb(203,231,255)',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.history}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              History
-            </Text>
-          </View>
-          <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#FFF7F0',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.geo}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Geography
-            </Text>
-          </View>
-        </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   };
 
-  const renderTutors = (item) => {
+  const renderSubjects = (item, index) => {
     return (
       <View
-        style={{
-          height: RfH(141),
-          width: RfW(109),
-          borderRadius: 8,
-          backgroundColor: 'rgb(245,245,245)',
-          marginHorizontal: RfW(10),
-          marginTop: RfH(20),
-        }}>
-        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Thumbnail large style={{ marginTop: RfH(11) }} source={Images.kushal} />
-          <Text style={{ marginTop: 1, color: Colors.primaryText }}>{item.name}</Text>
-          <Text style={{ marginTop: 1, color: Colors.secondaryText, fontSize: 12 }}>{item.subject}</Text>
+        style={[
+          commonStyles.verticallyStretchedItemsView,
+          {
+            flex: 0.5,
+            backgroundColor: getBoxColor(item?.offering?.displayName),
+            padding: RfH(8),
+            marginHorizontal: RfW(8),
+            marginVertical: RfH(8),
+            borderRadius: RfH(8),
+          },
+        ]}>
+        <IconButtonWrapper
+          iconWidth={RfW(48)}
+          styling={{ alignSelf: 'center' }}
+          iconHeight={RfH(56)}
+          styling={{ aliinSelf: 'flex-start' }}
+          iconImage={getSubjectIcons(item?.offering?.displayName)}
+        />
+        <View style={commonStyles.horizontalChildrenView}>
+          <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.semiBold }]}>
+            {item?.offerings[2]?.displayName}
+          </Text>
+          <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.semiBold }]}>
+            -{item?.offerings[1]?.displayName}
+          </Text>
         </View>
+        <Text style={commonStyles.smallMutedText}>{item?.offering?.displayName}</Text>
       </View>
     );
   };
 
-  const client = initializeApollo();
   const logout = () => {
     clearAllLocalStorage().then(() => {
       client.cache.reset().then(() => {
         removeToken().then(() => {
           // set in apollo cache
           isLoggedIn(false);
+          userType('');
           userDetails({});
 
           studentDetails({});
@@ -264,350 +258,152 @@ function TutorDashboard() {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <StatusBar barStyle="dark-content" />
-      <View style={[commonStyles.mainContainer]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-end',
-            marginTop: RfH(18),
-          }}>
-          <View style={{ flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
-            <Text style={{ fontFamily: 'SegoeUI-Semibold', fontSize: 28, color: Colors.primaryText }}>
-              Hi {userInfo.firstName}
+      <View style={commonStyles.mainContainer}>
+        <View style={{ height: RfH(24) }} />
+        <View style={commonStyles.horizontalChildrenSpaceView}>
+          <View>
+            <Text
+              style={{
+                fontFamily: Fonts.semiBold,
+                fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                color: Colors.primaryText,
+              }}>
+              Hi
             </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Text
-                style={{
-                  color: Colors.secondaryText,
-                  fontSize: 16,
-                  marginTop: RfH(4),
-                }}>
-                GURUQT{userInfo.id}
-              </Text>
-              {/* <Icon */}
-              {/*  type="MaterialIcons" */}
-              {/*  name="keyboard-arrow-down" */}
-              {/*  style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }} */}
-              {/* /> */}
-            </View>
+            <Text
+              style={{
+                fontFamily: Fonts.semiBold,
+                fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
+                color: Colors.primaryText,
+              }}>
+              {userInfo.firstName}
+            </Text>
           </View>
-          <View style={{ flex: 0.1, marginRight: RfW(16) }}>
+          <View>
             <Image
               source={Images.user}
-              style={{ height: RfH(49), width: RfW(49), borderRadius: 12, marginBottom: RfH(8) }}
+              style={{
+                height: RfH(40),
+                width: RfH(40),
+                borderRadius: RfH(8),
+              }}
             />
           </View>
         </View>
-        <View style={{ marginTop: RfW(26) }}>
-          <Item
-            style={{
-              backgroundColor: '#F3F4F9',
-              borderRadius: 10,
-              paddingHorizontal: RfW(10),
-              borderColor: 'transparent',
-              height: RfH(50),
-            }}>
-            <Icon type="MaterialIcons" name="search" style={{ color: Colors.brandBlue2 }} />
-            <Input placeholder="Search" />
-          </Item>
+        <View
+          style={{
+            backgroundColor: Colors.lightGrey,
+            marginTop: RfH(16),
+            paddingVertical: RfH(8),
+            borderRadius: RfH(8),
+          }}>
+          <View style={commonStyles.horizontalChildrenView}>
+            <IconButtonWrapper
+              iconHeight={RfH(24)}
+              iconWidth={RfW(24)}
+              iconImage={Images.searchIcon}
+              styling={{ marginLeft: RfW(8) }}
+            />
+            <Input
+              value={searchLocation}
+              placeholder="Search for the area you want to teach"
+              onChangeText={(text) => setSearchLocation(text)}
+              style={{
+                backgroundColor: Colors.lightGrey,
+                fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                height: RfH(38),
+              }}
+            />
+          </View>
         </View>
-
-        <View style={{ height: RfH(210), marginTop: RfH(29) }}>
-          <Swiper horizontal autoplay autoplayTimeout={2}>
-            <View>
-              <View style={{ height: RfH(170), backgroundColor: '#ceecfe', borderRadius: 20 }} />
+        <View style={{ height: RfH(220), marginTop: RfH(29) }}>
+          <Swiper horizontal style={{ overflow: 'visible' }}>
+            <View
+              style={{
+                backgroundColor: '#ceecfe',
+                borderRadius: 20,
+                marginRight: 8,
+              }}>
+              <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
             </View>
-            <View>
-              <View style={{ height: RfH(170), backgroundColor: '#ceecfe', borderRadius: 20 }} />
+            <View
+              style={{
+                backgroundColor: '#ceecfe',
+                borderRadius: 20,
+                marginRight: 8,
+              }}>
+              <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
+            </View>
+            <View
+              style={{
+                backgroundColor: '#ceecfe',
+                borderRadius: 20,
+                marginRight: 8,
+              }}>
+              <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
             </View>
           </Swiper>
         </View>
 
-        <TouchableOpacity onPress={() => logout()}>
-          <Text className="h5">Logout</Text>
-        </TouchableOpacity>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
-          <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
-        </View>
-        <View
-          style={{
-            height: RfH(140),
-            backgroundColor: '#ceecfe',
-            borderRadius: 20,
-            marginTop: RfH(20),
-            padding: 16,
-          }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-            <View style={{ flex: 0.3 }}>
-              <Image style={{ height: RfH(88), width: RfW(78), zIndex: 5, borderRadius: 8 }} source={Images.kushal} />
+        {upcomingClasses.length > 0 && (
+          <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
+              <TouchableWithoutFeedback onPress={() => changeTab(2)}>
+                <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
+              </TouchableWithoutFeedback>
             </View>
-            <View
-              style={{
-                flex: 0.7,
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'stretch',
-              }}>
-              <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
-                Science by Rahul Das
-              </Text>
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>CBSE Class 9</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Icon
-                  type="FontAwesome"
-                  name="calendar-o"
-                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                />
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>Sunday , June 10 </Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Icon
-                  type="Feather"
-                  name="clock"
-                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                />
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>7:00-8:00 PM</Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Icon
-                  type="MaterialIcons"
-                  name="computer"
-                  style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                />
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>Online Class</Text>
-              </View>
+            <View>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={upcomingClasses}
+                renderItem={({ item, index }) => renderUpcomingClasses(item, index)}
+                keyExtractor={(item, index) => index.toString()}
+              />
             </View>
           </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-end',
-            marginTop: RfH(25),
-          }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
-            Tutors By Subjects
-          </Text>
-        </View>
-        {renderSubjects()}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            marginTop: RfH(25),
-          }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Favourite Tutors</Text>
-          <Text style={{ color: Colors.brandBlue2, fontSize: 10 }}>View All</Text>
-        </View>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={favouriteTutor}
-          renderItem={({ item }) => renderTutors(item)}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-end',
-            marginTop: RfH(25),
-          }}>
-          <Text style={{ color: Colors.primaryText, fontFamily: 'SegoeUI-Bold', fontSize: 20 }}>
-            Recommended Tutors
-          </Text>
-        </View>
-        <View style={{ height: RfH(92), backgroundColor: 'rgb(230,252,231)', borderRadius: 8, marginTop: RfH(20) }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              paddingVertical: RfH(13),
-              marginRight: RfW(16),
-            }}>
-            <View
-              style={{
-                flex: 0.3,
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
+        )}
+        <TouchableWithoutFeedback onPress={() => logout()}>
+          <Text>logout</Text>
+        </TouchableWithoutFeedback>
+        {subjects.length > 0 && (
+          <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>My Subjects</Text>
+              <TouchableWithoutFeedback onPress={() => changeTab(2)}>
+                <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
+              </TouchableWithoutFeedback>
             </View>
-            <View
-              style={{
-                flex: 0.7,
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'stretch',
-              }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Gurbani Singh</Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <Icon
-                    type="FontAwesome"
-                    name="star"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      color: Colors.primaryText,
-                      fontFamily: 'SegoeUI-Semibold',
-                    }}>
-                    4.5
-                  </Text>
-                </View>
-              </View>
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                3 years of Experience
-              </Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  English, Maths , Science
-                </Text>
-                <Icon
-                  type="MaterialIcons"
-                  name="computer"
-                  style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
-                />
-              </View>
+            <View style={{ marginTop: RfH(16) }}>
+              <FlatList
+                data={subjects}
+                extraData={refreshSubjectList}
+                numColumns={2}
+                renderItem={({ item, index }) => renderSubjects(item, index)}
+                keyExtractor={(item, index) => index.toString()}
+              />
             </View>
           </View>
-        </View>
-        <View style={{ height: RfH(92), backgroundColor: 'rgb(231,229,242)', borderRadius: 8, marginTop: RfH(20) }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              paddingVertical: RfH(13),
-              marginRight: RfW(16),
-            }}>
-            <View
-              style={{
-                flex: 0.3,
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
-            </View>
-            <View
-              style={{
-                flex: 0.7,
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'stretch',
-              }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Tushar Das</Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <Icon
-                    type="FontAwesome"
-                    name="star"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      color: Colors.primaryText,
-                      fontFamily: 'SegoeUI-Semibold',
-                    }}>
-                    4.5
-                  </Text>
-                </View>
-              </View>
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                3 years of Experience
-              </Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  English, Maths , Science
-                </Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <Icon
-                    type="AntDesign"
-                    name="home"
-                    style={{ fontSize: 18, marginRight: RfW(8), color: Colors.secondaryText }}
-                  />
-                  <Icon
-                    type="MaterialIcons"
-                    name="computer"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
-                  />
-                </View>
-              </View>
-            </View>
+        )}
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING)}>
+          <View style={{ marginTop: RfH(20) }}>
+            <Image
+              style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}
+              source={Images.student_requests}
+            />
           </View>
-        </View>
-        <View style={{ height: RfH(92), backgroundColor: 'rgb(255,247,240)', borderRadius: 8, marginTop: RfH(20) }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              paddingVertical: RfH(13),
-              marginRight: RfW(16),
-            }}>
-            <View
-              style={{
-                flex: 0.3,
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
-            </View>
-            <View
-              style={{
-                flex: 0.7,
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'stretch',
-              }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Gurbani Singh</Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <Icon
-                    type="FontAwesome"
-                    name="star"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      color: Colors.primaryText,
-                      fontFamily: 'SegoeUI-Semibold',
-                    }}>
-                    4.5
-                  </Text>
-                </View>
-              </View>
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                3 years of Experience
-              </Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  English, Maths , Science
-                </Text>
-                <Icon
-                  type="MaterialIcons"
-                  name="computer"
-                  style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
-                />
-              </View>
-            </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}>
+          <View>
+            <Image
+              style={{ width: Dimensions.get('window').width - 32, height: RfH(184) }}
+              source={Images.refer_earn}
+            />
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </View>
     </ScrollView>
   );

@@ -349,7 +349,7 @@ function tutorDetails(props) {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: getBoxColor(item.displayName),
+              backgroundColor: selectedSubject.id === item.id ? Colors.lightBlue : Colors.lightPurple,
               height: RfH(67),
               width: RfW(70),
               marginHorizontal: RfW(4),
@@ -359,7 +359,7 @@ function tutorDetails(props) {
               iconWidth={RfW(48)}
               styling={{ alignSelf: 'center' }}
               iconHeight={RfH(56)}
-              iconImage={getSubjectIcons(item.displayName)}
+              iconImage={Images.book}
             />
           </View>
           <Text

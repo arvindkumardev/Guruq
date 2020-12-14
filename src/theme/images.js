@@ -156,6 +156,9 @@ const Images = {
   refer_one: require('../assets/images/refer_one.png'),
   refer_two: require('../assets/images/refer_two.png'),
   refer_three: require('../assets/images/refer_three.png'),
+
+  dash_tutor_img: require('../assets/images/dash_tutor_img.png'),
+  student_requests: require('../assets/images/student_requests.png'),
 };
 
 export default Images;

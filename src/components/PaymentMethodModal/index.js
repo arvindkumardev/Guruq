@@ -321,6 +321,7 @@ const PaymentMethod = (props) => {
     bookingData.orderPayment.paymentMethod = paymentMethod;
     bookingData.orderPayment.amount = amount;
     bookingData.itemPrice = amount;
+    bookingData.orderStatus = OrderPaymentStatusEnum.PENDING.value;
 
     // hide the payment popup
     props.hidePaymentPopup();

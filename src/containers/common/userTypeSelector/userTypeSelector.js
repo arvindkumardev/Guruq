@@ -12,7 +12,7 @@ import { isLoggedIn, studentDetails, tutorDetails, userDetails } from '../../../
 import { CREATE_STUDENT, CREATE_TUTOR } from '../graphql-mutation';
 
 function UserTypeSelector(props) {
-  const [userName, setUserName] = useState('Sheena');
+  const [userName, setUserName] = useState('');
   const navigation = useNavigation();
 
   const { route } = props;
