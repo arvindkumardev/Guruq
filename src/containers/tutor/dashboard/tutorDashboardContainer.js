@@ -7,8 +7,9 @@ import { Colors, Images } from '../../../theme';
 import styles from './styles';
 import TutorDashboard from './components/tutorDashboard';
 import CalendarView from '../calendar/calendarView';
-import BottomTab from '../../student/dashboard/components/bottomTab';
+import BottomTab from './components/bottomTab';
 import ClassView from '../classes/classesView';
+import Performance from '../performance/performance';
 
 function TutorDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);
@@ -30,8 +31,8 @@ function TutorDashboardContainer(props) {
           )}
           {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
           {activeTab === 3 && <ClassView />}
-          {/* // {activeTab === 4 && <Wallet />}
-          // {activeTab === 5 && <Profile />} */}
+          {activeTab === 4 && <Performance />}
+          {/* {activeTab === 5 && <Profile />} */}
         </View>
         <BottomTab activeTab={activeTab} changeTab={changeTab} />
       </Container>

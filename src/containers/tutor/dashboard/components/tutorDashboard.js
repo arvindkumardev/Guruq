@@ -3,6 +3,7 @@
 import { Dimensions, FlatList, Image, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Input } from 'native-base';
+import PropTypes from 'prop-types';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
@@ -28,13 +29,15 @@ import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import { getBoxColor } from '../../../../theme/colors';
 import initializeApollo from '../../../../apollo/apollo';
 
-function TutorDashboard() {
+function TutorDashboard(props) {
   const navigation = useNavigation();
   const [searchLocation, setSearchLocation] = useState('');
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [refreshSubjectList, setRefreshSubjectList] = useState(false);
   const client = initializeApollo();
+
+  const { changeTab } = props;
 
   const tutorInfo = useReactiveVar(tutorDetails);
   const userInfo = useReactiveVar(userDetails);
@@ -386,5 +389,13 @@ function TutorDashboard() {
     </ScrollView>
   );
 }
+
+TutorDashboard.propTypes = {
+  changeTab: PropTypes.func,
+};
+
+TutorDashboard.defaultProps = {
+  changeTab: null,
+};
 
 export default TutorDashboard;

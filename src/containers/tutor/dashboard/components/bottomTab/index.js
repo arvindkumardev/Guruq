@@ -54,11 +54,11 @@ function BottomTab(props) {
           active={activeTab === 4}
           onPress={() => changeTab(4)}>
           <Image
-            source={activeTab === 4 ? Images.wallet_active : Images.wallet}
+            source={activeTab === 4 ? Images.performance : Images.wallet}
             style={styles.iconStyle}
             resizeMode="contain"
           />
-          <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Wallet</Text>
+          <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Performance</Text>
         </Button>
         <Button
           style={{ backgroundColor: Colors.white }}
