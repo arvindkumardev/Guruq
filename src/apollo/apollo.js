@@ -8,7 +8,7 @@ import apolloLogger from 'apollo-link-logger';
 import { getToken } from '../utils/helpers';
 
 // const GRAPHQL_ENDPOINT = 'http://10.0.0.5:5000/graphql';
-const GRAPHQL_ENDPOINT = 'http://54.179.154.136/graphql';
+const GRAPHQL_ENDPOINT = 'http://apiv2.guruq.in/graphql';
 
 let apolloClient = null;
 

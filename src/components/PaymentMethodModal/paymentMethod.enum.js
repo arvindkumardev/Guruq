@@ -19,3 +19,10 @@ export const OrderPaymentStatusEnum = {
   PARTIAL_REFUND: { value: 6, label: 'PARTIAL_REFUND' },
   CANCELLED: { value: 7, label: 'CANCELLED' },
 };
+
+export const OrderStatusEnum = {
+  COMPLETE: { value: 1, label: 'COMPLETE' },
+  PENDING: { value: 2, label: 'PENDING' },
+  CANCELLED: { value: 3, label: 'CANCELLED' },
+  REFUNDED: { value: 4, label: 'REFUNDED' },
+};

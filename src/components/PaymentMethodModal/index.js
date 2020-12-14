@@ -23,9 +23,9 @@ import { RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import routeNames from '../../routes/screenNames';
 import { userDetails } from '../../apollo/cache';
-import { ADD_INTERESTED_OFFERINGS, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
+import { CREATE_BOOKING, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
 import Dash from '../Dash';
-import { OrderPaymentStatusEnum, PaymentMethodEnum } from './paymentMethod.enum';
+import { OrderPaymentStatusEnum, PaymentMethodEnum, OrderStatusEnum } from './paymentMethod.enum';
 import styles from '../../theme/styles';
 
 const PaymentMethod = (props) => {
@@ -38,7 +38,7 @@ const PaymentMethod = (props) => {
 
   const userInfo = useReactiveVar(userDetails);
 
-  const [createNewBooking, { loading: bookingLoading }] = useMutation(ADD_INTERESTED_OFFERINGS, {
+  const [createNewBooking, { loading: bookingLoading }] = useMutation(CREATE_BOOKING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
@@ -60,7 +60,7 @@ const PaymentMethod = (props) => {
             initiatePaypalPayment(data.createBooking.id);
             break;
           case PaymentMethodEnum.CASH.value:
-            completedPayment(data.createBooking.id, OrderPaymentStatusEnum.COMPLETE.value, 'Success');
+            completedPayment(data.createBooking.id, OrderPaymentStatusEnum.COMPLETE.label, 'Success');
             break;
           default:
             break;
@@ -107,11 +107,11 @@ const PaymentMethod = (props) => {
     RNRazorpayCheckout.open(options)
       .then((data) => {
         // handle success
-        completedPayment(bookingOrderId, OrderPaymentStatusEnum.COMPLETE.value, data.razorpay_payment_id);
+        completedPayment(bookingOrderId, OrderPaymentStatusEnum.COMPLETE.label, data.razorpay_payment_id);
       })
       .catch((error) => {
         // handle failure
-        completedPayment(bookingOrderId, OrderPaymentStatusEnum.FAILED.value, error.description);
+        completedPayment(bookingOrderId, OrderPaymentStatusEnum.FAILED.label, error.description);
         // create booking - with cancelled payment
       });
   };
@@ -318,10 +318,26 @@ const PaymentMethod = (props) => {
       postalCode: 110001,
     };
     bookingData.convenienceCharges = paymentMethod === PaymentMethodEnum.PAYTM.value ? convenienceCharges : 0;
-    bookingData.orderPayment.paymentMethod = paymentMethod;
+    switch (paymentMethod) {
+      case PaymentMethodEnum.ONLINE.value:
+        bookingData.orderPayment.paymentMethod = PaymentMethodEnum.ONLINE.label;
+        break;
+      case PaymentMethodEnum.PAYTM.value:
+        bookingData.orderPayment.paymentMethod = PaymentMethodEnum.PAYTM.label;
+        break;
+      case PaymentMethodEnum.PAYPAL.value:
+        bookingData.orderPayment.paymentMethod = PaymentMethodEnum.PAYPAL.label;
+        break;
+      case PaymentMethodEnum.CASH.value:
+        bookingData.orderPayment.paymentMethod = PaymentMethodEnum.CASH.label;
+        break;
+      default:
+        break;
+    }
     bookingData.orderPayment.amount = amount;
     bookingData.itemPrice = amount;
-    bookingData.orderStatus = OrderPaymentStatusEnum.PENDING.value;
+    bookingData.orderStatus = OrderStatusEnum.PENDING.label;
+    bookingData.promotionId = 0;
 
     // hide the payment popup
     props.hidePaymentPopup();
@@ -333,14 +349,30 @@ const PaymentMethod = (props) => {
 
   const completedPayment = (orderId, status, transactionData) => {
     setPaymentStatus(status);
+    const details = {};
+    details.orderId = orderId;
+    details.paymentStatus = status;
+    details.transactionDetails = transactionData;
+    switch (paymentMethod) {
+      case PaymentMethodEnum.ONLINE.value:
+        details.paymentMethod = PaymentMethodEnum.ONLINE.label;
+        break;
+      case PaymentMethodEnum.PAYTM.value:
+        details.paymentMethod = PaymentMethodEnum.PAYTM.label;
+        break;
+      case PaymentMethodEnum.PAYPAL.value:
+        details.paymentMethod = PaymentMethodEnum.PAYPAL.label;
+        break;
+      case PaymentMethodEnum.CASH.value:
+        details.paymentMethod = PaymentMethodEnum.CASH.label;
+        break;
+      default:
+        break;
+    }
+
     payment({
       variables: {
-        paymentDetails: {
-          orderId,
-          paymentMethod,
-          paymentStatus: status,
-          transactionDetails: transactionData,
-        },
+        paymentDetails: details,
       },
     });
   };

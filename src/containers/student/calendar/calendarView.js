@@ -156,6 +156,7 @@ function CalendarView(props) {
   };
 
   const getScheduledClassesbyDay = (date) => {
+    console.log(`${studentInfo.id},${moment(date).toDate()},${moment(date).endOf('day').toDate()}`);
     getScheduledClasses({
       variables: {
         classesSearchDto: {

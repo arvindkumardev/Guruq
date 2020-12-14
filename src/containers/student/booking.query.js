@@ -215,12 +215,6 @@ export const GET_SCHEDULED_CLASSES = gql`
       status
       startDate
       endDate
-      address {
-        id
-        city
-        state
-        country
-      }
     }
   }
 `;

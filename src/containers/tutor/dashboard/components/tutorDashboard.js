@@ -21,7 +21,14 @@ import moment from 'moment';
 import { dropRightWhile } from 'lodash';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { clearAllLocalStorage, getSubjectIcons, removeToken, RfH, RfW } from '../../../../utils/helpers';
+import {
+  clearAllLocalStorage,
+  getSubjectIcons,
+  getUserImageUrl,
+  removeToken,
+  RfH,
+  RfW,
+} from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
@@ -59,9 +66,9 @@ function TutorDashboard() {
         const endMinutes = new Date(obj.endDate).getUTCMinutes();
         const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
           startMinutes < 10 ? `0${startMinutes}` : startMinutes
-        } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
-          endMinutes < 10 ? `0${endMinutes}` : endMinutes
-        } ${endHours < 12 ? `AM` : 'PM'}`;
+        } - ${endHours < 10 ? `0${endHours}` : endHours}:${endMinutes < 10 ? `0${endMinutes}` : endMinutes} ${
+          endHours < 12 ? `AM` : 'PM'
+        }`;
         const item = {
           startDate: obj.startDate,
           uuid: obj.uuid,
@@ -78,10 +85,11 @@ function TutorDashboard() {
   });
 
   useEffect(() => {
+    console.log(tutorInfo);
     getScheduledClasses({
       variables: {
         classesSearchDto: {
-          studentId: tutorInfo.id,
+          tutorId: tutorInfo.id,
           startDate: moment().toDate(),
           endDate: moment().endOf('day').toDate(),
         },
@@ -119,6 +127,10 @@ function TutorDashboard() {
     }, [])
   );
 
+  const getTutorImage = (tutor) => {
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
+  };
+
   const renderUpcomingClasses = (item, index) => {
     return (
       <View style={{ flex: 1 }}>
@@ -150,53 +162,31 @@ function TutorDashboard() {
                   marginLeft: RfW(8),
                 }}>
                 <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
-                  {item.classTitle} by {item.classData?.tutor?.contactDetail?.firstName}{' '}
-                  {item.classData?.tutor?.contactDetail?.lastName}
+                  {item.classData?.students[0]?.contactDetail?.firstName}{' '}
+                  {item.classData?.students[0]?.contactDetail?.lastName}
                 </Text>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                   {`${item.board} | ${item.class}`}
                 </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    type="FontAwesome"
-                    name="calendar-o"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
+                <View style={commonStyles.horizontalChildrenSpaceView}>
                   <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {new Date(item.startDate).toDateString()}
+                    {item.classTitle}
                   </Text>
+                  <IconButtonWrapper
+                    iconHeight={RfH(16)}
+                    iconWidth={RfW(16)}
+                    iconImage={item.classData.onlineClass ? Images.laptop : Images.home}
+                  />
                 </View>
+
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
                   }}>
-                  <Icon
-                    type="Feather"
-                    name="clock"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>{item.timing}</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    type="MaterialIcons"
-                    name="computer"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
                   <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {item.classData.onlineClass ? 'Online' : 'Offline'} Class
+                    {new Date(item.startDate).toDateString()} | {item.timing}
                   </Text>
                 </View>
               </View>

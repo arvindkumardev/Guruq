@@ -60,6 +60,7 @@ function CalendarView(props) {
               class: obj.offering.parentOffering.displayName,
               timing,
               id: obj.id,
+              students: obj.students,
             },
           ],
         };
@@ -78,7 +79,7 @@ function CalendarView(props) {
     getScheduledClasses({
       variables: {
         classesSearchDto: {
-          studentId: tutorInfo.id,
+          tutorId: tutorInfo.id,
           startDate: moment().toDate(),
           endDate: moment().endOf('day').toDate(),
         },
@@ -108,7 +109,12 @@ function CalendarView(props) {
             />
           </View>
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>{item.classTitle}</Text>
+            <Text style={commonStyles.headingPrimaryText}>
+              {item.classTitle}{' '}
+              {item.students.length > 1
+                ? 'Group Class'
+                : `Class for ${item.students[0].contactDetail.firstName} ${item.students[0].contactDetail.lastName}`}
+            </Text>
             <Text style={commonStyles.mediumMutedText}>
               {item.board} | {item.class}
             </Text>
@@ -159,7 +165,7 @@ function CalendarView(props) {
     getScheduledClasses({
       variables: {
         classesSearchDto: {
-          studentId: tutorInfo.id,
+          tutorId: tutorInfo.id,
           startDate: moment(date).toDate(),
           endDate: moment(date).endOf('day').toDate(),
         },

@@ -8,7 +8,7 @@ import { Colors, Images } from '../../../theme';
 import { RfH, storeData } from '../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import styles from './style';
-import { isLoggedIn, studentDetails, tutorDetails, userDetails } from '../../../apollo/cache';
+import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../apollo/cache';
 import { CREATE_STUDENT, CREATE_TUTOR } from '../graphql-mutation';
 
 function UserTypeSelector(props) {
@@ -37,6 +37,8 @@ function UserTypeSelector(props) {
         // isLoggedIn(true);
         userDetails({ ...userInfo, type: 'STUDENT' });
         studentDetails(data);
+
+        userType('STUDENT');
       }
     },
   });
@@ -56,6 +58,7 @@ function UserTypeSelector(props) {
         // isLoggedIn(true);
         userDetails({ ...userInfo, type: 'TUTOR' });
         tutorDetails(data);
+        userType('TUTOR');
       }
     },
   });

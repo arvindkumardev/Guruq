@@ -3,6 +3,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './screenNames';
 import TutorDashboardContainer from '../containers/tutor/dashboard/tutorDashboardContainer';
 import CalendarView from '../containers/tutor/calendar/calendarView';
+import ScheduledClassDetails from '../containers/tutor/calendar/scheduledClassDetails';
+import CancelReason from '../containers/student/calendar/cancelReason';
+import OnlineClass from '../containers/onlineClass/onlineClass';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +20,21 @@ export const getTutorRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.CALENDAR}
         component={CalendarView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
+        component={ScheduledClassDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.CANCEL_REASON}
+        component={CancelReason}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.ONLINE_CLASS}
+        component={OnlineClass}
         options={{ headerShown: false }}
       />
     </>

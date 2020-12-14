@@ -46,6 +46,8 @@ const NavigationRouteNames = {
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',
     DASHBOARD: 'tutor_dashboard',
+    CANCEL_REASON: 'cancel_reason',
+    ONLINE_CLASS: 'online_class',
   },
 };
 
