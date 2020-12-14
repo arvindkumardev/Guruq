@@ -159,6 +159,8 @@ const Images = {
 
   dash_tutor_img: require('../assets/images/dash_tutor_img.png'),
   student_requests: require('../assets/images/student_requests.png'),
+  performance: require('../assets/images/performance.png'),
+  b_star: require('../assets/images/b_star.png'),
 };
 
 export default Images;
