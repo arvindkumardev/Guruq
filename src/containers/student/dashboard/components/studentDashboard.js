@@ -12,12 +12,11 @@ import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { WebView } from 'react-native-webview';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { getUserImageUrl, RfH, RfW, getSubjectIcons } from '../../../../utils/helpers';
+import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { IconButtonWrapper } from '../../../../components';
-import { offeringsMasterData, userDetails, studentDetails } from '../../../../apollo/cache';
+import { offeringsMasterData, studentDetails, userDetails } from '../../../../apollo/cache';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
@@ -26,7 +25,6 @@ import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashb
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
-import { getBoxColor } from '../../../../theme/colors';
 import { GET_SCHEDULED_CLASSES } from '../../booking.query';
 
 function StudentDashboard(props) {
@@ -229,16 +227,16 @@ function StudentDashboard(props) {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: getBoxColor(item.displayName),
-              height: RfH(67),
-              width: RfW(70),
+              // backgroundColor: '#ff0000',
+              height: RfH(64),
+              width: RfW(64),
               marginHorizontal: RfW(4),
               borderRadius: RfW(8),
             }}>
             <IconButtonWrapper
-              iconWidth={RfW(40)}
+              iconWidth={RfW(64)}
               styling={{ alignSelf: 'center' }}
-              iconHeight={RfH(40)}
+              iconHeight={RfH(64)}
               iconImage={getSubjectIcons(item.displayName)}
             />
           </View>
