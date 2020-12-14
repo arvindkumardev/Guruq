@@ -63,10 +63,8 @@ export const SEARCH_TUTORS = gql`
               city
               state
               country
-              location {
-                latitude
-                longitude
-              }
+              latitude
+              longitude
             }
           }
         }

@@ -70,10 +70,8 @@ export const GET_CLASS_DETAILS = gql`
         state
         country
         fullAddress
-        location {
-          latitude
-          longitude
-        }
+        latitude
+        longitude
       }
     }
   }

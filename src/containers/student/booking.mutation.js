@@ -15,10 +15,8 @@ export const CREATE_BOOKING = gql`
         postalCode
         landmark
         fullAddress
-        location {
-          latitude
-          longitude
-        }
+        latitude
+        longitude
       }
       billingAddress {
         id
@@ -30,10 +28,8 @@ export const CREATE_BOOKING = gql`
         postalCode
         landmark
         fullAddress
-        location {
-          latitude
-          longitude
-        }
+        latitude
+        longitude
       }
       payableAmount
       orderPayment {
