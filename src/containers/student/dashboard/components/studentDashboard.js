@@ -21,7 +21,7 @@ import NavigationRouteNames from '../../../../routes/screenNames';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import StudentOfferingModal from './studentOfferingModal';
-import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA } from '../../dashboard-query';
+import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import Loader from '../../../../components/Loader';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
@@ -61,6 +61,7 @@ function StudentDashboard(props) {
   const [favouriteTutors, setFavouriteTutors] = useState([]);
   const [interestedOfferings, setInterestedOfferings] = useState({});
   const [upcomingClasses, setUpcomingClasses] = useState([]);
+  const [sponsoredTutors, setSponsoredTutors] = useState([]);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
@@ -74,6 +75,22 @@ function StudentDashboard(props) {
     onCompleted: (data) => {
       if (data) {
         setFavouriteTutors(data?.getFavouriteTutors);
+      }
+    },
+  });
+
+  const [getSponsoredTutors, { loading: loadingSponsoredTutors }] = useLazyQuery(GET_SPONSORED_TUTORS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setSponsoredTutors(data?.getSponsoredTutors);
       }
     },
   });
@@ -119,12 +136,14 @@ function StudentDashboard(props) {
   useEffect(() => {
     getFavouriteTutors();
     getInterestedOfferings();
+    getSponsoredTutors();
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       getFavouriteTutors();
       getInterestedOfferings();
+      getSponsoredTutors();
     }, [])
   );
 
@@ -454,6 +473,91 @@ function StudentDashboard(props) {
             </Text>
           </TouchableWithoutFeedback>
         </View> */}
+      </View>
+    );
+  };
+
+  const renderSponsoredTutor = (item) => {
+    return (
+      <View style={{ marginTop: RfH(16), flex: 1 }}>
+        <TouchableWithoutFeedback
+          onPress={() => gotoTutors(item)}
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            alignItems: 'stretch',
+          }}>
+          <View
+            style={{
+              backgroundColor: 'rgb(230,252,231)',
+              borderRadius: 8,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+                paddingVertical: RfH(13),
+                marginRight: RfW(16),
+              }}>
+              <View
+                style={{
+                  flex: 0.3,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <IconButtonWrapper iconHeight={RfH(70)} iconImage={getTutorImage(item?.tutor)} iconWidth={RfW(70)} />
+              </View>
+              <View
+                style={{
+                  flex: 0.7,
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'stretch',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>
+                    {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
+                  </Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Icon
+                      type="FontAwesome"
+                      name="star"
+                      style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                    />
+                    <Text
+                      style={{
+                        alignSelf: 'center',
+                        color: Colors.primaryText,
+                        fontWeight: '600',
+                      }}>
+                      {parseFloat(item?.tutor?.averageRating)}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                  {item?.tutor?.teachingExperience ? `${item?.tutor?.teachingExperience} years of Experience` : ''}
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                    English, Maths , Science
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   };
@@ -905,237 +1009,13 @@ function StudentDashboard(props) {
             }}>
             <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Recommended Tutors</Text>
           </View>
-          <View
-            style={{
-              height: RfH(92),
-              backgroundColor: 'rgb(230,252,231)',
-              borderRadius: 8,
-              marginTop: RfH(20),
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                paddingVertical: RfH(13),
-                marginRight: RfW(16),
-              }}>
-              <View
-                style={{
-                  flex: 0.3,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
-              </View>
-              <View
-                style={{
-                  flex: 0.7,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  alignItems: 'stretch',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Gurbani Singh</Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Icon
-                      type="FontAwesome"
-                      name="star"
-                      style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                    />
-                    <Text
-                      style={{
-                        alignSelf: 'center',
-                        color: Colors.primaryText,
-                        fontWeight: '600',
-                      }}>
-                      4.5
-                    </Text>
-                  </View>
-                </View>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  3 years of Experience
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    English, Maths , Science
-                  </Text>
-                  <Icon
-                    type="MaterialIcons"
-                    name="computer"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              height: RfH(92),
-              backgroundColor: 'rgb(231,229,242)',
-              borderRadius: 8,
-              marginTop: RfH(20),
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                paddingVertical: RfH(13),
-                marginRight: RfW(16),
-              }}>
-              <View
-                style={{
-                  flex: 0.3,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
-              </View>
-              <View
-                style={{
-                  flex: 0.7,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  alignItems: 'stretch',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Tushar Das</Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Icon
-                      type="FontAwesome"
-                      name="star"
-                      style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                    />
-                    <Text
-                      style={{
-                        alignSelf: 'center',
-                        color: Colors.primaryText,
-                        fontWeight: '600',
-                      }}>
-                      4.5
-                    </Text>
-                  </View>
-                </View>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  3 years of Experience
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    English, Maths , Science
-                  </Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Icon
-                      type="AntDesign"
-                      name="home"
-                      style={{ fontSize: 18, marginRight: RfW(8), color: Colors.secondaryText }}
-                    />
-                    <Icon
-                      type="MaterialIcons"
-                      name="computer"
-                      style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              height: RfH(92),
-              backgroundColor: 'rgb(255,247,240)',
-              borderRadius: 8,
-              marginTop: RfH(20),
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                paddingVertical: RfH(13),
-                marginRight: RfW(16),
-              }}>
-              <View
-                style={{
-                  flex: 0.3,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Thumbnail style={{ height: RfH(70), width: RfW(70), borderRadius: 35 }} source={Images.kushal} />
-              </View>
-              <View
-                style={{
-                  flex: 0.7,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  alignItems: 'stretch',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>Gurbani Singh</Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Icon
-                      type="FontAwesome"
-                      name="star"
-                      style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                    />
-                    <Text
-                      style={{
-                        alignSelf: 'center',
-                        color: Colors.primaryText,
-                        fontWeight: '600',
-                      }}>
-                      4.5
-                    </Text>
-                  </View>
-                </View>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  3 years of Experience
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    English, Maths , Science
-                  </Text>
-                  <Icon
-                    type="MaterialIcons"
-                    name="computer"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.secondaryText }}
-                  />
-                </View>
-              </View>
-            </View>
+          <View>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={sponsoredTutors}
+              renderItem={({ item, index }) => renderSponsoredTutor(item, index)}
+              keyExtractor={(item, index) => index.toString()}
+            />
           </View>
           <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING)}>
             <View style={{ marginTop: RfH(20) }}>

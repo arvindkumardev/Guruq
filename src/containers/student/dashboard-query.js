@@ -70,3 +70,28 @@ export const GET_INTERESTED_OFFERINGS = gql`
     }
   }
 `;
+
+export const GET_SPONSORED_TUTORS = gql`
+  query GetSponsoredTutors {
+    getSponsoredTutors {
+      tutor {
+        id
+        contactDetail {
+          firstName
+          lastName
+          gender
+        }
+        profileImage {
+          filename
+        }
+        tutorOfferings {
+          offering {
+            displayName
+          }
+        }
+        averageRating
+        teachingExperience
+      }
+    }
+  }
+`;
