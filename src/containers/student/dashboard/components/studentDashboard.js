@@ -62,6 +62,7 @@ function StudentDashboard(props) {
   const [interestedOfferings, setInterestedOfferings] = useState({});
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [sponsoredTutors, setSponsoredTutors] = useState([]);
+  const [refreshSponsors, setRefreshSponsors] = useState(false);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
@@ -91,6 +92,7 @@ function StudentDashboard(props) {
     onCompleted: (data) => {
       if (data) {
         setSponsoredTutors(data?.getSponsoredTutors);
+        setRefreshSponsors(!refreshSponsors);
       }
     },
   });
@@ -478,6 +480,12 @@ function StudentDashboard(props) {
   };
 
   const renderSponsoredTutor = (item) => {
+    const sub = [];
+    item.tutor.tutorOfferings.map((obj) => {
+      if (obj.offerings && sub.findIndex((ob) => ob === obj.offerings[2].displayName) === -1) {
+        sub.push(obj.offerings[2].displayName);
+      }
+    });
     return (
       <View style={{ marginTop: RfH(16), flex: 1 }}>
         <TouchableWithoutFeedback
@@ -550,9 +558,7 @@ function StudentDashboard(props) {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    English, Maths , Science
-                  </Text>
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>{sub.join(',')}</Text>
                 </View>
               </View>
             </View>
@@ -999,23 +1005,27 @@ function StudentDashboard(props) {
               />
             </View>
           )}
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-end',
-              marginTop: RfH(25),
-            }}>
-            <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Recommended Tutors</Text>
-          </View>
           <View>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={sponsoredTutors}
-              renderItem={({ item, index }) => renderSponsoredTutor(item, index)}
-              keyExtractor={(item, index) => index.toString()}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-end',
+                marginTop: RfH(25),
+              }}>
+              <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                Recommended Tutors
+              </Text>
+            </View>
+            <View>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={sponsoredTutors}
+                extraData={refreshSponsors}
+                renderItem={({ item, index }) => renderSponsoredTutor(item, index)}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
           </View>
           <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING)}>
             <View style={{ marginTop: RfH(20) }}>

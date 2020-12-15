@@ -28,12 +28,14 @@ import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import { getBoxColor } from '../../../../theme/colors';
 import initializeApollo from '../../../../apollo/apollo';
+import TutorSubjectsModal from './tutorSubjectsModal';
 
 function TutorDashboard(props) {
   const navigation = useNavigation();
   const [searchLocation, setSearchLocation] = useState('');
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [showAllSubjects, setShowAllSubjects] = useState(false);
   const [refreshSubjectList, setRefreshSubjectList] = useState(false);
   const client = initializeApollo();
 
@@ -328,7 +330,7 @@ function TutorDashboard(props) {
           <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
               <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>My Subjects</Text>
-              <TouchableWithoutFeedback onPress={() => changeTab(2)}>
+              <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
                 <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
               </TouchableWithoutFeedback>
             </View>
@@ -360,6 +362,7 @@ function TutorDashboard(props) {
           </View>
         </TouchableWithoutFeedback>
       </View>
+      <TutorSubjectsModal visible={showAllSubjects} onClose={() => setShowAllSubjects(false)} subjects={subjects} />
     </ScrollView>
   );
 }

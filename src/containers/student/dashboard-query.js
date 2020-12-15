@@ -85,7 +85,7 @@ export const GET_SPONSORED_TUTORS = gql`
           filename
         }
         tutorOfferings {
-          offering {
+          offerings {
             displayName
           }
         }
