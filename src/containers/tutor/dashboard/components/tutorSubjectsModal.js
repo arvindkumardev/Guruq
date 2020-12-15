@@ -18,7 +18,14 @@ const TutorSubjectsModal = (props) => {
 
   const renderItem = (item) => {
     return (
-      <View style={{ marginTop: RfH(20), flex: 1, backgroundColor: getBoxColor(item?.offering?.displayName) }}>
+      <View
+        style={{
+          marginTop: RfH(20),
+          flex: 1,
+          backgroundColor: getBoxColor(item?.offering?.displayName),
+          marginHorizontal: RfW(8),
+          padding: RfH(8),
+        }}>
         <TouchableWithoutFeedback
           style={{
             flexDirection: 'column',
@@ -68,12 +75,20 @@ const TutorSubjectsModal = (props) => {
             backgroundColor: Colors.white,
             paddingHorizontal: RfW(16),
           }}>
+          <IconButtonWrapper
+            iconHeight={RfH(24)}
+            iconWidth={RfW(24)}
+            styling={{ alignSelf: 'flex-end', marginVertical: RfH(16), marginRight: RfW(16) }}
+            iconImage={Images.cross}
+            submitFunction={() => onClose(false)}
+          />
           <FlatList
             showsHorizontalScrollIndicator={false}
             numColumns={3}
             data={subjects}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ paddingBottom: RfH(34) }}
           />
         </View>
       </View>
