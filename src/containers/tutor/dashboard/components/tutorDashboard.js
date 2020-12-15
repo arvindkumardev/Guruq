@@ -285,32 +285,6 @@ function TutorDashboard(props) {
             />
           </View>
         </View>
-        <View
-          style={{
-            backgroundColor: Colors.lightGrey,
-            marginTop: RfH(16),
-            paddingVertical: RfH(8),
-            borderRadius: RfH(8),
-          }}>
-          <View style={commonStyles.horizontalChildrenView}>
-            <IconButtonWrapper
-              iconHeight={RfH(24)}
-              iconWidth={RfW(24)}
-              iconImage={Images.searchIcon}
-              styling={{ marginLeft: RfW(8) }}
-            />
-            <Input
-              value={searchLocation}
-              placeholder="Search for the area you want to teach"
-              onChangeText={(text) => setSearchLocation(text)}
-              style={{
-                backgroundColor: Colors.lightGrey,
-                fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
-                height: RfH(38),
-              }}
-            />
-          </View>
-        </View>
         <View style={{ height: RfH(220), marginTop: RfH(29) }}>
           <Swiper horizontal style={{ overflow: 'visible' }}>
             <View
@@ -372,7 +346,7 @@ function TutorDashboard(props) {
             </View>
             <View style={{ marginTop: RfH(16) }}>
               <FlatList
-                data={subjects}
+                data={subjects.slice(0, 6)}
                 extraData={refreshSubjectList}
                 numColumns={2}
                 renderItem={({ item, index }) => renderSubjects(item, index)}

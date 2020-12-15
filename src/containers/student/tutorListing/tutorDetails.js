@@ -341,6 +341,7 @@ function tutorDetails(props) {
   };
 
   const renderSubjects = (item, index) => {
+    // const image = Images.`${item.displayName}`;
     return (
       <TouchableWithoutFeedback onPress={() => selectSubject(item)}>
         <View style={{ marginTop: RfH(20), flex: 1 }}>
