@@ -1,25 +1,14 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-restricted-syntax */
-import {
-  Alert,
-  Dimensions,
-  FlatList,
-  Image,
-  ScrollView,
-  StatusBar,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { Input } from 'native-base';
 import PropTypes from 'prop-types';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Col, Icon, Input, Item, Thumbnail } from 'native-base';
 import Swiper from 'react-native-swiper';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import moment from 'moment';
-import { dropRightWhile } from 'lodash';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import {
@@ -31,11 +20,10 @@ import {
   RfW,
 } from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import routeNames from '../../../../routes/screenNames';
+import NavigationRouteNames from '../../../../routes/screenNames';
 import { IconButtonWrapper } from '../../../../components';
 import Fonts from '../../../../theme/fonts';
 import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../../apollo/cache';
-import NavigationRouteNames from '../../../../routes/screenNames';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import { getBoxColor } from '../../../../theme/colors';

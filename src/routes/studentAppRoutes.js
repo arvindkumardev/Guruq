@@ -29,6 +29,7 @@ import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetai
 import WebViewPages from '../containers/student/profile/webViewPages';
 import TutionNeedsListing from '../containers/tutionNeeds/tutionNeedsListing';
 import TutionNeedsHistory from '../containers/tutionNeeds/TutionNeedsHistory';
+import WebViewPage from '../components/WebViewPage';
 
 const Stack = createStackNavigator();
 
@@ -164,6 +165,7 @@ export const getStudentRoutes = () => {
         component={TutionNeedsHistory}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
     </>
   );
 };

@@ -19,3 +19,5 @@ export const tutorDetails = makeVar({});
 export const userLocation = makeVar({});
 
 export const offeringsMasterData = makeVar([]);
+
+export const notificationPayload = makeVar({});
