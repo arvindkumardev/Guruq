@@ -53,7 +53,6 @@ function App() {
     if (state) {
       routeNameRef.current = getActiveRouteName(state);
     }
-
     GlobalFont.applyGlobal('SegoeUI');
   }, []);
 

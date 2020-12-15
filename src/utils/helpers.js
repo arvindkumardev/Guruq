@@ -189,7 +189,7 @@ export const getSubjectIcons = (name) => {
     case 'Computer Science':
       icon = SubjectIcons.computer_science;
       break;
-    case 'Dna':
+    case 'biology':
       icon = SubjectIcons.dna;
       break;
     case 'Hindi':

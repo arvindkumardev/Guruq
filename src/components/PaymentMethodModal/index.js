@@ -111,8 +111,7 @@ const PaymentMethod = (props) => {
       })
       .catch((error) => {
         // handle failure
-        completedPayment(bookingOrderId, OrderPaymentStatusEnum.FAILED.label, error.description);
-        // create booking - with cancelled payment
+        Alert.alert('Payment failed!');
       });
   };
 
