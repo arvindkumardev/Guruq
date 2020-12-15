@@ -16,6 +16,8 @@ const NavigationRouteNames = {
 
   ONLINE_CLASS: 'online_class1',
 
+  WEB_VIEW: 'web_view',
+
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
     STUDY_AREA: 'student_study_area',

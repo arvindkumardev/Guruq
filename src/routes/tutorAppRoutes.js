@@ -6,6 +6,7 @@ import CalendarView from '../containers/tutor/calendar/calendarView';
 import ScheduledClassDetails from '../containers/tutor/calendar/scheduledClassDetails';
 import CancelReason from '../containers/student/calendar/cancelReason';
 import OnlineClass from '../containers/onlineClass/onlineClass';
+import WebViewPage from '../components/WebViewPage/index';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,7 @@ export const getTutorRoutes = () => {
         component={OnlineClass}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
     </>
   );
 };
