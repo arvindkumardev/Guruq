@@ -28,8 +28,8 @@ function Profile() {
   const [accountData, setAccountData] = useState([
     { name: 'Personal Details', icon: Images.personal },
     { name: 'Address', icon: Images.home },
-    { name: 'Parents Details', icon: Images.parent_details },
     { name: 'Education', icon: Images.education },
+    { name: 'Experience', icon: Images.education },
   ]);
   const [myStudyData, setMyStudyData] = useState([
     { name: 'Add Study Area', icon: Images.personal },
@@ -76,17 +76,23 @@ function Profile() {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/personal-information`,
         label: 'Personal Details',
-      }); // setIsPersonalMenuOpen(false)
-      //  alert('ok')
+      });
     } else if (item.name === 'Address') {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/addresses`,
-        label: 'Addresses',
+        label: 'Address Details',
       });
-      // setIsPersonalMenuOpen(false)
-      //  alert('ok')
+    } else if (item.name === 'Education') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/tutor/embed/education`,
+        label: 'Education Details',
+      });
+    } else if (item.name === 'Experience') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
+        label: 'Experience Details',
+      });
     } else {
-      // setIsPersonalMenuOpen(true)
       return null;
     }
     return null;
