@@ -44,6 +44,7 @@ const NavigationRouteNames = {
     DETAILED_RATING: 'detailed rating',
     COMPARE_MODAL: 'compare_modal',
     FAVOURITE_TUTOR: 'favourite_tutor',
+    NOTIFICATIONS: 'notifications',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',

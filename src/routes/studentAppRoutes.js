@@ -30,6 +30,7 @@ import WebViewPages from '../containers/student/profile/webViewPages';
 import TutionNeedsListing from '../containers/tutionNeeds/tutionNeedsListing';
 import TutionNeedsHistory from '../containers/tutionNeeds/TutionNeedsHistory';
 import WebViewPage from '../components/WebViewPage';
+import Notifications from '../containers/student/dashboard/notifications';
 
 const Stack = createStackNavigator();
 
@@ -166,6 +167,11 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.NOTIFICATIONS}
+        component={Notifications}
+        options={{ headerShown: false }}
+      />
     </>
   );
 };

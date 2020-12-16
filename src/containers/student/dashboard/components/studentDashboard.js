@@ -829,7 +829,7 @@ function StudentDashboard(props) {
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}>
               <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
             </TouchableOpacity>
           </View>

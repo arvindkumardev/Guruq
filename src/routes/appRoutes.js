@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
 import AsyncStorage from '@react-native-community/async-storage';
-// import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
+import { firebase } from '@react-native-firebase/app';
 import NavigationRouteNames from './screenNames';
 import Login from '../containers/common/login/login';
 import OtpVerification from '../containers/common/login/otpVerification';
@@ -16,8 +17,8 @@ import { UserTypeEnum } from '../common/userType.enum';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
 import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
-// import { initializeNotification, requestUserPermission } from '../common/firebase';
-// import { notificationPayload } from '../apollo/cache';
+import { firebaseConfig, getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
+import { notificationPayload } from '../apollo/cache';
 
 const Stack = createStackNavigator();
 
@@ -31,22 +32,24 @@ const AppStack = (props) => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   requestUserPermission();
-  //   initializeNotification();
-  //   messaging().onNotificationOpenedApp((remoteMessage) => {
-  //     if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
-  //       notificationPayload(remoteMessage.data);
-  //     }
-  //   });
-  //   messaging()
-  //     .getInitialNotification()
-  //     .then((remoteMessage) => {
-  //       if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
-  //         notificationPayload(remoteMessage.data);
-  //       }
-  //     });
-  // }, []);
+  useEffect(() => {
+    firebase.initializeApp(firebaseConfig);
+    getFcmToken();
+    requestUserPermission();
+    initializeNotification();
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
+        notificationPayload(remoteMessage.data);
+      }
+    });
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
+          notificationPayload(remoteMessage.data);
+        }
+      });
+  }, []);
 
   const getLoggedInRoutes = () => {
     if (userType === UserTypeEnum.OTHER.label) {

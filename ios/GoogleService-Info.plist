@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>716496455490-p2bdprjoaftori9vsnsu9t5k8fcsakvn.apps.googleusercontent.com</string>
+	<string>624385656193-9is0ig421dl0regnjan4pou2ar6srogf.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.716496455490-p2bdprjoaftori9vsnsu9t5k8fcsakvn</string>
+	<string>com.googleusercontent.apps.624385656193-9is0ig421dl0regnjan4pou2ar6srogf</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAEpyW_wjvqploaKdt002T9KGMTdEFvXJw</string>
+	<string>AIzaSyBvF_tvwaEQF_qK91EuSeodOC4f6hTBiPk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>716496455490</string>
+	<string>624385656193</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.tuition.GuruQ</string>
 	<key>PROJECT_ID</key>
-	<string>guruq-7f7a2</string>
+	<string>guruq-dev-207df</string>
 	<key>STORAGE_BUCKET</key>
-	<string>guruq-7f7a2.appspot.com</string>
+	<string>guruq-dev-207df.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:716496455490:ios:5a3c8842e0cf887b4aeadb</string>
-	<key>DATABASE_URL</key>
-	<string>https://guruq-7f7a2.firebaseio.com</string>
+	<string>1:624385656193:ios:60232ea6f1a68a654a1480</string>
 </dict>
 </plist>
