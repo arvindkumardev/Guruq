@@ -161,6 +161,7 @@ const Images = {
   student_requests: require('../assets/images/student_requests.png'),
   performance: require('../assets/images/performance.png'),
   b_star: require('../assets/images/b_star.png'),
+  dots: require('../assets/images/dots.png'),
 };
 
 export default Images;

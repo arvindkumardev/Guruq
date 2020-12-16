@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "716496455490",
-    "firebase_url": "https://guruq-7f7a2.firebaseio.com",
-    "project_id": "guruq-7f7a2",
-    "storage_bucket": "guruq-7f7a2.appspot.com"
+    "project_number": "624385656193",
+    "project_id": "guruq-dev-207df",
+    "storage_bucket": "guruq-dev-207df.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:716496455490:android:54db239da8ce4fbf4aeadb",
+        "mobilesdk_app_id": "1:624385656193:android:f20f913217cb8a674a1480",
         "android_client_info": {
           "package_name": "com.guruq"
         }
       },
       "oauth_client": [
         {
-          "client_id": "716496455490-454qo20g45d8lgrbni6m4u3las1bjpq0.apps.googleusercontent.com",
+          "client_id": "624385656193-aboucj7i8jtmnd6pt1ltie4u9bna3grd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC_Nm6NtJncE243WCp1zuZcm5zDt5ziARI"
+          "current_key": "AIzaSyCPxveTepV-Lv4aRqQ85d4Zs994vqyRXY0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "716496455490-454qo20g45d8lgrbni6m4u3las1bjpq0.apps.googleusercontent.com",
+              "client_id": "624385656193-aboucj7i8jtmnd6pt1ltie4u9bna3grd.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
