@@ -58,6 +58,7 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
   query GetCurrentTutor {
     getCurrentTutor {
       id
+      certified
       contactDetail {
         firstName
         lastName

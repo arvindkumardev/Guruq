@@ -18,7 +18,10 @@ import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
 import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
 import { firebaseConfig, getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
-import { notificationPayload } from '../apollo/cache';
+import { notificationPayload, tutorDetails } from '../apollo/cache';
+import { TutorCertificationStageEnum } from '../containers/tutor/enums';
+import CertificationCompletedView from '../containers/tutor/certficationCompleted/certificationCompletedView';
+import WebViewPages from '../containers/tutor/profile/webViewPages';
 
 const Stack = createStackNavigator();
 
@@ -67,7 +70,32 @@ const AppStack = (props) => {
       return getStudentRoutes();
     }
     if (userType === UserTypeEnum.TUTOR.label) {
-      return getTutorRoutes();
+      if (tutorDetails && tutorDetails?.certified) {
+        return getTutorRoutes();
+      }
+      if (
+        tutorDetails &&
+        tutorDetails?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
+      ) {
+        return (
+          <>
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
+              component={CertificationCompletedView}
+              options={{ headerShown: false }}
+            />
+          </>
+        );
+      }
+      return (
+        <>
+          <Stack.Screen
+            name={NavigationRouteNames.WEB_VIEW}
+            component={WebViewPages}
+            options={{ headerShown: false }}
+          />
+        </>
+      );
     }
   };
 
