@@ -124,6 +124,7 @@ export const CREATE_TUTOR = gql`
   mutation CreateTutor {
     createTutor {
       id
+      certified
       contactDetail {
         firstName
         lastName

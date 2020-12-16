@@ -51,6 +51,7 @@ const NavigationRouteNames = {
     DASHBOARD: 'tutor_dashboard',
     CANCEL_REASON: 'cancel_reason',
     ONLINE_CLASS: 'online_class',
+    CERTIFICATION_COMPLETED_VIEW: 'certification_completed_view',
   },
 };
 
