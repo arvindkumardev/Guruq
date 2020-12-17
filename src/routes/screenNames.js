@@ -52,6 +52,8 @@ const NavigationRouteNames = {
     CANCEL_REASON: 'cancel_reason',
     ONLINE_CLASS: 'online_class',
     CERTIFICATION_COMPLETED_VIEW: 'certification_completed_view',
+    SUBJECTS_LIST: 'subjects_list',
+    PRICE_MATRIX: 'price_matrix',
   },
 };
 

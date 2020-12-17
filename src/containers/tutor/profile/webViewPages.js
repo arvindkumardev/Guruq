@@ -7,15 +7,12 @@ import { RfW } from '../../../utils/helpers';
 function WebViewPages(props) {
   const { route } = props;
 
-  // const url = route?.params?.url;
-  // const label = route?.params?.label;
+  const url = route?.params?.url;
+  const label = route?.params?.label;
   return (
     <View style={{ flex: 1 }}>
-      <ScreenHeader label="Certification Process" horizontalPadding={RfW(16)} />
-      <WebView
-        source={{ uri: 'http://dashboardv2.guruq.in/tutor/embed/on-boarding' }}
-        style={{ width: '100%', height: '100%' }}
-      />
+      <ScreenHeader label={label} horizontalPadding={RfW(16)} />
+      <WebView source={{ uri: url }} style={{ width: '100%', height: '100%' }} />
     </View>
   );
 }

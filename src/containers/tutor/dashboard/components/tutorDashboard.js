@@ -78,7 +78,6 @@ function TutorDashboard(props) {
   });
 
   useEffect(() => {
-    console.log(tutorInfo);
     getScheduledClasses({
       variables: {
         classesSearchDto: {
@@ -208,7 +207,7 @@ function TutorDashboard(props) {
           iconWidth={RfW(48)}
           styling={{ alignSelf: 'center' }}
           iconHeight={RfH(56)}
-          styling={{ aliinSelf: 'flex-start' }}
+          styling={{ alignSelf: 'flex-start' }}
           iconImage={getSubjectIcons(item?.offering?.displayName)}
         />
         <View style={commonStyles.horizontalChildrenView}>

@@ -70,33 +70,36 @@ const AppStack = (props) => {
       return getStudentRoutes();
     }
     if (userType === UserTypeEnum.TUTOR.label) {
-      if (tutorDetails && tutorDetails?.certified) {
-        return getTutorRoutes();
-      }
-      if (
-        tutorDetails &&
-        tutorDetails?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
-      ) {
-        return (
-          <>
-            <Stack.Screen
-              name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
-              component={CertificationCompletedView}
-              options={{ headerShown: false }}
-            />
-          </>
-        );
-      }
-      return (
-        <>
-          <Stack.Screen
-            name={NavigationRouteNames.WEB_VIEW}
-            component={WebViewPages}
-            options={{ headerShown: false }}
-          />
-        </>
-      );
+      return getTutorRoutes();
     }
+    // if (userType === UserTypeEnum.TUTOR.label) {
+    //   if (tutorDetails && tutorDetails?.certified) {
+    //     return getTutorRoutes();
+    //   }
+    //   if (
+    //     tutorDetails &&
+    //     tutorDetails?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
+    //   ) {
+    //     return (
+    //       <>
+    //         <Stack.Screen
+    //           name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
+    //           component={CertificationCompletedView}
+    //           options={{ headerShown: false }}
+    //         />
+    //       </>
+    //     );
+    //   }
+    //   return (
+    //     <>
+    //       <Stack.Screen
+    //         name={NavigationRouteNames.WEB_VIEW}
+    //         component={WebViewPages}
+    //         options={{ headerShown: false }}
+    //       />
+    //     </>
+    //   );
+    // }
   };
 
   return (

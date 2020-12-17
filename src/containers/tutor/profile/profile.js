@@ -30,6 +30,8 @@ function Profile() {
     { name: 'Address', icon: Images.home },
     { name: 'Education', icon: Images.education },
     { name: 'Experience', icon: Images.education },
+    { name: 'Documents', icon: Images.book },
+    { name: 'Bank Details', icon: Images.bank },
   ]);
   const [myStudyData, setMyStudyData] = useState([
     { name: 'Add Study Area', icon: Images.personal },
@@ -37,10 +39,8 @@ function Profile() {
   ]);
   const [bookingData, setBookingData] = useState([{ name: 'Purchased History', icon: Images.personal }]);
   const [myClassesData, setMyClassesData] = useState([
-    { name: 'Calendar', icon: Images.personal },
-    { name: 'Upcoming Classes', icon: Images.home },
-    // { name: 'Parents Details', icon: Images.parent_details },
-    // { name: 'Education', icon: Images.education },
+    { name: 'Online', icon: Images.laptop },
+    { name: 'Offline', icon: Images.home },
   ]);
   const [isStudyMenuOpen, setIsStudyMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
@@ -113,7 +113,7 @@ function Profile() {
         ]}>
         <View style={{ flexDirection: 'row' }}>
           <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} />
-          <Text style={{ fontSize: 15, color: Colors.primaryText, marginLeft: RfW(16) }}>{item.name}</Text>
+          <Text style={[commonStyles.mediumMutedText, { marginLeft: RfW(16) }]}>{item.name}</Text>
         </View>
         <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
       </TouchableWithoutFeedback>
@@ -123,23 +123,14 @@ function Profile() {
   const renderActionIcons = () => {
     return (
       <View style={[styles.userMenuParentView, { justifyContent: 'space-evenly', alignItems: 'center' }]}>
-        <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
-          <Text style={styles.actionText}>Favourites</Text>
+        <View
+          style={[styles.actionIconParentView, { flex: 0.5, borderRightColor: Colors.darkGrey, borderRightWidth: 1 }]}>
+          <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.bell} />
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Notification</Text>
         </View>
-        <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bell} />
-          <Text style={styles.actionText}>Notification</Text>
-        </View>
-        <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.qpoint} />
-          <Text style={styles.actionText}>Q Points</Text>
-        </View>
-        <View style={styles.actionIconParentView}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.cart} />
-            <Text style={styles.actionText}>Cart</Text>
-          </TouchableWithoutFeedback>
+        <View style={[styles.actionIconParentView, { flex: 0.5 }]}>
+          <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.qpoint} />
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Q Points</Text>
         </View>
       </View>
     );
@@ -178,9 +169,8 @@ function Profile() {
           </View>
         </View>
         <View style={commonStyles.lineSeparator} />
-        {renderActionIcons()}
-
-        <View style={commonStyles.blankGreyViewSmall} />
+        <View style={{ paddingVertical: RfH(16) }}>{renderActionIcons()}</View>
+        <View style={commonStyles.lineSeparator} />
         <View>
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
@@ -213,22 +203,22 @@ function Profile() {
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-        <View style={styles.userMenuParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
-          <View style={styles.menuItemParentView}>
-            <Text style={styles.menuItemPrimaryText}>My Study Area</Text>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-              Add/Modify study area
-            </Text>
-          </View>
-          <TouchableWithoutFeedback onPress={() => setIsStudyMenuOpen(!isStudyMenuOpen)}>
+        <TouchableWithoutFeedback onPress={() => setIsStudyMenuOpen(!isStudyMenuOpen)}>
+          <View style={styles.userMenuParentView}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>Scheduler</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Availability of date and time slots
+              </Text>
+            </View>
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
               iconImage={isStudyMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
-          </TouchableWithoutFeedback>
-        </View>
+          </View>
+        </TouchableWithoutFeedback>
         {isStudyMenuOpen && (
           <SafeAreaView>
             <FlatList
@@ -242,52 +232,23 @@ function Profile() {
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-        <View style={styles.userMenuParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
-          <View style={styles.menuItemParentView}>
-            <Text style={styles.menuItemPrimaryText}>Booking Details</Text>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-              Purchased History
-            </Text>
-          </View>
-          <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
+        <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
+          <View style={styles.userMenuParentView}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>Classes</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Online, Offline
+              </Text>
+            </View>
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
               iconImage={isBookingMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
-          </TouchableWithoutFeedback>
-        </View>
-        {isBookingMenuOpen && (
-          <SafeAreaView>
-            <FlatList
-              data={bookingData}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </SafeAreaView>
-        )}
-
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-        <View style={styles.userMenuParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
-          <View style={styles.menuItemParentView}>
-            <Text style={styles.menuItemPrimaryText}>My Classes</Text>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-              Calendar, Schedule Class, Renew Class, Class...
-            </Text>
           </View>
-          <TouchableWithoutFeedback onPress={() => setIsMyClassesMenuOpen(!isMyClassesMenuOpen)}>
-            <IconWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={isMyClassesMenuOpen ? Images.collapse_grey : Images.expand_gray}
-            />
-          </TouchableWithoutFeedback>
-        </View>
-        {isMyClassesMenuOpen && (
+        </TouchableWithoutFeedback>
+        {isBookingMenuOpen && (
           <SafeAreaView>
             <FlatList
               data={myClassesData}
@@ -297,8 +258,25 @@ function Profile() {
             />
           </SafeAreaView>
         )}
-        <View style={commonStyles.blankGreyViewSmall} />
 
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.SUBJECTS_LIST)}>
+          <View style={styles.userMenuParentView}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>My Subjects</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Add price for the classes
+              </Text>
+            </View>
+            <IconWrapper
+              iconWidth={RfW(24)}
+              iconHeight={RfH(24)}
+              iconImage={isMyClassesMenuOpen ? Images.collapse_grey : Images.expand_gray}
+            />
+          </View>
+        </TouchableWithoutFeedback>
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
           <View style={styles.menuItemParentView}>
@@ -316,12 +294,12 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
 
-        <View style={commonStyles.blankGreyViewSmall} />
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
           <View style={styles.menuItemParentView}>
-            <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
+            <TouchableWithoutFeedback>
               <Text style={styles.menuItemPrimaryText}>Settings</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                 Account Settings, Change Password, Notifications
@@ -334,8 +312,7 @@ function Profile() {
             iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
           />
         </View>
-
-        <View style={commonStyles.blankGreyViewSmall} />
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
@@ -384,8 +361,7 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
 
-        <View style={commonStyles.blankGreyViewSmall} />
-
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />
           <View style={styles.menuItemParentView}>
@@ -397,6 +373,7 @@ function Profile() {
             Calendar, Schedule Class, Renew Class, Class...
          </Text> */}
           </View>
+
           {/* <TouchableWithoutFeedback onPress={() => setIsLogout(!isLogout)}>
           <IconWrapper
             iconWidth={RfW(24)}
@@ -407,6 +384,8 @@ function Profile() {
         </TouchableWithoutFeedback> */}
         </View>
         {/* <View style={commonStyles.lineSeparator} /> */}
+
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         <View
           style={{
             justifyContent: 'space-around',
