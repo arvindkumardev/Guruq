@@ -12,15 +12,13 @@ const WebViewPage = (props) => {
   const [token, setToken] = useState();
   const [injectJS, setInjectJS] = useState('');
 
+  const INJECTEDJAVASCRIPT = `const meta = document.createElement('meta'); meta.setAttribute('content', 'width=375, initial-scale=1, maximum-scale=1, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `;
   // useEffect(() => {
   //   getToken().then((tk) => setToken(tk));
   // });
 
   useEffect(() => {
     getToken().then((tk) => {
-      setInjectJS(`(function(){     
-        window.localStorage.setItem('authToken', '${tk}');
-        window.location = '${url}/${token}';})();`);
       setToken(tk);
     });
   });
@@ -35,11 +33,11 @@ const WebViewPage = (props) => {
       <ScreenHeader label={label} homeIcon />
       {token && (
         <WebView
-          source={{ uri: `http://dashboardv2.guruq.in/embed.html` }}
+          source={{ uri: `${url}/${token}` }}
           javaScriptEnabled
           domStorageEnabled
-          injectedJavaScript={injectJS}
           onMessage={onMessage}
+          injectedJavaScript={INJECTEDJAVASCRIPT}
         />
       )}
     </>
