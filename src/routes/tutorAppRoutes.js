@@ -7,6 +7,10 @@ import ScheduledClassDetails from '../containers/tutor/calendar/scheduledClassDe
 import CancelReason from '../containers/student/calendar/cancelReason';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import WebViewPage from '../components/WebViewPage/index';
+import SubjectList from '../containers/tutor/profile/mySubjects/subjectList';
+import PriceMatrix from '../containers/tutor/profile/mySubjects/priceMatrix';
+import ViewSchedule from '../containers/tutor/profile/scheduler/viewSchedule';
+import UpdateSchedule from '../containers/tutor/profile/scheduler/updateSchedule';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +43,26 @@ export const getTutorRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.SUBJECTS_LIST}
+        component={SubjectList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PRICE_MATRIX}
+        component={PriceMatrix}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.VIEW_SCHEDULE}
+        component={ViewSchedule}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.UPDATE_SCHEDULE}
+        component={UpdateSchedule}
+        options={{ headerShown: false }}
+      />
     </>
   );
 };

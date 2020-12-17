@@ -4,7 +4,7 @@ import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { notificationPayload, tutorDetails } from '../apollo/cache';
+import { notificationPayload } from '../apollo/cache';
 import { firebaseConfig, getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
 import { UserTypeEnum } from '../common/userType.enum';
 import EnterPassword from '../containers/common/login/enterPassword';
@@ -15,9 +15,6 @@ import SignUp from '../containers/common/login/signUp';
 import GettingStarted from '../containers/common/onboarding/gettingStarted';
 import SplashScreen from '../containers/common/splashScreen/splashScreen';
 import UserTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
-import CertificationCompletedView from '../containers/tutor/certficationProcess/certificationCompletedView';
-import CertificationProcessView from '../containers/tutor/certficationProcess/certificationProcessView';
-import { TutorCertificationStageEnum } from '../containers/tutor/enums';
 import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
 import NavigationRouteNames from './screenNames';
 import { getStudentRoutes } from './studentAppRoutes';
@@ -70,33 +67,36 @@ const AppStack = (props) => {
       return getStudentRoutes();
     }
     if (userType === UserTypeEnum.TUTOR.label) {
-      if (tutorDetails && tutorDetails?.certified) {
-        return getTutorRoutes();
-      }
-      if (
-        tutorDetails &&
-        tutorDetails?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
-      ) {
-        return (
-          <>
-            <Stack.Screen
-              name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
-              component={CertificationCompletedView}
-              options={{ headerShown: false }}
-            />
-          </>
-        );
-      }
-      return (
-        <>
-          <Stack.Screen
-            name={NavigationRouteNames.WEB_VIEW}
-            component={CertificationProcessView}
-            options={{ headerShown: false }}
-          />
-        </>
-      );
+      return getTutorRoutes();
     }
+    // if (userType === UserTypeEnum.TUTOR.label) {
+    //   if (tutorDetails && tutorDetails?.certified) {
+    //     return getTutorRoutes();
+    //   }
+    //   if (
+    //     tutorDetails &&
+    //     tutorDetails?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
+    //   ) {
+    //     return (
+    //       <>
+    //         <Stack.Screen
+    //           name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
+    //           component={CertificationCompletedView}
+    //           options={{ headerShown: false }}
+    //         />
+    //       </>
+    //     );
+    //   }
+    //   return (
+    //     <>
+    //       <Stack.Screen
+    //         name={NavigationRouteNames.WEB_VIEW}
+    //         component={WebViewPages}
+    //         options={{ headerShown: false }}
+    //       />
+    //     </>
+    //   );
+    // }
   };
 
   return (
