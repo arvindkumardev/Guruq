@@ -1,9 +1,9 @@
 import messaging from '@react-native-firebase/messaging';
-import inAppMessaging from '@react-native-firebase/in-app-messaging';
-
-const registerForInAppMessages = async () => {
-  await inAppMessaging().setMessagesDisplaySuppressed(true);
-};
+// import inAppMessaging from '@react-native-firebase/in-app-messaging';
+//
+// const registerForInAppMessages = async () => {
+//   await inAppMessaging().setMessagesDisplaySuppressed(true);
+// };
 const registerAppWithFCM = async () => {
   await messaging().registerDeviceForRemoteMessages();
 };

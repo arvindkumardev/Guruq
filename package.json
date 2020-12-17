@@ -10,7 +10,8 @@
     "lint": "eslint *.js **/*.js",
     "clean-android": "cd android && ./gradlew clean && cd ../",
     "clean:ios": "cd ios && xcodebuild clean && cd ../",
-    "clean-android-assets": "rm -rf ./android/app/src/main/res/drawable-*; rm -rf ./android/app/src/main/res/raw-*"
+    "clean-android-assets": "rm -rf ./android/app/src/main/res/drawable-*; rm -rf ./android/app/src/main/res/raw-*",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@apollo/client": "^3.2.7",
@@ -22,7 +23,6 @@
     "@react-native-community/netinfo": "^5.9.7",
     "@react-native-community/picker": "^1.8.1",
     "@react-native-firebase/app": "^10.2.0",
-    "@react-native-firebase/in-app-messaging": "^10.2.0",
     "@react-native-firebase/messaging": "^10.2.0",
     "@react-navigation/bottom-tabs": "^5.9.2",
     "@react-navigation/native": "^5.7.6",
@@ -37,6 +37,7 @@
     "lottie-react-native": "^3.5.0",
     "moment": "^2.29.1",
     "native-base": "^2.13.14",
+    "patch-package": "^6.2.2",
     "prop-types": "^15.7.2",
     "react": "16.14.0",
     "react-apollo": "^3.1.5",

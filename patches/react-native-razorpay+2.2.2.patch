@@ -1,0 +1,57 @@
+diff --git a/node_modules/react-native-razorpay/RazorpayCheckout.js b/node_modules/react-native-razorpay/RazorpayCheckout.js
+index 09d0bfc..c4d1ffb 100644
+--- a/node_modules/react-native-razorpay/RazorpayCheckout.js
++++ b/node_modules/react-native-razorpay/RazorpayCheckout.js
+@@ -23,7 +23,7 @@ class RazorpayCheckout {
+         rejectFn(data);
+         removeSubscriptions();
+       });
+-      NativeModules.RazorpayCheckout.open(options);
++      NativeModules.RNRazorpayCheckout.open(options);
+     });
+   }
+   static onExternalWalletSelection(externalWalletCallback) {
+diff --git a/node_modules/react-native-razorpay/android/src/main/java/com/razorpay/rn/RazorpayModule.java b/node_modules/react-native-razorpay/android/src/main/java/com/razorpay/rn/RazorpayModule.java
+index e9e90f8..ab0445c 100644
+--- a/node_modules/react-native-razorpay/android/src/main/java/com/razorpay/rn/RazorpayModule.java
++++ b/node_modules/react-native-razorpay/android/src/main/java/com/razorpay/rn/RazorpayModule.java
+@@ -51,7 +51,7 @@ public class RazorpayModule extends ReactContextBaseJavaModule implements Activi
+ 
+   @Override
+   public String getName() {
+-    return "RazorpayCheckout";
++    return "RNRazorpayCheckout";
+   }
+ 
+   @ReactMethod
+diff --git a/node_modules/react-native-razorpay/ios/RazorpayCheckout.h b/node_modules/react-native-razorpay/ios/RazorpayCheckout.h
+index 91bc413..67bef55 100644
+--- a/node_modules/react-native-razorpay/ios/RazorpayCheckout.h
++++ b/node_modules/react-native-razorpay/ios/RazorpayCheckout.h
+@@ -8,6 +8,6 @@
+ 
+ #import "RCTBridgeModule.h"
+ 
+-@interface RazorpayCheckout : NSObject <RCTBridgeModule>
++@interface RNRazorpayCheckout : NSObject <RCTBridgeModule>
+ 
+ @end
+diff --git a/node_modules/react-native-razorpay/ios/RazorpayCheckout.m b/node_modules/react-native-razorpay/ios/RazorpayCheckout.m
+index 77bf69e..0170c63 100644
+--- a/node_modules/react-native-razorpay/ios/RazorpayCheckout.m
++++ b/node_modules/react-native-razorpay/ios/RazorpayCheckout.m
+@@ -13,12 +13,12 @@
+ 
+ typedef RazorpayCheckout Razorpay;
+ 
+-@interface RazorpayCheckout () <RazorpayPaymentCompletionProtocolWithData,
++@interface RNRazorpayCheckout () <RazorpayPaymentCompletionProtocolWithData,
+ ExternalWalletSelectionProtocol>
+ 
+ @end
+ 
+-@implementation RazorpayCheckout
++@implementation RNRazorpayCheckout
+ 
+ RCT_EXPORT_MODULE()
+ 
