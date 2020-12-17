@@ -54,6 +54,8 @@ const NavigationRouteNames = {
     CERTIFICATION_COMPLETED_VIEW: 'certification_completed_view',
     SUBJECTS_LIST: 'subjects_list',
     PRICE_MATRIX: 'price_matrix',
+    VIEW_SCHEDULE: 'view_schedule',
+    UPDATE_SCHEDULE: 'update_schedule',
   },
 };
 

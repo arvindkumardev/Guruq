@@ -34,8 +34,8 @@ function Profile() {
     { name: 'Bank Details', icon: Images.bank },
   ]);
   const [myStudyData, setMyStudyData] = useState([
-    { name: 'Add Study Area', icon: Images.personal },
-    { name: 'Modify Study Area', icon: Images.home },
+    { name: 'View Schedule', icon: Images.calendar },
+    { name: 'Update Schedule', icon: Images.calendar },
   ]);
   const [bookingData, setBookingData] = useState([{ name: 'Purchased History', icon: Images.personal }]);
   const [myClassesData, setMyClassesData] = useState([
@@ -92,6 +92,10 @@ function Profile() {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
         label: 'Experience Details',
       });
+    } else if (item.name === 'View Schedule') {
+      navigation.navigate(routeNames.TUTOR.VIEW_SCHEDULE);
+    } else if (item.name === 'Update Schedule') {
+      navigation.navigate(routeNames.TUTOR.UPDATE_SCHEDULE);
     } else {
       return null;
     }
@@ -174,7 +178,7 @@ function Profile() {
         <View>
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-            style={[styles.userMenuParentView, , { height: 60 }]}>
+            style={[styles.userMenuParentView, , { height: RfH(60) }]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
 
             <View style={styles.menuItemParentView}>
