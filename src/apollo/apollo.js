@@ -1,13 +1,11 @@
 import { ApolloClient, createHttpLink, InMemoryCache, split } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-
-import { setContext } from '@apollo/client/link/context';
-
 import apolloLogger from 'apollo-link-logger';
 import { getToken } from '../utils/helpers';
 
-// const GRAPHQL_ENDPOINT = 'http://10.0.0.5:5000/graphql';
+// const GRAPHQL_ENDPOINT = 'http://10.0.0.9:5000/graphql';
 const GRAPHQL_ENDPOINT = 'http://apiv2.guruq.in/graphql';
 
 let apolloClient = null;

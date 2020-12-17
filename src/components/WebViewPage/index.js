@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
-import { ScreenHeader } from '../index';
 import { getToken } from '../../utils/helpers';
+import { ScreenHeader } from '../index';
 
-const WebViewPages = (props) => {
+const WebViewPage = (props) => {
   const { route } = props;
 
   const url = route?.params?.url;
   const label = route?.params?.label;
 
   const [token, setToken] = useState();
+  const [injectJS, setInjectJS] = useState('');
+
+  // useEffect(() => {
+  //   getToken().then((tk) => setToken(tk));
+  // });
 
   useEffect(() => {
-    getToken().then((tk) => setToken(tk));
+    getToken().then((tk) => {
+      setInjectJS(`(function(){     
+        window.localStorage.setItem('authToken', '${tk}');
+        window.location = '${url}/${token}';})();`);
+      setToken(tk);
+    });
   });
 
   const onMessage = (payload) => {
@@ -25,10 +35,10 @@ const WebViewPages = (props) => {
       <ScreenHeader label={label} homeIcon />
       {token && (
         <WebView
-          source={{ uri: `${url}/${token}` }}
+          source={{ uri: `http://dashboardv2.guruq.in/embed.html` }}
           javaScriptEnabled
           domStorageEnabled
-          // injectedJavaScript={INJECTED_JAVASCRIPT}
+          injectedJavaScript={injectJS}
           onMessage={onMessage}
         />
       )}
@@ -36,4 +46,4 @@ const WebViewPages = (props) => {
   );
 };
 
-export default WebViewPages;
+export default WebViewPage;

@@ -1,12 +1,12 @@
-import { Image, Text, View } from 'react-native';
 import React from 'react';
+import { Text, View } from 'react-native';
 
-function CertificationCompletedView() {
+const CertificationCompletedView = (props) => {
   return (
     <View>
       <Text>Certification Completed</Text>
     </View>
   );
-}
+};
 
 export default CertificationCompletedView;

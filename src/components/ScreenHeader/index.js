@@ -1,16 +1,16 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable import/no-cycle */
-import React from 'react';
-import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Images, Colors } from '../../theme';
-import { RfH, RfW } from '../../utils/helpers';
-import commonStyles from '../../theme/styles';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Text, View } from 'react-native';
 import { IconButtonWrapper } from '..';
+import { Colors } from '../../theme';
+import commonStyles from '../../theme/styles';
+import { RfH, RfW } from '../../utils/helpers';
 import BackArrow from '../BackArrow';
 
-function customRangeSelector(props) {
+const ScreenHeader = (props) => {
   const navigation = useNavigation();
   const {
     style,
@@ -62,9 +62,9 @@ function customRangeSelector(props) {
       {lineVisible && <View style={commonStyles.lineSeparator} />}
     </View>
   );
-}
+};
 
-customRangeSelector.propTypes = {
+ScreenHeader.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   label: PropTypes.string,
   labelStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
@@ -77,7 +77,7 @@ customRangeSelector.propTypes = {
   onRightIconClick: PropTypes.func,
 };
 
-customRangeSelector.defaultProps = {
+ScreenHeader.defaultProps = {
   style: { backgroundColor: Colors.white },
   label: '',
   labelStyle: {},
@@ -90,4 +90,4 @@ customRangeSelector.defaultProps = {
   onRightIconClick: null,
 };
 
-export default customRangeSelector;
+export default ScreenHeader;

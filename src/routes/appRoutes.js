@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import { firebase } from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
-import AsyncStorage from '@react-native-community/async-storage';
-import messaging from '@react-native-firebase/messaging';
-import { firebase } from '@react-native-firebase/app';
-import NavigationRouteNames from './screenNames';
+import React, { useEffect, useState } from 'react';
+import { notificationPayload, tutorDetails } from '../apollo/cache';
+import { firebaseConfig, getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
+import { UserTypeEnum } from '../common/userType.enum';
+import EnterPassword from '../containers/common/login/enterPassword';
 import Login from '../containers/common/login/login';
 import OtpVerification from '../containers/common/login/otpVerification';
 import SetPassword from '../containers/common/login/setPassword';
 import SignUp from '../containers/common/login/signUp';
-import EnterPassword from '../containers/common/login/enterPassword';
-import UserTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
-import SplashScreen from '../containers/common/splashScreen/splashScreen';
 import GettingStarted from '../containers/common/onboarding/gettingStarted';
-import { UserTypeEnum } from '../common/userType.enum';
+import SplashScreen from '../containers/common/splashScreen/splashScreen';
+import UserTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
+import CertificationCompletedView from '../containers/tutor/certficationProcess/certificationCompletedView';
+import CertificationProcessView from '../containers/tutor/certficationProcess/certificationProcessView';
+import { TutorCertificationStageEnum } from '../containers/tutor/enums';
+import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
+import NavigationRouteNames from './screenNames';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
-import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
-import { firebaseConfig, getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
-import { notificationPayload, tutorDetails } from '../apollo/cache';
-import { TutorCertificationStageEnum } from '../containers/tutor/enums';
-import CertificationCompletedView from '../containers/tutor/certficationCompleted/certificationCompletedView';
-import WebViewPages from '../containers/tutor/profile/webViewPages';
 
 const Stack = createStackNavigator();
 
@@ -91,7 +91,7 @@ const AppStack = (props) => {
         <>
           <Stack.Screen
             name={NavigationRouteNames.WEB_VIEW}
-            component={WebViewPages}
+            component={CertificationProcessView}
             options={{ headerShown: false }}
           />
         </>
