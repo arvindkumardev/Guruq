@@ -11,6 +11,8 @@ import SubjectList from '../containers/tutor/profile/mySubjects/subjectList';
 import PriceMatrix from '../containers/tutor/profile/mySubjects/priceMatrix';
 import ViewSchedule from '../containers/tutor/profile/scheduler/viewSchedule';
 import UpdateSchedule from '../containers/tutor/profile/scheduler/updateSchedule';
+import PostTutionNeeds from '../containers/tutionNeeds/postTutionNeeds';
+import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetails';
 
 const Stack = createStackNavigator();
 
@@ -61,6 +63,16 @@ export const getTutorRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.UPDATE_SCHEDULE}
         component={UpdateSchedule}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.POST_TUTION_NEEDS}
+        component={PostTutionNeeds}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.POST_TUTION_NEED_DETAILS}
+        component={PostTutionNeedDetails}
         options={{ headerShown: false }}
       />
     </>

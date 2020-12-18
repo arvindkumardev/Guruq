@@ -8,10 +8,14 @@ import { RfH, RfW } from '../../../../utils/helpers';
 import { Colors } from '../../../../theme';
 import PriceMatrixView from './components/priceMatrixView';
 import WhyMeView from './components/whyMeView';
+import Loader from '../../../../components/Loader';
 
-function PriceMatrix() {
+function PriceMatrix(props) {
   const [isPriceMatrix, setIsPriceMatrix] = useState(true);
   const [isWhyMe, setIsWhyMe] = useState(false);
+  const { route } = props;
+
+  const offering = route?.params?.offering;
 
   const onPriceMatrixClicked = () => {
     setIsPriceMatrix(true);
@@ -21,8 +25,14 @@ function PriceMatrix() {
     setIsPriceMatrix(false);
     setIsWhyMe(true);
   };
+
+  const showLoader = (loading) => {
+    return loading;
+  };
+
   return (
     <View style={{ paddingHorizontal: RfW(16), backgroundColor: Colors.white, flex: 1 }}>
+      <Loader isLoading={showLoader()} />
       <ScreenHeader homeIcon />
       <View>
         <View style={[commonStyles.horizontalChildrenCenterView]}>
@@ -45,8 +55,8 @@ function PriceMatrix() {
         </View>
       </View>
       <View style={{ flex: 1 }}>
-        {isPriceMatrix && <PriceMatrixView />}
-        {isWhyMe && <WhyMeView />}
+        {isPriceMatrix && <PriceMatrixView selectedOffering={offering} showLoader={() => showLoader()} />}
+        {isWhyMe && <WhyMeView selectedOffering={offering} showLoader={() => showLoader()} />}
       </View>
     </View>
   );
