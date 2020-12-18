@@ -53,7 +53,7 @@ function BottomTab(props) {
           active={activeTab === 4}
           onPress={() => changeTab(4)}>
           <Image
-            source={activeTab === 4 ? Images.performance : Images.wallet}
+            source={activeTab === 4 ? Images.wallet_active : Images.wallet}
             style={styles.iconStyle}
             resizeMode="contain"
           />

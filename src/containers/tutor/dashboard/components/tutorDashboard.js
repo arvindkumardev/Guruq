@@ -278,7 +278,13 @@ function TutorDashboard(props) {
               </Text>
             </View>
             <View>
-              <Image
+              <IconButtonWrapper
+                iconHeight={RfH(32)}
+                iconWidth={RfH(32)}
+                iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
+                styling={{ borderRadius: RfH(32) }}
+              />
+              {/* <Image
                 source={Images.user}
                 style={{
                   height: RfH(32),
@@ -288,7 +294,7 @@ function TutorDashboard(props) {
                   borderBottomLeftRadius: RfH(32),
                   borderBottomRightRadius: RfH(32),
                 }}
-              />
+              /> */}
             </View>
           </View>
 

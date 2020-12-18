@@ -2,30 +2,30 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-plusplus */
-import { Dimensions, FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Icon, Thumbnail } from 'native-base';
-import Swiper from 'react-native-swiper';
-import moment from 'moment';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import moment from 'moment';
+import { Icon } from 'native-base';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Images } from '../../../../theme';
-import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
-import { IconButtonWrapper } from '../../../../components';
+import Swiper from 'react-native-swiper';
 import { offeringsMasterData, studentDetails, userDetails } from '../../../../apollo/cache';
-import NavigationRouteNames from '../../../../routes/screenNames';
-import Fonts from '../../../../theme/fonts';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import StudentOfferingModal from './studentOfferingModal';
-import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
-import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
+import { IconButtonWrapper } from '../../../../components';
 import Loader from '../../../../components/Loader';
-import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
+import NavigationRouteNames from '../../../../routes/screenNames';
+import { Colors, Images } from '../../../../theme';
+import Fonts from '../../../../theme/fonts';
+import commonStyles from '../../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../booking.query';
+import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
+import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
+import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
+import StudentOfferingModal from './studentOfferingModal';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
@@ -828,8 +828,14 @@ function StudentDashboard(props) {
               <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
             </TouchableOpacity>
           </View>
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
+              <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{ marginLeft: RfW(16) }}
+              onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
               <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
             </TouchableOpacity>
           </View>
@@ -859,7 +865,13 @@ function StudentDashboard(props) {
               {/* </View> */}
             </View>
             <View>
-              <Image
+              <IconButtonWrapper
+                iconHeight={RfH(32)}
+                iconWidth={RfH(32)}
+                iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
+                styling={{ borderRadius: RfH(32) }}
+              />
+              {/* <Image
                 source={Images.user}
                 style={{
                   height: RfH(32),
@@ -869,7 +881,7 @@ function StudentDashboard(props) {
                   borderBottomLeftRadius: RfH(32),
                   borderBottomRightRadius: RfH(32),
                 }}
-              />
+              /> */}
             </View>
           </View>
 

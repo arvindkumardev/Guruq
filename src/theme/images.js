@@ -23,10 +23,12 @@ const Images = {
   classes: require('../assets/images/classes.png'),
   tutor_tab: require('../assets/images/tutor_tab.png'),
   profile: require('../assets/images/profile.png'),
+
   cbse: require('../assets/images/cbse.png'),
   icse: require('../assets/images/icse.png'),
   ib: require('../assets/images/ib.png'),
   igcse: require('../assets/images/igcse.png'),
+
   heartFilled: require('../assets/images/heart-filled.png'),
   heart: require('../assets/images/heart.png'),
   bell: require('../assets/images/bell.png'),
@@ -72,7 +74,6 @@ const Images = {
   school_education: require('../assets/images/school_education.png'),
   language: require('../assets/images/language.png'),
   golden_star: require('../assets/images/golden_star.png'),
-  understanding: require('../assets/images/understanding.png'),
   thumb_range: require('../assets/images/thumb_range.png'),
   stats: require('../assets/images/stats.png'),
   methodology: require('../assets/images/methodology.png'),

@@ -5,11 +5,12 @@ import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOp
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import initializeApollo from '../../../apollo/apollo';
 import { isLoggedIn, tutorDetails, userDetails, userType } from '../../../apollo/cache';
+import { IconButtonWrapper } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
 import { default as NavigationRouteNames, default as routeNames } from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { clearAllLocalStorage, removeToken, RfH, RfW } from '../../../utils/helpers';
+import { clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 
 function Profile() {
@@ -172,7 +173,14 @@ function Profile() {
             justifyContent: 'center',
           }}>
           <View style={styles.userDetailsView}>
-            <Image style={styles.userIcon} source={Images.user} />
+            {/* <Image style={styles.userIcon} source={Images.user} /> */}
+            <IconButtonWrapper
+              style={styles.userIcon}
+              iconHeight={RfH(64)}
+              iconWidth={RfH(64)}
+              iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
+              styling={{ borderRadius: RfH(64) }}
+            />
             <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16) }}>
               <Text style={styles.userName}>
                 {userInfo?.firstName} {userInfo?.lastName}
