@@ -3,22 +3,22 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-const-assign */
 /* eslint-disable no-plusplus */
-import { FlatList, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import commonStyles from '../../../theme/styles';
-import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
-import { Colors, Fonts, Images } from '../../../theme';
 import BackArrow from '../../../components/BackArrow';
-import { SCHEDULE_CLASS } from '../class.mutation';
-import { GET_SCHEDULED_CLASSES } from '../booking.query';
 import Loader from '../../../components/Loader';
+import { Colors, Fonts, Images } from '../../../theme';
+import commonStyles from '../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
+import { GET_SCHEDULED_CLASSES } from '../booking.query';
+import { SCHEDULE_CLASS } from '../class.mutation';
 
 function scheduleClass(props) {
   const navigation = useNavigation();
@@ -135,7 +135,7 @@ function scheduleClass(props) {
                 {classData?.tutor?.contactDetail?.firstName} {classData?.tutor?.contactDetail?.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUQS{classData?.tutor.id}
+                T{classData?.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 {classData?.onlineClass ? 'Online' : 'Offline'} Classes
@@ -213,12 +213,12 @@ function scheduleClass(props) {
       const interval = 1;
       const timeArray = [];
       timeArray.push({
-        startTime: new Date(item.startDate).setUTCMinutes(new Date(item.startDate).getUTCMinutes() + 15),
+        startTime: new Date(item.startDate).setMinutes(new Date(item.startDate).getMinutes() + 15),
       });
-      let endTime = new Date(item.startDate).setUTCHours(new Date(item.startDate).getUTCHours() + interval);
+      let endTime = new Date(item.startDate).setHours(new Date(item.startDate).getHours() + interval);
       while (endTime < new Date(item.endDate)) {
-        timeArray.push({ startTime: new Date(endTime).setUTCMinutes(new Date(endTime).getUTCMinutes() + 15) });
-        endTime = new Date(endTime).setUTCMinutes(new Date(endTime).getUTCMinutes() + 15);
+        timeArray.push({ startTime: new Date(endTime).setMinutes(new Date(endTime).getMinutes() + 15) });
+        endTime = new Date(endTime).setMinutes(new Date(endTime).getMinutes() + 15);
       }
       setStartTimes(timeArray);
       const newArray = [];

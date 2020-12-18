@@ -25,21 +25,13 @@ function bookingConfirmed() {
   const [orderItems, setOrderItems] = useState([]);
 
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
+    fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
       setIsEmpty(true);
     },
     onCompleted: (data) => {
       if (data && data?.searchOrderItems && data?.searchOrderItems.edges.length > 0) {
-        // const orderList = [];
-        // for (const booking of data.searchBookings) {
-        //   for (const orderItem of booking.orderItems) {
-        //     orderList.push({ booking, orderItem });
-        //   }
-        // }
         setOrderItems(data?.searchOrderItems.edges);
         setIsEmpty(false);
       } else {
@@ -122,7 +114,7 @@ function bookingConfirmed() {
                 T{item.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online' : 'Offline'} Individual Class
+                {item.onlineClass ? 'Online' : 'Offline'} - Individual Class
               </Text>
             </View>
           </View>

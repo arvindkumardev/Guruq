@@ -1,39 +1,33 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-nested-ternary */
-import { Text, View, FlatList, ScrollView, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import ProgressCircle from 'react-native-progress-circle';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
 import { Button, Icon } from 'native-base';
-import CalendarStrip from 'react-native-calendar-strip';
-import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import ProgressCircle from 'react-native-progress-circle';
 import { Rating } from 'react-native-ratings';
-import commonStyles from '../../../theme/styles';
-import { Colors, Images } from '../../../theme';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { CompareModal, DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
+import BackArrow from '../../../components/BackArrow';
 import Loader from '../../../components/Loader';
-import { GET_AVERAGE_RATINGS, GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS, SEARCH_REVIEW } from '../tutor-query';
-import styles from './styles';
+import { Colors, Images } from '../../../theme';
+import Fonts from '../../../theme/fonts';
+import commonStyles from '../../../theme/styles';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import {
+  getSaveData,
+  getUserImageUrl,
+  removeData,
   RfH,
   RfW,
   storeData,
-  titleCaseIfExists,
-  getSaveData,
-  removeData,
-  getUserImageUrl,
-  getSubjectIcons,
+  titleCaseIfExists
 } from '../../../utils/helpers';
-import { CompareModal, DateSlotSelectorModal, IconButtonWrapper, Ratings } from '../../../components';
-import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import routeNames from '../../../routes/screenNames';
-import Fonts from '../../../theme/fonts';
-import ClassModeSelectModal from './components/classModeSelectModal';
-import BackArrow from '../../../components/BackArrow';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
-import { GET_AVAILABILITY } from '../class.query';
-import { ADD_TO_CART } from '../booking.mutation';
-import { getBoxColor } from '../../../theme/colors';
+import { GET_AVERAGE_RATINGS, GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS, SEARCH_REVIEW } from '../tutor-query';
+import ClassModeSelectModal from './components/classModeSelectModal';
+import styles from './styles';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
@@ -907,7 +901,7 @@ function tutorDetails(props) {
             <Text style={styles.tutorName}>
               {tutorData?.contactDetail?.firstName} {tutorData?.contactDetail?.lastName}
             </Text>
-            <Text style={styles.tutorDetails}>GURUQT{tutorData?.id}</Text>
+            <Text style={styles.tutorDetails}>T{tutorData?.id}</Text>
             {tutorData?.educationDetails?.length > 0 && (
               <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
                 {titleCaseIfExists(tutorData?.educationDetails[0]?.degree?.degreeLevel)}

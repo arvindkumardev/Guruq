@@ -1,25 +1,24 @@
 /* eslint-disable no-restricted-syntax */
-import { Alert, FlatList, Modal, ScrollView, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { Button, CheckBox } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import MapView, { Marker } from 'react-native-maps';
 import { useLazyQuery, useMutation } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
-import { Colors, Images } from '../../../theme';
+import { Button, CheckBox } from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, Modal, ScrollView, Text, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
+import BackArrow from '../../../components/BackArrow';
+import Loader from '../../../components/Loader';
+import NavigationRouteNames from '../../../routes/screenNames';
+import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import NavigationRouteNames from '../../../routes/screenNames';
-
-import styles from '../../student/tutorListing/styles';
-import BackArrow from '../../../components/BackArrow';
+import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SCHEDULE_CLASS } from '../../student/booking.mutation';
-import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import { GET_CLASS_DETAILS } from '../../student/class.query';
-import Loader from '../../../components/Loader';
+import styles from '../../student/tutorListing/styles';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -176,12 +175,12 @@ function ScheduledClassDetails(props) {
       const interval = 1;
       const timeArray = [];
       timeArray.push({
-        startTime: new Date(item.startDate).setUTCMinutes(new Date(item.startDate).getUTCMinutes() + 15),
+        startTime: new Date(item.startDate).setMinutes(new Date(item.startDate).getMinutes() + 15),
       });
-      let endTime = new Date(item.startDate).setUTCHours(new Date(item.startDate).getUTCHours() + interval);
+      let endTime = new Date(item.startDate).setHours(new Date(item.startDate).getHours() + interval);
       while (endTime < new Date(item.endDate)) {
-        timeArray.push({ startTime: new Date(endTime).setUTCMinutes(new Date(endTime).getUTCMinutes() + 15) });
-        endTime = new Date(endTime).setUTCMinutes(new Date(endTime).getUTCMinutes() + 15);
+        timeArray.push({ startTime: new Date(endTime).setMinutes(new Date(endTime).getMinutes() + 15) });
+        endTime = new Date(endTime).setMinutes(new Date(endTime).getMinutes() + 15);
       }
       setStartTimes(timeArray);
       const newArray = [];
@@ -347,7 +346,7 @@ function ScheduledClassDetails(props) {
             <Text style={commonStyles.headingPrimaryText}>
               {classData?.tutor?.contactDetail?.firstName} {classData?.tutor?.contactDetail?.lastName}
             </Text>
-            <Text style={commonStyles.mediumMutedText}>GURUQT{classData?.tutor?.id}</Text>
+            <Text style={commonStyles.mediumMutedText}>T{classData?.tutor?.id}</Text>
           </View>
         </View>
 
@@ -451,8 +450,8 @@ function ScheduledClassDetails(props) {
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
             <Text style={commonStyles.mediumMutedText}>
-              GURUQC{new Date().getUTCFullYear().toString().substring(2, 4)}
-              {new Date().getUTCMonth()}
+              GURUQC{new Date().getFullYear().toString().substring(2, 4)}
+              {new Date().getMonth()}
               {classDetails?.classData?.id}
             </Text>
           </View>

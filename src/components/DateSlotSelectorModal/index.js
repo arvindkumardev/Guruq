@@ -1,22 +1,21 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable radix */
 /* eslint-disable react/no-array-index-key */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Modal, View, FlatList, Text, TouchableWithoutFeedback } from 'react-native';
+import { useLazyQuery } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
+import { Button, Picker } from 'native-base';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Modal, Text, TouchableWithoutFeedback, View } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Button, Picker } from 'native-base';
-import { timing } from 'react-native-reanimated';
-import { useLazyQuery } from '@apollo/client';
-import moment from 'moment';
-import { Colors, Images } from '../../theme';
-import { RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import commonStyles from '../../theme/styles';
 import { GET_AVAILABILITY } from '../../containers/student/class.query';
+import { Colors, Images } from '../../theme';
+import commonStyles from '../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { RfH, RfW } from '../../utils/helpers';
 
 const dateSlotModal = (props) => {
   const navigation = useNavigation();
@@ -74,10 +73,10 @@ const dateSlotModal = (props) => {
   };
 
   const renderSlots = (item, index) => {
-    const startHours = new Date(item.startDate).getUTCHours();
-    const startMinutes = new Date(item.startDate).getUTCMinutes();
-    const endHours = new Date(item.endDate).getUTCHours();
-    const endMinutes = new Date(item.endDate).getUTCMinutes();
+    const startHours = new Date(item.startDate).getHours();
+    const startMinutes = new Date(item.startDate).getMinutes();
+    const endHours = new Date(item.endDate).getHours();
+    const endMinutes = new Date(item.endDate).getMinutes();
     return (
       <TouchableWithoutFeedback onPress={() => selectedClassSlot(item, index)}>
         <View
@@ -209,7 +208,7 @@ const dateSlotModal = (props) => {
                 {times.map((obj, i) => {
                   return (
                     <Picker.Item
-                      label={`${new Date(obj.startTime).getUTCHours()}:${new Date(obj.startTime).getUTCMinutes()}`}
+                      label={`${new Date(obj.startTime).getHours()}:${new Date(obj.startTime).getMinutes()}`}
                       value={obj.startTime}
                       key={i}
                     />
@@ -218,10 +217,10 @@ const dateSlotModal = (props) => {
               </Picker>
               <Text style={{ marginRight: RfW(16) }}>
                 {`${new Date(
-                  new Date(selectedTime).setUTCHours(new Date(selectedTime).getUTCHours() + 1)
-                ).getUTCHours()}:${new Date(
-                  new Date(selectedTime).setUTCHours(new Date(selectedTime).getUTCHours() + 1)
-                ).getUTCMinutes()}`}
+                  new Date(selectedTime).setHours(new Date(selectedTime).getHours() + 1)
+                ).getHours()}:${new Date(
+                  new Date(selectedTime).setHours(new Date(selectedTime).getHours() + 1)
+                ).getMinutes()}`}
               </Text>
             </View>
           </View>
