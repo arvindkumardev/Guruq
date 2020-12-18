@@ -80,6 +80,7 @@ function SubjectList() {
         showRightIcon
         rightIcon={Images.moreInformation}
         horizontalPadding={RfW(16)}
+        onRightIconClick={() => navigation.navigate(routeNames.POST_TUTION_NEEDS)}
       />
       <View style={commonStyles.verticallyStretchedItemsView}>
         <FlatList
