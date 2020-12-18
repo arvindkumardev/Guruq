@@ -1,19 +1,19 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-plusplus */
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Modal, View, FlatList, Text, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { Textarea, Button } from 'native-base';
-import { AirbnbRating, Rating } from 'react-native-ratings';
 import { useMutation } from '@apollo/client';
-import { Colors, Images } from '../../theme';
-import { RfH, RfW } from '../../utils/helpers';
+import { useNavigation } from '@react-navigation/native';
+import { Button, Textarea } from 'native-base';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { FlatList, Modal, ScrollView, Text, View } from 'react-native';
+import { AirbnbRating } from 'react-native-ratings';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { IconButtonWrapper } from '..';
+import { ADD_REVIEW } from '../../containers/student/tutor-mutation';
+import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { ADD_REVIEW } from '../../containers/student/tutor-mutation';
+import { RfH, RfW } from '../../utils/helpers';
 import Loader from '../Loader';
 
 const ReviewModal = (props) => {
@@ -122,7 +122,7 @@ const ReviewModal = (props) => {
             <IconButtonWrapper
               iconWidth={RfW(96)}
               iconHeight={RfH(96)}
-              iconImage={Images.kushal}
+              // iconImage={}
               styling={{ borderRadius: 8 }}
             />
             <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}>

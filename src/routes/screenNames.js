@@ -13,10 +13,10 @@ const NavigationRouteNames = {
   WEB_VIEW_PAGES: 'web_view_pages',
   TUTION_NEEDS_LISTING: 'tution_needs_listing',
   TUTION_NEEDS_HISTORY: 'tution_needs_history',
-
   ONLINE_CLASS: 'online_class1',
 
   WEB_VIEW: 'web_view',
+  NOTIFICATIONS: 'notifications',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',

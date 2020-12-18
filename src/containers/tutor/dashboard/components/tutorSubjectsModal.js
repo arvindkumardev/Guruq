@@ -1,15 +1,14 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Modal, Text, View, FlatList } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { Colors, Fonts, Images } from '../../../../theme';
-import { getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { FlatList, Modal, Text, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { IconButtonWrapper } from '../../../../components';
-import NavigationRouteNames from '../../../../routes/screenNames';
+import { Colors, Fonts, Images } from '../../../../theme';
 import { getBoxColor } from '../../../../theme/colors';
 import commonStyles from '../../../../theme/styles';
+import { getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
 
 const TutorSubjectsModal = (props) => {
   const navigation = useNavigation();
@@ -84,7 +83,7 @@ const TutorSubjectsModal = (props) => {
           />
           <FlatList
             showsHorizontalScrollIndicator={false}
-            numColumns={3}
+            numColumns={2}
             data={subjects}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}

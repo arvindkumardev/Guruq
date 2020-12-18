@@ -1,9 +1,8 @@
-import { Text, Image } from 'react-native';
+import { Button, Footer, FooterTab } from 'native-base';
 import React from 'react';
-import { Button, Footer, FooterTab, Thumbnail } from 'native-base';
+import { Image, Text } from 'react-native';
 import { Colors, Images } from '../../../../../theme';
 import styles from './styles';
-import { RfH, RfW } from '../../../../../utils/helpers';
 
 function BottomTab(props) {
   const { activeTab, changeTab } = props;
@@ -58,7 +57,7 @@ function BottomTab(props) {
             style={styles.iconStyle}
             resizeMode="contain"
           />
-          <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Performance</Text>
+          <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Wallet</Text>
         </Button>
         <Button
           style={{ backgroundColor: Colors.white }}

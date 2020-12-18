@@ -1,20 +1,16 @@
-import { FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View, ScrollView } from 'react-native';
-import React, { useState } from 'react';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import { useReactiveVar } from '@apollo/client';
-import commonStyles from '../../../theme/styles';
-import { Colors, Images } from '../../../theme';
-import { clearAllLocalStorage, removeData, removeToken, RfH, RfW, storeData } from '../../../utils/helpers';
-import IconWrapper from '../../../components/IconWrapper';
-import styles from './styles';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { isLoggedIn, tutorDetails, userDetails, userType } from '../../../apollo/cache';
-
-import routeNames from '../../../routes/screenNames';
-import Fonts from '../../../theme/fonts';
-import apolloClient from '../../../apollo/apollo';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import initializeApollo from '../../../apollo/apollo';
+import { isLoggedIn, tutorDetails, userDetails, userType } from '../../../apollo/cache';
+import IconWrapper from '../../../components/IconWrapper';
+import { default as NavigationRouteNames, default as routeNames } from '../../../routes/screenNames';
+import { Colors, Images } from '../../../theme';
+import commonStyles from '../../../theme/styles';
+import { clearAllLocalStorage, removeToken, RfH, RfW } from '../../../utils/helpers';
+import styles from './styles';
 
 function Profile() {
   const navigation = useNavigation();
@@ -124,31 +120,47 @@ function Profile() {
     );
   };
 
-  const renderActionIcons = () => {
-    return (
-      <View style={[styles.userMenuParentView, { justifyContent: 'space-evenly', alignItems: 'center' }]}>
-        <View
-          style={[styles.actionIconParentView, { flex: 0.5, borderRightColor: Colors.darkGrey, borderRightWidth: 1 }]}>
-          <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.bell} />
-          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Notification</Text>
-        </View>
-        <View style={[styles.actionIconParentView, { flex: 0.5 }]}>
-          <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.qpoint} />
-          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Q Points</Text>
-        </View>
-      </View>
-    );
-  };
+  // const renderActionIcons = () => {
+  //   return (
+  //     <View style={[styles.userMenuParentView, { justifyContent: 'space-evenly', alignItems: 'center' }]}>
+  //       <View
+  //         style={[styles.actionIconParentView, { flex: 0.5, borderRightColor: Colors.darkGrey, borderRightWidth: 1 }]}>
+  //         <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.bell} />
+  //         <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Notification</Text>
+  //       </View>
+  //       <View style={[styles.actionIconParentView, { flex: 0.5 }]}>
+  //         <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.qpoint} />
+  //         <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Q Points</Text>
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
       <StatusBar barStyle="dark-content" />
+
+      <View
+        style={{
+          height: 44,
+          paddingHorizontal: RfW(16),
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <View style={{ flexDirection: 'row' }} />
+        <View>
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
+            <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <ScrollView
-        stickyHeaderIndices={[0]}
+        // stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         // onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}>
-        <View style={{ height: 44 }} />
         <View style={{ paddingHorizontal: RfW(16), height: 54 }}>
           <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
         </View>
@@ -168,13 +180,13 @@ function Profile() {
               <Text style={styles.userMobDetails}>
                 +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
               </Text>
-              <Text style={styles.userMobDetails}>GURUQS{userInfo?.id}</Text>
+              <Text style={styles.userMobDetails}>T{userInfo?.id}</Text>
             </View>
           </View>
         </View>
-        <View style={commonStyles.lineSeparator} />
-        <View style={{ paddingVertical: RfH(16) }}>{renderActionIcons()}</View>
-        <View style={commonStyles.lineSeparator} />
+        {/* <View style={commonStyles.lineSeparator} /> */}
+        {/* <View style={{ paddingVertical: RfH(16) }}>{renderActionIcons()}</View> */}
+        <View style={commonStyles.blankGreyViewSmall} />
         <View>
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
@@ -204,9 +216,7 @@ function Profile() {
             />
           </SafeAreaView>
         )}
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
         <TouchableWithoutFeedback onPress={() => setIsStudyMenuOpen(!isStudyMenuOpen)}>
           <View style={styles.userMenuParentView}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
@@ -233,9 +243,7 @@ function Profile() {
             />
           </SafeAreaView>
         )}
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
         <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
           <View style={styles.userMenuParentView}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
@@ -262,9 +270,7 @@ function Profile() {
             />
           </SafeAreaView>
         )}
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
         <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.SUBJECTS_LIST)}>
           <View style={styles.userMenuParentView}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
@@ -281,6 +287,9 @@ function Profile() {
             />
           </View>
         </TouchableWithoutFeedback>
+
+        <View style={commonStyles.blankGreyViewSmall} />
+
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
           <View style={styles.menuItemParentView}>
@@ -298,7 +307,7 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
 
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+        <View style={commonStyles.blankGreyViewSmall} />
 
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
@@ -316,7 +325,8 @@ function Profile() {
             iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
           />
         </View>
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+        <View style={commonStyles.blankGreyViewSmall} />
 
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
@@ -334,9 +344,7 @@ function Profile() {
             iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
           />
         </View>
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
         {isInformationMenuOpen && (
           <SafeAreaView>
             <FlatList
@@ -347,7 +355,6 @@ function Profile() {
             />
           </SafeAreaView>
         )}
-
         <View style={styles.userMenuParentView}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
           <View style={styles.menuItemParentView}>
@@ -365,7 +372,8 @@ function Profile() {
           </TouchableWithoutFeedback>
         </View>
 
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+        <View style={commonStyles.blankGreyViewSmall} />
+
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />
           <View style={styles.menuItemParentView}>
@@ -388,7 +396,6 @@ function Profile() {
         </TouchableWithoutFeedback> */}
         </View>
         {/* <View style={commonStyles.lineSeparator} /> */}
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         <View
           style={{
