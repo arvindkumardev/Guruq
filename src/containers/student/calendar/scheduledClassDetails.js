@@ -86,12 +86,12 @@ function ScheduledClassDetails(props) {
   const renderAttendees = (item) => {
     return (
       <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
-        <View style={commonStyles.horizontalChildrenView}>
+        <View style={[commonStyles.horizontalChildrenView]}>
           <IconButtonWrapper
             iconImage={getStudentImageUrl(item?.profileImage?.filename, item?.contactDetail?.gender, item.id)}
-            iconHeight={RfH(45)}
-            iconWidth={RfH(45)}
-            styling={{ borderRadius: RfH(22.5) }}
+            iconHeight={RfH(48)}
+            iconWidth={RfH(48)}
+            styling={{ borderRadius: RfH(8) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.headingPrimaryText}>
@@ -318,8 +318,8 @@ function ScheduledClassDetails(props) {
                       ]}>
                       <IconButtonWrapper
                         iconImage={Images.video}
-                        iconHeight={RfH(16)}
-                        iconWidth={RfW(16)}
+                        iconHeight={RfH(20)}
+                        iconWidth={RfW(20)}
                         styling={{ alignSelf: 'center' }}
                       />
                       <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
@@ -341,7 +341,7 @@ function ScheduledClassDetails(props) {
             iconImage={getTutorImage(classData?.tutor)}
             iconHeight={RfH(48)}
             iconWidth={RfH(48)}
-            styling={{ borderRadius: RfH(48) }}
+            styling={{ borderRadius: RfH(8) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.headingPrimaryText}>
