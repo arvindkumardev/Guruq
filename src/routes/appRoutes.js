@@ -37,6 +37,11 @@ const AppStack = (props) => {
     getFcmToken();
     requestUserPermission();
     initializeNotification();
+    notificationPayload({
+      screen: 'tutor_detail',
+      tutor_id: 38480,
+      offering_id: 249,
+    });
     messaging().onNotificationOpenedApp((remoteMessage) => {
       if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
         notificationPayload(remoteMessage.data);

@@ -1,20 +1,25 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-nested-ternary */
-import { useLazyQuery, useMutation } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
-import { Button, Icon } from 'native-base';
-import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
-import ProgressCircle from 'react-native-progress-circle';
-import { Rating } from 'react-native-ratings';
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { CompareModal, DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
-import BackArrow from '../../../components/BackArrow';
-import Loader from '../../../components/Loader';
-import { Colors, Images } from '../../../theme';
-import Fonts from '../../../theme/fonts';
+import ProgressCircle from 'react-native-progress-circle';
+import { Button, Icon } from 'native-base';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { Rating } from 'react-native-ratings';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
-import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { Colors, Images } from '../../../theme';
+import Loader from '../../../components/Loader';
+import {
+  GET_AVERAGE_RATINGS,
+  GET_FAVOURITE_TUTORS,
+  GET_TUTOR_OFFERINGS,
+  SEARCH_REVIEW,
+  SEARCH_TUTORS,
+} from '../tutor-query';
+import styles from './styles';
 import {
   getSaveData,
   getUserImageUrl,
@@ -22,19 +27,22 @@ import {
   RfH,
   RfW,
   storeData,
-  titleCaseIfExists
+  titleCaseIfExists,
 } from '../../../utils/helpers';
-import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
-import { GET_AVERAGE_RATINGS, GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS, SEARCH_REVIEW } from '../tutor-query';
+import { CompareModal, DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import Fonts from '../../../theme/fonts';
 import ClassModeSelectModal from './components/classModeSelectModal';
-import styles from './styles';
+import BackArrow from '../../../components/BackArrow';
+import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 
 function tutorDetails(props) {
   const navigation = useNavigation();
 
   const { route } = props;
 
-  const tutorData = route?.params?.tutorData;
+  const tutorId = route?.params?.tutorId;
+  const tutorDataObj = route?.params?.tutorData;
   const parentOffering = route?.params?.parentOffering;
   const parentParentOffering = route?.params?.parentParentOffering;
 
@@ -42,6 +50,7 @@ function tutorDetails(props) {
   const [showClassModePopup, setShowClassModePopup] = useState(false);
   const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState({});
+  const [tutorData, setTutorData] = useState({});
 
   const [subjects, setSubjects] = useState([]);
   const [refreshList, setRefreshList] = useState(false);
@@ -72,8 +81,27 @@ function tutorDetails(props) {
     },
   });
 
+  const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setTutorData(data?.searchTutors?.edges[0]);
+      }
+    },
+  });
+
   useEffect(() => {
-    getFavouriteTutors();
+    // getFavouriteTutors();
+    if (tutorId) {
+      console.log('tutorId', tutorId);
+      getTutors({ variables: { searchDto: { certified: true, active: true, id: tutorId } } });
+    } else if (tutorDataObj) {
+      setTutorData(tutorDataObj);
+    }
   }, []);
 
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
@@ -136,22 +164,23 @@ function tutorDetails(props) {
             }
           }
         });
+
+        console.log('subjects', subjects);
         setClassDetails(classData);
-        setSelectedSubject({
-          id: subjects[0].id,
-          name: subjects[0].displayName,
-          offeringId: subjects[0].offeringId,
-        });
+        if (!isEmpty(subjects)) {
+          setSelectedSubject({
+            id: subjects[0].id,
+            name: subjects[0].displayName,
+            offeringId: subjects[0].offeringId,
+          });
+        }
+
         setPriceMatrix(pm);
         setBudgets(sb);
         setRefreshList(!refreshList);
       }
     },
   });
-
-  useEffect(() => {
-    getTutorOffering();
-  }, []);
 
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
@@ -262,18 +291,10 @@ function tutorDetails(props) {
   });
 
   useEffect(() => {
-    searchReview({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
-  }, []);
-
-  useEffect(() => {
-    getAverageRating({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
-  }, []);
-
-  useEffect(() => {
-    if (favouriteTutors) {
+    if (favouriteTutors && !isEmpty(tutorData)) {
       setIsFavourite(favouriteTutors.find((ft) => ft?.tutor?.id === tutorData?.id));
     }
-  }, [favouriteTutors]);
+  }, [favouriteTutors, tutorData]);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -288,8 +309,13 @@ function tutorDetails(props) {
   };
 
   useEffect(() => {
-    checkCompare();
-  }, []);
+    if (!isEmpty(tutorData)) {
+      searchReview({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
+      getAverageRating({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
+      getTutorOffering();
+      checkCompare();
+    }
+  }, [tutorData]);
 
   const addToCompare = async () => {
     let compareArray = [];
@@ -781,263 +807,273 @@ function tutorDetails(props) {
         { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
       ]}>
       <Loader
-        isLoading={loadingFavouriteTutors || loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading}
+        isLoading={
+          loadingFavouriteTutors ||
+          loadingFavouriteTutors ||
+          favouriteLoading ||
+          removeFavouriteLoading ||
+          loadingTutors
+        }
       />
-      <View
-        style={[
-          styles.topView,
-          {
-            backgroundColor: Colors.white,
-            height: RfH(88),
-            paddingTop: RfH(44),
-            paddingHorizontal: RfW(16),
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          },
-        ]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}>
-          <BackArrow action={onBackPress} />
-
-          {hideTutorPersonal && (
+      {!isEmpty(tutorData) && (
+        <>
+          <View
+            style={[
+              styles.topView,
+              {
+                backgroundColor: Colors.white,
+                height: RfH(88),
+                paddingTop: RfH(44),
+                paddingHorizontal: RfW(16),
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              },
+            ]}>
             <View
-              style={[
-                commonStyles.horizontalChildrenView,
-                {
-                  backgroundColor: Colors.white,
-                  paddingHorizontal: RfW(16),
-                  paddingVertical: RfH(8),
-                  justifyContent: 'center',
-                },
-              ]}>
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}>
+              <BackArrow action={onBackPress} />
+
+              {hideTutorPersonal && (
+                <View
+                  style={[
+                    commonStyles.horizontalChildrenView,
+                    {
+                      backgroundColor: Colors.white,
+                      paddingHorizontal: RfW(16),
+                      paddingVertical: RfH(8),
+                      justifyContent: 'center',
+                    },
+                  ]}>
+                  <IconButtonWrapper
+                    iconWidth={RfW(24)}
+                    iconHeight={RfH(24)}
+                    iconImage={getTutorImage(tutorData)}
+                    imageResizeMode="cover"
+                    styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
+                  />
+                  <Text
+                    style={[
+                      styles.tutorName,
+                      {
+                        marginLeft: RfW(8),
+                        alignSelf: 'center',
+                      },
+                    ]}>
+                    {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
+                  </Text>
+                </View>
+              )}
+            </View>
+
+            <View style={commonStyles.horizontalChildrenStartView}>
+              <TouchableWithoutFeedback onPress={() => addToCompare()}>
+                <View
+                  style={{
+                    height: RfH(44),
+                    width: RfW(44),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <IconButtonWrapper
+                    iconWidth={RfW(16)}
+                    iconHeight={RfH(16)}
+                    iconImage={
+                      compareData.some((item) => item.id === tutorData.id) ? Images.checkbox_selected : Images.checkbox
+                    }
+                    styling={{ marginHorizontal: RfW(16) }}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+
+              <TouchableWithoutFeedback onPress={() => Alert.alert('Add to Favourite')}>
+                <View
+                  style={{
+                    height: RfH(44),
+                    width: RfW(44),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <IconButtonWrapper
+                    iconWidth={RfW(16)}
+                    iconHeight={RfH(16)}
+                    iconImage={isFavourite ? Images.heartFilled : Images.heart}
+                    styling={{ marginHorizontal: RfW(16) }}
+                    submitFunction={() => markFavouriteTutor()}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+
+              {/* <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} /> */}
+            </View>
+          </View>
+          <ScrollView
+            // stickyHeaderIndices={[0]}
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={16}
+            onScroll={(event) => handleScroll(event)}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+                paddingHorizontal: RfW(16),
+                marginBottom: RfH(17),
+              }}>
               <IconButtonWrapper
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
+                iconWidth={RfH(98)}
+                iconHeight={RfH(98)}
                 iconImage={getTutorImage(tutorData)}
                 imageResizeMode="cover"
-                styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
+                styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
               />
-              <Text
-                style={[
-                  styles.tutorName,
-                  {
-                    marginLeft: RfW(8),
-                    alignSelf: 'center',
-                  },
-                ]}>
-                {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
-              </Text>
+              <View style={{ marginLeft: RfW(16) }}>
+                <Text style={styles.tutorName}>
+                  {tutorData?.contactDetail?.firstName} {tutorData?.contactDetail?.lastName}
+                </Text>
+                <Text style={styles.tutorDetails}>GURUQT{tutorData?.id}</Text>
+                {tutorData?.educationDetails?.length > 0 && (
+                  <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
+                    {titleCaseIfExists(tutorData?.educationDetails[0]?.degree?.degreeLevel)}
+                    {' - '}
+                    {titleCaseIfExists(tutorData?.educationDetails[0]?.fieldOfStudy)}
+                  </Text>
+                )}
+                <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
+                  {tutorData.teachingExperience ? `${tutorData.teachingExperience} years of Teaching Experience` : ''}
+                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: RfH(8) }}>
+                  <Icon
+                    type="FontAwesome"
+                    name={tutorData.averageRating > 0 ? 'star' : 'star-o'}
+                    style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
+                  />
+                  {tutorData.averageRating > 0 ? (
+                    <Text style={styles.chargeText}>{parseFloat(tutorData.averageRating).toFixed(1)}</Text>
+                  ) : (
+                    <Text
+                      style={{
+                        color: Colors.secondaryText,
+                        fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+                      }}>
+                      NOT RATED
+                    </Text>
+                  )}
+                  {tutorData.reviewCount > 0 && (
+                    <Text
+                      style={{
+                        color: Colors.secondaryText,
+                        fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                        marginLeft: RfW(8),
+                      }}>
+                      {tutorData.reviewCount} Reviews
+                    </Text>
+                  )}
+                </View>
+              </View>
             </View>
-          )}
-        </View>
+            <View style={commonStyles.lineSeparator} />
 
-        <View style={commonStyles.horizontalChildrenStartView}>
-          <TouchableWithoutFeedback onPress={() => addToCompare()}>
-            <View
-              style={{
-                height: RfH(44),
-                width: RfW(44),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(16)}
-                iconHeight={RfH(16)}
-                iconImage={
-                  compareData.some((item) => item.id === tutorData.id) ? Images.checkbox_selected : Images.checkbox
-                }
-                styling={{ marginHorizontal: RfW(16) }}
-              />
+            {classView()}
+
+            {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
+
+            {/* <View style={{ marginHorizontal: RfW(16), marginVertical: RfH(16) }}> */}
+            {/*  <Text style={commonStyles.headingPrimaryText}>Educational Qualification</Text> */}
+            {/*  <Text style={[styles.tutorDetails, { marginTop: RfH(8) }]}>Mass Communication</Text> */}
+            {/* </View> */}
+
+            <View style={commonStyles.lineSeparator} />
+            {/* <View style={[commonStyles.blankViewSmall, { backgroundColor: Colors.lightGrey }]} /> */}
+            {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
+
+            <View>
+              <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
+              <View style={{ marginBottom: RfH(16), paddingHorizontal: RfW(16) }}>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  numColumns={4}
+                  data={subjects}
+                  extraData={refreshList}
+                  renderItem={({ item, index }) => renderSubjects(item, index)}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
             </View>
-          </TouchableWithoutFeedback>
 
-          <TouchableWithoutFeedback onPress={() => Alert.alert('Add to Favourite')}>
-            <View
-              style={{
-                height: RfH(44),
-                width: RfW(44),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(16)}
-                iconHeight={RfH(16)}
-                iconImage={isFavourite ? Images.heartFilled : Images.heart}
-                styling={{ marginHorizontal: RfW(16) }}
-                submitFunction={() => markFavouriteTutor()}
-              />
+            <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+            {/* <View style={[commonStyles.blankViewSmall, { backgroundColor: Colors.lightGrey }]} /> */}
+            {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
+
+            {renderPriceMatrix()}
+
+            <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+            <View>
+              <TouchableWithoutFeedback onPress={() => setShowDateSlotModal(true)}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    marginHorizontal: RfW(16),
+                    marginVertical: RfH(16),
+                    color: Colors.brandBlue2,
+                  }}>
+                  View Availability of Classes
+                </Text>
+              </TouchableWithoutFeedback>
             </View>
-          </TouchableWithoutFeedback>
 
-          {/* <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.share} /> */}
-        </View>
-      </View>
-      <ScrollView
-        // stickyHeaderIndices={[0]}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
-        onScroll={(event) => handleScroll(event)}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            paddingHorizontal: RfW(16),
-            marginBottom: RfH(17),
-          }}>
-          <IconButtonWrapper
-            iconWidth={RfH(98)}
-            iconHeight={RfH(98)}
-            iconImage={getTutorImage(tutorData)}
-            imageResizeMode="cover"
-            styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
+            <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+            {renderRatingsReviews()}
+          </ScrollView>
+
+          <View style={commonStyles.lineSeparator} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: RfH(8),
+              paddingHorizontal: RfW(16),
+            }}>
+            <Button
+              onPress={() => openClassModeModal(true)}
+              style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
+              <Text style={commonStyles.textButtonOutlinePrimary}>Book {isFreeDemo ? '[Free]' : ''} Demo</Text>
+            </Button>
+
+            <Button onPress={() => openClassModeModal(false)} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+              <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
+            </Button>
+          </View>
+
+          <DateSlotSelectorModal
+            visible={showDateSlotModal}
+            onClose={() => setShowDateSlotModal(false)}
+            tutorId={tutorData?.id}
           />
-          <View style={{ marginLeft: RfW(16) }}>
-            <Text style={styles.tutorName}>
-              {tutorData?.contactDetail?.firstName} {tutorData?.contactDetail?.lastName}
-            </Text>
-            <Text style={styles.tutorDetails}>T{tutorData?.id}</Text>
-            {tutorData?.educationDetails?.length > 0 && (
-              <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
-                {titleCaseIfExists(tutorData?.educationDetails[0]?.degree?.degreeLevel)}
-                {' - '}
-                {titleCaseIfExists(tutorData?.educationDetails[0]?.fieldOfStudy)}
-              </Text>
-            )}
-            <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
-              {tutorData.teachingExperience ? `${tutorData.teachingExperience} years of Teaching Experience` : ''}
-            </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: RfH(8) }}>
-              <Icon
-                type="FontAwesome"
-                name={tutorData.averageRating > 0 ? 'star' : 'star-o'}
-                style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
-              />
-              {tutorData.averageRating > 0 ? (
-                <Text style={styles.chargeText}>{parseFloat(tutorData.averageRating).toFixed(1)}</Text>
-              ) : (
-                <Text
-                  style={{
-                    color: Colors.secondaryText,
-                    fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
-                  }}>
-                  NOT RATED
-                </Text>
-              )}
-              {tutorData.reviewCount > 0 && (
-                <Text
-                  style={{
-                    color: Colors.secondaryText,
-                    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
-                    marginLeft: RfW(8),
-                  }}>
-                  {tutorData.reviewCount} Reviews
-                </Text>
-              )}
-            </View>
-          </View>
-        </View>
-        <View style={commonStyles.lineSeparator} />
-
-        {classView()}
-
-        {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
-
-        {/* <View style={{ marginHorizontal: RfW(16), marginVertical: RfH(16) }}> */}
-        {/*  <Text style={commonStyles.headingPrimaryText}>Educational Qualification</Text> */}
-        {/*  <Text style={[styles.tutorDetails, { marginTop: RfH(8) }]}>Mass Communication</Text> */}
-        {/* </View> */}
-
-        <View style={commonStyles.lineSeparator} />
-        {/* <View style={[commonStyles.blankViewSmall, { backgroundColor: Colors.lightGrey }]} /> */}
-        {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
-
-        <View>
-          <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
-          <View style={{ marginBottom: RfH(16), paddingHorizontal: RfW(16) }}>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              numColumns={4}
-              data={subjects}
-              extraData={refreshList}
-              renderItem={({ item, index }) => renderSubjects(item, index)}
-              keyExtractor={(item, index) => index.toString()}
+          {showClassModePopup && (
+            <ClassModeSelectModal
+              visible={showClassModePopup}
+              onClose={() => setShowClassModePopup(false)}
+              selectedSubject={selectedSubject}
+              demo={isDemo}
+              budgetDetails={budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`]}
             />
-          </View>
-        </View>
+          )}
 
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-        {/* <View style={[commonStyles.blankViewSmall, { backgroundColor: Colors.lightGrey }]} /> */}
-        {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
-
-        {renderPriceMatrix()}
-
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-        <View>
-          <TouchableWithoutFeedback onPress={() => setShowDateSlotModal(true)}>
-            <Text
-              style={{
-                fontSize: 15,
-                marginHorizontal: RfW(16),
-                marginVertical: RfH(16),
-                color: Colors.brandBlue2,
-              }}>
-              View Availability of Classes
-            </Text>
-          </TouchableWithoutFeedback>
-        </View>
-
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-        {renderRatingsReviews()}
-      </ScrollView>
-
-      <View style={commonStyles.lineSeparator} />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: RfH(8),
-          paddingHorizontal: RfW(16),
-        }}>
-        <Button
-          onPress={() => openClassModeModal(true)}
-          style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
-          <Text style={commonStyles.textButtonOutlinePrimary}>Book {isFreeDemo ? '[Free]' : ''} Demo</Text>
-        </Button>
-
-        <Button onPress={() => openClassModeModal(false)} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
-          <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
-        </Button>
-      </View>
-
-      <DateSlotSelectorModal
-        visible={showDateSlotModal}
-        onClose={() => setShowDateSlotModal(false)}
-        tutorId={tutorData?.id}
-      />
-      {showClassModePopup && (
-        <ClassModeSelectModal
-          visible={showClassModePopup}
-          onClose={() => setShowClassModePopup(false)}
-          selectedSubject={selectedSubject}
-          demo={isDemo}
-          budgetDetails={budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`]}
-        />
-      )}
-
-      {showCompareModal && (
-        <CompareModal
-          visible={showCompareModal}
-          onClose={() => setShowCompareModal(false)}
-          removeFromCompare={(index) => removeFromCompare(index)}
-        />
+          {showCompareModal && (
+            <CompareModal
+              visible={showCompareModal}
+              onClose={() => setShowCompareModal(false)}
+              removeFromCompare={(index) => removeFromCompare(index)}
+            />
+          )}
+        </>
       )}
     </View>
   );

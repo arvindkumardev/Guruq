@@ -26,6 +26,7 @@ import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
 import StudentOfferingModal from './studentOfferingModal';
+import NotificationRedirection from '../../../notification/notificationRedirection';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
@@ -814,6 +815,7 @@ function StudentDashboard(props) {
       <StatusBar barStyle="dark-content" />
 
       <Loader isLoading={interestedOfferingsLoading || loadingFavouriteTutors} />
+      <NotificationRedirection />
 
       <View style={[commonStyles.mainContainer]}>
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
