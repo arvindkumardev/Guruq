@@ -86,7 +86,6 @@ function Profile() {
     return (
       <TouchableWithoutFeedback
         onPress={() => personalDetails(item)}
-        // disabled={}
         style={[
           styles.userMenuParentView,
           {
@@ -97,7 +96,7 @@ function Profile() {
           },
         ]}>
         <View style={{ flexDirection: 'row' }}>
-          <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} />
+          <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
           <Text style={{ fontSize: 15, color: Colors.primaryText, marginLeft: RfW(16) }}>{item.name}</Text>
         </View>
         <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
@@ -210,6 +209,7 @@ function Profile() {
               <IconWrapper
                 iconWidth={RfW(24)}
                 iconHeight={RfH(24)}
+                imageResizeMode="contain"
                 iconImage={isAccountMenuOpen ? Images.collapse_grey : Images.expand_gray}
               />
             </TouchableWithoutFeedback>
@@ -239,6 +239,7 @@ function Profile() {
               <IconWrapper
                 iconWidth={RfW(24)}
                 iconHeight={RfH(24)}
+                imageResizeMode="cover"
                 iconImage={isStudyMenuOpen ? Images.collapse_grey : Images.expand_gray}
               />
             </TouchableWithoutFeedback>
@@ -420,9 +421,9 @@ function Profile() {
           <View style={commonStyles.blankGreyViewSmall} />
 
           <View style={[styles.userMenuParentView]}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode={'contain'} iconImage={Images.logOut} />
             <View style={styles.menuItemParentView}>
-              <TouchableOpacity onPress={() => logout()}>
+              <TouchableOpacity onPress={logout}>
                 <Text style={styles.menuItemPrimaryText}>Logout</Text>
               </TouchableOpacity>
 
@@ -434,7 +435,7 @@ function Profile() {
           <IconWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
-            
+
             iconImage={isLogout ? Images.collapse_grey : Images.expand_gray}
           />
         </TouchableWithoutFeedback> */}
@@ -442,10 +443,11 @@ function Profile() {
           {/* <View style={commonStyles.lineSeparator} /> */}
           <View
             style={{
-              justifyContent: 'space-around',
-              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               flexDirection: 'row',
               marginTop: 20,
+              marginHorizontal:RfW(20)
             }}>
             <View>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
@@ -457,7 +459,12 @@ function Profile() {
             </View>
 
             <View>
-              <IconWrapper iconHeight={RfH(65)} iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} />
+              <IconWrapper
+                iconHeight={RfH(65)}
+                iconWidth={RfW(65)}
+                iconImage={Images.profile_footer_logo}
+                imageResizeMode="contain"
+              />
             </View>
 
             <View>
