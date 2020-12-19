@@ -12,6 +12,8 @@ import RateReview from './ReviewModal';
 import PaymentMethodModal from './PaymentMethodModal';
 import CompareModal from './CompareModal';
 import Ratings from './Ratings';
+import Loader from './Loader';
+import BackArrow from './BackArrow';
 
 export {
   IconButtonWrapper,
@@ -27,4 +29,6 @@ export {
   PaymentMethodModal,
   CompareModal,
   Ratings,
+  Loader,
+  BackArrow
 };

@@ -352,8 +352,9 @@ const myCart = () => {
                   height: RfH(40),
                   borderColor: Colors.borderColor,
                   borderWidth: 0.5,
+                  borderRadius: RfH(10),
                   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-                  marginVertical: 4,
+                  marginVertical: RfH(4),
                   paddingLeft: 8,
                 }}
                 placeholder="Enter coupon code"
@@ -519,27 +520,14 @@ const myCart = () => {
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
       <Loader isLoading={cartLoading || removeLoading || couponLoading} />
-      {/* <View style={{ marginHorizontal: RfW(16) }}> */}
       <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
-      {/* </View> */}
       {cartLoading ? (
         <View style={{ backgroundColor: Colors.lightGrey }} />
       ) : (
-        <View>
+        <>
           {!isEmpty ? (
-            <View>
+            <View style={{ flex: 1 }}>
               <ScrollView showsVerticalScrollIndicator={false}>
-                {/* <View */}
-                {/*  style={[ */}
-                {/*    styles.itemView, */}
-                {/*    { */}
-                {/*      marginTop: RfH(8), */}
-                {/*      paddingVertical: RfH(8), */}
-                {/*      paddingLeft: RfW(48), */}
-                {/*    }, */}
-                {/*  ]}> */}
-                {/*  <Text style={styles.appliedFilterText}>{cartItems.length} ITEMS</Text> */}
-                {/* </View> */}
                 <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.white }}>
                   <FlatList
                     showsHorizontalScrollIndicator={false}
@@ -559,8 +547,6 @@ const myCart = () => {
                 {renderCouponView()}
 
                 <View style={commonStyles.blankViewSmall} />
-
-                {/* <Text style={[styles.chargeText, { margin: RfH(16), marginLeft: RfW(16) }]}>CART DETAILS (4 Items)</Text> */}
 
                 <View
                   style={{
@@ -641,7 +627,7 @@ const myCart = () => {
               </Text>
             </View>
           )}
-        </View>
+        </>
       )}
 
       <QPointPayModal

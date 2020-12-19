@@ -36,6 +36,7 @@
 		A97433C7FA5E490097F6C153 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF62E044659042B99B6468F1 /* Roboto.ttf */; };
 		ABE389E7F7CE47BB82F59F11 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D89CEE7741D844E985CB294E /* EvilIcons.ttf */; };
 		B2F9ACB4B8B04171951003C0 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7936FE574D74B659EFE2A01 /* Octicons.ttf */; };
+		B5E83383258E3B6D004FF423 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5E83382258E3B6D004FF423 /* GoogleService-Info.plist */; };
 		CDA6EC346E4CD3B8A233BF5B /* libPods-GuruQ-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E10FBEF3F246AE32D1371B2 /* libPods-GuruQ-tvOSTests.a */; };
 		D2BC0F5243CE4DE5A838A95E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69116DD09F734418B0B82635 /* Foundation.ttf */; };
 		F45D12F42544969100ECE3D8 /* SegoeUI-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45D12F22544969000ECE3D8 /* SegoeUI-Semibold.ttf */; };
@@ -115,6 +116,7 @@
 		A6F79D522872A737D099540B /* libPods-GuruQ-GuruQTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GuruQ-GuruQTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7936FE574D74B659EFE2A01 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		B51CC6E3258BB2D8004A495D /* GuruQ.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = GuruQ.entitlements; path = GuruQ/GuruQ.entitlements; sourceTree = "<group>"; };
+		B5E83382258E3B6D004FF423 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B987C30E71524F67A8EC90A9 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		BE4E87D4A2C1524CA872A67D /* Pods-GuruQ-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuruQ-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-GuruQ-tvOS/Pods-GuruQ-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		C032ECEA0FD34143AB55C6F2 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 		13B07FAE1A68108700A75B9A /* GuruQ */ = {
 			isa = PBXGroup;
 			children = (
+				B5E83382258E3B6D004FF423 /* GoogleService-Info.plist */,
 				B51CC6E3258BB2D8004A495D /* GuruQ.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -457,6 +460,7 @@
 			files = (
 				F45D12FF25449C2700ECE3D8 /* SegoeUI-Bold.ttf in Resources */,
 				F45D12F42544969100ECE3D8 /* SegoeUI-Semibold.ttf in Resources */,
+				B5E83383258E3B6D004FF423 /* GoogleService-Info.plist in Resources */,
 				F45D12F52544969100ECE3D8 /* SegoeUI-Regular.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,

@@ -87,7 +87,7 @@ function App() {
     <ApolloProvider client={client}>
       <ApolloHooksProvider client={client}>
         <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
-          <StatusBar barStyle="dark-content" />
+          <StatusBar barStyle="light-content" />
           <Root>
             <AppStack
               isUserLoggedIn={isUserLoggedIn}
