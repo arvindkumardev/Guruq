@@ -8,7 +8,7 @@ import ClassSelector from '../containers/student/studyArea/classSelector';
 import PersonalDetails from '../containers/student/profile/personalDetails';
 import CompareTutors from '../containers/student/tutorListing/compareTutors';
 import TutorListing from '../containers/student/tutorListing/tutorListing';
-import TutorDetails from '../containers/student/tutorListing/tutorDetails';
+import TutorDetails from '../containers/student/tutorDetails/tutorDetails';
 import myCart from '../containers/student/tutorListing/bookingTutor/myCart';
 import bookingConfirmed from '../containers/student/payment/bookingConfirmed';
 import paymentReceived from '../containers/student/payment/paymentReceived';

@@ -165,15 +165,7 @@ function FilterComponent(props) {
               </Text>
             </Button>
             <Button onPress={handleApplyFilters} block style={styles.solidButton}>
-              <Text
-                style={[
-                  styles.buttonText,
-                  {
-                    color: Colors.white,
-                  },
-                ]}>
-                Apply
-              </Text>
+              <Text style={[styles.buttonText, { color: Colors.white }]}>Apply</Text>
             </Button>
           </View>
         </View>

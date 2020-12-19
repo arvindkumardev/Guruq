@@ -1,19 +1,17 @@
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, ScrollView, TouchableWithoutFeedback, FlatList, Modal } from 'react-native';
+import { FlatList, Modal, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
-import { IconButtonWrapper, CustomRadioButton } from '../../../../components';
+import { CustomRadioButton, IconButtonWrapper, Loader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
-import { Images, Colors } from '../../../../theme';
+import { Colors, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
 import routeNames from '../../../../routes/screenNames';
-import Loader from '../../../../components/Loader';
-import styles from '../styles';
+import styles from './styles';
 import { ADD_TO_CART } from '../../booking.mutation';
-import Fonts from '../../../../theme/fonts';
 
 const classModeSelectModal = (props) => {
   const { visible, onClose, budgetDetails, selectedSubject, demo } = props;
