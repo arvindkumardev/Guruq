@@ -17,7 +17,6 @@ import scheduleClass from '../containers/student/classes/scheduleClass';
 import scheduledClassDetails from '../containers/student/calendar/scheduledClassDetails';
 import PaymentMethod from '../containers/student/payment/paymentMethod';
 import cancelReason from '../containers/student/calendar/cancelReason';
-import onlineClass from '../containers/student/calendar/onlineClass';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
@@ -114,11 +113,11 @@ export const getStudentRoutes = () => {
         component={cancelReason}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name={NavigationRouteNames.STUDENT.ONLINE_CLASS}
         component={onlineClass}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.RATE_AND_REVIEW}
         component={RateAndReviews}

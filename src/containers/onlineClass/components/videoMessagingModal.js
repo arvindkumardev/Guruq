@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { useLazyQuery, useMutation, useSubscription } from '@apollo/client';
+import emojiUtils from 'emoji-utils';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-import emojiUtils from 'emoji-utils';
-import { useLazyQuery, useMutation, useSubscription } from '@apollo/client';
-import Colors from '../../../theme/colors';
-import { RfH, RfW } from '../../../utils/helpers';
-import Images from '../../../theme/images';
-import IconButtonWrapper from '../../../components/IconWrapper';
-import Fonts from '../../../theme/fonts';
-import { dimensions } from './style';
 import SlackMessage from '../../../components/Chat/SlackMessage';
+import IconButtonWrapper from '../../../components/IconWrapper';
+import Colors from '../../../theme/colors';
+import Fonts from '../../../theme/fonts';
+import Images from '../../../theme/images';
+import { RfH, RfW } from '../../../utils/helpers';
 import { GET_CHAT_MESSAGES, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
+import { dimensions } from './style';
 
 const VideoMessagingModal = (props) => {
   const { visible, onClose, channelName } = props;
@@ -70,7 +70,7 @@ const VideoMessagingModal = (props) => {
     }
   );
   useEffect(() => {
-    getChatMessages({ variables: { channelName: props.channelName } });
+    // getChatMessages({ variables: { channelName: props.channelName } });
   }, []);
 
   const { loading: loadingNewMessageEvent } = useSubscription(NEW_CHAT_MESSAGE, {

@@ -7,16 +7,15 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
-import styles from './style';
-
-import requestCameraAndAudioPermission from './permission';
-import { RfH, RfW } from '../../../utils/helpers';
-import { Colors } from '../../../theme';
+import BackArrow from '../../../components/BackArrow';
 import IconButtonWrapper from '../../../components/IconWrapper';
+import { Colors } from '../../../theme';
 import Images from '../../../theme/images';
 import commonStyles from '../../../theme/styles';
-import BackArrow from '../../../components/BackArrow';
+import { RfH, RfW } from '../../../utils/helpers';
 import ClassDetailsModal from './classDetailsModal';
+import requestCameraAndAudioPermission from './permission';
+import styles from './style';
 import VideoMessagingModal from './videoMessagingModal';
 import VideoMoreAction from './videoMoreAction';
 import Whiteboard from './whiteboard';
@@ -633,11 +632,11 @@ export default class Video extends Component<Props, State> {
         )}
 
         <ClassDetailsModal visible={this.state.showClassDetails} onClose={this.toggleClassDetails} />
-        <VideoMessagingModal
+        {/* <VideoMessagingModal
           visible={this.state.showMessageBox}
           onClose={this.toggleMessageBox}
           channelName={this.props.channelName}
-        />
+        /> */}
         <VideoMoreAction visible={this.state.showMoreActions} onClose={this.toggleMoreAction} />
       </View>
     );
