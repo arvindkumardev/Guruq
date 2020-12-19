@@ -682,10 +682,10 @@ function StudentDashboard(props) {
     onCompleted: (data) => {
       const array = [];
       for (const obj of data.getScheduledClasses) {
-        const startHours = new Date(obj.startDate).getUTCHours();
-        const startMinutes = new Date(obj.startDate).getUTCMinutes();
-        const endHours = new Date(obj.endDate).getUTCHours();
-        const endMinutes = new Date(obj.endDate).getUTCMinutes();
+        const startHours = new Date(obj.startDate).getHours();
+        const startMinutes = new Date(obj.startDate).getMinutes();
+        const endHours = new Date(obj.endDate).getHours();
+        const endMinutes = new Date(obj.endDate).getMinutes();
         const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
           startMinutes < 10 ? `0${startMinutes}` : startMinutes
         } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${

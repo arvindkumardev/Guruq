@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import { isEmpty } from 'lodash';
-import styles, { getIconImageStyle } from './style';
-
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import { getImageSource } from '../../utils/helpers';
+import styles, { getIconImageStyle } from './style';
 
 function stylingIconButtonWrapper(props) {
   const {
@@ -89,7 +88,7 @@ stylingIconButtonWrapper.defaultProps = {
   backgroundColor: '#000',
   iconHeight: 50,
   iconWidth: 50,
-  imageResizeMode: 'contain',
+  imageResizeMode: 'cover',
   onHold: null,
   onLeave: null,
   onPressIn: null,

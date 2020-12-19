@@ -1,25 +1,24 @@
 /* eslint-disable react/no-typos */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
-import { FlatList, ScrollView, Text, TouchableWithoutFeedback, View, Image } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import CalendarStrip from 'react-native-calendar-strip';
-import { RFValue } from 'react-native-responsive-fontsize';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
+import moment from 'moment';
 import { Button } from 'native-base';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import commonStyles from '../../../theme/styles';
-import routeNames from '../../../routes/screenNames';
-import { RfH, RfW, monthNames, getSubjectIcons } from '../../../utils/helpers';
-import { Colors, Fonts, Images } from '../../../theme';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-
-import { IconButtonWrapper } from '../../../components';
-import { GET_SCHEDULED_CLASSES } from '../booking.query';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import CalendarStrip from 'react-native-calendar-strip';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { studentDetails } from '../../../apollo/cache';
+import { IconButtonWrapper } from '../../../components';
+import routeNames from '../../../routes/screenNames';
+import { Colors, Images } from '../../../theme';
 import { getBoxColor } from '../../../theme/colors';
+import commonStyles from '../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
+import { GET_SCHEDULED_CLASSES } from '../booking.query';
 
 function CalendarView(props) {
   const navigation = useNavigation();
@@ -40,18 +39,18 @@ function CalendarView(props) {
     onCompleted: (data) => {
       const array = [];
       for (const obj of data.getScheduledClasses) {
-        const startHours = new Date(obj.startDate).getUTCHours();
-        const startMinutes = new Date(obj.startDate).getUTCMinutes();
-        const endHours = new Date(obj.endDate).getUTCHours();
-        const endMinutes = new Date(obj.endDate).getUTCMinutes();
+        const startHours = new Date(obj.startDate).getHours();
+        const startMinutes = new Date(obj.startDate).getMinutes();
+        const endHours = new Date(obj.endDate).getHours();
+        const endMinutes = new Date(obj.endDate).getMinutes();
         const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
           startMinutes < 10 ? `0${startMinutes}` : startMinutes
         } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
           endMinutes < 10 ? `0${endMinutes}` : endMinutes
         } ${endHours < 12 ? `AM` : 'PM'}`;
         const item = {
-          date: new Date(obj.startDate).getUTCDate(),
-          month: new Date(obj.startDate).getUTCMonth(),
+          date: new Date(obj.startDate).getDate(),
+          month: new Date(obj.startDate).getMonth(),
           classes: [
             {
               uuid: obj.uuid,
@@ -74,23 +73,11 @@ function CalendarView(props) {
     },
   });
 
-  useEffect(() => {
-    getScheduledClasses({
-      variables: {
-        classesSearchDto: {
-          studentId: studentInfo.id,
-          startDate: moment().toDate(),
-          endDate: moment().endOf('day').toDate(),
-        },
-      },
-    });
-  }, []);
-
   const renderClassItem = (item) => {
     return (
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: item })}>
-        <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
+        <View style={[commonStyles.horizontalChildrenStartView, { marginBottom: RfH(24) }]}>
           <View
             style={{
               height: RfH(72),
@@ -124,23 +111,14 @@ function CalendarView(props) {
 
   const renderListItem = (item) => {
     return (
-      <View style={{ marginTop: RfH(32) }}>
-        <View>
-          <Text style={commonStyles.headingPrimaryText}>
-            {item.date} {monthNames[item.month]}
-          </Text>
-        </View>
-        <View>
-          <View>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={item.classes}
-              renderItem={({ item }) => renderClassItem(item)}
-              keyExtractor={(index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: RfH(170) }}
-            />
-          </View>
-        </View>
+      <View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={item.classes}
+          renderItem={({ item }) => renderClassItem(item)}
+          keyExtractor={(index) => index.toString()}
+          contentContainerStyle={{ paddingBottom: RfH(170) }}
+        />
       </View>
     );
   };
@@ -167,6 +145,19 @@ function CalendarView(props) {
       },
     });
   };
+
+  useEffect(() => {
+    getScheduledClassesbyDay(new Date());
+    // getScheduledClasses({
+    //   variables: {
+    //     classesSearchDto: {
+    //       studentId: studentInfo.id,
+    //       startDate: moment().toDate(),
+    //       endDate: moment().endOf('day').toDate(),
+    //     },
+    //   },
+    // });
+  }, []);
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
@@ -220,6 +211,9 @@ function CalendarView(props) {
               onDateSelected={(d) => getScheduledClassesbyDay(d)}
             />
           </View>
+
+          <View style={commonStyles.lineSeparatorWithVerticalMargin} />
+
           {isEmpty ? (
             <View>
               <Image
