@@ -1,20 +1,20 @@
 /* eslint-disable no-restricted-syntax */
-import { FlatList, Image, ScrollView, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { Button } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
-import { Colors, Fonts, Images } from '../../../theme';
-import routeNames from '../../../routes/screenNames';
-import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
-import commonStyles from '../../../theme/styles';
-import styles from './styles';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { useNavigation } from '@react-navigation/native';
+import { Button } from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, ScrollView, Text, View } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { IconButtonWrapper } from '../../../components';
+import Loader from '../../../components/Loader';
+import routeNames from '../../../routes/screenNames';
+import { Colors, Fonts, Images } from '../../../theme';
+import commonStyles from '../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_ORDER_ITEMS } from '../booking.query';
 import { OrderStatus } from '../enums';
-import Loader from '../../../components/Loader';
+import styles from './styles';
 
 function bookingConfirmed() {
   const navigation = useNavigation();
@@ -119,7 +119,7 @@ function bookingConfirmed() {
                 {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUS{item.tutor.id}
+                T{item.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 {item.onlineClass ? 'Online' : 'Offline'} Individual Class

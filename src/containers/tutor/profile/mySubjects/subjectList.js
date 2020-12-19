@@ -47,7 +47,7 @@ function SubjectList() {
 
   const renderSubjects = (item, index) => {
     return (
-      <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.PRICE_MATRIX)}>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.PRICE_MATRIX, { offering: item })}>
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(16) }]}>
             <View style={commonStyles.horizontalChildrenView}>
@@ -80,6 +80,7 @@ function SubjectList() {
         showRightIcon
         rightIcon={Images.moreInformation}
         horizontalPadding={RfW(16)}
+        onRightIconClick={() => navigation.navigate(routeNames.POST_TUTION_NEEDS)}
       />
       <View style={commonStyles.verticallyStretchedItemsView}>
         <FlatList
