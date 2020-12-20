@@ -1,6 +1,14 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-nested-ternary */
-import { FlatList, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View, SafeAreaView } from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -31,9 +39,10 @@ import {
 } from '../../../utils/helpers';
 import { BackArrow, CompareModal, DateSlotSelectorModal, IconButtonWrapper, Loader } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import Fonts from '../../../theme/fonts';
 import ClassModeSelectModal from './components/classModeSelectModal';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
+import PriceMatrixComponent from './components/priceMatrixComponent';
+import TutorAvailabilitySlots from "../../../components/TutorAvailabilitySlots";
 
 function TutorDetails(props) {
   const navigation = useNavigation();
@@ -42,7 +51,9 @@ function TutorDetails(props) {
 
   const tutorId = route?.params?.tutorId;
   const tutorDataObj = route?.params?.tutorData;
+
   const parentOffering = route?.params?.parentOffering;
+
   const parentParentOffering = route?.params?.parentParentOffering;
 
   const [showDateSlotModal, setShowDateSlotModal] = useState(false);
@@ -53,8 +64,6 @@ function TutorDetails(props) {
 
   const [subjects, setSubjects] = useState([]);
   const [refreshList, setRefreshList] = useState(false);
-  const [priceMatrix, setPriceMatrix] = useState({});
-  const [budgets, setBudgets] = useState([]);
   const [compareData, setCompareData] = useState([]);
   const [isFavourite, setIsFavourite] = useState(false);
   const [isDemo, setIsDemo] = useState(false);
@@ -110,9 +119,6 @@ function TutorDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        const pm = {};
-        const sb = {};
-        // const classData = {};
         const subjectList = [];
         data?.getTutorOfferings?.map((item) => {
           if (item.offering && !subjectList.find((sub) => sub.id === item.offering.id)) {
@@ -127,22 +133,8 @@ function TutorDetails(props) {
                 onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
                 individualClass: item.groupClass === 0 || item.groupClass === 2,
                 homeTution: item.onlineClass === 0 || item.onlineClass === 2,
+                budgetDetails: item.budgets,
               });
-
-              pm[`o${item.offering.id}`] = {
-                online: { demo: 0, c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-                offline: { demo: 0, c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-              };
-
-              sb[`${item.offering.id}`] = item.budgets;
-
-              for (const b of item.budgets) {
-                if (b.demo) {
-                  pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'].demo = b.price;
-                } else {
-                  pm[`o${item.offering.id}`][b.onlineClass ? 'online' : 'offline'][`c${b.count}`] = b.price;
-                }
-              }
             }
           }
         });
@@ -150,8 +142,6 @@ function TutorDetails(props) {
           setSelectedSubject(subjectList[0]);
         }
         setSubjects(subjectList);
-        setPriceMatrix(pm);
-        setBudgets(sb);
         setRefreshList(!refreshList);
       }
     },
@@ -362,7 +352,7 @@ function TutorDetails(props) {
         color="rgb(203,231,255)"
         shadowColor={Colors.lightGrey}
         bgColor={Colors.white}>
-        <IconButtonWrapper iconWidth={RfW(22)} iconHeight={RfH(22)} imageResizeMode={'contain'} iconImage={item.image} />
+        <IconButtonWrapper iconWidth={RfW(22)} iconHeight={RfH(22)} imageResizeMode="contain" iconImage={item.image} />
       </ProgressCircle>
       <Text
         style={{
@@ -478,166 +468,6 @@ function TutorDetails(props) {
         />
         <Text style={styles.classMeta}>Home Tuition</Text>
       </View>
-    </View>
-  );
-
-  const renderPriceMatrix = () => (
-    <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfW(16) }}>
-      <View>
-        <Text style={[commonStyles.headingPrimaryText]}>Price Matrix</Text>
-      </View>
-      <View
-        style={[
-          commonStyles.horizontalChildrenCenterView,
-          {
-            marginTop: RfH(16),
-            fontFamily: Fonts.semiBold,
-          },
-        ]}>
-        <View style={{ flex: 0.3 }}>
-          <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold }]}>Classes</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            flex: 0.7,
-          }}>
-          <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2 }]}>Demo</Text>
-          <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>1</Text>
-          <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>5</Text>
-          <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>10</Text>
-          <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>25</Text>
-          <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.16 }]}>50</Text>
-        </View>
-      </View>
-      {priceMatrix &&
-      selectedSubject &&
-      selectedSubject.id &&
-      priceMatrix[`o${selectedSubject.id}`]?.online.c1 === 0 &&
-      priceMatrix[`o${selectedSubject.id}`]?.online.c5 === 0 &&
-      priceMatrix[`o${selectedSubject.id}`]?.online.c10 === 0 &&
-      priceMatrix[`o${selectedSubject.id}`]?.online.c25 === 0 &&
-      priceMatrix[`o${selectedSubject.id}`]?.online.c50 === 0 ? (
-        <View />
-      ) : (
-        <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            {
-              marginTop: RfH(16),
-            },
-          ]}>
-          <View style={{ flex: 0.3 }}>
-            <Text style={styles.tutorDetails}>Online Classes</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 0.7,
-            }}>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.online.demo}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`]?.online.c1}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix && selectedSubject && selectedSubject.id && priceMatrix[`o${selectedSubject.id}`]?.online.c5}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.online.c10}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.online.c25}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.online.c50}
-            </Text>
-          </View>
-        </View>
-      )}
-      {priceMatrix &&
-      selectedSubject &&
-      selectedSubject.id &&
-      priceMatrix[`o${selectedSubject.id}`]?.offline.c1 === 0 &&
-      priceMatrix[`o${selectedSubject.id}`]?.offline.c5 === 0 &&
-      priceMatrix[`o${selectedSubject.id}`]?.offline.c10 === 0 &&
-      priceMatrix[`o${selectedSubject.id}`]?.offline.c25 === 0 &&
-      priceMatrix[`o${selectedSubject.id}`]?.offline.c50 === 0 ? (
-        <View />
-      ) : (
-        <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            {
-              marginTop: RfH(16),
-            },
-          ]}>
-          <View style={{ flex: 0.3 }}>
-            <Text style={styles.tutorDetails}>Home Tutions</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 0.7,
-            }}>
-            <Text style={[styles.tutorDetails, { flex: 0.2 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.demo}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c1}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c5}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c10}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c25}
-            </Text>
-            <Text style={[styles.tutorDetails, { flex: 0.16 }]}>
-              {priceMatrix &&
-                selectedSubject &&
-                selectedSubject.id &&
-                priceMatrix[`o${selectedSubject.id}`]?.offline.c50}
-            </Text>
-          </View>
-        </View>
-      )}
     </View>
   );
 
@@ -826,11 +656,7 @@ function TutorDetails(props) {
       ]}>
       <Loader
         isLoading={
-          loadingFavouriteTutors ||
-          loadingFavouriteTutors ||
-          favouriteLoading ||
-          removeFavouriteLoading ||
-          loadingTutors
+          loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading || loadingTutors || loadingTutorsOffering
         }
       />
       {!isEmpty(tutorData) && (
@@ -861,8 +687,15 @@ function TutorDetails(props) {
             </View>
 
             <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-            {renderPriceMatrix()}
+            <View style={{ paddingHorizontal: RfW(16) }}>
+              {selectedSubject && selectedSubject.budgetDetails && (
+                <PriceMatrixComponent
+                  budgets={selectedSubject.budgetDetails}
+                  showOnline={selectedSubject.onlineClass}
+                  showOffline={selectedSubject.homeTution}
+                />
+              )}
+            </View>
 
             <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
             <TouchableOpacity onPress={() => setShowDateSlotModal(true)} activeOpacity={1}>
@@ -904,7 +737,7 @@ function TutorDetails(props) {
             </Button>
           </View>
 
-          <DateSlotSelectorModal
+          <TutorAvailabilitySlots
             visible={showDateSlotModal}
             onClose={() => setShowDateSlotModal(false)}
             tutorId={tutorData?.id}
@@ -914,8 +747,7 @@ function TutorDetails(props) {
               visible={showClassModePopup}
               onClose={() => setShowClassModePopup(false)}
               selectedSubject={selectedSubject}
-              demo={isDemo}
-              budgetDetails={budgets && selectedSubject && selectedSubject.id && budgets[`${selectedSubject.id}`]}
+              isDemoClass={isDemo}
             />
           )}
           {showCompareModal && (

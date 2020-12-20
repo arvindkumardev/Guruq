@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, Modal, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
@@ -12,18 +12,17 @@ import { RfH, RfW } from '../../../../utils/helpers';
 import routeNames from '../../../../routes/screenNames';
 import styles from './styles';
 import { ADD_TO_CART } from '../../booking.mutation';
+import PriceMatrixComponent from './priceMatrixComponent';
 
-const classModeSelectModal = (props) => {
-  const { visible, onClose, budgetDetails, selectedSubject, demo } = props;
+const ClassModeSelectModal = (props) => {
+  const { visible, onClose, selectedSubject, isDemoClass, isRenewal } = props;
+  const { budgetDetails } = selectedSubject;
   const navigation = useNavigation();
-
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(0);
-  const [onlineClassMode, setOnlineClassMode] = useState(false);
-  const [offlineClassMode, setOfflineClassMode] = useState(false);
-  const [refreshList, setRefreshList] = useState(false);
-  const [onlineClassPrices, setOnlineClassPrices] = useState([]);
-  const [offlineClassPrices, setOfflineClassPrices] = useState([]);
+  const [classPrice, setClassPrice] = useState(0);
+  const [isOnlineClassMode, setIsOnlineClassMode] = useState(selectedSubject.onlineClass);
+  const demoClassPrice = budgetDetails.filter((budget) => budget.demo === true);
 
   const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
@@ -40,172 +39,51 @@ const classModeSelectModal = (props) => {
     },
   });
 
+  const calculateAmount = (noClasses, isOnline) => {
+    const applicableBudgets = budgetDetails
+      .filter((budget) => budget.onlineClass === isOnline && budget.demo === isDemoClass)
+      .sort((a, b) => a.count < b.count);
+    let perClassPrice = 0;
+    applicableBudgets.forEach((budget) => {
+      if (noClasses >= budget.count && budget.price !== 0) {
+        perClassPrice = budget.price;
+      }
+    });
+    setClassPrice(perClassPrice);
+    return noClasses * perClassPrice;
+  };
+
   useEffect(() => {
-    const bdata = [];
-    const odata = [];
-    if (demo) {
-      if (budgetDetails.find((ob) => ob?.demo === true)) {
-        for (const obj of budgetDetails) {
-          if (obj.demo) {
-            setAmount(obj.price);
-            if (!obj.onlineClass) {
-              odata.push({ classes: obj.count, pricePerHour: obj.price, totalPrice: obj.price * obj.count });
-            } else {
-              bdata.push({ classes: obj.count, pricePerHour: obj.price, totalPrice: obj.price * obj.count });
-            }
-          }
-        }
+    if (visible) {
+      if (isDemoClass) {
+        const isOnlineFreeClass =
+          selectedSubject.onlineClass && (!demoClassPrice || !demoClassPrice.some((item) => item.onlineClass));
+        setIsOnlineClassMode(isOnlineFreeClass);
+        setAmount(calculateAmount(1, isOnlineFreeClass));
       } else {
-        for (const obj of budgetDetails) {
-          if (obj.count === 1) {
-            setAmount(obj.price);
-            if (!obj.onlineClass) {
-              odata.push({ classes: obj.count, pricePerHour: obj.price, totalPrice: obj.price * obj.count });
-            } else {
-              bdata.push({ classes: obj.count, pricePerHour: obj.price, totalPrice: obj.price * obj.count });
-            }
-          }
-        }
-      }
-    } else {
-      for (const b of budgetDetails) {
-        if (!b.demo && b.count === 1) {
-          setAmount(b.price);
-        }
-        if (!b.demo) {
-          if (!b.onlineClass) {
-            odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
-          } else {
-            bdata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
-          }
-        }
+        setAmount(calculateAmount(1, isOnlineClassMode));
       }
     }
-    if (bdata.length > 0) {
-      setOnlineClassMode(true);
-      setOfflineClassMode(false);
-    } else {
-      setOnlineClassMode(false);
-      setOfflineClassMode(true);
-    }
-    setOnlineClassPrices(bdata);
-    setOfflineClassPrices(odata);
-    setRefreshList(!refreshList);
-  }, [budgetDetails]);
+  }, [visible]);
 
   const addClass = () => {
-    const cls = numberOfClass + 1;
-    setNumberOfClass(numberOfClass + 1);
-    let amt = 0;
-    for (const b of budgetDetails) {
-      if (cls < 5 && b.count < 5) {
-        amt = b.price;
-        break;
-      } else if (cls > 4 && cls < 10 && b.count > 4 && b.count < 10) {
-        amt = b.price;
-        break;
-      } else if (cls > 9 && cls < 25 && b.count > 9 && b.count < 25) {
-        amt = b.price;
-        break;
-      } else if (cls > 24 && cls < 50 && b.count > 24 && b.count < 50) {
-        amt = b.price;
-        break;
-      } else {
-        amt = b.price;
-      }
-    }
-    setAmount(amt * cls);
+    const noCls = numberOfClass + 1;
+    setNumberOfClass(noCls);
+    setAmount(calculateAmount(noCls, isOnlineClassMode));
   };
 
   const removeClass = () => {
     if (numberOfClass > 1) {
-      setNumberOfClass(numberOfClass - 1);
-      const cls = numberOfClass - 1;
-      let amt = 0;
-      for (const b of budgetDetails) {
-        if (cls < 5 && b.count < 5) {
-          amt = b.price;
-          break;
-        } else if (cls > 4 && cls < 10 && b.count > 4 && b.count < 10) {
-          amt = b.price;
-          break;
-        } else if (cls > 9 && cls < 25 && b.count > 9 && b.count < 25) {
-          amt = b.price;
-          break;
-        } else if (cls > 24 && cls < 50 && b.count > 24 && b.count < 50) {
-          amt = b.price;
-          break;
-        } else {
-          amt = b.price;
-        }
-      }
-      setAmount(amt * cls);
+      const noCls = numberOfClass - 1;
+      setNumberOfClass(noCls);
+      setAmount(calculateAmount(noCls, isOnlineClassMode));
     }
   };
 
-  const onClassItemClick = (item) => {
-    setAmount(item.totalPrice);
-    setNumberOfClass(item.classes);
-  };
-
-  const renderClasses = (item) => {
-    return (
-      <TouchableWithoutFeedback onPress={() => onClassItemClick(item)}>
-        <View
-          style={[
-            commonStyles.borderBottom,
-            {
-              // marginTop: RfH(24),
-              height: RfH(44),
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              paddingBottom: RfH(8),
-            },
-          ]}>
-          <View style={{}}>
-            <Text style={commonStyles.mediumMutedText}>{item.classes}</Text>
-          </View>
-          <View>
-            <Text style={commonStyles.mediumMutedText}>{item.pricePerHour}</Text>
-          </View>
-          <View>
-            <Text style={commonStyles.mediumMutedText}>{item.totalPrice}</Text>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  };
-
-  const changeOnlineClassMode = () => {
-    setOnlineClassMode(true);
-    setOfflineClassMode(false);
-    if (onlineClassPrices.length > 0) {
-      const odata = [];
-      for (const b of budgetDetails) {
-        if (b.onlineClass) {
-          odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
-        }
-      }
-      setAmount(budgetDetails[0].price);
-      setNumberOfClass(1);
-      setOnlineClassPrices(odata);
-    }
-  };
-
-  const changeOfflineClassMode = () => {
-    setOfflineClassMode(true);
-    setOnlineClassMode(false);
-    if (offlineClassPrices.length > 0) {
-      const odata = [];
-      for (const b of budgetDetails) {
-        if (!b.onlineClass) {
-          odata.push({ classes: b.count, pricePerHour: b.price, totalPrice: b.price * b.count });
-        }
-      }
-      setAmount(budgetDetails[0].price);
-      setNumberOfClass(1);
-      setOfflineClassPrices(odata);
+  const changeClassMode = (isOnline) => {
+    if (isOnlineClassMode !== isOnline) {
+      setIsOnlineClassMode(isOnline);
+      setAmount(calculateAmount(1, isOnline));
     }
   };
 
@@ -214,9 +92,10 @@ const classModeSelectModal = (props) => {
       tutorOfferingId: selectedSubject.offeringId,
       count: numberOfClass,
       groupSize: 1,
-      demo: false,
-      onlineClass: onlineClassMode,
+      demo: isDemoClass,
+      onlineClass: isOnlineClassMode,
       price: amount,
+      renewal: isRenewal,
     };
     addToCart({
       variables: { cartCreateDto: cartCreate },
@@ -255,11 +134,14 @@ const classModeSelectModal = (props) => {
             },
           ]}>
           <View style={{ flex: 1 }}>
-            <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Book Class</Text>
+            <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>
+              Book {selectedSubject.displayName} Class
+            </Text>
           </View>
-          <View style={{ flex: 0.5, paddingHorizontal: RfW(16) }}>
+          <View style={{ flex: 0.5 }}>
             <IconButtonWrapper
               styling={{ alignSelf: 'flex-end' }}
+              containerStyling={{ paddingHorizontal: RfW(16) }}
               iconHeight={RfH(24)}
               iconWidth={RfW(24)}
               iconImage={Images.cross}
@@ -270,73 +152,37 @@ const classModeSelectModal = (props) => {
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(16), alignSelf: 'flex-start' }]}>
-              Select mode of class and number of Classes
+              {isDemoClass ? 'Select mode of demo class' : 'Select mode of class and number of Classes'}
             </Text>
-            <View
-              style={[
-                commonStyles.horizontalChildrenSpaceView,
-                {
-                  marginTop: RfH(16),
-                  alignItems: 'flex-start',
-                },
-              ]}>
-              <Text style={commonStyles.mediumPrimaryText}>Mode of Class</Text>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'flex-start' }]}>
+              <Text style={commonStyles.mediumPrimaryText}>Mode of {isDemoClass && 'demo'} Class</Text>
               <View style={commonStyles.horizontalChildrenCenterView}>
-                {onlineClassPrices.length > 0 && (
+                {selectedSubject.onlineClass > 0 && (
                   <View style={{ flexDirection: 'row' }}>
-                    <CustomRadioButton enabled={onlineClassMode} submitFunction={() => changeOnlineClassMode()} />
-                    <Text
-                      style={[
-                        styles.appliedFilterText,
-                        {
-                          marginLeft: RfH(8),
-                        },
-                      ]}>
-                      Online
-                    </Text>
+                    <CustomRadioButton enabled={isOnlineClassMode} submitFunction={() => changeClassMode(true)} />
+                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
                   </View>
                 )}
-                {offlineClassPrices.length > 0 && (
+                {selectedSubject.homeTution && (
                   <View style={{ flexDirection: 'row', marginLeft: RfW(16) }}>
-                    <CustomRadioButton enabled={offlineClassMode} submitFunction={() => changeOfflineClassMode()} />
-                    <Text
-                      style={[
-                        styles.appliedFilterText,
-                        {
-                          marginLeft: RfH(8),
-                        },
-                      ]}>
-                      Offline
-                    </Text>
+                    <CustomRadioButton enabled={!isOnlineClassMode} submitFunction={() => changeClassMode(false)} />
+                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Home Tuition</Text>
                   </View>
                 )}
               </View>
             </View>
-            <View
-              style={{
-                marginTop: RfH(16),
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-              }}>
-              <Text>Classes</Text>
-              <Text>Price/Hour</Text>
-              <Text>Total Price</Text>
-            </View>
-            <View style={commonStyles.borderBottom}>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                data={onlineClassMode ? onlineClassPrices : offlineClassPrices}
-                extraData={refreshList}
-                renderItem={({ item, index }) => renderClasses(item, index)}
-                keyExtractor={(item, index) => index.toString()}
+            {!isDemoClass && (
+              <PriceMatrixComponent
+                budgets={selectedSubject.budgetDetails}
+                showOnline={isOnlineClassMode}
+                showOffline={!isOnlineClassMode}
               />
-            </View>
-            {!demo && (
+            )}
+            {!isDemoClass && (
               <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
                 <Text style={commonStyles.regularPrimaryText}>Total Classes</Text>
                 <View style={styles.bookingSelectorParent}>
-                  <TouchableWithoutFeedback onPress={() => removeClass()}>
+                  <TouchableWithoutFeedback onPress={removeClass}>
                     <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
                       <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                     </View>
@@ -344,7 +190,7 @@ const classModeSelectModal = (props) => {
 
                   <Text>{numberOfClass}</Text>
 
-                  <TouchableWithoutFeedback onPress={() => addClass()}>
+                  <TouchableWithoutFeedback onPress={addClass}>
                     <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
                       <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                     </View>
@@ -352,10 +198,14 @@ const classModeSelectModal = (props) => {
                 </View>
               </View>
             )}
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-              <Text style={commonStyles.regularPrimaryText}>Amount Payable</Text>
-              <Text style={commonStyles.headingPrimaryText}>₹{amount}</Text>
-            </View>
+            {amount !== 0 && (
+              <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
+                <Text style={commonStyles.regularPrimaryText}>Amount Payable</Text>
+                <Text style={commonStyles.headingPrimaryText}>
+                  {numberOfClass} X ₹{classPrice} = ₹{amount}
+                </Text>
+              </View>
+            )}
             <View style={{ alignSelf: 'center', marginTop: RfH(32) }}>
               <Button onPress={() => onAddingIntoCart()} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
                 <Text style={commonStyles.textButtonPrimary}>Add to Cart</Text>
@@ -368,20 +218,20 @@ const classModeSelectModal = (props) => {
   );
 };
 
-classModeSelectModal.propTypes = {
+ClassModeSelectModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
-  budgetDetails: PropTypes.array,
   selectedSubject: PropTypes.object,
-  demo: PropTypes.bool,
+  isDemoClass: PropTypes.bool,
+  isRenewal: PropTypes.bool,
 };
 
-classModeSelectModal.defaultProps = {
+ClassModeSelectModal.defaultProps = {
   visible: false,
   onClose: null,
-  budgetDetails: [],
   selectedSubject: {},
-  demo: false,
+  isDemoClass: false,
+  isRenewal: false,
 };
 
-export default classModeSelectModal;
+export default ClassModeSelectModal;

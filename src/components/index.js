@@ -30,5 +30,5 @@ export {
   CompareModal,
   Ratings,
   Loader,
-  BackArrow
+  BackArrow,
 };

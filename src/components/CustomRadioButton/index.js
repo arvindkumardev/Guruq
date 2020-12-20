@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, TouchableOpacity, View } from 'react-native';
-import { isEmpty } from 'lodash';
-import { Images, Colors } from '../../theme';
+import { Colors, Images } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 
-function stylingIconButtonWrapper(props) {
+function CustomRadioButton(props) {
   const { iconHeight, iconWidth, styling, enabled, submitFunction } = props;
 
   return (
@@ -31,7 +30,7 @@ function stylingIconButtonWrapper(props) {
   );
 }
 
-stylingIconButtonWrapper.propTypes = {
+CustomRadioButton.propTypes = {
   iconHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   iconWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   styling: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
@@ -39,7 +38,7 @@ stylingIconButtonWrapper.propTypes = {
   submitFunction: PropTypes.func,
 };
 
-stylingIconButtonWrapper.defaultProps = {
+CustomRadioButton.defaultProps = {
   iconHeight: RfH(18),
   iconWidth: RfW(18),
   styling: {},
@@ -47,4 +46,4 @@ stylingIconButtonWrapper.defaultProps = {
   submitFunction: null,
 };
 
-export default stylingIconButtonWrapper;
+export default CustomRadioButton;

@@ -1,41 +1,37 @@
 import { useLazyQuery } from '@apollo/client';
 import moment from 'moment';
-import { Button, Picker } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Modal, Text, View } from 'react-native';
+import { FlatList, Modal, Text, View } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { isEmpty } from 'lodash';
 import { IconButtonWrapper } from '..';
-import { GET_TUTOR_AVAILABILITY } from '../../containers/student/class.query';
+import { GET_AVAILABILITY_DATA } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { RfH, RfW } from '../../utils/helpers';
 
-const DateSlotSelectorModal = (props) => {
-  const [selectedSlot, setSelectedSlot] = useState({});
+const TutorAvailabilitySlots = (props) => {
   const [availability, setAvailability] = useState([]);
-  const { visible, onClose, onSubmit, tutorId } = props;
+  const { visible, onClose, tutorId } = props;
 
-  const [getTutorAvailability, { loading: loaderAvailability }] = useLazyQuery(GET_TUTOR_AVAILABILITY, {
+  const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY_DATA, {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
     },
     onCompleted: (data) => {
+      setAvailability([]);
       if (data) {
-        setAvailability(data.getTutorAvailability);
+        setAvailability(data.getAvailabilityData);
       }
     },
   });
 
   const getAvailabilityData = (date) => {
-    setSelectedSlot({});
-    setAvailability([]);
-    getTutorAvailability({
+    getAvailability({
       variables: {
         tutorAvailability: {
           tutorId,
@@ -50,15 +46,32 @@ const DateSlotSelectorModal = (props) => {
     getAvailabilityData(new Date());
   }, []);
 
-  return (
-    <Modal
-      animationType="fade"
-      transparent
-      backdropOpacity={1}
-      visible={visible}
-      onRequestClose={() => {
-        onClose(false);
+  const renderSlots = (item, index) => (
+    <View
+      style={{
+        backgroundColor: !item.active ? Colors.lightGrey : item.selected ? Colors.lightGreen : Colors.lightBlue,
+        padding: 8,
+        borderRadius: 8,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        marginHorizontal: RfW(4),
+        marginVertical: RfH(4),
       }}>
+      <Text
+        style={{
+          alignSelf: 'center',
+          fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+        }}>
+        {moment(item.startDate).format('hh:mm A')}
+        {' : '}
+        {moment(item.endDate).format('hh:mm A')}
+      </Text>
+    </View>
+  );
+
+  return (
+    <Modal animationType="fade" transparent backdropOpacity={1} visible={visible} onRequestClose={onClose}>
       <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'column' }} />
       <View
         style={{
@@ -71,7 +84,7 @@ const DateSlotSelectorModal = (props) => {
           alignItems: 'stretch',
           backgroundColor: Colors.white,
           opacity: 1,
-          paddingBottom: RfH(40),
+          paddingBottom: RfH(34),
         }}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>
           <Text style={commonStyles.headingPrimaryText}>Available Slots</Text>
@@ -80,7 +93,7 @@ const DateSlotSelectorModal = (props) => {
             iconWidth={RfW(24)}
             styling={{ alignSelf: 'flex-end' }}
             iconImage={Images.cross}
-            submitFunction={() => onClose(false)}
+            submitFunction={onClose}
           />
         </View>
         <View style={{ paddingHorizontal: RfW(16) }}>
@@ -111,73 +124,45 @@ const DateSlotSelectorModal = (props) => {
                 ],
               },
             ]}
-            onHeaderSelected={(a) => console.log(a)}
             onDateSelected={(d) => getAvailabilityData(d)}
           />
         </View>
-        {!isEmpty(availability) ? (
-          <View>
-            <View
-              style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(20) }]}>
-              <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>Start Time</Text>
-              <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>End Time</Text>
+        <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(48) }}>
+          <Text style={{ fontFamily: 'SegoeUI-Bold', fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>Select Slot</Text>
+        </View>
+        <View style={{ alignItems: 'center', paddingTop: RfH(24) }}>
+          {availability.length > 0 && (
+            <FlatList
+              style={{ height: RfH(200) }}
+              data={availability}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item, index }) => renderSlots(item, index)}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{ paddingHorizontal: RfW(8) }}
+            />
+          )}
+          {availability.length === 0 && (
+            <View style={{ height: RfH(200) }}>
+              <Text> No Slots Available</Text>
             </View>
-            <View style={commonStyles.horizontalChildrenSpaceView}>
-              <Picker
-                iosHeader="Start Time"
-                Header="Start Time"
-                mode="default"
-                textStyle={{ color: Colors.brandBlue2 }}
-                placeholder="Select Start Time"
-                placeholderStyle={{ fontSize: 15 }}
-                selectedValue={selectedSlot}
-                onValueChange={(value) => setSelectedSlot(value)}>
-                {availability.map((slot, i) => (
-                  <Picker.Item label={moment(slot.startDate).format('hh:mm A')} value={slot} key={i} />
-                ))}
-              </Picker>
-              <Text style={{ marginRight: RfW(16), textAlign: 'center' }}>
-                {!isEmpty(selectedSlot) ? moment(selectedSlot.endDate).format('hh:mm A') : '--'}
-              </Text>
-            </View>
-          </View>
-        ) : (
-          <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: RfH(10) }}>
-            <Text style={commonStyles.mediumPrimaryText}> No slots available for the selected date</Text>
-          </View>
-        )}
-
-        {!isEmpty(selectedSlot) && (
-          <View
-            style={{
-              marginTop: RfH(24),
-              marginBottom: RfH(34),
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Button onPress={() => onSubmit(selectedSlot)} style={commonStyles.buttonPrimary}>
-              <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
-            </Button>
-          </View>
-        )}
+          )}
+        </View>
       </View>
     </Modal>
   );
 };
 
-DateSlotSelectorModal.defaultProps = {
+TutorAvailabilitySlots.defaultProps = {
   visible: false,
   onClose: null,
-  onSubmit: null,
   tutorId: 0,
 };
 
-DateSlotSelectorModal.propTypes = {
+TutorAvailabilitySlots.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
-  onSubmit: PropTypes.func,
   tutorId: PropTypes.number,
 };
 
-export default DateSlotSelectorModal;
+export default TutorAvailabilitySlots;

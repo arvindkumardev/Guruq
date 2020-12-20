@@ -2,29 +2,29 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-plusplus */
-import {useLazyQuery, useMutation, useReactiveVar} from '@apollo/client';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import {Icon} from 'native-base';
+import { Icon } from 'native-base';
 import PropTypes from 'prop-types';
-import React, {useEffect, useState} from 'react';
-import {Dimensions, FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View} from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {RFValue} from 'react-native-responsive-fontsize';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
-import {offeringsMasterData, studentDetails, userDetails} from '../../../../apollo/cache';
-import {IconButtonWrapper} from '../../../../components';
+import { offeringsMasterData, studentDetails, userDetails } from '../../../../apollo/cache';
+import { IconButtonWrapper } from '../../../../components';
 import Loader from '../../../../components/Loader';
 import NavigationRouteNames from '../../../../routes/screenNames';
-import {Colors, Images} from '../../../../theme';
+import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
-import {STANDARD_SCREEN_SIZE} from '../../../../utils/constants';
-import {getSubjectIcons, getUserImageUrl, RfH, RfW} from '../../../../utils/helpers';
-import {GET_CART_ITEMS, GET_SCHEDULED_CLASSES} from '../../booking.query';
-import {MARK_INTERESTED_OFFERING_SELECTED} from '../../dashboard-mutation';
-import {GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS} from '../../dashboard-query';
-import {GET_FAVOURITE_TUTORS} from '../../tutor-query';
+import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
+import { GET_CART_ITEMS, GET_SCHEDULED_CLASSES } from '../../booking.query';
+import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
+import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
+import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
 import StudentOfferingModal from './studentOfferingModal';
 import NotificationRedirection from '../../../notification/notificationRedirection';
 
@@ -209,7 +209,7 @@ function StudentDashboard(props) {
             iconWidth={RfW(64)}
             styling={{ alignSelf: 'center' }}
             iconHeight={RfH(64)}
-            imageResizeMode={'contain'}
+            imageResizeMode="contain"
             iconImage={getSubjectIcons(item.displayName)}
           />
         </View>
@@ -578,49 +578,50 @@ function StudentDashboard(props) {
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <IconButtonWrapper
-              iconImage={Images.cart}
-              iconHeight={RfH(16)}
-              iconWidth={RfW(16)}
-              submitFunction={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CART)}
-            />
-            {cartCount > 0 && (
+            <TouchableOpacity
+              onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CART)}
+              style={{ paddingHorizontal: RfW(8) }}>
+              <IconButtonWrapper
+                iconImage={Images.cart}
+                iconHeight={RfH(18)}
+                iconWidth={RfW(18)}
+              />
+              {cartCount > 0 && (
+                <View
+                  style={{
+                    backgroundColor: Colors.orangeRed,
+                    borderRadius: RfH(20),
+                    position: 'absolute',
+                    top: RfH(-3),
+                    left: RfW(10),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: RfH(12),
+                    width: RfH(12),
+                  }}>
+                  <Text style={{ fontSize: 9, fontWeight: 'bold', color: Colors.white }}>{cartCount}</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
+              style={{ paddingLeft: RfW(8) }}>
+              <IconButtonWrapper iconImage={Images.bell} iconHeight={RfH(18)} iconWidth={RfW(18)} imageResizeMode={'contain'}/>
               <View
                 style={{
                   backgroundColor: Colors.orangeRed,
                   borderRadius: RfH(20),
                   position: 'absolute',
                   top: RfH(-3),
-                  left: RfW(2),
+                  left: RfW(15),
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: RfH(10),
-                  width: RfH(10),
+                  height: RfH(12),
+                  width: RfH(12),
                 }}>
-                <Text style={{ fontSize: 7, fontWeight: 'bold', color: Colors.white }}>{cartCount}</Text>
+                <Text style={{ fontSize: 9, fontWeight: 'bold', color: Colors.white }}>2</Text>
               </View>
-            )}
-            <IconButtonWrapper
-              iconImage={Images.bell}
-              iconHeight={RfH(16)}
-              iconWidth={RfW(14)}
-              styling={{ marginLeft: RfW(16) }}
-              submitFunction={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
-            />
-            <View
-              style={{
-                backgroundColor: Colors.orangeRed,
-                borderRadius: RfH(20),
-                position: 'absolute',
-                top: RfH(-3),
-                left: RfW(40),
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: RfH(10),
-                width: RfH(10),
-              }}>
-              <Text style={{ fontSize: 7, fontWeight: 'bold', color: Colors.white }}>2</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
