@@ -21,7 +21,7 @@ const VideoMessagingModal = (props) => {
   const getMessageToRender = (message) => {
     return {
       ...message,
-      _id: message.id,
+      _id: message.uuid,
       createdAt: message.createdDate,
       user: { _id: message.createdBy.id, name: `${message.createdBy.firstName} ${message.createdBy.lastName}` },
     };
@@ -31,9 +31,6 @@ const VideoMessagingModal = (props) => {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
     },
     onCompleted: (data) => {
       console.log(data);
@@ -50,9 +47,6 @@ const VideoMessagingModal = (props) => {
       fetchPolicy: 'no-cache',
       onError: (e) => {
         console.log(e);
-        if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-          const error = e.graphQLErrors[0].extensions.exception.response;
-        }
       },
       onCompleted: (data) => {
         console.log(data);
@@ -60,7 +54,7 @@ const VideoMessagingModal = (props) => {
           if (data?.getChatMessages) {
             setChatMessages(
               GiftedChat.append(
-                chatMessages,
+                [],
                 data.getChatMessages.map((message) => getMessageToRender(message))
               )
             );
@@ -70,12 +64,12 @@ const VideoMessagingModal = (props) => {
     }
   );
   useEffect(() => {
-    // getChatMessages({ variables: { channelName: props.channelName } });
+    getChatMessages({ variables: { channelName: props.channelName } });
   }, []);
 
   const { loading: loadingNewMessageEvent } = useSubscription(NEW_CHAT_MESSAGE, {
     onSubscriptionData: ({ subscriptionData: { data } }) => {
-      console.log(data);
+      console.log('onSubscriptionData: ', data);
       if (data && data?.chatMessageSent) {
         const message = data.chatMessageSent;
         setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));

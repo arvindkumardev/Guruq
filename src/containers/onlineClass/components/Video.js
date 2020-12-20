@@ -651,11 +651,11 @@ export default class Video extends Component<Props, State> {
           onClose={this.toggleClassDetails}
           classDetails={this.props.classDetails}
         />
-        {/* <VideoMessagingModal
+        <VideoMessagingModal
           visible={this.state.showMessageBox}
           onClose={this.toggleMessageBox}
           channelName={this.props.channelName}
-        /> */}
+        />
         <VideoMoreAction visible={this.state.showMoreActions} onClose={this.toggleMoreAction} />
       </View>
     );

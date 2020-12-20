@@ -5,7 +5,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import apolloLogger from 'apollo-link-logger';
 import { getToken } from '../utils/helpers';
 
-// const GRAPHQL_ENDPOINT = 'http://10.0.0.9:5000/graphql';
+// const GRAPHQL_ENDPOINT = 'http://10.0.0.7:5000/graphql';
 const GRAPHQL_ENDPOINT = 'http://apiv2.guruq.in/graphql';
 
 let apolloClient = null;
@@ -53,7 +53,7 @@ const cache = new InMemoryCache();
 
 function createApolloClient() {
   return new ApolloClient({
-    link: apolloLogger.concat(splitLink),
+    link: splitLink,
     cache,
   });
 }
