@@ -1,22 +1,22 @@
 /* eslint-disable no-use-before-define */
-import {Alert, Modal, NativeEventEmitter, NativeModules, Text, TouchableOpacity, View,} from 'react-native';
-import React, {useState} from 'react';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {useNavigation} from '@react-navigation/native';
-import {Button} from 'native-base';
+import { Alert, Modal, NativeEventEmitter, NativeModules, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { useNavigation } from '@react-navigation/native';
+import { Button } from 'native-base';
 import PropTypes from 'prop-types';
 import RNRazorpayCheckout from 'react-native-razorpay';
-import {useMutation, useReactiveVar} from '@apollo/client';
-import {Colors, Fonts, Images} from '../../theme';
+import { useMutation, useReactiveVar } from '@apollo/client';
+import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
-import {CustomRadioButton, IconButtonWrapper} from '..';
-import {RfH, RfW} from '../../utils/helpers';
-import {STANDARD_SCREEN_SIZE} from '../../utils/constants';
+import { CustomRadioButton, IconButtonWrapper } from '..';
+import { RfH, RfW } from '../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import routeNames from '../../routes/screenNames';
-import {userDetails} from '../../apollo/cache';
-import {CREATE_BOOKING, MAKE_PAYMENT} from '../../containers/student/booking.mutation';
+import { userDetails } from '../../apollo/cache';
+import { CREATE_BOOKING, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
 import Dash from '../Dash';
-import {OrderPaymentStatusEnum, OrderStatusEnum, PaymentMethodEnum} from './paymentMethod.enum';
+import { OrderPaymentStatusEnum, OrderStatusEnum, PaymentMethodEnum } from './paymentMethod.enum';
 
 const convenienceCharges = 100;
 const PaymentMethod = (props) => {
