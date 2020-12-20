@@ -10,3 +10,13 @@ export const CREATE_UPDATE_TUTOR_OFFERINGS = gql`
     }
   }
 `;
+
+export const UPDATE_AVAILABILITY = gql`
+  mutation UpdateAvailability($tutorAvailability: TutorAvailabilityDto!) {
+    updateAvailability(tutorAvailability: $tutorAvailability) {
+      id
+      startDate
+      endDate
+    }
+  }
+`;

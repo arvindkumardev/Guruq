@@ -1,25 +1,63 @@
+/* eslint-disable no-restricted-syntax */
 import { FlatList, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, CheckBox, Item, ListItem } from 'native-base';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import moment from 'moment';
 import { ScreenHeader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { RfH, RfW } from '../../../../utils/helpers';
 import { Colors } from '../../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { GET_AVAILABILITY } from '../../../student/class.query';
+import { tutorDetails } from '../../../../apollo/cache';
 
 function ViewSchedule() {
-  const [timeSlots, setTimeSlots] = useState([
-    { slot: '9:30- 10:30 AM', isActive: false },
-    { slot: '10:30- 11:30 AM', isActive: false },
-    { slot: '1:30- 2:30 PM', isActive: true },
-    { slot: '3:00- 4:00 PM', isActive: false },
-    { slot: '4:00- 5:00 PM', isActive: false },
-    { slot: '5:00- 6:00 PM', isActive: true },
-    { slot: '7:00- 8:00 PM', isActive: false },
-    { slot: '8:00- 9:00 PM', isActive: false },
-  ]);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const tutorInfo = useReactiveVar(tutorDetails);
+
+  const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      setTimeSlots([]);
+      const dateObj = [];
+      for (const obj of data.getAvailability) {
+        const sHours = new Date(obj.startDate).getHours();
+        const sMin = new Date(obj.startDate).getMinutes();
+        const eHours = new Date(obj.endDate).getHours();
+        const eMin = new Date(obj.endDate).getMinutes();
+        dateObj.push({
+          slot: `${`${sHours < 10 ? `0${sHours}` : sHours}:${sMin < 10 ? `0${sMin}` : sMin}`} - ${`${
+            eHours < 10 ? `0${eHours}` : eHours
+          }:${eMin < 10 ? `0${eMin}` : eMin}`}`,
+          isActive: obj.active,
+        });
+      }
+      setTimeSlots(dateObj);
+    },
+  });
+
+  const getAvailabilityData = (date) => {
+    getAvailability({
+      variables: {
+        tutorAvailability: {
+          tutorId: tutorInfo?.id,
+          startDate: moment(date).toDate(),
+          endDate: moment(date).endOf('day').toDate(),
+        },
+      },
+    });
+  };
+
+  useEffect(() => {
+    getAvailabilityData(new Date());
+  }, []);
 
   const onCheckPressed = (index) => {
     const arrSlots = [];
@@ -81,19 +119,17 @@ function ViewSchedule() {
               },
             ]}
             onHeaderSelected={(a) => console.log(a)}
-            // onDateSelected={(d) => getScheduledClassesbyDay(d)}
+            onDateSelected={(d) => getAvailabilityData(d)}
           />
         </View>
       </View>
-      <View>
-        <FlatList
-          data={timeSlots}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => renderItem(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingLeft: RfW(16) }}
-        />
-      </View>
+      <FlatList
+        data={timeSlots}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item, index }) => renderItem(item, index)}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{ paddingLeft: RfW(16), paddingBottom: RfH(84) }}
+      />
       <View
         style={{
           flexDirection: 'row',
@@ -106,7 +142,7 @@ function ViewSchedule() {
         }}>
         <View style={{ paddingBottom: RfH(32), paddingTop: RfH(8) }}>
           <Button style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]}>
-            <Text style={commonStyles.textButtonPrimary}>Confirm</Text>
+            <Text style={commonStyles.textButtonPrimary}>Edit Availability</Text>
           </Button>
         </View>
       </View>
