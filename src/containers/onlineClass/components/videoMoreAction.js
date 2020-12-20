@@ -24,7 +24,7 @@ const VideoMoreAction = (props) => {
           <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
           <View
             style={{
-              bottom: '50%',
+              bottom: 0,
               left: 0,
               right: 0,
               position: 'absolute',
@@ -32,7 +32,7 @@ const VideoMoreAction = (props) => {
               justifyContent: 'flex-start',
               alignItems: 'stretch',
               // backgroundColor: Colors.white,
-              paddingHorizontal: RfW(16),
+              // paddingHorizontal: RfW(16),
               // paddingVertical: RfW(16),
             }}>
             <View

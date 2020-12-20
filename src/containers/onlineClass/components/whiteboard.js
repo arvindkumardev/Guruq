@@ -7,7 +7,7 @@ const Whiteboard = (props) => {
   return (
     <WebView
       source={{
-        uri: `https://wbo.ophir.dev/boards/${uuid}`,
+        uri: `https://staging.guruq.in/boards/bid/${uuid}`,
       }}
       style={{ width: '100%', height: '100%' }}
     />

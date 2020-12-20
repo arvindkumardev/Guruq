@@ -139,7 +139,7 @@ function CalendarView(props) {
       variables: {
         classesSearchDto: {
           studentId: studentInfo.id,
-          startDate: moment(date).toDate(),
+          startDate: moment(date).startOf('day').toDate(),
           endDate: moment(date).endOf('day').toDate(),
         },
       },
@@ -148,15 +148,6 @@ function CalendarView(props) {
 
   useEffect(() => {
     getScheduledClassesbyDay(new Date());
-    // getScheduledClasses({
-    //   variables: {
-    //     classesSearchDto: {
-    //       studentId: studentInfo.id,
-    //       startDate: moment().toDate(),
-    //       endDate: moment().endOf('day').toDate(),
-    //     },
-    //   },
-    // });
   }, []);
 
   return (

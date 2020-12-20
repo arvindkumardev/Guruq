@@ -33,6 +33,9 @@ export const GET_CLASS_DETAILS = gql`
       }
       students {
         id
+        user {
+          id
+        }
         profileImage {
           id
           filename
@@ -45,6 +48,9 @@ export const GET_CLASS_DETAILS = gql`
       }
       tutor {
         id
+        user {
+          id
+        }
         profileImage {
           id
           filename

@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { isEmpty, isNumber } from 'lodash';
 import { Alert, Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import moment from 'moment';
 import Images from '../theme/images';
 import SubjectIcons from '../theme/subjectIcons';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
@@ -18,9 +19,7 @@ export const storeData = async (key, value) => {
       v = JSON.stringify(value);
     }
     await AsyncStorage.setItem(key, v);
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 };
 
 export const getSaveData = async (key) => {
@@ -265,4 +264,19 @@ export const getSubjectIcons = (name) => {
       icon = Images.book;
   }
   return icon;
+};
+
+export const formatDate = (date, format) => {
+  return moment(date).format(format);
+};
+
+export const printDate = (date) => {
+  return formatDate(date, 'MMM DD, YYYY');
+};
+export const printDateTime = (date) => {
+  return formatDate(date, 'MMM DD, YYYY - hh:mm a');
+};
+
+export const printTime = (date) => {
+  return formatDate(date, 'hh:mm a');
 };
