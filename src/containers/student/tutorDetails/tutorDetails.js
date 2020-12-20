@@ -362,7 +362,7 @@ function TutorDetails(props) {
         color="rgb(203,231,255)"
         shadowColor={Colors.lightGrey}
         bgColor={Colors.white}>
-        <IconButtonWrapper iconWidth={RfW(22)} iconImage={item.image} />
+        <IconButtonWrapper iconWidth={RfW(22)} iconHeight={RfH(22)} imageResizeMode={'contain'} iconImage={item.image} />
       </ProgressCircle>
       <Text
         style={{
@@ -850,6 +850,7 @@ function TutorDetails(props) {
                 <FlatList
                   showsHorizontalScrollIndicator={false}
                   horizontal
+                  scrollEnabled={false}
                   data={subjects}
                   extraData={refreshList}
                   renderItem={({ item, index }) => renderSubjects(item, index)}

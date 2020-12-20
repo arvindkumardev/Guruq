@@ -28,12 +28,13 @@ import Dash from '../Dash';
 import { OrderPaymentStatusEnum, PaymentMethodEnum, OrderStatusEnum } from './paymentMethod.enum';
 import styles from '../../theme/styles';
 
+const convenienceCharges = 100;
 const PaymentMethod = (props) => {
   const { visible, onClose, bookingData, amount, discount, deductedAgaintQPoint } = props;
 
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(PaymentMethodEnum.ONLINE.value);
-  const [convenienceCharges, setConvenienceCharges] = useState(100);
+
   const [paymentStatus, setPaymentStatus] = useState(OrderPaymentStatusEnum.FAILED.value);
 
   const userInfo = useReactiveVar(userDetails);
@@ -47,7 +48,6 @@ const PaymentMethod = (props) => {
       }
     },
     onCompleted: (data) => {
-      console.log('paymentMethod', paymentMethod);
       if (data) {
         switch (paymentMethod) {
           case PaymentMethodEnum.ONLINE.value:
@@ -88,7 +88,6 @@ const PaymentMethod = (props) => {
   });
 
   const initiateRazorPayPayment = (bookingOrderId) => {
-    console.log('initiateRazorPayPayment', bookingOrderId);
     const options = {
       description: 'Credits towards class booking',
       image:
@@ -106,7 +105,6 @@ const PaymentMethod = (props) => {
     };
     RNRazorpayCheckout.open(options)
       .then((data) => {
-        // handle success
         completedPayment(bookingOrderId, OrderPaymentStatusEnum.COMPLETE.label, data.razorpay_payment_id);
       })
       .catch((error) => {
@@ -117,7 +115,7 @@ const PaymentMethod = (props) => {
 
   const initiatePaytmPayment = async (bookingOrderId) => {
     // eslint-disable-next-line no-undef
-    const response = await fetch('http://localhost:5000/payment/initiatePaytmTransaction', {
+    const response = await fetch('http://apiv2.guruq.in/payment/initiatePaytmTransaction', {
       method: 'GET',
     });
 
@@ -182,7 +180,6 @@ const PaymentMethod = (props) => {
     return (
       <View style={{}}>
         <View style={commonStyles.blankViewSmall} />
-
         <View
           style={{
             height: 44,
@@ -191,8 +188,6 @@ const PaymentMethod = (props) => {
           <Text
             style={{
               paddingHorizontal: RfW(16),
-              // marginTop: RfW(24),
-              // marginBottom: RfW(8),
               fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
               color: Colors.secondaryText,
             }}>
@@ -200,8 +195,7 @@ const PaymentMethod = (props) => {
           </Text>
         </View>
         <View style={{ paddingHorizontal: RfW(16), backgroundColor: Colors.white }}>
-          <View style={{}}>
-            {/* <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>ORDER SUMMARY</Text> */}
+          <View>
             <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
               <Text
                 style={{
@@ -219,7 +213,7 @@ const PaymentMethod = (props) => {
                 ₹{parseFloat(amount).toFixed(2)}
               </Text>
             </View>
-            {paymentMethod === PaymentMethodEnum.PAYTM.value && (
+            {paymentMethod === PaymentMethodEnum.CASH.value && (
               <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
                 <View style={{ flexDirection: 'column' }}>
                   <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
@@ -238,23 +232,7 @@ const PaymentMethod = (props) => {
                 </Text>
               </View>
             )}
-
             <View style={commonStyles.lineSeparator} />
-
-            {/* <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(8) }]}> */}
-            {/*  <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}> */}
-            {/*    Coupon Applied */}
-            {/*  </Text> */}
-            {/*  <Text */}
-            {/*    style={{ */}
-            {/*      fontSize: RFValue(15, STANDARD_SCREEN_SIZE), */}
-            {/*      color: Colors.brandBlue2, */}
-            {/*      fontFamily: Fonts.semiBold, */}
-            {/*    }}> */}
-            {/*    -₹200 */}
-            {/*  </Text> */}
-            {/* </View> */}
-
             <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
               <View style={{ flexDirection: 'column' }}>
                 <Text
@@ -292,13 +270,6 @@ const PaymentMethod = (props) => {
                 -₹{parseFloat(deductedAgaintQPoint).toFixed(2)}
               </Text>
             </View>
-
-            {/* <View style={commonStyles.lineSeparatorWithVerticalMargin} /> */}
-
-            {/* <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}> */}
-            {/*  <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>To Pay</Text> */}
-            {/*  <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: Fonts.semiBold }}>₹999</Text> */}
-            {/* </View> */}
           </View>
         </View>
       </View>
@@ -338,7 +309,6 @@ const PaymentMethod = (props) => {
     bookingData.orderStatus = OrderStatusEnum.PENDING.label;
     bookingData.promotionId = 0;
 
-    // hide the payment popup
     props.hidePaymentPopup();
 
     createNewBooking({
@@ -418,17 +388,11 @@ const PaymentMethod = (props) => {
         <View style={{ paddingHorizontal: 0, backgroundColor: Colors.lightGrey }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={commonStyles.blankViewSmall} />
-
             <View>
-              <View
-                style={{
-                  height: 44,
-                  justifyContent: 'center',
-                }}>
+              <View style={{ height: RfH(44), justifyContent: 'center' }}>
                 <Text
                   style={{
                     paddingHorizontal: RfW(16),
-                    // marginBottom: RfW(8),
                     fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
                     color: Colors.secondaryText,
                   }}>
@@ -441,41 +405,28 @@ const PaymentMethod = (props) => {
                   paddingHorizontal: RfW(16),
                   backgroundColor: Colors.white,
                 }}>
-                {/* <View style={{ marginTop: RfH(24) }}> */}
-                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.ONLINE.value)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.ONLINE.value)} activeOpacity={0.8}>
                   <View
                     style={[
                       commonStyles.horizontalChildrenView,
                       commonStyles.lineSeparator,
                       { alignItems: 'center', height: RfH(44) },
                     ]}>
-                    <CustomRadioButton
-                      enabled={paymentMethod === PaymentMethodEnum.ONLINE.value}
-                      submitFunction={() => setPaymentMethod(PaymentMethodEnum.ONLINE.value)}
-                    />
+                    <CustomRadioButton enabled={paymentMethod === PaymentMethodEnum.ONLINE.value} />
                     <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>
                       Online Payment
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.PAYTM.value)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.PAYTM.value)} activeOpacity={0.8}>
                   <View
                     style={[
                       commonStyles.horizontalChildrenView,
                       commonStyles.lineSeparator,
                       { alignItems: 'center', height: RfH(44) },
                     ]}>
-                    <CustomRadioButton
-                      enabled={paymentMethod === PaymentMethodEnum.PAYTM.value}
-                      submitFunction={() => setPaymentMethod(PaymentMethodEnum.PAYTM.value)}
-                    />
-                    <Text
-                      style={{
-                        fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                        marginLeft: RfW(8),
-                      }}>
-                      Paytm
-                    </Text>
+                    <CustomRadioButton enabled={paymentMethod === PaymentMethodEnum.PAYTM.value} />
+                    <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Paytm</Text>
                     <View style={commonStyles.horizontalChildrenView} />
                   </View>
                 </TouchableOpacity>
@@ -486,21 +437,12 @@ const PaymentMethod = (props) => {
                       commonStyles.lineSeparator,
                       { alignItems: 'center', height: RfH(44) },
                     ]}>
-                    <CustomRadioButton
-                      enabled={paymentMethod === PaymentMethodEnum.PAYPAL.value}
-                      submitFunction={() => setPaymentMethod(PaymentMethodEnum.PAYPAL.value)}
-                    />
-                    <Text
-                      style={{
-                        fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                        marginLeft: RfW(8),
-                      }}>
-                      PayPal
-                    </Text>
+                    <CustomRadioButton enabled={paymentMethod === PaymentMethodEnum.PAYPAL.value} />
+                    <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>PayPal</Text>
                     <View style={commonStyles.horizontalChildrenView} />
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.CASH.value)}>
+                <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.CASH.value)} activeOpacity={0.8}>
                   <View
                     style={[
                       commonStyles.horizontalChildrenView,
@@ -509,17 +451,8 @@ const PaymentMethod = (props) => {
                         height: RfH(44),
                       },
                     ]}>
-                    <CustomRadioButton
-                      enabled={paymentMethod === PaymentMethodEnum.CASH.value}
-                      submitFunction={() => setPaymentMethod(PaymentMethodEnum.CASH.value)}
-                    />
-                    <Text
-                      style={{
-                        fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                        marginLeft: RfW(8),
-                      }}>
-                      Cash
-                    </Text>
+                    <CustomRadioButton enabled={paymentMethod === PaymentMethodEnum.CASH.value} />
+                    <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>Cash</Text>
                   </View>
                 </TouchableOpacity>
                 {/* <View style={{ borderBottomWidth: 0.5, borderBottomColor: Colors.darkGrey, marginVertical: RfH(16) }} /> */}
@@ -533,7 +466,7 @@ const PaymentMethod = (props) => {
             style={[
               commonStyles.horizontalChildrenSpaceView,
               {
-                alignItems: 'flex-end',
+                alignItems: 'center',
                 backgroundColor: Colors.white,
                 paddingTop: RfH(8),
                 paddingHorizontal: RfW(16),
@@ -544,19 +477,13 @@ const PaymentMethod = (props) => {
               <Text style={commonStyles.headingPrimaryText}>
                 ₹
                 {parseFloat(
-                  amount +
-                    (paymentMethod === PaymentMethodEnum.CASH.value ? convenienceCharges : 0) -
-                    discount -
-                    deductedAgaintQPoint
+                  amount + (paymentMethod === PaymentMethodEnum.CASH.value ? convenienceCharges : 0) - discount
                 ).toFixed(2)}
-              </Text>
-              <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
-                View Details
               </Text>
             </View>
             <View>
               <Button
-                onPress={() => makePayment()}
+                onPress={makePayment}
                 style={[
                   commonStyles.buttonPrimary,
                   {

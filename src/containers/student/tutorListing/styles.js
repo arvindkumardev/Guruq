@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     paddingTop: RfH(44),
   },
   headerComponent: {
-    height: RfH(44),
+    height: RfH(50),
     marginTop: RfH(16),
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   },
   bookIcon: {
     height: RfH(40),
+    width: RfH(40),
   },
   switchView: {
     flexDirection: 'row',
