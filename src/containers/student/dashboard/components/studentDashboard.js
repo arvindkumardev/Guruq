@@ -621,6 +621,7 @@ function StudentDashboard(props) {
                 iconWidth={RfH(32)}
                 iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
                 styling={{ borderRadius: RfH(32) }}
+                submitFunction={() => changeTab(5)}
               />
             </View>
           </View>

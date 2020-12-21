@@ -2,6 +2,7 @@ import { Image, Text, View } from 'react-native';
 import React from 'react';
 import { WebView } from 'react-native-webview';
 import { ScreenHeader } from '../../../components';
+import { RfW } from '../../../utils/helpers';
 
 function WebViewPages(props) {
   const { route } = props;
@@ -10,7 +11,7 @@ function WebViewPages(props) {
   const label = route?.params?.label;
   return (
     <View>
-      <ScreenHeader label={label} homeIcon />
+      <ScreenHeader label={label} homeIcon horizontalPadding={RfW(16)} />
       <WebView source={{ uri: url }} />
     </View>
   );

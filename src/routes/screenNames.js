@@ -56,6 +56,7 @@ const NavigationRouteNames = {
     PRICE_MATRIX: 'price_matrix',
     VIEW_SCHEDULE: 'view_schedule',
     UPDATE_SCHEDULE: 'update_schedule',
+    BANK_DETAILS: 'bank_details',
   },
 };
 

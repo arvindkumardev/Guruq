@@ -9,8 +9,8 @@ import TutorDashboard from './components/tutorDashboard';
 import CalendarView from '../calendar/calendarView';
 import BottomTab from './components/bottomTab';
 import ClassView from '../classes/classesView';
-import Performance from '../performance/performance';
 import Profile from '../profile/profile';
+import Wallet from '../wallet/wallet';
 
 function TutorDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);
@@ -28,12 +28,12 @@ function TutorDashboardContainer(props) {
       <Container>
         <View style={{ flex: 1 }}>
           {activeTab === 1 && (
-            <TutorDashboard refetchStudentOfferings={refetchStudentOfferings} changeTab={() => changeTab(2)} />
+            <TutorDashboard refetchStudentOfferings={refetchStudentOfferings} changeTab={(tab) => changeTab(tab)} />
           )}
           {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
           {activeTab === 3 && <ClassView />}
-          {activeTab === 4 && <Performance />}
-          {activeTab === 5 && <Profile />}
+          {activeTab === 4 && <Wallet />}
+          {activeTab === 5 && <Profile changeTab={() => changeTab(3)} />}
         </View>
         <BottomTab activeTab={activeTab} changeTab={changeTab} />
       </Container>
