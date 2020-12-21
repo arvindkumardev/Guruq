@@ -404,7 +404,7 @@ function TutorDashboard(props) {
               </View>
             </View>
           )}
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING)}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS)}>
             <View style={{ marginTop: RfH(20) }}>
               <Image
                 style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}

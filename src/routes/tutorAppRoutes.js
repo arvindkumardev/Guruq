@@ -15,6 +15,7 @@ import PostTutionNeeds from '../containers/tutionNeeds/postTutionNeeds';
 import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetails';
 import ReferEarn from '../containers/referAndEarn/referEarn';
 import Notifications from '../containers/student/dashboard/notifications';
+import StudentRequests from '../containers/tutor/dashboard/components/studentRequests';
 
 const Stack = createStackNavigator();
 
@@ -81,6 +82,11 @@ export const getTutorRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.NOTIFICATIONS}
         component={Notifications}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.STUDENT_REQUESTS}
+        component={StudentRequests}
         options={{ headerShown: false }}
       />
     </>
