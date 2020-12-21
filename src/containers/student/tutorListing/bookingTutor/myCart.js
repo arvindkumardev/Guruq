@@ -291,7 +291,7 @@ const myCart = () => {
         </View>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={styles.tutorDetails}>
-            {item.groupSize === 1 ? 'Individual' : 'Group'} {item?.onlineClass ? 'Online' : 'Offline'} Class
+            {item?.onlineClass ? 'Online' : 'Offline'} {item.groupSize === 1 ? 'Individual' : 'Group'} Class
           </Text>
 
           <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>₹{item?.price}</Text>

@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import moment from 'moment';
-import { Button, CheckBox } from 'native-base';
+import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Modal, ScrollView, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
@@ -14,7 +13,7 @@ import Loader from '../../../components/Loader';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { API_URL, IMAGES_BASE_URL, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SCHEDULE_CLASS } from '../booking.mutation';
 import { GET_CLASS_DETAILS } from '../class.query';
@@ -73,8 +72,8 @@ function ScheduledClassDetails(props) {
 
   const getStudentImageUrl = (filename, gender, id) => {
     return filename
-      ? `https://guruq.in/api/${filename}`
-      : `https://guruq.in/guruq-new/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
+      ? `${API_URL}/${filename}`
+      : `${IMAGES_BASE_URL}/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
   };
 
   const renderAttendees = (item) => (
@@ -93,7 +92,7 @@ function ScheduledClassDetails(props) {
           <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
         </View>
       </View>
-      {/*<CheckBox checked={item.joined} />*/}
+      {/* <CheckBox checked={item.joined} /> */}
     </View>
   );
 
@@ -195,10 +194,10 @@ function ScheduledClassDetails(props) {
 
                 <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                    {classDetails?.classTitle}
+                    {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
                   </Text>
                   <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                    {`${classDetails.board} | ${classDetails.class}`}
+                    {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
                   </Text>
                 </View>
               </View>
@@ -251,13 +250,19 @@ function ScheduledClassDetails(props) {
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
-                    <Text style={commonStyles.headingPrimaryText}>{classDetails?.classTitle}</Text>
-                    <Text
-                      style={[
-                        commonStyles.mediumMutedText,
-                        { marginTop: RfH(4) },
-                      ]}>{`${classDetails.board} | ${classDetails.class}`}</Text>
+                  <View
+                    style={{
+                      height: RfH(54),
+                      justifyContent: 'center',
+                      paddingHorizontal: RfW(0),
+                      marginRight: RfH(16),
+                    }}>
+                    <Text style={commonStyles.headingPrimaryText} numberOfLines={1}>
+                      {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
+                    </Text>
+                    <Text style={[commonStyles.mediumMutedText, { marginTop: RfH(4) }]}>
+                      {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+                    </Text>
                   </View>
 
                   <View style={{}}>
@@ -422,7 +427,7 @@ function ScheduledClassDetails(props) {
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
             <Text style={commonStyles.mediumMutedText}>
-              GURUQC{new Date().getFullYear().toString().substring(2, 4)}
+              C-{new Date().getFullYear().toString().substring(2, 4)}
               {new Date().getMonth()}
               {classDetails?.classData?.id}
             </Text>

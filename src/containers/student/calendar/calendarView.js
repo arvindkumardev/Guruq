@@ -37,17 +37,6 @@ function CalendarView(props) {
       }
     },
     onCompleted: (data) => {
-      // const array = [];
-      // for (const obj of data.getScheduledClasses) {
-      //   array.push({
-      //     uuid: obj.uuid,
-      //     classTitle: obj.offering.displayName,
-      //     board: obj.offering?.parentOffering?.parentOffering?.displayName,
-      //     class: obj.offering?.parentOffering?.displayName,
-      //     timing: `${moment(obj.startDate).format('hh:mm A')} - ${moment(obj.endDate).format('hh:mm A')}`,
-      //     id: obj.id,
-      //   });
-      // }
       setScheduledClasses(data.getScheduledClasses);
       setIsEmpty(data.getScheduledClasses.length === 0);
     },
@@ -78,12 +67,14 @@ function CalendarView(props) {
             {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>
-            {`${classDetails?.offering?.parentOffering?.displayName} | ${
-              classDetails?.offering?.parentOffering?.parentOffering?.displayName
-            } - ${classDetails?.onlineClass ? 'Online Class' : 'Offline Class'}`}
+            {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>
             {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
+          </Text>
+          <Text style={commonStyles.mediumMutedText}>
+            {classDetails?.onlineClass ? 'Online' : 'Offline'} {classDetails?.groupSize === 1 ? 'Individual' : 'Group'}{' '}
+            Class
           </Text>
         </View>
         <View />

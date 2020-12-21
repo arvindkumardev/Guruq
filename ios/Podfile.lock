@@ -298,7 +298,7 @@ PODS:
     - React-cxxreact (= 0.63.3)
     - React-jsi (= 0.63.3)
   - React-jsinspector (0.63.3)
-  - react-native-agora (3.1.5):
+  - react-native-agora (3.1.6):
     - AgoraRtcEngine_iOS_Crypto (= 3.1.2)
     - React
   - react-native-maps (0.27.1):
@@ -637,7 +637,7 @@ SPEC CHECKSUMS:
   React-jsi: df07aa95b39c5be3e41199921509bfa929ed2b9d
   React-jsiexecutor: b56c03e61c0dd5f5801255f2160a815f4a53d451
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
-  react-native-agora: 90a03a9f1a14260aadb4ee9aeccdad6c0c9340c9
+  react-native-agora: c4d4f60318536cfd4ae3ddddeebcd6cb1c9f3c4f
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-netinfo: 0212ce8604e88edf686f1481b925b17a42a52449
   react-native-razorpay: bb19c0aa50ee004ddb4b51615f07f3435aae4901
@@ -671,4 +671,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a1ff7fde0f387a5c01fb4277ca9bdfdfd9af3c2e
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0

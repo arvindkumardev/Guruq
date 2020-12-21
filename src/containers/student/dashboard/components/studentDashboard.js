@@ -20,7 +20,7 @@ import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
+import { getSubjectIcons, getUserImageUrl, printDate, printTime, RfH, RfW } from '../../../../utils/helpers';
 import { GET_CART_ITEMS, GET_SCHEDULED_CLASSES } from '../../booking.query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
@@ -427,29 +427,7 @@ function StudentDashboard(props) {
       }
     },
     onCompleted: (data) => {
-      const array = [];
-      for (const obj of data.getScheduledClasses) {
-        const startHours = new Date(obj.startDate).getHours();
-        const startMinutes = new Date(obj.startDate).getMinutes();
-        const endHours = new Date(obj.endDate).getHours();
-        const endMinutes = new Date(obj.endDate).getMinutes();
-        const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
-          startMinutes < 10 ? `0${startMinutes}` : startMinutes
-        } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
-          endMinutes < 10 ? `0${endMinutes}` : endMinutes
-        } ${endHours < 12 ? `AM` : 'PM'}`;
-        const item = {
-          startDate: obj.startDate,
-          uuid: obj.uuid,
-          classTitle: obj.offering.displayName,
-          board: obj.offering.parentOffering.parentOffering.displayName,
-          class: obj.offering.parentOffering.displayName,
-          timing,
-          classData: obj,
-        };
-        array.push(item);
-      }
-      setUpcomingClasses(array);
+      setUpcomingClasses(data.getScheduledClasses);
     },
   });
 
@@ -465,13 +443,11 @@ function StudentDashboard(props) {
     });
   }, []);
 
-  const renderUpcomingClasses = (item, index) => {
+  const renderUpcomingClasses = (classDetails, index) => {
     return (
       <View style={{ flex: 1 }}>
         <TouchableWithoutFeedback
-          onPress={() =>
-            navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: item })
-          }>
+          onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails })}>
           <View
             style={{
               backgroundColor: Colors.lightBlue,
@@ -486,7 +462,7 @@ function StudentDashboard(props) {
                 <IconButtonWrapper
                   iconWidth={RfH(98)}
                   iconHeight={RfH(98)}
-                  iconImage={getTutorImage(item.classData.tutor)}
+                  iconImage={getTutorImage(classDetails.tutor)}
                   imageResizeMode="cover"
                   styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
                 />
@@ -500,11 +476,10 @@ function StudentDashboard(props) {
                   marginLeft: RfW(8),
                 }}>
                 <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
-                  {item.classTitle} by {item.classData?.tutor?.contactDetail?.firstName}{' '}
-                  {item.classData?.tutor?.contactDetail?.lastName}
+                  {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
                 </Text>
                 <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  {`${item.board} | ${item.class}`}
+                  {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
                 </Text>
                 <View
                   style={{
@@ -518,7 +493,7 @@ function StudentDashboard(props) {
                     style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
                   <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {new Date(item.startDate).toDateString()}
+                    {printDate(classDetails.startDate)}
                   </Text>
                 </View>
                 <View
@@ -532,7 +507,9 @@ function StudentDashboard(props) {
                     name="clock"
                     style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>{item.timing}</Text>
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                    {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -546,7 +523,7 @@ function StudentDashboard(props) {
                     style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
                   />
                   <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {item.classData.onlineClass ? 'Online' : 'Offline'} Class
+                    {classDetails.onlineClass ? 'Online' : 'Offline'} Class
                   </Text>
                 </View>
               </View>
@@ -581,11 +558,7 @@ function StudentDashboard(props) {
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CART)}
               style={{ paddingHorizontal: RfW(8) }}>
-              <IconButtonWrapper
-                iconImage={Images.cart}
-                iconHeight={RfH(18)}
-                iconWidth={RfW(18)}
-              />
+              <IconButtonWrapper iconImage={Images.cart} iconHeight={RfH(18)} iconWidth={RfW(18)} />
               {cartCount > 0 && (
                 <View
                   style={{
@@ -606,7 +579,12 @@ function StudentDashboard(props) {
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
               style={{ paddingLeft: RfW(8) }}>
-              <IconButtonWrapper iconImage={Images.bell} iconHeight={RfH(18)} iconWidth={RfW(18)} imageResizeMode={'contain'}/>
+              <IconButtonWrapper
+                iconImage={Images.bell}
+                iconHeight={RfH(18)}
+                iconWidth={RfW(18)}
+                imageResizeMode="contain"
+              />
               <View
                 style={{
                   backgroundColor: Colors.orangeRed,
