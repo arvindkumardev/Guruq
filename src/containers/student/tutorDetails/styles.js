@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
   },
   tutorDetails: {
-    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
     color: Colors.secondaryText,
     marginTop: RfH(2),
   },

@@ -23,11 +23,6 @@ import styles from '../tutorListing/styles';
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
-  // const [attendees, setAttendees] = useState([]);
-  const [startTimes, setStartTimes] = useState([]);
-  const [availability, setAvailability] = useState([]);
-  const [selectedEndTime, setSelectedEndTime] = useState(null);
-  const [selectedStartTime, setSelectedStartTime] = useState(null);
   const [showBackButton, setShowBackButton] = useState(false);
   const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
   const [showCancelClassStartedPopup, setShowCancelClassStartedPopup] = useState(false);
@@ -73,7 +68,6 @@ function ScheduledClassDetails(props) {
   });
 
   useEffect(() => {
-    console.log(classDetails);
     getClassDetails({ variables: { classId: classDetails.id } });
   }, []);
 
@@ -83,27 +77,25 @@ function ScheduledClassDetails(props) {
       : `https://guruq.in/guruq-new/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
   };
 
-  const renderAttendees = (item) => {
-    return (
-      <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
-        <View style={[commonStyles.horizontalChildrenView]}>
-          <IconButtonWrapper
-            iconImage={getStudentImageUrl(item?.profileImage?.filename, item?.contactDetail?.gender, item.id)}
-            iconHeight={RfH(48)}
-            iconWidth={RfH(48)}
-            styling={{ borderRadius: RfH(8) }}
-          />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>
-              {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
-            </Text>
-            <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
-          </View>
+  const renderAttendees = (item) => (
+    <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
+      <View style={[commonStyles.horizontalChildrenView]}>
+        <IconButtonWrapper
+          iconImage={getStudentImageUrl(item?.profileImage?.filename, item?.contactDetail?.gender, item.id)}
+          iconHeight={RfH(48)}
+          iconWidth={RfH(48)}
+          styling={{ borderRadius: RfH(8) }}
+        />
+        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+          <Text style={commonStyles.headingPrimaryText}>
+            {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
+          </Text>
+          <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
         </View>
-        <CheckBox checked={item.joined} />
       </View>
-    );
-  };
+      {/*<CheckBox checked={item.joined} />*/}
+    </View>
+  );
 
   const renderAttachments = (item) => {
     return (
@@ -146,12 +138,7 @@ function ScheduledClassDetails(props) {
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
-
-    if (scrollPosition > 30) {
-      setShowBackButton(true);
-    } else {
-      setShowBackButton(false);
-    }
+    setShowBackButton(scrollPosition > 30);
   };
 
   const [scheduleClass, { loading: scheduleLoading }] = useMutation(SCHEDULE_CLASS, {
@@ -171,57 +158,27 @@ function ScheduledClassDetails(props) {
     },
   });
 
-  const selectedSlot = (item, index) => {
-    if (item.active) {
-      const interval = 1;
-      const timeArray = [];
-      timeArray.push({
-        startTime: new Date(item.startDate).setMinutes(new Date(item.startDate).getMinutes() + 15),
-      });
-      let endTime = new Date(item.startDate).setHours(new Date(item.startDate).getHours() + interval);
-      while (endTime < new Date(item.endDate)) {
-        timeArray.push({ startTime: new Date(endTime).setMinutes(new Date(endTime).getMinutes() + 15) });
-        endTime = new Date(endTime).setMinutes(new Date(endTime).getMinutes() + 15);
-      }
-      setStartTimes(timeArray);
-      const newArray = [];
-      availability.map((obj) => {
-        obj.selected = false;
-        newArray.push(obj);
-      });
-      let arrayItem = {};
-      arrayItem = { ...newArray[index] };
-      arrayItem.selected = !arrayItem.selected;
-      newArray[index] = arrayItem;
-      setAvailability(newArray);
-    }
-  };
-
-  const selectedClassTime = (value) => {
-    setSelectedStartTime(moment.utc(value).format('YYYY-MM-DD hh:mm:ss'));
-    setSelectedEndTime(moment.utc(value).add(1, 'hours').format('YYYY-MM-DD hh:mm:ss'));
-  };
-
-  const onScheduleClass = () => {
+  const onScheduleClass = (slot) => {
     scheduleClass({
       variables: {
         classesCreateDto: {
           orderItemId: classData?.orderItem?.id,
-          startDate: selectedStartTime,
-          endDate: selectedEndTime,
+          startDate: slot.startDate,
+          endDate: slot.endDate,
         },
       },
     });
   };
 
   return (
-    <View style={{ backgroundColor: Colors.white }}>
+    <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={classDetailsLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
-        scrollEventThrottle={16}>
+        scrollEventThrottle={16}
+        scrollEnabled={classData?.students?.length > 2}>
         <View style={[styles.topView, showBackButton ? { height: RfH(88) } : { height: RfH(98) }]}>
           {showBackButton && (
             <View
@@ -331,8 +288,7 @@ function ScheduledClassDetails(props) {
           )}
         </View>
 
-        <View
-          style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(44), height: 44 }]}>
+        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(80) }]}>
           <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.tutor_icon} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
         </View>
@@ -364,7 +320,12 @@ function ScheduledClassDetails(props) {
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-          <IconButtonWrapper iconImage={Images.bell} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+          <IconButtonWrapper
+            iconImage={Images.bell}
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            imageResizeMode="contain"
+          />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Notification alert</Text>
             <Text style={commonStyles.mediumMutedText}>20 minutes before</Text>
@@ -374,7 +335,12 @@ function ScheduledClassDetails(props) {
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-          <IconButtonWrapper iconImage={Images.attendees} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+          <IconButtonWrapper
+            iconImage={Images.attendees}
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            imageResizeMode="contain"
+          />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
             <Text style={commonStyles.mediumMutedText}>
@@ -447,7 +413,12 @@ function ScheduledClassDetails(props) {
 
         <View
           style={[commonStyles.horizontalChildrenView, { marginTop: RfH(16), paddingHorizontal: RfH(16), height: 60 }]}>
-          <IconButtonWrapper iconImage={Images.personal} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+          <IconButtonWrapper
+            iconImage={Images.personal}
+            iconWidth={RfW(24)}
+            iconHeight={RfH(24)}
+            imageResizeMode="contain"
+          />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
             <Text style={commonStyles.mediumMutedText}>
@@ -556,7 +527,7 @@ function ScheduledClassDetails(props) {
                   marginTop: RfH(32),
                 }}>
                 <Button
-                  onPress={() => goToCancelReason()}
+                  onPress={goToCancelReason}
                   block
                   bordered
                   style={{ flex: 1, height: RfH(40), alignSelf: 'center', marginRight: RfW(8) }}>
@@ -565,7 +536,7 @@ function ScheduledClassDetails(props) {
                   </Text>
                 </Button>
                 <Button
-                  onPress={() => openRescheduleModal()}
+                  onPress={openRescheduleModal}
                   block
                   style={{ flex: 1, backgroundColor: Colors.brandBlue2, height: RfH(40) }}>
                   <Text style={commonStyles.textButtonPrimary}>Reschedule</Text>
@@ -580,10 +551,7 @@ function ScheduledClassDetails(props) {
         visible={showReschedulePopup}
         onClose={() => setShowReschedulePopup(false)}
         tutorId={classData?.tutor?.id}
-        selectedSlot={(item, index) => selectedSlot(item, index)}
-        onSubmit={() => onScheduleClass()}
-        times={startTimes}
-        selectedClassTime={(value) => selectedClassTime(value)}
+        onSubmit={onScheduleClass}
       />
     </View>
   );

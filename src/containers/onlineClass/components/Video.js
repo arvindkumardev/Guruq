@@ -7,16 +7,15 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
-import styles from './style';
-
-import requestCameraAndAudioPermission from './permission';
-import { RfH, RfW } from '../../../utils/helpers';
-import { Colors } from '../../../theme';
+import BackArrow from '../../../components/BackArrow';
 import IconButtonWrapper from '../../../components/IconWrapper';
+import { Colors } from '../../../theme';
 import Images from '../../../theme/images';
 import commonStyles from '../../../theme/styles';
-import BackArrow from '../../../components/BackArrow';
+import { deviceWidth, RfH, RfW, printDate, printTime } from '../../../utils/helpers';
 import ClassDetailsModal from './classDetailsModal';
+import requestCameraAndAudioPermission from './permission';
+import styles from './style';
 import VideoMessagingModal from './videoMessagingModal';
 import VideoMoreAction from './videoMoreAction';
 import Whiteboard from './whiteboard';
@@ -280,6 +279,12 @@ export default class Video extends Component<Props, State> {
     this.setState({ whiteboardEnabled: !this.state.whiteboardEnabled });
   };
 
+  getParticipant = (id) => {
+    const participants = [...this.props.classDetails.students, this.props.classDetails.tutor];
+
+    return participants.find((p) => p.user?.id === id);
+  };
+
   _renderVideos = () => {
     return (
       <View style={[styles.fullView, { backgroundColor: '#222222' }]}>
@@ -309,7 +314,10 @@ export default class Video extends Component<Props, State> {
                 <Text
                   style={[commonStyles.regularPrimaryText, { marginLeft: RfW(8), color: Colors.white }]}
                   numberOfLines={1}>
-                  Class 10 Mathematics by Roshan Singh
+                  {this.props.classDetails?.offering?.parentOffering?.displayName}{' '}
+                  {this.props.classDetails?.offering?.displayName} by{' '}
+                  {this.props.classDetails?.tutor?.contactDetail?.firstName}{' '}
+                  {this.props.classDetails?.tutor?.contactDetail?.lastName}
                 </Text>
               </View>
             </TouchableWithoutFeedback>
@@ -383,63 +391,69 @@ export default class Video extends Component<Props, State> {
         )}
 
         {this.state.peerIds.length <= 1 && (
-          <View
-            style={{
-              width: 100,
-              height: 150,
-              top: this.state.showDetailedActions ? 16 : 60,
-              left: 20,
-              borderRadius: 20,
-              zIndex: 2,
-            }}>
-            {!this.state.videoMuted ? (
-              <RtcLocalView.SurfaceView
-                style={styles.max}
-                channelId={this.props.channelName}
-                renderMode={VideoRenderMode.Hidden}
-              />
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: '#444444',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+          <TouchableWithoutFeedback onPress={this.toggleDetailedActions}>
+            <View
+              style={{
+                width: 100,
+                height: 150,
+                top: this.state.showDetailedActions ? 16 : 60,
+                right: -(deviceWidth() - 120),
+                borderRadius: 20,
+                zIndex: 2,
+              }}>
+              {!this.state.videoMuted ? (
+                <RtcLocalView.SurfaceView
+                  style={styles.max}
+                  channelId={this.props.channelName}
+                  renderMode={VideoRenderMode.Hidden}
+                />
+              ) : (
                 <View
                   style={{
-                    height: RfH(60),
-                    width: RfW(60),
-                    borderRadius: 60,
-                    backgroundColor: Colors.lightBlue,
-                    flexDirection: 'row',
+                    flex: 1,
+                    backgroundColor: '#444444',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <Text
+                  <View
                     style={{
-                      color: Colors.primaryText,
-                      fontSize: 48,
+                      height: RfH(60),
+                      width: RfW(60),
+                      borderRadius: 60,
+                      backgroundColor: Colors.lightBlue,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}>
-                    {this.props.userInfo.firstName[0]}
-                  </Text>
+                    <Text
+                      style={{
+                        color: Colors.primaryText,
+                        fontSize: 48,
+                      }}>
+                      {this.props.userInfo.firstName[0]}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            )}
+              )}
 
-            {this.state.audioMuted && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  position: 'absolute',
-                  top: 8,
-                  right: 8,
-                  zIndex: 1,
-                }}>
-                <IconButtonWrapper iconImage={Images.microphone_mute_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-              </View>
-            )}
-          </View>
+              {this.state.audioMuted && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    zIndex: 1,
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={Images.microphone_mute_white}
+                    iconWidth={RfW(24)}
+                    iconHeight={RfH(24)}
+                  />
+                </View>
+              )}
+            </View>
+          </TouchableWithoutFeedback>
         )}
 
         {this.state.showDetailedActions && (
@@ -632,7 +646,11 @@ export default class Video extends Component<Props, State> {
           </View>
         )}
 
-        <ClassDetailsModal visible={this.state.showClassDetails} onClose={this.toggleClassDetails} />
+        <ClassDetailsModal
+          visible={this.state.showClassDetails}
+          onClose={this.toggleClassDetails}
+          classDetails={this.props.classDetails}
+        />
         <VideoMessagingModal
           visible={this.state.showMessageBox}
           onClose={this.toggleMessageBox}
@@ -709,6 +727,8 @@ export default class Video extends Component<Props, State> {
             const audioItem = this.state.audioStates.find((s) => s.uid === value);
             const videoItem = this.state.videoStates.find((s) => s.uid === value);
 
+            const participant = this.getParticipant(value);
+
             console.log('videoItem', videoItem, peerIds);
             return (
               <>
@@ -744,9 +764,13 @@ export default class Video extends Component<Props, State> {
                           alignItems: 'center',
                           marginBottom: 8,
                         }}>
-                        <Text style={{ color: Colors.primaryText, fontSize: 36 }}>R</Text>
+                        <Text style={{ color: Colors.primaryText, fontSize: 36 }}>
+                          {participant?.contactDetail?.firstName[0]}
+                        </Text>
                       </View>
-                      <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>Remote</Text>
+                      <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>
+                        {participant?.contactDetail?.firstName}
+                      </Text>
                     </View>
                   )}
                 </TouchableWithoutFeedback>
@@ -779,6 +803,8 @@ export default class Video extends Component<Props, State> {
     // const value = selectedUid;
     const audioItem = this.state.audioStates.find((s) => s.uid === selectedUid);
     const videoItem = this.state.videoStates.find((s) => s.uid === selectedUid);
+
+    const participant = this.getParticipant(selectedUid);
 
     console.log('videoItem', videoItem, peerIds);
 
@@ -821,9 +847,13 @@ export default class Video extends Component<Props, State> {
                         alignItems: 'center',
                         marginBottom: 8,
                       }}>
-                      <Text style={{ color: Colors.primaryText, fontSize: 48 }}>R</Text>
+                      <Text style={{ color: Colors.primaryText, fontSize: 48 }}>
+                        {participant?.contactDetail?.firstName[0]}
+                      </Text>
                     </View>
-                    <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>Remote</Text>
+                    <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
+                      {participant?.contactDetail?.firstName}
+                    </Text>
                   </View>
                 )}
               </TouchableWithoutFeedback>
@@ -856,7 +886,7 @@ export default class Video extends Component<Props, State> {
                       paddingHorizontal: 8,
                     },
                   ]}>
-                  Arun
+                  {participant?.contactDetail?.firstName}
                 </Text>
               </View>
             )}
@@ -989,7 +1019,10 @@ export default class Video extends Component<Props, State> {
                       {`${this.props.classDetails?.offering?.parentOffering?.displayName} | ${this.props.classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
                     </Text>
                     <Text style={commonStyles.mediumMutedText}>
-                      {new Date(this.props.classDetails?.startDate).toDateString()}
+                      {printDate(this.props.classDetails?.startDate)}
+                      {' at '}
+                      {printTime(this.props.classDetails?.startDate)} {' - '}
+                      {printTime(this.props.classDetails?.endDate)}
                     </Text>
                   </View>
                   <View>

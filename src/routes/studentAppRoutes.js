@@ -10,14 +10,13 @@ import CompareTutors from '../containers/student/tutorListing/compareTutors';
 import TutorListing from '../containers/student/tutorListing/tutorListing';
 import TutorDetails from '../containers/student/tutorDetails/tutorDetails';
 import myCart from '../containers/student/tutorListing/bookingTutor/myCart';
-import bookingConfirmed from '../containers/student/payment/bookingConfirmed';
+import BookingConfirmed from '../containers/student/payment/bookingConfirmed';
 import paymentReceived from '../containers/student/payment/paymentReceived';
-import myClasses from '../containers/student/classes/classes';
+import MyClasses from '../containers/student/classes/classes';
 import scheduleClass from '../containers/student/classes/scheduleClass';
 import scheduledClassDetails from '../containers/student/calendar/scheduledClassDetails';
 import PaymentMethod from '../containers/student/payment/paymentMethod';
 import cancelReason from '../containers/student/calendar/cancelReason';
-import onlineClass from '../containers/student/calendar/onlineClass';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
@@ -86,7 +85,7 @@ export const getStudentRoutes = () => {
       />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
-        component={bookingConfirmed}
+        component={BookingConfirmed}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -96,7 +95,7 @@ export const getStudentRoutes = () => {
       />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.MY_CLASSES}
-        component={myClasses}
+        component={MyClasses}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -114,11 +113,11 @@ export const getStudentRoutes = () => {
         component={cancelReason}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name={NavigationRouteNames.STUDENT.ONLINE_CLASS}
         component={onlineClass}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.RATE_AND_REVIEW}
         component={RateAndReviews}

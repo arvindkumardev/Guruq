@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../../../theme/colors';
-import { RfH, RfW } from '../../../utils/helpers';
+import { printDate, printTime, RfH, RfW } from '../../../utils/helpers';
 import Images from '../../../theme/images';
 import IconButtonWrapper from '../../../components/IconWrapper';
 import Fonts from '../../../theme/fonts';
 import commonStyles from '../../../theme/styles';
 
 const ClassDetailsModal = (props) => {
-  const { visible, onClose } = props;
+  const { visible, onClose, classDetails } = props;
 
   return (
     <Modal
@@ -32,6 +32,7 @@ const ClassDetailsModal = (props) => {
             alignItems: 'stretch',
             backgroundColor: Colors.white,
             paddingHorizontal: RfW(16),
+            paddingBottom: RfH(44),
             // paddingVertical: RfW(16),
           }}>
           <View
@@ -49,8 +50,35 @@ const ClassDetailsModal = (props) => {
 
           <View style={{ height: 8 }} />
 
-          <View>
-            <Text style={commonStyles.headingPrimaryText}>CBSE - Class 10 - Mathematics</Text>
+          <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
+            <View
+              style={{
+                height: RfH(72),
+                width: RfW(72),
+                backgroundColor: Colors.lightPurple,
+                borderRadius: 8,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
+            </View>
+            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+              <Text style={commonStyles.headingPrimaryText}>
+                {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
+              </Text>
+              <Text style={commonStyles.mediumMutedText}>
+                {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+              </Text>
+              <Text style={commonStyles.mediumMutedText}>
+                {printDate(classDetails?.startDate)}
+                {' at '}
+                {printTime(classDetails?.startDate)} {' - '}
+                {printTime(classDetails?.endDate)}
+              </Text>
+            </View>
+            <View>
+              <IconButtonWrapper />
+            </View>
           </View>
 
           <View style={{ height: 34 }} />

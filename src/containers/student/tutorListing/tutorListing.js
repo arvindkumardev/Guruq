@@ -16,7 +16,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import {getSaveData, getSubjectIcons, removeData, RfH, RfW, storeData} from '../../../utils/helpers';
+import { getSaveData, getSubjectIcons, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { CompareModal, IconButtonWrapper } from '../../../components';
 import { GET_FAVOURITE_TUTORS, SEARCH_TUTORS } from '../tutor-query';
@@ -280,7 +280,10 @@ function TutorListing(props) {
                   </Text>
                 </View>
               </View>
-              <IconButtonWrapper styling={[styles.bookIcon, { alignSelf: 'flex-end' }]} iconImage={getSubjectIcons(offering?.displayName)} />
+              <IconButtonWrapper
+                styling={[styles.bookIcon, { alignSelf: 'flex-end' }]}
+                iconImage={getSubjectIcons(offering?.displayName)}
+              />
             </View>
           )}
 

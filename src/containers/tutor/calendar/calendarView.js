@@ -20,7 +20,6 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { getSubjectIcons, monthNames, RfH, RfW } from '../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../student/booking.query';
 
-
 function CalendarView(props) {
   const navigation = useNavigation();
   const [showHeader, setShowHeader] = useState(false);
@@ -74,18 +73,6 @@ function CalendarView(props) {
       }
     },
   });
-
-  useEffect(() => {
-    getScheduledClasses({
-      variables: {
-        classesSearchDto: {
-          tutorId: tutorInfo.id,
-          startDate: moment().toDate(),
-          endDate: moment().endOf('day').toDate(),
-        },
-      },
-    });
-  }, []);
 
   const renderClassItem = (item) => {
     return (
@@ -166,12 +153,16 @@ function CalendarView(props) {
       variables: {
         classesSearchDto: {
           tutorId: tutorInfo.id,
-          startDate: moment(date).toDate(),
+          startDate: moment(date).startOf('day').toDate(),
           endDate: moment(date).endOf('day').toDate(),
         },
       },
     });
   };
+
+  useEffect(() => {
+    getScheduledClasses(new Date());
+  }, []);
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>

@@ -3,11 +3,11 @@ import { useLazyQuery } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, ScrollView, Text, View } from 'react-native';
+import { FlatList, Image, ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { isEmpty } from 'lodash';
 import { IconButtonWrapper } from '../../../components';
 import Loader from '../../../components/Loader';
-import routeNames from '../../../routes/screenNames';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -15,14 +15,20 @@ import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_ORDER_ITEMS } from '../booking.query';
 import { OrderStatus } from '../enums';
 import styles from './styles';
+import { GET_TUTOR_OFFERINGS } from '../tutor-query';
+import ClassModeSelectModal from '../tutorDetails/components/classModeSelectModal';
+import NavigationRouteNames from '../../../routes/screenNames';
 
-function bookingConfirmed() {
+function MyClasses() {
   const navigation = useNavigation();
   const [isHistorySelected, setIsHistorySelected] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
-
+  const [refreshData, setRefreshData] = useState(false);
   const [orderItems, setOrderItems] = useState([]);
+  const [renewClassObj, setRenewClassObj] = useState({});
+  const [selectedSubject, setSelectedSubject] = useState({});
+  const [openClassModal, setOpenClassModal] = useState(false);
 
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
@@ -34,8 +40,11 @@ function bookingConfirmed() {
       if (data && data?.searchOrderItems && data?.searchOrderItems.edges.length > 0) {
         setOrderItems(data?.searchOrderItems.edges);
         setIsEmpty(false);
+        setRefreshData(true);
       } else {
+        setOrderItems([]);
         setIsEmpty(true);
+        setRefreshData(true);
       }
     },
   });
@@ -53,23 +62,62 @@ function bookingConfirmed() {
   }, []);
 
   const goToScheduleClasses = (item) => {
-    if (!isHistorySelected) {
-      const classes = [];
-      for (let i = 1; i <= item.count; i++) {
-        classes.push({ class: `${i}`, date: '', startTime: '' });
-      }
-      navigation.navigate(routeNames.STUDENT.SCHEDULE_CLASS, { classData: item, classes });
-    }
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: item });
   };
 
   const getTutorImage = (tutor) => {
     return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
   };
 
+  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const selectedOffering = data?.getTutorOfferings.find((sub) => sub.offering.id === renewClassObj.offering.id);
+        if (selectedOffering) {
+          setSelectedSubject({
+            id: selectedOffering.offering.id,
+            displayName: selectedOffering.offering.displayName,
+            offeringId: selectedOffering.id,
+            demoClass: selectedOffering.demoClass,
+            freeDemo: selectedOffering.freeDemo,
+            groupClass: selectedOffering.groupClass === 0 || selectedOffering.groupClass === 1,
+            onlineClass: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 1,
+            individualClass: selectedOffering.groupClass === 0 || selectedOffering.groupClass === 2,
+            homeTution: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 2,
+            budgetDetails: selectedOffering.budgets,
+          });
+          setOpenClassModal(true);
+        }
+      }
+    },
+  });
+
+  const renewClass = (item) => {
+    setRenewClassObj(item);
+    getTutorOffering({
+      variables: { tutorId: item.tutor.id },
+    });
+  };
+
+  const tutorDetail = (item) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
+      tutorId: item.tutor.id,
+      parentOffering: item.offering?.parentOffering?.id,
+      parentParentOffering: item.offering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: item.offering?.parentOffering?.displayName,
+      parentParentOfferingName: item.offering?.parentOffering?.parentOffering?.displayName,
+    });
+  };
+
   const renderClassItem = (item) => {
     return (
-      <View>
-        <View style={{ height: RfH(40) }} />
+      <View style={{ marginTop: RfH(30) }}>
         <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
@@ -78,7 +126,9 @@ function bookingConfirmed() {
             {item.offering?.parentOffering?.displayName}
           </Text>
           {!isHistorySelected && (
-            <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
+            <TouchableOpacity activeOpacity={0.6} onPress={() => renewClass(item)}>
+              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
+            </TouchableOpacity>
           )}
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
@@ -91,15 +141,8 @@ function bookingConfirmed() {
                 iconHeight={RfH(64)}
                 imageResizeMode="cover"
                 iconImage={getTutorImage(item.tutor)}
+                submitFunction={() => tutorDetail(item)}
               />
-              <Text
-                style={{
-                  marginTop: RfH(4),
-                  fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
-                  textAlign: 'center',
-                }}>
-                Detail
-              </Text>
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
@@ -107,7 +150,8 @@ function bookingConfirmed() {
                   fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
-                }}>
+                }}
+                onPress={() => tutorDetail(item)}>
                 {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
@@ -139,11 +183,11 @@ function bookingConfirmed() {
                 textAlign: 'right',
                 color: Colors.darkGrey,
               }}>
-              {item.availableClasses} Unscheduled Classses
+              {item.availableClasses} Unscheduled {item.availableClasses === 1 ? 'Class' : 'Classes'}
             </Text>
           )}
           <Button
-            onPress={() => goToScheduleClasses(item)}
+            onPress={() => (isHistorySelected ? renewClass(item) : goToScheduleClasses(item))}
             style={[
               commonStyles.buttonPrimary,
               {
@@ -162,97 +206,68 @@ function bookingConfirmed() {
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
-
-    if (scrollPosition > 35) {
-      setShowHeader(true);
-    } else {
-      setShowHeader(false);
-    }
+    setShowHeader(scrollPosition > 30);
   };
 
-  const onUnscheduledClicked = () => {
+  const onClicked = (isHistory) => {
     searchOrderItems({
       variables: {
         bookingSearchDto: {
           orderStatus: OrderStatus.COMPLETE.label,
-          showHistory: false,
-          showWithAvailableClasses: true,
+          showHistory: isHistory,
+          showWithAvailableClasses: !isHistory,
         },
       },
     });
-    setIsHistorySelected(false);
-  };
-
-  const onHistoryClicked = () => {
-    searchOrderItems({
-      variables: {
-        bookingSearchDto: {
-          orderStatus: OrderStatus.COMPLETE.label,
-          showHistory: true,
-          showWithAvailableClasses: false,
-        },
-      },
-    });
-    setIsHistorySelected(true);
+    setIsHistorySelected(isHistory);
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-      <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
-        {showHeader && (
-          <Text
-            style={[
-              commonStyles.headingPrimaryText,
-              {
-                alignSelf: 'center',
-              },
-            ]}>
-            My Classes
-          </Text>
-        )}
-      </View>
+    <>
+      <Loader isLoading={loadingTutorsOffering || loadingBookings} />
+      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
+        <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
+          {showHeader && <Text style={[commonStyles.headingPrimaryText, { alignSelf: 'center' }]}>My Classes</Text>}
+        </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        onScroll={(event) => handleScroll(event)}
-        stickyHeaderIndices={[1]}
-        scrollEventThrottle={16}>
-        <View>
-          <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
-        </View>
-        <View>
-          <View
-            style={[
-              commonStyles.horizontalChildrenCenterView,
-              showHeader
-                ? { backgroundColor: Colors.white, paddingBottom: RfH(8) }
-                : { paddingTop: RfH(16), backgroundColor: Colors.white },
-            ]}>
-            <Button
-              onPress={() => onUnscheduledClicked()}
-              small
-              block
-              bordered
-              style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
-              <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
-                Unscheduled Classes
-              </Text>
-            </Button>
-            <Button
-              onPress={() => onHistoryClicked()}
-              small
-              block
-              bordered
-              style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
-              <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
-            </Button>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          onScroll={(event) => handleScroll(event)}
+          stickyHeaderIndices={[1]}
+          scrollEventThrottle={16}
+          scrollEnabled={!isEmpty && orderItems.length > 2}>
+          <View>
+            <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
           </View>
-        </View>
-        {loadingBookings ? (
-          <View style={{ backgroundColor: Colors.lightGrey }}>
-            <Loader isLoading={loadingBookings} />
+          <View>
+            <View
+              style={[
+                commonStyles.horizontalChildrenCenterView,
+                showHeader
+                  ? { backgroundColor: Colors.white, paddingBottom: RfH(8) }
+                  : { paddingTop: RfH(16), backgroundColor: Colors.white },
+              ]}>
+              <Button
+                onPress={() => onClicked(false)}
+                small
+                block
+                bordered
+                style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
+                <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
+                  Unscheduled Classes
+                </Text>
+              </Button>
+              <Button
+                onPress={() => onClicked(true)}
+                small
+                block
+                bordered
+                style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
+                <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
+              </Button>
+            </View>
           </View>
-        ) : (
+
           <View>
             {!isEmpty ? (
               <FlatList
@@ -261,6 +276,7 @@ function bookingConfirmed() {
                 renderItem={({ item }) => renderClassItem(item)}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingBottom: RfH(170) }}
+                extraData={refreshData}
               />
             ) : (
               <View>
@@ -295,10 +311,19 @@ function bookingConfirmed() {
               </View>
             )}
           </View>
+        </ScrollView>
+        {openClassModal && (
+          <ClassModeSelectModal
+            visible={openClassModal}
+            onClose={() => setOpenClassModal(false)}
+            selectedSubject={selectedSubject}
+            isDemoClass={false}
+            isRenewal
+          />
         )}
-      </ScrollView>
-    </View>
+      </View>
+    </>
   );
 }
 
-export default bookingConfirmed;
+export default MyClasses;
