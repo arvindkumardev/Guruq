@@ -31,6 +31,7 @@ function CalendarView(props) {
   const [scheduledClasses, setScheduledClasses] = useState([]);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    fetch_policy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -73,8 +74,7 @@ function CalendarView(props) {
             {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>
-            {classDetails?.onlineClass ? 'Online' : 'Offline'} {classDetails?.groupSize === 1 ? 'Individual' : 'Group'}{' '}
-            Class
+            {classDetails?.onlineClass ? 'Online' : 'Offline'} {classDetails?.groupClass ? 'Group' : 'Individual'} Class
           </Text>
         </View>
         <View />
