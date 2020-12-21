@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors } from '../../../theme';
 import CalendarView from '../calendar/calendarView';
-import Classes from '../classes/classes';
+import MyClasses from '../classes/classes';
 import Profile from '../profile/profile';
 import StudentDashboard from './components/studentDashboard';
 import { userLocation } from '../../../apollo/cache';
@@ -66,7 +66,7 @@ function StudentDashboardContainer(props) {
             <StudentDashboard refetchStudentOfferings={refetchStudentOfferings} changeTab={() => changeTab(2)} />
           )}
           {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
-          {activeTab === 3 && <Classes />}
+          {activeTab === 3 && <MyClasses />}
           {activeTab === 4 && <Wallet />}
           {activeTab === 5 && <Profile />}
         </View>

@@ -28,7 +28,7 @@ function CalendarView(props) {
 
   const studentInfo = useReactiveVar(studentDetails);
 
-  const [monthData, setMonthData] = useState([]);
+  const [scheduledClasses, setScheduledClasses] = useState([]);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     onError: (e) => {
@@ -39,102 +39,73 @@ function CalendarView(props) {
     onCompleted: (data) => {
       const array = [];
       for (const obj of data.getScheduledClasses) {
-        const startHours = new Date(obj.startDate).getHours();
-        const startMinutes = new Date(obj.startDate).getMinutes();
-        const endHours = new Date(obj.endDate).getHours();
-        const endMinutes = new Date(obj.endDate).getMinutes();
-        const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
-          startMinutes < 10 ? `0${startMinutes}` : startMinutes
-        } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
-          endMinutes < 10 ? `0${endMinutes}` : endMinutes
-        } ${endHours < 12 ? `AM` : 'PM'}`;
-        const item = {
-          date: new Date(obj.startDate).getDate(),
-          month: new Date(obj.startDate).getMonth(),
-          classes: [
-            {
-              uuid: obj.uuid,
-              classTitle: obj.offering.displayName,
-              board: obj.offering.parentOffering.parentOffering.displayName,
-              class: obj.offering.parentOffering.displayName,
-              timing,
-              id: obj.id,
-            },
-          ],
-        };
-        array.push(item);
+        array.push({
+          uuid: obj.uuid,
+          classTitle: obj.offering.displayName,
+          board: obj.offering?.parentOffering?.parentOffering?.displayName,
+          class: obj.offering?.parentOffering?.displayName,
+          timing: `${moment(obj.startDate).format('hh:mm A')} - ${moment(obj.endDate).format('hh:mm A')}`,
+          id: obj.id,
+        });
       }
-      setMonthData(array);
-      if (array.length > 0) {
-        setIsEmpty(false);
-      } else {
-        setIsEmpty(true);
-      }
+      setScheduledClasses(array);
+      setIsEmpty(array.length === 0);
     },
   });
 
-  const renderClassItem = (item) => {
-    return (
-      <TouchableWithoutFeedback
-        onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: item })}>
-        <View style={[commonStyles.horizontalChildrenStartView, { marginBottom: RfH(24) }]}>
-          <View
-            style={{
-              height: RfH(72),
-              width: RfW(72),
-              backgroundColor: getBoxColor(item.classTitle),
-              borderRadius: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <IconButtonWrapper
-              iconHeight={RfH(56)}
-              iconWidth={RfW(48)}
-              styling={{ alignSelf: 'center' }}
-              iconImage={getSubjectIcons(item.classTitle)}
-            />
-          </View>
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>{item.classTitle}</Text>
-            <Text style={commonStyles.mediumMutedText}>
-              {item.board} | {item.class}
-            </Text>
-            <Text style={commonStyles.mediumMutedText}>{item.timing}</Text>
-          </View>
-          <View>
-            <IconButtonWrapper />
-          </View>
+  const renderClassItem = (item) => (
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: item })}>
+      <View style={[commonStyles.horizontalChildrenStartView, { marginBottom: RfH(24) }]}>
+        <View
+          style={{
+            height: RfH(72),
+            width: RfW(72),
+            backgroundColor: getBoxColor(item.classTitle),
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <IconButtonWrapper
+            iconHeight={RfH(56)}
+            iconWidth={RfW(48)}
+            styling={{ alignSelf: 'center' }}
+            iconImage={getSubjectIcons(item.classTitle)}
+          />
         </View>
-      </TouchableWithoutFeedback>
-    );
-  };
-
-  const renderListItem = (item) => {
-    return (
-      <View>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={item.classes}
-          renderItem={({ item }) => renderClassItem(item)}
-          keyExtractor={(index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: RfH(170) }}
-        />
+        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+          <Text style={commonStyles.headingPrimaryText}>{item.classTitle}</Text>
+          <Text style={commonStyles.mediumMutedText}>
+            {item.board} | {item.class}
+          </Text>
+          <Text style={commonStyles.mediumMutedText}>{item.timing}</Text>
+        </View>
+        <View />
       </View>
-    );
-  };
+    </TouchableWithoutFeedback>
+  );
+  //
+  // const renderListItem = (item) => {
+  //   return (
+  //     <View>
+  //       <FlatList
+  //         showsVerticalScrollIndicator={false}
+  //         data={item.classes}
+  //         renderItem={({ item }) => renderClassItem(item)}
+  //         keyExtractor={(index) => index.toString()}
+  //         contentContainerStyle={{ paddingBottom: RfH(170) }}
+  //       />
+  //     </View>
+  //   );
+  // };
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
-
-    if (scrollPosition > 30) {
-      setShowHeader(true);
-    } else {
-      setShowHeader(false);
-    }
+    setShowHeader(scrollPosition > 30);
   };
 
-  const getScheduledClassesbyDay = (date) => {
-    console.log(`${studentInfo.id},${moment(date).toDate()},${moment(date).endOf('day').toDate()}`);
+  const getScheduledClassesByDate = (date) => {
+    setScheduledClasses([]);
     getScheduledClasses({
       variables: {
         classesSearchDto: {
@@ -147,7 +118,7 @@ function CalendarView(props) {
   };
 
   useEffect(() => {
-    getScheduledClassesbyDay(new Date());
+    getScheduledClassesByDate(new Date());
   }, []);
 
   return (
@@ -199,7 +170,7 @@ function CalendarView(props) {
                 },
               ]}
               onHeaderSelected={(a) => console.log(a)}
-              onDateSelected={(d) => getScheduledClassesbyDay(d)}
+              onDateSelected={(d) => getScheduledClassesByDate(d)}
             />
           </View>
 
@@ -210,12 +181,12 @@ function CalendarView(props) {
               <Image
                 source={Images.empty_schedule}
                 style={{
-                  margin: RfH(56),
                   alignSelf: 'center',
                   height: RfH(200),
                   width: RfW(164),
                   marginBottom: RfH(32),
                 }}
+                resizeMode="contain"
               />
               <Text
                 style={[
@@ -239,11 +210,18 @@ function CalendarView(props) {
           ) : (
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={monthData}
-              renderItem={({ item }) => renderListItem(item)}
-              keyExtractor={(item, index) => index.toString()}
+              data={scheduledClasses}
+              renderItem={({ item }) => renderClassItem(item)}
+              keyExtractor={(index) => index.toString()}
               contentContainerStyle={{ paddingBottom: RfH(170) }}
             />
+            // <FlatList
+            //   showsVerticalScrollIndicator={false}
+            //   data={monthData}
+            //   renderItem={({ item }) => renderListItem(item)}
+            //   keyExtractor={(item, index) => index.toString()}
+            //   contentContainerStyle={{ paddingBottom: RfH(170) }}
+            // />
           )}
         </ScrollView>
       </View>

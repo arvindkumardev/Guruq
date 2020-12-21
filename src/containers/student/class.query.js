@@ -1,8 +1,18 @@
 import { gql } from '@apollo/client';
 
-export const GET_AVAILABILITY = gql`
-  query GetAvailability($tutorAvailability: TutorAvailabilityDto!) {
-    getAvailability(tutorAvailability: $tutorAvailability) {
+export const GET_AVAILABILITY_DATA = gql`
+  query GetAvailabilityData($tutorAvailability: TutorAvailabilityDto!) {
+    getAvailabilityData(tutorAvailability: $tutorAvailability) {
+      active
+      startDate
+      endDate
+    }
+  }
+`;
+
+export const GET_TUTOR_AVAILABILITY = gql`
+  query GetTutorAvailability($tutorAvailability: TutorAvailabilityDto!) {
+    getTutorAvailability(tutorAvailability: $tutorAvailability) {
       active
       startDate
       endDate
