@@ -52,6 +52,10 @@ function Profile(props) {
     { name: 'Send Feedback', icon: Images.parent_details },
   ]);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
+  const [about, setAbout] = useState([
+    { name: 'About', icon: Images.personal },
+    { name: 'Team', icon: Images.home },
+  ]);
 
   const client = initializeApollo();
 
@@ -88,6 +92,41 @@ function Profile(props) {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
         label: 'Experience Details',
+      });
+    } else if (item.name === 'Documents') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
+        label: 'Documents',
+      });
+    } else if (item.name === 'Bank Details') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
+        label: 'Bank Details',
+      });
+    } else if (item.name === 'Customer Care') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/`,
+        label: 'Customer Care',
+      });
+    } else if (item.name === "FAQ's") {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
+        label: "FAQ's",
+      });
+    } else if (item.name === 'Send Feedback') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
+        label: 'Feedback',
+      });
+    } else if (item.name === 'About') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
+        label: 'About',
+      });
+    } else if (item.name === 'Team') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
+        label: 'Team',
       });
     } else if (item.name === 'Online' || item.name === 'Offline') {
       changeTab(3);
@@ -367,22 +406,33 @@ function Profile(props) {
             />
           </SafeAreaView>
         )}
-        <View style={styles.userMenuParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
-          <View style={styles.menuItemParentView}>
-            <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-              About, team
-            </Text>
-          </View>
-          <TouchableWithoutFeedback onPress={() => setIsAboutGuruMenuOpen(!isAboutGuruMenuOpen)}>
+        <TouchableWithoutFeedback onPress={() => setIsAboutGuruMenuOpen(!isAboutGuruMenuOpen)}>
+          <View style={styles.userMenuParentView}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                About, team
+              </Text>
+            </View>
             <IconWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
               iconImage={isAboutGuruMenuOpen ? Images.collapse_grey : Images.expand_gray}
             />
-          </TouchableWithoutFeedback>
-        </View>
+          </View>
+        </TouchableWithoutFeedback>
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+        {isAboutGuruMenuOpen && (
+          <SafeAreaView>
+            <FlatList
+              data={about}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => renderItem(item)}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </SafeAreaView>
+        )}
 
         <View style={commonStyles.blankGreyViewSmall} />
 
