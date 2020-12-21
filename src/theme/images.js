@@ -157,6 +157,7 @@ const Images = {
   b_star: require('../assets/images/b_star.png'),
   dots: require('../assets/images/dots.png'),
   bank: require('../assets/images/bank.png'),
+  tick: require('../assets/images/tick.png'),
 };
 
 export default Images;

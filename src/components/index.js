@@ -14,6 +14,7 @@ import CompareModal from './CompareModal';
 import Ratings from './Ratings';
 import Loader from './Loader';
 import BackArrow from './BackArrow';
+import CustomCheckBox from './CustomCheckBox';
 
 export {
   IconButtonWrapper,
@@ -31,4 +32,5 @@ export {
   Ratings,
   Loader,
   BackArrow,
+  CustomCheckBox,
 };
