@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import PropTypes from 'prop-types';
 import initializeApollo from '../../../apollo/apollo';
 import { isLoggedIn, tutorDetails, userDetails, userType } from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
@@ -13,8 +14,9 @@ import commonStyles from '../../../theme/styles';
 import { clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 
-function Profile() {
+function Profile(props) {
   const navigation = useNavigation();
+  const { changeTab } = props;
   const userInfo = useReactiveVar(userDetails);
   const tutorInfo = useReactiveVar(tutorDetails);
 
@@ -61,8 +63,6 @@ function Profile() {
           isLoggedIn(false);
           userType('');
           userDetails({});
-
-          tutorDetails({});
           tutorDetails({});
         });
       });
@@ -89,6 +89,8 @@ function Profile() {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
         label: 'Experience Details',
       });
+    } else if (item.name === 'Online' || item.name === 'Offline') {
+      changeTab(3);
     } else if (item.name === 'View Schedule') {
       navigation.navigate(routeNames.TUTOR.VIEW_SCHEDULE);
     } else if (item.name === 'Update Schedule') {
@@ -198,7 +200,7 @@ function Profile() {
         <View>
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-            style={[styles.userMenuParentView, , { height: RfH(60) }]}>
+            style={[styles.userMenuParentView, { height: RfH(60) }]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
 
             <View style={styles.menuItemParentView}>
@@ -298,22 +300,24 @@ function Profile() {
 
         <View style={commonStyles.blankGreyViewSmall} />
 
-        <View style={[styles.userMenuParentView]}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
-          <View style={styles.menuItemParentView}>
-            <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-              Send invitation to friend and earn
-            </Text>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.REFER_EARN)}>
+          <View style={[styles.userMenuParentView]}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Send invitation to friend and earn
+              </Text>
+            </View>
+            <TouchableWithoutFeedback>
+              <IconWrapper
+                iconWidth={RfW(24)}
+                iconHeight={RfH(24)}
+                iconImage={isReferFriendMenuOpen ? Images.collapse_grey : Images.expand_gray}
+              />
+            </TouchableWithoutFeedback>
           </View>
-          <TouchableWithoutFeedback onPress={() => setIsReferFriendMenuOpen(!isReferFriendMenuOpen)}>
-            <IconWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={isReferFriendMenuOpen ? Images.collapse_grey : Images.expand_gray}
-            />
-          </TouchableWithoutFeedback>
-        </View>
+        </TouchableWithoutFeedback>
 
         <View style={commonStyles.blankGreyViewSmall} />
 
@@ -422,7 +426,7 @@ function Profile() {
           </View>
 
           <View>
-            <IconWrapper iconHeight={RfH(65)} iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} />
+            <IconButtonWrapper iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} />
           </View>
 
           <View>
@@ -443,5 +447,12 @@ function Profile() {
     </View>
   );
 }
+Profile.propTypes = {
+  changeTab: PropTypes.func,
+};
+
+Profile.defaultProps = {
+  changeTab: null,
+};
 
 export default Profile;

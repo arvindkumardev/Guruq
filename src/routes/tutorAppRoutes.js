@@ -13,6 +13,7 @@ import ViewSchedule from '../containers/tutor/profile/scheduler/viewSchedule';
 import UpdateSchedule from '../containers/tutor/profile/scheduler/updateSchedule';
 import PostTutionNeeds from '../containers/tutionNeeds/postTutionNeeds';
 import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetails';
+import ReferEarn from '../containers/referAndEarn/referEarn';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +76,7 @@ export const getTutorRoutes = () => {
         component={PostTutionNeedDetails}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
     </>
   );
 };

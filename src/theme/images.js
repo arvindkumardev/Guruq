@@ -158,6 +158,9 @@ const Images = {
   dots: require('../assets/images/dots.png'),
   bank: require('../assets/images/bank.png'),
   tick: require('../assets/images/tick.png'),
+  coin: require('../assets/images/coin.png'),
+  activities: require('../assets/images/activities.png'),
+  earn: require('../assets/images/earn.png'),
 };
 
 export default Images;

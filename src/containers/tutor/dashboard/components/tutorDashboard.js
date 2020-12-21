@@ -14,7 +14,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
@@ -34,7 +34,7 @@ import {
   getUserImageUrl,
   removeToken,
   RfH,
-  RfW
+  RfW,
 } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';

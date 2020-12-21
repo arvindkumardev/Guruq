@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
-import { getToken } from '../../utils/helpers';
+import { getToken, RfW } from '../../utils/helpers';
 import { ScreenHeader } from '../index';
 
 const WebViewPage = (props) => {
@@ -30,7 +30,7 @@ const WebViewPage = (props) => {
 
   return (
     <>
-      <ScreenHeader label={label} homeIcon />
+      <ScreenHeader label={label} homeIcon horizontalPadding={RfW(16)} />
       {token && (
         <WebView
           source={{ uri: `${url}/${token}` }}
