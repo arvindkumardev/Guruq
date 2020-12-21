@@ -211,6 +211,7 @@ export const GET_SCHEDULED_CLASSES = gql`
         id
       }
       onlineClass
+      groupClass
       demo
       status
       startDate
