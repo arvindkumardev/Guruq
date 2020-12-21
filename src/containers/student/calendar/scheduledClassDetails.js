@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Modal, ScrollView, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { RFValue } from 'react-native-responsive-fontsize';
+import moment from 'moment';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
 import BackArrow from '../../../components/BackArrow';
@@ -201,29 +202,32 @@ function ScheduledClassDetails(props) {
                   </Text>
                 </View>
               </View>
-              <View style={{}}>
-                <Button
-                  block
-                  onPress={() => goToOnlineClass()}
-                  // setShowClassStartedPopup(true)}
-                  style={[
-                    commonStyles.buttonPrimary,
-                    {
-                      height: 36,
-                      width: RfH(100),
-                      borderRadius: 4,
-                      marginHorizontal: 0,
-                    },
-                  ]}>
-                  <IconButtonWrapper
-                    iconImage={Images.video}
-                    iconHeight={RfH(16)}
-                    iconWidth={RfW(16)}
-                    styling={{ alignSelf: 'center' }}
-                  />
-                  <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
-                </Button>
-              </View>
+
+              {moment(classDetails.endDate).isAfter(new Date()) && (
+                <View style={{}}>
+                  <Button
+                    block
+                    onPress={() => goToOnlineClass()}
+                    // setShowClassStartedPopup(true)}
+                    style={[
+                      commonStyles.buttonPrimary,
+                      {
+                        height: 36,
+                        width: RfH(100),
+                        borderRadius: 4,
+                        marginHorizontal: 0,
+                      },
+                    ]}>
+                    <IconButtonWrapper
+                      iconImage={Images.video}
+                      iconHeight={RfH(16)}
+                      iconWidth={RfW(16)}
+                      styling={{ alignSelf: 'center' }}
+                    />
+                    <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
+                  </Button>
+                </View>
+              )}
             </View>
           )}
 
@@ -265,28 +269,30 @@ function ScheduledClassDetails(props) {
                     </Text>
                   </View>
 
-                  <View style={{}}>
-                    <Button
-                      block
-                      onPress={() => goToOnlineClass()}
-                      // setShowClassStartedPopup(true)}
-                      style={[
-                        commonStyles.buttonPrimary,
-                        {
-                          width: RfH(100),
-                          borderRadius: 4,
-                          marginHorizontal: 0,
-                        },
-                      ]}>
-                      <IconButtonWrapper
-                        iconImage={Images.video}
-                        iconHeight={RfH(20)}
-                        iconWidth={RfW(20)}
-                        styling={{ alignSelf: 'center' }}
-                      />
-                      <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
-                    </Button>
-                  </View>
+                  {moment(classDetails.endDate).isAfter(new Date()) && (
+                    <View style={{}}>
+                      <Button
+                        block
+                        onPress={() => goToOnlineClass()}
+                        // setShowClassStartedPopup(true)}
+                        style={[
+                          commonStyles.buttonPrimary,
+                          {
+                            width: RfH(100),
+                            borderRadius: 4,
+                            marginHorizontal: 0,
+                          },
+                        ]}>
+                        <IconButtonWrapper
+                          iconImage={Images.video}
+                          iconHeight={RfH(20)}
+                          iconWidth={RfW(20)}
+                          styling={{ alignSelf: 'center' }}
+                        />
+                        <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
+                      </Button>
+                    </View>
+                  )}
                 </View>
               </View>
             </View>

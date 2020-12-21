@@ -562,17 +562,17 @@ function StudentDashboard(props) {
               {cartCount > 0 && (
                 <View
                   style={{
-                    backgroundColor: Colors.orangeRed,
+                    backgroundColor: Colors.brandBlue2,
                     borderRadius: RfH(20),
                     position: 'absolute',
-                    top: RfH(-3),
-                    left: RfW(10),
+                    top: RfH(-10),
+                    left: RfW(0),
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: RfH(12),
-                    width: RfH(12),
+                    height: RfH(16),
+                    width: RfH(16),
                   }}>
-                  <Text style={{ fontSize: 9, fontWeight: 'bold', color: Colors.white }}>{cartCount}</Text>
+                  <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>{cartCount}</Text>
                 </View>
               )}
             </TouchableOpacity>
@@ -587,17 +587,17 @@ function StudentDashboard(props) {
               />
               <View
                 style={{
-                  backgroundColor: Colors.orangeRed,
+                  backgroundColor: Colors.orange,
                   borderRadius: RfH(20),
                   position: 'absolute',
-                  top: RfH(-3),
-                  left: RfW(15),
+                  top: RfH(-10),
+                  left: RfW(0),
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: RfH(12),
-                  width: RfH(12),
+                  height: RfH(16),
+                  width: RfH(16),
                 }}>
-                <Text style={{ fontSize: 9, fontWeight: 'bold', color: Colors.white }}>2</Text>
+                <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>2</Text>
               </View>
             </TouchableOpacity>
           </View>
