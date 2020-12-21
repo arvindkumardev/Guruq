@@ -283,6 +283,7 @@ function TutorDashboard(props) {
                 iconWidth={RfH(32)}
                 iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
                 styling={{ borderRadius: RfH(32) }}
+                submitFunction={() => changeTab(5)}
               />
               {/* <Image
                 source={Images.user}

@@ -14,6 +14,7 @@ import UpdateSchedule from '../containers/tutor/profile/scheduler/updateSchedule
 import PostTutionNeeds from '../containers/tutionNeeds/postTutionNeeds';
 import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetails';
 import ReferEarn from '../containers/referAndEarn/referEarn';
+import Notifications from '../containers/student/dashboard/notifications';
 
 const Stack = createStackNavigator();
 
@@ -77,6 +78,11 @@ export const getTutorRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.NOTIFICATIONS}
+        component={Notifications}
+        options={{ headerShown: false }}
+      />
     </>
   );
 };

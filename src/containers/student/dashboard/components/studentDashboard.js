@@ -581,11 +581,7 @@ function StudentDashboard(props) {
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CART)}
               style={{ paddingHorizontal: RfW(8) }}>
-              <IconButtonWrapper
-                iconImage={Images.cart}
-                iconHeight={RfH(18)}
-                iconWidth={RfW(18)}
-              />
+              <IconButtonWrapper iconImage={Images.cart} iconHeight={RfH(18)} iconWidth={RfW(18)} />
               {cartCount > 0 && (
                 <View
                   style={{
@@ -606,7 +602,12 @@ function StudentDashboard(props) {
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
               style={{ paddingLeft: RfW(8) }}>
-              <IconButtonWrapper iconImage={Images.bell} iconHeight={RfH(18)} iconWidth={RfW(18)} imageResizeMode={'contain'}/>
+              <IconButtonWrapper
+                iconImage={Images.bell}
+                iconHeight={RfH(18)}
+                iconWidth={RfW(18)}
+                imageResizeMode="contain"
+              />
               <View
                 style={{
                   backgroundColor: Colors.orangeRed,
@@ -643,6 +644,7 @@ function StudentDashboard(props) {
                 iconWidth={RfH(32)}
                 iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
                 styling={{ borderRadius: RfH(32) }}
+                submitFunction={() => changeTab(5)}
               />
             </View>
           </View>
