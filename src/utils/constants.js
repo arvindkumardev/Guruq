@@ -33,3 +33,7 @@ export const IND_COUNTRY_OBJ = {
 export const LOTTIE_JSON_FILES = {
   loaderJson: require('../assets/json/loader1.json'),
 };
+
+export const WEBSITE_URL = 'https://guruq.in';
+export const API_URL = 'https://guruq.in/api';
+export const IMAGES_BASE_URL = 'https://guruq.in/guruq-new';

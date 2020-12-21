@@ -39,14 +39,17 @@ function Profile() {
   const [myClassesData, setMyClassesData] = useState([
     { name: 'Calendar', icon: Images.personal },
     { name: 'Upcoming Classes', icon: Images.home },
-    // { name: 'Parents Details', icon: Images.parent_details },
-    // { name: 'Education', icon: Images.education },
   ]);
   const [isStudyMenuOpen, setIsStudyMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
   const [isReferFriendMenuOpen, setIsReferFriendMenuOpen] = useState(false);
   const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
+  const [settingsData, setSettingsData] = useState([
+    { name: 'Change Password', icon: Images.personal },
+    { name: 'Change Mobile and email', icon: Images.home },
+    { name: 'Notifications', icon: Images.parent_details },
+  ]);
   const [informationData, setInformationData] = useState([
     { name: 'Customer Care', icon: Images.personal },
     { name: "FAQ's", icon: Images.home },
@@ -71,17 +74,34 @@ function Profile() {
       });
     });
   };
+
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
-      navigation.navigate(routeNames.STUDENT.WEB_VIEW_PAGES);
-      // setIsPersonalMenuOpen(false)
-      //  alert('ok')
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/student/embed/personal-information`,
+        label: 'Personal Details',
+      });
+    } else if (item.name === 'Address') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/student/embed/addresses`,
+        label: 'Address Details',
+      });
+    } else if (item.name === 'Education') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/student/embed/education`,
+        label: 'Education Details',
+      });
+    } else if (item.name === 'Experience') {
+      navigation.navigate(routeNames.WEB_VIEW, {
+        url: `http://dashboardv2.guruq.in/student/embed/experience`,
+        label: 'Experience Details',
+      });
     } else {
-      // setIsPersonalMenuOpen(true)
       return null;
     }
     return null;
   };
+
   const renderItem = (item) => {
     return (
       <TouchableWithoutFeedback
@@ -421,7 +441,7 @@ function Profile() {
           <View style={commonStyles.blankGreyViewSmall} />
 
           <View style={[styles.userMenuParentView]}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode={'contain'} iconImage={Images.logOut} />
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" iconImage={Images.logOut} />
             <View style={styles.menuItemParentView}>
               <TouchableOpacity onPress={logout}>
                 <Text style={styles.menuItemPrimaryText}>Logout</Text>
@@ -447,7 +467,7 @@ function Profile() {
               alignItems: 'center',
               flexDirection: 'row',
               marginTop: 20,
-              marginHorizontal:RfW(20)
+              marginHorizontal: RfW(20),
             }}>
             <View>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>

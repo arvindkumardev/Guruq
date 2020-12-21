@@ -16,6 +16,7 @@ import { dimensions } from './style';
 const VideoMessagingModal = (props) => {
   const { visible, onClose, channelName } = props;
 
+  const [chatMessageIds, setChatMessageIds] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
 
   const getMessageToRender = (message) => {
@@ -36,7 +37,10 @@ const VideoMessagingModal = (props) => {
       console.log(data);
       if (data && data?.sendChatMessage) {
         const message = data.sendChatMessage;
-        setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+        if (!chatMessageIds.includes(message.id)) {
+          setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+          setChatMessageIds([...chatMessageIds, message.id]);
+        }
       }
     },
   });
@@ -49,17 +53,19 @@ const VideoMessagingModal = (props) => {
         console.log(e);
       },
       onCompleted: (data) => {
-        console.log(data);
+        console.log('getChatMessages', data);
         if (data) {
           if (data?.getChatMessages) {
-            setChatMessages(
-              GiftedChat.append(
-                [],
-                data.getChatMessages.map((message) => getMessageToRender(message))
-              )
-            );
+            // eslint-disable-next-line no-restricted-syntax
+            for (const message of data.getChatMessages) {
+              if (!chatMessageIds.includes(message.id)) {
+                setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+                setChatMessageIds([...chatMessageIds, message.id]);
+              }
+            }
           }
         }
+        console.log('getChatMessages - setChatMessageIds', chatMessageIds);
       },
     }
   );
@@ -72,7 +78,10 @@ const VideoMessagingModal = (props) => {
       console.log('onSubscriptionData: ', data);
       if (data && data?.chatMessageSent) {
         const message = data.chatMessageSent;
-        setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+        if (!chatMessageIds.includes(message.id)) {
+          setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+          setChatMessageIds([...chatMessageIds, message.id]);
+        }
       }
     },
   });
@@ -106,7 +115,7 @@ const VideoMessagingModal = (props) => {
       };
     }
 
-    return <SlackMessage {...props} messageTextStyle={messageTextStyle} />;
+    return <SlackMessage {...props} messageTextStyle={messageTextStyle} user={userInfo?.id} />;
   };
 
   return (

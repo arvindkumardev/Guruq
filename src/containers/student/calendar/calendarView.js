@@ -17,7 +17,7 @@ import { Colors, Images } from '../../../theme';
 import { getBoxColor } from '../../../theme/colors';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
+import { getSubjectIcons, printTime, RfH, RfW } from '../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../booking.query';
 
 function CalendarView(props) {
@@ -37,31 +37,20 @@ function CalendarView(props) {
       }
     },
     onCompleted: (data) => {
-      const array = [];
-      for (const obj of data.getScheduledClasses) {
-        array.push({
-          uuid: obj.uuid,
-          classTitle: obj.offering.displayName,
-          board: obj.offering?.parentOffering?.parentOffering?.displayName,
-          class: obj.offering?.parentOffering?.displayName,
-          timing: `${moment(obj.startDate).format('hh:mm A')} - ${moment(obj.endDate).format('hh:mm A')}`,
-          id: obj.id,
-        });
-      }
-      setScheduledClasses(array);
-      setIsEmpty(array.length === 0);
+      setScheduledClasses(data.getScheduledClasses);
+      setIsEmpty(data.getScheduledClasses.length === 0);
     },
   });
 
-  const renderClassItem = (item) => (
+  const renderClassItem = (classDetails) => (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails: item })}>
+      onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails })}>
       <View style={[commonStyles.horizontalChildrenStartView, { marginBottom: RfH(24) }]}>
         <View
           style={{
             height: RfH(72),
             width: RfW(72),
-            backgroundColor: getBoxColor(item.classTitle),
+            backgroundColor: getBoxColor(classDetails?.offering?.displayName),
             borderRadius: 8,
             alignItems: 'center',
             justifyContent: 'center',
@@ -70,34 +59,28 @@ function CalendarView(props) {
             iconHeight={RfH(56)}
             iconWidth={RfW(48)}
             styling={{ alignSelf: 'center' }}
-            iconImage={getSubjectIcons(item.classTitle)}
+            iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
           />
         </View>
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.headingPrimaryText}>{item.classTitle}</Text>
-          <Text style={commonStyles.mediumMutedText}>
-            {item.board} | {item.class}
+          <Text style={commonStyles.headingPrimaryText}>
+            {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
           </Text>
-          <Text style={commonStyles.mediumMutedText}>{item.timing}</Text>
+          <Text style={commonStyles.mediumMutedText}>
+            {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+          </Text>
+          <Text style={commonStyles.mediumMutedText}>
+            {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
+          </Text>
+          <Text style={commonStyles.mediumMutedText}>
+            {classDetails?.onlineClass ? 'Online' : 'Offline'} {classDetails?.groupSize === 1 ? 'Individual' : 'Group'}{' '}
+            Class
+          </Text>
         </View>
         <View />
       </View>
     </TouchableWithoutFeedback>
   );
-  //
-  // const renderListItem = (item) => {
-  //   return (
-  //     <View>
-  //       <FlatList
-  //         showsVerticalScrollIndicator={false}
-  //         data={item.classes}
-  //         renderItem={({ item }) => renderClassItem(item)}
-  //         keyExtractor={(index) => index.toString()}
-  //         contentContainerStyle={{ paddingBottom: RfH(170) }}
-  //       />
-  //     </View>
-  //   );
-  // };
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;

@@ -202,7 +202,7 @@ const ClassModeSelectModal = (props) => {
               <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
                 <Text style={commonStyles.regularPrimaryText}>Amount Payable</Text>
                 <Text style={commonStyles.headingPrimaryText}>
-                  {numberOfClass} X ₹{classPrice} = ₹{amount}
+                  {numberOfClass} x ₹{classPrice} = ₹{amount}
                 </Text>
               </View>
             )}
