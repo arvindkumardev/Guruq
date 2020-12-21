@@ -208,15 +208,17 @@ function TutorDashboard(props) {
             flex: 0.5,
             backgroundColor: getBoxColor(item?.offering?.displayName),
             padding: RfH(8),
-            marginHorizontal: RfW(8),
+            // marginHorizontal: RfW(8),
+            // width: '48%',
+            marginRight: index % 2 === 0 ? RfW(0) : RfW(0),
+            marginLeft: index % 2 !== 0 ? RfW(8) : RfW(0),
             marginVertical: RfH(8),
             borderRadius: RfH(8),
           },
         ]}>
         <IconButtonWrapper
           iconWidth={RfW(48)}
-          styling={{ alignSelf: 'center' }}
-          iconHeight={RfH(56)}
+          iconHeight={RfH(48)}
           styling={{ alignSelf: 'flex-start' }}
           iconImage={getSubjectIcons(item?.offering?.displayName)}
         />
@@ -231,22 +233,6 @@ function TutorDashboard(props) {
         <Text style={commonStyles.smallMutedText}>{item?.offering?.displayName}</Text>
       </View>
     );
-  };
-
-  const logout = () => {
-    clearAllLocalStorage().then(() => {
-      client.cache.reset().then(() => {
-        removeToken().then(() => {
-          // set in apollo cache
-          isLoggedIn(false);
-          userType('');
-          userDetails({});
-
-          studentDetails({});
-          tutorDetails({});
-        });
-      });
-    });
   };
 
   return (
@@ -330,7 +316,7 @@ function TutorDashboard(props) {
             />
           </View>
         </View> */}
-          <View style={{ height: RfH(220), marginTop: RfH(29) }}>
+          <View style={{ height: RfH(220), marginTop: RfH(24) }}>
             <Swiper horizontal style={{ overflow: 'visible' }}>
               <View
                 style={{
@@ -384,7 +370,7 @@ function TutorDashboard(props) {
           )}
 
           {subjects.length > 0 && (
-            <View>
+            <View style={{ marginTop: RfH(24) }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>My Subjects</Text>
                 <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
@@ -393,7 +379,7 @@ function TutorDashboard(props) {
                   </Text>
                 </TouchableWithoutFeedback>
               </View>
-              <View style={{ marginTop: RfH(16) }}>
+              <View style={{ marginTop: RfH(8), flex: 1, justifyContent: 'space-between' }}>
                 <FlatList
                   data={subjects.slice(0, 6)}
                   extraData={refreshSubjectList}

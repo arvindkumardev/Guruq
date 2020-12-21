@@ -8,6 +8,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import PropTypes from 'prop-types';
 import ProgressCircle from 'react-native-progress-circle';
+import Swiper from 'react-native-swiper';
 import commonStyles from '../../../theme/styles';
 import { RfH, RfW } from '../../../utils/helpers';
 import { Colors, Fonts, Images } from '../../../theme';
@@ -71,29 +72,24 @@ function Wallet(props) {
           commonStyles.horizontalChildrenEqualSpaceView,
           {
             marginTop: RfH(16),
-            backgroundColor: Colors.lightPurple,
+            backgroundColor: Colors.lightBlue,
             padding: RfH(16),
-            borderRadius: RfH(8),
-            marginHorizontal: RfW(16),
+            // borderRadius: RfH(8),
+            // marginHorizontal: RfW(16),
           },
         ]}>
-        <ProgressCircle
-          percent={70}
-          radius={32}
-          borderWidth={6}
-          color={Colors.brandBlue2}
-          shadowColor={Colors.lightGrey}
-          outerCircleStyle={{ backgroundColor: Colors.lightGrey }}
-          bgColor={Colors.lightPurple}
-        />
         <View style={commonStyles.verticallyCenterItemsView}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>₹ 1700.00</Text>
-          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Total Income</Text>
+          <Text style={[commonStyles.headingPrimaryText, { fontSize: 24, fontFamily: Fonts.bold }]}>456</Text>
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Balance</Text>
         </View>
         <View style={commonStyles.verticallyCenterItemsView}>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>170</Text>
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Earned This Month</Text>
+        </View>
+        {/* <View style={commonStyles.verticallyCenterItemsView}>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>₹ 1400.00</Text>
-          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Expenditure</Text>
-        </View>
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Spent</Text>
+        </View> */}
       </View>
     );
   };
@@ -109,7 +105,7 @@ function Wallet(props) {
           <Text style={commonStyles.mediumMutedText}>{item.date}</Text>
           <Text
             style={[commonStyles.mediumMutedText, { color: item.status === 1 ? Colors.brandBlue2 : Colors.orangeRed }]}>
-            {item.status === 1 ? 'Success' : 'Redeem'}
+            {item.status === 1 ? 'Earn' : 'Redeem'}
           </Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(24) }]} />
@@ -126,10 +122,9 @@ function Wallet(props) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           onScroll={(event) => handleScroll(event)}
-          stickyHeaderIndices={[1]}
           scrollEventThrottle={16}>
           <Text style={[commonStyles.pageTitleThirdRow, { marginHorizontal: RfW(16) }]}>My Wallet</Text>
-          <View style={{ height: RfH(44) }} />
+          {/* <View style={{ height: RfH(44) }} />
           <View
             style={[
               commonStyles.horizontalChildrenSpaceView,
@@ -144,14 +139,18 @@ function Wallet(props) {
               }}>
               ₹ 300.00
             </Text>
-          </View>
-          <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(16), marginHorizontal: RfW(16) }]}>
-            <IconButtonWrapper iconWidth={RfH(21)} iconHeight={RfH(21)} iconImage={Images.coin} />
-            <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(8) }]}>1 Q point = 1 INR</Text>
-          </View>
+          </View> */}
+          {/* <View style={[commonStyles.horizontalChildrenView]}>
+            {/* <IconButtonWrapper iconWidth={RfH(21)} iconHeight={RfH(21)} iconImage={Images.coin} /> */}
+            {/* <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(8) }]}>1 Q point = 1 INR</Text> */}
+
+            
+          {/* </View> */}
+
           {renderBalanceView()}
-          <View style={{ height: RfH(32) }} />
-          <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16) }]}>
+
+        
+          {/* <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16) }]}>
             <View
               style={[
                 commonStyles.verticallyCenterItemsView,
@@ -184,12 +183,13 @@ function Wallet(props) {
                 Earn More
               </Text>
             </View>
-          </View>
-          <View style={{ height: RfH(32) }} />
+          </View> */}
+          {/* <View style={{ height: RfH(16) }} /> */}
+
           <View
             style={[commonStyles.horizontalChildrenSpaceView, { backgroundColor: Colors.lightGrey, padding: RfW(16) }]}>
             <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Transaction history</Text>
-            <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2 }]}>View All</Text>
+            {/* <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2 }]}>View All</Text> */}
           </View>
           <FlatList
             showsVerticalScrollIndicator={false}
