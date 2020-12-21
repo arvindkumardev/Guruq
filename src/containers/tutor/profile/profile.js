@@ -44,6 +44,13 @@ function Profile() {
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
   const [isReferFriendMenuOpen, setIsReferFriendMenuOpen] = useState(false);
   const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
+
+  const [settingsData, setSettingsData] = useState([
+    { name: 'Change Password', icon: Images.personal },
+    { name: 'Update Mobile and Email', icon: Images.home },
+    { name: 'Notifications', icon: Images.parent_details },
+  ]);
   const [informationData, setInformationData] = useState([
     { name: 'Customer Care', icon: Images.personal },
     { name: "FAQ's", icon: Images.home },
@@ -231,7 +238,7 @@ function Profile() {
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Scheduler</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Availability of date and time slots
+                Mark your Availability - date and time slots
               </Text>
             </View>
             <IconWrapper
@@ -258,7 +265,7 @@ function Profile() {
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Classes</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Online, Offline
+                Classes, Students, Tuitions Requests
               </Text>
             </View>
             <IconWrapper
@@ -285,7 +292,7 @@ function Profile() {
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>My Subjects</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Add price for the classes
+                Add price for the classes, Subject profile
               </Text>
             </View>
             <IconWrapper
@@ -320,7 +327,7 @@ function Profile() {
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
           <View style={styles.menuItemParentView}>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => setIsSettingsMenuOpen(!isSettingsMenuOpen)}>
               <Text style={styles.menuItemPrimaryText}>Settings</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                 Account Settings, Change Password, Notifications
@@ -333,6 +340,17 @@ function Profile() {
             iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
           />
         </View>
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+        {isSettingsMenuOpen && (
+          <SafeAreaView>
+            <FlatList
+              data={settingsData}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => renderItem(item)}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </SafeAreaView>
+        )}
 
         <View style={commonStyles.blankGreyViewSmall} />
 
@@ -422,7 +440,12 @@ function Profile() {
           </View>
 
           <View>
-            <IconWrapper iconHeight={RfH(65)} iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} />
+            <IconWrapper
+              resizeMode="contain"
+              iconHeight={RfH(65)}
+              iconWidth={RfW(65)}
+              iconImage={Images.profile_footer_logo}
+            />
           </View>
 
           <View>

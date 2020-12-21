@@ -401,39 +401,65 @@ export default class Video extends Component<Props, State> {
                 borderRadius: 20,
                 zIndex: 2,
               }}>
-              {!this.state.videoMuted ? (
-                <RtcLocalView.SurfaceView
-                  style={styles.max}
-                  channelId={this.props.channelName}
-                  renderMode={VideoRenderMode.Hidden}
-                />
+              {this.state.whiteboardEnabled ? (
+                <>
+                  {this.state.peerIds
+                    .filter((uid) => uid === this.state.selectedUid)
+                    .map((value, index, array) => {
+                      const audioItem = this.state.audioStates.find((s) => s.uid === value);
+                      const videoItem = this.state.videoStates.find((s) => s.uid === value);
+
+                      const participant = this.getParticipant(value);
+
+                      console.log('videoItem', videoItem, this.state.peerIds);
+                      return (
+                        <>
+                          <TouchableWithoutFeedback onPress={() => this.setState({ selectedUid: value })}>
+                            {videoItem && videoItem.status ? (
+                              <RtcRemoteView.SurfaceView
+                                // style={styles.remyesote}
+                                style={[styles.remote, { borderRadius: 20 }]}
+                                uid={value}
+                                channelId={this.props.channelName}
+                                renderMode={VideoRenderMode.Hidden}
+                                zOrderMediaOverlay
+                              />
+                            ) : (
+                              this._renderVideoMutedView(participant?.contactDetail?.firstName)
+                            )}
+                          </TouchableWithoutFeedback>
+                          {audioItem && !audioItem.status && (
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                position: 'absolute',
+                                // bottom: 8,
+                                right: 8,
+                                zIndex: 2,
+                              }}>
+                              <IconButtonWrapper
+                                iconImage={Images.microphone_mute_white}
+                                iconWidth={RfW(24)}
+                                iconHeight={RfH(24)}
+                              />
+                            </View>
+                          )}
+                        </>
+                      );
+                    })}
+                </>
               ) : (
-                <View
-                  style={{
-                    flex: 1,
-                    backgroundColor: '#444444',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <View
-                    style={{
-                      height: RfH(60),
-                      width: RfW(60),
-                      borderRadius: 60,
-                      backgroundColor: Colors.lightBlue,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        color: Colors.primaryText,
-                        fontSize: 48,
-                      }}>
-                      {this.props.userInfo.firstName[0]}
-                    </Text>
-                  </View>
-                </View>
+                <>
+                  {!this.state.videoMuted ? (
+                    <RtcLocalView.SurfaceView
+                      style={styles.max}
+                      channelId={this.props.channelName}
+                      renderMode={VideoRenderMode.Hidden}
+                    />
+                  ) : (
+                    this._renderVideoMutedView(this.props.userInfo.firstName)
+                  )}
+                </>
               )}
 
               {this.state.audioMuted && (
@@ -661,6 +687,38 @@ export default class Video extends Component<Props, State> {
     );
   };
 
+  _renderVideoMutedView = (firstName, remote = false, selected = false) => {
+    return (
+      <>
+        <View
+          style={[
+            remote ? styles.remote : {},
+            {
+              flex: 1,
+              backgroundColor: selected ? '#222222' : '#444444',
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          ]}>
+          <View
+            style={{
+              height: RfH(selected ? 100 : 60),
+              width: RfW(selected ? 100 : 60),
+              borderRadius: 100,
+              backgroundColor: Colors.lightBlue,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: 8,
+            }}>
+            <Text style={{ color: Colors.primaryText, fontSize: selected ? 48 : 36 }}>{firstName[0]}</Text>
+          </View>
+          <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>{firstName}</Text>
+        </View>
+      </>
+    );
+  };
+
   _renderRemoteVideos = () => {
     const { peerIds } = this.state;
     return (
@@ -743,35 +801,7 @@ export default class Video extends Component<Props, State> {
                       zOrderMediaOverlay
                     />
                   ) : (
-                    <View
-                      style={[
-                        styles.remote,
-                        {
-                          flex: 1,
-                          backgroundColor: '#444444',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        },
-                      ]}>
-                      <View
-                        style={{
-                          height: RfH(60),
-                          width: RfW(60),
-                          borderRadius: 100,
-                          backgroundColor: Colors.lightBlue,
-                          flexDirection: 'row',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          marginBottom: 8,
-                        }}>
-                        <Text style={{ color: Colors.primaryText, fontSize: 36 }}>
-                          {participant?.contactDetail?.firstName[0]}
-                        </Text>
-                      </View>
-                      <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>
-                        {participant?.contactDetail?.firstName}
-                      </Text>
-                    </View>
+                    this._renderVideoMutedView(participant?.contactDetail?.firstName, true)
                   )}
                 </TouchableWithoutFeedback>
                 {audioItem && !audioItem.status && (
@@ -826,35 +856,7 @@ export default class Video extends Component<Props, State> {
                     zOrderMediaOverlay
                   />
                 ) : (
-                  <View
-                    style={[
-                      // styles.remote,
-                      {
-                        flex: 1,
-                        backgroundColor: '#222222',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      },
-                    ]}>
-                    <View
-                      style={{
-                        height: RfH(100),
-                        width: RfW(100),
-                        borderRadius: 100,
-                        backgroundColor: Colors.lightBlue,
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginBottom: 8,
-                      }}>
-                      <Text style={{ color: Colors.primaryText, fontSize: 48 }}>
-                        {participant?.contactDetail?.firstName[0]}
-                      </Text>
-                    </View>
-                    <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
-                      {participant?.contactDetail?.firstName}
-                    </Text>
-                  </View>
+                  this._renderVideoMutedView(participant?.contactDetail?.firstName, false, true)
                 )}
               </TouchableWithoutFeedback>
             )}
@@ -898,6 +900,152 @@ export default class Video extends Component<Props, State> {
     );
   };
 
+  _renderWaitingScreen = () => {
+    return (
+      <>
+        <View style={{ height: 44, marginTop: 44, paddingHorizontal: 16, justifyContent: 'center' }}>
+          <BackArrow action={this.onBackPress} whiteArrow />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flex: 1, justifyContent: 'flex-end', alignSelf: 'stretch' }}>
+            {this.state.previewVideo ? (
+              <RtcLocalView.SurfaceView style={{ flex: 1 }} renderMode={VideoRenderMode.Hidden} />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: '#444444',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    height: RfH(100),
+                    width: RfW(100),
+                    borderRadius: 100,
+                    backgroundColor: Colors.lightBlue,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      color: Colors.primaryText,
+                      fontSize: 48,
+                    }}>
+                    {this.props.userInfo.firstName[0]}
+                  </Text>
+                </View>
+              </View>
+            )}
+
+            <View
+              style={{
+                marginTop: RfH(-100),
+                marginBottom: RfH(34),
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <TouchableWithoutFeedback onPress={this.togglePreview}>
+                <View
+                  style={{
+                    width: RfW(54),
+                    height: RfH(54),
+                    backgroundColor: this.state.videoMuted ? Colors.white : '#222222',
+                    borderRadius: 54,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginHorizontal: RfW(8),
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
+                    iconWidth={RfW(24)}
+                    iconHeight={RfH(24)}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+
+              <TouchableWithoutFeedback onPress={this.audioToggle}>
+                <View
+                  style={{
+                    width: RfW(54),
+                    height: RfH(54),
+                    backgroundColor: this.state.audioMuted ? Colors.white : '#222222',
+                    borderRadius: 54,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginHorizontal: RfW(8),
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={this.state.audioMuted ? Images.microphone_mute : Images.microphone}
+                    iconWidth={RfW(24)}
+                    iconHeight={RfH(24)}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flex: 0.5,
+              backgroundColor: Colors.lightPurple,
+              // paddingTop: RfH(44),
+              justifyContent: 'flex-start',
+              alignSelf: 'stretch',
+            }}>
+            <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
+              <View
+                style={{
+                  height: RfH(72),
+                  width: RfW(72),
+                  backgroundColor: Colors.lightPurple,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
+              </View>
+              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+                <Text style={commonStyles.headingPrimaryText}>
+                  {`${this.props.classDetails?.offering?.displayName} by ${this.props.classDetails?.tutor?.contactDetail?.firstName} ${this.props.classDetails?.tutor?.contactDetail?.lastName}`}
+                </Text>
+                <Text style={commonStyles.mediumMutedText}>
+                  {`${this.props.classDetails?.offering?.parentOffering?.displayName} | ${this.props.classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+                </Text>
+                <Text style={commonStyles.mediumMutedText}>
+                  {printDate(this.props.classDetails?.startDate)}
+                  {' at '}
+                  {printTime(this.props.classDetails?.startDate)} {' - '}
+                  {printTime(this.props.classDetails?.endDate)}
+                </Text>
+              </View>
+              <View>
+                <IconButtonWrapper />
+              </View>
+            </View>
+
+            <View style={styles.buttonHolder}>
+              <TouchableWithoutFeedback onPress={this.startCall}>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}> Join Class </Text>
+                </View>
+              </TouchableWithoutFeedback>
+
+              {/* FIXME: REMOVE ME */}
+              <TouchableWithoutFeedback onPress={this.endCall}>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}> End Call </Text>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </View>
+        </View>
+      </>
+    );
+  };
+
   render() {
     const { joinSucceed } = this.state;
 
@@ -905,149 +1053,7 @@ export default class Video extends Component<Props, State> {
       <View style={[styles.max, { backgroundColor: Colors.brandBlue2 }]}>
         <StatusBar barStyle="light-content" />
 
-        {!joinSucceed && (
-          <>
-            <View style={{ height: 44, marginTop: 44, paddingHorizontal: 16, justifyContent: 'center' }}>
-              <BackArrow action={this.onBackPress} whiteArrow />
-            </View>
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{ flex: 1, justifyContent: 'flex-end', alignSelf: 'stretch' }}>
-                {this.state.previewVideo ? (
-                  <RtcLocalView.SurfaceView style={{ flex: 1 }} renderMode={VideoRenderMode.Hidden} />
-                ) : (
-                  <View
-                    style={{
-                      flex: 1,
-                      backgroundColor: '#444444',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        height: RfH(100),
-                        width: RfW(100),
-                        borderRadius: 100,
-                        backgroundColor: Colors.lightBlue,
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Text
-                        style={{
-                          color: Colors.primaryText,
-                          fontSize: 48,
-                        }}>
-                        {this.props.userInfo.firstName[0]}
-                      </Text>
-                    </View>
-                  </View>
-                )}
-
-                <View
-                  style={{
-                    marginTop: RfH(-100),
-                    marginBottom: RfH(34),
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <TouchableWithoutFeedback onPress={this.togglePreview}>
-                    <View
-                      style={{
-                        width: RfW(54),
-                        height: RfH(54),
-                        backgroundColor: this.state.videoMuted ? Colors.white : '#222222',
-                        borderRadius: 54,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginHorizontal: RfW(8),
-                      }}>
-                      <IconButtonWrapper
-                        iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
-                        iconWidth={RfW(24)}
-                        iconHeight={RfH(24)}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-
-                  <TouchableWithoutFeedback onPress={this.audioToggle}>
-                    <View
-                      style={{
-                        width: RfW(54),
-                        height: RfH(54),
-                        backgroundColor: this.state.audioMuted ? Colors.white : '#222222',
-                        borderRadius: 54,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginHorizontal: RfW(8),
-                      }}>
-                      <IconButtonWrapper
-                        iconImage={this.state.audioMuted ? Images.microphone_mute : Images.microphone}
-                        iconWidth={RfW(24)}
-                        iconHeight={RfH(24)}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  flex: 0.5,
-                  backgroundColor: Colors.lightPurple,
-                  // paddingTop: RfH(44),
-                  justifyContent: 'flex-start',
-                  alignSelf: 'stretch',
-                }}>
-                <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
-                  <View
-                    style={{
-                      height: RfH(72),
-                      width: RfW(72),
-                      backgroundColor: Colors.lightPurple,
-                      borderRadius: 8,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
-                  </View>
-                  <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-                    <Text style={commonStyles.headingPrimaryText}>
-                      {`${this.props.classDetails?.offering?.displayName} by ${this.props.classDetails?.tutor?.contactDetail?.firstName} ${this.props.classDetails?.tutor?.contactDetail?.lastName}`}
-                    </Text>
-                    <Text style={commonStyles.mediumMutedText}>
-                      {`${this.props.classDetails?.offering?.parentOffering?.displayName} | ${this.props.classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
-                    </Text>
-                    <Text style={commonStyles.mediumMutedText}>
-                      {printDate(this.props.classDetails?.startDate)}
-                      {' at '}
-                      {printTime(this.props.classDetails?.startDate)} {' - '}
-                      {printTime(this.props.classDetails?.endDate)}
-                    </Text>
-                  </View>
-                  <View>
-                    <IconButtonWrapper />
-                  </View>
-                </View>
-
-                <View style={styles.buttonHolder}>
-                  <TouchableWithoutFeedback onPress={this.startCall}>
-                    <View style={styles.button}>
-                      <Text style={styles.buttonText}> Join Class </Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-
-                  {/* FIXME: REMOVE ME */}
-                  <TouchableWithoutFeedback onPress={this.endCall}>
-                    <View style={styles.button}>
-                      <Text style={styles.buttonText}> End Call </Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-              </View>
-            </View>
-          </>
-        )}
+        {!joinSucceed && this._renderWaitingScreen()}
 
         {joinSucceed && this._renderVideos()}
       </View>

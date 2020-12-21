@@ -14,7 +14,7 @@ import { IconButtonWrapper, PaymentMethodModal, ScreenHeader, Loader } from '../
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
 import styles from '../styles';
-import { alertBox, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import QPointPayModal from '../components/qPointPayModal';
 import CouponModal from '../components/couponModal';
@@ -254,11 +254,11 @@ const myCart = () => {
   const renderCartItems = (item, index) => (
     <View style={[commonStyles.horizontalChildrenStartView, { marginBottom: RfH(16) }]}>
       <IconButtonWrapper
-        iconHeight={RfH(90)}
+        iconHeight={RfH(80)}
         iconWidth={RfW(80)}
         imageResizeMode="cover"
         iconImage={getTutorImage(item?.tutor)}
-        styling={{ flex: 0.3, borderRadius: 16 }}
+        styling={{ flex: 0.3, borderRadius: 8 }}
       />
       <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
         <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -288,16 +288,18 @@ const myCart = () => {
           <Text style={styles.tutorDetails}>
             {item?.offering?.parentOffering?.parentOffering?.displayName}, {item?.offering?.parentOffering?.displayName}
           </Text>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), fontFamily: 'SegoeUI-Bold' }}>
-            ₹{item?.price}
-          </Text>
         </View>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={styles.tutorDetails}>
-            {item.groupSize === 1 ? 'Individual' : 'Group'} {item?.onlineClass ? 'online' : 'offline'} class
+            {item.groupSize === 1 ? 'Individual' : 'Group'} {item?.onlineClass ? 'Online' : 'Offline'} Class
           </Text>
+
+          <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>₹{item?.price}</Text>
+        </View>
+
+        <View style={{ marginTop: RfH(8) }}>
           <TouchableWithoutFeedback onPress={() => removeCartItem(item)}>
-            <Text style={[commonStyles.smallPrimaryText, { color: Colors.orangeRed }]}>Delete</Text>
+            <Text style={[commonStyles.mediumPrimaryText, { color: Colors.orangeRed }]}>REMOVE</Text>
           </TouchableWithoutFeedback>
         </View>
       </View>

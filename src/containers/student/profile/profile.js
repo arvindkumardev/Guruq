@@ -39,14 +39,17 @@ function Profile() {
   const [myClassesData, setMyClassesData] = useState([
     { name: 'Calendar', icon: Images.personal },
     { name: 'Upcoming Classes', icon: Images.home },
-    // { name: 'Parents Details', icon: Images.parent_details },
-    // { name: 'Education', icon: Images.education },
   ]);
   const [isStudyMenuOpen, setIsStudyMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
   const [isReferFriendMenuOpen, setIsReferFriendMenuOpen] = useState(false);
   const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
+  const [settingsData, setSettingsData] = useState([
+    { name: 'Change Password', icon: Images.personal },
+    { name: "Change Mobile and email", icon: Images.home },
+    { name: 'Notifications', icon: Images.parent_details },
+  ]);
   const [informationData, setInformationData] = useState([
     { name: 'Customer Care', icon: Images.personal },
     { name: "FAQ's", icon: Images.home },
