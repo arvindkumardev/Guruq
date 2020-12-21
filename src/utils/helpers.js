@@ -2,12 +2,12 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import AsyncStorage from '@react-native-community/async-storage';
-import { isNumber, isEmpty } from 'lodash';
-import { Dimensions, Alert } from 'react-native';
+import { isEmpty, isNumber } from 'lodash';
+import { Alert, Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
-import SubjectIcons from '../theme/subjectIcons';
 import Images from '../theme/images';
+import SubjectIcons from '../theme/subjectIcons';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
 
 let token;
 
@@ -180,6 +180,9 @@ export const getSubjectIcons = (name) => {
     case 'Accounts':
       icon = SubjectIcons.accounts;
       break;
+    case 'Accountancy':
+      icon = SubjectIcons.accountancy;
+      break;
     case 'Chemistry':
       icon = SubjectIcons.chemistry;
       break;
@@ -189,8 +192,11 @@ export const getSubjectIcons = (name) => {
     case 'Computer Science':
       icon = SubjectIcons.computer_science;
       break;
-    case 'biology':
-      icon = SubjectIcons.dna;
+    case 'Biology':
+      icon = SubjectIcons.biology;
+      break;
+    case 'Business Studies':
+      icon = SubjectIcons.business_studies;
       break;
     case 'Hindi':
       icon = SubjectIcons.hindi;
@@ -227,6 +233,21 @@ export const getSubjectIcons = (name) => {
       break;
     case 'Sanskrit':
       icon = SubjectIcons.sanskrit;
+      break;
+    case 'Spanish':
+      icon = SubjectIcons.spanish;
+      break;
+    case 'Russian':
+      icon = SubjectIcons.russian;
+      break;
+    case 'French':
+      icon = SubjectIcons.french;
+      break;
+    case 'German':
+      icon = SubjectIcons.german;
+      break;
+    case 'Chinese':
+      icon = SubjectIcons.chinese;
       break;
     case 'Psychology':
       icon = SubjectIcons.psychology;

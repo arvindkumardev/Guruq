@@ -106,7 +106,10 @@ export const GET_TUTOR_OFFERINGS = gql`
   query GetTutorOfferings($tutorId: Int!) {
     getTutorOfferings(tutorId: $tutorId) {
       id
+      demoClass
       freeDemo
+      onlineClass
+      groupClass
       tutor {
         id
       }

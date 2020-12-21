@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // marginLeft: RfW(-4),
     zIndex: 3,
-    backgroundColor: Colors.brandBlue2,
+    backgroundColor: Colors.brandBlue,
     height: 40,
 
     borderTopLeftRadius: 0,
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // marginRight: RfW(-4),
     zIndex: 3,
-    backgroundColor: Colors.brandBlue2,
+    backgroundColor: Colors.brandBlue,
     height: 40,
 
     borderTopRightRadius: 0,

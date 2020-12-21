@@ -10,6 +10,16 @@ export const GET_AVAILABILITY = gql`
   }
 `;
 
+export const GET_AVAILABILITY_DATA = gql`
+  query GetAvailabilityData($tutorAvailability: TutorAvailabilityDto!) {
+    getAvailabilityData(tutorAvailability: $tutorAvailability) {
+      active
+      startDate
+      endDate
+    }
+  }
+`;
+
 export const GET_CLASS_DETAILS = gql`
   query GetClassDetails($classId: Int!) {
     getClassDetails(classId: $classId) {

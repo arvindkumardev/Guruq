@@ -1,19 +1,19 @@
 /* eslint-disable no-nested-ternary */
-import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { RFValue } from 'react-native-responsive-fontsize';
 import { useReactiveVar } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { offeringsMasterData } from '../../../apollo/cache';
+import { IconButtonWrapper } from '../../../components';
+import BackArrow from '../../../components/BackArrow';
+import routeNames from '../../../routes/screenNames';
+import { Colors, Images } from '../../../theme';
+import Fonts from '../../../theme/fonts';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
-import { IconButtonWrapper } from '../../../components';
 import styles from './style';
-import routeNames from '../../../routes/screenNames';
-import Fonts from '../../../theme/fonts';
-import BackArrow from '../../../components/BackArrow';
-import { offeringsMasterData } from '../../../apollo/cache';
 
 function BoardSelector(props) {
   const navigation = useNavigation();

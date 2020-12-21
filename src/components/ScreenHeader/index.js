@@ -43,7 +43,7 @@ const ScreenHeader = (props) => {
         <View style={[commonStyles.horizontalChildrenSpaceView, { flex: 1 }]}>
           <View style={commonStyles.horizontalChildrenView}>
             {homeIcon && <BackArrow action={onBackPress} />}
-            <View style={[labelStyle, { flexDirection: 'row', justifyContent: 'center' }]}>
+            <View style={[labelStyle, { flexDirection: 'row', justifyContent: 'center', marginLeft: RfW(8) }]}>
               <Text style={commonStyles.headingPrimaryText}>{label}</Text>
             </View>
           </View>

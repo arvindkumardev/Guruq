@@ -2,30 +2,31 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-plusplus */
-import { Dimensions, FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Icon, Thumbnail } from 'native-base';
-import Swiper from 'react-native-swiper';
+import {useLazyQuery, useMutation, useReactiveVar} from '@apollo/client';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
-import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { RFValue } from 'react-native-responsive-fontsize';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Images } from '../../../../theme';
-import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
-import { IconButtonWrapper } from '../../../../components';
-import { offeringsMasterData, studentDetails, userDetails } from '../../../../apollo/cache';
-import NavigationRouteNames from '../../../../routes/screenNames';
-import Fonts from '../../../../theme/fonts';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import StudentOfferingModal from './studentOfferingModal';
-import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
-import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
+import {Icon} from 'native-base';
+import PropTypes from 'prop-types';
+import React, {useEffect, useState} from 'react';
+import {Dimensions, FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {RFValue} from 'react-native-responsive-fontsize';
+import Swiper from 'react-native-swiper';
+import {offeringsMasterData, studentDetails, userDetails} from '../../../../apollo/cache';
+import {IconButtonWrapper} from '../../../../components';
 import Loader from '../../../../components/Loader';
-import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
-import { GET_SCHEDULED_CLASSES } from '../../booking.query';
+import NavigationRouteNames from '../../../../routes/screenNames';
+import {Colors, Images} from '../../../../theme';
+import Fonts from '../../../../theme/fonts';
+import commonStyles from '../../../../theme/styles';
+import {STANDARD_SCREEN_SIZE} from '../../../../utils/constants';
+import {getSubjectIcons, getUserImageUrl, RfH, RfW} from '../../../../utils/helpers';
+import {GET_CART_ITEMS, GET_SCHEDULED_CLASSES} from '../../booking.query';
+import {MARK_INTERESTED_OFFERING_SELECTED} from '../../dashboard-mutation';
+import {GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS} from '../../dashboard-query';
+import {GET_FAVOURITE_TUTORS} from '../../tutor-query';
+import StudentOfferingModal from './studentOfferingModal';
+import NotificationRedirection from '../../../notification/notificationRedirection';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
@@ -41,6 +42,12 @@ function StudentDashboard(props) {
 
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});
+  const [favouriteTutors, setFavouriteTutors] = useState([]);
+  const [interestedOfferings, setInterestedOfferings] = useState({});
+  const [upcomingClasses, setUpcomingClasses] = useState([]);
+  const [sponsoredTutors, setSponsoredTutors] = useState([]);
+  const [refreshSponsors, setRefreshSponsors] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
   const [
     getOfferingMasterData,
@@ -50,27 +57,32 @@ function StudentDashboard(props) {
   useEffect(() => {
     getOfferingMasterData();
   }, []);
+
   useEffect(() => {
     if (offeringData && offeringData.offerings && offeringData.offerings.edges) {
       offeringsMasterData(offeringData.offerings.edges);
-
-      // after fetching this, push the user to dashboard
     }
   }, [offeringData]);
 
-  const [favouriteTutors, setFavouriteTutors] = useState([]);
-  const [interestedOfferings, setInterestedOfferings] = useState({});
-  const [upcomingClasses, setUpcomingClasses] = useState([]);
-  const [sponsoredTutors, setSponsoredTutors] = useState([]);
-  const [refreshSponsors, setRefreshSponsors] = useState(false);
+  const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setCartCount(data.getCartItems.length);
+      }
+    },
+  });
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
-
-        console.log(error);
       }
     },
     onCompleted: (data) => {
@@ -85,8 +97,6 @@ function StudentDashboard(props) {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
-
-        console.log(error);
       }
     },
     onCompleted: (data) => {
@@ -102,38 +112,19 @@ function StudentDashboard(props) {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
-
-        console.log(error);
         navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
       }
     },
     onCompleted: (data) => {
       if (data && data.getInterestedOfferings && data.getInterestedOfferings.length > 0) {
-        console.log(
-          'data.getInterestedOfferings.find((s) => s.selected)',
-          data.getInterestedOfferings.find((s) => s.selected)
-        );
-
         setInterestedOfferings(data.getInterestedOfferings);
-
-        const selectedOffering = data.getInterestedOfferings.find((s) => s.selected);
-        setSelectedOffering(selectedOffering ? selectedOffering.offering : {});
+        const selectedOfferingData = data.getInterestedOfferings.find((s) => s.selected);
+        setSelectedOffering(selectedOfferingData ? selectedOfferingData.offering : {});
       } else {
         navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
       }
     },
   });
-
-  // const [
-  //   ,
-  //   {
-  //     loading: ,
-  //     error: interestedOfferingsError,
-  //     data: interestedOfferings,
-  //     refetch: _refetchInterestedOffering,
-  //   },
-  // ] = useLazyQuery();
-  // const refetchInterestedOffering = (args) => _refetchInterestedOffering(args);
 
   useEffect(() => {
     getFavouriteTutors();
@@ -146,6 +137,7 @@ function StudentDashboard(props) {
       getFavouriteTutors();
       getInterestedOfferings();
       getSponsoredTutors();
+      getCartItems();
     }, [])
   );
 
@@ -163,56 +155,17 @@ function StudentDashboard(props) {
     },
   });
 
-  // useEffect(() => {
-  //   console.log(interestedOfferingsError);
-  //   if (
-  //     interestedOfferingsError &&
-  //     interestedOfferingsError.graphQLErrors &&
-  //     interestedOfferingsError.graphQLErrors.length > 0
-  //   ) {
-  //     navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
-  //   }
-  // }, [interestedOfferingsError]);
-
-  // useEffect(() => {
-  //   console.log(interestedOfferings);
-  //
-  //   if (
-  //     interestedOfferings &&
-  //     interestedOfferings.getInterestedOfferings &&
-  //     interestedOfferings.getInterestedOfferings.length > 0
-  //   ) {
-  //     const selectedOffering = interestedOfferings.getInterestedOfferings.find((s) => s.selected);
-  //     console.log('interestedOfferings.getInterestedOfferings.find((s) => s.selected)', selectedOffering);
-  //     setSelectedOffering(selectedOffering ? selectedOffering.offering : {});
-  //   } else if (!interestedOfferingsLoading && interestedOfferings.getInterestedOfferings.length === 0) {
-  //     navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
-  //   }
-  // }, [interestedOfferings]);
-
   const onOfferingSelect = (offering) => {
     setStudentOfferingModalVisible(false);
 
     setSelectedOffering(offering);
 
-    console.log('offering selected', offering);
-
-    // call mutation
     markInterestedOffering({ variables: { offeringId: offering.id } });
-
-    // refetchOffering();
   };
 
   useEffect(() => {
     getInterestedOfferings({ fetchPolicy: 'network-only' });
-    // console.log('refetchStudentOfferings', refetchStudentOfferings);
   }, [refetchStudentOfferings]);
-
-  // useEffect(() => {
-  //   // refetch everything
-  //
-  //   console.log('selectedOffering updated', selectedOffering);
-  // }, [selectedOffering]);
 
   const gotoTutors = (subject) => {
     setShowAllSubjects(false);
@@ -233,251 +186,46 @@ function StudentDashboard(props) {
     return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
   };
 
-  const renderSubjects = (item) => {
-    return (
-      <View style={{ marginTop: RfH(20), flex: 1 }}>
-        <TouchableWithoutFeedback
-          onPress={() => gotoTutors(item)}
+  const renderSubjects = (item) => (
+    <View style={{ marginTop: RfH(20), flex: 1 }}>
+      <TouchableWithoutFeedback
+        onPress={() => gotoTutors(item)}
+        style={{
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
+          alignItems: 'stretch',
+        }}>
+        <View
           style={{
             flexDirection: 'column',
-            justifyContent: 'flex-end',
-            alignItems: 'stretch',
-          }}>
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              // backgroundColor: '#ff0000',
-              height: RfH(64),
-              width: RfW(64),
-              marginHorizontal: RfW(4),
-              borderRadius: RfW(8),
-            }}>
-            <IconButtonWrapper
-              iconWidth={RfW(64)}
-              styling={{ alignSelf: 'center' }}
-              iconHeight={RfH(64)}
-              iconImage={getSubjectIcons(item.displayName)}
-            />
-          </View>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 12,
-              width: RfW(70),
-              color: Colors.primaryText,
-              marginTop: RfH(5),
-            }}>
-            {item.displayName}
-          </Text>
-        </TouchableWithoutFeedback>
-        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-          <TouchableWithoutFeedback
-            onPress={() => gotoTutors('English')}
-            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#E7E5F2',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.book}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              English
-            </Text>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-            onPress={() => gotoTutors('Physics')}
-            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#FFF7F0',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.physics}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Physics
-            </Text>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-            onPress={() => gotoTutors('English')}
-            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgb(230,252,231)',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.beaker}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Chemistry
-            </Text>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-            onPress={() => gotoTutors('English')}
-            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgb(203,231,255)',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.dna}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Biology
-            </Text>
-          </TouchableWithoutFeedback>
-        </View> */}
-
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: 'center',
             alignItems: 'center',
-            marginTop: RfH(20),
+            height: RfH(64),
+            width: RfW(64),
+            marginHorizontal: RfW(4),
+            borderRadius: RfW(8),
           }}>
-          <TouchableWithoutFeedback
-            onPress={() => gotoTutors('English')}
-            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgb(230,252,231)',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.math}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Maths
-            </Text>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-            onPress={() => gotoTutors('English')}
-            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#E7E5F2',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.civic}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Civics
-            </Text>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-            onPress={() => gotoTutors('English')}
-            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgb(203,231,255)',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.history}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              History
-            </Text>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-            onPress={() => gotoTutors('English')}
-            style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch' }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#FFF7F0',
-                height: RfH(67),
-                width: RfW(67),
-                borderRadius: RfW(8),
-              }}>
-              <IconButtonWrapper
-                iconWidth={RfW(24.5)}
-                styling={{ alignSelf: 'center' }}
-                iconHeight={RfH(34.2)}
-                iconImage={Images.geo}
-              />
-            </View>
-            <Text style={{ textAlign: 'center', fontSize: 12, color: Colors.primaryText, marginTop: RfH(5) }}>
-              Geography
-            </Text>
-          </TouchableWithoutFeedback>
-        </View> */}
-      </View>
-    );
-  };
+          <IconButtonWrapper
+            iconWidth={RfW(64)}
+            styling={{ alignSelf: 'center' }}
+            iconHeight={RfH(64)}
+            imageResizeMode={'contain'}
+            iconImage={getSubjectIcons(item.displayName)}
+          />
+        </View>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 12,
+            width: RfW(70),
+            color: Colors.primaryText,
+            marginTop: RfH(5),
+          }}>
+          {item.displayName}
+        </Text>
+      </TouchableWithoutFeedback>
+    </View>
+  );
 
   const renderSponsoredTutor = (item) => {
     const sub = [];
@@ -681,10 +429,10 @@ function StudentDashboard(props) {
     onCompleted: (data) => {
       const array = [];
       for (const obj of data.getScheduledClasses) {
-        const startHours = new Date(obj.startDate).getUTCHours();
-        const startMinutes = new Date(obj.startDate).getUTCMinutes();
-        const endHours = new Date(obj.endDate).getUTCHours();
-        const endMinutes = new Date(obj.endDate).getUTCMinutes();
+        const startHours = new Date(obj.startDate).getHours();
+        const startMinutes = new Date(obj.startDate).getMinutes();
+        const endHours = new Date(obj.endDate).getHours();
+        const endMinutes = new Date(obj.endDate).getMinutes();
         const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
           startMinutes < 10 ? `0${startMinutes}` : startMinutes
         } ${startHours < 12 ? `AM` : 'PM'} - ${endHours < 10 ? `0${endHours}` : endHours}:${
@@ -814,6 +562,7 @@ function StudentDashboard(props) {
       <StatusBar barStyle="dark-content" />
 
       <Loader isLoading={interestedOfferingsLoading || loadingFavouriteTutors} />
+      <NotificationRedirection />
 
       <View style={[commonStyles.mainContainer]}>
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -828,10 +577,50 @@ function StudentDashboard(props) {
               <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
             </TouchableOpacity>
           </View>
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}>
-              <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
-            </TouchableOpacity>
+          <View style={{ flexDirection: 'row' }}>
+            <IconButtonWrapper
+              iconImage={Images.cart}
+              iconHeight={RfH(16)}
+              iconWidth={RfW(16)}
+              submitFunction={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CART)}
+            />
+            {cartCount > 0 && (
+              <View
+                style={{
+                  backgroundColor: Colors.orangeRed,
+                  borderRadius: RfH(20),
+                  position: 'absolute',
+                  top: RfH(-3),
+                  left: RfW(2),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: RfH(10),
+                  width: RfH(10),
+                }}>
+                <Text style={{ fontSize: 7, fontWeight: 'bold', color: Colors.white }}>{cartCount}</Text>
+              </View>
+            )}
+            <IconButtonWrapper
+              iconImage={Images.bell}
+              iconHeight={RfH(16)}
+              iconWidth={RfW(14)}
+              styling={{ marginLeft: RfW(16) }}
+              submitFunction={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
+            />
+            <View
+              style={{
+                backgroundColor: Colors.orangeRed,
+                borderRadius: RfH(20),
+                position: 'absolute',
+                top: RfH(-3),
+                left: RfW(40),
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: RfH(10),
+                width: RfH(10),
+              }}>
+              <Text style={{ fontSize: 7, fontWeight: 'bold', color: Colors.white }}>2</Text>
+            </View>
           </View>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -846,49 +635,16 @@ function StudentDashboard(props) {
               <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
                 Hi {userInfo.firstName}
               </Text>
-              {/* <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}> */}
-              {/*  <Text style={{ color: Colors.darkGrey, fontSize: 16, marginTop: RfH(4) }}>CBSE Class 9</Text> */}
-              {/*  <TouchableOpacity onPress={() => setStudyAreaModalVisible(true)}> */}
-              {/*    /!* <Icon *!/ */}
-              {/*    /!*  type="MaterialIcons" *!/ */}
-              {/*    /!*  name="keyboard-arrow-down" *!/ */}
-              {/*    /!*  style={{ marginTop: RfH(8), marginLeft: RfW(4), color: Colors.secondaryText }} *!/ */}
-              {/*    /!* /> *!/ */}
-              {/*    <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} /> */}
-              {/*  </TouchableOpacity> */}
-              {/* </View> */}
             </View>
             <View>
-              <Image
-                source={Images.user}
-                style={{
-                  height: RfH(32),
-                  width: RfW(32),
-                  borderTopLeftRadius: RfH(32),
-                  borderTopRightRadius: RfH(32),
-                  borderBottomLeftRadius: RfH(32),
-                  borderBottomRightRadius: RfH(32),
-                }}
+              <IconButtonWrapper
+                iconHeight={RfH(32)}
+                iconWidth={RfH(32)}
+                iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
+                styling={{ borderRadius: RfH(32) }}
               />
             </View>
           </View>
-
-          {/* <View style={{ height: 44 }}> */}
-          {/*  <Item */}
-          {/*    style={{ */}
-          {/*      backgroundColor: '#F3F4F9', */}
-          {/*      borderRadius: 10, */}
-          {/*      paddingHorizontal: RfW(10), */}
-          {/*      borderColor: 'transparent', */}
-          {/*      height: RfH(36), */}
-          {/*      marginTop: 4, */}
-          {/*      marginBottom: 4, */}
-          {/*    }}> */}
-          {/*    <Icon type="MaterialIcons" name="search" style={{ color: Colors.brandBlue2 }} /> */}
-          {/*    <Input placeholder="Search" /> */}
-          {/*  </Item> */}
-          {/* </View> */}
-
           <View style={{ height: RfH(220), marginTop: RfH(29) }}>
             <Swiper horizontal style={{ overflow: 'visible' }}>
               <View

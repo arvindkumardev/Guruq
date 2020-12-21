@@ -15,6 +15,7 @@ import CustomDatePicker from '../../../../components/CustomDatePicker';
 function UpdateSchedule() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [refreshSlots, setRefreshSlots] = useState(false);
   const tutorInfo = useReactiveVar(tutorDetails);
 
   const getHour = (hoursString) => {
@@ -76,7 +77,7 @@ function UpdateSchedule() {
     });
     arrTime[index].endTime = value;
     if (arrTime[index + 1]) {
-      const sTime = parseInt(getHour(value)) + 1;
+      const sTime = parseInt(getHour(value));
       const eTime = getMinutes(value);
       arrTime[index + 1].startTime = `${sTime < 10 ? `0${sTime}` : sTime}:${eTime < 10 ? `0${eTime}` : eTime}`;
     }
@@ -98,23 +99,31 @@ function UpdateSchedule() {
   });
 
   const onUpdating = () => {
-    const availableArray = [];
-    slots.map((obj) => {
-      availableArray.push({
-        startTime: `${moment(startDate + obj.startTime, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
-        endTime: `${moment(startDate + obj.endTime, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
-        active: obj.active,
+    if (!startDate) {
+      Alert.alert('Please select start date!');
+    } else if (!endDate) {
+      Alert.alert('Please select end date!');
+    } else {
+      const availableArray = [];
+      slots.map((obj) => {
+        availableArray.push({
+          startTime: `${moment(startDate + obj.startTime, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
+          endTime: `${moment(startDate + (obj.endTime === '24:00' ? '23:59' : obj.endTime), 'YYYY-MM-DDLT').format(
+            'YYYY-MM-DDTHH:mm:s'
+          )}0+05:30`,
+          active: obj.active,
+        });
       });
-    });
-    updateAvailability({
-      variables: {
-        tutorAvailability: {
-          startDate: `${moment(startDate, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
-          endDate: `${moment(endDate, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
-          availableTimes: availableArray,
+      updateAvailability({
+        variables: {
+          tutorAvailability: {
+            startDate: `${moment(startDate, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
+            endDate: `${moment(endDate, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
+            availableTimes: availableArray,
+          },
         },
-      },
-    });
+      });
+    }
   };
 
   const addSlot = () => {
@@ -125,20 +134,23 @@ function UpdateSchedule() {
     arrTime.splice(slots.length - 1, 1);
     const sTime = parseInt(getHour(arrTime[slots.length - 2].endTime));
     const eTime = parseInt(getMinutes(arrTime[slots.length - 2].endTime));
-    const endStartTime = sTime + 1;
-    const newObj = {
-      startName: `${sTime < 10 ? `0${sTime}` : sTime}:${eTime < 10 ? `0${eTime}` : eTime}`,
-      endDate: `${endStartTime < 10 ? `0${endStartTime}` : endStartTime}:${eTime < 10 ? `0${eTime}` : eTime}`,
-      active: true,
-    };
-    arrTime.push(newObj);
-    const lastObj = {
-      startName: `${endStartTime < 10 ? `0${endStartTime}` : endStartTime}:${eTime < 10 ? `0${eTime}` : eTime}`,
-      endDate: '24:00',
-      active: true,
-    };
-    arrTime.push(lastObj);
-    setSlots(arrTime);
+    if (sTime + 1 <= 23) {
+      const endStartTime = sTime + 1;
+      const newObj = {
+        startTime: `${sTime < 10 ? `0${sTime}` : sTime}:${eTime < 10 ? `0${eTime}` : eTime}`,
+        endTime: `${endStartTime < 10 ? `0${endStartTime}` : endStartTime}:${eTime < 10 ? `0${eTime}` : eTime}`,
+        active: true,
+      };
+      arrTime.push(newObj);
+      const lastObj = {
+        startTime: `${endStartTime < 10 ? `0${endStartTime}` : endStartTime}:${eTime < 10 ? `0${eTime}` : eTime}`,
+        endTime: '24:00',
+        active: false,
+      };
+      arrTime.push(lastObj);
+      setSlots(arrTime);
+      setRefreshSlots(true);
+    }
   };
 
   const renderItem = (item, index) => {
@@ -220,22 +232,24 @@ function UpdateSchedule() {
       </View>
       <View style={[commonStyles.blankGreyViewSmall, { marginTop: RfH(16), height: RfH(8) }]} />
       <View style={{ height: RfH(24) }} />
-      <View>
-        <FlatList
-          data={slots}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => renderItem(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+      <FlatList
+        data={slots}
+        extraData={refreshSlots}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item, index }) => renderItem(item, index)}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{ paddingBottom: RfH(84) }}
+      />
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'center',
-          bottom: RfH(32),
+          bottom: RfH(0),
           left: 0,
           right: 0,
+          backgroundColor: Colors.white,
           position: 'absolute',
+          paddingBottom: RfH(32),
         }}>
         <Button
           onPress={() => onUpdating()}

@@ -1,33 +1,43 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-restricted-syntax */
-import { Dimensions, FlatList, Image, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { Input } from 'native-base';
-import PropTypes from 'prop-types';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import Swiper from 'react-native-swiper';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { RFValue } from 'react-native-responsive-fontsize';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import commonStyles from '../../../../theme/styles';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import Swiper from 'react-native-swiper';
+import initializeApollo from '../../../../apollo/apollo';
+import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../../apollo/cache';
+import { IconButtonWrapper } from '../../../../components';
+import Loader from '../../../../components/Loader';
+import NavigationRouteNames from '../../../../routes/screenNames';
 import { Colors, Images } from '../../../../theme';
+import { getBoxColor } from '../../../../theme/colors';
+import Fonts from '../../../../theme/fonts';
+import commonStyles from '../../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import {
   clearAllLocalStorage,
   getSubjectIcons,
   getUserImageUrl,
   removeToken,
   RfH,
-  RfW,
+  RfW
 } from '../../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import NavigationRouteNames from '../../../../routes/screenNames';
-import { IconButtonWrapper } from '../../../../components';
-import Fonts from '../../../../theme/fonts';
-import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../../apollo/cache';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
-import { getBoxColor } from '../../../../theme/colors';
-import initializeApollo from '../../../../apollo/apollo';
 import TutorSubjectsModal from './tutorSubjectsModal';
 
 function TutorDashboard(props) {
@@ -53,10 +63,10 @@ function TutorDashboard(props) {
     onCompleted: (data) => {
       const array = [];
       for (const obj of data.getScheduledClasses) {
-        const startHours = new Date(obj.startDate).getUTCHours();
-        const startMinutes = new Date(obj.startDate).getUTCMinutes();
-        const endHours = new Date(obj.endDate).getUTCHours();
-        const endMinutes = new Date(obj.endDate).getUTCMinutes();
+        const startHours = new Date(obj.startDate).getHours();
+        const startMinutes = new Date(obj.startDate).getMinutes();
+        const endHours = new Date(obj.endDate).getHours();
+        const endMinutes = new Date(obj.endDate).getMinutes();
         const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
           startMinutes < 10 ? `0${startMinutes}` : startMinutes
         } - ${endHours < 10 ? `0${endHours}` : endHours}:${endMinutes < 10 ? `0${endMinutes}` : endMinutes} ${
@@ -240,10 +250,55 @@ function TutorDashboard(props) {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <>
       <StatusBar barStyle="dark-content" />
+      <Loader isLoading={loadingScheduledClasses || loadingTutorsOffering} />
+
       <View style={commonStyles.mainContainer}>
-        <View style={{ height: RfH(24) }} />
+        <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }} />
+          <View>
+            <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}>
+              <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              height: 54,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View>
+              <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
+                Hi {userInfo.firstName}
+              </Text>
+            </View>
+            <View>
+              <IconButtonWrapper
+                iconHeight={RfH(32)}
+                iconWidth={RfH(32)}
+                iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
+                styling={{ borderRadius: RfH(32) }}
+              />
+              {/* <Image
+                source={Images.user}
+                style={{
+                  height: RfH(32),
+                  width: RfW(32),
+                  borderTopLeftRadius: RfH(32),
+                  borderTopRightRadius: RfH(32),
+                  borderBottomLeftRadius: RfH(32),
+                  borderBottomRightRadius: RfH(32),
+                }}
+              /> */}
+            </View>
+          </View>
+
+          {/* <View style={{ height: RfH(24) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <View>
             <Text
@@ -273,96 +328,102 @@ function TutorDashboard(props) {
               }}
             />
           </View>
-        </View>
-        <View style={{ height: RfH(220), marginTop: RfH(29) }}>
-          <Swiper horizontal style={{ overflow: 'visible' }}>
-            <View
-              style={{
-                backgroundColor: '#ceecfe',
-                borderRadius: 20,
-                marginRight: 8,
-              }}>
-              <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
-            </View>
-            <View
-              style={{
-                backgroundColor: '#ceecfe',
-                borderRadius: 20,
-                marginRight: 8,
-              }}>
-              <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
-            </View>
-            <View
-              style={{
-                backgroundColor: '#ceecfe',
-                borderRadius: 20,
-                marginRight: 8,
-              }}>
-              <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
-            </View>
-          </Swiper>
-        </View>
+        </View> */}
+          <View style={{ height: RfH(220), marginTop: RfH(29) }}>
+            <Swiper horizontal style={{ overflow: 'visible' }}>
+              <View
+                style={{
+                  backgroundColor: '#ceecfe',
+                  borderRadius: 20,
+                  marginRight: 8,
+                }}>
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
+              </View>
+              <View
+                style={{
+                  backgroundColor: '#ceecfe',
+                  borderRadius: 20,
+                  marginRight: 8,
+                }}>
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
+              </View>
+              <View
+                style={{
+                  backgroundColor: '#ceecfe',
+                  borderRadius: 20,
+                  marginRight: 8,
+                }}>
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_tutor_img} />
+              </View>
+            </Swiper>
+          </View>
 
-        {upcomingClasses.length > 0 && (
-          <View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-              <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>Upcoming Classes</Text>
-              <TouchableWithoutFeedback onPress={() => changeTab(2)}>
-                <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
-              </TouchableWithoutFeedback>
-            </View>
+          {upcomingClasses.length > 0 && (
             <View>
-              <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={upcomingClasses}
-                renderItem={({ item, index }) => renderUpcomingClasses(item, index)}
-                keyExtractor={(item, index) => index.toString()}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                  Upcoming Classes
+                </Text>
+                <TouchableWithoutFeedback onPress={() => changeTab(2)}>
+                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                    View All
+                  </Text>
+                </TouchableWithoutFeedback>
+              </View>
+              <View>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={upcomingClasses}
+                  renderItem={({ item, index }) => renderUpcomingClasses(item, index)}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+            </View>
+          )}
+
+          {subjects.length > 0 && (
+            <View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>My Subjects</Text>
+                <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
+                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                    View All
+                  </Text>
+                </TouchableWithoutFeedback>
+              </View>
+              <View style={{ marginTop: RfH(16) }}>
+                <FlatList
+                  data={subjects.slice(0, 6)}
+                  extraData={refreshSubjectList}
+                  numColumns={2}
+                  renderItem={({ item, index }) => renderSubjects(item, index)}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+            </View>
+          )}
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING)}>
+            <View style={{ marginTop: RfH(20) }}>
+              <Image
+                style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}
+                source={Images.student_requests}
               />
             </View>
-          </View>
-        )}
-        <TouchableWithoutFeedback onPress={() => logout()}>
-          <Text>logout</Text>
-        </TouchableWithoutFeedback>
-        {subjects.length > 0 && (
-          <View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-              <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>My Subjects</Text>
-              <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
-                <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
-              </TouchableWithoutFeedback>
-            </View>
-            <View style={{ marginTop: RfH(16) }}>
-              <FlatList
-                data={subjects.slice(0, 6)}
-                extraData={refreshSubjectList}
-                numColumns={2}
-                renderItem={({ item, index }) => renderSubjects(item, index)}
-                keyExtractor={(item, index) => index.toString()}
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}>
+            <View>
+              <Image
+                style={{ width: Dimensions.get('window').width - 32, height: RfH(184) }}
+                source={Images.refer_earn}
               />
             </View>
-          </View>
-        )}
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING)}>
-          <View style={{ marginTop: RfH(20) }}>
-            <Image
-              style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}
-              source={Images.student_requests}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}>
-          <View>
-            <Image
-              style={{ width: Dimensions.get('window').width - 32, height: RfH(184) }}
-              source={Images.refer_earn}
-            />
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+
+          <TutorSubjectsModal visible={showAllSubjects} onClose={() => setShowAllSubjects(false)} subjects={subjects} />
+        </ScrollView>
       </View>
-      <TutorSubjectsModal visible={showAllSubjects} onClose={() => setShowAllSubjects(false)} subjects={subjects} />
-    </ScrollView>
+    </>
   );
 }
 

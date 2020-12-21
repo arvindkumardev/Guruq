@@ -6,19 +6,20 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, CheckBox, Item, ListItem } from 'native-base';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
-import { ScreenHeader } from '../../../../components';
+import { useFocusEffect } from '@react-navigation/native';
+import { CustomCheckBox, ScreenHeader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { RfH, RfW } from '../../../../utils/helpers';
 import { Colors } from '../../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { GET_AVAILABILITY } from '../../../student/class.query';
+import { GET_AVAILABILITY_DATA } from '../../../student/class.query';
 import { tutorDetails } from '../../../../apollo/cache';
 
 function ViewSchedule() {
   const [timeSlots, setTimeSlots] = useState([]);
   const tutorInfo = useReactiveVar(tutorDetails);
 
-  const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY, {
+  const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY_DATA, {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -27,7 +28,7 @@ function ViewSchedule() {
     onCompleted: (data) => {
       setTimeSlots([]);
       const dateObj = [];
-      for (const obj of data.getAvailability) {
+      for (const obj of data.getAvailabilityData) {
         const sHours = new Date(obj.startDate).getHours();
         const sMin = new Date(obj.startDate).getMinutes();
         const eHours = new Date(obj.endDate).getHours();
@@ -59,25 +60,33 @@ function ViewSchedule() {
     getAvailabilityData(new Date());
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      getAvailabilityData(new Date());
+    }, [])
+  );
+
   const onCheckPressed = (index) => {
     const arrSlots = [];
     timeSlots.map((obj) => {
       arrSlots.push(obj);
     });
     arrSlots[index].isActive = !arrSlots[index].isActive;
-    console.log(arrSlots);
     setTimeSlots(arrSlots);
   };
 
   const renderItem = (item, index) => {
     return (
-      <View>
+      <View style={{ marginTop: RfH(16) }}>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text>{item.slot}</Text>
-          <View>
-            <ListItem underline={false} style={{ borderBottomWidth: 0 }}>
-              <CheckBox checked={item.isActive} onPress={() => onCheckPressed(index)} />
-            </ListItem>
+          <View style={{ marginBottom: RfH(8) }}>
+            <CustomCheckBox
+              enabled={item.isActive}
+              submitFunction={() => onCheckPressed(index)}
+              iconHeight={RfH(16)}
+              iconWidth={RfW(16)}
+            />
           </View>
         </View>
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
@@ -128,9 +137,9 @@ function ViewSchedule() {
         showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => renderItem(item, index)}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingLeft: RfW(16), paddingBottom: RfH(84) }}
+        contentContainerStyle={{ paddingHorizontal: RfW(16), paddingBottom: RfH(84) }}
       />
-      <View
+      {/* <View
         style={{
           flexDirection: 'row',
           justifyContent: 'center',
@@ -145,7 +154,7 @@ function ViewSchedule() {
             <Text style={commonStyles.textButtonPrimary}>Edit Availability</Text>
           </Button>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 }

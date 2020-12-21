@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { firebase } from '@react-native-firebase/app';
+// import { firebase } from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { notificationPayload } from '../apollo/cache';
-import { firebaseConfig, getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
+import { getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
 import { UserTypeEnum } from '../common/userType.enum';
 import EnterPassword from '../containers/common/login/enterPassword';
 import Login from '../containers/common/login/login';
@@ -33,10 +33,15 @@ const AppStack = (props) => {
   }, []);
 
   useEffect(() => {
-    firebase.initializeApp(firebaseConfig);
+    // firebase.initializeApp(firebaseConfig);
     getFcmToken();
     requestUserPermission();
     initializeNotification();
+    // notificationPayload({
+    //   screen: 'tutor_detail',
+    //   tutor_id: 38480,
+    //   offering_id: 249,
+    // });
     messaging().onNotificationOpenedApp((remoteMessage) => {
       if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
         notificationPayload(remoteMessage.data);

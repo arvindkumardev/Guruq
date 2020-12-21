@@ -10,7 +10,7 @@ function stylingIconButtonWrapper(props) {
 
   return (
     <View>
-      <TouchableOpacity onPress={submitFunction}>
+      <TouchableOpacity onPress={submitFunction} activeOpacity={1}>
         {enabled ? (
           <View>
             <Image source={Images.radio} style={[styling, { height: iconHeight, width: iconWidth }]} />
