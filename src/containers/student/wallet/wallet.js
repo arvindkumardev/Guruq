@@ -2,10 +2,10 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
 import { ScrollView, Text, View, Image, FlatList } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { useNavigation } from '@react-navigation/native';
-import { useReactiveVar } from '@apollo/client';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import PropTypes from 'prop-types';
 import ProgressCircle from 'react-native-progress-circle';
 import commonStyles from '../../../theme/styles';
@@ -14,6 +14,7 @@ import { Colors, Fonts, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { studentDetails } from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
+import { SEARCH_QPOINTS_TRANSACTIONS } from '../../common/graphql-query';
 
 function Wallet(props) {
   const navigation = useNavigation();
@@ -36,6 +37,31 @@ function Wallet(props) {
       setShowHeader(false);
     }
   };
+
+  const [getQPointsTransactions, { loading: loadingPointsTransactions }] = useLazyQuery(SEARCH_QPOINTS_TRANSACTIONS, {
+    fetchPolicy: 'no-cache',
+    variables: { searchDto: { userId: userInfo?.id } },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log(data);
+      }
+    },
+  });
+
+  useEffect(() => {
+    getQPointsTransactions();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getQPointsTransactions();
+    }, [])
+  );
 
   const renderBalanceView = () => {
     return (

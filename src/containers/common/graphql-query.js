@@ -74,3 +74,19 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
     }
   }
 `;
+
+export const SEARCH_QPOINTS_TRANSACTIONS = gql`
+  query SearchQPointTransaction($searchDto: SearchQPointDto!) {
+    searchQPointTransaction(searchDto: $searchDto) {
+      edges {
+        points
+        pointType {
+          action
+          actionType
+          description
+          points
+        }
+      }
+    }
+  }
+`;
