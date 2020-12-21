@@ -170,7 +170,6 @@ export const GET_SCHEDULED_CLASSES = gql`
     getScheduledClasses(classesSearchDto: $classesSearchDto) {
       id
       uuid
-
       students {
         id
         profileImage {

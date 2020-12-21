@@ -10,7 +10,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { CustomRadioButton, IconButtonWrapper } from '..';
-import { RfH, RfW } from '../../utils/helpers';
+import { alertBox, RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import routeNames from '../../routes/screenNames';
 import { userDetails } from '../../apollo/cache';
@@ -20,7 +20,7 @@ import { OrderPaymentStatusEnum, OrderStatusEnum, PaymentMethodEnum } from './pa
 
 const convenienceCharges = 100;
 const PaymentMethod = (props) => {
-  const { visible, onClose, bookingData, amount, discount, deductedAgaintQPoint } = props;
+  const { visible, onClose, bookingData, amount, discount, deductedAgaintQPoint, hidePaymentPopup } = props;
 
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(PaymentMethodEnum.ONLINE.value);
@@ -32,7 +32,6 @@ const PaymentMethod = (props) => {
   const [createNewBooking, { loading: bookingLoading }] = useMutation(CREATE_BOOKING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
@@ -98,13 +97,11 @@ const PaymentMethod = (props) => {
         completedPayment(bookingOrderId, OrderPaymentStatusEnum.COMPLETE.label, data.razorpay_payment_id);
       })
       .catch((error) => {
-        // handle failure
-        Alert.alert('Payment failed!');
+        alertBox('Payment failed!', 'Please try again');
       });
   };
 
   const initiatePaytmPayment = async (bookingOrderId) => {
-    // eslint-disable-next-line no-undef
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     const raw = JSON.stringify({ orderDetails: { userId: userInfo.id, orderId: bookingOrderId } });
@@ -114,8 +111,6 @@ const PaymentMethod = (props) => {
       body: raw,
       redirect: 'follow',
     };
-
-    console.log('requestOptions', requestOptions);
     const response = await fetch('http://apiv2.guruq.in/api/payment/initiatePaytmTransaction', requestOptions);
 
     console.log(response);
@@ -123,9 +118,8 @@ const PaymentMethod = (props) => {
     const data = await response.json();
 
     if (data.error) {
-      Alert.alert('PayTM is not available right now, please try again later!');
+      Alert.alert('PayTm is not available right now, please try again later!');
     } else {
-      console.log(data);
 
       const AllInOneSDKPlugin = NativeModules.AllInOneSDKSwiftWrapper;
 
@@ -136,7 +130,7 @@ const PaymentMethod = (props) => {
       const callback = `https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=${orderId}`;
       const isStaging = true;
 
-      console.log('-------------------------open Native--------', NativeModules);
+      console.log('x', NativeModules);
       const result = AllInOneSDKPlugin.openPaytm(mid, orderId, txnToken, amount, callback, isStaging);
 
       console.log(result);
@@ -269,17 +263,18 @@ const PaymentMethod = (props) => {
   };
 
   const makePayment = () => {
-    bookingData.serviceAddress = { id: 258747 };
-    bookingData.billingAddress = {
-      type: 6,
-      fullAddress: 'Dwarka Sector 21',
-      country: 'India',
-      state: 'Delhi',
-      city: 'New Delhi',
-      subArea: 'CP',
-      postalCode: 110001,
-    };
+    // bookingData.serviceAddress = { id: 258747 };
+    // bookingData.billingAddress = {
+    //   type: 6,
+    //   fullAddress: 'Dwarka Sector 21',
+    //   country: 'India',
+    //   state: 'Delhi',
+    //   city: 'New Delhi',
+    //   subArea: 'CP',
+    //   postalCode: 110001,
+    // };
     bookingData.convenienceCharges = paymentMethod === PaymentMethodEnum.CASH.value ? convenienceCharges : 0;
+    bookingData.orderPayment = { paymentMethod: '', amount: 0 };
     switch (paymentMethod) {
       case PaymentMethodEnum.ONLINE.value:
         bookingData.orderPayment.paymentMethod = PaymentMethodEnum.ONLINE.label;
@@ -300,9 +295,7 @@ const PaymentMethod = (props) => {
     bookingData.itemPrice = amount;
     bookingData.orderStatus = OrderStatusEnum.PENDING.label;
     bookingData.promotionId = 0;
-
-    props.hidePaymentPopup();
-
+    hidePaymentPopup();
     createNewBooking({
       variables: { orderCreateDto: bookingData },
     });
@@ -427,21 +420,21 @@ const PaymentMethod = (props) => {
                   <View style={commonStyles.horizontalChildrenView} />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.PAYPAL.value)}>
-                <View
-                  style={[
-                    commonStyles.horizontalChildrenView,
-                    commonStyles.lineSeparator,
-                    { alignItems: 'center', height: RfH(44) },
-                  ]}>
-                  <CustomRadioButton
-                    enabled={paymentMethod === PaymentMethodEnum.PAYPAL.value}
-                    submitFunction={() => setPaymentMethod(PaymentMethodEnum.PAYPAL.value)}
-                  />
-                  <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>PayPal</Text>
-                  <View style={commonStyles.horizontalChildrenView} />
-                </View>
-              </TouchableOpacity>
+              {/* <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.PAYPAL.value)}> */}
+              {/*  <View */}
+              {/*    style={[ */}
+              {/*      commonStyles.horizontalChildrenView, */}
+              {/*      commonStyles.lineSeparator, */}
+              {/*      { alignItems: 'center', height: RfH(44) }, */}
+              {/*    ]}> */}
+              {/*    <CustomRadioButton */}
+              {/*      enabled={paymentMethod === PaymentMethodEnum.PAYPAL.value} */}
+              {/*      submitFunction={() => setPaymentMethod(PaymentMethodEnum.PAYPAL.value)} */}
+              {/*    /> */}
+              {/*    <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>PayPal</Text> */}
+              {/*    <View style={commonStyles.horizontalChildrenView} /> */}
+              {/*  </View> */}
+              {/* </TouchableOpacity> */}
               <TouchableOpacity onPress={() => setPaymentMethod(PaymentMethodEnum.CASH.value)} activeOpacity={0.8}>
                 <View
                   style={[

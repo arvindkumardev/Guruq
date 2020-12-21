@@ -4,22 +4,57 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useLazyQuery } from '@apollo/client';
+import moment from 'moment';
 import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SCHEDULE_CLASS } from '../class.mutation';
-import NavigationRouteNames from '../../../routes/screenNames';
+import { GET_SCHEDULED_CLASSES } from '../booking.query';
 
 function ScheduleClass(props) {
   const navigation = useNavigation();
   const { route } = props;
   const classData = route?.params?.classData;
-  const classes = [];
+
   const [showSlotSelector, setShowSlotSelector] = useState(false);
   const [tutorClasses, setTutorClasses] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+
+  const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        console.log('error', error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data && data.getScheduledClasses) {
+        const scheduledClasses = data.getScheduledClasses.map((item) => item.startDate);
+        const classes = tutorClasses;
+        for (let i = 0; i < scheduledClasses.length; i++) {
+          classes[i] = { startDate: scheduledClasses[i], isScheduled: true };
+        }
+        setTutorClasses(classes);
+        setRefresh(!refresh);
+      }
+    },
+  });
+
+  const getScheduleClassCall = () => {
+    getScheduledClasses({
+      variables: {
+        classesSearchDto: {
+          orderItemId: classData.id,
+          startDate: moment(new Date('2020-01-01')).toDate(),
+          endDate: moment(new Date('2021-12-31')).toDate(),
+        },
+      },
+    });
+  };
 
   const [scheduleClass, { loading: scheduleLoading }] = useMutation(SCHEDULE_CLASS, {
     fetchPolicy: 'no-cache',
@@ -30,15 +65,8 @@ function ScheduleClass(props) {
     },
     onCompleted: (data) => {
       if (data) {
+        getScheduleClassCall();
         setShowSlotSelector(false);
-        navigation.navigate(NavigationRouteNames.STUDENT.MY_CLASSES);
-        // const array = [];
-        // classes.map((obj) => {
-        //   array.push(obj);
-        // });
-        // array[selectedIndex].date = new Date(data.scheduleClass.startDate).toDateString();
-        // setTutorClasses(array);
-        // setShowSlotSelector(false);
       }
     },
   });
@@ -46,45 +74,13 @@ function ScheduleClass(props) {
   useEffect(() => {
     if (classData) {
       const classes = [];
-      for (let i = 1; i <= classData.availableClasses; i++) {
-        classes.push({ class: `${i}`, date: '', startTime: '' });
+      for (let i = 0; i < classData.count; i++) {
+        classes.push({ startDate: '', isScheduled: false });
       }
       setTutorClasses(classes);
+      getScheduleClassCall();
     }
   }, [classData]);
-  //
-  // const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
-  //   onError: (e) => {
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     const array = [];
-  //     classes.map((obj) => {
-  //       array.push(obj);
-  //     });
-  //     console.log("data.getScheduledClasses",data.getScheduledClasses)
-  //     for (let i = 0; i < data.getScheduledClasses.length; i++) {
-  //       if (parseInt(array[i].class) === i + 1) {
-  //         array[i].date = new Date(data.getScheduledClasses[i].startDate).toDateString();
-  //       }
-  //     }
-  //     setTutorClasses(array);
-  //   },
-  // });
-  //
-  // useEffect(() => {
-  //   getScheduledClasses({
-  //     variables: {
-  //       classesSearchDto: {
-  //         orderItemId: classData.id,
-  //         startDate: moment().toDate(),
-  //         endDate: moment().endOf('day').toDate(),
-  //       },
-  //     },
-  //   });
-  // }, []);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -92,6 +88,22 @@ function ScheduleClass(props) {
 
   const getTutorImage = (tutor) => {
     return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
+  };
+
+  const showSlotPopup = () => {
+    setShowSlotSelector(true);
+  };
+
+  const onScheduleClass = (slot) => {
+    scheduleClass({
+      variables: {
+        classesCreateDto: {
+          orderItemId: classData?.id,
+          startDate: slot.startDate,
+          endDate: slot.endDate,
+        },
+      },
+    });
   };
 
   const renderTutorDetails = () => (
@@ -137,69 +149,58 @@ function ScheduleClass(props) {
     </View>
   );
 
-  const showSlotPopup = (item, index) => {
-    if (!item.date) {
-      setSelectedIndex(index);
-      setShowSlotSelector(true);
-    }
-  };
-
-  const renderClassView = (item, index) => {
-    return (
-      <View style={{ flex: 0.5, marginTop: RfH(16) }}>
-        <TouchableWithoutFeedback onPress={() => showSlotPopup(item, index)}>
-          <View>
-            <View
-              style={{
-                marginRight: RfW(8),
-                marginLeft: RfW(8),
-                height: RfH(96),
-                backgroundColor: !item.date ? Colors.lightBlue : Colors.lightGrey,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 8,
-              }}>
-              <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class {item.class}</Text>
-              {item.date === '' && (
-                <IconButtonWrapper
-                  iconHeight={RfH(20)}
-                  iconWidth={RfW(24)}
-                  iconImage={Images.calendar}
-                  styling={{ marginTop: RfH(8) }}
-                />
-              )}
-              {item.date !== '' && (
+  const renderClassView = (item, index) => (
+    <View style={{ flex: 0.5, marginTop: RfH(16) }}>
+      <TouchableWithoutFeedback onPress={() => (item.isScheduled ? null : showSlotPopup())}>
+        <View>
+          <View
+            style={{
+              marginRight: RfW(8),
+              marginLeft: RfW(8),
+              height: RfH(96),
+              backgroundColor: !item.isScheduled ? Colors.lightBlue : Colors.lightGrey,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 8,
+            }}>
+            <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class {index + 1}</Text>
+            {!item.isScheduled && (
+              <IconButtonWrapper
+                iconHeight={RfH(20)}
+                iconWidth={RfW(24)}
+                iconImage={Images.calendar}
+                styling={{ marginTop: RfH(8) }}
+              />
+            )}
+            {item.isScheduled && (
+              <>
                 <Text
                   style={{
                     fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
                     color: Colors.darkGrey,
                     marginTop: RfH(8),
                   }}>
-                  {item.date}
+                  {moment(item.startDate).format('DD-MMM-YYYY')}
                 </Text>
-              )}
-            </View>
+                <Text
+                  style={{
+                    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+                    color: Colors.darkGrey,
+                    marginTop: RfH(8),
+                  }}>
+                  {moment(item.startDate).format('HH:MM A')}
+                </Text>
+              </>
+            )}
           </View>
-        </TouchableWithoutFeedback>
-      </View>
-    );
-  };
-
-  const onScheduleClass = (slot) => {
-    scheduleClass({
-      variables: {
-        classesCreateDto: {
-          orderItemId: classData?.id,
-          startDate: slot.startDate,
-          endDate: slot.endDate,
-        },
-      },
-    });
-  };
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  );
 
   return (
     <>
-      <Loader isLoading={scheduleLoading} />
+      <Loader isLoading={scheduleLoading || loadingScheduledClasses} />
       <View style={[commonStyles.mainContainer, { paddingTop: RfH(44), backgroundColor: Colors.white }]}>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <View style={commonStyles.horizontalChildrenView}>
@@ -217,6 +218,7 @@ function ScheduleClass(props) {
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: RfH(34) }}
           scrollEnabled={tutorClasses.length > 6}
+          extraData={refresh}
         />
         <DateSlotSelectorModal
           visible={showSlotSelector}

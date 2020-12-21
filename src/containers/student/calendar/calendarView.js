@@ -11,7 +11,7 @@ import { FlatList, Image, ScrollView, Text, TouchableWithoutFeedback, View } fro
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { studentDetails } from '../../../apollo/cache';
-import { IconButtonWrapper } from '../../../components';
+import {IconButtonWrapper, Loader} from '../../../components';
 import routeNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import { getBoxColor } from '../../../theme/colors';
@@ -109,6 +109,8 @@ function CalendarView(props) {
   }, []);
 
   return (
+      <>
+          <Loader isLoading={loadingScheduledClasses} />
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
         {showHeader && <Text style={commonStyles.headingPrimaryText}>Your Schedule</Text>}
@@ -213,6 +215,7 @@ function CalendarView(props) {
         </ScrollView>
       </View>
     </View>
+          </>
   );
 }
 

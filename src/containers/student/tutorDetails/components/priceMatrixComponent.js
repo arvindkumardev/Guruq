@@ -52,7 +52,9 @@ function PriceMatrixComponent(props) {
       {!isEmpty(priceMatrix) && (
         <View style={{ paddingVertical: RfW(16) }}>
           <View>
-            <Text style={[commonStyles.headingPrimaryText]}>Price Matrix <Text style={commonStyles.regularMutedText}> (price/class)</Text></Text>
+            <Text style={[commonStyles.headingPrimaryText]}>
+              Price Matrix <Text style={commonStyles.regularMutedText}> (price/class)</Text>
+            </Text>
           </View>
           <View
             style={[

@@ -150,7 +150,7 @@ const ClassModeSelectModal = (props) => {
           </View>
         </View>
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <View>
             <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(16), alignSelf: 'flex-start' }]}>
               {isDemoClass ? 'Select mode of demo class' : 'Select mode of class and number of Classes'}
             </Text>
@@ -211,7 +211,7 @@ const ClassModeSelectModal = (props) => {
                 <Text style={commonStyles.textButtonPrimary}>Add to Cart</Text>
               </Button>
             </View>
-          </ScrollView>
+          </View>
         </View>
       </View>
     </Modal>

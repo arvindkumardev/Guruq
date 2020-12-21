@@ -42,7 +42,7 @@ import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/con
 import ClassModeSelectModal from './components/classModeSelectModal';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import PriceMatrixComponent from './components/priceMatrixComponent';
-import TutorAvailabilitySlots from "../../../components/TutorAvailabilitySlots";
+import TutorAvailabilitySlots from '../../../components/TutorAvailabilitySlots';
 
 function TutorDetails(props) {
   const navigation = useNavigation();
@@ -471,53 +471,44 @@ function TutorDetails(props) {
     </View>
   );
 
-  const renderRatingsReviews = () => {
-    return (
+  const renderRatingsReviews = () => (
+    <View>
       <View>
-        <View>
-          <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Rating and Reviews</Text>
-        </View>
-        <View>
-          <Rating
-            style={{ paddingVertical: RfH(16), alignSelf: 'flex-start', marginHorizontal: RfW(16) }}
-            imageSize={30}
-            ratingCount={5}
-            readonly
-            startingValue={overallRating}
-          />
-        </View>
-        <View style={{ paddingHorizontal: RfW(16) }}>
-          <FlatList
-            numColumns={3}
-            data={reviewProgress}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => renderProgress(item)}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-
-        <View style={commonStyles.lineSeparatorWithMargin} />
-
-        <View style={{ marginBottom: RfH(34) }}>
-          <FlatList
-            data={userReviews}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => renderReviews(item)}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
+        <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Rating and Reviews</Text>
       </View>
-    );
-  };
+      <View>
+        <Rating
+          style={{ paddingVertical: RfH(16), alignSelf: 'flex-start', marginHorizontal: RfW(16) }}
+          imageSize={30}
+          ratingCount={5}
+          readonly
+          startingValue={overallRating}
+        />
+      </View>
+      <View style={{ paddingHorizontal: RfW(16) }}>
+        <FlatList
+          numColumns={3}
+          data={reviewProgress}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => renderProgress(item)}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+      <View style={commonStyles.lineSeparatorWithMargin} />
+      <View style={{ marginBottom: RfH(34) }}>
+        <FlatList
+          data={userReviews}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => renderReviews(item)}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+    </View>
+  );
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
-
-    if (scrollPosition > 90) {
-      setHideTutorPersonal(true);
-    } else {
-      setHideTutorPersonal(false);
-    }
+    setHideTutorPersonal(scrollPosition > 90);
   };
 
   const getTutorImage = (tutor) => {

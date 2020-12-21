@@ -677,37 +677,43 @@ function StudentDashboard(props) {
             </View>
           )}
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              marginTop: RfH(25),
-            }}>
-            <Text
-              style={{
-                color: Colors.primaryText,
-                fontFamily: Fonts.bold,
-                fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-              }}>
-              Tutors By Subjects
-            </Text>
-            <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
-              <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>View All</Text>
-            </TouchableWithoutFeedback>
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              numColumns={4}
-              data={
-                offeringMasterData &&
-                offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id).slice(0, 8)
-              }
-              renderItem={({ item }) => renderSubjects(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
+          {!interestedOfferingsLoading && (
+            <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-end',
+                  marginTop: RfH(25),
+                }}>
+                <Text
+                  style={{
+                    color: Colors.primaryText,
+                    fontFamily: Fonts.bold,
+                    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                  }}>
+                  Tutors By Subjects
+                </Text>
+                <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
+                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                    View All
+                  </Text>
+                </TouchableWithoutFeedback>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  numColumns={4}
+                  data={
+                    offeringMasterData &&
+                    offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id).slice(0, 8)
+                  }
+                  renderItem={({ item }) => renderSubjects(item)}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+            </>
+          )}
           {favouriteTutors.length > 0 && (
             <View>
               <View

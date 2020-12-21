@@ -1,11 +1,10 @@
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
-import React, { useEffect, useState } from 'react';
-import { FlatList, Image, ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { isEmpty } from 'lodash';
 import { IconButtonWrapper } from '../../../components';
 import Loader from '../../../components/Loader';
 import { Colors, Fonts, Images } from '../../../theme';
@@ -33,7 +32,6 @@ function MyClasses() {
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      console.log(e);
       setIsEmpty(true);
     },
     onCompleted: (data) => {
@@ -49,17 +47,19 @@ function MyClasses() {
     },
   });
 
-  useEffect(() => {
-    searchOrderItems({
-      variables: {
-        bookingSearchDto: {
-          orderStatus: OrderStatus.COMPLETE.label,
-          showHistory: false,
-          showWithAvailableClasses: true,
+  useFocusEffect(
+    React.useCallback(() => {
+      searchOrderItems({
+        variables: {
+          bookingSearchDto: {
+            orderStatus: OrderStatus.COMPLETE.label,
+            showHistory: false,
+            showWithAvailableClasses: true,
+          },
         },
-      },
-    });
-  }, []);
+      });
+    }, [])
+  );
 
   const goToScheduleClasses = (item) => {
     navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: item });

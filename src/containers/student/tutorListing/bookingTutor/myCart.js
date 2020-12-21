@@ -24,7 +24,7 @@ import { ME_QUERY } from '../../../common/graphql-query';
 import routeNames from '../../../../routes/screenNames';
 import { GET_TUTOR_OFFERINGS } from '../../tutor-query';
 
-const myCart = () => {
+const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   // const [showCouponModal, setShowCouponModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -38,16 +38,9 @@ const myCart = () => {
 
   // const [applyCoupons, setApplyCoupons] = useState(false);
   // const [appliedCouponCode, setAppliedCouponCode] = useState('');
-  const [appliedCouponValue, setAppliedCouponValue] = useState(0);
+  // const [appliedCouponValue, setAppliedCouponValue] = useState(0);
 
   // const [couponCode, setCouponCode] = useState('');
-
-  const [bookingData, setBookingData] = useState({
-    itemPrice: amount,
-    orderStatus: 1,
-    redeemQPoints: qPoints,
-    orderPayment: { amount, paymentMethod: 1 },
-  });
 
   const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
     fetchPolicy: 'no-cache',
@@ -519,7 +512,7 @@ const myCart = () => {
       <View style={commonStyles.lineSeparator} />
       <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
         <Text style={commonStyles.regularPrimaryText}>Payable Amount</Text>
-        <Text style={commonStyles.regularPrimaryText}>₹{amount - (appliedCouponValue + qPointsRedeem)}</Text>
+        <Text style={commonStyles.regularPrimaryText}>₹{amount - qPointsRedeem}</Text>
       </View>
     </View>
   );
@@ -587,7 +580,7 @@ const myCart = () => {
               },
             ]}>
             <View>
-              <Text style={commonStyles.headingPrimaryText}>₹{amount - (appliedCouponValue + qPointsRedeem)}</Text>
+              <Text style={commonStyles.headingPrimaryText}>₹{amount - qPointsRedeem}</Text>
             </View>
             <Button
               onPress={() => setShowPaymentModal(true)}
@@ -649,14 +642,14 @@ const myCart = () => {
       <PaymentMethodModal
         visible={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
-        bookingData={bookingData}
+        bookingData={{ itemPrice: amount, redeemQPoints: qPointsRedeem }}
         amount={amount}
         deductedAgaintQPoint={qPointsRedeem}
-        discount={appliedCouponValue}
+        // discount={appliedCouponValue}
         hidePaymentPopup={() => setShowPaymentModal(false)}
       />
     </View>
   );
 };
 
-export default myCart;
+export default MyCart;
