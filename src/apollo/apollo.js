@@ -53,7 +53,7 @@ const cache = new InMemoryCache();
 
 function createApolloClient() {
   return new ApolloClient({
-    link: splitLink,
+    link: apolloLogger.concat(splitLink),
     cache,
   });
 }
