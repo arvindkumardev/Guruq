@@ -68,7 +68,7 @@ function StudentDashboardContainer(props) {
           {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
           {activeTab === 3 && <MyClasses />}
           {activeTab === 4 && <Wallet />}
-          {activeTab === 5 && <Profile />}
+          {activeTab === 5 && <Profile changeTab={(t) => changeTab(t)} />}
         </View>
         <BottomTab activeTab={activeTab} changeTab={changeTab} />
       </Container>
