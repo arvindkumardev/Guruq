@@ -22,33 +22,32 @@ import { GET_SCHEDULED_CLASSES } from '../booking.query';
 
 function CalendarView(props) {
   const navigation = useNavigation();
-  const [showHeader, setShowHeader] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [refresh, setRefresh] = useState(false);
   const { changeTab } = props;
-
   const studentInfo = useReactiveVar(studentDetails);
 
+  const [showHeader, setShowHeader] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
   const [scheduledClasses, setScheduledClasses] = useState([]);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
-    fetch_policy: 'no-cache',
+    fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
     },
     onCompleted: (data) => {
-      console.log("data",data)
       setScheduledClasses(data.getScheduledClasses);
       setIsEmpty(data.getScheduledClasses.length === 0);
-      setRefresh(!refresh)
     },
   });
 
+  const classDetailNavigation = (classId) => {
+    navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+  };
+
   const renderClassItem = (classDetails) => (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails })}>
+    <TouchableWithoutFeedback onPress={() => classDetailNavigation(classDetails.id)}>
       <View
         style={[
           commonStyles.horizontalChildrenStartView,
@@ -95,7 +94,7 @@ function CalendarView(props) {
   };
 
   const getScheduledClassesByDate = (date) => {
-    console.log("date",date)
+    console.log('getScheduledClassesByDate', date);
     setScheduledClasses([]);
     getScheduledClasses({
       variables: {
@@ -208,17 +207,9 @@ function CalendarView(props) {
                 showsVerticalScrollIndicator={false}
                 data={scheduledClasses}
                 renderItem={({ item }) => renderClassItem(item)}
-                keyExtractor={(index) => index.toString()}
+                keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={{ paddingBottom: RfH(170) }}
-                extraData={refresh}
               />
-              // <FlatList
-              //   showsVerticalScrollIndicator={false}
-              //   data={monthData}
-              //   renderItem={({ item }) => renderListItem(item)}
-              //   keyExtractor={(item, index) => index.toString()}
-              //   contentContainerStyle={{ paddingBottom: RfH(170) }}
-              // />
             )}
           </ScrollView>
         </View>

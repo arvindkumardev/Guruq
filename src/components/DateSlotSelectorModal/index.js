@@ -7,17 +7,17 @@ import { Modal, Text, View } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
-import { IconButtonWrapper } from '..';
+import { IconButtonWrapper, Loader } from '..';
 import { GET_TUTOR_AVAILABILITY } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { printDateTime, RfH, RfW } from '../../utils/helpers';
+import { RfH, RfW } from '../../utils/helpers';
 
 const DateSlotSelectorModal = (props) => {
   const [selectedSlot, setSelectedSlot] = useState({});
   const [availability, setAvailability] = useState([]);
-  const { visible, onClose, onSubmit, tutorId } = props;
+  const { visible, onClose, onSubmit, tutorId, studentId } = props;
 
   const [getTutorAvailability, { loading: loaderAvailability }] = useLazyQuery(GET_TUTOR_AVAILABILITY, {
     fetchPolicy: 'no-cache',
@@ -40,6 +40,7 @@ const DateSlotSelectorModal = (props) => {
       variables: {
         tutorAvailability: {
           tutorId,
+          studentId,
           startDate: moment(date).startOf('day').toDate(),
           endDate: moment(date).endOf('day').toDate(),
         },
@@ -52,118 +53,121 @@ const DateSlotSelectorModal = (props) => {
   }, []);
 
   return (
-    <Modal
-      animationType="fade"
-      transparent
-      backdropOpacity={1}
-      visible={visible}
-      onRequestClose={() => {
-        onClose(false);
-      }}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'column' }} />
-      <View
-        style={{
-          bottom: 0,
-          left: 0,
-          right: 0,
-          position: 'absolute',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'stretch',
-          backgroundColor: Colors.white,
-          opacity: 1,
-          paddingBottom: RfH(40),
+    <>
+      <Loader isLoading={loaderAvailability} />
+      <Modal
+        animationType="fade"
+        transparent
+        backdropOpacity={1}
+        visible={visible}
+        onRequestClose={() => {
+          onClose(false);
         }}>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>
-          <Text style={commonStyles.headingPrimaryText}>Available Slots</Text>
-          <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
-            styling={{ alignSelf: 'flex-end' }}
-            iconImage={Images.cross}
-            submitFunction={() => onClose(false)}
-          />
-        </View>
-        <View style={{ paddingHorizontal: RfW(16) }}>
-          <CalendarStrip
-            calendarHeaderStyle={{
-              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-              alignSelf: 'flex-start',
-              paddingBottom: RfH(8),
-            }}
-            selectedDate={new Date()}
-            highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
-            highlightDateNameStyle={{ color: Colors.brandBlue2 }}
-            disabledDateNameStyle={{ color: Colors.darkGrey }}
-            disabledDateNumberStyle={{ color: Colors.darkGrey }}
-            dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-            dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-            style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
-            calendarAnimation={{ type: 'parallel', duration: 300 }}
-            daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-            markedDates={[
-              {
-                date: new Date(),
-                dots: [
-                  {
-                    color: Colors.brandBlue,
-                    selectedColor: Colors.brandBlue,
-                  },
-                ],
-              },
-            ]}
-            onHeaderSelected={(a) => console.log(a)}
-            onDateSelected={(d) => getAvailabilityData(d)}
-          />
-        </View>
-        {!isEmpty(availability) ? (
-          <View>
-            <View
-              style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(20) }]}>
-              <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>Start Time</Text>
-              <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>End Time</Text>
-            </View>
-            <View style={commonStyles.horizontalChildrenSpaceView}>
-              <Picker
-                iosHeader="Start Time"
-                Header="Start Time"
-                mode="default"
-                textStyle={{ color: Colors.brandBlue2 }}
-                placeholder="Select Start Time"
-                placeholderStyle={{ fontSize: 15 }}
-                selectedValue={selectedSlot}
-                onValueChange={(value) => setSelectedSlot(value)}>
-                {availability.map((slot, i) => (
-                  <Picker.Item label={moment(slot.startDate).format('hh:mm A')} value={slot} key={i} />
-                ))}
-              </Picker>
-              <Text style={{ marginRight: RfW(16), textAlign: 'center' }}>
-                {!isEmpty(selectedSlot) ? moment(selectedSlot.endDate).format('hh:mm A') : '--'}
-              </Text>
-            </View>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'column' }} />
+        <View
+          style={{
+            bottom: 0,
+            left: 0,
+            right: 0,
+            position: 'absolute',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch',
+            backgroundColor: Colors.white,
+            opacity: 1,
+            paddingBottom: RfH(40),
+          }}>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>
+            <Text style={commonStyles.headingPrimaryText}>Available Slots</Text>
+            <IconButtonWrapper
+              iconHeight={RfH(24)}
+              iconWidth={RfW(24)}
+              styling={{ alignSelf: 'flex-end' }}
+              iconImage={Images.cross}
+              submitFunction={() => onClose(false)}
+            />
           </View>
-        ) : (
-          <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: RfH(10) }}>
-            <Text style={commonStyles.mediumPrimaryText}> No slots available for the selected date</Text>
+          <View style={{ paddingHorizontal: RfW(16) }}>
+            <CalendarStrip
+              calendarHeaderStyle={{
+                fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                alignSelf: 'flex-start',
+                paddingBottom: RfH(8),
+              }}
+              selectedDate={new Date()}
+              highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
+              highlightDateNameStyle={{ color: Colors.brandBlue2 }}
+              disabledDateNameStyle={{ color: Colors.darkGrey }}
+              disabledDateNumberStyle={{ color: Colors.darkGrey }}
+              dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+              dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+              style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
+              calendarAnimation={{ type: 'parallel', duration: 300 }}
+              daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+              markedDates={[
+                {
+                  date: new Date(),
+                  dots: [
+                    {
+                      color: Colors.brandBlue,
+                      selectedColor: Colors.brandBlue,
+                    },
+                  ],
+                },
+              ]}
+              onHeaderSelected={(a) => console.log(a)}
+              onDateSelected={(d) => getAvailabilityData(d)}
+            />
           </View>
-        )}
+          {!isEmpty(availability) ? (
+            <View>
+              <View
+                style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(20) }]}>
+                <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>Start Time</Text>
+                <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>End Time</Text>
+              </View>
+              <View style={commonStyles.horizontalChildrenSpaceView}>
+                <Picker
+                  iosHeader="Start Time"
+                  Header="Start Time"
+                  mode="default"
+                  textStyle={{ color: Colors.brandBlue2 }}
+                  placeholder="Select Start Time"
+                  placeholderStyle={{ fontSize: 15 }}
+                  selectedValue={selectedSlot}
+                  onValueChange={(value) => setSelectedSlot(value)}>
+                  {availability.map((slot, i) => (
+                    <Picker.Item label={moment(slot.startDate).format('hh:mm A')} value={slot} key={i} />
+                  ))}
+                </Picker>
+                <Text style={{ marginRight: RfW(16), textAlign: 'center' }}>
+                  {!isEmpty(selectedSlot) ? moment(selectedSlot.endDate).format('hh:mm A') : '--'}
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: RfH(10) }}>
+              <Text style={commonStyles.mediumPrimaryText}> No slots available for the selected date</Text>
+            </View>
+          )}
 
-        {!isEmpty(selectedSlot) && (
-          <View
-            style={{
-              marginTop: RfH(24),
-              marginBottom: RfH(34),
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Button onPress={() => onSubmit(selectedSlot)} style={commonStyles.buttonPrimary}>
-              <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
-            </Button>
-          </View>
-        )}
-      </View>
-    </Modal>
+          {!isEmpty(selectedSlot) && (
+            <View
+              style={{
+                marginTop: RfH(24),
+                marginBottom: RfH(34),
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Button onPress={() => onSubmit(selectedSlot)} style={commonStyles.buttonPrimary}>
+                <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
+              </Button>
+            </View>
+          )}
+        </View>
+      </Modal>
+    </>
   );
 };
 

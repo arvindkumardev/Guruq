@@ -37,32 +37,31 @@ function CancelReason(props) {
     },
   });
 
-  const onReasonChange = (item, index) => {
-    const array = [];
-    reasons.map((obj) => {
-      array.push({ reason: obj.reason, selected: false });
-    });
-    array[index].selected = true;
-    setReasons(array);
-  };
-
-  const renderReasons = (item, index) => {
-    return (
-      <TouchableWithoutFeedback onPress={() => onReasonChange(item, index)}>
-        <View style={commonStyles.horizontalChildrenView}>
-          <CustomRadioButton enabled={item.selected} />
-          <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>{item.reason}</Text>
-        </View>
-        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginVertical: RfH(16) }} />
-      </TouchableWithoutFeedback>
+  const onReasonChange = (index) => {
+    setReasons((reasons) =>
+      reasons.map((reasonItem, reasonIndex) => ({ ...reasonItem, selected: reasonIndex === index }))
     );
   };
 
+  const renderReasons = (item, index) => (
+    <TouchableWithoutFeedback onPress={() => onReasonChange(index)}>
+      <View style={commonStyles.horizontalChildrenView}>
+        <CustomRadioButton enabled={item.selected} />
+        <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>{item.reason}</Text>
+      </View>
+      <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginVertical: RfH(16) }} />
+    </TouchableWithoutFeedback>
+  );
+
   const onCancelClass = () => {
     cancelClass({
-      variables: { classesId: classId },
+      variables: {
+        id: classId,
+        cancelReason: reasons.find((item) => item.selected).reason,
+      },
     });
   };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
       <ScreenHeader label="Cancel Reason" homeIcon />
@@ -76,7 +75,7 @@ function CancelReason(props) {
         />
       </View>
       <View style={{ marginTop: RfH(32) }}>
-        <Button onPress={() => onCancelClass()} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+        <Button onPress={onCancelClass} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
           <Text style={commonStyles.textButtonPrimary}>Submit</Text>
         </Button>
       </View>

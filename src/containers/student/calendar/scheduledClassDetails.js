@@ -15,8 +15,8 @@ import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { API_URL, IMAGES_BASE_URL, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
-import { SCHEDULE_CLASS } from '../booking.mutation';
+import { getUserImageUrl, printDate, printTime, RfH, RfW } from '../../../utils/helpers';
+import {RE_SCHEDULE_CLASS, SCHEDULE_CLASS} from '../booking.mutation';
 import { GET_CLASS_DETAILS } from '../class.query';
 import styles from '../tutorListing/styles';
 
@@ -30,27 +30,7 @@ function ScheduledClassDetails(props) {
 
   const { route } = props;
 
-  // FIXME: only get id of class and full object
-  // use the classData everywhere for showing information
-  const { classDetails } = route.params;
-
-  // useEffect(() => {
-  //   const array = [];
-  //   if (classData?.students) {
-  //     for (const obj of classData?.students) {
-  //       const item = {
-  //         id: obj?.id,
-  //         filePath: obj?.profileImage?.filePath,
-  //         studentName: obj?.contactDetail?.firstName,
-  //         studentId: obj?.contactDetail?.lastName,
-  //         gender: obj?.contactDetail?.gender,
-  //         joined: true,
-  //       };
-  //       array.push(item);
-  //     }
-  //     setAttendees(array);
-  //   }
-  // }, [classData]);
+  const { classId } = route.params;
 
   const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -61,6 +41,7 @@ function ScheduledClassDetails(props) {
       }
     },
     onCompleted: (data) => {
+      console.log(data);
       if (data) {
         setClassData(data.getClassDetails);
       }
@@ -68,8 +49,10 @@ function ScheduledClassDetails(props) {
   });
 
   useEffect(() => {
-    getClassDetails({ variables: { classId: classDetails.id } });
-  }, []);
+    if (classId) {
+      getClassDetails({ variables: { classId } });
+    }
+  }, [classId]);
 
   const getStudentImageUrl = (filename, gender, id) => {
     return filename
@@ -115,7 +98,7 @@ function ScheduledClassDetails(props) {
 
   const goToCancelReason = () => {
     setShowCancelClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId: classDetails.id });
+    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId });
   };
 
   const goToOnlineClass = () => {
@@ -141,7 +124,7 @@ function ScheduledClassDetails(props) {
     setShowBackButton(scrollPosition > 30);
   };
 
-  const [scheduleClass, { loading: scheduleLoading }] = useMutation(SCHEDULE_CLASS, {
+  const [reScheduleClass, { loading: scheduleLoading }] = useMutation(RE_SCHEDULE_CLASS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -159,11 +142,10 @@ function ScheduledClassDetails(props) {
   });
 
   const onScheduleClass = (slot) => {
-    console.log('slot', slot);
-    scheduleClass({
+    reScheduleClass({
       variables: {
         classesCreateDto: {
-          orderItemId: classData?.orderItem?.id,
+          id: classData?.classEntity?.id,
           startDate: slot.startDate,
           endDate: slot.endDate,
         },
@@ -196,20 +178,19 @@ function ScheduledClassDetails(props) {
 
                 <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                    {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
+                    {`${classData?.classEntity?.offering?.displayName} by ${classData?.classEntity?.tutor?.contactDetail?.firstName} ${classData?.classEntity?.tutor?.contactDetail?.lastName}`}
                   </Text>
                   <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                    {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+                    {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
                   </Text>
                 </View>
               </View>
 
-              {moment(classDetails.endDate).isAfter(new Date()) && (
+              {moment(classData.endDate).isAfter(new Date()) && (
                 <View style={{}}>
                   <Button
                     block
-                    onPress={() => goToOnlineClass()}
-                    // setShowClassStartedPopup(true)}
+                    onPress={goToOnlineClass}
                     style={[
                       commonStyles.buttonPrimary,
                       {
@@ -263,19 +244,18 @@ function ScheduledClassDetails(props) {
                       marginRight: RfH(16),
                     }}>
                     <Text style={commonStyles.headingPrimaryText} numberOfLines={1}>
-                      {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
+                      {`${classData?.classEntity?.offering?.displayName} by ${classData?.classEntity?.tutor?.contactDetail?.firstName} ${classData?.classEntity?.tutor?.contactDetail?.lastName}`}
                     </Text>
                     <Text style={[commonStyles.mediumMutedText, { marginTop: RfH(4) }]}>
-                      {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+                      {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
                     </Text>
                   </View>
 
-                  {moment(classDetails.endDate).isAfter(new Date()) && (
-                    <View style={{}}>
+                  {moment(classData.endDate).isAfter(new Date()) && (
+                    <View>
                       <Button
                         block
-                        onPress={() => goToOnlineClass()}
-                        // setShowClassStartedPopup(true)}
+                        onPress={goToOnlineClass}
                         style={[
                           commonStyles.buttonPrimary,
                           {
@@ -306,16 +286,17 @@ function ScheduledClassDetails(props) {
         </View>
         <View style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}>
           <IconButtonWrapper
-            iconImage={getTutorImage(classData?.tutor)}
+            iconImage={getTutorImage(classData?.classEntity?.tutor)}
             iconHeight={RfH(48)}
             iconWidth={RfH(48)}
             styling={{ borderRadius: RfH(8) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.headingPrimaryText}>
-              {classData?.tutor?.contactDetail?.firstName} {classData?.tutor?.contactDetail?.lastName}
+              {classData?.classEntity?.tutor?.contactDetail?.firstName}{' '}
+              {classData?.classEntity?.tutor?.contactDetail?.lastName}
             </Text>
-            <Text style={commonStyles.mediumMutedText}>T{classData?.tutor?.id}</Text>
+            <Text style={commonStyles.mediumMutedText}>T{classData?.classEntity?.tutor?.id}</Text>
           </View>
         </View>
 
@@ -324,8 +305,8 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>{new Date(classData?.startDate).toDateString()}</Text>
-            <Text style={commonStyles.mediumMutedText}>{classDetails.timing}</Text>
+            <Text style={commonStyles.headingPrimaryText}>{printDate(classData?.classEntity?.startDate)}</Text>
+            <Text style={commonStyles.mediumMutedText}>{printTime(classData?.classEntity?.startDate)}</Text>
           </View>
         </View>
 
@@ -356,14 +337,14 @@ function ScheduledClassDetails(props) {
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
             <Text style={commonStyles.mediumMutedText}>
-              {classData?.students?.length} participants to join the Class
+              {classData?.classEntity?.students?.length} participants to join the Class
             </Text>
           </View>
         </View>
         <FlatList
           style={{ marginBottom: RfH(16), marginLeft: 40 }}
           showsHorizontalScrollIndicator={false}
-          data={classData?.students}
+          data={classData?.classEntity?.students}
           renderItem={({ item, index }) => renderAttendees(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
@@ -387,7 +368,7 @@ function ScheduledClassDetails(props) {
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
 
-        {classData.address && (
+        {classData?.classEntity?.address && (
           <>
             <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
               <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(24)} iconHeight={RfH(24)} />
@@ -436,28 +417,37 @@ function ScheduledClassDetails(props) {
             <Text style={commonStyles.mediumMutedText}>
               C-{new Date().getFullYear().toString().substring(2, 4)}
               {new Date().getMonth()}
-              {classDetails?.classData?.id}
+              {classData?.classEntity?.id}
             </Text>
           </View>
         </View>
 
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: RfH(16),
-            marginBottom: RfH(34),
-          }}>
-          <Button
-            onPress={() => setShowCancelClassStartedPopup(true)}
-            block
-            style={{ width: RfW(128), backgroundColor: Colors.orangeRed }}>
-            <Text style={commonStyles.textButtonPrimary}>Cancel Class</Text>
-          </Button>
-        </View>
+        {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              marginTop: RfH(16),
+              marginBottom: RfH(34),
+            }}>
+            {classData?.isRescheduleAllowed && (
+              <Button
+                onPress={openRescheduleModal}
+                block
+                style={{ width: RfW(150), backgroundColor: Colors.brandBlue2 }}>
+                <Text style={commonStyles.textButtonPrimary}>Reschedule Class</Text>
+              </Button>
+            )}
+            {classData?.isCancelAllowed && (
+              <Button onPress={goToCancelReason} block style={{ width: RfW(150), backgroundColor: Colors.orangeRed }}>
+                <Text style={commonStyles.textButtonPrimary}>Cancel Class</Text>
+              </Button>
+            )}
+          </View>
+        )}
       </ScrollView>
       <Modal
         animationType="fade"
@@ -501,68 +491,68 @@ function ScheduledClassDetails(props) {
           <View style={{ flex: 1 }} />
         </View>
       </Modal>
-      <Modal
-        animationType="fade"
-        backdropOpacity={1}
-        transparent
-        visible={showCancelClassStartedPopup}
-        onRequestClose={() => {
-          setShowCancelClassStartedPopup(false);
-        }}>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <View style={{ flex: 1 }} />
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-              paddingHorizontal: RfW(16),
-            }}>
-            <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}>
-              <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
-                styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
-                iconImage={Images.cross}
-                submitFunction={() => setShowCancelClassStartedPopup(false)}
-              />
-              <View style={{ padding: RfH(16) }}>
-                <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}>
-                  Do you want to re-schedule your class?
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: RfH(32),
-                }}>
-                <Button
-                  onPress={goToCancelReason}
-                  block
-                  bordered
-                  style={{ flex: 1, height: RfH(40), alignSelf: 'center', marginRight: RfW(8) }}>
-                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>
-                    Cancel Class
-                  </Text>
-                </Button>
-                <Button
-                  onPress={openRescheduleModal}
-                  block
-                  style={{ flex: 1, backgroundColor: Colors.brandBlue2, height: RfH(40) }}>
-                  <Text style={commonStyles.textButtonPrimary}>Reschedule</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-          <View style={{ flex: 1 }} />
-        </View>
-      </Modal>
+      {/* <Modal */}
+      {/*  animationType="fade" */}
+      {/*  backdropOpacity={1} */}
+      {/*  transparent */}
+      {/*  visible={showCancelClassStartedPopup} */}
+      {/*  onRequestClose={() => { */}
+      {/*    setShowCancelClassStartedPopup(false); */}
+      {/*  }}> */}
+      {/*  <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
+      {/*    <View style={{ flex: 1 }} /> */}
+      {/*    <View */}
+      {/*      style={{ */}
+      {/*        flexDirection: 'column', */}
+      {/*        justifyContent: 'flex-start', */}
+      {/*        alignItems: 'stretch', */}
+      {/*        paddingHorizontal: RfW(16), */}
+      {/*      }}> */}
+      {/*      <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}> */}
+      {/*        <IconButtonWrapper */}
+      {/*          iconHeight={RfH(24)} */}
+      {/*          iconWidth={RfW(24)} */}
+      {/*          styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }} */}
+      {/*          iconImage={Images.cross} */}
+      {/*          submitFunction={() => setShowCancelClassStartedPopup(false)} */}
+      {/*        /> */}
+      {/*        <View style={{ padding: RfH(16) }}> */}
+      {/*          <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}> */}
+      {/*            Do you want to re-schedule your class? */}
+      {/*          </Text> */}
+      {/*        </View> */}
+      {/*        <View */}
+      {/*          style={{ */}
+      {/*            flexDirection: 'row', */}
+      {/*            justifyContent: 'space-between', */}
+      {/*            alignItems: 'center', */}
+      {/*            marginTop: RfH(32), */}
+      {/*          }}> */}
+      {/*          <Button */}
+      {/*            onPress={goToCancelReason} */}
+      {/*            block */}
+      {/*            bordered */}
+      {/*            style={{ flex: 1, height: RfH(40), alignSelf: 'center', marginRight: RfW(8) }}> */}
+      {/*            <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}> */}
+      {/*              Cancel Class */}
+      {/*            </Text> */}
+      {/*          </Button> */}
+      {/*          <Button */}
+      {/*            onPress={openRescheduleModal} */}
+      {/*            block */}
+      {/*            style={{ flex: 1, backgroundColor: Colors.brandBlue2, height: RfH(40) }}> */}
+      {/*            <Text style={commonStyles.textButtonPrimary}>Reschedule</Text> */}
+      {/*          </Button> */}
+      {/*        </View> */}
+      {/*      </View> */}
+      {/*    </View> */}
+      {/*    <View style={{ flex: 1 }} /> */}
+      {/*  </View> */}
+      {/* </Modal> */}
       <DateSlotSelectorModal
         visible={showReschedulePopup}
         onClose={() => setShowReschedulePopup(false)}
-        tutorId={classData?.tutor?.id}
+        tutorId={classData?.classEntity?.tutor?.id}
         onSubmit={onScheduleClass}
       />
     </View>

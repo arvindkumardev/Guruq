@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
 import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
@@ -13,10 +13,12 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SCHEDULE_CLASS } from '../class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../booking.query';
+import { studentDetails } from '../../../apollo/cache';
 
 function ScheduleClass(props) {
   const navigation = useNavigation();
   const { route } = props;
+  const studentInfo = useReactiveVar(studentDetails);
   const classData = route?.params?.classData;
 
   const [showSlotSelector, setShowSlotSelector] = useState(false);
@@ -95,7 +97,7 @@ function ScheduleClass(props) {
   };
 
   const onScheduleClass = (slot) => {
-    console.log("slot",slot)
+    console.log('slot', slot);
     scheduleClass({
       variables: {
         classesCreateDto: {
@@ -226,6 +228,7 @@ function ScheduleClass(props) {
           onClose={() => setShowSlotSelector(false)}
           tutorId={classData?.tutor?.id}
           onSubmit={onScheduleClass}
+          studentId={studentInfo?.id}
         />
       </View>
     </>

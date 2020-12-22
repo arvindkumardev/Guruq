@@ -317,9 +317,9 @@ const PaymentMethod = (props) => {
       case PaymentMethodEnum.PAYPAL.value:
         details.paymentMethod = PaymentMethodEnum.PAYPAL.label;
         break;
-      case PaymentMethodEnum.CASH.value:
-        details.paymentMethod = PaymentMethodEnum.CASH.label;
-        break;
+      // case PaymentMethodEnum.CASH.value:
+      //   details.paymentMethod = PaymentMethodEnum.CASH.label;
+      //   break;
       default:
         break;
     }
