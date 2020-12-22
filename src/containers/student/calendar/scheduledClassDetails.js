@@ -159,6 +159,7 @@ function ScheduledClassDetails(props) {
   });
 
   const onScheduleClass = (slot) => {
+    console.log('slot', slot);
     scheduleClass({
       variables: {
         classesCreateDto: {
