@@ -36,7 +36,11 @@ function InterviewPending() {
             }
           });
           setAvailableTimes(times);
-          setSelectedTime(new Date(times[0].startDate).toLocaleTimeString());
+          setSelectedTime(
+            `${moment(new Date(times[0].startDate).toLocaleTimeString(), ['HH.mm']).format(
+              'hh:mm a'
+            )}-${moment(new Date(times[0].endDate).toLocaleTimeString(), ['HH.mm']).format('hh:mm a')}`
+          );
         }
       },
     }
@@ -85,7 +89,7 @@ function InterviewPending() {
               <Text style={commonStyles.mediumMutedText}>Interview Time</Text>
               <View
                 style={[
-                  commonStyles.horizontalChildrenSpaceView,
+                  commonStyles.horizontalChildrenView,
                   {
                     borderWidth: 1,
                     borderColor: Colors.darkGrey,
@@ -96,10 +100,19 @@ function InterviewPending() {
                 ]}>
                 <Picker
                   selectedValue={selectedTime}
-                  style={{ height: RfH(48) }}
+                  style={{ height: RfH(48), width: RfW(130) }}
                   onValueChange={(value) => setSelectedTime(value)}>
                   {availableTimes.map((obj) => {
-                    return <Picker.Item label={new Date(obj?.startDate).toLocaleTimeString()} value={obj?.startDate} />;
+                    return (
+                      <Picker.Item
+                        label={`${moment(new Date(obj.startDate).toLocaleTimeString(), ['HH.mm']).format(
+                          'hh:mm a'
+                        )}-${moment(new Date(obj.endDate).toLocaleTimeString(), ['HH.mm']).format('hh:mm a')}`}
+                        value={`${moment(new Date(obj.startDate).toLocaleTimeString(), ['HH.mm']).format(
+                          'hh:mm a'
+                        )}-${moment(new Date(obj.endDate).toLocaleTimeString(), ['HH.mm']).format('hh:mm a')}`}
+                      />
+                    );
                   })}
                 </Picker>
                 <View style={[commonStyles.horizontalChildrenView, { justifyContent: 'center' }]}>
@@ -155,7 +168,7 @@ function InterviewPending() {
                   borderStyle: 'dashed',
                   borderColor: Colors.darkGrey,
                 }}>
-                <IconButtonWrapper iconWidth={RfW(32)} iconHeight={RfH(16)} iconImage={Images.expand_gray} />
+                <IconButtonWrapper iconWidth={RfW(24)} iconHeight={RfH(24)} iconImage={Images.upload} />
               </View>
             </View>
           </View>
@@ -192,7 +205,7 @@ function InterviewPending() {
                   borderStyle: 'dashed',
                   borderColor: Colors.darkGrey,
                 }}>
-                <IconButtonWrapper iconWidth={RfW(32)} iconHeight={RfH(16)} iconImage={Images.expand_gray} />
+                <IconButtonWrapper iconWidth={RfW(24)} iconHeight={RfH(24)} iconImage={Images.upload} />
               </View>
             </View>
           </View>
@@ -213,7 +226,7 @@ function InterviewPending() {
                   borderStyle: 'dashed',
                   borderColor: Colors.darkGrey,
                 }}>
-                <IconButtonWrapper iconWidth={RfW(32)} iconHeight={RfH(16)} iconImage={Images.expand_gray} />
+                <IconButtonWrapper iconWidth={RfW(24)} iconHeight={RfH(24)} iconImage={Images.upload} />
               </View>
             </View>
           </View>
@@ -233,7 +246,7 @@ function InterviewPending() {
                   borderStyle: 'dashed',
                   borderColor: Colors.darkGrey,
                 }}>
-                <IconButtonWrapper iconWidth={RfW(32)} iconHeight={RfH(16)} iconImage={Images.expand_gray} />
+                <IconButtonWrapper iconWidth={RfW(24)} iconHeight={RfH(24)} iconImage={Images.upload} />
               </View>
             </View>
           </View>
