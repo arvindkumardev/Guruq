@@ -10,7 +10,7 @@ import CalendarView from '../calendar/calendarView';
 import BottomTab from './components/bottomTab';
 import ClassView from '../classes/classesView';
 import Profile from '../profile/profile';
-import Wallet from '../wallet/wallet';
+import Wallet from '../../common/wallet/wallet';
 
 function TutorDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);

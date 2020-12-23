@@ -90,3 +90,14 @@ export const SEARCH_QPOINTS_TRANSACTIONS = gql`
     }
   }
 `;
+
+export const SEARCH_IN_INQUIRY = gql`
+  query SearchInquiry($searchDto: SearchInquiryDto!) {
+    searchInquiry(searchDto: $searchDto) {
+      edges {
+        title
+        text
+      }
+    }
+  }
+`;

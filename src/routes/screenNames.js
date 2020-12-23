@@ -17,6 +17,8 @@ const NavigationRouteNames = {
 
   WEB_VIEW: 'web_view',
   NOTIFICATIONS: 'notifications',
+  SEND_FEEDBACK: 'send_feedback',
+  CUSTOMER_CARE: 'customer_care',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
@@ -57,6 +59,7 @@ const NavigationRouteNames = {
     VIEW_SCHEDULE: 'view_schedule',
     UPDATE_SCHEDULE: 'update_schedule',
     STUDENT_REQUESTS: 'student_requests',
+    SCHEDULE_YOUR_INTERVIEW: 'schedule_your_interview',
   },
 };
 

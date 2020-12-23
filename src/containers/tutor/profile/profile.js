@@ -38,8 +38,8 @@ function Profile(props) {
   ]);
   const [bookingData, setBookingData] = useState([{ name: 'Purchased History', icon: Images.personal }]);
   const [myClassesData, setMyClassesData] = useState([
-    { name: 'Online', icon: Images.laptop },
-    { name: 'Offline', icon: Images.home },
+    { name: 'My Classes', icon: Images.laptop },
+    { name: 'My Students', icon: Images.home },
   ]);
   const [isStudyMenuOpen, setIsStudyMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
@@ -111,20 +111,14 @@ function Profile(props) {
         label: 'Bank Details',
       });
     } else if (item.name === 'Customer Care') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/`,
-        label: 'Customer Care',
-      });
+      navigation.navigate(routeNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
         label: "FAQ's",
       });
     } else if (item.name === 'Send Feedback') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
-        label: 'Feedback',
-      });
+      navigation.navigate(routeNames.SEND_FEEDBACK);
     } else if (item.name === 'About') {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
@@ -135,7 +129,7 @@ function Profile(props) {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
         label: 'Team',
       });
-    } else if (item.name === 'Online' || item.name === 'Offline') {
+    } else if (item.name === 'My Classes' || item.name === 'My Students') {
       changeTab(3);
     } else if (item.name === 'View Schedule') {
       navigation.navigate(routeNames.TUTOR.VIEW_SCHEDULE);
