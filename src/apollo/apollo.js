@@ -25,7 +25,7 @@ const authLink = setContext(async (req, { headers }) => {
     },
   };
 });
-const link = ApolloLink.from([errorLink, authLink, httpLink]);
+const link = ApolloLink.from([apolloLogger, errorLink, authLink, httpLink]);
 
 const wsLink = new WebSocketLink({
   uri: GRAPHQL_ENDPOINT.replace('http', 'ws'),
@@ -57,7 +57,7 @@ const cache = new InMemoryCache();
 
 function createApolloClient() {
   return new ApolloClient({
-    link: apolloLogger.concat(splitLink),
+    link: splitLink,
     cache,
   });
 }

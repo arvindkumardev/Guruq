@@ -125,10 +125,9 @@ function Wallet(props) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           onScroll={(event) => handleScroll(event)}
-          stickyHeaderIndices={[1]}
           scrollEventThrottle={16}>
           <Text style={[commonStyles.pageTitleThirdRow, { marginHorizontal: RfW(16) }]}>My Wallet</Text>
-          <View style={{ height: RfH(44) }} />
+          {/* <View style={{ height: RfH(44) }} />
           <View
             style={[
               commonStyles.horizontalChildrenSpaceView,
@@ -143,14 +142,16 @@ function Wallet(props) {
               }}>
               ₹ 300.00
             </Text>
-          </View>
-          <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(16), marginHorizontal: RfW(16) }]}>
-            <IconButtonWrapper iconWidth={RfH(21)} iconHeight={RfH(21)} iconImage={Images.coin} />
-            <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(8) }]}>1 Q point = 1 INR</Text>
-          </View>
+          </View> */}
+          {/* <View style={[commonStyles.horizontalChildrenView]}>
+            {/* <IconButtonWrapper iconWidth={RfH(21)} iconHeight={RfH(21)} iconImage={Images.coin} /> */}
+          {/* <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(8) }]}>1 Q point = 1 INR</Text> */}
+
+          {/* </View> */}
+
           {renderBalanceView()}
-          <View style={{ height: RfH(32) }} />
-          <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16) }]}>
+
+          {/* <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16) }]}>
             <View
               style={[
                 commonStyles.verticallyCenterItemsView,
@@ -183,12 +184,13 @@ function Wallet(props) {
                 Earn More
               </Text>
             </View>
-          </View>
-          <View style={{ height: RfH(32) }} />
+          </View> */}
+          {/* <View style={{ height: RfH(16) }} /> */}
+
           <View
             style={[commonStyles.horizontalChildrenSpaceView, { backgroundColor: Colors.lightGrey, padding: RfW(16) }]}>
             <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Transaction history</Text>
-            <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2 }]}>View All</Text>
+            {/* <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2 }]}>View All</Text> */}
           </View>
           <FlatList
             showsVerticalScrollIndicator={false}
