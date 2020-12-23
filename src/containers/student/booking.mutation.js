@@ -123,6 +123,32 @@ export const SCHEDULE_CLASS = gql`
   }
 `;
 
+export const RE_SCHEDULE_CLASS = gql`
+  mutation RescheduleClass($classesCreateDto: CreateUpdateClassesDto!) {
+    rescheduleClass(classesCreateDto: $classesCreateDto) {
+      id
+      uuid
+      orderItem {
+        id
+      }
+      students {
+        id
+      }
+      tutor {
+        id
+      }
+      offering {
+        id
+      }
+      onlineClass
+      demo
+
+      startDate
+      endDate
+    }
+  }
+`;
+
 export const CHECK_COUPON = gql`
   mutation CheckCoupon($code: String!) {
     checkCoupon(code: $code) {

@@ -443,11 +443,14 @@ function StudentDashboard(props) {
     });
   }, []);
 
+  const classDetailNavigation = (classId) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+  };
+
   const renderUpcomingClasses = (classDetails, index) => {
     return (
       <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails })}>
+        <TouchableWithoutFeedback onPress={() => classDetailNavigation(classDetails.id)}>
           <View
             style={{
               backgroundColor: Colors.lightBlue,

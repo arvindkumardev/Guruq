@@ -2,7 +2,7 @@ import { SafeAreaView, StatusBar, View, BackHandler } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'native-base';
 import GetLocation from 'react-native-get-location';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors } from '../../../theme';
 import CalendarView from '../calendar/calendarView';
@@ -16,7 +16,7 @@ import Wallet from '../../common/wallet/wallet';
 
 function StudentDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);
-
+  const isFocussed = useIsFocused();
   const { route } = props;
   const refetchStudentOfferings = route?.params?.refetchStudentOfferings;
 
@@ -37,6 +37,12 @@ function StudentDashboardContainer(props) {
         console.warn(code, message);
       });
   });
+
+  useEffect(() => {
+    if (route?.params?.tabId && isFocussed) {
+      setActiveTab(route?.params?.tabId);
+    }
+  }, [isFocussed]);
 
   useFocusEffect(() => {
     const backAction = () => {

@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery } from '@apollo/client';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { IconButtonWrapper } from '../../../components';
@@ -20,6 +20,7 @@ import NavigationRouteNames from '../../../routes/screenNames';
 
 function MyClasses() {
   const navigation = useNavigation();
+  const isFocussed = useIsFocused();
   const [isHistorySelected, setIsHistorySelected] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -47,19 +48,21 @@ function MyClasses() {
     },
   });
 
-  useFocusEffect(
-    React.useCallback(() => {
+  console.log('isHistorySelected', isHistorySelected);
+
+  useEffect(() => {
+    if (isFocussed) {
       searchOrderItems({
         variables: {
           bookingSearchDto: {
             orderStatus: OrderStatus.COMPLETE.label,
-            showHistory: false,
-            showWithAvailableClasses: true,
+            showHistory: isHistorySelected,
+            showWithAvailableClasses: !isHistorySelected,
           },
         },
       });
-    }, [])
-  );
+    }
+  }, [isFocussed]);
 
   const goToScheduleClasses = (item) => {
     navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: item });
@@ -175,7 +178,19 @@ function MyClasses() {
           </View>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: isHistorySelected ? 'space-between' : 'flex-end',
+            alignItems: 'center',
+          }}>
+          {isHistorySelected && (
+            <TouchableOpacity activeOpacity={0.6} onPress={() => goToScheduleClasses(item)}>
+              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+                View Schedule
+              </Text>
+            </TouchableOpacity>
+          )}
           {!isHistorySelected && (
             <Text
               style={{

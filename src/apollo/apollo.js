@@ -1,8 +1,9 @@
-import { ApolloClient, createHttpLink, InMemoryCache, split } from '@apollo/client';
+import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, split } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import apolloLogger from 'apollo-link-logger';
+import { onError } from '@apollo/client/link/error';
 import { getToken } from '../utils/helpers';
 
 // const GRAPHQL_ENDPOINT = 'http://10.0.0.7:5000/graphql';
@@ -10,6 +11,9 @@ const GRAPHQL_ENDPOINT = 'http://apiv2.guruq.in/graphql';
 
 let apolloClient = null;
 
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+});
 const httpLink = createHttpLink({ uri: GRAPHQL_ENDPOINT, credentials: 'same-origin' });
 const authLink = setContext(async (req, { headers }) => {
   const token = await getToken();
@@ -21,7 +25,7 @@ const authLink = setContext(async (req, { headers }) => {
     },
   };
 });
-const link = authLink.concat(httpLink);
+const link = ApolloLink.from([errorLink, authLink, httpLink]);
 
 const wsLink = new WebSocketLink({
   uri: GRAPHQL_ENDPOINT.replace('http', 'ws'),
@@ -53,7 +57,7 @@ const cache = new InMemoryCache();
 
 function createApolloClient() {
   return new ApolloClient({
-    link: splitLink,
+    link: apolloLogger.concat(splitLink),
     cache,
   });
 }
