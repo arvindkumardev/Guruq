@@ -121,8 +121,12 @@ function TutorDetails(props) {
       if (data) {
         const subjectList = [];
         data?.getTutorOfferings?.map((item) => {
+          console.log('parentOffering', parentOffering, parentParentOffering, item);
           if (item.offering && !subjectList.find((sub) => sub.id === item.offering.id)) {
-            if (item.offerings[1].id === parentOffering && item.offerings[2].id === parentParentOffering) {
+            if (
+              item.offerings.find((item) => item.level === 2)?.id === parentOffering &&
+              item.offerings.find((item) => item.level === 1)?.id === parentParentOffering
+            ) {
               subjectList.push({
                 id: item.offering.id,
                 displayName: item.offering.displayName,
@@ -138,6 +142,7 @@ function TutorDetails(props) {
             }
           }
         });
+        console.log('subjectList', subjectList);
         if (!isEmpty(subjectList)) {
           setSelectedSubject(subjectList[0]);
         }
@@ -661,21 +666,23 @@ function TutorDetails(props) {
             <View style={commonStyles.lineSeparator} />
             {selectedSubject && classView()}
             <View style={commonStyles.lineSeparator} />
-            <View>
-              <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
-              <View style={{ marginBottom: RfH(16), paddingHorizontal: RfW(16) }}>
-                <FlatList
-                  showsHorizontalScrollIndicator={false}
-                  horizontal
-                  scrollEnabled={false}
-                  data={subjects}
-                  extraData={refreshList}
-                  renderItem={({ item, index }) => renderSubjects(item, index)}
-                  keyExtractor={(item, index) => index.toString()}
-                  style={{ flex: 1 }}
-                />
+            {!isEmpty(subjects) && (
+              <View>
+                <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
+                <View style={{ marginBottom: RfH(16), paddingHorizontal: RfW(16) }}>
+                  <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                    scrollEnabled={false}
+                    data={subjects}
+                    extraData={refreshList}
+                    renderItem={({ item, index }) => renderSubjects(item, index)}
+                    keyExtractor={(item, index) => index.toString()}
+                    style={{ flex: 1 }}
+                  />
+                </View>
               </View>
-            </View>
+            )}
 
             <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
             <View style={{ paddingHorizontal: RfW(16) }}>

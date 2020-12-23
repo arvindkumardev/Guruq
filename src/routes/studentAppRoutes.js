@@ -133,7 +133,11 @@ export const getStudentRoutes = () => {
         component={CalendarView}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.ONLINE_CLASS} component={OnlineClass} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.ONLINE_CLASS}
+        component={OnlineClass}
+        options={{ headerShown: false, gestureEnabled: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.FAVOURITE_TUTOR}
         component={FavouriteTutors}
