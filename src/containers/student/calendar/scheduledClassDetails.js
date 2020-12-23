@@ -99,7 +99,7 @@ function ScheduledClassDetails(props) {
 
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData });
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData?.classEntity });
   };
 
   const getTutorImage = (tutor) => {
@@ -157,7 +157,7 @@ function ScheduledClassDetails(props) {
 
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
-      <Loader isLoading={classDetailsLoading||scheduleLoading} />
+      <Loader isLoading={classDetailsLoading || scheduleLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
@@ -188,7 +188,7 @@ function ScheduledClassDetails(props) {
                 </View>
               </View>
 
-              {moment(classData.endDate).isAfter(new Date()) && (
+              {moment(classData?.classEntity?.endDate).isAfter(new Date()) && (
                 <View style={{}}>
                   <Button
                     block
@@ -253,7 +253,7 @@ function ScheduledClassDetails(props) {
                     </Text>
                   </View>
 
-                  {moment(classData.endDate).isAfter(new Date()) && (
+                  {moment(classData?.classEntity?.endDate).isAfter(new Date()) && (
                     <View>
                       <Button
                         block
