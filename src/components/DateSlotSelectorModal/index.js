@@ -17,7 +17,7 @@ import { RfH, RfW } from '../../utils/helpers';
 const DateSlotSelectorModal = (props) => {
   const [selectedSlot, setSelectedSlot] = useState({});
   const [availability, setAvailability] = useState([]);
-  const { visible, onClose, onSubmit, tutorId, studentId } = props;
+  const { visible, onClose, onSubmit, tutorId, studentId, isReschedule } = props;
 
   const [getTutorAvailability, { loading: loaderAvailability }] = useLazyQuery(GET_TUTOR_AVAILABILITY, {
     fetchPolicy: 'no-cache',
@@ -41,16 +41,18 @@ const DateSlotSelectorModal = (props) => {
         tutorAvailability: {
           tutorId,
           studentId,
-          startDate: moment(date).startOf('day').toDate(),
-          endDate: moment(date).endOf('day').toDate(),
+          startDate: moment(date).format('yyyy-MM-DD'),
+          endDate: moment(date).format('yyyy-MM-DD'),
         },
       },
     });
   };
 
   useEffect(() => {
-    getAvailabilityData(new Date());
-  }, []);
+    if (visible) {
+      getAvailabilityData(new Date());
+    }
+  }, [visible]);
 
   return (
     <>
@@ -161,7 +163,9 @@ const DateSlotSelectorModal = (props) => {
                 justifyContent: 'center',
               }}>
               <Button onPress={() => onSubmit(selectedSlot)} style={commonStyles.buttonPrimary}>
-                <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
+                <Text style={commonStyles.textButtonPrimary}>
+                  {isReschedule ? 'Reschedule Class' : 'Schedule Class'}
+                </Text>
               </Button>
             </View>
           )}
@@ -176,6 +180,7 @@ DateSlotSelectorModal.defaultProps = {
   onClose: null,
   onSubmit: null,
   tutorId: 0,
+  isReschedule: false,
 };
 
 DateSlotSelectorModal.propTypes = {
@@ -183,6 +188,7 @@ DateSlotSelectorModal.propTypes = {
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
   tutorId: PropTypes.number,
+  isReschedule: PropTypes.bool,
 };
 
 export default DateSlotSelectorModal;

@@ -14,6 +14,7 @@ import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SCHEDULE_CLASS } from '../class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../booking.query';
 import { studentDetails } from '../../../apollo/cache';
+import routeNames from '../../../routes/screenNames';
 
 function ScheduleClass(props) {
   const navigation = useNavigation();
@@ -30,15 +31,17 @@ function ScheduleClass(props) {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
-        console.log('error', error);
       }
     },
     onCompleted: (data) => {
       if (data && data.getScheduledClasses) {
-        const scheduledClasses = data.getScheduledClasses.map((item) => item.startDate);
+        const scheduledClasses = data.getScheduledClasses.map((item) => ({
+          startDate: item.startDate,
+          classId: item.id,
+        }));
         const classes = tutorClasses;
         for (let i = 0; i < scheduledClasses.length; i++) {
-          classes[i] = { startDate: scheduledClasses[i], isScheduled: true };
+          classes[i] = { ...scheduledClasses[i], isScheduled: true };
         }
         setTutorClasses(classes);
         setRefresh(!refresh);
@@ -51,8 +54,6 @@ function ScheduleClass(props) {
       variables: {
         classesSearchDto: {
           orderItemId: classData.id,
-          startDate: moment(new Date('2020-01-01')).toDate(),
-          endDate: moment(new Date('2021-12-31')).toDate(),
         },
       },
     });
@@ -77,7 +78,7 @@ function ScheduleClass(props) {
     if (classData) {
       const classes = [];
       for (let i = 0; i < classData.count; i++) {
-        classes.push({ startDate: '', isScheduled: false });
+        classes.push({ startDate: '', isScheduled: false, classId: '' });
       }
       setTutorClasses(classes);
       getScheduleClassCall();
@@ -97,7 +98,6 @@ function ScheduleClass(props) {
   };
 
   const onScheduleClass = (slot) => {
-    console.log('slot', slot);
     scheduleClass({
       variables: {
         classesCreateDto: {
@@ -107,6 +107,10 @@ function ScheduleClass(props) {
         },
       },
     });
+  };
+
+  const classDetailNavigation = (classId) => {
+    navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
   };
 
   const renderTutorDetails = () => (
@@ -154,7 +158,8 @@ function ScheduleClass(props) {
 
   const renderClassView = (item, index) => (
     <View style={{ flex: 0.5, marginTop: RfH(16) }}>
-      <TouchableWithoutFeedback onPress={() => (item.isScheduled ? null : showSlotPopup())}>
+      <TouchableWithoutFeedback
+        onPress={() => (item.isScheduled ? classDetailNavigation(item.classId) : showSlotPopup())}>
         <View>
           <View
             style={{

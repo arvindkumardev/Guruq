@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Button } from 'native-base';
 import PropTypes from 'prop-types';
@@ -22,11 +22,13 @@ import { GET_SCHEDULED_CLASSES } from '../booking.query';
 
 function CalendarView(props) {
   const navigation = useNavigation();
+  const isFocussed = useIsFocused();
   const { changeTab } = props;
   const studentInfo = useReactiveVar(studentDetails);
 
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [scheduledClasses, setScheduledClasses] = useState([]);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
@@ -94,8 +96,8 @@ function CalendarView(props) {
   };
 
   const getScheduledClassesByDate = (date) => {
-    console.log('getScheduledClassesByDate', date);
     setScheduledClasses([]);
+    setSelectedDate(date);
     getScheduledClasses({
       variables: {
         classesSearchDto: {
@@ -108,8 +110,10 @@ function CalendarView(props) {
   };
 
   useEffect(() => {
-    getScheduledClassesByDate(new Date());
-  }, []);
+    if (isFocussed) {
+      getScheduledClassesByDate(selectedDate);
+    }
+  }, [isFocussed]);
 
   return (
     <>

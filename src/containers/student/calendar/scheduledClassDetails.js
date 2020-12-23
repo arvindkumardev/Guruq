@@ -15,8 +15,8 @@ import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { API_URL, IMAGES_BASE_URL, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getUserImageUrl, printDate, printTime, RfH, RfW } from '../../../utils/helpers';
-import {RE_SCHEDULE_CLASS, SCHEDULE_CLASS} from '../booking.mutation';
+import { alertBox, getUserImageUrl, printDate, printTime, RfH, RfW } from '../../../utils/helpers';
+import { RE_SCHEDULE_CLASS } from '../booking.mutation';
 import { GET_CLASS_DETAILS } from '../class.query';
 import styles from '../tutorListing/styles';
 
@@ -25,7 +25,6 @@ function ScheduledClassDetails(props) {
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [showBackButton, setShowBackButton] = useState(false);
   const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
-  const [showCancelClassStartedPopup, setShowCancelClassStartedPopup] = useState(false);
   const [classData, setClassData] = useState({});
 
   const { route } = props;
@@ -35,13 +34,11 @@ function ScheduledClassDetails(props) {
   const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
     },
     onCompleted: (data) => {
-      console.log(data);
       if (data) {
         setClassData(data.getClassDetails);
       }
@@ -80,24 +77,23 @@ function ScheduledClassDetails(props) {
     </View>
   );
 
-  const renderAttachments = (item) => {
-    return (
-      <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(16) }]}>
-        <View style={commonStyles.horizontalChildrenView}>
-          <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>{item.chapter}</Text>
-            <Text style={commonStyles.mediumMutedText}>
-              {item.size} | {item.date}
-            </Text>
-          </View>
-        </View>
-      </View>
-    );
-  };
+  // const renderAttachments = (item) => {
+  //   return (
+  //     <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(16) }]}>
+  //       <View style={commonStyles.horizontalChildrenView}>
+  //         <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
+  //         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+  //           <Text style={commonStyles.headingPrimaryText}>{item.chapter}</Text>
+  //           <Text style={commonStyles.mediumMutedText}>
+  //             {item.size} | {item.date}
+  //           </Text>
+  //         </View>
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   const goToCancelReason = () => {
-    setShowCancelClassStartedPopup(false);
     navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId });
   };
 
@@ -115,7 +111,6 @@ function ScheduledClassDetails(props) {
   };
 
   const openRescheduleModal = () => {
-    setShowCancelClassStartedPopup(false);
     setShowReschedulePopup(true);
   };
 
@@ -136,7 +131,13 @@ function ScheduledClassDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        setShowReschedulePopup(false);
+        alertBox('Class rescheduled successfully', '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => {
+            setShowReschedulePopup(false);
+            getClassDetails({ variables: { classId } });
+          },
+        });
       }
     },
   });
@@ -148,6 +149,7 @@ function ScheduledClassDetails(props) {
           id: classData?.classEntity?.id,
           startDate: slot.startDate,
           endDate: slot.endDate,
+          orderItemId: classData?.classEntity?.orderItem?.id,
         },
       },
     });
@@ -155,7 +157,7 @@ function ScheduledClassDetails(props) {
 
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
-      <Loader isLoading={classDetailsLoading} />
+      <Loader isLoading={classDetailsLoading||scheduleLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
@@ -306,7 +308,9 @@ function ScheduledClassDetails(props) {
           <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>{printDate(classData?.classEntity?.startDate)}</Text>
-            <Text style={commonStyles.mediumMutedText}>{printTime(classData?.classEntity?.startDate)}</Text>
+            <Text style={commonStyles.mediumMutedText}>
+              {printTime(classData?.classEntity?.startDate)} - {printTime(classData?.classEntity?.endDate)}
+            </Text>
           </View>
         </View>
 
@@ -554,6 +558,7 @@ function ScheduledClassDetails(props) {
         onClose={() => setShowReschedulePopup(false)}
         tutorId={classData?.classEntity?.tutor?.id}
         onSubmit={onScheduleClass}
+        isReschedule
       />
     </View>
   );
