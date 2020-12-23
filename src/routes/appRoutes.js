@@ -79,16 +79,16 @@ const AppStack = (props) => {
     }
     if (userType === UserTypeEnum.TUTOR.label) {
       if (tutorInfo && tutorInfo?.certified) {
-        return getTutorRoutes();
-        // return (
-        //   <>
-        //     <Stack.Screen
-        //       name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
-        //       component={InterviewPending}
-        //       options={{ headerShown: false }}
-        //     />
-        //   </>
-        // );
+        // return getTutorRoutes();
+        return (
+          <>
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
+              component={InterviewPending}
+              options={{ headerShown: false }}
+            />
+          </>
+        );
       }
       if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING) {
         return (

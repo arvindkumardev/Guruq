@@ -164,6 +164,7 @@ const Images = {
   call: require('../assets/images/call.png'),
   email: require('../assets/images/email.png'),
   whatsapp: require('../assets/images/whatsapp.png'),
+  upload: require('../assets/images/upload.png'),
 };
 
 export default Images;
