@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Button, Textarea } from 'native-base';
+import { Button, Icon, Textarea } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Modal, ScrollView, Text, View } from 'react-native';
@@ -11,7 +11,8 @@ import { ADD_REVIEW } from '../../containers/student/tutor-mutation';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { alertBox, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getUserImageUrl, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import Fonts from '../../theme/fonts';
 
 const ReviewModal = (props) => {
   const [ratings, setRatings] = useState([
@@ -37,7 +38,7 @@ const ReviewModal = (props) => {
     onCompleted: (data) => {
       if (data) {
         alertBox('Thank you for providing your valuable feedback', '', {
-          positiveText: 'Yes',
+          positiveText: 'Ok',
           onPositiveClick: () => {
             onClose(false);
           },
@@ -74,7 +75,7 @@ const ReviewModal = (props) => {
   };
 
   const onAddReview = () => {
-    if (ratings.find((rate) => rate === 0) || rate === 0) {
+    if (ratings.find((rate) => rate.rating === 0) || rate === 0) {
       alertBox('Please provide all the ratings', '');
     } else if (isEmpty(review)) {
       alertBox('Please provide review', '');
@@ -114,30 +115,101 @@ const ReviewModal = (props) => {
       onRequestClose={() => {
         onClose(false);
       }}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)',alignItems:'center'}} />
+      <View style={{ backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center',justifyContent:'center' }} />
       <View
         style={[
           commonStyles.verticallyStretchedItemsView,
-          { backgroundColor: Colors.white, paddingTop: RfH(32) },
+          { backgroundColor: Colors.white, paddingTop: RfH(60), flex: 1 },
         ]}>
         <Loader isLoading={reviewLoading} />
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'position' })} enabled>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={commonStyles.verticallyCenterItemsView}>
-              <IconButtonWrapper
-                iconWidth={RfW(96)}
-                iconHeight={RfH(96)}
-                iconImage={getTutorImage(classDetails?.tutor)}
-                styling={{ borderRadius: 8 }}
-              />
-              <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}>
-                {classDetails?.tutor?.contactDetail?.firstName} {classDetails.tutor.contactDetail.lastName}
-              </Text>
-              <Text style={commonStyles.mediumMutedText}>
-                {`${classDetails?.offering?.displayName} (${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName})`}
-              </Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' ,paddingHorizontal:RfW(15)}}>
+                <View style={{ flex: 0.3 }}>
+                  <IconButtonWrapper
+                    iconWidth={RfH(98)}
+                    iconHeight={RfH(98)}
+                    iconImage={getTutorImage(classDetails.tutor)}
+                    imageResizeMode="cover"
+                    styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 0.7,
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    alignItems: 'stretch',
+                    marginLeft: RfW(8),
+                  }}>
+                  <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
+                    {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
+                  </Text>
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                    {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      type="FontAwesome"
+                      name="calendar-o"
+                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                    />
+                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                      {printDate(classDetails.startDate)}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      type="Feather"
+                      name="clock"
+                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                    />
+                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                      {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      type="MaterialIcons"
+                      name="computer"
+                      style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                    />
+                    <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                      {classDetails.onlineClass ? 'Online' : 'Offline'} Class
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              {/* <IconButtonWrapper */}
+              {/*  iconWidth={RfW(96)} */}
+              {/*  iconHeight={RfH(96)} */}
+              {/*  iconImage={getTutorImage(classDetails?.tutor)} */}
+              {/*  styling={{ borderRadius: 8 }} */}
+              {/* /> */}
+              {/* <Text style={[commonStyles.headingPrimaryText, { marginTop: RfH(8) }]}> */}
+              {/*  {classDetails?.tutor?.contactDetail?.firstName} {classDetails.tutor.contactDetail.lastName} */}
+              {/* </Text> */}
+              {/* <Text style={commonStyles.mediumMutedText}> */}
+              {/*  {`${classDetails?.offering?.displayName} (${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName})`} */}
+              {/* </Text> */}
               <View style={{ paddingVertical: RfH(20) }}>
-              <Text style={commonStyles.mediumMutedText}>Rate Your Class</Text>
+                <Text style={commonStyles.mediumMutedText}>Rate Your Class</Text>
               </View>
               <View>
                 <AirbnbRating
@@ -166,6 +238,7 @@ const ReviewModal = (props) => {
                   renderItem={({ item, index }) => renderRatings(item, index)}
                   keyExtractor={(item, index) => index.toString()}
                   style={{ marginTop: RfH(16) }}
+                  scrollEnabled={false}
                 />
               </View>
               <View style={{ marginTop: RfH(32) }}>

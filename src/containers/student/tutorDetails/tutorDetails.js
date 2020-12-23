@@ -37,7 +37,7 @@ import {
   storeData,
   titleCaseIfExists,
 } from '../../../utils/helpers';
-import { BackArrow, CompareModal, DateSlotSelectorModal, IconButtonWrapper, Loader } from '../../../components';
+import { BackArrow, CompareModal, IconButtonWrapper, Loader } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import ClassModeSelectModal from './components/classModeSelectModal';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
@@ -61,7 +61,6 @@ function TutorDetails(props) {
   const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState({});
   const [tutorData, setTutorData] = useState({});
-
   const [subjects, setSubjects] = useState([]);
   const [refreshList, setRefreshList] = useState(false);
   const [compareData, setCompareData] = useState([]);
@@ -69,7 +68,6 @@ function TutorDetails(props) {
   const [isDemo, setIsDemo] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [overallRating, setOverallRating] = useState(0);
-  const [favouriteTutors, setFavouriteTutors] = useState([]);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
@@ -80,7 +78,7 @@ function TutorDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        setFavouriteTutors(data?.getFavouriteTutors);
+        setIsFavourite(data?.getFavouriteTutors.find((ft) => ft?.tutor?.id === tutorData?.id));
       }
     },
   });
@@ -94,60 +92,11 @@ function TutorDetails(props) {
     onCompleted: (data) => {
       if (data) {
         setTutorData(data?.searchTutors?.edges[0]);
-      }
-    },
-  });
-
-  useEffect(() => {
-    getFavouriteTutors();
-    if (tutorId) {
-      getTutors({ variables: { searchDto: { certified: true, active: true, id: tutorId } } });
-    } else if (tutorDataObj) {
-      setTutorData(tutorDataObj);
-    }
-  }, []);
-
-  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
-    fetchPolicy: 'no-cache',
-    variables: { tutorId: tutorData?.id },
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-
-        console.log(error);
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        const subjectList = [];
-        data?.getTutorOfferings?.map((item) => {
-          console.log('parentOffering', parentOffering, parentParentOffering, item);
-          if (item.offering && !subjectList.find((sub) => sub.id === item.offering.id)) {
-            if (
-              item.offerings.find((item) => item.level === 2)?.id === parentOffering &&
-              item.offerings.find((item) => item.level === 1)?.id === parentParentOffering
-            ) {
-              subjectList.push({
-                id: item.offering.id,
-                displayName: item.offering.displayName,
-                offeringId: item.id,
-                demoClass: item.demoClass,
-                freeDemo: item.freeDemo,
-                groupClass: item.groupClass === 0 || item.groupClass === 1,
-                onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
-                individualClass: item.groupClass === 0 || item.groupClass === 2,
-                homeTution: item.onlineClass === 0 || item.onlineClass === 2,
-                budgetDetails: item.budgets,
-              });
-            }
-          }
+        getFavouriteTutors({
+          variables: {
+            parentOfferingId: parentOffering,
+          },
         });
-        console.log('subjectList', subjectList);
-        if (!isEmpty(subjectList)) {
-          setSelectedSubject(subjectList[0]);
-        }
-        setSubjects(subjectList);
-        setRefreshList(!refreshList);
       }
     },
   });
@@ -179,6 +128,62 @@ function TutorDetails(props) {
       }
     },
   });
+
+  useEffect(() => {
+    if (tutorId) {
+      getTutors({ variables: { searchDto: { certified: true, active: true, id: tutorId } } });
+    } else if (tutorDataObj) {
+      getFavouriteTutors({
+        variables: {
+          parentOfferingId: parentOffering,
+        },
+      });
+      setTutorData(tutorDataObj);
+    }
+  }, []);
+
+  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    variables: { tutorId: tutorData?.id },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const subjectList = [];
+        data?.getTutorOfferings?.map((item) => {
+          if (item.offering && !subjectList.find((sub) => sub.id === item.offering.id)) {
+            if (
+              item.offerings.find((item) => item.level === 2)?.id === parentOffering &&
+              item.offerings.find((item) => item.level === 1)?.id === parentParentOffering
+            ) {
+              subjectList.push({
+                id: item.offering.id,
+                displayName: item.offering.displayName,
+                offeringId: item.id,
+                demoClass: item.demoClass,
+                freeDemo: item.freeDemo,
+                groupClass: item.groupClass === 0 || item.groupClass === 1,
+                onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
+                individualClass: item.groupClass === 0 || item.groupClass === 2,
+                homeTution: item.onlineClass === 0 || item.onlineClass === 2,
+                budgetDetails: item.budgets,
+              });
+            }
+          }
+        });
+        if (!isEmpty(subjectList)) {
+          setSelectedSubject(subjectList[0]);
+        }
+        setSubjects(subjectList);
+        setRefreshList(!refreshList);
+      }
+    },
+  });
+
+
 
   const getPercentage = (value) => value * 20;
 
@@ -243,12 +248,6 @@ function TutorDetails(props) {
       }
     },
   });
-
-  useEffect(() => {
-    if (favouriteTutors && !isEmpty(tutorData)) {
-      setIsFavourite(favouriteTutors.find((ft) => ft?.tutor?.id === tutorData?.id));
-    }
-  }, [favouriteTutors, tutorData]);
 
   const onBackPress = () => {
     navigation.goBack();

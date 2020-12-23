@@ -49,7 +49,8 @@ const PaymentMethod = (props) => {
             initiatePaypalPayment(data.createBooking.id);
             break;
           case PaymentMethodEnum.CASH.value:
-            completedPayment(data.createBooking.id, OrderPaymentStatusEnum.COMPLETE.label, 'Success');
+            navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { data, paymentMethod });
+            // completedPayment(data.createBooking.id, OrderPaymentStatusEnum.COMPLETE.label, 'Success');
             break;
           default:
             break;
@@ -70,7 +71,7 @@ const PaymentMethod = (props) => {
       if (data) {
         onClose(false);
         if (OrderPaymentStatusEnum.COMPLETE.value) {
-          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, data);
+          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { data, paymentMethod });
         }
       }
     },
@@ -111,16 +112,17 @@ const PaymentMethod = (props) => {
       body: raw,
       redirect: 'follow',
     };
+
+    console.log("requestOptions",requestOptions)
     const response = await fetch('http://apiv2.guruq.in/api/payment/initiatePaytmTransaction', requestOptions);
 
-    console.log(response);
-
     const data = await response.json();
+
+    console.log(data);
 
     if (data.error) {
       Alert.alert('PayTm is not available right now, please try again later!');
     } else {
-
       const AllInOneSDKPlugin = NativeModules.AllInOneSDKSwiftWrapper;
 
       const { mid } = data.paytmParams.body;
@@ -130,7 +132,7 @@ const PaymentMethod = (props) => {
       const callback = `https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=${orderId}`;
       const isStaging = true;
 
-      console.log('x', NativeModules);
+      console.log('orderId', orderId);
       const result = AllInOneSDKPlugin.openPaytm(mid, orderId, txnToken, amount, callback, isStaging);
 
       console.log(result);
@@ -317,9 +319,6 @@ const PaymentMethod = (props) => {
       case PaymentMethodEnum.PAYPAL.value:
         details.paymentMethod = PaymentMethodEnum.PAYPAL.label;
         break;
-      // case PaymentMethodEnum.CASH.value:
-      //   details.paymentMethod = PaymentMethodEnum.CASH.label;
-      //   break;
       default:
         break;
     }

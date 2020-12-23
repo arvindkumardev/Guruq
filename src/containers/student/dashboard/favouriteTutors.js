@@ -1,11 +1,10 @@
-import { Image, Text, View, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Button, Icon } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import { Icon } from 'native-base';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { Images, Colors, Fonts } from '../../../theme';
-import { getUserImageUrl, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
+import { Colors, Fonts, Images } from '../../../theme';
+import { getTutorImage, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import styles from '../tutorListing/styles';
@@ -14,20 +13,16 @@ import { GET_FAVOURITE_TUTORS } from '../tutor-query';
 import { REMOVE_FAVOURITE } from '../tutor-mutation';
 import Loader from '../../../components/Loader';
 
-function FavouriteTutors() {
+function FavouriteTutors(props) {
   const [favouriteTutors, setFavouriteTutors] = useState([]);
   const [refreshTutorList, setRefreshTutorList] = useState(false);
-
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
-  };
+  const { selectedOffering } = props.route.params;
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
-
         console.log(error);
       }
     },
@@ -39,10 +34,6 @@ function FavouriteTutors() {
     },
   });
 
-  useEffect(() => {
-    getFavouriteTutors();
-  }, []);
-
   const [removeFavourite, { loading: removeFavouriteLoading }] = useMutation(REMOVE_FAVOURITE, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -52,11 +43,25 @@ function FavouriteTutors() {
     },
     onCompleted: (data) => {
       if (data) {
-        getFavouriteTutors();
+        getFavouriteTutors({
+          variables: {
+            parentOfferingId: selectedOffering?.id,
+          },
+        });
         setRefreshTutorList(!refreshTutorList);
       }
     },
   });
+
+  useEffect(() => {
+    if (selectedOffering) {
+      getFavouriteTutors({
+        variables: {
+          parentOfferingId: selectedOffering?.id,
+        },
+      });
+    }
+  }, [selectedOffering]);
 
   const removeFavouriteTutor = (tutorId) => {
     removeFavourite({
@@ -76,38 +81,6 @@ function FavouriteTutors() {
               imageResizeMode="cover"
               styling={styles.userIcon}
             />
-            {item?.id % 7 === 0 && (
-              <View
-                style={{
-                  position: 'absolute',
-                  bottom: -5,
-                  left: 0,
-                  zIndex: 100,
-                  borderRadius: RfW(20),
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginHorizontal: RfW(8),
-                }}>
-                <View
-                  style={{
-                    backgroundColor: Colors.orange,
-                    borderRadius: RfW(2),
-                    paddingVertical: RfH(2),
-                    paddingHorizontal: RfW(4),
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      textTransform: 'uppercase',
-                      color: Colors.white,
-                      fontFamily: Fonts.bold,
-                    }}>
-                    Sponsored
-                  </Text>
-                </View>
-              </View>
-            )}
           </View>
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row' }}>

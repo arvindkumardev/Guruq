@@ -165,6 +165,7 @@ const Images = {
   email: require('../assets/images/email.png'),
   whatsapp: require('../assets/images/whatsapp.png'),
   upload: require('../assets/images/upload.png'),
+  nopytn: require('../assets/images/nopytn.png'),
 };
 
 export default Images;

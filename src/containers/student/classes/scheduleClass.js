@@ -49,6 +49,16 @@ function ScheduleClass(props) {
     },
   });
 
+  const getScheduleClassCall = () => {
+    getScheduledClasses({
+      variables: {
+        classesSearchDto: {
+          orderItemId: classData.id,
+        },
+      },
+    });
+  };
+
   const [scheduleClass, { loading: scheduleLoading }] = useMutation(SCHEDULE_CLASS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -64,15 +74,7 @@ function ScheduleClass(props) {
     },
   });
 
-  const getScheduleClassCall = () => {
-    getScheduledClasses({
-      variables: {
-        classesSearchDto: {
-          orderItemId: classData.id,
-        },
-      },
-    });
-  };
+
 
   useEffect(() => {
     if (classData) {

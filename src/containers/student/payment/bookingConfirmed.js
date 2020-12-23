@@ -1,4 +1,4 @@
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
@@ -9,11 +9,14 @@ import { RfH, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
+import { PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 
 function bookingConfirmed(props) {
   const { route } = props;
 
-  const orderDetail = route?.params?.makePayment;
+  const { data, paymentMethod } = route?.params;
+  const isCash = PaymentMethodEnum.CASH.value === paymentMethod;
+  const orderDetail = data?.makePayment;
 
   const navigation = useNavigation();
 
@@ -27,7 +30,8 @@ function bookingConfirmed(props) {
           alignSelf: 'center',
           fontFamily: Fonts.semiBold,
         }}>
-        Booking Confirmed
+        {'Booking '}
+        {isCash ? 'Received' : 'Confirmed'}
       </Text>
       <View style={{ height: RfH(56) }} />
       <IconButtonWrapper
@@ -44,17 +48,19 @@ function bookingConfirmed(props) {
           alignSelf: 'center',
           fontFamily: Fonts.bold,
         }}>
-        Happy Learning
+        {isCash ? 'Cash Collection Pending' : 'Happy Learning'}
       </Text>
-      <Text
-        style={{
-          marginTop: RfH(5),
-          fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-          color: Colors.darkGrey,
-          alignSelf: 'center',
-        }}>
-        Booking ID {orderDetail?.uuid}
-      </Text>
+      {!isCash && (
+        <Text
+          style={{
+            marginTop: RfH(5),
+            fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+            color: Colors.darkGrey,
+            alignSelf: 'center',
+          }}>
+          Booking ID {orderDetail?.uuid}
+        </Text>
+      )}
       <Button
         onPress={() => navigation.navigate(routeNames.STUDENT.DASHBOARD)}
         style={[commonStyles.buttonPrimary, { bottom: RfH(34), position: 'absolute', alignSelf: 'center' }]}>

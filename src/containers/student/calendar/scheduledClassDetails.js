@@ -24,7 +24,8 @@ function ScheduledClassDetails(props) {
   const isFocussed = useIsFocused();
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [showBackButton, setShowBackButton] = useState(false);
-  const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
+  // const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
   const [classData, setClassData] = useState({});
   const [showReviewPopup, setShowReviewPopup] = useState(false);
 
@@ -42,7 +43,6 @@ function ScheduledClassDetails(props) {
     onCompleted: (data) => {
       if (data) {
         setClassData(data.getClassDetails);
-        setShowReviewPopup(true);
       }
     },
   });
@@ -117,11 +117,11 @@ function ScheduledClassDetails(props) {
   };
 
   const goToCancelReason = () => {
+    setOpenMenu(false);
     navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId });
   };
 
   const goToOnlineClass = () => {
-    setShowClassStartedPopup(false);
     navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData?.classEntity });
   };
 
@@ -134,6 +134,7 @@ function ScheduledClassDetails(props) {
   };
 
   const openRescheduleModal = () => {
+    setOpenMenu(false);
     setShowReschedulePopup(true);
   };
 
@@ -176,7 +177,7 @@ function ScheduledClassDetails(props) {
   );
 
   return (
-    <View style={{ backgroundColor: Colors.white, flex: 1 }}>
+    <TouchableOpacity style={{ backgroundColor: Colors.white, flex: 1 }} activeOpacity={1} onPress={()=>setOpenMenu(false)}>
       <Loader isLoading={classDetailsLoading || scheduleLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
@@ -273,29 +274,67 @@ function ScheduledClassDetails(props) {
                     </Text>
                   </View>
 
-                  {classData?.isClassJoinAllowed && (
-                    <View>
-                      <Button
-                        block
-                        onPress={goToOnlineClass}
-                        style={[
-                          commonStyles.buttonPrimary,
-                          {
-                            width: RfH(100),
-                            borderRadius: 4,
-                            marginHorizontal: 0,
-                          },
-                        ]}>
-                        <IconButtonWrapper
-                          iconImage={Images.video}
-                          iconHeight={RfH(20)}
-                          iconWidth={RfW(20)}
-                          styling={{ alignSelf: 'center' }}
-                        />
-                        <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
-                      </Button>
+                  {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
+                    <IconButtonWrapper
+                      iconImage={Images.vertical_dots}
+                      iconHeight={RfH(20)}
+                      iconWidth={RfW(20)}
+                      submitFunction={() => setOpenMenu(!openMenu)}
+                      styling={{ alignSelf: 'center' }}
+                    />
+                  )}
+                  {openMenu && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: RfH(23),
+                        right: RfW(10),
+                        backgroundColor: Colors.white,
+                        width: '45%',
+                        padding: RfH(16),
+                        borderWidth: 0.3,
+                        borderColor: Colors.darkGrey,
+                      }}>
+                      {classData?.isRescheduleAllowed && (
+                        <TouchableOpacity onPress={openRescheduleModal} style={{ paddingVertical: RfH(10) }}>
+                          <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>
+                            Reschedule Class
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                      {classData?.isCancelAllowed && (
+                        <TouchableOpacity
+                          onPress={goToCancelReason}
+                          style={{ paddingVertical: RfH(10), borderTopWidth: 0.5, borderColor: Colors.black }}>
+                          <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   )}
+
+                  {/* {classData?.isClassJoinAllowed && ( */}
+                  {/*  <View> */}
+                  {/*    <Button */}
+                  {/*      block */}
+                  {/*      onPress={goToOnlineClass} */}
+                  {/*      style={[ */}
+                  {/*        commonStyles.buttonPrimary, */}
+                  {/*        { */}
+                  {/*          width: RfH(100), */}
+                  {/*          borderRadius: 4, */}
+                  {/*          marginHorizontal: 0, */}
+                  {/*        }, */}
+                  {/*      ]}> */}
+                  {/*      <IconButtonWrapper */}
+                  {/*        iconImage={Images.video} */}
+                  {/*        iconHeight={RfH(20)} */}
+                  {/*        iconWidth={RfW(20)} */}
+                  {/*        styling={{ alignSelf: 'center' }} */}
+                  {/*      /> */}
+                  {/*      <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text> */}
+                  {/*    </Button> */}
+                  {/*  </View> */}
+                  {/* )} */}
                 </View>
               </View>
             </View>
@@ -451,73 +490,78 @@ function ScheduledClassDetails(props) {
 
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-        {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
+        {classData?.isClassJoinAllowed && (
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-around',
+              justifyContent: 'center',
               alignItems: 'center',
               marginTop: RfH(16),
               marginBottom: RfH(34),
             }}>
-            {classData?.isRescheduleAllowed && (
-              <Button
-                onPress={openRescheduleModal}
-                block
-                style={{ width: RfW(150), backgroundColor: Colors.brandBlue2 }}>
-                <Text style={commonStyles.textButtonPrimary}>Reschedule Class</Text>
-              </Button>
-            )}
-            {classData?.isCancelAllowed && (
-              <Button onPress={goToCancelReason} block style={{ width: RfW(150), backgroundColor: Colors.orangeRed }}>
-                <Text style={commonStyles.textButtonPrimary}>Cancel Class</Text>
-              </Button>
-            )}
+            <Button
+              block
+              onPress={goToOnlineClass}
+              style={[
+                commonStyles.buttonPrimary,
+                {
+                  borderRadius: 4,
+                  marginHorizontal: 0,
+                },
+              ]}>
+              <IconButtonWrapper
+                iconImage={Images.video}
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                styling={{ alignSelf: 'center' }}
+              />
+              <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
+            </Button>
           </View>
         )}
       </ScrollView>
-      <Modal
-        animationType="fade"
-        transparent={false}
-        visible={showClassStartedPopup}
-        onRequestClose={() => {
-          setShowClassStartedPopup(false);
-        }}>
-        <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.6 }}>
-          <View style={{ flex: 1 }} />
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-              paddingHorizontal: RfW(16),
-            }}>
-            <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}>
-              <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
-                styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
-                iconImage={Images.cross}
-                submitFunction={() => setShowClassStartedPopup(false)}
-              />
-              <View style={{ padding: RfH(16) }}>
-                <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}>
-                  Your class has been started. Confirm to continue.
-                </Text>
-              </View>
-              <View style={{ alignItems: 'center' }}>
-                <Button
-                  onPress={() => goToOnlineClass()}
-                  block
-                  style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-                  <Text style={commonStyles.textButtonPrimary}>Continue</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-          <View style={{ flex: 1 }} />
-        </View>
-      </Modal>
+      {/* <Modal */}
+      {/*  animationType="fade" */}
+      {/*  transparent={false} */}
+      {/*  visible={showClassStartedPopup} */}
+      {/*  onRequestClose={() => { */}
+      {/*    setShowClassStartedPopup(false); */}
+      {/*  }}> */}
+      {/*  <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.6 }}> */}
+      {/*    <View style={{ flex: 1 }} /> */}
+      {/*    <View */}
+      {/*      style={{ */}
+      {/*        flexDirection: 'column', */}
+      {/*        justifyContent: 'flex-start', */}
+      {/*        alignItems: 'stretch', */}
+      {/*        paddingHorizontal: RfW(16), */}
+      {/*      }}> */}
+      {/*      <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}> */}
+      {/*        <IconButtonWrapper */}
+      {/*          iconHeight={RfH(24)} */}
+      {/*          iconWidth={RfW(24)} */}
+      {/*          styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }} */}
+      {/*          iconImage={Images.cross} */}
+      {/*          submitFunction={() => setShowClassStartedPopup(false)} */}
+      {/*        /> */}
+      {/*        <View style={{ padding: RfH(16) }}> */}
+      {/*          <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}> */}
+      {/*            Your class has been started. Confirm to continue. */}
+      {/*          </Text> */}
+      {/*        </View> */}
+      {/*        <View style={{ alignItems: 'center' }}> */}
+      {/*          <Button */}
+      {/*            onPress={() => goToOnlineClass()} */}
+      {/*            block */}
+      {/*            style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}> */}
+      {/*            <Text style={commonStyles.textButtonPrimary}>Continue</Text> */}
+      {/*          </Button> */}
+      {/*        </View> */}
+      {/*      </View> */}
+      {/*    </View> */}
+      {/*    <View style={{ flex: 1 }} /> */}
+      {/*  </View> */}
+      {/* </Modal> */}
       <DateSlotSelectorModal
         visible={showReschedulePopup}
         onClose={() => setShowReschedulePopup(false)}
@@ -533,7 +577,7 @@ function ScheduledClassDetails(props) {
           classDetails={classData?.classEntity}
         />
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 

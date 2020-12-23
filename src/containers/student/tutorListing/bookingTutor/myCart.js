@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Image, Text, TextInput, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Button, Picker } from 'native-base';
+import { Button, Picker, Input } from 'native-base';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { isEmpty, range, sum } from 'lodash';
 import { IconButtonWrapper, PaymentMethodModal, ScreenHeader, Loader } from '../../../../components';
@@ -103,6 +103,7 @@ const MyCart = () => {
   useEffect(() => {
     if (userData) {
       setQPoints(userData.me.qPoints);
+
     }
   }, [userData]);
 
@@ -299,6 +300,12 @@ const MyCart = () => {
     </View>
   );
 
+  const onSetQPoints = (val) => {
+    if (val <= qPoints) {
+      setQPointsRedeem(val);
+    }
+  };
+
   const renderQPointView = () => (
     <View>
       <View
@@ -350,19 +357,13 @@ const MyCart = () => {
               <View style={{ borderRightColor: Colors.lightGrey, borderRightWidth: 1 }}>
                 <Text style={commonStyles.regularPrimaryText}>₹ </Text>
               </View>
-              <Picker
-                iosHeader="QPoints"
-                Header="QPoints"
-                style={{ height: RfH(36), width: RfW(80), alignItems: 'center' }}
-                mode="dialog"
-                textStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }}
-                placeholder={qPointsRedeem}
-                selectedValue={qPointsRedeem}
-                onValueChange={(value) => selectQPoints(value)}>
-                {range(0, qPoints + 1, 5).map((obj, i) => {
-                  return <Picker.Item label={obj} value={obj} key={i} />;
-                })}
-              </Picker>
+              <TextInput
+                onChangeText={onSetQPoints}
+                style={{ width: RfW(70), paddingVertical: RfH(8) }}
+                value={qPointsRedeem}
+                keyboardType="numeric"
+                editable={qPoints !== 0}
+              />
             </View>
           </View>
         </View>
