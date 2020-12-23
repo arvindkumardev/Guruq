@@ -1,17 +1,17 @@
-import {useMutation} from '@apollo/client';
-import {Button, Textarea} from 'native-base';
+import { useMutation } from '@apollo/client';
+import { Button, Textarea } from 'native-base';
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
-import {FlatList, KeyboardAvoidingView, Modal, ScrollView, Text, View} from 'react-native';
-import {AirbnbRating} from 'react-native-ratings';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {isEmpty} from 'lodash';
-import {IconButtonWrapper, Loader} from '..';
-import {ADD_REVIEW} from '../../containers/student/tutor-mutation';
-import {Colors} from '../../theme';
+import React, { useState } from 'react';
+import { FlatList, KeyboardAvoidingView, Modal, ScrollView, Text, View } from 'react-native';
+import { AirbnbRating } from 'react-native-ratings';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { isEmpty } from 'lodash';
+import { IconButtonWrapper, Loader } from '..';
+import { ADD_REVIEW } from '../../containers/student/tutor-mutation';
+import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
-import {STANDARD_SCREEN_SIZE} from '../../utils/constants';
-import {alertBox, getUserImageUrl, RfH, RfW} from '../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { alertBox, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
 
 const ReviewModal = (props) => {
   const [ratings, setRatings] = useState([
@@ -74,8 +74,10 @@ const ReviewModal = (props) => {
   };
 
   const onAddReview = () => {
-    if (ratings.find((rate) => rate === 0) || rate === 0 || isEmpty(review)) {
-      alertBox('', 'Please provide all the ratings and review');
+    if (ratings.find((rate) => rate === 0) || rate === 0) {
+      alertBox('Please provide all the ratings', '');
+    } else if (isEmpty(review)) {
+      alertBox('Please provide review', '');
     } else {
       addReview({
         variables: {
@@ -112,11 +114,11 @@ const ReviewModal = (props) => {
       onRequestClose={() => {
         onClose(false);
       }}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'column' }} />
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)',alignItems:'center'}} />
       <View
         style={[
           commonStyles.verticallyStretchedItemsView,
-          { backgroundColor: Colors.white, paddingTop: RfH(32), height: '95%' },
+          { backgroundColor: Colors.white, paddingTop: RfH(32) },
         ]}>
         <Loader isLoading={reviewLoading} />
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'position' })} enabled>
@@ -134,9 +136,9 @@ const ReviewModal = (props) => {
               <Text style={commonStyles.mediumMutedText}>
                 {`${classDetails?.offering?.displayName} (${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName})`}
               </Text>
-              <View style={{ height: RfH(32) }} />
-              <Text style={commonStyles.mediumMutedText}>Rate Your Tutor</Text>
-              <View style={{ height: RfH(24) }} />
+              <View style={{ paddingVertical: RfH(20) }}>
+              <Text style={commonStyles.mediumMutedText}>Rate Your Class</Text>
+              </View>
               <View>
                 <AirbnbRating
                   count={5}

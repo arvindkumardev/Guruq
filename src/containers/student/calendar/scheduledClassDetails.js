@@ -42,6 +42,7 @@ function ScheduledClassDetails(props) {
     onCompleted: (data) => {
       if (data) {
         setClassData(data.getClassDetails);
+        setShowReviewPopup(true);
       }
     },
   });
@@ -524,6 +525,7 @@ function ScheduledClassDetails(props) {
         onSubmit={onScheduleClass}
         isReschedule
       />
+
       {showReviewPopup && (
         <RateReview
           visible={showReviewPopup}
