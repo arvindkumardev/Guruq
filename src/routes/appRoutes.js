@@ -4,7 +4,8 @@ import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { notificationPayload } from '../apollo/cache';
+import { useReactiveVar } from '@apollo/client';
+import { notificationPayload, tutorDetails } from '../apollo/cache';
 import { getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
 import { UserTypeEnum } from '../common/userType.enum';
 import EnterPassword from '../containers/common/login/enterPassword';
@@ -19,12 +20,17 @@ import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
 import NavigationRouteNames from './screenNames';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
+import { TutorCertificationStageEnum } from '../containers/tutor/enums';
+import CertificationCompletedView from '../containers/tutor/certficationProcess/certificationCompletedView';
+import WebViewPage from '../components/WebViewPage';
+import InterviewPending from '../containers/tutor/interviewPending/interviewPending';
 
 const Stack = createStackNavigator();
 
 const AppStack = (props) => {
   const { isUserLoggedIn, userType, showSplashScreen } = props;
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
+  const tutorInfo = useReactiveVar(tutorDetails);
 
   useEffect(() => {
     AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then((val) => {
@@ -72,36 +78,49 @@ const AppStack = (props) => {
       return getStudentRoutes();
     }
     if (userType === UserTypeEnum.TUTOR.label) {
-      return getTutorRoutes();
+      if (tutorInfo && tutorInfo?.certified) {
+        return getTutorRoutes();
+        // return (
+        //   <>
+        //     <Stack.Screen
+        //       name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
+        //       component={InterviewPending}
+        //       options={{ headerShown: false }}
+        //     />
+        //   </>
+        // );
+      }
+      if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING) {
+        return (
+          <>
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
+              component={InterviewPending}
+              options={{ headerShown: false }}
+            />
+          </>
+        );
+      }
+      if (
+        tutorInfo &&
+        tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
+      ) {
+        return (
+          <>
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
+              component={CertificationCompletedView}
+              options={{ headerShown: false }}
+            />
+          </>
+        );
+      }
+      return (
+        <>
+          <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
+        </>
+      );
     }
-    // if (userType === UserTypeEnum.TUTOR.label) {
-    //   if (tutorDetails && tutorDetails?.certified) {
-    //     return getTutorRoutes();
-    //   }
-    //   if (
-    //     tutorDetails &&
-    //     tutorDetails?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
-    //   ) {
-    //     return (
-    //       <>
-    //         <Stack.Screen
-    //           name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
-    //           component={CertificationCompletedView}
-    //           options={{ headerShown: false }}
-    //         />
-    //       </>
-    //     );
-    //   }
-    //   return (
-    //     <>
-    //       <Stack.Screen
-    //         name={NavigationRouteNames.WEB_VIEW}
-    //         component={WebViewPages}
-    //         options={{ headerShown: false }}
-    //       />
-    //     </>
-    //   );
-    // }
   };
 
   return (

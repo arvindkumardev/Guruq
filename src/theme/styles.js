@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
 
   lineSeparatorWithHorizontalMargin: {
-    flex: 1,
+    // flex: 1,
     borderBottomColor: Colors.borderColor,
     borderBottomWidth: 0.5,
     marginHorizontal: RfH(16),

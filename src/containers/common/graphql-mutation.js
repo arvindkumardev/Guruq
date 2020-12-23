@@ -137,3 +137,11 @@ export const CREATE_TUTOR = gql`
     }
   }
 `;
+
+export const ADD_ENQUIRY = gql`
+  mutation AddInquiry($inquiryDto: CreateUpdateInquiryDto!) {
+    addInquiry(inquiryDto: $inquiryDto) {
+      id
+    }
+  }
+`;

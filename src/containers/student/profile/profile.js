@@ -106,20 +106,14 @@ function Profile(props) {
         label: 'Experience Details',
       });
     } else if (item.name === 'Customer Care') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/experience`,
-        label: 'Customer Care',
-      });
+      navigation.navigate(routeNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: "FAQ's",
       });
     } else if (item.name === 'Send Feedback') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/experience`,
-        label: 'Send Feedback',
-      });
+      navigation.navigate(routeNames.SEND_FEEDBACK);
     } else if (item.name === 'About') {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,

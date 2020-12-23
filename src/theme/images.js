@@ -161,6 +161,9 @@ const Images = {
   coin: require('../assets/images/coin.png'),
   activities: require('../assets/images/activities.png'),
   earn: require('../assets/images/earn.png'),
+  call: require('../assets/images/call.png'),
+  email: require('../assets/images/email.png'),
+  whatsapp: require('../assets/images/whatsapp.png'),
 };
 
 export default Images;

@@ -12,9 +12,9 @@ import commonStyles from '../../../theme/styles';
 import { RfH, RfW } from '../../../utils/helpers';
 import { Colors, Fonts, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { studentDetails } from '../../../apollo/cache';
+import { userDetails } from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
-import { SEARCH_QPOINTS_TRANSACTIONS } from '../../common/graphql-query';
+import { SEARCH_QPOINTS_TRANSACTIONS } from '../graphql-query';
 
 function Wallet(props) {
   const navigation = useNavigation();
@@ -26,7 +26,7 @@ function Wallet(props) {
   ]);
   const { changeTab } = props;
 
-  const studentInfo = useReactiveVar(studentDetails);
+  const userInfo = useReactiveVar(userDetails);
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
