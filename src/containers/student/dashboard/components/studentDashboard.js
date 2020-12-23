@@ -1,7 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-undef */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-plusplus */
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
@@ -177,8 +173,8 @@ function StudentDashboard(props) {
       tutorData: item.tutor,
       parentOffering: selectedOffering?.id,
       parentParentOffering: selectedOffering?.parentOffering?.id,
-      parentOfferingName: selectedOffering?.displayName,
-      parentParentOfferingName: selectedOffering?.parentOffering?.displayName,
+      parentOfferingName: selectedOffering?.parentOffering?.displayName,
+      parentParentOfferingName: selectedOffering?.parentOffering?.parentOffering?.displayName,
     });
   };
 
@@ -366,17 +362,10 @@ function StudentDashboard(props) {
 
   const getSubjects = (item) => {
     const subjects = [];
-
     item.tutor.tutorOfferings.map((obj) => {
       if (obj.offerings.find((o) => o.id === selectedOffering?.id)) {
         subjects.push(obj.offerings[0].displayName);
       }
-      // if (
-      //   selectedOffering?.parentOffering?.id === obj.offerings[0].id &&
-      //   selectedOffering?.id === obj.offerings[1].id
-      // ) {
-      //   subjects = `${obj.offerings[2].displayName},${subjects}`;
-      // }
     });
     return subjects.join(', ');
   };

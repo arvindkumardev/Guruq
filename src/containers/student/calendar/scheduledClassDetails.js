@@ -1,14 +1,13 @@
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Modal, ScrollView, Text, View } from 'react-native';
+import { Alert, FlatList, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { RFValue } from 'react-native-responsive-fontsize';
-import moment from 'moment';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
-import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
+import { DateSlotSelectorModal, IconButtonWrapper, RateReview } from '../../../components';
 import BackArrow from '../../../components/BackArrow';
 import Loader from '../../../components/Loader';
 import NavigationRouteNames from '../../../routes/screenNames';
@@ -22,10 +21,12 @@ import styles from '../tutorListing/styles';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
+  const isFocussed = useIsFocused();
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [showBackButton, setShowBackButton] = useState(false);
   const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
   const [classData, setClassData] = useState({});
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
 
   const { route } = props;
 
@@ -45,37 +46,46 @@ function ScheduledClassDetails(props) {
     },
   });
 
+  const [reScheduleClass, { loading: scheduleLoading }] = useMutation(RE_SCHEDULE_CLASS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === DUPLICATE_FOUND) {
+          Alert.alert(error.message);
+        }
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        alertBox('Class rescheduled successfully', '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => {
+            setShowReschedulePopup(false);
+            getClassDetails({ variables: { classId } });
+          },
+        });
+      }
+    },
+  });
+
   useEffect(() => {
-    if (classId) {
+    if (classId && isFocussed) {
       getClassDetails({ variables: { classId } });
     }
-  }, [classId]);
+  }, [classId, isFocussed]);
+
+  useEffect(() => {
+    if (route.params.showReviewModal && isFocussed) {
+      setShowReviewPopup(true);
+    }
+  }, [route.params.showReviewModal, isFocussed]);
 
   const getStudentImageUrl = (filename, gender, id) => {
     return filename
       ? `${API_URL}/${filename}`
       : `${IMAGES_BASE_URL}/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
   };
-
-  const renderAttendees = (item) => (
-    <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
-      <View style={[commonStyles.horizontalChildrenView]}>
-        <IconButtonWrapper
-          iconImage={getStudentImageUrl(item?.profileImage?.filename, item?.contactDetail?.gender, item.id)}
-          iconHeight={RfH(48)}
-          iconWidth={RfH(48)}
-          styling={{ borderRadius: RfH(8) }}
-        />
-        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.headingPrimaryText}>
-            {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
-          </Text>
-          <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
-        </View>
-      </View>
-      {/* <CheckBox checked={item.joined} /> */}
-    </View>
-  );
 
   // const renderAttachments = (item) => {
   //   return (
@@ -92,6 +102,18 @@ function ScheduledClassDetails(props) {
   //     </View>
   //   );
   // };
+
+  const handleTutorDetail = () => {
+    const selectedOffering = classData?.classEntity?.offering;
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
+      tutorData: classData.classEntity.tutor,
+      parentOffering: selectedOffering?.parentOffering?.id,
+      parentParentOffering: selectedOffering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: selectedOffering?.displayName,
+      parentParentOfferingName: selectedOffering?.parentOffering?.displayName,
+    });
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, { classId });
+  };
 
   const goToCancelReason = () => {
     navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId });
@@ -119,29 +141,6 @@ function ScheduledClassDetails(props) {
     setShowBackButton(scrollPosition > 30);
   };
 
-  const [reScheduleClass, { loading: scheduleLoading }] = useMutation(RE_SCHEDULE_CLASS, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        if (error.errorCode === DUPLICATE_FOUND) {
-          Alert.alert(error.message);
-        }
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        alertBox('Class rescheduled successfully', '', {
-          positiveText: 'Ok',
-          onPositiveClick: () => {
-            setShowReschedulePopup(false);
-            getClassDetails({ variables: { classId } });
-          },
-        });
-      }
-    },
-  });
-
   const onScheduleClass = (slot) => {
     reScheduleClass({
       variables: {
@@ -154,6 +153,26 @@ function ScheduledClassDetails(props) {
       },
     });
   };
+
+  const renderAttendees = (item) => (
+    <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
+      <View style={[commonStyles.horizontalChildrenView]}>
+        <IconButtonWrapper
+          iconImage={getStudentImageUrl(item?.profileImage?.filename, item?.contactDetail?.gender, item.id)}
+          iconHeight={RfH(48)}
+          iconWidth={RfH(48)}
+          styling={{ borderRadius: RfH(8) }}
+        />
+        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+          <Text style={commonStyles.headingPrimaryText}>
+            {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
+          </Text>
+          <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
+        </View>
+      </View>
+      {/* <CheckBox checked={item.joined} /> */}
+    </View>
+  );
 
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
@@ -188,7 +207,7 @@ function ScheduledClassDetails(props) {
                 </View>
               </View>
 
-              {moment(classData?.classEntity?.endDate).isAfter(new Date()) && (
+              {classData?.isClassJoinAllowed && (
                 <View style={{}}>
                   <Button
                     block
@@ -253,7 +272,7 @@ function ScheduledClassDetails(props) {
                     </Text>
                   </View>
 
-                  {moment(classData?.classEntity?.endDate).isAfter(new Date()) && (
+                  {classData?.isClassJoinAllowed && (
                     <View>
                       <Button
                         block
@@ -286,7 +305,10 @@ function ScheduledClassDetails(props) {
           <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.tutor_icon} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
         </View>
-        <View style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}>
+        <TouchableOpacity
+          style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}
+          activeOpacity={0.8}
+          onPress={handleTutorDetail}>
           <IconButtonWrapper
             iconImage={getTutorImage(classData?.classEntity?.tutor)}
             iconHeight={RfH(48)}
@@ -300,7 +322,7 @@ function ScheduledClassDetails(props) {
             </Text>
             <Text style={commonStyles.mediumMutedText}>T{classData?.classEntity?.tutor?.id}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
@@ -495,64 +517,6 @@ function ScheduledClassDetails(props) {
           <View style={{ flex: 1 }} />
         </View>
       </Modal>
-      {/* <Modal */}
-      {/*  animationType="fade" */}
-      {/*  backdropOpacity={1} */}
-      {/*  transparent */}
-      {/*  visible={showCancelClassStartedPopup} */}
-      {/*  onRequestClose={() => { */}
-      {/*    setShowCancelClassStartedPopup(false); */}
-      {/*  }}> */}
-      {/*  <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
-      {/*    <View style={{ flex: 1 }} /> */}
-      {/*    <View */}
-      {/*      style={{ */}
-      {/*        flexDirection: 'column', */}
-      {/*        justifyContent: 'flex-start', */}
-      {/*        alignItems: 'stretch', */}
-      {/*        paddingHorizontal: RfW(16), */}
-      {/*      }}> */}
-      {/*      <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}> */}
-      {/*        <IconButtonWrapper */}
-      {/*          iconHeight={RfH(24)} */}
-      {/*          iconWidth={RfW(24)} */}
-      {/*          styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }} */}
-      {/*          iconImage={Images.cross} */}
-      {/*          submitFunction={() => setShowCancelClassStartedPopup(false)} */}
-      {/*        /> */}
-      {/*        <View style={{ padding: RfH(16) }}> */}
-      {/*          <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}> */}
-      {/*            Do you want to re-schedule your class? */}
-      {/*          </Text> */}
-      {/*        </View> */}
-      {/*        <View */}
-      {/*          style={{ */}
-      {/*            flexDirection: 'row', */}
-      {/*            justifyContent: 'space-between', */}
-      {/*            alignItems: 'center', */}
-      {/*            marginTop: RfH(32), */}
-      {/*          }}> */}
-      {/*          <Button */}
-      {/*            onPress={goToCancelReason} */}
-      {/*            block */}
-      {/*            bordered */}
-      {/*            style={{ flex: 1, height: RfH(40), alignSelf: 'center', marginRight: RfW(8) }}> */}
-      {/*            <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}> */}
-      {/*              Cancel Class */}
-      {/*            </Text> */}
-      {/*          </Button> */}
-      {/*          <Button */}
-      {/*            onPress={openRescheduleModal} */}
-      {/*            block */}
-      {/*            style={{ flex: 1, backgroundColor: Colors.brandBlue2, height: RfH(40) }}> */}
-      {/*            <Text style={commonStyles.textButtonPrimary}>Reschedule</Text> */}
-      {/*          </Button> */}
-      {/*        </View> */}
-      {/*      </View> */}
-      {/*    </View> */}
-      {/*    <View style={{ flex: 1 }} /> */}
-      {/*  </View> */}
-      {/* </Modal> */}
       <DateSlotSelectorModal
         visible={showReschedulePopup}
         onClose={() => setShowReschedulePopup(false)}
@@ -560,6 +524,13 @@ function ScheduledClassDetails(props) {
         onSubmit={onScheduleClass}
         isReschedule
       />
+      {showReviewPopup && (
+        <RateReview
+          visible={showReviewPopup}
+          onClose={() => setShowReviewPopup(false)}
+          classDetails={classData?.classEntity}
+        />
+      )}
     </View>
   );
 }
