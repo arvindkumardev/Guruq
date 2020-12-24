@@ -104,20 +104,11 @@ function Profile(props) {
 
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/personal-information`,
-        label: 'Personal Details',
-      });
+      navigation.navigate(routeNames.STUDENT.PERSONAL_DETAILS);
     } else if (item.name === 'Address') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/addresses`,
-        label: 'Address Details',
-      });
+      navigation.navigate(routeNames.ADDRESS);
     } else if (item.name === 'Education') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/education`,
-        label: 'Education Details',
-      });
+      navigation.navigate(routeNames.EDUCATION);
     } else if (item.name === 'Experience') {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,

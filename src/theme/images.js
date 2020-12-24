@@ -42,6 +42,7 @@ const Images = {
   classes: require('../assets/images/classes.png'),
   collapse_grey: require('../assets/images/collapse_grey.png'),
   collapse: require('../assets/images/collapse.png'),
+  confirmed_booking: require('../assets/images/confirmed_booking.png'),
   cross: require('../assets/images/cross.png'),
   customer_care: require('../assets/images/customer-care.png'),
   dash_img1: require('../assets/images/dash-img.png'),
@@ -224,7 +225,6 @@ const Images = {
 
   //------------------------------------------------------------
   book: require('../assets/images/book.png'),
-  confirmed_booking: require('../assets/images/confirmed_booking.png'),
   attendees: require('../assets/images/attendees.png'),
   selected_star: require('../assets/images/selected_star.png'),
 

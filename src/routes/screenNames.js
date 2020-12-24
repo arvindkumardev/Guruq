@@ -19,6 +19,11 @@ const NavigationRouteNames = {
   NOTIFICATIONS: 'notifications',
   SEND_FEEDBACK: 'send_feedback',
   CUSTOMER_CARE: 'customer_care',
+  ADDRESS: 'address',
+  ADD_EDIT_ADDRESS: 'add_edit_address',
+  ADDRESS_MAP_VIEW: 'address_map_view',
+  EDUCATION: 'education',
+  ADD_EDIT_EDUCATION: 'add_edit_education',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',

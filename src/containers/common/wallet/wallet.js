@@ -78,11 +78,15 @@ function Wallet(props) {
           bgColor={Colors.lightPurple}
         />
         <View style={commonStyles.verticallyCenterItemsView}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>₹ 1700.00</Text>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+            ₹ {parseFloat(userInfo.qPoints).toFixed(2)}
+          </Text>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Total Income</Text>
         </View>
         <View style={commonStyles.verticallyCenterItemsView}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>₹ 1400.00</Text>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+            ₹ {parseFloat(userInfo.qPoints).toFixed(2)}
+          </Text>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Expenditure</Text>
         </View>
       </View>
