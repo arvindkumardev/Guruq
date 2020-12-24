@@ -3,7 +3,7 @@
 import { useNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { IconButtonWrapper } from '..';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
@@ -23,6 +23,9 @@ const ScreenHeader = (props) => {
     showRightIcon,
     rightIcon,
     onRightIconClick,
+    showRightText,
+    rightText,
+    onRightTextClick,
   } = props;
 
   const onBackPress = () => {
@@ -56,6 +59,11 @@ const ScreenHeader = (props) => {
                 submitFunction={() => onRightIconClick()}
               />
             )}
+            {showRightText && (
+              <TouchableWithoutFeedback onPress={() => onRightTextClick()}>
+                <Text>{rightText}</Text>
+              </TouchableWithoutFeedback>
+            )}
           </View>
         </View>
       </View>
@@ -73,8 +81,11 @@ ScreenHeader.propTypes = {
   lineVisible: PropTypes.bool,
   homeIcon: PropTypes.bool,
   showRightIcon: PropTypes.bool,
+  showRightText: PropTypes.bool,
+  rightText: PropTypes.string,
   rightIcon: PropTypes.string,
   onRightIconClick: PropTypes.func,
+  onRightTextClick: PropTypes.func,
 };
 
 ScreenHeader.defaultProps = {
@@ -85,9 +96,12 @@ ScreenHeader.defaultProps = {
   horizontalPadding: 0,
   lineVisible: true,
   homeIcon: false,
+  showRightText: false,
   showRightIcon: false,
+  rightText: '',
   rightIcon: null,
   onRightIconClick: null,
+  onRightTextClick: null,
 };
 
 export default ScreenHeader;

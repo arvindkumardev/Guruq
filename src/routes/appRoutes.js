@@ -24,6 +24,7 @@ import { TutorCertificationStageEnum } from '../containers/tutor/enums';
 import CertificationCompletedView from '../containers/tutor/certficationProcess/certificationCompletedView';
 import WebViewPage from '../components/WebViewPage';
 import InterviewPending from '../containers/tutor/interviewPending/interviewPending';
+import Address from '../containers/common/profileScreens/address';
 
 const Stack = createStackNavigator();
 
@@ -169,6 +170,7 @@ const AppStack = (props) => {
             component={UserTypeSelector}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name={NavigationRouteNames.ADDRESS} component={Address} options={{ headerShown: false }} />
         </>
       )}
     </Stack.Navigator>

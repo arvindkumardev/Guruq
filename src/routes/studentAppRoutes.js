@@ -5,7 +5,6 @@ import StudentDashboardContainer from '../containers/student/dashboard/studentDa
 import StudyAreaSelector from '../containers/student/studyArea/studyAreaSelector';
 import BoardSelector from '../containers/student/studyArea/boardSelector';
 import ClassSelector from '../containers/student/studyArea/classSelector';
-import PersonalDetails from '../containers/student/profile/personalDetails';
 import CompareTutors from '../containers/student/tutorListing/compareTutors';
 import TutorListing from '../containers/student/tutorListing/tutorListing';
 import TutorDetails from '../containers/student/tutorDetails/tutorDetails';
@@ -32,6 +31,10 @@ import WebViewPage from '../components/WebViewPage';
 import Notifications from '../containers/student/dashboard/notifications';
 import SendFeedback from '../containers/common/sendFeedback';
 import CustomerCare from '../containers/common/customerCare';
+import PersonalDetails from '../containers/common/profileScreens/personalDetails';
+import Address from '../containers/common/profileScreens/address';
+import AddEditAddress from '../containers/common/profileScreens/addEditAddress';
+import AddressMapView from '../containers/common/profileScreens/addressMapView';
 
 const Stack = createStackNavigator();
 
@@ -185,6 +188,17 @@ export const getStudentRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.CUSTOMER_CARE}
         component={CustomerCare}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.ADDRESS} component={Address} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.ADD_EDIT_ADDRESS}
+        component={AddEditAddress}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.ADDRESS_MAP_VIEW}
+        component={AddressMapView}
         options={{ headerShown: false }}
       />
     </>
