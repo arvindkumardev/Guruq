@@ -15,6 +15,7 @@ import Ratings from './Ratings';
 import Loader from './Loader';
 import BackArrow from './BackArrow';
 import CustomCheckBox from './CustomCheckBox';
+import SelectSubjectModal from './SelectSubjectModal';
 
 export {
   IconButtonWrapper,
@@ -33,4 +34,5 @@ export {
   Loader,
   BackArrow,
   CustomCheckBox,
+  SelectSubjectModal,
 };

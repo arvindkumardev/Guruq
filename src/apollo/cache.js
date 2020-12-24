@@ -20,4 +20,6 @@ export const userLocation = makeVar({});
 
 export const offeringsMasterData = makeVar([]);
 
+export const interestingOfferingData = makeVar([]);
+
 export const notificationPayload = makeVar({});

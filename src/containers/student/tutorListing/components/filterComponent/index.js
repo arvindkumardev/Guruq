@@ -31,7 +31,7 @@ function FilterComponent(props) {
 
   const handleClearFilters = () => {
     setFilterItems([...FILTER_DATA]);
-    setTempFilterList([...TEMP_FILTER_DATA]);
+    // setTempFilterList([...TEMP_FILTER_DATA]);
     setSelectedFilterItem(FILTER_DATA.find((item) => item.id === 6));
     clearFilters();
   };
