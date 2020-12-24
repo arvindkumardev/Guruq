@@ -12,7 +12,7 @@ import { GET_TUTOR_AVAILABILITY } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { RfH, RfW } from '../../utils/helpers';
+import {endOfDay, RfH, RfW, startOfDay} from '../../utils/helpers';
 
 const DateSlotSelectorModal = (props) => {
   const [selectedSlot, setSelectedSlot] = useState({});
@@ -41,8 +41,8 @@ const DateSlotSelectorModal = (props) => {
         tutorAvailability: {
           tutorId,
           studentId,
-          startDate: moment(date).format('yyyy-MM-DD'),
-          endDate: moment(date).format('yyyy-MM-DD'),
+          startDate: startOfDay(date),
+          endDate: endOfDay(date),
         },
       },
     });

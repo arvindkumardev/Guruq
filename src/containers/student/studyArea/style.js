@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     // marginLeft: RfW(36),
   },
   subHeading: {
-    marginTop: RfH(56),
+    marginTop: RfH(40),
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: '#313030',
     textAlign: 'left',
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: RfH(36),
+    marginTop: RfH(20),
   },
   areaView: {
     flex: 0.5,

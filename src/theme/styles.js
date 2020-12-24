@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   lineSeparator: {
     flex: 1,
     borderBottomColor: Colors.borderColor,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.8,
     // marginTop: RfH(16),
     // opacity: 0.5,
   },

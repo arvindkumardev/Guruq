@@ -4,12 +4,12 @@ import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { IconButtonWrapper } from '../../../components';
+import { IconButtonWrapper, SelectSubjectModal } from '../../../components';
 import Loader from '../../../components/Loader';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
+import { getTutorImage, getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_ORDER_ITEMS } from '../booking.query';
 import { OrderStatus } from '../enums';
 import styles from './styles';
@@ -28,6 +28,7 @@ function MyClasses() {
   const [renewClassObj, setRenewClassObj] = useState({});
   const [selectedSubject, setSelectedSubject] = useState({});
   const [openClassModal, setOpenClassModal] = useState(false);
+  const [showAllSubjects, setShowAllSubjects] = useState(false);
 
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
@@ -36,12 +37,12 @@ function MyClasses() {
     },
     onCompleted: (data) => {
       if (data && data?.searchOrderItems && data?.searchOrderItems.edges.length > 0) {
-        setOrderItems(data?.searchOrderItems.edges);
         setIsEmpty(false);
+        setOrderItems(data?.searchOrderItems.edges);
         setRefreshData(true);
       } else {
-        setOrderItems([]);
         setIsEmpty(true);
+        setOrderItems([]);
         setRefreshData(true);
       }
     },
@@ -94,13 +95,14 @@ function MyClasses() {
     navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: item });
   };
 
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
-  };
-
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
     setShowHeader(scrollPosition > 30);
+  };
+
+  const gotoTutors = (subject) => {
+    setShowAllSubjects(false);
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR, { offering: subject });
   };
 
   const onClicked = (isHistory) => {
@@ -242,7 +244,6 @@ function MyClasses() {
         <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
           {showHeader && <Text style={[commonStyles.headingPrimaryText, { alignSelf: 'center' }]}>My Classes</Text>}
         </View>
-
         <ScrollView
           showsVerticalScrollIndicator={false}
           onScroll={(event) => handleScroll(event)}
@@ -318,7 +319,10 @@ function MyClasses() {
                   Looks like you haven't booked any class.
                 </Text>
                 <View style={{ height: RfH(40) }} />
-                <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+                <Button
+                  block
+                  style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+                  onPress={() => setShowAllSubjects(true)}>
                   <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
                 </Button>
               </View>
@@ -334,6 +338,12 @@ function MyClasses() {
             isRenewal
           />
         )}
+
+        <SelectSubjectModal
+          onClose={() => setShowAllSubjects(false)}
+          onSelectSubject={gotoTutors}
+          visible={showAllSubjects}
+        />
       </View>
     </>
   );

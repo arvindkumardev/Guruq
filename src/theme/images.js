@@ -1,5 +1,7 @@
 /* eslint-disable no-dupe-keys */
 /* eslint-disable global-require */
+import SubjectIcons from "./subjectIcons";
+
 const Images = {
   aboutGuru: require('../assets/images/about-guru.png'),
   abroad: require('../assets/images/abroad.png'),
@@ -232,6 +234,10 @@ const Images = {
   b_star: require('../assets/images/b_star.png'),
   coin: require('../assets/images/coin.png'),
   nopytn: require('../assets/images/nopytn.png'),
+
+  emptyFavTutor: require('../assets/images/nopytn.png'),
+  emptyTutorList: require('../assets/images/nopytn.png'),
+  ...SubjectIcons,
 };
 
 export default Images;

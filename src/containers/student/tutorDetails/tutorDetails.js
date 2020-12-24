@@ -549,23 +549,26 @@ function TutorDetails(props) {
           </View>
         )}
       </View>
-      <View style={commonStyles.horizontalChildrenStartView}>
-        <TouchableOpacity onPress={addToCompare} style={styles.markFavouriteView}>
+      <View style={[commonStyles.horizontalChildrenStartView, { justifyContent: 'center', alignItems: 'center' }]}>
+        <View>
+          <Text> Add to compare</Text>
+        </View>
+        <TouchableOpacity onPress={addToCompare} style={[styles.markFavouriteView]}>
           <IconButtonWrapper
             iconWidth={RfW(16)}
             iconHeight={RfH(16)}
             iconImage={
               compareData.some((item) => item.id === tutorData.id) ? Images.checkbox_selected : Images.checkbox
             }
-            styling={{ marginHorizontal: RfW(16) }}
+            styling={{ marginHorizontal: RfW(8) }}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.markFavouriteView} onPress={markFavouriteTutor}>
+        <TouchableOpacity style={styles.markFavouriteView} onPress={markFavouriteTutor} activeOpacity={0.8}>
           <IconButtonWrapper
             iconWidth={RfW(16)}
             iconHeight={RfH(16)}
             iconImage={isFavourite ? Images.heartFilled : Images.heart}
-            styling={{ marginHorizontal: RfW(16) }}
+            styling={{ marginHorizontal: RfW(8) }}
           />
         </TouchableOpacity>
       </View>
@@ -634,7 +637,11 @@ function TutorDetails(props) {
         commonStyles.mainContainer,
         { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
       ]}>
-      <Loader isLoading={favouriteLoading || removeFavouriteLoading || loadingTutors || loadingTutorsOffering||isEmpty(tutorData)} />
+      <Loader
+        isLoading={
+          favouriteLoading || removeFavouriteLoading || loadingTutors || loadingTutorsOffering || isEmpty(tutorData)
+        }
+      />
       {!isEmpty(tutorData) && (
         <>
           {topHeaderComponent()}

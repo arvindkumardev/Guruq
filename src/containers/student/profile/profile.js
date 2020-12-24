@@ -1,7 +1,17 @@
 import { useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import {
+  BackHandler,
+  FlatList,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import initializeApollo from '../../../apollo/apollo';
@@ -11,7 +21,7 @@ import IconWrapper from '../../../components/IconWrapper';
 import { default as NavigationRouteNames, default as routeNames } from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 
 function Profile(props) {
@@ -32,8 +42,8 @@ function Profile(props) {
     { name: 'Education', icon: Images.education },
   ]);
   const [myStudyData, setMyStudyData] = useState([
-    { name: 'Add Study Area', icon: Images.personal },
-    { name: 'Modify Study Area', icon: Images.home },
+    { name: 'Add Study Area', icon: Images.study_area },
+    { name: 'Modify Study Area', icon: Images.edit },
   ]);
   const [bookingData, setBookingData] = useState([
     { name: 'Purchased History', icon: Images.personal },
@@ -84,6 +94,14 @@ function Profile(props) {
     });
   };
 
+  const logoutConfirmation = () => {
+    alertBox('Do you really want to logout?', '', {
+      positiveText: 'Yes',
+      onPositiveClick: logout,
+      negativeText: 'No',
+    });
+  };
+
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
       navigation.navigate(routeNames.WEB_VIEW, {
@@ -130,6 +148,8 @@ function Profile(props) {
       changeTab(2);
     } else if (item.name === 'Upcoming Classes') {
       changeTab(3);
+    } else if (item.name === 'Add Study Area') {
+      navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
     } else {
       return null;
     }
@@ -252,7 +272,12 @@ function Profile(props) {
             <TouchableWithoutFeedback
               onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
               style={[styles.userMenuParentView, , { height: 60 }]}>
-              <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
+              <IconWrapper
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                iconImage={Images.profile}
+                imageResizeMode="contain"
+              />
 
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>My Account</Text>
@@ -283,7 +308,7 @@ function Profile(props) {
 
           <TouchableWithoutFeedback onPress={() => setIsStudyMenuOpen(!isStudyMenuOpen)}>
             <View style={styles.userMenuParentView}>
-              <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.book} />
+              <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.book} imageResizeMode="contain" />
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>My Study Area</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -368,41 +393,33 @@ function Profile(props) {
           )}
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.FAVOURITE_TUTOR)}>
-            <View style={styles.userMenuParentView}>
-              <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
-              <View style={styles.menuItemParentView}>
-                <Text style={styles.menuItemPrimaryText}>My Favourites</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Add and remove your favourite tutors
-                </Text>
-              </View>
-              <IconWrapper
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-                iconImage={isFavouriteOpen ? Images.collapse_grey : Images.expand_gray}
-              />
+          <TouchableOpacity
+            onPress={() => navigation.navigate(routeNames.STUDENT.FAVOURITE_TUTOR)}
+            style={styles.userMenuParentView}
+            activeOpacity={0.8}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>My Favourites</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Manage your favourite tutors
+              </Text>
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
 
           <View style={commonStyles.blankGreyViewSmall} />
 
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.REFER_EARN)}>
-            <View style={[styles.userMenuParentView]}>
-              <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
-              <View style={styles.menuItemParentView}>
-                <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Send invitation to friend and earn
-                </Text>
-              </View>
-              <IconWrapper
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-                iconImage={isReferFriendMenuOpen ? Images.collapse_grey : Images.expand_gray}
-              />
+          <TouchableOpacity
+            onPress={() => navigation.navigate(routeNames.REFER_EARN)}
+            style={[styles.userMenuParentView]}
+            activeOpacity={0.8}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Send invitation to friend and earn
+              </Text>
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
 
           <View style={commonStyles.blankGreyViewSmall} />
 
@@ -487,22 +504,10 @@ function Profile(props) {
           <View style={[styles.userMenuParentView]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" iconImage={Images.logOut} />
             <View style={styles.menuItemParentView}>
-              <TouchableOpacity onPress={logout}>
+              <TouchableOpacity onPress={logoutConfirmation}>
                 <Text style={styles.menuItemPrimaryText}>Logout</Text>
               </TouchableOpacity>
-
-              {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-            Calendar, Schedule Class, Renew Class, Class...
-         </Text> */}
             </View>
-            {/* <TouchableWithoutFeedback onPress={() => setIsLogout(!isLogout)}>
-          <IconWrapper
-            iconWidth={RfW(24)}
-            iconHeight={RfH(24)}
-
-            iconImage={isLogout ? Images.collapse_grey : Images.expand_gray}
-          />
-        </TouchableWithoutFeedback> */}
           </View>
           {/* <View style={commonStyles.lineSeparator} /> */}
           <View

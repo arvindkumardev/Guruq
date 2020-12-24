@@ -113,12 +113,9 @@ const PaymentMethod = (props) => {
       redirect: 'follow',
     };
 
-    console.log("requestOptions",requestOptions)
     const response = await fetch('http://apiv2.guruq.in/api/payment/initiatePaytmTransaction', requestOptions);
 
     const data = await response.json();
-
-    console.log(data);
 
     if (data.error) {
       Alert.alert('PayTm is not available right now, please try again later!');
@@ -128,7 +125,7 @@ const PaymentMethod = (props) => {
       const { mid } = data.paytmParams.body;
       const { orderId } = data.paytmParams.body;
       const { txnToken } = data.body;
-      const amount = data.paytmParams.body.txnAmount.value;
+      const amount = data.paytmParams.body.txnAmount.value.toString();
       const callback = `https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=${orderId}`;
       const isStaging = true;
 

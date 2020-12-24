@@ -85,7 +85,9 @@ export const SEARCH_QPOINTS_TRANSACTIONS = gql`
           actionType
           description
           points
+          title
         }
+        createdDate
       }
     }
   }

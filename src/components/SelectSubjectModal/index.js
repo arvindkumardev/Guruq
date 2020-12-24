@@ -1,55 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, Modal, Text, View, TouchableOpacity } from 'react-native';
+import { useReactiveVar } from '@apollo/client';
 import { Colors, Images } from '../../theme';
 import { getSubjectIcons, RfH, RfW } from '../../utils/helpers';
 import IconButtonWrapper from '../IconWrapper';
 import commonStyles from '../../theme/styles';
+import { interestingOfferingData, offeringsMasterData } from '../../apollo/cache';
 
 const SelectSubjectModal = (props) => {
-  const { visible, onClose, onSelectSubject, subjects } = props;
+  const { visible, onClose, onSelectSubject } = props;
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
+  const interestedOfferings = useReactiveVar(interestingOfferingData);
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    if (visible) {
+      setSubjects(
+        offeringMasterData.filter(
+          (s) => s?.parentOffering?.id === interestedOfferings.find((offering) => offering.selected)?.offering?.id
+        )
+      );
+    }
+  }, [visible]);
 
   const renderSubjects = (item) => (
-    <View style={{ marginTop: RfH(20), flex: 1 }}>
-      <TouchableOpacity
-        onPress={() => onSelectSubject(item)}
+    <TouchableOpacity
+      onPress={() => onSelectSubject(item)}
+      style={{
+        flexDirection: 'column',
+        marginTop: RfH(20),
+        flex: 0.25,
+      }}>
+      <View
         style={{
           flexDirection: 'column',
-          justifyContent: 'flex-end',
-          alignItems: 'stretch',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginHorizontal: RfW(5),
+          borderRadius: RfW(8),
         }}>
-        <>
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: RfH(64),
-              width: RfW(64),
-              marginHorizontal: RfW(4),
-              borderRadius: RfW(8),
-            }}>
-            <IconButtonWrapper
-              iconWidth={RfW(64)}
-              styling={{ alignSelf: 'center' }}
-              iconHeight={RfH(64)}
-              imageResizeMode="contain"
-              iconImage={getSubjectIcons(item.displayName)}
-            />
-          </View>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 12,
-              width: RfW(70),
-              color: Colors.primaryText,
-              marginTop: RfH(5),
-            }}>
-            {item.displayName}
-          </Text>
-        </>
-      </TouchableOpacity>
-    </View>
+        <IconButtonWrapper
+          iconWidth={RfW(64)}
+          styling={{ alignSelf: 'center' }}
+          iconHeight={RfH(64)}
+          imageResizeMode="contain"
+          iconImage={getSubjectIcons(item.displayName)}
+        />
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 12,
+            color: Colors.primaryText,
+            marginTop: RfH(5),
+          }}>
+          {item.displayName}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -67,8 +75,8 @@ const SelectSubjectModal = (props) => {
             alignItems: 'stretch',
             backgroundColor: Colors.white,
             paddingHorizontal: RfW(16),
-            paddingTop: RfH(16),
-            height: '90%',
+            paddingVertical: RfH(20),
+            maxHeight: '90%',
           }}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
@@ -98,14 +106,12 @@ SelectSubjectModal.defaultProps = {
   visible: false,
   onClose: null,
   onSelectSubject: null,
-  subjects: [],
 };
 
 SelectSubjectModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
   onSelectSubject: PropTypes.func,
-  subjects: PropTypes.array,
 };
 
 export default SelectSubjectModal;

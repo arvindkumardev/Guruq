@@ -5,7 +5,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors } from '../../../theme';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { STANDARD_SCREEN_SIZE, STUDY_AREA_LEVELS } from '../../../utils/constants';
 import { RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
 import NavigationRouteNames from '../../../routes/screenNames';
@@ -16,13 +16,15 @@ import BackArrow from '../../../components/BackArrow';
 import { GET_INTERESTED_OFFERINGS } from '../dashboard-query';
 import Loader from '../../../components/Loader';
 
+const BACKGROUND_COLOR = [Colors.lightOrange, Colors.lightGreen, Colors.lightPurple, Colors.lightBlue];
 function ClassSelector(props) {
   const navigation = useNavigation();
-
   const { route } = props;
-  const { board } = route.params;
+  const { board, studyArea } = route.params;
 
   const offeringMasterData = useReactiveVar(offeringsMasterData);
+  const studyAreaObj = STUDY_AREA_LEVELS[studyArea.name];
+  const listData = offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === board.id);
 
   const [getInterestedOfferings, { loading: interestedOfferingsLoading }] = useLazyQuery(GET_INTERESTED_OFFERINGS, {
     fetchPolicy: 'no-cache',
@@ -71,21 +73,11 @@ function ClassSelector(props) {
           style={[
             styles.areaView,
             {
-              // height: RfH(54),
               marginHorizontal: RfW(8),
               marginVertical: RfW(8),
               height: RfH(100),
               width: RfW(100),
-              backgroundColor:
-                // Colors.lightGrey,
-                index % 4 === 0
-                  ? Colors.lightOrange
-                  : index % 4 === 1
-                  ? Colors.lightGreen
-                  : index % 4 === 2
-                  ? Colors.lightPurple
-                  : Colors.lightBlue,
-              // flex: 0,
+              backgroundColor: BACKGROUND_COLOR[index % 4],
               justifyContent: 'center',
               alignItems: 'center',
             },
@@ -122,16 +114,18 @@ function ClassSelector(props) {
               marginLeft: RfH(16),
               alignSelf: 'center',
             }}>
-            Select Your Level
+            Select Your {studyAreaObj.find((item) => item.level === 2)?.label}
           </Text>
         </View>
         <View style={[commonStyles.areaParentView, { paddingTop: RfH(44), marginBottom: RfH(98) }]}>
           <FlatList
-            data={offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === board.id)}
+            data={listData}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => renderItem(item, index)}
             keyExtractor={(item, index) => index.toString()}
+            scrollEnabled={listData.length > 5}
             numColumns={2}
+            ListFooterComponent={<View style={{ height: RfH(100) }} />}
           />
         </View>
       </View>

@@ -8,7 +8,7 @@ import { useMutation } from '@apollo/client';
 import { CustomRadioButton, IconButtonWrapper, Loader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, RfH, RfW } from '../../../../utils/helpers';
 import routeNames from '../../../../routes/screenNames';
 import styles from './styles';
 import { ADD_TO_CART } from '../../booking.mutation';
@@ -88,18 +88,22 @@ const ClassModeSelectModal = (props) => {
   };
 
   const onAddingIntoCart = () => {
-    const cartCreate = {
-      tutorOfferingId: selectedSubject.offeringId,
-      count: numberOfClass,
-      groupSize: 1,
-      demo: isDemoClass,
-      onlineClass: isOnlineClassMode,
-      price: amount,
-      renewal: isRenewal,
-    };
-    addToCart({
-      variables: { cartCreateDto: cartCreate },
-    });
+    if (amount > 0) {
+      const cartCreate = {
+        tutorOfferingId: selectedSubject.offeringId,
+        count: numberOfClass,
+        groupSize: 1,
+        demo: isDemoClass,
+        onlineClass: isOnlineClassMode,
+        price: amount,
+        renewal: isRenewal,
+      };
+      addToCart({
+        variables: { cartCreateDto: cartCreate },
+      });
+    } else {
+      alertBox('Error', 'Amount should be greater than zero for booking');
+    }
   };
 
   return (
@@ -207,7 +211,7 @@ const ClassModeSelectModal = (props) => {
               </View>
             )}
             <View style={{ alignSelf: 'center', marginTop: RfH(32) }}>
-              <Button onPress={() => onAddingIntoCart()} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+              <Button onPress={onAddingIntoCart} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
                 <Text style={commonStyles.textButtonPrimary}>Add to Cart</Text>
               </Button>
             </View>

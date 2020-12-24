@@ -202,7 +202,7 @@ const MyCart = () => {
       groupSize: 1,
       demo: false,
       onlineClass: item.onlineClass,
-      price: item.price / item.count,
+      price: item.mrp / item.count,
     };
     addToCart({
       variables: { cartCreateDto: cartCreate },
@@ -643,7 +643,7 @@ const MyCart = () => {
       <PaymentMethodModal
         visible={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
-        bookingData={{ itemPrice: amount, redeemQPoints: qPointsRedeem }}
+        bookingData={{ itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeem) }}
         amount={amount}
         deductedAgaintQPoint={qPointsRedeem}
         // discount={appliedCouponValue}

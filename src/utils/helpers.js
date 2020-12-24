@@ -177,96 +177,96 @@ export const monthNames = [
 ];
 
 export const getSubjectIcons = (name) => {
-  let icon = '';
-  switch (name) {
-    case 'Accounts':
-      icon = SubjectIcons.accounts;
-      break;
-    case 'Accountancy':
-      icon = SubjectIcons.accountancy;
-      break;
-    case 'Chemistry':
-      icon = SubjectIcons.chemistry;
-      break;
-    case 'Civics':
-      icon = SubjectIcons.civics;
-      break;
-    case 'Computer Science':
-      icon = SubjectIcons.computer_science;
-      break;
-    case 'Biology':
-      icon = SubjectIcons.biology;
-      break;
-    case 'Business Studies':
-      icon = SubjectIcons.business_studies;
-      break;
-    case 'Hindi':
-      icon = SubjectIcons.hindi;
-      break;
-    case 'Geography':
-      icon = SubjectIcons.geography;
-      break;
-    case 'English':
-      icon = SubjectIcons.english;
-      break;
-    case 'Engineering':
-      icon = SubjectIcons.engineering;
-      break;
-    case 'Economics':
-      icon = SubjectIcons.economics;
-      break;
-    case 'History':
-      icon = SubjectIcons.history;
-      break;
-    case 'Law':
-      icon = SubjectIcons.law;
-      break;
-    case 'Mathematics':
-      icon = SubjectIcons.maths;
-      break;
-    case 'Medical':
-      icon = SubjectIcons.medical;
-      break;
-    case 'Physical Education':
-      icon = SubjectIcons.physical_education;
-      break;
-    case 'Sociology':
-      icon = SubjectIcons.sociology;
-      break;
-    case 'Sanskrit':
-      icon = SubjectIcons.sanskrit;
-      break;
-    case 'Spanish':
-      icon = SubjectIcons.spanish;
-      break;
-    case 'Russian':
-      icon = SubjectIcons.russian;
-      break;
-    case 'French':
-      icon = SubjectIcons.french;
-      break;
-    case 'German':
-      icon = SubjectIcons.german;
-      break;
-    case 'Chinese':
-      icon = SubjectIcons.chinese;
-      break;
-    case 'Psychology':
-      icon = SubjectIcons.psychology;
-      break;
-    case 'Political Science':
-      icon = SubjectIcons.political_science;
-      break;
-    case 'Physics':
-      icon = SubjectIcons.physics;
-      break;
-    case 'ssc-govt':
-      icon = SubjectIcons.ssc_govt;
-      break;
-    default:
-      icon = Images.book;
-  }
-  return icon;
+  // let icon = '';
+  // switch (name) {
+  //   case 'Accounts':
+  //     icon = SubjectIcons.accounts;
+  //     break;
+  //   case 'Accountancy':
+  //     icon = SubjectIcons.accountancy;
+  //     break;
+  //   case 'Chemistry':
+  //     icon = SubjectIcons.chemistry;
+  //     break;
+  //   case 'Civics':
+  //     icon = SubjectIcons.civics;
+  //     break;
+  //   case 'Computer Science':
+  //     icon = SubjectIcons.computer_science;
+  //     break;
+  //   case 'Biology':
+  //     icon = SubjectIcons.biology;
+  //     break;
+  //   case 'Business Studies':
+  //     icon = SubjectIcons.business_studies;
+  //     break;
+  //   case 'Hindi':
+  //     icon = SubjectIcons.hindi;
+  //     break;
+  //   case 'Geography':
+  //     icon = SubjectIcons.geography;
+  //     break;
+  //   case 'English':
+  //     icon = SubjectIcons.english;
+  //     break;
+  //   case 'Engineering':
+  //     icon = SubjectIcons.engineering;
+  //     break;
+  //   case 'Economics':
+  //     icon = SubjectIcons.economics;
+  //     break;
+  //   case 'History':
+  //     icon = SubjectIcons.history;
+  //     break;
+  //   case 'Law':
+  //     icon = SubjectIcons.law;
+  //     break;
+  //   case 'Mathematics':
+  //     icon = SubjectIcons.maths;
+  //     break;
+  //   case 'Medical':
+  //     icon = SubjectIcons.medical;
+  //     break;
+  //   case 'Physical Education':
+  //     icon = SubjectIcons.physical_education;
+  //     break;
+  //   case 'Sociology':
+  //     icon = SubjectIcons.sociology;
+  //     break;
+  //   case 'Sanskrit':
+  //     icon = SubjectIcons.sanskrit;
+  //     break;
+  //   case 'Spanish':
+  //     icon = SubjectIcons.spanish;
+  //     break;
+  //   case 'Russian':
+  //     icon = SubjectIcons.russian;
+  //     break;
+  //   case 'French':
+  //     icon = SubjectIcons.french;
+  //     break;
+  //   case 'German':
+  //     icon = SubjectIcons.german;
+  //     break;
+  //   case 'Chinese':
+  //     icon = SubjectIcons.chinese;
+  //     break;
+  //   case 'Psychology':
+  //     icon = SubjectIcons.psychology;
+  //     break;
+  //   case 'Political Science':
+  //     icon = SubjectIcons.political_science;
+  //     break;
+  //   case 'Physics':
+  //     icon = SubjectIcons.physics;
+  //     break;
+  //   case 'ssc-govt':
+  //     icon = SubjectIcons.ssc_govt;
+  //     break;
+  //   default:
+  //     icon = Images.book;
+  // }
+  return Images[name.toLowerCase().replace(' ', '_')] ? Images[name.toLowerCase().replace(' ', '_')] : Images.english;
 };
 
 export const formatDate = (date, format) => {
@@ -282,4 +282,12 @@ export const printDateTime = (date) => {
 
 export const printTime = (date) => {
   return formatDate(date, 'hh:mm a');
+};
+
+export const startOfDay = (date) => {
+  return `${moment(date).format('YYYY-MM-DDT00:00:00')}Z`;
+};
+
+export const endOfDay = (date) => {
+  return `${moment(date).format('YYYY-MM-DDT23:59:59')}Z`;
 };

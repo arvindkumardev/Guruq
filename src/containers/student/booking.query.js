@@ -45,6 +45,7 @@ export const GET_CART_ITEMS = gql`
       groupSize
       price
       demo
+      mrp
       onlineClass
       pointsRedeemed
       payees {

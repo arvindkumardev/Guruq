@@ -42,7 +42,7 @@ function PostTutionNeedDetails(props) {
   const submitPYTN = () => {
     if (minPrice === 0 || maxPrice === 0) {
       alertBox('Please provide minimum and maximum price');
-    } else if (maxPrice < minPrice) {
+    } else if (parseFloat(maxPrice) < parseFloat(minPrice)) {
       alertBox('Maximum price should be greater than or equal to minimum price');
     } else {
       const offeringArray = [];

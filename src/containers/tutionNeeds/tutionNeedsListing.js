@@ -1,65 +1,110 @@
 /* eslint-disable no-restricted-syntax */
-import { FlatList, Image, ScrollView, Text, View } from 'react-native';
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { isEmpty } from 'lodash';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button } from 'native-base';
 import { Colors, Fonts, Images } from '../../theme';
 import routeNames from '../../routes/screenNames';
-import { getSubjectIcons, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getSubjectIcons, RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
 import Loader from '../../components/Loader';
 import { GET_TUTION_NEED_LISTING } from './pytn.query';
 import { offeringsMasterData, studentDetails } from '../../apollo/cache';
+import { DELETE_STUDENT_PYTN } from './pytn.mutation';
 
 function TutionNeedsListing(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const studentInfo = useReactiveVar(studentDetails);
-  const {selectedOffering} = props.route.params
+  const { selectedOffering } = props.route.params;
 
   const [orderItems, setOrderItems] = useState([]);
+  const [isListEmpty, setIsListEmpty] = useState(false);
+
+  // const [getTutorNeedsAccepted, { loading: loadingTutionNeedss }] = useLazyQuery(GET_ACCEPTED_TUTOR_NEED, {
+  //   onError: (e) => {
+  //     console.log('e', e);
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       console.log(data);
+  //       setOrderItems(data?.searchStudentPYTN?.edges);
+  //     }
+  //   },
+  // });
 
   const [getTutionNeeds, { loading: loadingTutionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
+    fetchPolicy: 'no-cache',
     onError: (e) => {
-      console.log('e', e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
     },
     onCompleted: (data) => {
       if (data) {
+        setIsListEmpty(data?.searchStudentPYTN?.edges.length === 0);
         setOrderItems(data?.searchStudentPYTN?.edges);
+      }
+    },
+  });
+
+  const [deletePYTN, { loading: pytnLoading }] = useMutation(DELETE_STUDENT_PYTN, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
       }
     },
   });
 
   useEffect(() => {
     if (isFocussed) {
-      getTutionNeeds({ variables: { searchDto: { id: studentInfo.id, offering: { id: selectedOffering.id } } } });
+      getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
     }
   }, [isFocussed]);
 
+  const getRootOfferingName = (offering) =>
+    offeringMasterData.find((item) => item.id === offering?.offering?.id)?.rootOffering?.displayName;
+
+  const removePytn = (item) => {
+    alertBox('Do you really want to remove the request', '', {
+      positiveText: 'Yes',
+      onPositiveClick: () => {
+        deletePYTN({ variables: { studentPytnId: item.id } });
+      },
+      negativeText: 'No',
+    });
+  };
+
   const renderClassItem = (item) => (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTION_NEEDS_HISTORY, { data: item })}>
-      <View>
-        <View style={{ height: RfH(40) }} />
+    <>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(routeNames.TUTION_NEEDS_HISTORY, { data: item })}
+        activeOpacity={1}>
+        <View style={{ height: RfH(35) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={commonStyles.headingPrimaryText}>{item?.offering?.rootOffering?.displayName}</Text>
+          <View>
+            <Text style={commonStyles.headingPrimaryText}>{getRootOfferingName(item)}</Text>
+            <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+              {item?.offering?.parentOffering?.parentOffering?.displayName}
+              {' | '}
+              {item?.offering?.parentOffering?.displayName}
+            </Text>
+          </View>
           <Text style={commonStyles.headingPrimaryText}>₹ {`${item.minPrice}-${item.maxPrice}`}</Text>
-        </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item?.offering?.parentOffering?.parentOffering?.displayName}
-            {' | '}
-            {item?.offering?.parentOffering?.displayName}
-          </Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
@@ -101,13 +146,13 @@ function TutionNeedsListing(props) {
             <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
           </View>
         </View>
-        <View style={[commonStyles.lineSeparator, { marginTop: RfH(16) }]} />
-        <View style={{ marginVertical: RfH(16) }}>
-          <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
-        </View>
-        <View style={commonStyles.lineSeparator} />
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableOpacity>
+      <View style={[commonStyles.lineSeparator, { marginTop: RfH(16) }]} />
+      <TouchableOpacity style={{ paddingVertical: RfH(16) }} onPress={() => removePytn(item)}>
+        <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
+      </TouchableOpacity>
+      <View style={commonStyles.lineSeparator} />
+    </>
   );
 
   const addRequestHandle = () => {
@@ -125,7 +170,7 @@ function TutionNeedsListing(props) {
         showRightIcon
         onRightIconClick={addRequestHandle}
       />
-      {!isEmpty(orderItems) && (
+      {!isListEmpty && (
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ paddingHorizontal: RfW(16) }}>
             <FlatList
@@ -139,7 +184,7 @@ function TutionNeedsListing(props) {
         </ScrollView>
       )}
 
-      {isEmpty(orderItems) && (
+      {isListEmpty && (
         <View style={{ flex: 1, paddingTop: RfH(100), alignItems: 'center' }}>
           <Image
             source={Images.nopytn}

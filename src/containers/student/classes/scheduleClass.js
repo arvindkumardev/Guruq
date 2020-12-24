@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/react-hooks';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
@@ -10,11 +10,11 @@ import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader } from '../
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
+import { getTutorImage, RfH, RfW } from '../../../utils/helpers';
 import { SCHEDULE_CLASS } from '../class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../booking.query';
 import { studentDetails } from '../../../apollo/cache';
-import routeNames from '../../../routes/screenNames';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function ScheduleClass(props) {
   const navigation = useNavigation();
@@ -74,8 +74,6 @@ function ScheduleClass(props) {
     },
   });
 
-
-
   useEffect(() => {
     if (classData) {
       const classes = [];
@@ -89,10 +87,6 @@ function ScheduleClass(props) {
 
   const onBackPress = () => {
     navigation.goBack();
-  };
-
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
   };
 
   const showSlotPopup = () => {
@@ -112,7 +106,17 @@ function ScheduleClass(props) {
   };
 
   const classDetailNavigation = (classId) => {
-    navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+  };
+
+  const tutorDetail = (item) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
+      tutorId: item.tutor.id,
+      parentOffering: item.offering?.parentOffering?.id,
+      parentParentOffering: item.offering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: item.offering?.parentOffering?.displayName,
+      parentParentOfferingName: item.offering?.parentOffering?.parentOffering?.displayName,
+    });
   };
 
   const renderTutorDetails = () => (
@@ -127,7 +131,7 @@ function ScheduleClass(props) {
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(20) }]}>
-        <View style={commonStyles.horizontalChildrenStartView}>
+        <TouchableOpacity style={commonStyles.horizontalChildrenStartView} onPress={() => tutorDetail(classData)}>
           <View style={commonStyles.verticallyStretchedItemsView}>
             <IconButtonWrapper
               styling={{ borderRadius: RfH(32) }}
@@ -153,7 +157,7 @@ function ScheduleClass(props) {
               {classData?.onlineClass ? 'Online' : 'Offline'} Classes
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

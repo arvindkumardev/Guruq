@@ -1,11 +1,12 @@
 import { ScrollView, Text, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
-import { Images, Colors } from '../../../theme';
-import { getSaveData, getUserImageUrl, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { Colors, Images } from '../../../theme';
+import { getSaveData, getTutorImage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
@@ -24,10 +25,6 @@ function compareTutors() {
     navigation.goBack();
   };
 
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
-  };
-
   const renderTutorView = (item, index) => {
     return (
       <View style={commonStyles.verticallyStretchedItemsView}>
@@ -35,6 +32,7 @@ function compareTutors() {
           iconWidth={RfH(18)}
           iconHeight={RfH(18)}
           iconImage={Images.cross}
+          imageResizeMode="contain"
           styling={styles.crossIcon}
           submitFunction={() => removeFromCompare(index)}
         />
@@ -42,7 +40,7 @@ function compareTutors() {
           iconWidth={RfH(70)}
           iconHeight={RfH(70)}
           iconImage={getTutorImage(item)}
-          imageResizeMode="cover"
+          imageResizeMode="contain"
           styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
         />
         <Text style={styles.compareTutorName}>
@@ -55,6 +53,7 @@ function compareTutors() {
             iconHeight={RfH(18)}
             iconWidth={RfH(18)}
             iconImage={Images.heart}
+            imageResizeMode={'contain'}
             styling={{ marginHorizontal: RfW(16) }}
           />
           <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfH(18)} iconImage={Images.share} />
@@ -65,11 +64,19 @@ function compareTutors() {
       </View>
     );
   };
+  //
+  // const getTutorData=(offerings)=>{
+  //     const data = {online:false,offline:false,demo:false,price:0}
+  //     offerings.forEach(offering=>{
+  //         offering.budgets.forEach()
+  //
+  //     })
+  //
+  // }
 
   const checkCompare = async () => {
     let compareArray = [];
     compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
-    console.log(compareArray);
     setTutorData(compareArray);
   };
 
@@ -89,12 +96,14 @@ function compareTutors() {
               iconWidth={RfW(76)}
               iconHeight={RfH(13)}
               iconImage={Images.four_stars}
+              imageResizeMode="contain"
               styling={{ marginHorizontal: RfH(6) }}
             />
             <IconButtonWrapper
               iconWidth={RfW(13)}
               iconHeight={RfH(13)}
               iconImage={Images.grey_star}
+              imageResizeMode="contain"
               styling={{ alignSelf: 'center' }}
             />
           </View>
@@ -158,6 +167,7 @@ function compareTutors() {
                 iconWidth={RfW(18)}
                 iconImage={Images.laptop}
                 styling={{ alignSelf: 'center' }}
+                imageResizeMode="contain"
               />
               <Text style={styles.typeItemText}>Online</Text>
             </View>
@@ -166,6 +176,7 @@ function compareTutors() {
                 iconHeight={RfH(13)}
                 iconWidth={RfW(18)}
                 iconImage={Images.home}
+                imageResizeMode="contain"
                 styling={{ alignSelf: 'center' }}
               />
               <Text style={styles.typeItemText}>Offline</Text>
@@ -177,6 +188,7 @@ function compareTutors() {
                 iconHeight={RfH(11)}
                 iconWidth={RfW(18)}
                 iconImage={Images.laptop}
+                imageResizeMode="contain"
                 styling={{ alignSelf: 'center' }}
               />
               <Text style={styles.typeItemText}>Online</Text>
@@ -186,6 +198,7 @@ function compareTutors() {
                 iconHeight={RfH(13)}
                 iconWidth={RfW(18)}
                 iconImage={Images.home}
+                imageResizeMode="contain"
                 styling={{ alignSelf: 'center' }}
               />
               <Text style={styles.typeItemText}>Offline</Text>
@@ -201,6 +214,7 @@ function compareTutors() {
                 iconHeight={RfH(11)}
                 iconWidth={RfW(18)}
                 iconImage={Images.single_user}
+                imageResizeMode="contain"
                 styling={{ alignSelf: 'center' }}
               />
               <Text style={styles.typeItemText}>Individual</Text>
@@ -210,6 +224,7 @@ function compareTutors() {
                 iconHeight={RfH(13)}
                 iconWidth={RfW(18)}
                 iconImage={Images.multiple_user}
+                imageResizeMode="contain"
                 styling={{ alignSelf: 'center' }}
               />
               <Text style={styles.typeItemText}>Group</Text>
@@ -221,6 +236,7 @@ function compareTutors() {
                 iconHeight={RfH(11)}
                 iconWidth={RfW(18)}
                 iconImage={Images.single_user}
+                imageResizeMode="contain"
                 styling={{ alignSelf: 'center' }}
               />
               <Text style={styles.typeItemText}>Individual</Text>
@@ -230,6 +246,7 @@ function compareTutors() {
                 iconHeight={RfH(13)}
                 iconWidth={RfW(18)}
                 iconImage={Images.multiple_user}
+                imageResizeMode="contain"
                 styling={{ alignSelf: 'center' }}
               />
               <Text style={styles.typeItemText}>Group</Text>
@@ -243,13 +260,15 @@ function compareTutors() {
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
       <ScreenHeader label="Compare Tutors" horizontalPadding={16} lineVisible homeIcon />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8), paddingHorizontal: RfW(16) }]}>
-          <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[0], 0)}</View>
-          <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[1], 1)}</View>
-        </View>
-        <View>{renderBasicInfoView(tutorData)}</View>
-      </ScrollView>
+      {!isEmpty(tutorData) && (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8), paddingHorizontal: RfW(16) }]}>
+            <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[0], 0)}</View>
+            <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[1], 1)}</View>
+          </View>
+          <View>{renderBasicInfoView(tutorData)}</View>
+        </ScrollView>
+      )}
     </View>
   );
 }

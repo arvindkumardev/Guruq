@@ -36,8 +36,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   markFavouriteView: {
-    height: RfH(44),
-    width: RfW(44),
     justifyContent: 'center',
     alignItems: 'center',
   },

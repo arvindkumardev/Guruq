@@ -13,7 +13,7 @@ import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 
 function TutorListCard(props) {
-  const { tutor, offering, markFavouriteTutor, isFavourite } = props;
+  const { tutor, offering, markFavouriteTutor, isFavourite, isSponsored } = props;
   const navigation = useNavigation();
 
   const getTutorImage = (tutor) => {
@@ -74,7 +74,7 @@ function TutorListCard(props) {
               imageResizeMode="cover"
               styling={styles.userIcon}
             />
-            {tutor.id % 7 === 0 && (
+            {isSponsored && (
               <View
                 style={{
                   position: 'absolute',

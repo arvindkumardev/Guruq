@@ -29,7 +29,7 @@ const compareModal = (props) => {
   }, []);
 
   const goToCompareView = () => {
-    onClose(false);
+    onClose();
     navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS);
   };
 
@@ -39,7 +39,7 @@ const compareModal = (props) => {
 
   const renderTutorView = (item, index) => {
     return (
-      <View style={commonStyles.verticallyStretchedItemsView}>
+      <View>
         {item && (
           <IconButtonWrapper
             iconWidth={RfH(18)}
@@ -54,7 +54,7 @@ const compareModal = (props) => {
             iconWidth={RfH(70)}
             iconHeight={RfH(70)}
             iconImage={getTutorImage(item)}
-            imageResizeMode="cover"
+            imageResizeMode="contain"
             styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
           />
         ) : (
@@ -62,6 +62,7 @@ const compareModal = (props) => {
             iconWidth={RfH(70)}
             iconHeight={RfH(70)}
             iconImage={Images.profile}
+            imageResizeMode="contain"
             styling={{ alignSelf: 'center', borderRadius: RfH(12), marginTop: RfH(48) }}
           />
         )}
@@ -78,9 +79,7 @@ const compareModal = (props) => {
       transparent
       backdropOpacity={1}
       visible={visible}
-      onRequestClose={() => {
-        onClose(false);
-      }}>
+      onRequestClose={onClose}>
       <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'column' }} />
       <View
         style={{
@@ -106,7 +105,7 @@ const compareModal = (props) => {
             iconWidth={RfW(24)}
             styling={{ alignSelf: 'flex-end' }}
             iconImage={Images.cross}
-            submitFunction={() => onClose(false)}
+            submitFunction={onClose}
           />
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), paddingHorizontal: RfW(16) }]}>
@@ -121,7 +120,7 @@ const compareModal = (props) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Button style={commonStyles.buttonPrimary} block onPress={() => goToCompareView()}>
+            <Button style={commonStyles.buttonPrimary} block onPress={goToCompareView}>
               <Text style={commonStyles.textButtonPrimary}>Compare</Text>
             </Button>
           </View>

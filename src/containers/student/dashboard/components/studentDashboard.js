@@ -16,7 +16,15 @@ import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { getSubjectIcons, getUserImageUrl, printDate, printTime, RfH, RfW } from '../../../../utils/helpers';
+import {
+  getSubjectIcons,
+  getTutorImage,
+  getUserImageUrl,
+  printDate,
+  printTime,
+  RfH,
+  RfW,
+} from '../../../../utils/helpers';
 import { GET_CART_ITEMS, GET_SCHEDULED_CLASSES } from '../../booking.query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
@@ -27,17 +35,14 @@ import NotificationRedirection from '../../../notification/notificationRedirecti
 function StudentDashboard(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
+  const { changeTab } = props;
 
   const userInfo = useReactiveVar(userDetails);
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const interestedOfferings = useReactiveVar(interestingOfferingData);
-
   const studentInfo = useReactiveVar(studentDetails);
 
   const [showAllSubjects, setShowAllSubjects] = useState(false);
-
-  const { changeTab } = props;
-
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});
   const [favouriteTutors, setFavouriteTutors] = useState([]);
@@ -103,7 +108,7 @@ function StudentDashboard(props) {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
+        // const error = e.graphQLErrors[0].extensions.exception.response;
         navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
       }
     },
@@ -128,21 +133,8 @@ function StudentDashboard(props) {
     },
   });
 
-  const getSubjects = (item) => {
-    const subjects = [];
-    item.tutor.tutorOfferings.map((obj) => {
-      if (
-        obj.offerings.find((o) => o.id === selectedOffering?.id) &&
-        !subjects.includes(obj.offerings[0].displayName)
-      ) {
-        subjects.push(obj.offerings[0].displayName);
-      }
-    });
-    return subjects.join(', ');
-  };
-
   useEffect(() => {
-    if (offeringMasterData) {
+    if (isEmpty(offeringMasterData)) {
       getOfferingMasterData();
     }
   }, []);
@@ -159,9 +151,14 @@ function StudentDashboard(props) {
           parentOfferingId: selectedOffering?.id,
         },
       });
-      setSelectedOfferingSubjects(offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id));
     }
   }, [selectedOffering]);
+
+  useEffect(() => {
+    if (!isEmpty(selectedOffering) && !isEmpty(offeringMasterData)) {
+      setSelectedOfferingSubjects(offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.id));
+    }
+  }, [offeringMasterData, selectedOffering]);
 
   useEffect(() => {
     if (isFocussed) {
@@ -170,6 +167,12 @@ function StudentDashboard(props) {
       } else {
         setSelectedOffering(interestedOfferings.find((s) => s.selected)?.offering);
       }
+      getFavouriteTutors({
+        variables: {
+          parentOfferingId: selectedOffering?.id,
+        },
+      });
+
       getCartItems();
       getScheduledClasses({
         variables: {
@@ -218,49 +221,53 @@ function StudentDashboard(props) {
     });
   };
 
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
+  const getSubjects = (item) => {
+    const subjects = [];
+    item.tutor.tutorOfferings.map((obj) => {
+      if (
+        obj.offerings.find((o) => o.id === selectedOffering?.id) &&
+        !subjects.includes(obj.offerings[0].displayName)
+      ) {
+        subjects.push(obj.offerings[0].displayName);
+      }
+    });
+    return subjects.join(', ');
   };
 
   const renderSubjects = (item) => (
-    <View style={{ marginTop: RfH(20), flex: 1 }}>
-      <TouchableWithoutFeedback
-        onPress={() => gotoTutors(item)}
+    <TouchableOpacity
+      onPress={() => gotoTutors(item)}
+      style={{
+        flexDirection: 'column',
+        marginTop: RfH(20),
+        flex: 0.25,
+      }}>
+      <View
         style={{
           flexDirection: 'column',
-          justifyContent: 'flex-end',
-          alignItems: 'stretch',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginHorizontal: RfW(5),
+          borderRadius: RfW(8),
         }}>
-        <View
-          style={{
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: RfH(64),
-            width: RfW(64),
-            marginHorizontal: RfW(4),
-            borderRadius: RfW(8),
-          }}>
-          <IconButtonWrapper
-            iconWidth={RfW(64)}
-            styling={{ alignSelf: 'center' }}
-            iconHeight={RfH(64)}
-            imageResizeMode="contain"
-            iconImage={getSubjectIcons(item.displayName)}
-          />
-        </View>
+        <IconButtonWrapper
+          iconWidth={RfW(64)}
+          styling={{ alignSelf: 'center' }}
+          iconHeight={RfH(64)}
+          imageResizeMode="contain"
+          iconImage={getSubjectIcons(item.displayName)}
+        />
         <Text
           style={{
             textAlign: 'center',
             fontSize: 12,
-            width: RfW(70),
             color: Colors.primaryText,
             marginTop: RfH(5),
           }}>
           {item.displayName}
         </Text>
-      </TouchableWithoutFeedback>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderSponsoredTutor = (item) => (
@@ -625,7 +632,7 @@ function StudentDashboard(props) {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  alignItems: 'flex-end',
+                  alignItems: 'center',
                   marginTop: RfH(25),
                 }}>
                 <Text
@@ -672,9 +679,7 @@ function StudentDashboard(props) {
                 </Text>
                 {favouriteTutors.length > 3 && (
                   <TouchableWithoutFeedback
-                    onPress={() =>
-                      navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR, { selectedOffering })
-                    }>
+                    onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}>
                     <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                       View All
                     </Text>
@@ -742,7 +747,6 @@ function StudentDashboard(props) {
 
       <SelectSubjectModal
         onClose={() => setShowAllSubjects(false)}
-        subjects={selectedOfferingSubjects}
         onSelectSubject={gotoTutors}
         visible={showAllSubjects}
       />
@@ -751,12 +755,10 @@ function StudentDashboard(props) {
 }
 
 StudentDashboard.propTypes = {
-  refetchStudentOfferings: PropTypes.bool,
   changeTab: PropTypes.func,
 };
 
 StudentDashboard.defaultProps = {
-  refetchStudentOfferings: false,
   changeTab: null,
 };
 

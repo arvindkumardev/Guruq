@@ -8,8 +8,9 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import PropTypes from 'prop-types';
 import ProgressCircle from 'react-native-progress-circle';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import commonStyles from '../../../theme/styles';
-import { RfH, RfW } from '../../../utils/helpers';
+import { formatDate, printDateTime, RfH, RfW } from '../../../utils/helpers';
 import { Colors, Fonts, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { userDetails } from '../../../apollo/cache';
@@ -19,23 +20,14 @@ import { SEARCH_QPOINTS_TRANSACTIONS } from '../graphql-query';
 function Wallet(props) {
   const navigation = useNavigation();
   const [showHeader, setShowHeader] = useState(false);
-  const [transactionData, setTransactionData] = useState([
-    { title: 'Registration', date: 'July 24,2020', amount: '+ ₹ 50', status: 1 },
-    { title: 'Completion of Profile', date: 'July 20,2020', amount: '+ ₹ 100', status: 1 },
-    { title: 'BookingID393038', date: 'July 18,2020', amount: '- ₹ 50', status: 2 },
-  ]);
+  const [transactionData, setTransactionData] = useState([]);
   const { changeTab } = props;
 
   const userInfo = useReactiveVar(userDetails);
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
-
-    if (scrollPosition > 30) {
-      setShowHeader(true);
-    } else {
-      setShowHeader(false);
-    }
+    setShowHeader(scrollPosition > 30);
   };
 
   const [getQPointsTransactions, { loading: loadingPointsTransactions }] = useLazyQuery(SEARCH_QPOINTS_TRANSACTIONS, {
@@ -48,7 +40,7 @@ function Wallet(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log(data);
+        setTransactionData(data?.searchQPointTransaction?.edges);
       }
     },
   });
@@ -69,7 +61,7 @@ function Wallet(props) {
         style={[
           commonStyles.horizontalChildrenEqualSpaceView,
           {
-            marginTop: RfH(16),
+            marginVertical: RfH(16),
             backgroundColor: Colors.lightPurple,
             padding: RfH(16),
             borderRadius: RfH(8),
@@ -101,14 +93,19 @@ function Wallet(props) {
     return (
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.title}</Text>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>{item.amount}</Text>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.pointType.title}</Text>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>
+            {item.pointType.actionType === 'EARN' ? '+' : '-'} {item.points}
+          </Text>
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(4) }]}>
-          <Text style={commonStyles.mediumMutedText}>{item.date}</Text>
+          <Text style={commonStyles.mediumMutedText}>{printDateTime(item.createdDate)}</Text>
           <Text
-            style={[commonStyles.mediumMutedText, { color: item.status === 1 ? Colors.brandBlue2 : Colors.orangeRed }]}>
-            {item.status === 1 ? 'Success' : 'Redeem'}
+            style={[
+              commonStyles.mediumMutedText,
+              { color: item.pointType.actionType === 'EARN' ? Colors.brandBlue2 : Colors.orangeRed },
+            ]}>
+            {item.pointType.actionType === 'EARN' ? 'Earn' : 'Redeemed'}
           </Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(24) }]} />
@@ -195,9 +192,10 @@ function Wallet(props) {
           <FlatList
             showsVerticalScrollIndicator={false}
             data={transactionData}
-            contentContainerStyle={{ paddingBottom: RfH(56), paddingTop: RfH(24) }}
+            contentContainerStyle={{ paddingTop: RfH(24) }}
             renderItem={({ item, index }) => renderItems(item, index)}
             keyExtractor={(item, index) => index.toString()}
+            ListFooterComponent={<View style={{ height: RfH(80) }} />}
           />
         </ScrollView>
       </View>

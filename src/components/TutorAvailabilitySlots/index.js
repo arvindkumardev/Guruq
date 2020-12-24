@@ -10,7 +10,7 @@ import { GET_AVAILABILITY_DATA } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { RfH, RfW } from '../../utils/helpers';
+import { endOfDay, RfH, RfW, startOfDay } from '../../utils/helpers';
 
 const TutorAvailabilitySlots = (props) => {
   const [availability, setAvailability] = useState([]);
@@ -35,8 +35,8 @@ const TutorAvailabilitySlots = (props) => {
       variables: {
         tutorAvailability: {
           tutorId,
-          startDate: moment(date).startOf('day').toDate(),
-          endDate: moment(date).endOf('day').toDate(),
+          startDate: startOfDay(date),
+          endDate: endOfDay(date),
         },
       },
     });
@@ -49,7 +49,7 @@ const TutorAvailabilitySlots = (props) => {
   const renderSlots = (item, index) => (
     <View
       style={{
-        backgroundColor: !item.active ? Colors.lightGrey : item.selected ? Colors.lightGreen : Colors.lightBlue,
+        backgroundColor: !item.active ? Colors.lightOrange : item.selected ? Colors.lightGreen : Colors.lightGreen,
         padding: 8,
         borderRadius: 8,
         flexDirection: 'row',

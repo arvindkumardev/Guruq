@@ -7,7 +7,7 @@ import styles from './styles';
 function BottomTab(props) {
   const { activeTab, changeTab } = props;
   return (
-    <Footer>
+    <Footer style={{ backgroundColor: Colors.white }}>
       <FooterTab style={{ backgroundColor: Colors.white }}>
         <Button
           style={{ backgroundColor: Colors.white }}

@@ -63,19 +63,22 @@ function StudentDashboardContainer(props) {
   }, []);
 
   return (
-    <SafeAreaView style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
-      <StatusBar barStyle="dark-content" />
-      <Container>
-        <View style={{ flex: 1 }}>
-          {activeTab === 1 && <StudentDashboard changeTab={changeTab} />}
-          {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
-          {activeTab === 3 && <MyClasses />}
-          {activeTab === 4 && <Wallet />}
-          {activeTab === 5 && <Profile changeTab={(t) => changeTab(t)} />}
-        </View>
-        <BottomTab activeTab={activeTab} changeTab={changeTab} />
-      </Container>
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
+        <StatusBar barStyle="dark-content" />
+        <Container>
+          <View style={{ flex: 1 }}>
+            {activeTab === 1 && <StudentDashboard changeTab={changeTab} />}
+            {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
+            {activeTab === 3 && <MyClasses />}
+            {activeTab === 4 && <Wallet />}
+            {activeTab === 5 && <Profile changeTab={(t) => changeTab(t)} />}
+          </View>
+          <BottomTab activeTab={activeTab} changeTab={changeTab} />
+        </Container>
+      </SafeAreaView>
+      <SafeAreaView style={{ flex: 0, backgroundColor: Colors.white }} />
+    </>
   );
 }
 
