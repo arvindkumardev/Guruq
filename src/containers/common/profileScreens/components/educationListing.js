@@ -9,18 +9,18 @@ import { Colors, Images } from '../../../../theme';
 import { IconButtonWrapper } from '../../../../components';
 import routeNames from '../../../../routes/screenNames';
 
-function AddressListing(props) {
+function EducationListing(props) {
   const navigation = useNavigation();
   const { referenceType, referenceId, details, onUpdate, isUpdateAllowed } = props;
   const [addresses, setAddresses] = useState([
-    { type: 'Home Address', firstrow: '28/13, Vasant Vihar', secondrow: 'Delhi', thirdRow: 'Delhi, India , 110024' },
+    { type: 'School Education', firstrow: 'Delhi Public School', secondrow: 'CBSE | Class 9', thirdRow: 'English' },
   ]);
 
   const renderAddress = (item) => {
     return (
       <View>
         <View style={commonStyles.horizontalChildrenStartView}>
-          <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(20)} />
+          <IconButtonWrapper iconImage={Images.school} iconWidth={RfW(16)} iconHeight={RfH(20)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.regularPrimaryText}>{item.type}</Text>
             <Text style={commonStyles.mediumMutedText}>{item.firstrow}</Text>
@@ -29,7 +29,7 @@ function AddressListing(props) {
           </View>
         </View>
         <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.ADD_EDIT_ADDRESS)}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.ADD_EDIT_EDUCATION)}>
             <Text style={{ color: Colors.orange }}>Edit</Text>
           </TouchableWithoutFeedback>
           <Text style={{ color: Colors.orange }}>Delete</Text>
@@ -50,7 +50,7 @@ function AddressListing(props) {
   );
 }
 
-AddressListing.propTypes = {
+EducationListing.propTypes = {
   referenceType: PropTypes.string,
   referenceId: PropTypes.number,
   details: PropTypes.object,
@@ -58,7 +58,7 @@ AddressListing.propTypes = {
   isUpdateAllowed: PropTypes.bool,
 };
 
-AddressListing.defaultProps = {
+EducationListing.defaultProps = {
   referenceType: '',
   referenceId: 0,
   details: {},
@@ -66,4 +66,4 @@ AddressListing.defaultProps = {
   isUpdateAllowed: false,
 };
 
-export default AddressListing;
+export default EducationListing;
