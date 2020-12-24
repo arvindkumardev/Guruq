@@ -142,8 +142,9 @@ function StudentDashboard(props) {
   };
 
   useEffect(() => {
-    getOfferingMasterData();
-    getInterestedOfferings();
+    if (offeringMasterData) {
+      getOfferingMasterData();
+    }
   }, []);
 
   useEffect(() => {
