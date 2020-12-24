@@ -20,3 +20,37 @@ export const UPDATE_AVAILABILITY = gql`
     }
   }
 `;
+
+export const ADD_INTERVIEW_DETAILS = gql`
+  mutation AddUpdateInterviewDetails($interviewDto: CreateUpdateInterviewDto!) {
+    addUpdateInterviewDetails(interviewDto: $interviewDto) {
+      id
+    }
+  }
+`;
+
+export const ADD_TUTOR_DOCUMENT_DETAILS = gql`
+  mutation AddUpdateDocumentDetail($documentDto: CreateUpdateDocumentDto!) {
+    addUpdateDocumentDetail(documentDto: $documentDto) {
+      id
+      name
+      type
+      attachment {
+        id
+        name
+        type
+        filename
+        size
+      }
+    }
+  }
+`;
+export const DELETE_TUTOR_DOCUMENT_DETAILS = gql`
+  mutation DeleteDocumentDetail($id: Int!) {
+    deleteDocumentDetail(id: $id) {
+      id
+      name
+      type
+    }
+  }
+`;

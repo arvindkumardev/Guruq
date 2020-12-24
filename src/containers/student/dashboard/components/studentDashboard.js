@@ -636,7 +636,7 @@ function StudentDashboard(props) {
                   borderRadius: 20,
                   marginRight: 8,
                 }}>
-                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img} />
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img1} />
               </View>
               <View
                 style={{
@@ -644,7 +644,7 @@ function StudentDashboard(props) {
                   borderRadius: 20,
                   marginRight: 8,
                 }}>
-                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img} />
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img2} />
               </View>
               <View
                 style={{
@@ -652,7 +652,7 @@ function StudentDashboard(props) {
                   borderRadius: 20,
                   marginRight: 8,
                 }}>
-                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img} />
+                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img3} />
               </View>
             </Swiper>
           </View>

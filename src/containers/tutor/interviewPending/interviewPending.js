@@ -1,20 +1,37 @@
-import { View, Text, TouchableWithoutFeedback, ScrollView, StatusBar } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, TouchableWithoutFeedback, ScrollView, StatusBar, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { Button, Input, Item, Picker } from 'native-base';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
+import { isArray, isStringEquals } from 'lodash';
+import { configs } from 'eslint-plugin-prettier';
 import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import { GET_INTERVIEW_SCHEDULE_AVAILABILITY } from '../tutor.query';
+import { ADD_INTERVIEW_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS, ADD_TUTOR_DOCUMENT_DETAILS } from '../tutor.mutation';
+import { tutorDetails } from '../../../apollo/cache';
+import { InterviewMode, InterviewStatus } from '../enums';
 
 function InterviewPending() {
   const [interviewDate, setInterviewDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('Select');
+  const [selectedTime, setSelectedTime] = useState('');
   const [selectedId, setSelectedId] = useState(1);
   const [addressId, setAddressId] = useState(1);
+  const [documents, setDocuments] = useState([]);
+  const [idProofDetails, setIdProofDetails] = useState('');
+  const [addressProofDetails, setAddressProofDetails] = useState('');
+  const [panCardDetails, setPanCardDetails] = useState('');
+  const [qualificationDetails, setQualificationDetails] = useState('');
+
+  const tutorInfo = useReactiveVar(tutorDetails);
+
+  const DOCUMENT_NAME_ID_PROOF = 'id proof';
+  const DOCUMENT_NAME_ADDRESS_PROOF = 'address proof';
+  const DOCUMENT_NAME_PAN_CARD = 'pan card';
+  const DOCUMENT_NAME_HIGHEST_QUALIFICATION = 'degree';
 
   const [availableTimes, setAvailableTimes] = useState([]);
 
@@ -36,11 +53,7 @@ function InterviewPending() {
             }
           });
           setAvailableTimes(times);
-          setSelectedTime(
-            `${moment(new Date(times[0].startDate).toLocaleTimeString(), ['HH.mm']).format(
-              'hh:mm a'
-            )}-${moment(new Date(times[0].endDate).toLocaleTimeString(), ['HH.mm']).format('hh:mm a')}`
-          );
+          setSelectedTime(times[0]);
         }
       },
     }
@@ -57,6 +70,161 @@ function InterviewPending() {
       },
     });
   };
+
+  const [addInterviewDetails, { loading: addEnquiryLoading }] = useMutation(ADD_INTERVIEW_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        Alert.alert('Interview scheduled!');
+      }
+    },
+  });
+
+  const onAddingDetails = () => {
+    if (!selectedTime) {
+      Alert.alert('Please select start time!');
+    } else {
+      addInterviewDetails({
+        variables: {
+          interviewDto: {
+            startDate: selectedTime.startDate,
+            endDate: selectedTime.endDate,
+            status: InterviewStatus.SCHEDULED.label,
+            mode: InterviewMode.ONLINE.label,
+            tutor: {
+              id: tutorInfo?.id,
+            },
+          },
+        },
+      });
+    }
+  };
+
+  const formatFileSize = (bytes, decimals = 2) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+  };
+
+  useEffect(() => {
+    if (isArray(documents)) {
+      setIdProofDetails(documents.find((s) => isStringEquals(s.name, DOCUMENT_NAME_ID_PROOF)));
+      setAddressProofDetails(documents.find((s) => isStringEquals(s.name, DOCUMENT_NAME_ADDRESS_PROOF)));
+      setPanCardDetails(documents.find((s) => isStringEquals(s.name, DOCUMENT_NAME_PAN_CARD)));
+      setQualificationDetails(documents.find((s) => isStringEquals(s.name, DOCUMENT_NAME_HIGHEST_QUALIFICATION)));
+    }
+  }, [documents]);
+
+  const [deleteDocumentRequest, { loading: deleteDocumentLoading }] = useMutation(DELETE_TUTOR_DOCUMENT_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError(e) {
+      console.log(e);
+      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+      //   const { errorCode } = e.graphQLErrors[0].extensions.exception.response;
+      // }
+      alert('Something went wrong! Please try again');
+    },
+    onCompleted(data) {
+      onDelete({ documents: documents.filter((doc) => doc.id !== data.deleteDocumentDetail.id) });
+    },
+  });
+
+  const [addDocumentRequest, { loading: addDocumentLoading }] = useMutation(ADD_TUTOR_DOCUMENT_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError(e) {
+      console.log(e);
+      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+      //   const { errorCode } = e.graphQLErrors[0].extensions.exception.response;
+      // }
+      alert('Something went wrong! Please try again');
+    },
+    onCompleted(data) {
+      if (data) {
+        onAddOrUpdate({
+          documents: [...documents, data.addUpdateDocumentDetail],
+        });
+        if (isStringEquals(data.addUpdateDocumentDetail.name, DOCUMENT_NAME_ID_PROOF)) {
+          setIdProofDetails(data.addUpdateDocumentDetail);
+        }
+        if (isStringEquals(data.addUpdateDocumentDetail.name, DOCUMENT_NAME_ADDRESS_PROOF)) {
+          setAddressProofDetails(data.addUpdateDocumentDetail);
+        }
+        if (isStringEquals(data.addUpdateDocumentDetail.name, DOCUMENT_NAME_PAN_CARD)) {
+          setPanCardDetails(data.addUpdateDocumentDetail);
+        }
+        if (isStringEquals(data.addUpdateDocumentDetail.name, DOCUMENT_NAME_HIGHEST_QUALIFICATION)) {
+          setQualificationDetails(data.addUpdateDocumentDetail);
+        }
+      }
+    },
+  });
+
+  const handleAcceptedFiles = async (files, documentName) => {
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem(AUTH_TOKEN_LS_KEY)}`);
+    const formdata = new FormData();
+    formdata.append('file', files[0]);
+    try {
+      setIsFileUploading(true);
+      const res = await fetch(`${config.restEndpoint}/upload/file`, {
+        headers,
+        method: 'POST',
+        body: formdata,
+      }).then((response) => response.json());
+      setIsFileUploading(false);
+      const ref = {};
+      ref[referenceType.toLowerCase()] = { id: referenceId };
+      const documentDto = {
+        attachment: {
+          name: files[0].name,
+          type: res.type,
+          filename: res.filename,
+          size: res.size,
+        },
+        ...ref,
+      };
+      switch (documentName) {
+        case DOCUMENT_NAME_ID_PROOF:
+          documentDto.name = DOCUMENT_NAME_ID_PROOF;
+          documentDto.type = idProofType;
+          setIdProofDetails(documentDto);
+          break;
+        case DOCUMENT_NAME_ADDRESS_PROOF:
+          documentDto.name = DOCUMENT_NAME_ADDRESS_PROOF;
+          documentDto.type = addressProofType;
+          setAddressProofDetails(documentDto);
+          break;
+        case DOCUMENT_NAME_PAN_CARD:
+          documentDto.name = DOCUMENT_NAME_PAN_CARD;
+          documentDto.type = DocumentTypeEnum.PAN_CARD.label;
+          setPanCardDetails(documentDto);
+          break;
+        case DOCUMENT_NAME_HIGHEST_QUALIFICATION:
+          documentDto.name = DOCUMENT_NAME_HIGHEST_QUALIFICATION;
+          documentDto.type = DocumentTypeEnum.OTHER.label;
+          setQualificationDetails(documentDto);
+          break;
+        default:
+          documentDto.type = null;
+          break;
+      }
+      if (documentDto.type) {
+        addDocumentRequest({ variables: { documentDto } });
+      }
+    } catch (error) {
+      setIsFileUploading(false);
+      console.log(error);
+    }
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <StatusBar barStyle="dark-content" />
@@ -108,9 +276,7 @@ function InterviewPending() {
                         label={`${moment(new Date(obj.startDate).toLocaleTimeString(), ['HH.mm']).format(
                           'hh:mm a'
                         )}-${moment(new Date(obj.endDate).toLocaleTimeString(), ['HH.mm']).format('hh:mm a')}`}
-                        value={`${moment(new Date(obj.startDate).toLocaleTimeString(), ['HH.mm']).format(
-                          'hh:mm a'
-                        )}-${moment(new Date(obj.endDate).toLocaleTimeString(), ['HH.mm']).format('hh:mm a')}`}
+                        value={obj}
                       />
                     );
                   })}
@@ -123,7 +289,7 @@ function InterviewPending() {
             </View>
           </View>
           <View style={{ marginTop: RfH(24) }}>
-            <Button style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+            <Button onPress={() => onAddingDetails()} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
               <Text style={commonStyles.textButtonPrimary}>Schedule Interview</Text>
             </Button>
           </View>

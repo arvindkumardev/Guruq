@@ -18,7 +18,7 @@ function CustomerCare() {
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={commonStyles.regularMutedText}>1800-419-7300</Text>
-          <IconButtonWrapper iconWidth={RfH(20)} iconHeight={RfH(20)} iconImage={Images.call} />
+          <IconButtonWrapper iconWidth={RfH(20)} iconHeight={RfH(20)} iconImage={Images.call_blue} />
         </View>
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
