@@ -18,7 +18,6 @@ function StudentDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);
   const isFocussed = useIsFocused();
   const { route } = props;
-  const refetchStudentOfferings = route?.params?.refetchStudentOfferings;
 
   const changeTab = (tab) => {
     setActiveTab(tab);
@@ -68,9 +67,7 @@ function StudentDashboardContainer(props) {
       <StatusBar barStyle="dark-content" />
       <Container>
         <View style={{ flex: 1 }}>
-          {activeTab === 1 && (
-            <StudentDashboard refetchStudentOfferings={refetchStudentOfferings} changeTab={(tab) => changeTab(tab)} />
-          )}
+          {activeTab === 1 && <StudentDashboard changeTab={changeTab} />}
           {activeTab === 2 && <CalendarView changeTab={() => changeTab(3)} />}
           {activeTab === 3 && <MyClasses />}
           {activeTab === 4 && <Wallet />}

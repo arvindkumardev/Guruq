@@ -1,9 +1,8 @@
-import { Text, Image } from 'react-native';
+import { Image, Text } from 'react-native';
 import React from 'react';
-import { Button, Footer, FooterTab, Thumbnail } from 'native-base';
+import { Button, Footer, FooterTab } from 'native-base';
 import { Colors, Images } from '../../../../../theme';
 import styles from './styles';
-import { RfH, RfW } from '../../../../../utils/helpers';
 
 function BottomTab(props) {
   const { activeTab, changeTab } = props;

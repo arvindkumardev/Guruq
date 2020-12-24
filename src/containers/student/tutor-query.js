@@ -103,8 +103,8 @@ export const SEARCH_TUTORS = gql`
 `;
 
 export const GET_TUTOR_OFFERINGS = gql`
-  query GetTutorOfferings($tutorId: Int!) {
-    getTutorOfferings(tutorId: $tutorId) {
+  query GetTutorOfferings($tutorId: Int!, $parentOfferingId: Int) {
+    getTutorOfferings(tutorId: $tutorId, parentOfferingId: $parentOfferingId) {
       id
       demoClass
       freeDemo

@@ -11,14 +11,14 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { getSaveData, getSubjectIcons, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
-import { CompareModal, IconButtonWrapper } from '../../../components';
+import { CompareModal, IconButtonWrapper, SelectSubjectModal } from '../../../components';
 import { GET_FAVOURITE_TUTORS, SEARCH_TUTORS } from '../tutor-query';
 import Loader from '../../../components/Loader';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -27,12 +27,16 @@ import BackArrow from '../../../components/BackArrow';
 import FilterComponent from './components/filterComponent';
 import { TEMP_FILTER_DATA } from './components/filterComponent/constant';
 import TutorListCard from './components/TutorListCard';
+import { offeringsMasterData } from '../../../apollo/cache';
 
 function TutorListing(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const { route } = props;
-  const offering = route?.params?.offering;
+  const selectedOffering = route?.params?.offering;
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
+  const [offering, setOffering] = useState(selectedOffering);
+  const [showAllSubjects, setShowAllSubjects] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [isFilterApplied, setIsFilterApplied] = useState(false);
   const [topHeaderSticky, setTopHeaderSticky] = useState(false);
@@ -100,25 +104,6 @@ function TutorListing(props) {
     },
   });
 
-  useEffect(() => {
-    getTutors({ variables: { searchDto: filterValues } });
-    getFavouriteTutors({
-      variables: {
-        parentOfferingId: offering?.parentOffering?.id,
-      },
-    });
-  }, []);
-
-  useEffect(() => {
-    if (isFocussed) {
-      getFavouriteTutors({
-        variables: {
-          parentOfferingId: offering?.parentOffering?.id,
-        },
-      });
-    }
-  }, [isFocussed]);
-
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -155,6 +140,31 @@ function TutorListing(props) {
       }
     },
   });
+
+  useEffect(() => {
+    getTutors({ variables: { searchDto: filterValues } });
+  }, []);
+
+  useEffect(() => {
+    if (!isEmpty(offering)) {
+      getFavouriteTutors({
+        variables: {
+          parentOfferingId: offering?.parentOffering?.id,
+        },
+      });
+      setFilterValues({ ...filterValues, offeringId: offering?.id });
+    }
+  }, [offering]);
+
+  useEffect(() => {
+    if (isFocussed) {
+      getFavouriteTutors({
+        variables: {
+          parentOfferingId: offering?.parentOffering?.id,
+        },
+      });
+    }
+  }, [isFocussed]);
 
   const markFavouriteTutor = (tutorId) => {
     if (favourites.includes(tutorId)) {
@@ -202,6 +212,8 @@ function TutorListing(props) {
   const clearFilters = () => {
     setFilterObj({ ...TEMP_FILTER_DATA });
     setFilterValuesHandle(TEMP_FILTER_DATA);
+    setShowFilterPopup(false);
+    setIsFilterApplied(false);
   };
 
   const removeFilter = (key) => {
@@ -227,8 +239,7 @@ function TutorListing(props) {
   };
 
   const filtersView = () => (
-    <View
-      style={[commonStyles.horizontalChildrenView, { marginTop: RfH(isFilterApplied ? 100 : 16), height: RfH(44) }]}>
+    <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(100) }]}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
         {Object.entries(filterObj).map(([key, value]) => (
           <>
@@ -249,6 +260,12 @@ function TutorListing(props) {
       </ScrollView>
     </View>
   );
+
+  const handleSubjectSelection = (sub) => {
+    setShowAllSubjects(false);
+    setOffering(sub);
+    clearFilters();
+  };
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
@@ -275,7 +292,11 @@ function TutorListing(props) {
                   </Text>
                 </View>
               </View>
-              <IconButtonWrapper styling={styles.bookIcon} iconImage={getSubjectIcons(offering?.displayName)} />
+              <IconButtonWrapper
+                styling={styles.bookIcon}
+                iconImage={getSubjectIcons(offering?.displayName)}
+                submitFunction={() => setShowAllSubjects(true)}
+              />
             </View>
           )}
           {!topHeaderSticky && (
@@ -298,6 +319,7 @@ function TutorListing(props) {
               <IconButtonWrapper
                 styling={[styles.bookIcon, { alignSelf: 'flex-end' }]}
                 iconImage={getSubjectIcons(offering?.displayName)}
+                submitFunction={() => setShowAllSubjects(true)}
               />
             </View>
           )}
@@ -359,6 +381,16 @@ function TutorListing(props) {
           removeFromCompare={(index) => removeFromCompare(index)}
         />
       )}
+
+      <SelectSubjectModal
+        onClose={() => setShowAllSubjects(false)}
+        subjects={
+          offeringMasterData &&
+          offeringMasterData.filter((s) => s?.parentOffering?.id === selectedOffering?.parentOffering?.id)
+        }
+        onSelectSubject={(sub) => handleSubjectSelection(sub)}
+        visible={showAllSubjects}
+      />
     </View>
   );
 }

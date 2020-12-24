@@ -123,7 +123,6 @@ function MyClasses() {
   };
 
   const tutorDetail = (item) => {
-    console.log("item",item)
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
       tutorId: item.tutor.id,
       parentOffering: item.offering?.parentOffering?.id,

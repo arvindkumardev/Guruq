@@ -113,7 +113,6 @@ function ScheduledClassDetails(props) {
       parentOfferingName: selectedOffering?.displayName,
       parentParentOfferingName: selectedOffering?.parentOffering?.displayName,
     });
-    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, { classId });
   };
 
   const goToCancelReason = () => {

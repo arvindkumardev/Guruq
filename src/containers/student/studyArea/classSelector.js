@@ -1,9 +1,8 @@
-/* eslint-disable no-nested-ternary */
 import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -11,9 +10,11 @@ import { RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { ADD_INTERESTED_OFFERINGS } from '../dashboard-mutation';
-import { offeringsMasterData } from '../../../apollo/cache';
+import { interestingOfferingData, offeringsMasterData } from '../../../apollo/cache';
 import Fonts from '../../../theme/fonts';
 import BackArrow from '../../../components/BackArrow';
+import { GET_INTERESTED_OFFERINGS } from '../dashboard-query';
+import Loader from '../../../components/Loader';
 
 function ClassSelector(props) {
   const navigation = useNavigation();
@@ -23,9 +24,24 @@ function ClassSelector(props) {
 
   const offeringMasterData = useReactiveVar(offeringsMasterData);
 
+  const [getInterestedOfferings, { loading: interestedOfferingsLoading }] = useLazyQuery(GET_INTERESTED_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
+      }
+    },
+    onCompleted: (data) => {
+      if (data && data.getInterestedOfferings && data.getInterestedOfferings.length > 0) {
+        interestingOfferingData(data.getInterestedOfferings);
+        navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD, { refetchStudentOfferings: true });
+      }
+    },
+  });
+
   const [addInterestedOffering, { loading: addOfferingLoading }] = useMutation(ADD_INTERESTED_OFFERINGS, {
     fetchPolicy: 'no-cache',
-
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD, { refetchStudentOfferings: true });
@@ -33,7 +49,7 @@ function ClassSelector(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD, { refetchStudentOfferings: true });
+        getInterestedOfferings();
       }
     },
   });
@@ -92,68 +108,34 @@ function ClassSelector(props) {
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
-      <StatusBar barStyle="dark-content" />
-      <View style={[styles.helloView]}>
-        <BackArrow action={onBackPress} />
-        <Text
-          style={{
-            fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-            fontFamily: Fonts.semiBold,
-            color: Colors.primaryText,
-            marginLeft: RfH(16),
-            alignSelf: 'center',
-          }}>
-          Select Your Level
-        </Text>
+    <>
+      <Loader isLoading={interestedOfferingsLoading || addOfferingLoading} />
+      <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
+        <StatusBar barStyle="dark-content" />
+        <View style={[styles.helloView]}>
+          <BackArrow action={onBackPress} />
+          <Text
+            style={{
+              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+              fontFamily: Fonts.semiBold,
+              color: Colors.primaryText,
+              marginLeft: RfH(16),
+              alignSelf: 'center',
+            }}>
+            Select Your Level
+          </Text>
+        </View>
+        <View style={[commonStyles.areaParentView, { paddingTop: RfH(44), marginBottom: RfH(98) }]}>
+          <FlatList
+            data={offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === board.id)}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => renderItem(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={2}
+          />
+        </View>
       </View>
-      <View style={[commonStyles.areaParentView, { paddingTop: RfH(44), marginBottom: RfH(98) }]}>
-        <FlatList
-          data={offeringMasterData && offeringMasterData.filter((s) => s?.parentOffering?.id === board.id)}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => renderItem(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
-        />
-        {/* {data &&
-          data.offerings &&
-          data.offerings.edges &&
-          data.offerings.edges
-            .filter((s) => s?.parentOffering?.id === board.id)
-            .map((s) => {
-              return (
-                <TouchableWithoutFeedback onPress={() => onClick(s)} style={{ alignItems: 'center', flex: 1 }}>
-                  <View style={[styles.classView, { marginRight: RfW(8) }]}>
-                    <View style={{ alignItems: 'center' }}>
-                      <Text style={styles.classTitle}>{s.displayName}</Text>
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              );
-            })} */}
-      </View>
-
-      {/* <View style={[styles.areaParentView, { marginTop: RfH(56) }]}> */}
-      {/*  {renderClassView(1, 'rgb(203,231,255)')} */}
-      {/*  {renderClassView(2, 'rgb(230,252,231)')} */}
-      {/*  {renderClassView(3, 'rgb(231,229,242)')} */}
-      {/* </View> */}
-      {/* <View style={[styles.areaParentView, { marginTop: RfH(24) }]}> */}
-      {/*  {renderClassView(4, 'rgb(230,252,231)')} */}
-      {/*  {renderClassView(5, 'rgb(203,231,255)')} */}
-      {/*  {renderClassView(6, 'rgb(255,247,240)')} */}
-      {/* </View> */}
-      {/* <View style={[styles.areaParentView, { marginTop: RfH(24) }]}> */}
-      {/*  {renderClassView(7, 'rgb(231,229,242)')} */}
-      {/*  {renderClassView(8, 'rgb(255,247,240)')} */}
-      {/*  {renderClassView(9, 'rgb(203,231,255)')} */}
-      {/* </View> */}
-      {/* <View style={[styles.areaParentView, { marginTop: RfH(24) }]}> */}
-      {/*  {renderClassView(10, 'rgb(203,231,255)')} */}
-      {/*  {renderClassView(11, 'rgb(231,229,242)')} */}
-      {/*  {renderClassView(12, 'rgb(230,252,231)')} */}
-      {/* </View> */}
-    </View>
+    </>
   );
 }
 

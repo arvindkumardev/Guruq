@@ -21,7 +21,6 @@ const StudentOfferingModal = (props) => {
   useEffect(() => {
     if (offerings && offerings.length > 0) {
       const selectedOffering = offerings.find((s) => s.selected);
-      console.log('selectedOffering', selectedOffering);
       if (selectedOffering) {
         setSelectedOffering(selectedOffering.offering);
       }

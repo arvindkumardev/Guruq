@@ -144,7 +144,7 @@ function TutorDetails(props) {
 
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
-    variables: { tutorId: tutorData?.id },
+    variables: { tutorId: tutorData?.id, parentOfferingId: parentOffering },
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -152,38 +152,27 @@ function TutorDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        const subjectList = [];
-        data?.getTutorOfferings?.map((item) => {
-          if (item.offering && !subjectList.find((sub) => sub.id === item.offering.id)) {
-            if (
-              item.offerings.find((item) => item.level === 2)?.id === parentOffering &&
-              item.offerings.find((item) => item.level === 1)?.id === parentParentOffering
-            ) {
-              subjectList.push({
-                id: item.offering.id,
-                displayName: item.offering.displayName,
-                offeringId: item.id,
-                demoClass: item.demoClass,
-                freeDemo: item.freeDemo,
-                groupClass: item.groupClass === 0 || item.groupClass === 1,
-                onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
-                individualClass: item.groupClass === 0 || item.groupClass === 2,
-                homeTution: item.onlineClass === 0 || item.onlineClass === 2,
-                budgetDetails: item.budgets,
-              });
-            }
-          }
-        });
+        const subjectList = data?.getTutorOfferings?.map((item) => ({
+          id: item.offering.id,
+          displayName: item.offering.displayName,
+          offeringId: item.id,
+          demoClass: item.demoClass,
+          freeDemo: item.freeDemo,
+          groupClass: item.groupClass === 0 || item.groupClass === 1,
+          onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
+          individualClass: item.groupClass === 0 || item.groupClass === 2,
+          homeTution: item.onlineClass === 0 || item.onlineClass === 2,
+          budgetDetails: item.budgets,
+        }));
         if (!isEmpty(subjectList)) {
           setSelectedSubject(subjectList[0]);
         }
         setSubjects(subjectList);
+        console.log('subjectList', subjectList);
         setRefreshList(!refreshList);
       }
     },
   });
-
-
 
   const getPercentage = (value) => value * 20;
 
@@ -199,16 +188,13 @@ function TutorDetails(props) {
   const [getAverageRating, { loading: ratingLoading }] = useLazyQuery(GET_AVERAGE_RATINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
     },
     onCompleted: (data) => {
-      console.log('data', data);
       if (data) {
         const ratingArray = reviewProgress;
-
         Object.entries(data.getAverageRating).forEach(([key, value]) => {
           ratingArray.map((item) => ({
             ...item,
@@ -226,7 +212,6 @@ function TutorDetails(props) {
   const [searchReview, { loading: reviewLoading }] = useLazyQuery(SEARCH_REVIEW, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      console.log(e);
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
       }
@@ -649,11 +634,7 @@ function TutorDetails(props) {
         commonStyles.mainContainer,
         { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
       ]}>
-      <Loader
-        isLoading={
-          loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading || loadingTutors || loadingTutorsOffering
-        }
-      />
+      <Loader isLoading={favouriteLoading || removeFavouriteLoading || loadingTutors || loadingTutorsOffering||isEmpty(tutorData)} />
       {!isEmpty(tutorData) && (
         <>
           {topHeaderComponent()}
@@ -665,23 +646,12 @@ function TutorDetails(props) {
             <View style={commonStyles.lineSeparator} />
             {selectedSubject && classView()}
             <View style={commonStyles.lineSeparator} />
-            {!isEmpty(subjects) && (
-              <View>
-                <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
-                <View style={{ marginBottom: RfH(16), paddingHorizontal: RfW(16) }}>
-                  <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    scrollEnabled={false}
-                    data={subjects}
-                    extraData={refreshList}
-                    renderItem={({ item, index }) => renderSubjects(item, index)}
-                    keyExtractor={(item, index) => index.toString()}
-                    style={{ flex: 1 }}
-                  />
-                </View>
-              </View>
-            )}
+            <View>
+              <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
+              <ScrollView style={{ marginBottom: RfH(16), paddingHorizontal: RfW(16) }} horizontal>
+                {subjects.map((item, index) => renderSubjects(item, index))}
+              </ScrollView>
+            </View>
 
             <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
             <View style={{ paddingHorizontal: RfW(16) }}>

@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   },
   tutorListContainer: {
     paddingHorizontal: RfH(16),
-    marginTop: RfH(34),
+    marginTop: RfH(20),
     marginBottom: RfH(34),
   },
   footerLoadMore: {
