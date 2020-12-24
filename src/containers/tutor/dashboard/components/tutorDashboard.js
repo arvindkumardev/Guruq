@@ -394,7 +394,7 @@ function TutorDashboard(props) {
             <View style={{ marginTop: RfH(20) }}>
               <Image
                 style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}
-                source={Images.student_requests}
+                source={Images.requests}
               />
             </View>
           </TouchableWithoutFeedback>
