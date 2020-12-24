@@ -54,7 +54,7 @@ function Login() {
   };
 
   return (
-    <MainContainer isLoading={checkUserLoading} isBackButtonVisible={false}>
+    <MainContainer isLoading={checkUserLoading} isBackButtonVisible={false} onBackPress={() => {}}>
       <View style={styles.contentMarginTop}>
         <Text style={styles.title}>Login/ Sign Up</Text>
         <Text style={styles.subtitle}>Enter your phone number to continue</Text>

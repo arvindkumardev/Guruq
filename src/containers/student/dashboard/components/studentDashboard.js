@@ -1,9 +1,5 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-undef */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-plusplus */
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Icon } from 'native-base';
 import PropTypes from 'prop-types';
@@ -30,6 +26,7 @@ import NotificationRedirection from '../../../notification/notificationRedirecti
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
+  const isFocussed = useIsFocused();
 
   const userInfo = useReactiveVar(userDetails);
   const offeringMasterData = useReactiveVar(offeringsMasterData);
@@ -46,7 +43,6 @@ function StudentDashboard(props) {
   const [interestedOfferings, setInterestedOfferings] = useState({});
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [sponsoredTutors, setSponsoredTutors] = useState([]);
-  const [refreshSponsors, setRefreshSponsors] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
   const [
@@ -102,7 +98,6 @@ function StudentDashboard(props) {
     onCompleted: (data) => {
       if (data) {
         setSponsoredTutors(data?.getSponsoredTutors);
-        setRefreshSponsors(!refreshSponsors);
       }
     },
   });
@@ -126,20 +121,60 @@ function StudentDashboard(props) {
     },
   });
 
-  useEffect(() => {
-    getFavouriteTutors();
-    getInterestedOfferings();
-    getSponsoredTutors();
-  }, []);
+  const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      setUpcomingClasses(data.getScheduledClasses);
+    },
+  });
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getFavouriteTutors();
+  const getSubjects = (item) => {
+    const subjects = [];
+    item.tutor.tutorOfferings.map((obj) => {
+      if (
+        obj.offerings.find((o) => o.id === selectedOffering?.id) &&
+        !subjects.includes(obj.offerings[0].displayName)
+      ) {
+        subjects.push(obj.offerings[0].displayName);
+      }
+    });
+    return subjects.join(', ');
+  };
+
+  useEffect(() => {
+    if (selectedOffering) {
+      getFavouriteTutors({
+        variables: {
+          parentOfferingId: selectedOffering?.id,
+        },
+      });
+      getSponsoredTutors({
+        variables: {
+          parentOfferingId: selectedOffering?.id,
+        },
+      });
+    }
+  }, [selectedOffering]);
+
+  useEffect(() => {
+    if (isFocussed) {
       getInterestedOfferings();
-      getSponsoredTutors();
       getCartItems();
-    }, [])
-  );
+      getScheduledClasses({
+        variables: {
+          classesSearchDto: {
+            studentId: studentInfo.id,
+            startDate: moment().toDate(),
+            endDate: moment().endOf('day').toDate(),
+          },
+        },
+      });
+    }
+  }, [isFocussed]);
 
   const [markInterestedOffering] = useMutation(MARK_INTERESTED_OFFERING_SELECTED, {
     fetchPolicy: 'no-cache',
@@ -157,9 +192,7 @@ function StudentDashboard(props) {
 
   const onOfferingSelect = (offering) => {
     setStudentOfferingModalVisible(false);
-
     setSelectedOffering(offering);
-
     markInterestedOffering({ variables: { offeringId: offering.id } });
   };
 
@@ -177,8 +210,8 @@ function StudentDashboard(props) {
       tutorData: item.tutor,
       parentOffering: selectedOffering?.id,
       parentParentOffering: selectedOffering?.parentOffering?.id,
-      parentOfferingName: selectedOffering?.displayName,
-      parentParentOfferingName: selectedOffering?.parentOffering?.displayName,
+      parentOfferingName: selectedOffering?.parentOffering?.displayName,
+      parentParentOfferingName: selectedOffering?.parentOffering?.parentOffering?.displayName,
     });
   };
 
@@ -228,16 +261,17 @@ function StudentDashboard(props) {
   );
 
   const renderSponsoredTutor = (item) => {
-    const sub = [];
-    item.tutor.tutorOfferings.map((obj) => {
-      if (obj.offerings && sub.findIndex((ob) => ob === obj.offerings[2].displayName) === -1) {
-        sub.push(obj.offerings[2].displayName);
-      }
-    });
+    // console.log('item', item);
+    // const sub = [];
+    // item.tutor.tutorOfferings.map((obj) => {
+    //   if (obj.offerings && sub.findIndex((ob) => ob === obj.offerings[2].displayName) === -1) {
+    //     sub.push(obj.offerings[2].displayName);
+    //   }
+    // });
     return (
       <View style={{ marginTop: RfH(16), flex: 1 }}>
         <TouchableWithoutFeedback
-          onPress={() => gotoTutors(item)}
+            onPress={() => goToTutorDetails(item)}
           style={{
             flexDirection: 'column',
             justifyContent: 'flex-end',
@@ -306,7 +340,9 @@ function StudentDashboard(props) {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>{sub.join(',')}</Text>
+                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+                    {getSubjects(item)}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -364,23 +400,6 @@ function StudentDashboard(props) {
     </Modal>
   );
 
-  const getSubjects = (item) => {
-    const subjects = [];
-
-    item.tutor.tutorOfferings.map((obj) => {
-      if (obj.offerings.find((o) => o.id === selectedOffering?.id)) {
-        subjects.push(obj.offerings[0].displayName);
-      }
-      // if (
-      //   selectedOffering?.parentOffering?.id === obj.offerings[0].id &&
-      //   selectedOffering?.id === obj.offerings[1].id
-      // ) {
-      //   subjects = `${obj.offerings[2].displayName},${subjects}`;
-      // }
-    });
-    return subjects.join(', ');
-  };
-
   const renderTutors = (item) => (
     <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
       <View
@@ -419,29 +438,6 @@ function StudentDashboard(props) {
       </View>
     </TouchableWithoutFeedback>
   );
-
-  const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      setUpcomingClasses(data.getScheduledClasses);
-    },
-  });
-
-  useEffect(() => {
-    getScheduledClasses({
-      variables: {
-        classesSearchDto: {
-          studentId: studentInfo.id,
-          startDate: moment().toDate(),
-          endDate: moment().endOf('day').toDate(),
-        },
-      },
-    });
-  }, []);
 
   const classDetailNavigation = (classId) => {
     navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
@@ -541,7 +537,7 @@ function StudentDashboard(props) {
     <>
       <StatusBar barStyle="dark-content" />
 
-      <Loader isLoading={interestedOfferingsLoading || loadingFavouriteTutors} />
+      <Loader isLoading={interestedOfferingsLoading} />
       <NotificationRedirection />
 
       <View style={[commonStyles.mainContainer]}>
@@ -734,12 +730,16 @@ function StudentDashboard(props) {
                   }}>
                   Favourite Tutors
                 </Text>
-                <TouchableWithoutFeedback
-                  onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}>
-                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
-                    View All
-                  </Text>
-                </TouchableWithoutFeedback>
+                {favouriteTutors.length > 3 && (
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR, { selectedOffering })
+                    }>
+                    <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                      View All
+                    </Text>
+                  </TouchableWithoutFeedback>
+                )}
               </View>
               <FlatList
                 horizontal
@@ -750,29 +750,30 @@ function StudentDashboard(props) {
               />
             </View>
           )}
-          <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-end',
-                marginTop: RfH(25),
-              }}>
-              <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
-                Recommended Tutors
-              </Text>
-            </View>
+          {sponsoredTutors.length > 0 && (
             <View>
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                data={sponsoredTutors}
-                extraData={refreshSponsors}
-                renderItem={({ item, index }) => renderSponsoredTutor(item, index)}
-                keyExtractor={(item, index) => index.toString()}
-              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                  marginTop: RfH(25),
+                }}>
+                <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                  Recommended Tutors
+                </Text>
+              </View>
+              <View>
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  data={sponsoredTutors}
+                  renderItem={({ item, index }) => renderSponsoredTutor(item, index)}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
             </View>
-          </View>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING)}>
+          )}
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING,{selectedOffering})}>
             <View style={{ marginTop: RfH(20) }}>
               <Image
                 style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}

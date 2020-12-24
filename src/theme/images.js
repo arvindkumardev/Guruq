@@ -231,6 +231,7 @@ const Images = {
   dash_tutor_img: require('../assets/images/dash_tutor_img.png'),
   b_star: require('../assets/images/b_star.png'),
   coin: require('../assets/images/coin.png'),
+  nopytn: require('../assets/images/nopytn.png'),
 };
 
 export default Images;

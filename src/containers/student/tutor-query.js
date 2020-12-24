@@ -116,6 +116,20 @@ export const GET_TUTOR_OFFERINGS = gql`
       offering {
         id
         displayName
+        parentOffering {
+          id
+          level
+          displayName
+          parentOffering {
+            id
+            level
+            displayName
+          }
+        }
+        rootOffering {
+          id
+          displayName
+        }
       }
       offerings {
         id
@@ -149,8 +163,8 @@ export const GET_TUTOR_OFFERINGS = gql`
 `;
 
 export const GET_FAVOURITE_TUTORS = gql`
-  query GetFavouriteTutors {
-    getFavouriteTutors {
+  query GetFavouriteTutors($parentOfferingId: Int!) {
+    getFavouriteTutors(parentOfferingId: $parentOfferingId) {
       id
       tutor {
         id

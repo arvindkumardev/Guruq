@@ -1,6 +1,3 @@
-/* eslint-disable react/no-typos */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-console */
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';

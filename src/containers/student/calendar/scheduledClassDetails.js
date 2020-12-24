@@ -1,14 +1,13 @@
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Modal, ScrollView, Text, View } from 'react-native';
+import { Alert, FlatList, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { RFValue } from 'react-native-responsive-fontsize';
-import moment from 'moment';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
-import { DateSlotSelectorModal, IconButtonWrapper } from '../../../components';
+import { DateSlotSelectorModal, IconButtonWrapper, RateReview } from '../../../components';
 import BackArrow from '../../../components/BackArrow';
 import Loader from '../../../components/Loader';
 import NavigationRouteNames from '../../../routes/screenNames';
@@ -22,10 +21,13 @@ import styles from '../tutorListing/styles';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
+  const isFocussed = useIsFocused();
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [showBackButton, setShowBackButton] = useState(false);
-  const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
+  // const [showClassStartedPopup, setShowClassStartedPopup] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
   const [classData, setClassData] = useState({});
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
 
   const { route } = props;
 
@@ -44,80 +46,6 @@ function ScheduledClassDetails(props) {
       }
     },
   });
-
-  useEffect(() => {
-    if (classId) {
-      getClassDetails({ variables: { classId } });
-    }
-  }, [classId]);
-
-  const getStudentImageUrl = (filename, gender, id) => {
-    return filename
-      ? `${API_URL}/${filename}`
-      : `${IMAGES_BASE_URL}/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
-  };
-
-  const renderAttendees = (item) => (
-    <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
-      <View style={[commonStyles.horizontalChildrenView]}>
-        <IconButtonWrapper
-          iconImage={getStudentImageUrl(item?.profileImage?.filename, item?.contactDetail?.gender, item.id)}
-          iconHeight={RfH(48)}
-          iconWidth={RfH(48)}
-          styling={{ borderRadius: RfH(8) }}
-        />
-        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.headingPrimaryText}>
-            {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
-          </Text>
-          <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
-        </View>
-      </View>
-      {/* <CheckBox checked={item.joined} /> */}
-    </View>
-  );
-
-  // const renderAttachments = (item) => {
-  //   return (
-  //     <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(16) }]}>
-  //       <View style={commonStyles.horizontalChildrenView}>
-  //         <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
-  //         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-  //           <Text style={commonStyles.headingPrimaryText}>{item.chapter}</Text>
-  //           <Text style={commonStyles.mediumMutedText}>
-  //             {item.size} | {item.date}
-  //           </Text>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
-  // };
-
-  const goToCancelReason = () => {
-    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId });
-  };
-
-  const goToOnlineClass = () => {
-    setShowClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData });
-  };
-
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
-  };
-
-  const onBackPress = () => {
-    navigation.goBack();
-  };
-
-  const openRescheduleModal = () => {
-    setShowReschedulePopup(true);
-  };
-
-  const handleScroll = (event) => {
-    const scrollPosition = event.nativeEvent.contentOffset.y;
-    setShowBackButton(scrollPosition > 30);
-  };
 
   const [reScheduleClass, { loading: scheduleLoading }] = useMutation(RE_SCHEDULE_CLASS, {
     fetchPolicy: 'no-cache',
@@ -142,6 +70,79 @@ function ScheduledClassDetails(props) {
     },
   });
 
+  useEffect(() => {
+    if (classId && isFocussed) {
+      getClassDetails({ variables: { classId } });
+    }
+  }, [classId, isFocussed]);
+
+  useEffect(() => {
+    if (route.params.showReviewModal && isFocussed) {
+      setShowReviewPopup(true);
+    }
+  }, [route.params.showReviewModal, isFocussed]);
+
+  const getStudentImageUrl = (filename, gender, id) => {
+    return filename
+      ? `${API_URL}/${filename}`
+      : `${IMAGES_BASE_URL}/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
+  };
+
+  // const renderAttachments = (item) => {
+  //   return (
+  //     <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(16) }]}>
+  //       <View style={commonStyles.horizontalChildrenView}>
+  //         <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
+  //         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+  //           <Text style={commonStyles.headingPrimaryText}>{item.chapter}</Text>
+  //           <Text style={commonStyles.mediumMutedText}>
+  //             {item.size} | {item.date}
+  //           </Text>
+  //         </View>
+  //       </View>
+  //     </View>
+  //   );
+  // };
+
+  const handleTutorDetail = () => {
+    const selectedOffering = classData?.classEntity?.offering;
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
+      tutorData: classData.classEntity.tutor,
+      parentOffering: selectedOffering?.parentOffering?.id,
+      parentParentOffering: selectedOffering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: selectedOffering?.displayName,
+      parentParentOfferingName: selectedOffering?.parentOffering?.displayName,
+    });
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, { classId });
+  };
+
+  const goToCancelReason = () => {
+    setOpenMenu(false);
+    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId });
+  };
+
+  const goToOnlineClass = () => {
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData?.classEntity });
+  };
+
+  const getTutorImage = (tutor) => {
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
+  };
+
+  const onBackPress = () => {
+    navigation.goBack();
+  };
+
+  const openRescheduleModal = () => {
+    setOpenMenu(false);
+    setShowReschedulePopup(true);
+  };
+
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+    setShowBackButton(scrollPosition > 30);
+  };
+
   const onScheduleClass = (slot) => {
     reScheduleClass({
       variables: {
@@ -155,9 +156,29 @@ function ScheduledClassDetails(props) {
     });
   };
 
+  const renderAttendees = (item) => (
+    <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
+      <View style={[commonStyles.horizontalChildrenView]}>
+        <IconButtonWrapper
+          iconImage={getStudentImageUrl(item?.profileImage?.filename, item?.contactDetail?.gender, item.id)}
+          iconHeight={RfH(48)}
+          iconWidth={RfH(48)}
+          styling={{ borderRadius: RfH(8) }}
+        />
+        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+          <Text style={commonStyles.headingPrimaryText}>
+            {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
+          </Text>
+          <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
+        </View>
+      </View>
+      {/* <CheckBox checked={item.joined} /> */}
+    </View>
+  );
+
   return (
-    <View style={{ backgroundColor: Colors.white, flex: 1 }}>
-      <Loader isLoading={classDetailsLoading||scheduleLoading} />
+    <TouchableOpacity style={{ backgroundColor: Colors.white, flex: 1 }} activeOpacity={1} onPress={()=>setOpenMenu(false)}>
+      <Loader isLoading={classDetailsLoading || scheduleLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
@@ -188,7 +209,7 @@ function ScheduledClassDetails(props) {
                 </View>
               </View>
 
-              {moment(classData.endDate).isAfter(new Date()) && (
+              {classData?.isClassJoinAllowed && (
                 <View style={{}}>
                   <Button
                     block
@@ -253,29 +274,67 @@ function ScheduledClassDetails(props) {
                     </Text>
                   </View>
 
-                  {moment(classData.endDate).isAfter(new Date()) && (
-                    <View>
-                      <Button
-                        block
-                        onPress={goToOnlineClass}
-                        style={[
-                          commonStyles.buttonPrimary,
-                          {
-                            width: RfH(100),
-                            borderRadius: 4,
-                            marginHorizontal: 0,
-                          },
-                        ]}>
-                        <IconButtonWrapper
-                          iconImage={Images.video}
-                          iconHeight={RfH(20)}
-                          iconWidth={RfW(20)}
-                          styling={{ alignSelf: 'center' }}
-                        />
-                        <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
-                      </Button>
+                  {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
+                    <IconButtonWrapper
+                      iconImage={Images.vertical_dots}
+                      iconHeight={RfH(20)}
+                      iconWidth={RfW(20)}
+                      submitFunction={() => setOpenMenu(!openMenu)}
+                      styling={{ alignSelf: 'center' }}
+                    />
+                  )}
+                  {openMenu && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: RfH(23),
+                        right: RfW(10),
+                        backgroundColor: Colors.white,
+                        width: '45%',
+                        padding: RfH(16),
+                        borderWidth: 0.3,
+                        borderColor: Colors.darkGrey,
+                      }}>
+                      {classData?.isRescheduleAllowed && (
+                        <TouchableOpacity onPress={openRescheduleModal} style={{ paddingVertical: RfH(10) }}>
+                          <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>
+                            Reschedule Class
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                      {classData?.isCancelAllowed && (
+                        <TouchableOpacity
+                          onPress={goToCancelReason}
+                          style={{ paddingVertical: RfH(10), borderTopWidth: 0.5, borderColor: Colors.black }}>
+                          <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   )}
+
+                  {/* {classData?.isClassJoinAllowed && ( */}
+                  {/*  <View> */}
+                  {/*    <Button */}
+                  {/*      block */}
+                  {/*      onPress={goToOnlineClass} */}
+                  {/*      style={[ */}
+                  {/*        commonStyles.buttonPrimary, */}
+                  {/*        { */}
+                  {/*          width: RfH(100), */}
+                  {/*          borderRadius: 4, */}
+                  {/*          marginHorizontal: 0, */}
+                  {/*        }, */}
+                  {/*      ]}> */}
+                  {/*      <IconButtonWrapper */}
+                  {/*        iconImage={Images.video} */}
+                  {/*        iconHeight={RfH(20)} */}
+                  {/*        iconWidth={RfW(20)} */}
+                  {/*        styling={{ alignSelf: 'center' }} */}
+                  {/*      /> */}
+                  {/*      <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text> */}
+                  {/*    </Button> */}
+                  {/*  </View> */}
+                  {/* )} */}
                 </View>
               </View>
             </View>
@@ -286,7 +345,10 @@ function ScheduledClassDetails(props) {
           <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.tutor_icon} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
         </View>
-        <View style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}>
+        <TouchableOpacity
+          style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}
+          activeOpacity={0.8}
+          onPress={handleTutorDetail}>
           <IconButtonWrapper
             iconImage={getTutorImage(classData?.classEntity?.tutor)}
             iconHeight={RfH(48)}
@@ -300,7 +362,7 @@ function ScheduledClassDetails(props) {
             </Text>
             <Text style={commonStyles.mediumMutedText}>T{classData?.classEntity?.tutor?.id}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
@@ -428,82 +490,44 @@ function ScheduledClassDetails(props) {
 
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-        {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
+        {classData?.isClassJoinAllowed && (
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-around',
+              justifyContent: 'center',
               alignItems: 'center',
               marginTop: RfH(16),
               marginBottom: RfH(34),
             }}>
-            {classData?.isRescheduleAllowed && (
-              <Button
-                onPress={openRescheduleModal}
-                block
-                style={{ width: RfW(150), backgroundColor: Colors.brandBlue2 }}>
-                <Text style={commonStyles.textButtonPrimary}>Reschedule Class</Text>
-              </Button>
-            )}
-            {classData?.isCancelAllowed && (
-              <Button onPress={goToCancelReason} block style={{ width: RfW(150), backgroundColor: Colors.orangeRed }}>
-                <Text style={commonStyles.textButtonPrimary}>Cancel Class</Text>
-              </Button>
-            )}
+            <Button
+              block
+              onPress={goToOnlineClass}
+              style={[
+                commonStyles.buttonPrimary,
+                {
+                  borderRadius: 4,
+                  marginHorizontal: 0,
+                },
+              ]}>
+              <IconButtonWrapper
+                iconImage={Images.video}
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                styling={{ alignSelf: 'center' }}
+              />
+              <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
+            </Button>
           </View>
         )}
       </ScrollView>
-      <Modal
-        animationType="fade"
-        transparent={false}
-        visible={showClassStartedPopup}
-        onRequestClose={() => {
-          setShowClassStartedPopup(false);
-        }}>
-        <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.6 }}>
-          <View style={{ flex: 1 }} />
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-              paddingHorizontal: RfW(16),
-            }}>
-            <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}>
-              <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
-                styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
-                iconImage={Images.cross}
-                submitFunction={() => setShowClassStartedPopup(false)}
-              />
-              <View style={{ padding: RfH(16) }}>
-                <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}>
-                  Your class has been started. Confirm to continue.
-                </Text>
-              </View>
-              <View style={{ alignItems: 'center' }}>
-                <Button
-                  onPress={() => goToOnlineClass()}
-                  block
-                  style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-                  <Text style={commonStyles.textButtonPrimary}>Continue</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-          <View style={{ flex: 1 }} />
-        </View>
-      </Modal>
       {/* <Modal */}
       {/*  animationType="fade" */}
-      {/*  backdropOpacity={1} */}
-      {/*  transparent */}
-      {/*  visible={showCancelClassStartedPopup} */}
+      {/*  transparent={false} */}
+      {/*  visible={showClassStartedPopup} */}
       {/*  onRequestClose={() => { */}
-      {/*    setShowCancelClassStartedPopup(false); */}
+      {/*    setShowClassStartedPopup(false); */}
       {/*  }}> */}
-      {/*  <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}> */}
+      {/*  <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.6 }}> */}
       {/*    <View style={{ flex: 1 }} /> */}
       {/*    <View */}
       {/*      style={{ */}
@@ -518,34 +542,19 @@ function ScheduledClassDetails(props) {
       {/*          iconWidth={RfW(24)} */}
       {/*          styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }} */}
       {/*          iconImage={Images.cross} */}
-      {/*          submitFunction={() => setShowCancelClassStartedPopup(false)} */}
+      {/*          submitFunction={() => setShowClassStartedPopup(false)} */}
       {/*        /> */}
       {/*        <View style={{ padding: RfH(16) }}> */}
       {/*          <Text style={[commonStyles.mediumMutedText, { fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }]}> */}
-      {/*            Do you want to re-schedule your class? */}
+      {/*            Your class has been started. Confirm to continue. */}
       {/*          </Text> */}
       {/*        </View> */}
-      {/*        <View */}
-      {/*          style={{ */}
-      {/*            flexDirection: 'row', */}
-      {/*            justifyContent: 'space-between', */}
-      {/*            alignItems: 'center', */}
-      {/*            marginTop: RfH(32), */}
-      {/*          }}> */}
+      {/*        <View style={{ alignItems: 'center' }}> */}
       {/*          <Button */}
-      {/*            onPress={goToCancelReason} */}
+      {/*            onPress={() => goToOnlineClass()} */}
       {/*            block */}
-      {/*            bordered */}
-      {/*            style={{ flex: 1, height: RfH(40), alignSelf: 'center', marginRight: RfW(8) }}> */}
-      {/*            <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}> */}
-      {/*              Cancel Class */}
-      {/*            </Text> */}
-      {/*          </Button> */}
-      {/*          <Button */}
-      {/*            onPress={openRescheduleModal} */}
-      {/*            block */}
-      {/*            style={{ flex: 1, backgroundColor: Colors.brandBlue2, height: RfH(40) }}> */}
-      {/*            <Text style={commonStyles.textButtonPrimary}>Reschedule</Text> */}
+      {/*            style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}> */}
+      {/*            <Text style={commonStyles.textButtonPrimary}>Continue</Text> */}
       {/*          </Button> */}
       {/*        </View> */}
       {/*      </View> */}
@@ -560,7 +569,15 @@ function ScheduledClassDetails(props) {
         onSubmit={onScheduleClass}
         isReschedule
       />
-    </View>
+
+      {showReviewPopup && (
+        <RateReview
+          visible={showReviewPopup}
+          onClose={() => setShowReviewPopup(false)}
+          classDetails={classData?.classEntity}
+        />
+      )}
+    </TouchableOpacity>
   );
 }
 

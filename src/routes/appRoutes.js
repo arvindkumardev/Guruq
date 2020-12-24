@@ -79,17 +79,9 @@ const AppStack = (props) => {
     }
     if (userType === UserTypeEnum.TUTOR.label) {
       if (tutorInfo && tutorInfo?.certified) {
-        // return getTutorRoutes();
-        return (
-          <>
-            <Stack.Screen
-              name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
-              component={InterviewPending}
-              options={{ headerShown: false }}
-            />
-          </>
-        );
+        return getTutorRoutes();
       }
+
       if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING) {
         return (
           <>
@@ -101,6 +93,23 @@ const AppStack = (props) => {
           </>
         );
       }
+
+      if (tutorInfo && tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.INTERVIEW_PENDING) {
+        return (
+          <>
+            <Stack.Screen
+              name={NavigationRouteNames.WEB_VIEW}
+              component={WebViewPage}
+              options={{
+                url: `http://dashboardv2.guruq.in/tutor/on-boarding`,
+                label: 'Tutor Certification Process',
+                headerShown: false,
+              }}
+            />
+          </>
+        );
+      }
+
       if (
         tutorInfo &&
         tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
@@ -115,11 +124,6 @@ const AppStack = (props) => {
           </>
         );
       }
-      return (
-        <>
-          <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
-        </>
-      );
     }
   };
 

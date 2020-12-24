@@ -6,22 +6,15 @@ import { userDetails } from '../../apollo/cache';
 import Video from './components/Video';
 import Loader from '../../components/Loader';
 import { GET_AGORA_RTC_TOKEN } from './onlineClass.query';
-import { RateReview } from '../../components';
 import NavigationRouteNames from '../../routes/screenNames';
+import { alertBox } from '../../utils/helpers';
 
 const OnlineClass = (props) => {
   const navigation = useNavigation();
-  const [showReviewPopup, setShowReviewPopup] = useState(false);
-
   const { route } = props;
-
   const { classDetails } = route.params;
   const userInfo = useReactiveVar(userDetails);
-
   const [token, setToken] = useState('');
-
-  console.log('userInfo', userInfo);
-  console.log('classDetails', classDetails);
 
   const [getToken, { loading }] = useLazyQuery(GET_AGORA_RTC_TOKEN, {
     onError: (e) => {
@@ -38,6 +31,7 @@ const OnlineClass = (props) => {
   useEffect(() => {
     getToken({ variables: { channelName: classDetails.uuid, userId: userInfo.id } });
   }, []);
+
   useFocusEffect(
     React.useCallback(() => {
       getToken({ variables: { channelName: classDetails.uuid, userId: userInfo.id } });
@@ -45,17 +39,20 @@ const OnlineClass = (props) => {
   );
 
   const callEnded = () => {
-    setShowReviewPopup(true);
-    // navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: !back });
+    alertBox('Do you really want to end the class?', '', {
+      positiveText: 'Yes',
+      onPositiveClick: () => {
+        navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, {
+          classId: classDetails.id,
+          showReviewModal: true,
+        });
+      },
+      negativeText: 'No',
+    });
   };
 
   const onPressBack = () => {
     navigation.goBack();
-  };
-
-  const onClose = () => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classDetails, classEnded: true });
-    setShowReviewPopup(false);
   };
 
   return loading ? (
@@ -70,9 +67,6 @@ const OnlineClass = (props) => {
         channelName={classDetails?.uuid}
         token={token}
       />
-      {showReviewPopup && (
-        <RateReview visible={showReviewPopup} onClose={() => onClose()} classDetails={classDetails} />
-      )}
     </View>
   );
 };

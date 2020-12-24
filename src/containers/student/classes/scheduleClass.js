@@ -74,6 +74,8 @@ function ScheduleClass(props) {
     },
   });
 
+
+
   useEffect(() => {
     if (classData) {
       const classes = [];

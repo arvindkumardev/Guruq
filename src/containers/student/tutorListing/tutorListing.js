@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
@@ -30,6 +30,7 @@ import TutorListCard from './components/TutorListCard';
 
 function TutorListing(props) {
   const navigation = useNavigation();
+  const isFocussed = useIsFocused();
   const { route } = props;
   const offering = route?.params?.offering;
   const [showCompareModal, setShowCompareModal] = useState(false);
@@ -101,8 +102,22 @@ function TutorListing(props) {
 
   useEffect(() => {
     getTutors({ variables: { searchDto: filterValues } });
-    getFavouriteTutors();
+    getFavouriteTutors({
+      variables: {
+        parentOfferingId: offering?.parentOffering?.id,
+      },
+    });
   }, []);
+
+  useEffect(() => {
+    if (isFocussed) {
+      getFavouriteTutors({
+        variables: {
+          parentOfferingId: offering?.parentOffering?.id,
+        },
+      });
+    }
+  }, [isFocussed]);
 
   const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
     fetchPolicy: 'no-cache',
@@ -141,10 +156,6 @@ function TutorListing(props) {
     },
   });
 
-  const onBackPress = () => {
-    navigation.goBack();
-  };
-
   const markFavouriteTutor = (tutorId) => {
     if (favourites.includes(tutorId)) {
       removeFavourite({
@@ -155,6 +166,10 @@ function TutorListing(props) {
         variables: { tutorFavourite: { tutor: { id: tutorId } } },
       });
     }
+  };
+
+  const onBackPress = () => {
+    navigation.goBack();
   };
 
   const handleScroll = (event) => {
@@ -238,7 +253,7 @@ function TutorListing(props) {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
-      <Loader isLoading={loadingTutors || loadingFavouriteTutors || favouriteLoading || removeFavouriteLoading} />
+      <Loader isLoading={loadingTutors || favouriteLoading || removeFavouriteLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
@@ -319,7 +334,7 @@ function TutorListing(props) {
           contentContainerStyle={styles.tutorListContainer}
           ListFooterComponent={
             <>
-              {loadMoreButton && !isEmpty(tutorList) && (
+              {loadMoreButton && !isEmpty(tutorList) && tutorList >= 49 && (
                 <TouchableOpacity style={styles.footerLoadMore} onPress={loadMore}>
                   <Text> Load More</Text>
                 </TouchableOpacity>

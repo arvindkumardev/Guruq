@@ -122,6 +122,9 @@ export const getUserImageUrl = (filename, gender, id) => {
     : `https://guruq.in/guruq-new/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
 };
 
+export const getTutorImage = (tutorObj) =>
+  getUserImageUrl(tutorObj?.profileImage?.filename, tutorObj?.contactDetail?.gender, tutorObj.id);
+
 export const alertBox = (
   alertTitle = '',
   alertMsg = '',

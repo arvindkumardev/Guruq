@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import { useLazyQuery } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
@@ -48,35 +47,11 @@ function MyClasses() {
     },
   });
 
-  console.log('isHistorySelected', isHistorySelected);
-
-  useEffect(() => {
-    if (isFocussed) {
-      searchOrderItems({
-        variables: {
-          bookingSearchDto: {
-            orderStatus: OrderStatus.COMPLETE.label,
-            showHistory: isHistorySelected,
-            showWithAvailableClasses: !isHistorySelected,
-          },
-        },
-      });
-    }
-  }, [isFocussed]);
-
-  const goToScheduleClasses = (item) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: item });
-  };
-
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
-  };
-
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
+        // const error = e.graphQLErrors[0].extensions.exception.response;
       }
     },
     onCompleted: (data) => {
@@ -101,6 +76,45 @@ function MyClasses() {
     },
   });
 
+  useEffect(() => {
+    if (isFocussed) {
+      searchOrderItems({
+        variables: {
+          bookingSearchDto: {
+            orderStatus: OrderStatus.COMPLETE.label,
+            showHistory: isHistorySelected,
+            showWithAvailableClasses: !isHistorySelected,
+          },
+        },
+      });
+    }
+  }, [isFocussed]);
+
+  const goToScheduleClasses = (item) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: item });
+  };
+
+  const getTutorImage = (tutor) => {
+    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
+  };
+
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+    setShowHeader(scrollPosition > 30);
+  };
+
+  const onClicked = (isHistory) => {
+    searchOrderItems({
+      variables: {
+        bookingSearchDto: {
+          orderStatus: OrderStatus.COMPLETE.label,
+          showHistory: isHistory,
+          showWithAvailableClasses: !isHistory,
+        },
+      },
+    });
+    setIsHistorySelected(isHistory);
+  };
   const renewClass = (item) => {
     setRenewClassObj(item);
     getTutorOffering({
@@ -109,6 +123,7 @@ function MyClasses() {
   };
 
   const tutorDetail = (item) => {
+    console.log("item",item)
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
       tutorId: item.tutor.id,
       parentOffering: item.offering?.parentOffering?.id,
@@ -147,7 +162,9 @@ function MyClasses() {
                 submitFunction={() => tutorDetail(item)}
               />
             </View>
-            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+            <TouchableOpacity
+              style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}
+              onPress={() => tutorDetail(item)}>
               <Text
                 style={{
                   fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -163,7 +180,7 @@ function MyClasses() {
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 {item.onlineClass ? 'Online' : 'Offline'} - Individual Class
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={commonStyles.verticallyCenterItemsView}>
             <Text
@@ -187,7 +204,7 @@ function MyClasses() {
           {isHistorySelected && (
             <TouchableOpacity activeOpacity={0.6} onPress={() => goToScheduleClasses(item)}>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
-                View Schedule
+                View Details
               </Text>
             </TouchableOpacity>
           )}
@@ -217,24 +234,6 @@ function MyClasses() {
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5 }} />
       </View>
     );
-  };
-
-  const handleScroll = (event) => {
-    const scrollPosition = event.nativeEvent.contentOffset.y;
-    setShowHeader(scrollPosition > 30);
-  };
-
-  const onClicked = (isHistory) => {
-    searchOrderItems({
-      variables: {
-        bookingSearchDto: {
-          orderStatus: OrderStatus.COMPLETE.label,
-          showHistory: isHistory,
-          showWithAvailableClasses: !isHistory,
-        },
-      },
-    });
-    setIsHistorySelected(isHistory);
   };
 
   return (

@@ -72,8 +72,8 @@ export const GET_INTERESTED_OFFERINGS = gql`
 `;
 
 export const GET_SPONSORED_TUTORS = gql`
-  query GetSponsoredTutors {
-    getSponsoredTutors {
+  query GetSponsoredTutors($parentOfferingId: Int!) {
+    getSponsoredTutors(parentOfferingId: $parentOfferingId) {
       tutor {
         id
         contactDetail {
@@ -85,7 +85,10 @@ export const GET_SPONSORED_TUTORS = gql`
           filename
         }
         tutorOfferings {
+          id
           offerings {
+            id
+            level
             displayName
           }
         }
