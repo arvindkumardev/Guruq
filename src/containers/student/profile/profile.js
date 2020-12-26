@@ -214,7 +214,7 @@ function Profile(props) {
           <TouchableOpacity
             style={{ marginLeft: RfW(16) }}
             onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
-            <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
+            <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} />
           </TouchableOpacity>
         </View>
       </View>
@@ -262,7 +262,7 @@ function Profile(props) {
           <View>
             <TouchableWithoutFeedback
               onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-              style={[styles.userMenuParentView, , { height: 60 }]}>
+              style={[styles.userMenuParentView, { height: 60 }]}>
               <IconWrapper
                 iconHeight={RfH(16)}
                 iconWidth={RfW(16)}

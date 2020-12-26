@@ -96,15 +96,15 @@ function AddEditAddress() {
               commonStyles.horizontalChildrenView,
               { borderBottomWidth: 1, borderBottomColor: Colors.brandBlue2, paddingVertical: RfH(8) },
             ]}>
-            <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(20)} />
+            <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(16)} />
             <Text style={{ marginLeft: RfW(12), color: Colors.brandBlue2 }}>Home</Text>
           </View>
           <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(8) }]}>
-            <IconButtonWrapper iconImage={Images.work_office} iconWidth={RfW(16)} iconHeight={RfH(20)} />
+            <IconButtonWrapper iconImage={Images.work_office} iconWidth={RfW(16)} iconHeight={RfH(16)} />
             <Text style={{ marginLeft: RfW(12) }}>Work</Text>
           </View>
           <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(8) }]}>
-            <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(20)} />
+            <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(16)} />
             <Text style={{ marginLeft: RfW(12) }}>Other</Text>
           </View>
         </View>
