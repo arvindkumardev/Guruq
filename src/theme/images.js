@@ -199,7 +199,7 @@ const Images = {
   tutor_active: require('../assets/images/tutor_active.png'),
   tutor_tab: require('../assets/images/tutor_tab.png'),
   tutor_icon: require('../assets/images/tutor-icon.png'),
-  tutor: require('../assets/images/tutor.png'),
+  tutor: require('../assets/images/teacher-01.png'),
   //-------
   two_users: require('../assets/images/two_users.png'),
   //-------

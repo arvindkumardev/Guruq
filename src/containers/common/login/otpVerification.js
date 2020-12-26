@@ -46,42 +46,37 @@ function OtpVerification(props) {
     },
   });
 
-  const [verifyPhoneNumber, { data: verifyData, error: verifyError, loading: verifyLoading }] = useMutation(
-    VERIFY_PHONE_NUMBER_MUTATION,
-    {
-      fetchPolicy: 'no-cache',
-    }
-  );
+  const [verifyPhoneNumber, { loading: verifyLoading }] = useMutation(VERIFY_PHONE_NUMBER_MUTATION, {
+    fetchPolicy: 'no-cache',
 
-  useEffect(() => {
-    if (verifyError && verifyError.graphQLErrors && verifyError.graphQLErrors.length > 0) {
-      const error = verifyError.graphQLErrors[0].extensions.exception.response;
-      console.log(error);
-      if (error.errorCode === INVALID_INPUT) {
-        // incorrect username/password
-        Alert.alert('Invalid or Incorrect OTP');
-      } else if (error.errorCode === NOT_FOUND) {
-        navigation.navigate(NavigationRouteNames.REGISTER, { mobileObj, newUser: true });
+    onError: (verifyError) => {
+      console.log(verifyError);
+      if (verifyError && verifyError.graphQLErrors && verifyError.graphQLErrors.length > 0) {
+        const error = verifyError.graphQLErrors[0].extensions.exception.response;
+        console.log(error);
+        if (error.errorCode === INVALID_INPUT) {
+          // incorrect username/password
+          Alert.alert('Invalid or Incorrect OTP');
+        } else if (error.errorCode === NOT_FOUND) {
+          navigation.navigate(NavigationRouteNames.REGISTER, { mobileObj, newUser: true });
+        }
       }
-    }
-  }, [verifyError]);
-
-  useEffect(() => {
-    if (verifyData && verifyData.verifyPhoneNumber) {
-      if (newUser) {
-        navigation.navigate(NavigationRouteNames.REGISTER, {
-          countryCode: mobileObj.country.dialCode,
-          number: mobileObj.mobile,
-        });
-      } else {
+    },
+    onCompleted: (verifyData) => {
+      if (verifyData && verifyData.verifyPhoneNumber) {
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, verifyData.verifyPhoneNumber.token).then(() => {
-          // isTokenLoading(true);
-          // navigation.navigate(NavigationRouteNames.SPLASH_SCREEN);
-          navigation.navigate(NavigationRouteNames.SET_PASSWORD);
+          if (newUser) {
+            navigation.navigate(NavigationRouteNames.REGISTER, {
+              countryCode: mobileObj.country.dialCode,
+              number: mobileObj.mobile,
+            });
+          } else {
+            navigation.navigate(NavigationRouteNames.SET_PASSWORD);
+          }
         });
       }
-    }
-  }, [verifyData]);
+    },
+  });
 
   useEffect(() => {
     generateOtp();

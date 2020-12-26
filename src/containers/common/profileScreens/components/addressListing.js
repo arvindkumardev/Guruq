@@ -20,7 +20,7 @@ function AddressListing(props) {
     return (
       <View>
         <View style={commonStyles.horizontalChildrenStartView}>
-          <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(20)} />
+          <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(16)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.regularPrimaryText}>{item.type}</Text>
             <Text style={commonStyles.mediumMutedText}>{item.firstrow}</Text>
