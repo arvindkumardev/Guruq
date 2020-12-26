@@ -5,7 +5,7 @@ import React from 'react';
 import { FlatList, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { interestingOfferingData, offeringsMasterData } from '../../../apollo/cache';
-import { IconButtonWrapper } from '../../../components';
+import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import BackArrow from '../../../components/BackArrow';
 import routeNames from '../../../routes/screenNames';
 import NavigationRouteNames from '../../../routes/screenNames';
@@ -103,20 +103,7 @@ function BoardSelector(props) {
     <>
       <Loader isLoading={interestedOfferingsLoading || addOfferingLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
-        <StatusBar barStyle="dark-content" />
-        <View style={styles.helloView}>
-          <BackArrow action={onBackPress} />
-          <Text
-            style={{
-              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-              fontFamily: Fonts.semiBold,
-              color: Colors.primaryText,
-              marginLeft: RfH(16),
-              alignSelf: 'center',
-            }}>
-            Select Your {studyAreaObj.find((item) => item.level === 1)?.label}
-          </Text>
-        </View>
+        <ScreenHeader label={`Select Your ${studyAreaObj.find((item) => item.level === 1)?.label}`} homeIcon />
         <View style={styles.areaParentView}>
           <FlatList
             data={listData}

@@ -18,11 +18,12 @@ import initializeApollo from '../../../apollo/apollo';
 import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
-import { default as NavigationRouteNames, default as routeNames } from '../../../routes/screenNames';
+
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
+import NavigationRouteNames from "../../../routes/screenNames";
 
 function Profile(props) {
   const navigation = useNavigation();
@@ -104,37 +105,37 @@ function Profile(props) {
 
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
-      navigation.navigate(routeNames.STUDENT.PERSONAL_DETAILS);
+      navigation.navigate(NavigationRouteNames.STUDENT.PERSONAL_DETAILS);
     } else if (item.name === 'Address') {
-      navigation.navigate(routeNames.ADDRESS);
+      navigation.navigate(NavigationRouteNames.ADDRESS);
     } else if (item.name === 'Education') {
-      navigation.navigate(routeNames.EDUCATION);
+      navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Experience') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: 'Experience Details',
       });
     } else if (item.name === 'Customer Care') {
-      navigation.navigate(routeNames.CUSTOMER_CARE);
+      navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: "FAQ's",
       });
     } else if (item.name === 'Send Feedback') {
-      navigation.navigate(routeNames.SEND_FEEDBACK);
+      navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
     } else if (item.name === 'About') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: 'About',
       });
     } else if (item.name === 'Team') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: 'Team',
       });
     } else if (item.name === 'My Cart') {
-      navigation.navigate(routeNames.STUDENT.MY_CART);
+      navigation.navigate(NavigationRouteNames.STUDENT.MY_CART);
     } else if (item.name === 'Calendar') {
       changeTab(2);
     } else if (item.name === 'Upcoming Classes') {
@@ -185,7 +186,7 @@ function Profile(props) {
           <Text style={styles.actionText}>Q Points</Text>
         </View>
         <View style={styles.actionIconParentView}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CART)}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.cart} />
             <Text style={styles.actionText}>Cart</Text>
           </TouchableWithoutFeedback>
@@ -385,7 +386,7 @@ function Profile(props) {
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
           <TouchableOpacity
-            onPress={() => navigation.navigate(routeNames.STUDENT.FAVOURITE_TUTOR)}
+            onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}
             style={styles.userMenuParentView}
             activeOpacity={0.8}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
@@ -400,7 +401,7 @@ function Profile(props) {
           <View style={commonStyles.blankGreyViewSmall} />
 
           <TouchableOpacity
-            onPress={() => navigation.navigate(routeNames.REFER_EARN)}
+            onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
             style={[styles.userMenuParentView]}
             activeOpacity={0.8}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />

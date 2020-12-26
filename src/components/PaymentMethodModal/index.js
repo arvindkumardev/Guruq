@@ -58,7 +58,10 @@ const PaymentMethod = (props) => {
             initiatePaypalPayment(data.createBooking.id);
             break;
           case PaymentMethodEnum.CASH.value:
-            navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { data, paymentMethod });
+            navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, {
+              uuid: data?.createBooking?.uuid,
+              paymentMethod,
+            });
             break;
           default:
             break;
@@ -79,7 +82,7 @@ const PaymentMethod = (props) => {
       if (data) {
         onClose(false);
         if (OrderPaymentStatusEnum.COMPLETE.value) {
-          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { data, paymentMethod });
+          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { uuid: data?.makePayment?.uuid, paymentMethod });
         }
       }
     },

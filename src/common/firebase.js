@@ -38,8 +38,7 @@ const requestUserPermission = async () => {
 };
 const getFcmToken = async () => {
   const fcmToken = await messaging().getToken();
-  console.log(`firebase token ${fcmToken}`);
-  return fcmToken || null;
+  return Promise.resolve(fcmToken || null);
 };
 
 const initializeNotification = () => {

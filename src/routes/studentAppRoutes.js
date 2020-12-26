@@ -93,7 +93,7 @@ export const getStudentRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
         component={BookingConfirmed}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, gestureEnabled: false }}
       />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.PAYMENT_RECEIVED}

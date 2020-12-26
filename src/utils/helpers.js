@@ -292,3 +292,23 @@ export const startOfDay = (date) => {
 export const endOfDay = (date) => {
   return `${moment(date).format('YYYY-MM-DDT23:59:59')}Z`;
 };
+
+
+export const createPayload = async (user, token) => {
+  const payload = {
+    userId: user?.id,
+    userType: user?.type,
+    deviceId: DeviceInfo.getDeviceId(),
+    deviceToken: token,
+    buildVersion: DeviceInfo.getBuildNumber(),
+    deviceModel: DeviceInfo.getModel(),
+    deviceManufacture: await DeviceInfo.getManufacturer(),
+    deviceOSVersion: DeviceInfo.getSystemVersion(),
+    wifiMACAddress: await DeviceInfo.getMacAddress(),
+    batterInfo: await DeviceInfo.getBatteryLevel().toString(),
+    storageInfo: await DeviceInfo.getTotalDiskCapacity().toString(),
+    ramInfo: await DeviceInfo.getTotalMemory().toString(),
+    networkInfo: await DeviceInfo.getIpAddress(),
+  };
+  return Promise.resolve(payload);
+};

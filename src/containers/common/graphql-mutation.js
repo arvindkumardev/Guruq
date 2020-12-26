@@ -145,3 +145,14 @@ export const ADD_ENQUIRY = gql`
     }
   }
 `;
+
+export const REGISTER_DEVICE = gql`
+  mutation RegisterDevice($deviceDto: UserDeviceDto!) {
+    registerDevice(deviceDto: $deviceDto) {
+      id
+      user {
+        id
+      }
+    }
+  }
+`;

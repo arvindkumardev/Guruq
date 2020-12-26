@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButtonWrapper } from '../index';
+import IconButtonWrapper from '../IconWrapper';
 import { RfH, RfW } from '../../utils/helpers';
 import { Images } from '../../theme';
 
@@ -11,7 +11,7 @@ const BackArrow = (props) => {
       iconHeight={RfH(32)}
       iconWidth={RfW(32)}
       iconImage={whiteArrow ? Images.backArrow_white : Images.backArrow}
-      submitFunction={() => action()}
+      submitFunction={action}
     />
   );
 };

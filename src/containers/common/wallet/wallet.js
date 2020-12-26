@@ -75,7 +75,7 @@ function Wallet() {
           },
         ]}>
         <ProgressCircle
-          percent={(balanceData.earn / balanceData.redeem) * 100}
+          percent={(balanceData.balance / balanceData.earn) * 100}
           radius={32}
           borderWidth={6}
           color={Colors.brandBlue2}

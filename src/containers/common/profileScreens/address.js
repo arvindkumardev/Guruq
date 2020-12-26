@@ -14,7 +14,7 @@ function Address() {
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader
         homeIcon
-        label="Manage Addess"
+        label="Manage Address"
         horizontalPadding={RfW(16)}
         showRightIcon
         rightIcon={Images.moreInformation}

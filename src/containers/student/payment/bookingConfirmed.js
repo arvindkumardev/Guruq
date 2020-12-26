@@ -14,9 +14,8 @@ import { PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymen
 function bookingConfirmed(props) {
   const { route } = props;
 
-  const { data, paymentMethod } = route?.params;
+  const { uuid, paymentMethod } = route?.params;
   const isCash = PaymentMethodEnum.CASH.value === paymentMethod;
-  const orderDetail = data?.makePayment;
 
   const navigation = useNavigation();
 
@@ -58,7 +57,7 @@ function bookingConfirmed(props) {
             color: Colors.darkGrey,
             alignSelf: 'center',
           }}>
-          Booking ID {orderDetail?.uuid}
+          Booking ID {uuid}
         </Text>
       )}
       <Button

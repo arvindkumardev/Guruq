@@ -10,7 +10,7 @@ import { RfH, RfW } from '../../../utils/helpers';
 import styles from './style';
 import routeNames from '../../../routes/screenNames';
 import { offeringsMasterData } from '../../../apollo/cache';
-import { IconButtonWrapper } from '../../../components';
+import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import BackArrow from '../../../components/BackArrow';
 import {
   COMPETITIVE_EXAM,
@@ -64,7 +64,7 @@ function StudyAreaSelector() {
           },
         ]}>
         <View style={{ alignItems: 'center' }}>
-          <IconButtonWrapper iconImage={getStudyAreaIcon(item.name)} imageResizeMode={'contain'}/>
+          <IconButtonWrapper iconImage={getStudyAreaIcon(item.name)} imageResizeMode="contain" />
           <Text style={styles.areaTitleOne}>{item.displayName}</Text>
         </View>
       </View>
@@ -73,21 +73,8 @@ function StudyAreaSelector() {
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
-      <StatusBar barStyle="dark-content" />
-      <View style={styles.helloView}>
-        <BackArrow action={onBackPress} />
-        <Text
-          style={{
-            fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-            fontFamily: Fonts.semiBold,
-            color: Colors.primaryText,
-            marginLeft: RfH(16),
-            alignSelf: 'center',
-          }}>
-          Select Your Study Area
-        </Text>
-      </View>
-      {/* <Text style={styles.subHeading}>Select Your Study Area</Text> */}
+      <ScreenHeader label="Select Your Study Area" homeIcon />
+      <Text style={styles.subHeading}>Select Your Study Area</Text>
       <Text style={styles.subHeadingText}>This will help us to find the best tutors for you</Text>
       <View style={[styles.areaParentView, { marginTop: RfH(50) }]}>
         <FlatList

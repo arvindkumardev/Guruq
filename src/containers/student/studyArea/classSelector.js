@@ -15,6 +15,7 @@ import Fonts from '../../../theme/fonts';
 import BackArrow from '../../../components/BackArrow';
 import { GET_INTERESTED_OFFERINGS } from '../dashboard-query';
 import Loader from '../../../components/Loader';
+import { ScreenHeader } from '../../../components';
 
 const BACKGROUND_COLOR = [Colors.lightOrange, Colors.lightGreen, Colors.lightPurple, Colors.lightBlue];
 function ClassSelector(props) {
@@ -103,20 +104,7 @@ function ClassSelector(props) {
     <>
       <Loader isLoading={interestedOfferingsLoading || addOfferingLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
-        <StatusBar barStyle="dark-content" />
-        <View style={[styles.helloView]}>
-          <BackArrow action={onBackPress} />
-          <Text
-            style={{
-              fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-              fontFamily: Fonts.semiBold,
-              color: Colors.primaryText,
-              marginLeft: RfH(16),
-              alignSelf: 'center',
-            }}>
-            Select Your {studyAreaObj.find((item) => item.level === 2)?.label}
-          </Text>
-        </View>
+        <ScreenHeader label={`Select Your ${studyAreaObj.find((item) => item.level === 2)?.label}`} homeIcon />
         <View style={[commonStyles.areaParentView, { paddingTop: RfH(44), marginBottom: RfH(98) }]}>
           <FlatList
             data={listData}

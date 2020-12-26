@@ -3,14 +3,14 @@
 /* eslint-disable operator-assignment */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
-import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Image, Text, TextInput, View } from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Button } from 'native-base';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { sum } from 'lodash';
-import { useNavigation } from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {Alert, FlatList, Image, Text, TextInput, View} from 'react-native';
+import {RFValue} from 'react-native-responsive-fontsize';
+import {ScrollView, TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {Button} from 'native-base';
+import {useLazyQuery, useMutation, useReactiveVar} from '@apollo/client';
+import {sum} from 'lodash';
+import {useNavigation} from '@react-navigation/native';
 import {
   IconButtonWrapper,
   Loader,
@@ -18,17 +18,18 @@ import {
   ScreenHeader,
   TutorImageComponent,
 } from '../../../../components';
-import { Colors, Fonts, Images } from '../../../../theme';
+import {Colors, Fonts, Images} from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
 import styles from '../styles';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { GET_CART_ITEMS } from '../../booking.query';
-import { ADD_TO_CART, REMOVE_CART_ITEM } from '../../booking.mutation';
-import { ME_QUERY } from '../../../common/graphql-query';
+import {alertBox, RfH, RfW} from '../../../../utils/helpers';
+import {STANDARD_SCREEN_SIZE} from '../../../../utils/constants';
+import {GET_CART_ITEMS} from '../../booking.query';
+import {ADD_TO_CART, REMOVE_CART_ITEM} from '../../booking.mutation';
+import {GET_MY_QPOINTS_BALANCE} from '../../../common/graphql-query';
 import routeNames from '../../../../routes/screenNames';
 import CustomModalWebView from '../../../../components/CustomModalWebView';
-import { PaymentMethodEnum } from '../../../../components/PaymentMethodModal/paymentMethod.enum';
+import {PaymentMethodEnum} from '../../../../components/PaymentMethodModal/paymentMethod.enum';
+import {userDetails} from '../../../../apollo/cache';
 
 const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
@@ -45,8 +46,8 @@ const MyCart = () => {
 
   const [paymentModal, setPaymentModal] = useState(false);
   const [bookingId, setBookingId] = useState('');
+  const userInfo = useReactiveVar(userDetails);
   const [paymentStatus, setPaymentStatus] = useState('success');
-  const [count, setCount] = useState(1);
 
   // const [applyCoupons, setApplyCoupons] = useState(false);
   // const [appliedCouponCode, setAppliedCouponCode] = useState('');
@@ -78,9 +79,23 @@ const MyCart = () => {
   //   fetchPolicy: 'no-cache',
   // });
 
-  const { loading: meLoading, error: meError, data: userData } = useQuery(ME_QUERY, {
+  const [getMyQpointBalance, { loading: loadingPointsBalance }] = useLazyQuery(GET_MY_QPOINTS_BALANCE, {
     fetchPolicy: 'no-cache',
+    variables: { searchDto: { userId: userInfo?.id } },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setQPoints(data.getMyBalance.balance);
+      }
+    },
   });
+  // const { loading: meLoading, error: meError, data: userData } = useQuery(ME_QUERY, {
+  //   fetchPolicy: 'no-cache',
+  // });
 
   const [addToCart, { loading: addTocartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
@@ -98,6 +113,7 @@ const MyCart = () => {
 
   useEffect(() => {
     getCartItems();
+    getMyQpointBalance();
   }, []);
 
   // useEffect(() => {
@@ -112,11 +128,11 @@ const MyCart = () => {
   //   }
   // }, [cartItemData?.getCartItems]);
 
-  useEffect(() => {
-    if (userData) {
-      setQPoints(userData.me.qPoints);
-    }
-  }, [userData]);
+  // useEffect(() => {
+  //   if (userData) {
+  //     setQPoints(userData.me.qPoints);
+  //   }
+  // }, [userData]);
 
   // const [checkCouponCode, { loading: couponLoading }] = useMutation(CHECK_COUPON, {
   //   fetchPolicy: 'no-cache',
@@ -204,13 +220,12 @@ const MyCart = () => {
       setPaymentStatus('success');
       setPaymentModal(false);
       navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, {
-        data: {},
+        uuid: bookingId,
         paymentMethod: PaymentMethodEnum.PAYTM.value,
       });
     } else if (event.url.indexOf('http://dashboardv2.guruq.in/booking/failure') > -1) {
       setPaymentModal(false);
       setPaymentStatus('failure');
-      setCount((count) => count + 1);
     } else {
       console.log('url', event.url);
     }
@@ -582,7 +597,7 @@ const MyCart = () => {
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 data={cartItems}
-                extraData={refreshList}
+                // extraData={refreshList}
                 renderItem={({ item, index }) => renderCartItems(item, index)}
                 keyExtractor={(item, index) => index.toString()}
               />
@@ -700,7 +715,7 @@ const MyCart = () => {
       />
       {paymentModal && bookingId !== '' && (
         <CustomModalWebView
-          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}?${count}`}
+          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}`}
           headerText="Payment"
           modalVisible={paymentModal}
           onNavigationStateChange={handlePaymentAuthorization}

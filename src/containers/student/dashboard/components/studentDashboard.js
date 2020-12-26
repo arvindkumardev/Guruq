@@ -134,7 +134,7 @@ function StudentDashboard(props) {
   }, []);
 
   useEffect(() => {
-    if (selectedOffering) {
+    if (!isEmpty(selectedOffering) && isFocussed) {
       getFavouriteTutors({
         variables: {
           parentOfferingId: selectedOffering?.id,
@@ -146,7 +146,7 @@ function StudentDashboard(props) {
         },
       });
     }
-  }, [selectedOffering]);
+  }, [selectedOffering, isFocussed]);
 
   useEffect(() => {
     if (!isEmpty(selectedOffering) && !isEmpty(offeringMasterData)) {
@@ -161,12 +161,6 @@ function StudentDashboard(props) {
       } else {
         setSelectedOffering(interestedOfferings.find((s) => s.selected)?.offering);
       }
-      getFavouriteTutors({
-        variables: {
-          parentOfferingId: selectedOffering?.id,
-        },
-      });
-
       getCartItems();
       getScheduledClasses({
         variables: {
@@ -539,7 +533,7 @@ function StudentDashboard(props) {
                     height: RfH(11),
                     width: RfH(11),
                   }}>
-                  <Text style={{ fontSize: 7, font: Fonts.bold, color: Colors.white }}>{cartCount}</Text>
+                  <Text style={{ fontSize: 7, color: Colors.white }}>{cartCount}</Text>
                 </View>
               )}
             </TouchableOpacity>

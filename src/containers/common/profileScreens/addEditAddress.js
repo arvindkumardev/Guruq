@@ -17,7 +17,7 @@ function AddEditAddress() {
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader
         homeIcon
-        label="Addess"
+        label="Address"
         horizontalPadding={RfW(16)}
         showRightIcon
         rightIcon={Images.moreInformation}

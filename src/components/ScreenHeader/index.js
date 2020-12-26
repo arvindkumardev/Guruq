@@ -49,13 +49,15 @@ const ScreenHeader = (props) => {
           },
         ]}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { flex: 1 }]}>
-          <View style={commonStyles.horizontalChildrenView}>
-            {homeIcon && <BackArrow action={onBackPress} />}
+          <View style={{ justifyContent: 'center', flexDirection: 'row', flex: 1 }}>
+            <View style={{ position: 'absolute', left: 0, top: -RfH(5), alignItems: 'center' }}>
+              {homeIcon && <BackArrow action={onBackPress} />}
+            </View>
             <View style={[labelStyle, { flexDirection: 'row', justifyContent: 'center', marginLeft: RfW(8) }]}>
               <Text style={commonStyles.headingPrimaryText}>{label}</Text>
             </View>
           </View>
-          <View>
+          <View style={{ position: 'absolute', right: 0 }}>
             {showRightIcon && (
               <IconButtonWrapper
                 iconImage={rightIcon}

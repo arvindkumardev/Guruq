@@ -4,8 +4,9 @@ import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
-import { notificationPayload, tutorDetails } from '../apollo/cache';
+import { useMutation, useReactiveVar } from '@apollo/client';
+import { Alert } from 'react-native';
+import { notificationPayload, tutorDetails, userDetails } from '../apollo/cache';
 import { getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
 import { UserTypeEnum } from '../common/userType.enum';
 import EnterPassword from '../containers/common/login/enterPassword';
@@ -25,6 +26,9 @@ import CertificationCompletedView from '../containers/tutor/certficationProcess/
 import WebViewPage from '../components/WebViewPage';
 import InterviewPending from '../containers/tutor/interviewPending/interviewPending';
 import Address from '../containers/common/profileScreens/address';
+import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
+import { DUPLICATE_FOUND } from '../common/errorCodes';
+import { alertBox, createPayload } from '../utils/helpers';
 
 const Stack = createStackNavigator();
 
@@ -33,15 +37,52 @@ const AppStack = (props) => {
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
 
+  const userDetailsObj = useReactiveVar(userDetails);
+
   useEffect(() => {
     AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then((val) => {
       setIsGettingStartedVisible(isEmpty(val));
     });
   }, []);
 
+  const [registerDevice, { loading: scheduleLoading }] = useMutation(REGISTER_DEVICE, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+      //   const error = e.graphQLErrors[0].extensions.exception.response;
+      //   if (error.errorCode === DUPLICATE_FOUND) {
+      //     Alert.alert(error.message);
+      //   }
+      // }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log(data);
+      }
+    },
+  });
+
   useEffect(() => {
-    // firebase.initializeApp(firebaseConfig);
-    getFcmToken();
+    if (!isEmpty(userDetailsObj)) {
+      console.log('userDetailsObj', userDetailsObj);
+      getFcmToken().then((token) => {
+        if (token) {
+          createPayload(userDetailsObj.me, token).then((payload) => {
+            registerDevice({ variables: { deviceDto: payload } });
+          });
+        }
+      });
+    }
+  }, [userDetailsObj]);
+
+  useEffect(() => {
+    getFcmToken().then((token) => {
+      if (token) {
+        createPayload(userDetailsObj.me, token).then((payload) => {
+          registerDevice({ variables: { deviceDto: payload } });
+        });
+      }
+    });
     requestUserPermission();
     initializeNotification();
     // notificationPayload({
