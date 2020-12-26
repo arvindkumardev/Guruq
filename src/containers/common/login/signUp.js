@@ -26,6 +26,8 @@ function SignUp(props) {
 
   const { route } = props;
 
+  console.log(route);
+
   const [addUser, { data: addUserData, error: addUserError, loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
     fetchPolicy: 'no-cache',
   });
@@ -71,8 +73,8 @@ function SignUp(props) {
     addUser({
       variables: {
         phoneNumber: {
-          countryCode: route.params.mobileObj.country.dialCode,
-          number: route.params.mobileObj.mobile,
+          countryCode: route.params.countryCode,
+          number: route.params.number,
         },
         firstName: firstName.trim(),
         lastName: lastName.trim(),

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { RfH, storeData } from '../../../utils/helpers';
+import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import styles from './style';
 import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../apollo/cache';
@@ -80,14 +80,20 @@ function UserTypeSelector(props) {
 
       <View style={{ marginTop: RfH(16) }}>
         <TouchableOpacity onPress={() => createStudent()}>
-          <Image style={{ alignSelf: 'center', marginTop: 16 }} source={Images.student} />
+          <Image
+            style={{ alignSelf: 'center', marginTop: 16, width: RfW(80), height: RfH(80) }}
+            source={Images.student}
+          />
         </TouchableOpacity>
       </View>
       <Text style={[styles.subHeading, { marginTop: RfH(16) }]}>Student</Text>
 
       <View style={{ marginTop: RfH(48) }}>
         <TouchableOpacity onPress={() => createTutor()}>
-          <Image style={{ alignSelf: 'center', marginTop: 12 }} source={Images.tutor} />
+          <Image
+            style={{ alignSelf: 'center', marginTop: 12, width: RfW(80), height: RfH(80) }}
+            source={Images.tutor}
+          />
         </TouchableOpacity>
       </View>
       <Text style={[styles.subHeading, { marginTop: RfH(16) }]}>Tutor</Text>
