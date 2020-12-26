@@ -306,17 +306,17 @@ function TutorDetails(props) {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: selectedSubject.id === item.id ? Colors.lightBlue : Colors.lightPurple,
+            // backgroundColor: selectedSubject.id === item.id ? Colors.lightBlue : Colors.lightPurple,
             height: RfH(70),
             width: RfH(70),
             marginHorizontal: RfW(8),
             borderRadius: RfW(8),
           }}>
           <IconButtonWrapper
-            iconWidth={RfW(48)}
+            iconWidth={RfW(64)}
             styling={{ alignSelf: 'center' }}
-            iconHeight={RfH(56)}
-            iconImage={getSubjectIcons(item.displayName)}
+            iconHeight={RfH(64)}
+            iconImage={getSubjectIcons(item.displayName, selectedSubject.id !== item.id)}
           />
         </View>
         <Text
@@ -536,14 +536,14 @@ function TutorDetails(props) {
                 justifyContent: 'center',
               },
             ]}>
-            <IconButtonWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={getTutorImage(tutorData)}
-              imageResizeMode="cover"
-              styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
-            />
-            <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>
+            {/* <IconButtonWrapper */}
+            {/*  iconWidth={RfW(24)} */}
+            {/*  iconHeight={RfH(24)} */}
+            {/*  iconImage={getTutorImage(tutorData)} */}
+            {/*  imageResizeMode="cover" */}
+            {/*  styling={{ alignSelf: 'center', borderRadius: RfW(64) }} */}
+            {/* /> */}
+            <Text style={[styles.tutorName, { alignSelf: 'center' }]}>
               {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
             </Text>
           </View>
@@ -551,7 +551,7 @@ function TutorDetails(props) {
       </View>
       <View style={[commonStyles.horizontalChildrenStartView, { justifyContent: 'center', alignItems: 'center' }]}>
         <View>
-          <Text> Add to compare</Text>
+          <Text>Compare</Text>
         </View>
         <TouchableOpacity onPress={addToCompare} style={[styles.markFavouriteView]}>
           <IconButtonWrapper

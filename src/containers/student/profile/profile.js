@@ -1,21 +1,24 @@
 import { useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import {
-  BackHandler,
-  FlatList,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import initializeApollo from '../../../apollo/apollo';
-import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../apollo/cache';
+import {
+  interestingOfferingData,
+  isLoggedIn,
+  isSplashScreenVisible,
+  isTokenLoading,
+  networkConnectivityError,
+  notificationPayload,
+  offeringsMasterData,
+  studentDetails,
+  tutorDetails,
+  userDetails,
+  userLocation,
+  userType,
+} from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
 import { default as NavigationRouteNames, default as routeNames } from '../../../routes/screenNames';
@@ -23,6 +26,7 @@ import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
+import {UserTypeEnum} from '../../../common/userType.enum';
 
 function Profile(props) {
   const navigation = useNavigation();
@@ -80,15 +84,21 @@ function Profile(props) {
 
   const logout = () => {
     clearAllLocalStorage().then(() => {
-      client.cache.reset().then(() => {
+      client.resetStore().then(() => {
         removeToken().then(() => {
-          // set in apollo cache
+          // // set in apollo cache
+          isTokenLoading(true);
           isLoggedIn(false);
+          isSplashScreenVisible(true);
           userType('');
+          networkConnectivityError(false);
           userDetails({});
-
           studentDetails({});
           tutorDetails({});
+          userLocation({});
+          offeringsMasterData([]);
+          interestingOfferingData([]);
+          notificationPayload({});
         });
       });
     });
@@ -251,7 +261,7 @@ function Profile(props) {
                 <Text style={styles.userMobDetails}>
                   +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
                 </Text>
-                <Text style={styles.userMobDetails}>S{userInfo?.id}</Text>
+                <Text style={styles.userMobDetails}>S{userInfo?.type===UserTypeEnum.STUDENT}</Text>
               </View>
             </View>
           </View>

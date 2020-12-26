@@ -5,7 +5,20 @@ import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOp
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import initializeApollo from '../../../apollo/apollo';
-import { isLoggedIn, tutorDetails, userDetails, userType } from '../../../apollo/cache';
+import {
+  interestingOfferingData,
+  isLoggedIn,
+  isSplashScreenVisible,
+  isTokenLoading,
+  networkConnectivityError,
+  notificationPayload,
+  offeringsMasterData,
+  studentDetails,
+  tutorDetails,
+  userDetails,
+  userLocation,
+  userType,
+} from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
 import { default as NavigationRouteNames, default as routeNames } from '../../../routes/screenNames';
@@ -68,17 +81,26 @@ function Profile(props) {
 
   const logout = () => {
     clearAllLocalStorage().then(() => {
-      client.cache.reset().then(() => {
+      client.resetStore().then(() => {
         removeToken().then(() => {
-          // set in apollo cache
+          // // set in apollo cache
+          isTokenLoading(true);
           isLoggedIn(false);
+          isSplashScreenVisible(true);
           userType('');
+          networkConnectivityError(false);
           userDetails({});
+          studentDetails({});
           tutorDetails({});
+          userLocation({});
+          offeringsMasterData([]);
+          interestingOfferingData([]);
+          notificationPayload({});
         });
       });
     });
   };
+
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
       navigation.navigate(routeNames.WEB_VIEW, {

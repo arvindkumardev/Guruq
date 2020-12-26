@@ -176,7 +176,7 @@ export const monthNames = [
   'December',
 ];
 
-export const getSubjectIcons = (name) => {
+export const getSubjectIcons = (name, disabled = false) => {
   // let icon = '';
   // switch (name) {
   //   case 'Accounts':
@@ -266,7 +266,14 @@ export const getSubjectIcons = (name) => {
   //   default:
   //     icon = Images.book;
   // }
-  return Images[name.toLowerCase().replace(' ', '_')] ? Images[name.toLowerCase().replace(' ', '_')] : Images.english;
+
+  let iconName = name.toLowerCase().replace(' ', '_');
+
+  if (disabled) {
+    iconName += '_gray';
+  }
+
+  return Images[iconName] ? Images[iconName] : Images.english;
 };
 
 export const formatDate = (date, format) => {
