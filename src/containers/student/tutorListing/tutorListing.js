@@ -309,11 +309,11 @@ function TutorListing(props) {
             <View style={styles.headerComponent}>
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <BackArrow action={onBackPress} />
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginLeft: RfW(8) }}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     {offering?.displayName} Tutors
                   </Text>
-                  <Text style={[styles.classText, { marginLeft: RfW(8) }]}>
+                  <Text style={[styles.classText, {}]}>
                     {offering?.parentOffering?.parentOffering?.displayName}
                     {' | '}
                     {offering?.parentOffering?.displayName}

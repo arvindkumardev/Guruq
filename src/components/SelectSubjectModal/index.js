@@ -74,11 +74,15 @@ const SelectSubjectModal = (props) => {
             justifyContent: 'flex-start',
             alignItems: 'stretch',
             backgroundColor: Colors.white,
-            paddingHorizontal: RfW(16),
-            paddingVertical: RfH(20),
+            // paddingHorizontal: RfW(16),
+            // paddingVertical: RfH(20),
             maxHeight: '90%',
           }}>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
+          <View
+            style={[
+              commonStyles.horizontalChildrenSpaceView,
+              { backgroundColor: Colors.lightBlue, paddingHorizontal: RfW(16) },
+            ]}>
             <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
             <IconButtonWrapper
               iconHeight={RfH(24)}
