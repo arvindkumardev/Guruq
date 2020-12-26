@@ -1,15 +1,15 @@
-import { FlatList, Image, Text, View, TouchableOpacity } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Button, Icon } from 'native-base';
+import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Colors, Images } from '../../../theme';
-import { getTutorImage, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
+import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import styles from '../tutorListing/styles';
-import { IconButtonWrapper, ScreenHeader, SelectSubjectModal } from '../../../components';
+import { IconButtonWrapper, ScreenHeader, SelectSubjectModal, TutorImageComponent } from '../../../components';
 import { GET_FAVOURITE_TUTORS } from '../tutor-query';
 import { REMOVE_FAVOURITE } from '../tutor-mutation';
 import Loader from '../../../components/Loader';
@@ -101,15 +101,12 @@ function FavouriteTutors() {
 
   const renderItem = (item) => (
     <View style={styles.listItemParent}>
-      <TouchableOpacity onPress={() => goToTutorDetails(item)} style={commonStyles.horizontalChildrenStartView} activeOpacity={1}>
+      <TouchableOpacity
+        onPress={() => goToTutorDetails(item)}
+        style={commonStyles.horizontalChildrenStartView}
+        activeOpacity={1}>
         <View style={styles.userIconParent}>
-          <IconButtonWrapper
-            iconWidth={RfW(24)}
-            iconHeight={RfH(24)}
-            iconImage={getTutorImage(item?.tutor)}
-            imageResizeMode="cover"
-            styling={styles.userIcon}
-          />
+          <TutorImageComponent tutor={item?.tutor} />
         </View>
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row' }}>
@@ -132,10 +129,12 @@ function FavouriteTutors() {
                     alignItems: 'center',
                     justifyContent: 'flex-start',
                   }}>
-                  <Icon
-                    type="FontAwesome"
-                    name={item?.tutor?.averageRating > 0 ? 'star' : 'star-o'}
-                    style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
+                  <IconButtonWrapper
+                    iconImage={item?.tutor.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
+                    iconHeight={RfH(15)}
+                    iconWidth={RfW(15)}
+                    imageResizeMode="contain"
+                    styling={{ marginRight: RfW(4) }}
                   />
                   {item?.tutor?.averageRating > 0 ? (
                     <Text style={styles.chargeText}>{parseFloat(item?.tutor?.averageRating).toFixed(1)}</Text>

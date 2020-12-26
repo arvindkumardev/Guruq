@@ -16,6 +16,8 @@ import Loader from './Loader';
 import BackArrow from './BackArrow';
 import CustomCheckBox from './CustomCheckBox';
 import SelectSubjectModal from './SelectSubjectModal';
+import ChooseSubjectComponent from './ChooseSubjectsComponent';
+import TutorImageComponent from './TutorImageComponent';
 
 export {
   IconButtonWrapper,
@@ -35,4 +37,6 @@ export {
   BackArrow,
   CustomCheckBox,
   SelectSubjectModal,
+  ChooseSubjectComponent,
+  TutorImageComponent,
 };

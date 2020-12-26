@@ -12,26 +12,28 @@ function MainContainer(props) {
   const { isLoading, onBackPress, isBackButtonVisible } = props;
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View
-        style={[
-          commonStyles.mainContainer,
-          { paddingTop: RfH(44), paddingHorizontal: 0, backgroundColor: Colors.brandBlue },
-        ]}>
-        <Loader isLoading={isLoading} />
-        <StatusBar barStyle="light-content" />
-        {isBackButtonVisible && (
-          <View style={{ paddingHorizontal: RfW(16),width:'20%'}}>
-            <Icon onPress={onBackPress} type="MaterialIcons" name="keyboard-backspace" style={styles.backIcon} />
-          </View>
-        )}
-        <View style={{ flex: 1 }} />
+    <>
+      <Loader isLoading={isLoading} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View
+          style={[
+            commonStyles.mainContainer,
+            { paddingTop: RfH(44), paddingHorizontal: 0, backgroundColor: Colors.brandBlue },
+          ]}>
+          <StatusBar barStyle="light-content" />
+          {isBackButtonVisible && (
+            <View style={{ paddingHorizontal: RfW(16), width: '20%' }}>
+              <Icon onPress={onBackPress} type="MaterialIcons" name="keyboard-backspace" style={styles.backIcon} />
+            </View>
+          )}
+          <View style={{ flex: 1 }} />
 
-        <KeyboardAvoidingView behavior="padding">
-          <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>{props.children}</View>
-        </KeyboardAvoidingView>
-      </View>
-    </TouchableWithoutFeedback>
+          <KeyboardAvoidingView behavior="padding">
+            <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>{props.children}</View>
+          </KeyboardAvoidingView>
+        </View>
+      </TouchableWithoutFeedback>
+    </>
   );
 }
 

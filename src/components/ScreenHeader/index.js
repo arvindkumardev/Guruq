@@ -26,10 +26,15 @@ const ScreenHeader = (props) => {
     showRightText,
     rightText,
     onRightTextClick,
+    handleBack,
   } = props;
 
   const onBackPress = () => {
-    navigation.goBack();
+    if (handleBack) {
+      handleBack();
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -86,6 +91,7 @@ ScreenHeader.propTypes = {
   rightIcon: PropTypes.string,
   onRightIconClick: PropTypes.func,
   onRightTextClick: PropTypes.func,
+  handleBack: PropTypes.func,
 };
 
 ScreenHeader.defaultProps = {
@@ -102,6 +108,7 @@ ScreenHeader.defaultProps = {
   rightIcon: null,
   onRightIconClick: null,
   onRightTextClick: null,
+  handleBack: null,
 };
 
 export default ScreenHeader;

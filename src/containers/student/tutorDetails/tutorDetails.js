@@ -37,7 +37,7 @@ import {
   storeData,
   titleCaseIfExists,
 } from '../../../utils/helpers';
-import { BackArrow, CompareModal, IconButtonWrapper, Loader } from '../../../components';
+import { BackArrow, CompareModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import ClassModeSelectModal from './components/classModeSelectModal';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
@@ -536,12 +536,12 @@ function TutorDetails(props) {
                 justifyContent: 'center',
               },
             ]}>
-            <IconButtonWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={getTutorImage(tutorData)}
-              imageResizeMode="cover"
-              styling={{ alignSelf: 'center', borderRadius: RfW(64) }}
+            <TutorImageComponent
+              tutor={tutorData}
+              width={24}
+              height={24}
+              styling={{ alignSelf: 'center', borderRadius: RfH(64) }}
+              fontSize={15}
             />
             <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>
               {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
@@ -550,9 +550,11 @@ function TutorDetails(props) {
         )}
       </View>
       <View style={[commonStyles.horizontalChildrenStartView, { justifyContent: 'center', alignItems: 'center' }]}>
-        <View>
-          <Text> Add to compare</Text>
-        </View>
+        {!hideTutorPersonal && (
+          <View>
+            <Text> Add to compare</Text>
+          </View>
+        )}
         <TouchableOpacity onPress={addToCompare} style={[styles.markFavouriteView]}>
           <IconButtonWrapper
             iconWidth={RfW(16)}
@@ -577,20 +579,19 @@ function TutorDetails(props) {
 
   const topProfileView = () => (
     <View style={styles.topContainer}>
-      <IconButtonWrapper
-        iconWidth={RfH(98)}
-        iconHeight={RfH(98)}
-        iconImage={getTutorImage(tutorData)}
-        imageResizeMode="cover"
+      <TutorImageComponent
+        tutor={tutorData}
+        width={98}
+        height={98}
         styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
       />
-      <View style={{ marginLeft: RfW(16) }}>
+      <View style={{ marginLeft: RfW(16), width: '70%' }}>
         <Text style={styles.tutorName}>
           {tutorData?.contactDetail?.firstName} {tutorData?.contactDetail?.lastName}
         </Text>
         <Text style={styles.tutorDetails}>GURUQT{tutorData?.id}</Text>
         {tutorData?.educationDetails?.length > 0 && (
-          <Text style={[styles.tutorDetails, { color: Colors.primaryText }]}>
+          <Text style={[styles.tutorDetails, { color: Colors.primaryText }]} numberOfLines={1}>
             {titleCaseIfExists(tutorData?.educationDetails[0]?.degree?.degreeLevel)}
             {' - '}
             {titleCaseIfExists(tutorData?.educationDetails[0]?.fieldOfStudy)}
@@ -600,10 +601,12 @@ function TutorDetails(props) {
           {tutorData.teachingExperience ? `${tutorData.teachingExperience} years of Teaching Experience` : ''}
         </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: RfH(8) }}>
-          <Icon
-            type="FontAwesome"
-            name={tutorData.averageRating > 0 ? 'star' : 'star-o'}
-            style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
+          <IconButtonWrapper
+            iconImage={tutorData.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
+            iconHeight={RfH(15)}
+            iconWidth={RfW(15)}
+            imageResizeMode="contain"
+            styling={{ marginRight: RfW(4) }}
           />
           {tutorData.averageRating > 0 ? (
             <Text style={styles.chargeText}>{parseFloat(tutorData.averageRating).toFixed(1)}</Text>

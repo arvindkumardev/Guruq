@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import { Colors, Images } from '../../theme';
 import { alertBox, RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
@@ -12,7 +13,7 @@ import { CREATE_STUDENT_PYTN } from './pytn.mutation';
 import routeNames from '../../routes/screenNames';
 import Loader from '../../components/Loader';
 
-function PostTutionNeedDetails(props) {
+function PytnSubmit(props) {
   const { route } = props;
 
   const subjectData = route?.params?.subjectData;
@@ -46,9 +47,14 @@ function PostTutionNeedDetails(props) {
       alertBox('Maximum price should be greater than or equal to minimum price');
     } else {
       const offeringArray = [];
-      subjectData?.subject?.map((obj) => {
-        offeringArray.push({ id: obj?.id });
-      });
+      if(!isEmpty(subjectData?.subject)){
+        subjectData?.subject?.map((obj) => {
+          offeringArray.push({ id: obj?.id });
+        });
+      }else{
+        offeringArray.push({ id: subjectData?.class?.id });
+      }
+
       createPYTN({
         variables: {
           studentPYTNDto: {
@@ -103,9 +109,10 @@ function PostTutionNeedDetails(props) {
               {' | '}
               {subjectData?.class?.displayName}
             </Text>
-            {subjectData?.subject?.map((obj) => {
-              return <Text style={[commonStyles.headingMutedText, { marginTop: RfW(8) }]}>{obj.displayName}</Text>;
-            })}
+            {!isEmpty(subjectData.subject) &&
+              subjectData?.subject?.map((obj) => {
+                return <Text style={[commonStyles.headingMutedText, { marginTop: RfW(8) }]}>{obj.displayName}</Text>;
+              })}
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
           <Text style={commonStyles.headingPrimaryText}>Mode of Tution</Text>
@@ -238,4 +245,4 @@ function PostTutionNeedDetails(props) {
   );
 }
 
-export default PostTutionNeedDetails;
+export default PytnSubmit;

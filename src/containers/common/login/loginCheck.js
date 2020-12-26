@@ -2,6 +2,7 @@ import { View } from 'react-native';
 import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { useLazyQuery } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import { GET_CURRENT_STUDENT_QUERY, GET_CURRENT_TUTOR_QUERY, ME_QUERY } from '../graphql-query';
 import {
   isLoggedIn,
@@ -15,6 +16,8 @@ import {
 import { UserTypeEnum } from '../../../common/userType.enum';
 
 function LoginCheck() {
+  console.log('LoginCheck');
+
   const { error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
 
   const [getCurrentStudent, { data: currentStudent }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
@@ -32,7 +35,7 @@ function LoginCheck() {
   }, [error]);
 
   useEffect(() => {
-    if (data) {
+    if (!isEmpty(data)) {
       userDetails(data.me);
       userType(data.me.type);
       if (data.me.type === UserTypeEnum.STUDENT.label) {

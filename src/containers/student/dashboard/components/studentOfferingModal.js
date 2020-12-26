@@ -27,36 +27,28 @@ const StudentOfferingModal = (props) => {
     }
   }, [offerings]);
 
-  const renderItem = (item, index, showSeparator) => {
-    return (
-      <TouchableWithoutFeedback onPress={() => setSelectedOffering(item.offering)}>
-        <View style={{ height: 44, flexDirection: 'row', alignItems: 'center' }}>
-          <CustomRadioButton
-            enabled={item?.offering?.id === selectedOffering?.id}
-            submitFunction={() => setSelectedOffering(item.offering)}
-          />
-          <Text style={{ color: Colors.primaryText, marginLeft: RfW(8) }}>
-            {item?.offering?.parentOffering?.displayName} - {item?.offering?.displayName}
-          </Text>
-        </View>
-        {showSeparator && <View style={commonStyles.lineSeparator} />}
-      </TouchableWithoutFeedback>
-    );
-  };
+  const renderItem = (item, index, showSeparator) => (
+    <TouchableWithoutFeedback onPress={() => setSelectedOffering(item.offering)}>
+      <View style={{ height: 44, flexDirection: 'row', alignItems: 'center' }}>
+        <CustomRadioButton
+          enabled={item?.offering?.id === selectedOffering?.id}
+          submitFunction={() => setSelectedOffering(item.offering)}
+        />
+        <Text style={{ color: Colors.primaryText, marginLeft: RfW(8) }}>
+          {item?.offering?.parentOffering?.displayName} - {item?.offering?.displayName}
+        </Text>
+      </View>
+      {showSeparator && <View style={commonStyles.lineSeparator} />}
+    </TouchableWithoutFeedback>
+  );
 
   const addStudyArea = () => {
-    onClose(false);
+    onClose();
     navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
   };
 
   return (
-    <Modal
-      animationType="fade"
-      transparent
-      visible={visible}
-      onRequestClose={() => {
-        onClose(false);
-      }}>
+    <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
       <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
         <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
         <View
@@ -82,7 +74,7 @@ const StudentOfferingModal = (props) => {
             <Text style={{ color: Colors.primaryText, fontSize: 18, fontFamily: Fonts.semiBold }}>
               Choose your study area
             </Text>
-            <TouchableOpacity onPress={() => onClose(false)}>
+            <TouchableOpacity onPress={onClose}>
               <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
             </TouchableOpacity>
           </View>

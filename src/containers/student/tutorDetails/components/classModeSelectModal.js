@@ -88,7 +88,9 @@ const ClassModeSelectModal = (props) => {
   };
 
   const onAddingIntoCart = () => {
-    if (amount > 0) {
+    if (amount === 0 && !isDemoClass) {
+      alertBox('Error', 'Amount should be greater than zero for booking');
+    } else {
       const cartCreate = {
         tutorOfferingId: selectedSubject.offeringId,
         count: numberOfClass,
@@ -101,8 +103,6 @@ const ClassModeSelectModal = (props) => {
       addToCart({
         variables: { cartCreateDto: cartCreate },
       });
-    } else {
-      alertBox('Error', 'Amount should be greater than zero for booking');
     }
   };
 

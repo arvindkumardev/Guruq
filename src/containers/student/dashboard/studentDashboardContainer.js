@@ -13,6 +13,7 @@ import { userLocation } from '../../../apollo/cache';
 import BottomTab from './components/bottomTab';
 import { alertBox } from '../../../utils/helpers';
 import Wallet from '../../common/wallet/wallet';
+import CustomModalWebView from '../../../components/CustomModalWebView';
 
 function StudentDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);

@@ -39,19 +39,58 @@ export const GET_TUTION_NEED_LISTING = gql`
 `;
 
 export const GET_ACCEPTED_TUTOR_NEED = gql`
-  query GetStudentPytnAccepted($studentPytnId: Int!) {
-    getStudentPytnAccepted(studentPytnId: $studentPytnId) {
+  query GetStudentPytnAccepted($acceptedSearchDto: StudentPytnAcceptedSearchDto!) {
+    getStudentPytnAccepted(acceptedSearchDto: $acceptedSearchDto) {
       edges {
         studentPytnEntity {
           id
         }
         tutor {
+          id
+          teachingExperience
+          averageRating
+          reviewCount
+          profileImage {
+            id
+            name
+            filename
+          }
           contactDetail {
             firstName
             lastName
+            gender
           }
-          profileImage {
-            filename
+          experienceDetails {
+            id
+            institution {
+              name
+              address {
+                id
+                city
+                state
+                country
+                latitude
+                longitude
+              }
+            }
+          }
+          educationDetails {
+            id
+            school {
+              id
+              name
+            }
+            degree {
+              id
+              name
+              degreeLevel
+            }
+            fieldOfStudy
+            subjects
+            board
+            startDate
+            endDate
+            isCurrent
           }
         }
         id

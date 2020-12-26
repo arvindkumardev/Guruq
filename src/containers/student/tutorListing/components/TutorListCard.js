@@ -1,12 +1,11 @@
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
-import { Icon } from 'native-base';
 import { RFValue } from 'react-native-responsive-fontsize';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../styles';
 import commonStyles from '../../../../theme/styles';
-import { IconButtonWrapper } from '../../../../components';
-import { getUserImageUrl, RfH, RfW, titleCaseIfExists } from '../../../../utils/helpers';
+import { IconButtonWrapper, TutorImageComponent } from '../../../../components';
+import { RfH, RfW, titleCaseIfExists } from '../../../../utils/helpers';
 import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
@@ -15,10 +14,6 @@ import routeNames from '../../../../routes/screenNames';
 function TutorListCard(props) {
   const { tutor, offering, markFavouriteTutor, isFavourite, isSponsored } = props;
   const navigation = useNavigation();
-
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
-  };
 
   const goToTutorDetails = () => {
     navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
@@ -67,13 +62,7 @@ function TutorListCard(props) {
       <TouchableWithoutFeedback onPress={goToTutorDetails}>
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
-            <IconButtonWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={getTutorImage(tutor)}
-              imageResizeMode="cover"
-              styling={styles.userIcon}
-            />
+            <TutorImageComponent tutor={tutor} />
             {isSponsored && (
               <View
                 style={{
@@ -128,10 +117,12 @@ function TutorListCard(props) {
                       alignItems: 'center',
                       justifyContent: 'flex-start',
                     }}>
-                    <Icon
-                      type="FontAwesome"
-                      name={tutor.averageRating > 0 ? 'star' : 'star-o'}
-                      style={{ fontSize: 15, marginRight: RfW(4), color: Colors.brandBlue2 }}
+                    <IconButtonWrapper
+                      iconImage={tutor.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
+                      iconHeight={RfH(15)}
+                      iconWidth={RfW(15)}
+                      imageResizeMode="contain"
+                      styling={{ marginRight: RfW(4) }}
                     />
                     {tutor.averageRating > 0 ? (
                       <Text style={styles.chargeText}>{parseFloat(tutor.averageRating).toFixed(1)}</Text>

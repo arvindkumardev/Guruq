@@ -20,7 +20,16 @@ import { OrderPaymentStatusEnum, OrderStatusEnum, PaymentMethodEnum } from './pa
 
 const convenienceCharges = 100;
 const PaymentMethod = (props) => {
-  const { visible, onClose, bookingData, amount, discount, deductedAgaintQPoint, hidePaymentPopup } = props;
+  const {
+    visible,
+    onClose,
+    bookingData,
+    amount,
+    discount,
+    deductedAgaintQPoint,
+    hidePaymentPopup,
+    handlePaytmPayment,
+  } = props;
 
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(PaymentMethodEnum.ONLINE.value);
@@ -43,14 +52,13 @@ const PaymentMethod = (props) => {
             initiateRazorPayPayment(data.createBooking.id);
             break;
           case PaymentMethodEnum.PAYTM.value:
-            initiatePaytmPayment(data.createBooking.id);
+            handlePaytmPayment(data.createBooking.uuid);
             break;
           case PaymentMethodEnum.PAYPAL.value:
             initiatePaypalPayment(data.createBooking.id);
             break;
           case PaymentMethodEnum.CASH.value:
             navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { data, paymentMethod });
-            // completedPayment(data.createBooking.id, OrderPaymentStatusEnum.COMPLETE.label, 'Success');
             break;
           default:
             break;
@@ -98,54 +106,14 @@ const PaymentMethod = (props) => {
         completedPayment(bookingOrderId, OrderPaymentStatusEnum.COMPLETE.label, data.razorpay_payment_id);
       })
       .catch((error) => {
-        alertBox('Payment failed!', 'Please try again');
+        alertBox('Payment Failed', 'Please try again', {
+          positiveText: 'Try Again',
+          onPositiveClick: () => {
+            initiateRazorPayPayment(bookingOrderId);
+          },
+          negativeText: 'Cancel',
+        });
       });
-  };
-
-  const initiatePaytmPayment = async (bookingOrderId) => {
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-    const raw = JSON.stringify({ orderDetails: { userId: userInfo.id, orderId: bookingOrderId } });
-    const requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
-
-    const response = await fetch('http://apiv2.guruq.in/api/payment/initiatePaytmTransaction', requestOptions);
-
-    const data = await response.json();
-
-    if (data.error) {
-      Alert.alert('PayTm is not available right now, please try again later!');
-    } else {
-      const AllInOneSDKPlugin = NativeModules.AllInOneSDKSwiftWrapper;
-
-      const { mid } = data.paytmParams.body;
-      const { orderId } = data.paytmParams.body;
-      const { txnToken } = data.body;
-      const amount = data.paytmParams.body.txnAmount.value.toString();
-      const callback = `https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=${orderId}`;
-      const isStaging = true;
-
-      console.log('orderId', orderId);
-      const result = AllInOneSDKPlugin.openPaytm(mid, orderId, txnToken, amount, callback, isStaging);
-
-      console.log(result);
-
-      // instantiate the event emitter
-      const CounterEvents = new NativeEventEmitter(NativeModules.AllInOneSDKSwiftWrapper);
-
-      // subscribe to event
-      CounterEvents.addListener(
-        'responseIfNotInstalled',
-        // cf(res)
-        (res) => console.log('response received from paytm event', JSON.stringify(res))
-        // console.log("response received from paytm event", res)
-      );
-      CounterEvents.addListener('responseIfPaytmInstalled', (res) => console.log(JSON.stringify(res)));
-    }
   };
 
   const initiatePaypalPayment = (bookingOrderId) => {
@@ -504,6 +472,7 @@ PaymentMethod.defaultProps = {
   amount: 0,
   discount: 0,
   deductedAgaintQPoint: 0,
+  handlePaytmPayment: null,
 };
 
 PaymentMethod.propTypes = {
@@ -514,6 +483,7 @@ PaymentMethod.propTypes = {
   discount: PropTypes.number,
   deductedAgaintQPoint: PropTypes.number,
   hidePaymentPopup: PropTypes.func,
+  handlePaytmPayment: PropTypes.func,
 };
 
 export default PaymentMethod;

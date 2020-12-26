@@ -7,7 +7,7 @@ import { RfH, RfW } from '../../utils/helpers';
 
 const styles = StyleSheet.create({
   itemStyle: {
-    padding: RfH(12),
+    padding: RfH(10),
     marginHorizontal: RfW(4),
     marginVertical: RfH(4),
     borderRadius: RfH(8),

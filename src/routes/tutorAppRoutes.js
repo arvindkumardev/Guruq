@@ -11,8 +11,8 @@ import SubjectList from '../containers/tutor/profile/mySubjects/subjectList';
 import PriceMatrix from '../containers/tutor/profile/mySubjects/priceMatrix';
 import ViewSchedule from '../containers/tutor/profile/scheduler/viewSchedule';
 import UpdateSchedule from '../containers/tutor/profile/scheduler/updateSchedule';
-import PostTutionNeeds from '../containers/tutionNeeds/postTutionNeeds';
-import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetails';
+import PytnSubjectSelection from '../containers/tutionNeeds/pytnSubjectSelection';
+import PytnSubmit from '../containers/tutionNeeds/pytnSubmit';
 import ReferEarn from '../containers/referAndEarn/referEarn';
 import Notifications from '../containers/student/dashboard/notifications';
 import StudentRequests from '../containers/tutor/dashboard/components/studentRequests';
@@ -72,12 +72,12 @@ export const getTutorRoutes = () => {
       />
       <Stack.Screen
         name={NavigationRouteNames.POST_TUTION_NEEDS}
-        component={PostTutionNeeds}
+        component={PytnSubjectSelection}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name={NavigationRouteNames.POST_TUTION_NEED_DETAILS}
-        component={PostTutionNeedDetails}
+        component={PytnSubmit}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
