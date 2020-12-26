@@ -116,6 +116,7 @@ export const titleCaseIfExists = (inputString) => {
   return str.join(' ').trim();
 };
 
+export const getFileUrl = (filename) => `https://guruq.in/api/${filename}`;
 export const getUserImageUrl = (filename, gender, id) => {
   return filename
     ? `https://guruq.in/api/${filename}`

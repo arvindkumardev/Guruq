@@ -80,6 +80,8 @@ function EnterPassword(props) {
     }
   };
 
+  console.log('isUserLoggedIn', isUserLoggedIn);
+
   return (
     <MainContainer isLoading={signInLoading || forgotPasswordLoading} onBackPress={onBackPress}>
       {isUserLoggedIn && <LoginCheck />}

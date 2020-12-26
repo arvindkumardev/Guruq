@@ -10,21 +10,13 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
 import { isEmpty } from 'lodash';
 import { offeringsMasterData, studentDetails, userDetails, interestingOfferingData } from '../../../../apollo/cache';
-import { IconButtonWrapper, SelectSubjectModal, Loader } from '../../../../components';
+import { IconButtonWrapper, SelectSubjectModal, Loader, TutorImageComponent } from '../../../../components';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import {
-  getSubjectIcons,
-  getTutorImage,
-  getUserImageUrl,
-  printDate,
-  printTime,
-  RfH,
-  RfW,
-} from '../../../../utils/helpers';
+import { alertBox, getSubjectIcons, getUserImageUrl, printDate, printTime, RfH, RfW } from '../../../../utils/helpers';
 import { GET_CART_ITEMS, GET_SCHEDULED_CLASSES } from '../../booking.query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
@@ -115,7 +107,9 @@ function StudentDashboard(props) {
     onCompleted: (data) => {
       if (data && data.getInterestedOfferings && data.getInterestedOfferings.length > 0) {
         interestingOfferingData(data.getInterestedOfferings);
-        setSelectedOffering(data.getInterestedOfferings.find((s) => s.selected)?.offering);
+        const interestedOffering = data.getInterestedOfferings.find((s) => s.selected)?.offering;
+        setSelectedOffering(interestedOffering);
+        setStudentOfferingModalVisible(isEmpty(interestedOffering) && !isEmpty(data.getInterestedOfferings));
       } else {
         navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
       }
@@ -299,7 +293,7 @@ function StudentDashboard(props) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <IconButtonWrapper iconHeight={RfH(70)} iconImage={getTutorImage(item?.tutor)} iconWidth={RfW(70)} />
+              <TutorImageComponent tutor={item?.tutor} height={70} width={70} styling={{}} />
             </View>
             <View
               style={{
@@ -318,19 +312,31 @@ function StudentDashboard(props) {
                   {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
-                  <Icon
-                    type="FontAwesome"
-                    name="star"
-                    style={{ fontSize: 20, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                  <IconButtonWrapper
+                    iconImage={item.tutor.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfW(20)}
+                    imageResizeMode="contain"
+                    styling={{ marginRight: RfW(8) }}
                   />
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      color: Colors.primaryText,
-                      fontWeight: '600',
-                    }}>
-                    {parseFloat(item?.tutor?.averageRating)}
-                  </Text>
+                  {item?.tutor?.averageRating > 0 ? (
+                    <Text
+                      style={{
+                        alignSelf: 'center',
+                        color: Colors.primaryText,
+                        fontWeight: '600',
+                      }}>
+                      {parseFloat(item?.tutor?.averageRating)}
+                    </Text>
+                  ) : (
+                    <Text
+                      style={{
+                        color: Colors.secondaryText,
+                        fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+                      }}>
+                      NOT RATED
+                    </Text>
+                  )}
                 </View>
               </View>
               <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
@@ -363,13 +369,13 @@ function StudentDashboard(props) {
           marginTop: RfH(20),
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <IconButtonWrapper
-            iconWidth={RfH(80)}
-            iconHeight={RfH(80)}
-            iconImage={getTutorImage(item.tutor)}
-            imageResizeMode="cover"
+          <TutorImageComponent
+            tutor={item?.tutor}
+            height={80}
+            width={80}
             styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
           />
+
           <Text
             numberOfLines={2}
             style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
@@ -396,6 +402,14 @@ function StudentDashboard(props) {
     navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
   };
 
+  const handleStudentOfferingModal = () => {
+    if (isEmpty(selectedOffering)) {
+      alertBox('Please select the interesting offering');
+    } else {
+      setStudentOfferingModalVisible(false);
+    }
+  };
+
   const renderUpcomingClasses = (classDetails, index) => {
     return (
       <View style={{ flex: 1 }}>
@@ -411,11 +425,10 @@ function StudentDashboard(props) {
             }}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
               <View style={{ flex: 0.3 }}>
-                <IconButtonWrapper
-                  iconWidth={RfH(98)}
-                  iconHeight={RfH(98)}
-                  iconImage={getTutorImage(classDetails.tutor)}
-                  imageResizeMode="cover"
+                <TutorImageComponent
+                  tutor={classDetails?.tutor}
+                  height={98}
+                  width={98}
                   styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
                 />
               </View>
@@ -507,48 +520,53 @@ function StudentDashboard(props) {
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CART)}
               style={{ paddingHorizontal: RfW(8) }}>
-              <IconButtonWrapper iconImage={Images.cart} iconHeight={RfH(18)} iconWidth={RfW(18)} />
+              <IconButtonWrapper
+                iconImage={Images.cart}
+                iconHeight={RfH(25)}
+                iconWidth={RfW(25)}
+                imageResizeMode="contain"
+              />
               {cartCount > 0 && (
                 <View
                   style={{
                     backgroundColor: Colors.brandBlue2,
                     borderRadius: RfH(20),
                     position: 'absolute',
-                    top: RfH(-10),
-                    left: RfW(0),
+                    top: RfH(2),
+                    left: RfW(17),
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: RfH(16),
-                    width: RfH(16),
+                    height: RfH(11),
+                    width: RfH(11),
                   }}>
-                  <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>{cartCount}</Text>
+                  <Text style={{ fontSize: 7, font: Fonts.bold, color: Colors.white }}>{cartCount}</Text>
                 </View>
               )}
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
-              style={{ paddingLeft: RfW(8) }}>
-              <IconButtonWrapper
-                iconImage={Images.bell}
-                iconHeight={RfH(18)}
-                iconWidth={RfW(18)}
-                imageResizeMode="contain"
-              />
-              <View
-                style={{
-                  backgroundColor: Colors.orange,
-                  borderRadius: RfH(20),
-                  position: 'absolute',
-                  top: RfH(-10),
-                  left: RfW(0),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: RfH(16),
-                  width: RfH(16),
-                }}>
-                <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>2</Text>
-              </View>
-            </TouchableOpacity>
+            {/* <TouchableOpacity */}
+            {/*  onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)} */}
+            {/*  style={{ paddingLeft: RfW(8) }}> */}
+            {/*  <IconButtonWrapper */}
+            {/*    iconImage={Images.bell} */}
+            {/*    iconHeight={RfH(20)} */}
+            {/*    iconWidth={RfW(20)} */}
+            {/*    imageResizeMode="contain" */}
+            {/*  /> */}
+            {/*  <View */}
+            {/*    style={{ */}
+            {/*      backgroundColor: Colors.orange, */}
+            {/*      borderRadius: RfH(20), */}
+            {/*      position: 'absolute', */}
+            {/*      top: RfH(-10), */}
+            {/*      left: RfW(0), */}
+            {/*      alignItems: 'center', */}
+            {/*      justifyContent: 'center', */}
+            {/*      height: RfH(16), */}
+            {/*      width: RfH(16), */}
+            {/*    }}> */}
+            {/*    <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>2</Text> */}
+            {/*  </View> */}
+            {/* </TouchableOpacity> */}
           </View>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -739,7 +757,7 @@ function StudentDashboard(props) {
       </View>
 
       <StudentOfferingModal
-        onClose={setStudentOfferingModalVisible}
+        onClose={handleStudentOfferingModal}
         visible={studentOfferingModalVisible}
         onSelect={onOfferingSelect}
         offerings={interestedOfferings}

@@ -5,6 +5,7 @@ export const CREATE_BOOKING = gql`
   mutation CreateBooking($orderCreateDto: OrderCreateDto!) {
     createBooking(orderCreateDto: $orderCreateDto) {
       id
+      uuid
       billingAddress {
         id
         street

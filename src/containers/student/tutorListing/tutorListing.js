@@ -15,9 +15,10 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
+import { Button } from 'native-base';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { getSaveData, getSubjectIcons, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { getSaveData, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { CompareModal, IconButtonWrapper, SelectSubjectModal } from '../../../components';
 import { GET_FAVOURITE_TUTORS, SEARCH_TUTORS } from '../tutor-query';
@@ -44,6 +45,7 @@ function TutorListing(props) {
   const [tutorList, setTutorList] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
   const [loadMoreButton, setLoadMoreButton] = useState(true);
+  const [isFilterApplied, setFilterApplied] = useState(true);
 
   const [filterValues, setFilterValues] = useState({
     certified: true,
@@ -231,12 +233,14 @@ function TutorListing(props) {
     setShowFilterPopup(false);
     setFilterObj(filterObjData);
     setFilterValuesHandle(filterObjData);
+    setFilterApplied(true);
   };
 
   const clearFilters = () => {
     setFilterObj({ ...TEMP_FILTER_DATA });
     setFilterValuesHandle(TEMP_FILTER_DATA);
     setShowFilterPopup(false);
+    setFilterApplied(false);
   };
 
   const removeFilter = (key) => {
@@ -285,6 +289,7 @@ function TutorListing(props) {
   );
 
   const handleSubjectSelection = (sub) => {
+    setFilterApplied(false);
     setShowAllSubjects(false);
     setOffering(sub);
     clearFilters();
@@ -317,7 +322,7 @@ function TutorListing(props) {
               </View>
               <IconButtonWrapper
                 styling={styles.bookIcon}
-                iconImage={getSubjectIcons(offering?.displayName)}
+                iconImage={Images.subjectSwitcher}
                 submitFunction={() => setShowAllSubjects(true)}
               />
             </View>
@@ -340,8 +345,10 @@ function TutorListing(props) {
                 </View>
               </View>
               <IconButtonWrapper
-                styling={[styles.bookIcon, { alignSelf: 'flex-end' }]}
-                iconImage={getSubjectIcons(offering?.displayName)}
+                iconWidth={RfH(40)}
+                iconHeight={RfH(40)}
+                styling={{ alignSelf: 'flex-end' }}
+                iconImage={Images.subjectSwitcher}
                 submitFunction={() => setShowAllSubjects(true)}
               />
             </View>
@@ -412,8 +419,19 @@ function TutorListing(props) {
                 commonStyles.regularMutedText,
                 { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
               ]}>
-              No tutor found for the selected subject and filters.
+              {isFilterApplied
+                ? "Oops we don't have anyone for the applied filters."
+                : "Oops we don't have anyone for selected subject."}
             </Text>
+            <View style={{ height: RfH(40) }} />
+            <Button
+              block
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+              onPress={() => (isFilterApplied ? setShowFilterPopup(true) : setShowAllSubjects(true))}>
+              <Text style={commonStyles.textButtonPrimary}>
+                {isFilterApplied ? 'Change Filters' : 'Change Subject'}
+              </Text>
+            </Button>
           </View>
         )}
       </ScrollView>

@@ -93,6 +93,16 @@ export const SEARCH_QPOINTS_TRANSACTIONS = gql`
   }
 `;
 
+export const GET_MY_QPOINTS_BALANCE = gql`
+  query getMyBalance {
+    getMyBalance {
+      earn
+      redeem
+      balance
+    }
+  }
+`;
+
 export const SEARCH_IN_INQUIRY = gql`
   query SearchInquiry($searchDto: SearchInquiryDto!) {
     searchInquiry(searchDto: $searchDto) {

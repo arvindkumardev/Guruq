@@ -7,26 +7,33 @@ import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Image, Text, TextInput, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Button, Picker, Input } from 'native-base';
+import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { isEmpty, range, sum } from 'lodash';
-import { IconButtonWrapper, PaymentMethodModal, ScreenHeader, Loader } from '../../../../components';
+import { sum } from 'lodash';
+import { useNavigation } from '@react-navigation/native';
+import {
+  IconButtonWrapper,
+  Loader,
+  PaymentMethodModal,
+  ScreenHeader,
+  TutorImageComponent,
+} from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
 import styles from '../styles';
-import { alertBox, getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, RfH, RfW } from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import QPointPayModal from '../components/qPointPayModal';
-import CouponModal from '../components/couponModal';
 import { GET_CART_ITEMS } from '../../booking.query';
-import { ADD_TO_CART, CHECK_COUPON, REMOVE_CART_ITEM } from '../../booking.mutation';
+import { ADD_TO_CART, REMOVE_CART_ITEM } from '../../booking.mutation';
 import { ME_QUERY } from '../../../common/graphql-query';
 import routeNames from '../../../../routes/screenNames';
-import { GET_TUTOR_OFFERINGS } from '../../tutor-query';
+import CustomModalWebView from '../../../../components/CustomModalWebView';
+import { PaymentMethodEnum } from '../../../../components/PaymentMethodModal/paymentMethod.enum';
 
 const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   // const [showCouponModal, setShowCouponModal] = useState(false);
+  const navigation = useNavigation();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -35,6 +42,11 @@ const MyCart = () => {
   const [qPoints, setQPoints] = useState(0);
   const [qPointsRedeem, setQPointsRedeem] = useState(0);
   const [applyQPoints, setApplyQPoints] = useState(false);
+
+  const [paymentModal, setPaymentModal] = useState(false);
+  const [bookingId, setBookingId] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('success');
+  const [count, setCount] = useState(1);
 
   // const [applyCoupons, setApplyCoupons] = useState(false);
   // const [appliedCouponCode, setAppliedCouponCode] = useState('');
@@ -103,7 +115,6 @@ const MyCart = () => {
   useEffect(() => {
     if (userData) {
       setQPoints(userData.me.qPoints);
-
     }
   }, [userData]);
 
@@ -166,12 +177,55 @@ const MyCart = () => {
     setQPointsRedeem(0);
   };
 
-  const selectQPoints = (value) => {
-    setQPointsRedeem(value);
+  const handlePaytmPayment = (bookingId) => {
+    setShowPaymentModal(false);
+    setPaymentModal(true);
+    setBookingId(bookingId);
+    // console.log('bookingId', bookingId);
+    // setPaymentUrl(`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}`);
   };
 
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
+  useEffect(() => {
+    if (!paymentModal && paymentStatus === 'failure') {
+      alertBox('Transaction Failed', 'Please try again', {
+        positiveText: 'Try Again',
+        onPositiveClick: () => {
+          setPaymentModal(true);
+          setPaymentStatus('');
+        },
+        negativeText: 'Cancel',
+      });
+    }
+  }, [paymentModal]);
+
+  const handlePaymentAuthorization = async (event) => {
+    if (event.url.indexOf('http://dashboardv2.guruq.in/booking/confirmation') > -1) {
+      setBookingId('');
+      setPaymentStatus('success');
+      setPaymentModal(false);
+      navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, {
+        data: {},
+        paymentMethod: PaymentMethodEnum.PAYTM.value,
+      });
+    } else if (event.url.indexOf('http://dashboardv2.guruq.in/booking/failure') > -1) {
+      setPaymentModal(false);
+      setPaymentStatus('failure');
+      setCount((count) => count + 1);
+    } else {
+      console.log('url', event.url);
+    }
+  };
+
+  const paymentBackButtonHandler = () => {
+    alertBox('Do you really want to cancel the transaction', '', {
+      positiveText: 'Yes',
+      onPositiveClick: () => {
+        setPaymentStatus('');
+        setBookingId('');
+        setPaymentModal(false);
+      },
+      negativeText: 'No',
+    });
   };
 
   const removeCartItem = (item) => {
@@ -247,13 +301,7 @@ const MyCart = () => {
 
   const renderCartItems = (item, index) => (
     <View style={[commonStyles.horizontalChildrenStartView, { marginBottom: RfH(16) }]}>
-      <IconButtonWrapper
-        iconHeight={RfH(80)}
-        iconWidth={RfW(80)}
-        imageResizeMode="cover"
-        iconImage={getTutorImage(item?.tutor)}
-        styling={{ flex: 0.3, borderRadius: 8 }}
-      />
+      <TutorImageComponent tutor={item?.tutor} width={80} height={80} styling={{ flex: 0.3, borderRadius: 8 }} />
       <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <View>
@@ -646,9 +694,19 @@ const MyCart = () => {
         bookingData={{ itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeem) }}
         amount={amount}
         deductedAgaintQPoint={qPointsRedeem}
+        handlePaytmPayment={handlePaytmPayment}
         // discount={appliedCouponValue}
         hidePaymentPopup={() => setShowPaymentModal(false)}
       />
+      {paymentModal && bookingId !== '' && (
+        <CustomModalWebView
+          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}?${count}`}
+          headerText="Payment"
+          modalVisible={paymentModal}
+          onNavigationStateChange={handlePaymentAuthorization}
+          backButtonHandler={paymentBackButtonHandler}
+        />
+      )}
     </View>
   );
 };

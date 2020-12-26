@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
-import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader } from '../../../components';
+import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -133,13 +133,7 @@ function ScheduleClass(props) {
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(20) }]}>
         <TouchableOpacity style={commonStyles.horizontalChildrenStartView} onPress={() => tutorDetail(classData)}>
           <View style={commonStyles.verticallyStretchedItemsView}>
-            <IconButtonWrapper
-              styling={{ borderRadius: RfH(32) }}
-              iconWidth={RfH(64)}
-              iconHeight={RfH(64)}
-              imageResizeMode="cover"
-              iconImage={getTutorImage(classData?.tutor)}
-            />
+            <TutorImageComponent tutor={classData?.tutor} width={64} height={64} styling={{ borderRadius: RfH(32) }} />
           </View>
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text
@@ -234,14 +228,14 @@ function ScheduleClass(props) {
           scrollEnabled={tutorClasses.length > 6}
           extraData={refresh}
         />
-        <DateSlotSelectorModal
-          visible={showSlotSelector}
-          onClose={() => setShowSlotSelector(false)}
-          tutorId={classData?.tutor?.id}
-          onSubmit={onScheduleClass}
-          studentId={studentInfo?.id}
-        />
       </View>
+      <DateSlotSelectorModal
+        visible={showSlotSelector}
+        onClose={() => setShowSlotSelector(false)}
+        tutorId={classData?.tutor?.id}
+        onSubmit={onScheduleClass}
+        studentId={studentInfo?.id}
+      />
     </>
   );
 }

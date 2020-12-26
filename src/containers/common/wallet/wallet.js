@@ -1,27 +1,20 @@
-/* eslint-disable react/no-typos */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-console */
-import { ScrollView, Text, View, Image, FlatList } from 'react-native';
+import { FlatList, ScrollView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import PropTypes from 'prop-types';
 import ProgressCircle from 'react-native-progress-circle';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import commonStyles from '../../../theme/styles';
-import { formatDate, printDateTime, RfH, RfW } from '../../../utils/helpers';
-import { Colors, Fonts, Images } from '../../../theme';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { printDateTime, RfH, RfW } from '../../../utils/helpers';
+import { Colors, Fonts } from '../../../theme';
 import { userDetails } from '../../../apollo/cache';
-import { IconButtonWrapper } from '../../../components';
-import { SEARCH_QPOINTS_TRANSACTIONS } from '../graphql-query';
+import { Loader } from '../../../components';
+import { GET_MY_QPOINTS_BALANCE, SEARCH_QPOINTS_TRANSACTIONS } from '../graphql-query';
 
-function Wallet(props) {
-  const navigation = useNavigation();
+function Wallet() {
+  const isFocussed = useIsFocused();
   const [showHeader, setShowHeader] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
-  const { changeTab } = props;
+  const [balanceData, setBalanceData] = useState({});
 
   const userInfo = useReactiveVar(userDetails);
 
@@ -29,6 +22,22 @@ function Wallet(props) {
     const scrollPosition = event.nativeEvent.contentOffset.y;
     setShowHeader(scrollPosition > 30);
   };
+
+  const [getMyQpointBalance, { loading: loadingPointsBalance }] = useLazyQuery(GET_MY_QPOINTS_BALANCE, {
+    fetchPolicy: 'no-cache',
+    variables: { searchDto: { userId: userInfo?.id } },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+        setBalanceData(data.getMyBalance);
+      }
+    },
+  });
 
   const [getQPointsTransactions, { loading: loadingPointsTransactions }] = useLazyQuery(SEARCH_QPOINTS_TRANSACTIONS, {
     fetchPolicy: 'no-cache',
@@ -46,14 +55,11 @@ function Wallet(props) {
   });
 
   useEffect(() => {
-    getQPointsTransactions();
-  }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
+    if (isFocussed) {
       getQPointsTransactions();
-    }, [])
-  );
+      getMyQpointBalance();
+    }
+  }, [isFocussed]);
 
   const renderBalanceView = () => {
     return (
@@ -69,7 +75,7 @@ function Wallet(props) {
           },
         ]}>
         <ProgressCircle
-          percent={70}
+          percent={(balanceData.earn / balanceData.redeem) * 100}
           radius={32}
           borderWidth={6}
           color={Colors.brandBlue2}
@@ -79,15 +85,15 @@ function Wallet(props) {
         />
         <View style={commonStyles.verticallyCenterItemsView}>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            ₹ {parseFloat(userInfo.qPoints).toFixed(2)}
+            ₹ {parseFloat(balanceData.earn).toFixed(2)}
           </Text>
-          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Total Income</Text>
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Total Points</Text>
         </View>
         <View style={commonStyles.verticallyCenterItemsView}>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            ₹ {parseFloat(userInfo.qPoints).toFixed(2)}
+            ₹ {parseFloat(balanceData.redeem).toFixed(2)}
           </Text>
-          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Expenditure</Text>
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Points Redeemed</Text>
         </View>
       </View>
     );
@@ -118,7 +124,8 @@ function Wallet(props) {
   };
 
   return (
-    <View style={{ backgroundColor: Colors.white }}>
+    <View style={{ backgroundColor: Colors.white, flex: 1 }}>
+      <Loader isLoading={loadingPointsTransactions || loadingPointsBalance} />
       <View style={{ height: RfH(44), marginHorizontal: RfW(16), alignItems: 'center', justifyContent: 'center' }}>
         {showHeader && <Text style={commonStyles.headingPrimaryText}>My Wallet</Text>}
       </View>
@@ -126,7 +133,8 @@ function Wallet(props) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           onScroll={(event) => handleScroll(event)}
-          scrollEventThrottle={16}>
+          scrollEventThrottle={16}
+          scrollEnabled={transactionData.length > 0}>
           <Text style={[commonStyles.pageTitleThirdRow, { marginHorizontal: RfW(16) }]}>My Wallet</Text>
           {/* <View style={{ height: RfH(44) }} />
           <View
@@ -206,13 +214,4 @@ function Wallet(props) {
     </View>
   );
 }
-
-Wallet.propTypes = {
-  changeTab: PropTypes.func,
-};
-
-Wallet.defaultProps = {
-  changeTab: null,
-};
-
 export default Wallet;

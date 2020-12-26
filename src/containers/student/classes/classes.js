@@ -4,7 +4,7 @@ import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { IconButtonWrapper, SelectSubjectModal } from '../../../components';
+import { IconButtonWrapper, SelectSubjectModal, TutorImageComponent } from '../../../components';
 import Loader from '../../../components/Loader';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
@@ -152,20 +152,14 @@ function MyClasses() {
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
-          <View style={commonStyles.horizontalChildrenStartView}>
+          <TouchableOpacity
+            style={commonStyles.horizontalChildrenStartView}
+            onPress={() => tutorDetail(item)}
+            activeOpacity={0.8}>
             <View style={commonStyles.verticallyStretchedItemsView}>
-              <IconButtonWrapper
-                styling={{ borderRadius: RfH(32) }}
-                iconWidth={RfH(64)}
-                iconHeight={RfH(64)}
-                imageResizeMode="cover"
-                iconImage={getTutorImage(item.tutor)}
-                submitFunction={() => tutorDetail(item)}
-              />
+              <TutorImageComponent tutor={item?.tutor} height={64} width={64} styling={{ borderRadius: RfH(32) }} />
             </View>
-            <TouchableOpacity
-              style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}
-              onPress={() => tutorDetail(item)}>
+            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
                 style={{
                   fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
@@ -181,8 +175,8 @@ function MyClasses() {
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 {item.onlineClass ? 'Online' : 'Offline'} - Individual Class
               </Text>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
           <View style={commonStyles.verticallyCenterItemsView}>
             <Text
               style={[

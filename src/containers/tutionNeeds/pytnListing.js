@@ -16,30 +16,14 @@ import { GET_TUTION_NEED_LISTING } from './pytn.query';
 import { offeringsMasterData, studentDetails } from '../../apollo/cache';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
 
-function TutionNeedsListing(props) {
+function PytnListing(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const studentInfo = useReactiveVar(studentDetails);
-  const { selectedOffering } = props.route.params;
 
   const [orderItems, setOrderItems] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
-
-  // const [getTutorNeedsAccepted, { loading: loadingTutionNeedss }] = useLazyQuery(GET_ACCEPTED_TUTOR_NEED, {
-  //   onError: (e) => {
-  //     console.log('e', e);
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     if (data) {
-  //       console.log(data);
-  //       setOrderItems(data?.searchStudentPYTN?.edges);
-  //     }
-  //   },
-  // });
 
   const [getTutionNeeds, { loading: loadingTutionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
     fetchPolicy: 'no-cache',
@@ -56,7 +40,7 @@ function TutionNeedsListing(props) {
     },
   });
 
-  const [deletePYTN, { loading: pytnLoading }] = useMutation(DELETE_STUDENT_PYTN, {
+  const [deletePYTN, { loading: pytnDelete }] = useMutation(DELETE_STUDENT_PYTN, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -65,7 +49,13 @@ function TutionNeedsListing(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
+        alertBox('Request removed successfully', '', {
+          positiveText: 'ok',
+          onPositiveClick: () => {
+            getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
+          },
+          negativeText: 'No',
+        });
       }
     },
   });
@@ -92,7 +82,7 @@ function TutionNeedsListing(props) {
   const renderClassItem = (item) => (
     <>
       <TouchableOpacity
-        onPress={() => navigation.navigate(routeNames.TUTION_NEEDS_HISTORY, { data: item })}
+        onPress={() => navigation.navigate(routeNames.TUTION_NEEDS_HISTORY, { data: item, studentPytnId: item.id })}
         activeOpacity={1}>
         <View style={{ height: RfH(35) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -160,64 +150,66 @@ function TutionNeedsListing(props) {
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <Loader isLoading={loadingTutionNeeds} />
-      <ScreenHeader
-        homeIcon
-        label="Post your tuition needs"
-        horizontalPadding={RfW(16)}
-        rightIcon={Images.moreInformation}
-        showRightIcon
-        onRightIconClick={addRequestHandle}
-      />
-      {!isListEmpty && (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ paddingHorizontal: RfW(16) }}>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={orderItems}
-              renderItem={({ item }) => renderClassItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: RfH(170) }}
-            />
-          </View>
-        </ScrollView>
-      )}
+    <>
+      <Loader isLoading={loadingTutionNeeds || pytnDelete} />
+      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
+        <ScreenHeader
+          homeIcon
+          label="Post your tuition needs"
+          horizontalPadding={RfW(16)}
+          rightIcon={Images.moreInformation}
+          showRightIcon
+          onRightIconClick={addRequestHandle}
+        />
+        {!isListEmpty && (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{ paddingHorizontal: RfW(16) }}>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={orderItems}
+                renderItem={({ item }) => renderClassItem(item)}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={{ paddingBottom: RfH(170) }}
+              />
+            </View>
+          </ScrollView>
+        )}
 
-      {isListEmpty && (
-        <View style={{ flex: 1, paddingTop: RfH(100), alignItems: 'center' }}>
-          <Image
-            source={Images.nopytn}
-            style={{
-              height: RfH(264),
-              width: RfW(248),
-              marginBottom: RfH(32),
-            }}
-            resizeMode="contain"
-          />
-          <Text
-            style={[
-              commonStyles.pageTitleThirdRow,
-              { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
-            ]}>
-            No data found
-          </Text>
-          <Text
-            style={[
-              commonStyles.regularMutedText,
-              { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
-            ]}>
-            Looks like you haven't Requested for any class.
-          </Text>
-          <Button
-            onPress={addRequestHandle}
-            style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
-            <Text style={commonStyles.textButtonPrimary}>Post your tuition needs</Text>
-          </Button>
-        </View>
-      )}
-    </View>
+        {isListEmpty && (
+          <View style={{ flex: 1, paddingTop: RfH(100), alignItems: 'center' }}>
+            <Image
+              source={Images.nopytn}
+              style={{
+                height: RfH(264),
+                width: RfW(248),
+                marginBottom: RfH(32),
+              }}
+              resizeMode="contain"
+            />
+            <Text
+              style={[
+                commonStyles.pageTitleThirdRow,
+                { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+              ]}>
+              No data found
+            </Text>
+            <Text
+              style={[
+                commonStyles.regularMutedText,
+                { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
+              ]}>
+              Looks like you haven't Requested for any class.
+            </Text>
+            <Button
+              onPress={addRequestHandle}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
+              <Text style={commonStyles.textButtonPrimary}>Post your tuition needs</Text>
+            </Button>
+          </View>
+        )}
+      </View>
+    </>
   );
 }
 
-export default TutionNeedsListing;
+export default PytnListing;

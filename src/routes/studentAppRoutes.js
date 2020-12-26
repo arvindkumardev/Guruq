@@ -22,11 +22,11 @@ import OnlineClass from '../containers/onlineClass/onlineClass';
 import CalendarView from '../containers/student/calendar/calendarView';
 import FavouriteTutors from '../containers/student/dashboard/favouriteTutors';
 import ReferEarn from '../containers/referAndEarn/referEarn';
-import PostTutionNeeds from '../containers/tutionNeeds/postTutionNeeds';
-import PostTutionNeedDetails from '../containers/tutionNeeds/postTutionNeedDetails';
+import PytnSubjectSelection from '../containers/tutionNeeds/pytnSubjectSelection';
+import PytnSubmit from '../containers/tutionNeeds/pytnSubmit';
 import WebViewPages from '../containers/student/profile/webViewPages';
-import TutionNeedsListing from '../containers/tutionNeeds/tutionNeedsListing';
-import TutionNeedsHistory from '../containers/tutionNeeds/TutionNeedsHistory';
+import PytnListing from '../containers/tutionNeeds/pytnListing';
+import PytnDetail from '../containers/tutionNeeds/pytnDetail';
 import WebViewPage from '../components/WebViewPage';
 import Notifications from '../containers/student/dashboard/notifications';
 import SendFeedback from '../containers/common/sendFeedback';
@@ -153,12 +153,12 @@ export const getStudentRoutes = () => {
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.POST_TUTION_NEEDS}
-        component={PostTutionNeeds}
+        component={PytnSubjectSelection}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name={NavigationRouteNames.POST_TUTION_NEED_DETAILS}
-        component={PostTutionNeedDetails}
+        component={PytnSubmit}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -168,12 +168,12 @@ export const getStudentRoutes = () => {
       />
       <Stack.Screen
         name={NavigationRouteNames.TUTION_NEEDS_LISTING}
-        component={TutionNeedsListing}
+        component={PytnListing}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name={NavigationRouteNames.TUTION_NEEDS_HISTORY}
-        component={TutionNeedsHistory}
+        component={PytnDetail}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />

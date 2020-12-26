@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightPurple,
   },
   bookIcon: {
-    height: RfH(40),
-    width: RfH(40),
+    height: RfH(30),
+    width: RfH(30),
   },
   switchView: {
     flexDirection: 'row',

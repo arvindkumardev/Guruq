@@ -6,8 +6,9 @@ import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { isEmpty } from 'lodash';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
-import { DateSlotSelectorModal, IconButtonWrapper, RateReview } from '../../../components';
+import { DateSlotSelectorModal, IconButtonWrapper, RateReview, TutorImageComponent } from '../../../components';
 import BackArrow from '../../../components/BackArrow';
 import Loader from '../../../components/Loader';
 import NavigationRouteNames from '../../../routes/screenNames';
@@ -176,7 +177,10 @@ function ScheduledClassDetails(props) {
   );
 
   return (
-    <TouchableOpacity style={{ backgroundColor: Colors.white, flex: 1 }} activeOpacity={1} onPress={()=>setOpenMenu(false)}>
+    <TouchableOpacity
+      style={{ backgroundColor: Colors.white, flex: 1 }}
+      activeOpacity={1}
+      onPress={() => setOpenMenu(false)}>
       <Loader isLoading={classDetailsLoading || scheduleLoading} />
       <ScrollView
         stickyHeaderIndices={[0]}
@@ -344,24 +348,27 @@ function ScheduledClassDetails(props) {
           <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.tutor_icon} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
         </View>
-        <TouchableOpacity
-          style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}
-          activeOpacity={0.8}
-          onPress={handleTutorDetail}>
-          <IconButtonWrapper
-            iconImage={getTutorImage(classData?.classEntity?.tutor)}
-            iconHeight={RfH(48)}
-            iconWidth={RfH(48)}
-            styling={{ borderRadius: RfH(8) }}
-          />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>
-              {classData?.classEntity?.tutor?.contactDetail?.firstName}{' '}
-              {classData?.classEntity?.tutor?.contactDetail?.lastName}
-            </Text>
-            <Text style={commonStyles.mediumMutedText}>T{classData?.classEntity?.tutor?.id}</Text>
-          </View>
-        </TouchableOpacity>
+        {!isEmpty(classData) && (
+          <TouchableOpacity
+            style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}
+            activeOpacity={0.8}
+            onPress={handleTutorDetail}>
+            <TutorImageComponent
+              tutor={classData?.classEntity?.tutor}
+              height={48}
+              width={48}
+              fontSize={30}
+              styling={{ borderRadius: RfH(8) }}
+            />
+            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+              <Text style={commonStyles.headingPrimaryText}>
+                {classData?.classEntity?.tutor?.contactDetail?.firstName}{' '}
+                {classData?.classEntity?.tutor?.contactDetail?.lastName}
+              </Text>
+              <Text style={commonStyles.mediumMutedText}>T{classData?.classEntity?.tutor?.id}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
 
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
