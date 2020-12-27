@@ -1,11 +1,11 @@
 import { View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Colors } from '../../theme';
-import { RfW } from '../../utils/helpers';
-import commonStyles from '../../theme/styles';
-import { ChooseSubjectComponent, ScreenHeader } from '../../components';
-import NavigationRouteNames from '../../routes/screenNames';
+import { Colors } from '../../../theme';
+import { RfW } from '../../../utils/helpers';
+import commonStyles from '../../../theme/styles';
+import { ChooseSubjectComponent, ScreenHeader } from '../../../components';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function PytnSubjectSelection() {
   const navigation = useNavigation();

@@ -4,14 +4,14 @@ import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import { isEmpty } from 'lodash';
-import { Colors, Images } from '../../theme';
-import { alertBox, RfH, RfW } from '../../utils/helpers';
-import commonStyles from '../../theme/styles';
+import { Colors, Images } from '../../../theme';
+import { alertBox, RfH, RfW } from '../../../utils/helpers';
+import commonStyles from '../../../theme/styles';
 import styles from './styles';
-import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../components';
+import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../components';
 import { CREATE_STUDENT_PYTN } from './pytn.mutation';
-import routeNames from '../../routes/screenNames';
-import Loader from '../../components/Loader';
+import routeNames from '../../../routes/screenNames';
+import Loader from '../../../components/Loader';
 
 function PytnSubmit(props) {
   const { route } = props;

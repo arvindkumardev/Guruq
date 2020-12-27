@@ -5,15 +5,15 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button } from 'native-base';
-import { Colors, Fonts, Images } from '../../theme';
-import routeNames from '../../routes/screenNames';
-import { alertBox, getSubjectIcons, RfH, RfW } from '../../utils/helpers';
-import commonStyles from '../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { IconButtonWrapper, ScreenHeader } from '../../components';
-import Loader from '../../components/Loader';
+import { Colors, Fonts, Images } from '../../../theme';
+import routeNames from '../../../routes/screenNames';
+import { alertBox, getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
+import commonStyles from '../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { IconButtonWrapper, ScreenHeader } from '../../../components';
+import Loader from '../../../components/Loader';
 import { GET_TUTION_NEED_LISTING } from './pytn.query';
-import { offeringsMasterData, studentDetails } from '../../apollo/cache';
+import { offeringsMasterData, studentDetails } from '../../../apollo/cache';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
 
 function PytnListing(props) {

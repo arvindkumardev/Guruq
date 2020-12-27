@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Fonts } from '../../theme';
-import Colors from '../../theme/colors';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { RfH, RfW } from '../../utils/helpers';
+import { Fonts } from '../../../theme';
+import Colors from '../../../theme/colors';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { RfH, RfW } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
   itemStyle: {

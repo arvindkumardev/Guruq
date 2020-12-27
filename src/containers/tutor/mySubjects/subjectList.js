@@ -2,14 +2,13 @@ import { View, FlatList, Text, TouchableWithoutFeedback } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { IconButtonWrapper, ScreenHeader } from '../../../components';
+import { IconButtonWrapper, ScreenHeader, Loader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Images, Colors } from '../../../theme';
 import { getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
 import { tutorDetails } from '../../../apollo/cache';
 import { GET_TUTOR_OFFERINGS } from '../../student/tutor-query';
-import routeNames from '../../../routes/screenNames';
-import Loader from '../../../components/Loader';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function SubjectList() {
   const navigation = useNavigation();
@@ -48,7 +47,8 @@ function SubjectList() {
   );
 
   const renderSubjects = (item) => (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.PRICE_MATRIX, { offering: item })}>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX, { offering: item })}>
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(16) }]}>
           <View style={commonStyles.horizontalChildrenView}>
@@ -81,7 +81,7 @@ function SubjectList() {
         showRightIcon
         rightIcon={Images.moreInformation}
         horizontalPadding={RfW(16)}
-        onRightIconClick={() => navigation.navigate(routeNames.POST_TUTION_NEEDS)}
+        onRightIconClick={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECT_SELECTION)}
       />
       <View style={commonStyles.verticallyStretchedItemsView}>
         <FlatList

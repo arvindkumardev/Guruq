@@ -434,12 +434,12 @@ const MyCart = () => {
         <View
           style={{
             backgroundColor: Colors.white,
-            height: RfH(44),
+            height: RfH(50),
             paddingHorizontal: RfW(16),
           }}>
           <View style={commonStyles.lineSeparator} />
 
-          <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(50), alignItems: 'center' }]}>
             <Text style={commonStyles.secondaryText}>{qPoints} Available Points</Text>
             <View
               style={[

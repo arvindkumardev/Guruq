@@ -1,10 +1,10 @@
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { Button } from 'native-base';
 import { ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfW } from '../../../utils/helpers';
 import { Colors } from '../../../theme';
 import PriceMatrixView from './components/priceMatrixView';
 import WhyMeView from './components/whyMeView';

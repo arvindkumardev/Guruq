@@ -60,6 +60,7 @@ const NavigationRouteNames = {
     ONLINE_CLASS: 'online_class',
     CERTIFICATION_COMPLETED_VIEW: 'certification_completed_view',
     SUBJECTS_LIST: 'subjects_list',
+    SUBJECT_SELECTION: 'subject_selection',
     PRICE_MATRIX: 'price_matrix',
     VIEW_SCHEDULE: 'view_schedule',
     UPDATE_SCHEDULE: 'update_schedule',
