@@ -1,20 +1,25 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useIsFocused } from '@react-navigation/native';
 import { Button } from 'native-base';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
-import { IconButtonWrapper, ScreenHeader, Loader } from '../../../components';
+import { IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
 import { Colors, Fonts } from '../../../theme';
 import { alertBox, getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_TUTOR_PYTN_REQUESTS } from '../../student/pytn/pytn.query';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { offeringsMasterData } from '../../../apollo/cache';
 import { ACCEPT_STUDENT_PYTN } from '../../student/pytn/pytn.mutation';
+import PriceInputModal from './priceInputModal';
 
 function PytnRequests() {
   const [requests, setRequests] = useState([]);
+  const [selectedPytn, setSelectedPytn] = useState({});
+  const [priceVal, setPriceVal] = useState(0);
+  const [showPriceModal, setShowPriceModal] = useState(false);
   const isFocussed = useIsFocused();
   const offeringMasterData = useReactiveVar(offeringsMasterData);
 
@@ -41,24 +46,58 @@ function PytnRequests() {
     },
     onCompleted: (data) => {
       if (data) {
-        alertBox('Request accepted successfully', '', {
-          positiveText: 'ok',
+        alertBox(`Request ${isEmpty(selectedPytn.acceptedPytns) ? 'accepted' : 'edited'} successfully`, '', {
+          positiveText: 'Ok',
           onPositiveClick: () => {
-            getPytnRequests({ variables: { searchDto: { size: 100 } } });
+            getPytnRequests({ variables: { searchDto: { size: 15 } } });
           },
-          negativeText: 'No',
         });
       }
     },
   });
 
   const handleAccept = (request) => {
-    acceptStudentPytn({ variables: { studentPYTNAcceptDto: { studentPytnId: request.id, price: 150 } } });
+    setSelectedPytn(request);
+    if (isEmpty(request.acceptedPytns)) {
+      setPriceVal(0);
+    } else {
+      setPriceVal(request.acceptedPytns[0].price);
+    }
+    setShowPriceModal(true);
+  };
+
+  const onSubmit = () => {
+    if (priceVal === 0) {
+      alertBox('Please enter the amount');
+    } else if (priceVal < selectedPytn.minPrice || priceVal > selectedPytn.maxPrice) {
+      alertBox('Please enter the correct amount');
+    } else if (isEmpty(selectedPytn.acceptedPytns)) {
+      setShowPriceModal(false);
+      acceptStudentPytn({
+        variables: {
+          studentPYTNAcceptDto: {
+            studentPytnId: selectedPytn.id,
+            price: parseFloat(priceVal),
+          },
+        },
+      });
+    } else {
+      setShowPriceModal(false);
+      acceptStudentPytn({
+        variables: {
+          studentPYTNAcceptDto: {
+            studentPytnId: selectedPytn.id,
+            price: parseFloat(priceVal),
+            id: selectedPytn.acceptedPytns[0].id,
+          },
+        },
+      });
+    }
   };
 
   useEffect(() => {
     if (isFocussed) {
-      getPytnRequests({ variables: { searchDto: { size: 100 } } });
+      getPytnRequests({ variables: { searchDto: { size: 15 } } });
     }
   }, [isFocussed]);
 
@@ -122,9 +161,19 @@ function PytnRequests() {
         </View>
       </View>
       <View style={commonStyles.lineSeparator} />
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginVertical: RfH(5) }}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: !isEmpty(item.acceptedPytns) ? 'space-between' : 'flex-end',
+          marginVertical: RfH(5),
+          alignItems: 'center',
+        }}>
+        {!isEmpty(item.acceptedPytns) && <Text style={commonStyles.mediumPrimaryText}>Request accepted</Text>}
         <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]} onPress={() => handleAccept(item)}>
-          <Text style={commonStyles.textButtonPrimary}>Accept</Text>
+          <Text style={commonStyles.textButtonPrimary}>
+            {!isEmpty(item.acceptedPytns) ? 'Edit Request' : 'Accept Request'}
+          </Text>
         </Button>
       </View>
       <View style={commonStyles.lineSeparator} />
@@ -141,8 +190,17 @@ function PytnRequests() {
           renderItem={({ item, index }) => renderClassItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: RfH(120) }}
+          showsVerticalScrollIndicator={false}
         />
       </View>
+      <PriceInputModal
+        visible={showPriceModal}
+        onClose={() => setShowPriceModal(false)}
+        onSubmit={onSubmit}
+        onPriceChange={(val) => setPriceVal(val)}
+        price={priceVal}
+        selectedPytn={selectedPytn}
+      />
     </>
   );
 }
