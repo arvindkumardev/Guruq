@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { Alert, Modal, NativeEventEmitter, NativeModules, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
@@ -33,8 +33,6 @@ const PaymentMethod = (props) => {
 
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(PaymentMethodEnum.ONLINE.value);
-
-  const [paymentStatus, setPaymentStatus] = useState(OrderPaymentStatusEnum.FAILED.value);
 
   const userInfo = useReactiveVar(userDetails);
 
@@ -272,7 +270,6 @@ const PaymentMethod = (props) => {
   };
 
   const completedPayment = (orderId, status, transactionData) => {
-    setPaymentStatus(status);
     const details = {};
     details.orderId = orderId;
     details.paymentStatus = status;

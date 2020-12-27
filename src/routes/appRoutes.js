@@ -37,6 +37,8 @@ const AppStack = (props) => {
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
 
+  console.log("tutorInfo",tutorInfo)
+
   const userDetailsObj = useReactiveVar(userDetails);
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const AppStack = (props) => {
 
   useEffect(() => {
     if (!isEmpty(userDetailsObj)) {
-      console.log('userDetailsObj', userDetailsObj);
+      console.log("userDetailsObj",userDetailsObj)
       getFcmToken().then((token) => {
         if (token) {
           createPayload(userDetailsObj.me, token).then((payload) => {
@@ -120,7 +122,8 @@ const AppStack = (props) => {
       return getStudentRoutes();
     }
     if (userType === UserTypeEnum.TUTOR.label) {
-      if (tutorInfo && tutorInfo?.certified) {
+      console.log("tutorInfo",tutorInfo)
+      if (tutorInfo && tutorInfo.certified) {
         return getTutorRoutes();
       }
 

@@ -3,14 +3,14 @@
 /* eslint-disable operator-assignment */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
-import React, {useEffect, useState} from 'react';
-import {Alert, FlatList, Image, Text, TextInput, View} from 'react-native';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {ScrollView, TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {Button} from 'native-base';
-import {useLazyQuery, useMutation, useReactiveVar} from '@apollo/client';
-import {sum} from 'lodash';
-import {useNavigation} from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, Image, Text, TextInput, View } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Button } from 'native-base';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
+import { sum } from 'lodash';
+import { useNavigation } from '@react-navigation/native';
 import {
   IconButtonWrapper,
   Loader,
@@ -18,25 +18,24 @@ import {
   ScreenHeader,
   TutorImageComponent,
 } from '../../../../components';
-import {Colors, Fonts, Images} from '../../../../theme';
+import { Colors, Fonts, Images } from '../../../../theme';
 import commonStyles from '../../../../theme/styles';
 import styles from '../styles';
-import {alertBox, RfH, RfW} from '../../../../utils/helpers';
-import {STANDARD_SCREEN_SIZE} from '../../../../utils/constants';
-import {GET_CART_ITEMS} from '../../booking.query';
-import {ADD_TO_CART, REMOVE_CART_ITEM} from '../../booking.mutation';
-import {GET_MY_QPOINTS_BALANCE} from '../../../common/graphql-query';
+import { alertBox, RfH, RfW } from '../../../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { GET_CART_ITEMS } from '../../booking.query';
+import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../../booking.mutation';
+import { GET_MY_QPOINTS_BALANCE } from '../../../common/graphql-query';
 import routeNames from '../../../../routes/screenNames';
 import CustomModalWebView from '../../../../components/CustomModalWebView';
-import {PaymentMethodEnum} from '../../../../components/PaymentMethodModal/paymentMethod.enum';
-import {userDetails} from '../../../../apollo/cache';
+import { OrderStatusEnum, PaymentMethodEnum } from '../../../../components/PaymentMethodModal/paymentMethod.enum';
+import { userDetails } from '../../../../apollo/cache';
 
 const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   // const [showCouponModal, setShowCouponModal] = useState(false);
   const navigation = useNavigation();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [refreshList, setRefreshList] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [amount, setAmount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
@@ -78,6 +77,35 @@ const MyCart = () => {
   // const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(GET_CART_ITEMS, {
   //   fetchPolicy: 'no-cache',
   // });
+
+  const [createNewBooking, { loading: bookingLoading }] = useMutation(CREATE_BOOKING, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, {
+          uuid: data?.createBooking?.uuid,
+        });
+      }
+    },
+  });
+
+  const createBookingHandle = () => {
+    const bookingData = { itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeem) };
+    bookingData.convenienceCharges = 0;
+    bookingData.orderPayment = { paymentMethod: PaymentMethodEnum.ONLINE.label, amount: 0 };
+    bookingData.orderPayment.amount = amount;
+    bookingData.itemPrice = amount;
+    bookingData.orderStatus = OrderStatusEnum.PENDING.label;
+    bookingData.promotionId = 0;
+    createNewBooking({
+      variables: { orderCreateDto: bookingData },
+    });
+  };
 
   const [getMyQpointBalance, { loading: loadingPointsBalance }] = useLazyQuery(GET_MY_QPOINTS_BALANCE, {
     fetchPolicy: 'no-cache',
@@ -426,6 +454,7 @@ const MyCart = () => {
                 value={qPointsRedeem}
                 keyboardType="numeric"
                 editable={qPoints !== 0}
+                returnKeyType="done"
               />
             </View>
           </View>
@@ -647,7 +676,7 @@ const MyCart = () => {
               <Text style={commonStyles.headingPrimaryText}>₹{amount - qPointsRedeem}</Text>
             </View>
             <Button
-              onPress={() => setShowPaymentModal(true)}
+              onPress={() => (amount - qPointsRedeem === 0 ? createBookingHandle() : setShowPaymentModal(true))}
               style={[
                 commonStyles.buttonPrimary,
                 {
@@ -656,7 +685,9 @@ const MyCart = () => {
                   marginHorizontal: 0,
                 },
               ]}>
-              <Text style={commonStyles.textButtonPrimary}>Pay Now</Text>
+              <Text style={commonStyles.textButtonPrimary}>
+                {amount - qPointsRedeem === 0 ? 'Create Booking' : 'Pay Now'}
+              </Text>
             </Button>
           </View>
         </View>

@@ -74,13 +74,14 @@ function App() {
   };
 
   useEffect(() => {
-    // clearAllLocalStorage()
+    // clearAllLocalStorage();
     // Fetch the token from storage then navigate to our appropriate place
     bootstrapAsync();
   }, []);
 
   const onStateChangeHandle = async (state) => {
     routeNameRef.current = getActiveRouteName(state);
+    console.log("getActiveRouteName(state)",getActiveRouteName(state))
   };
 
   return (

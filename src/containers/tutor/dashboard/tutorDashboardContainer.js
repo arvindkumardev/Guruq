@@ -22,6 +22,8 @@ function TutorDashboardContainer(props) {
     setActiveTab(tab);
   };
 
+  console.log("saass")
+
   return (
     <SafeAreaView style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
       <StatusBar barStyle="dark-content" />

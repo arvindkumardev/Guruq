@@ -18,6 +18,10 @@ export const SEARCH_TUTORS = gql`
           firstName
           lastName
           gender
+          phoneNumber {
+            countryCode
+            number
+          }
         }
         tutorOfferings {
           id

@@ -1,19 +1,18 @@
 import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import { getToken, RfH, RfW, storeData } from '../../../utils/helpers';
+import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
 import { isLoggedIn } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import LoginCheck from './loginCheck';
-import { ME_QUERY } from '../graphql-query';
 
 function SignUp(props) {
   const navigation = useNavigation();
@@ -27,32 +26,24 @@ function SignUp(props) {
 
   const { route } = props;
 
-  const [addUser, { data: addUserData, error: addUserError, loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
+  const [addUser, { loading: addUserLoading }] = useMutation(SIGNUP_MUTATION, {
     fetchPolicy: 'no-cache',
-  });
-
-  const [getMe, { data: userData, error: userError }] = useLazyQuery(ME_QUERY, {
-    fetchPolicy: 'no-cache',
-  });
-
-  useEffect(() => {
-    if (addUserError && addUserError.graphQLErrors && addUserError.graphQLErrors.length > 0) {
-      const error = addUserError.graphQLErrors[0].extensions.exception.response;
+    onError: (e) => {
+      const error = e.graphQLErrors[0].extensions.exception.response;
       if (error.errorCode === DUPLICATE_FOUND) {
         Alert.alert('Email already being used by another user, please use different email!');
       }
-    }
-  }, [addUserError]);
-
-  useEffect(() => {
-    if (addUserData && addUserData.signUp) {
-      // isLoggedIn(true);
-      storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, addUserData.signUp.token).then(() => {
+    },
+    onCompleted: async (data) => {
+      if (data) {
+        await storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token);
         isLoggedIn(true);
-        getMe();
-      });
-    }
-  }, [addUserData]);
+        //     .then(() => {
+        //   isLoggedIn(true);
+        // });
+      }
+    },
+  });
 
   const onBackPress = () => {
     navigation.goBack();
@@ -113,7 +104,7 @@ function SignUp(props) {
               </View>
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
                 <Label>Email</Label>
-                <Input onChangeText={(text) => setEmail(text)} />
+                <Input onChangeText={(text) => setEmail(text)} keyboardType="email-address" />
               </Item>
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
                 <Label>Password</Label>
