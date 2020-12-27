@@ -504,7 +504,7 @@ function Profile(props) {
           </View>
 
           <View>
-            <IconButtonWrapper iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} imageResizeMode={'contain'}/>
+            <IconButtonWrapper iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} imageResizeMode="contain" />
           </View>
 
           <View>

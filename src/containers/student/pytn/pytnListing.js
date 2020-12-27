@@ -15,6 +15,7 @@ import Loader from '../../../components/Loader';
 import { GET_TUTION_NEED_LISTING } from './pytn.query';
 import { offeringsMasterData, studentDetails } from '../../../apollo/cache';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
+import {isEmpty} from 'lodash'
 
 function PytnListing(props) {
   const navigation = useNavigation();
@@ -50,7 +51,7 @@ function PytnListing(props) {
     onCompleted: (data) => {
       if (data) {
         alertBox('Request removed successfully', '', {
-          positiveText: 'ok',
+          positiveText: 'Ok',
           onPositiveClick: () => {
             getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
           },
@@ -137,10 +138,20 @@ function PytnListing(props) {
           </View>
         </View>
       </TouchableOpacity>
-      <View style={[commonStyles.lineSeparator, { marginTop: RfH(16) }]} />
-      <TouchableOpacity style={{ paddingVertical: RfH(16) }} onPress={() => removePytn(item)}>
-        <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
-      </TouchableOpacity>
+      <View style={[commonStyles.lineSeparator, { marginTop: RfH(10) }]} />
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingVertical: RfH(20),
+        }}>
+        <Text style={commonStyles.mediumPrimaryText}>{!isEmpty(item.acceptedPytns)?`Your request has been accepted by ${item.acceptedPytns.length} tutors`:'Not accepted yet'}</Text>
+        <TouchableOpacity onPress={() => removePytn(item)}>
+          <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
+        </TouchableOpacity>
+      </View>
       <View style={commonStyles.lineSeparator} />
     </>
   );
