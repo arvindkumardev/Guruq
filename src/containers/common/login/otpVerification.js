@@ -51,16 +51,16 @@ function OtpVerification(props) {
 
     onError: (verifyError) => {
       console.log(verifyError);
-      if (verifyError && verifyError.graphQLErrors && verifyError.graphQLErrors.length > 0) {
-        const error = verifyError.graphQLErrors[0].extensions.exception.response;
-        console.log(error);
-        if (error.errorCode === INVALID_INPUT) {
-          // incorrect username/password
-          Alert.alert('Invalid or Incorrect OTP');
-        } else if (error.errorCode === NOT_FOUND) {
-          navigation.navigate(NavigationRouteNames.REGISTER, { mobileObj, newUser: true });
-        }
-      }
+      // if (verifyError && verifyError.graphQLErrors && verifyError.graphQLErrors.length > 0) {
+      //   const error = verifyError.graphQLErrors[0].extensions.exception.response;
+      //   console.log(error);
+      //   if (error.errorCode === INVALID_INPUT) {
+      //     // incorrect username/password
+      //     Alert.alert('Invalid or Incorrect OTP');
+      //   } else if (error.errorCode === NOT_FOUND) {
+      //     navigation.navigate(NavigationRouteNames.REGISTER, { mobileObj, newUser: true });
+      //   }
+      // }
     },
     onCompleted: (verifyData) => {
       if (verifyData && verifyData.verifyPhoneNumber) {
