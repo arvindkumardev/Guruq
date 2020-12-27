@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { getFileUrl, RfH, RfW } from '../../utils/helpers';
-import styles from '../../containers/tutionNeeds/styles';
+import styles from '../../containers/pytn/styles';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';

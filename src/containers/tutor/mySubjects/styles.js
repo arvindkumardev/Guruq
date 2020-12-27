@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Colors, Fonts } from '../../../../theme';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { Colors, Fonts } from '../../../theme';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 const styles = StyleSheet.create({
   activeRightButton: {

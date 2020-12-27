@@ -6,15 +6,16 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
-import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../../components';
-import { Colors, Fonts, Images } from '../../../theme';
-import commonStyles from '../../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getTutorImage, RfH, RfW } from '../../../utils/helpers';
-import { SCHEDULE_CLASS } from '../class.mutation';
-import { GET_SCHEDULED_CLASSES } from '../booking.query';
-import { studentDetails } from '../../../apollo/cache';
-import NavigationRouteNames from '../../../routes/screenNames';
+import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../components';
+import { Colors, Fonts, Images } from '../../theme';
+import commonStyles from '../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { RfH, RfW } from '../../utils/helpers';
+import { SCHEDULE_CLASS } from '../student/class.mutation';
+import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
+import { studentDetails, userType } from '../../apollo/cache';
+import NavigationRouteNames from '../../routes/screenNames';
+import { UserTypeEnum } from '../../common/userType.enum';
 
 function ScheduleClass(props) {
   const navigation = useNavigation();
@@ -25,6 +26,9 @@ function ScheduleClass(props) {
   const [showSlotSelector, setShowSlotSelector] = useState(false);
   const [tutorClasses, setTutorClasses] = useState([]);
   const [refresh, setRefresh] = useState(false);
+
+  const userTypeVal = useReactiveVar(userType);
+  const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
@@ -131,9 +135,15 @@ function ScheduleClass(props) {
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(20) }]}>
-        <TouchableOpacity style={commonStyles.horizontalChildrenStartView} onPress={() => tutorDetail(classData)}>
+        <TouchableOpacity
+          style={commonStyles.horizontalChildrenStartView}
+          onPress={() => tutorDetail(classData)}
+          disabled={!isStudent}>
           <View style={commonStyles.verticallyStretchedItemsView}>
-            <TutorImageComponent tutor={classData?.tutor} width={64} height={64} styling={{ borderRadius: RfH(32) }} />
+            <TutorImageComponent
+              tutor={isStudent ? classData?.tutor : { contactDetail: classData?.createdBy }}
+              styling={{ borderRadius: RfH(32), width: RfH(64), height: RfH(64) }}
+            />
           </View>
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text
@@ -142,11 +152,15 @@ function ScheduleClass(props) {
                 fontFamily: Fonts.semiBold,
                 marginTop: RfH(2),
               }}>
-              {classData?.tutor?.contactDetail?.firstName} {classData?.tutor?.contactDetail?.lastName}
+              {isStudent
+                ? `${classData.tutor.contactDetail.firstName} ${classData.tutor.contactDetail.lastName}`
+                : `${classData?.createdBy.firstName} ${classData?.createdBy.lastName}`}
             </Text>
-            <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              T{classData?.tutor.id}
-            </Text>
+            {isStudent && (
+              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                T{classData?.tutor.id}
+              </Text>
+            )}
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
               {classData?.onlineClass ? 'Online' : 'Offline'} Classes
             </Text>
@@ -159,7 +173,8 @@ function ScheduleClass(props) {
   const renderClassView = (item, index) => (
     <View style={{ flex: 0.5, marginTop: RfH(16) }}>
       <TouchableWithoutFeedback
-        onPress={() => (item.isScheduled ? classDetailNavigation(item.classId) : showSlotPopup())}>
+        onPress={() => (item.isScheduled ? classDetailNavigation(item.classId) : isStudent ? showSlotPopup() : null)}
+        activeOpacity={0.8}>
         <View>
           <View
             style={{
@@ -172,13 +187,23 @@ function ScheduleClass(props) {
               borderRadius: 8,
             }}>
             <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class {index + 1}</Text>
-            {!item.isScheduled && (
+            {!item.isScheduled && isStudent && (
               <IconButtonWrapper
                 iconHeight={RfH(20)}
-                iconWidth={RfW(24)}
+                iconWidth={RfH(24)}
                 iconImage={Images.calendar}
                 styling={{ marginTop: RfH(8) }}
               />
+            )}
+            {!item.isScheduled && !isStudent && (
+              <Text
+                style={{
+                  fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+                  color: Colors.darkGrey,
+                  marginTop: RfH(8),
+                }}>
+                Not Scheduled
+              </Text>
             )}
             {item.isScheduled && (
               <>

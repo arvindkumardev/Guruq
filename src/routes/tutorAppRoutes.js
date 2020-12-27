@@ -2,17 +2,17 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './screenNames';
 import TutorDashboardContainer from '../containers/tutor/dashboard/tutorDashboardContainer';
-import CalendarView from '../containers/tutor/calendar/calendarView';
-import ScheduledClassDetails from '../containers/tutor/calendar/scheduledClassDetails';
-import CancelReason from '../containers/student/calendar/cancelReason';
+// import CalendarView from '../containers/tutor/calendar/calendarView';
+// import ScheduledClassDetails from '../containers/tutor/calendar/scheduledClassDetails';
+// import CancelReason from '../containers/calendar/cancelReason';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import WebViewPage from '../components/WebViewPage/index';
-import SubjectList from '../containers/tutor/profile/mySubjects/subjectList';
-import PriceMatrix from '../containers/tutor/profile/mySubjects/priceMatrix';
+import SubjectList from '../containers/tutor/mySubjects/subjectList';
+import PriceMatrix from '../containers/tutor/mySubjects/priceMatrix';
 import ViewSchedule from '../containers/tutor/profile/scheduler/viewSchedule';
 import UpdateSchedule from '../containers/tutor/profile/scheduler/updateSchedule';
-import PytnSubjectSelection from '../containers/tutionNeeds/pytnSubjectSelection';
-import PytnSubmit from '../containers/tutionNeeds/pytnSubmit';
+import PytnSubjectSelection from '../containers/pytn/pytnSubjectSelection';
+import PytnSubmit from '../containers/pytn/pytnSubmit';
 import ReferEarn from '../containers/referAndEarn/referEarn';
 import Notifications from '../containers/student/dashboard/notifications';
 import StudentRequests from '../containers/tutor/dashboard/components/studentRequests';
@@ -29,21 +29,21 @@ export const getTutorRoutes = () => {
         component={TutorDashboardContainer}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.CALENDAR}
-        component={CalendarView}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
-        component={ScheduledClassDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.CANCEL_REASON}
-        component={CancelReason}
-        options={{ headerShown: false }}
-      />
+      {/* <Stack.Screen */}
+      {/*  name={NavigationRouteNames.STUDENT.CALENDAR} */}
+      {/*  component={CalendarView} */}
+      {/*  options={{ headerShown: false }} */}
+      {/* /> */}
+      {/* <Stack.Screen */}
+      {/*  name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS} */}
+      {/*  component={ScheduledClassDetails} */}
+      {/*  options={{ headerShown: false }} */}
+      {/* /> */}
+      {/* <Stack.Screen */}
+      {/*  name={NavigationRouteNames.STUDENT.CANCEL_REASON} */}
+      {/*  component={CancelReason} */}
+      {/*  options={{ headerShown: false }} */}
+      {/* /> */}
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.ONLINE_CLASS}
         component={OnlineClass}

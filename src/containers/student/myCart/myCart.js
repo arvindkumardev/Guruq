@@ -17,19 +17,19 @@ import {
   PaymentMethodModal,
   ScreenHeader,
   TutorImageComponent,
-} from '../../../../components';
-import { Colors, Fonts, Images } from '../../../../theme';
-import commonStyles from '../../../../theme/styles';
-import styles from '../styles';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { GET_CART_ITEMS } from '../../booking.query';
-import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../../booking.mutation';
-import { GET_MY_QPOINTS_BALANCE } from '../../../common/graphql-query';
-import routeNames from '../../../../routes/screenNames';
-import CustomModalWebView from '../../../../components/CustomModalWebView';
-import { OrderStatusEnum, PaymentMethodEnum } from '../../../../components/PaymentMethodModal/paymentMethod.enum';
-import { userDetails } from '../../../../apollo/cache';
+} from '../../../components';
+import { Colors, Fonts, Images } from '../../../theme';
+import commonStyles from '../../../theme/styles';
+import styles from '../tutorListing/styles';
+import { alertBox, RfH, RfW } from '../../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { GET_CART_ITEMS } from '../booking.query';
+import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
+import { GET_MY_QPOINTS_BALANCE } from '../../common/graphql-query';
+import routeNames from '../../../routes/screenNames';
+import CustomModalWebView from '../../../components/CustomModalWebView';
+import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
+import { userDetails } from '../../../apollo/cache';
 
 const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
@@ -426,6 +426,7 @@ const MyCart = () => {
           iconHeight={RfH(20)}
           iconImage={applyQPoints ? Images.checkbox_selected : Images.checkbox}
           submitFunction={enableApplyQPoints}
+          imageResizeMode={'contain'}
         />
       </View>
 

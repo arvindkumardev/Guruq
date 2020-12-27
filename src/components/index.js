@@ -18,6 +18,7 @@ import CustomCheckBox from './CustomCheckBox';
 import SelectSubjectModal from './SelectSubjectModal';
 import ChooseSubjectComponent from './ChooseSubjectsComponent';
 import TutorImageComponent from './TutorImageComponent';
+import UpcomingClassComponent from './UpcomingClassComponent';
 
 export {
   IconButtonWrapper,
@@ -39,4 +40,5 @@ export {
   SelectSubjectModal,
   ChooseSubjectComponent,
   TutorImageComponent,
+  UpcomingClassComponent
 };

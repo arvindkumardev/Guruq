@@ -47,11 +47,11 @@ function PytnSubmit(props) {
       alertBox('Maximum price should be greater than or equal to minimum price');
     } else {
       const offeringArray = [];
-      if(!isEmpty(subjectData?.subject)){
+      if (!isEmpty(subjectData?.subject)) {
         subjectData?.subject?.map((obj) => {
           offeringArray.push({ id: obj?.id });
         });
-      }else{
+      } else {
         offeringArray.push({ id: subjectData?.class?.id });
       }
 
@@ -229,6 +229,8 @@ function PytnSubmit(props) {
                 value={maxPrice}
                 onChangeText={(text) => setMaxPrice(text)}
                 keyboardType="numeric"
+                returnKeyType="done"
+                onSubmitEditing={submitPYTN}
               />
             </Item>
           </View>

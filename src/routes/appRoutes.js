@@ -29,6 +29,11 @@ import Address from '../containers/common/profileScreens/address';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
 import { DUPLICATE_FOUND } from '../common/errorCodes';
 import { alertBox, createPayload } from '../utils/helpers';
+import scheduledClassDetails from '../containers/calendar/scheduledClassDetails';
+import cancelReason from '../containers/calendar/cancelReason';
+import MyClasses from '../containers/myClasses/classes';
+import scheduleClass from '../containers/myClasses/scheduleClass';
+import CalendarView from "../containers/calendar/calendarView";
 
 const Stack = createStackNavigator();
 
@@ -37,7 +42,7 @@ const AppStack = (props) => {
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
 
-  console.log("tutorInfo",tutorInfo)
+  console.log('tutorInfo', tutorInfo);
 
   const userDetailsObj = useReactiveVar(userDetails);
 
@@ -66,7 +71,7 @@ const AppStack = (props) => {
 
   useEffect(() => {
     if (!isEmpty(userDetailsObj)) {
-      console.log("userDetailsObj",userDetailsObj)
+      console.log('userDetailsObj', userDetailsObj);
       getFcmToken().then((token) => {
         if (token) {
           createPayload(userDetailsObj.me, token).then((payload) => {
@@ -106,6 +111,36 @@ const AppStack = (props) => {
       });
   }, []);
 
+  const getCommonRoutes = () => (
+    <>
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.CALENDAR}
+        component={CalendarView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
+        component={scheduledClassDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.CANCEL_REASON}
+        component={cancelReason}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.MY_CLASSES}
+        component={MyClasses}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.SCHEDULE_CLASS}
+        component={scheduleClass}
+        options={{ headerShown: false }}
+      />
+    </>
+  );
+
   const getLoggedInRoutes = () => {
     if (userType === UserTypeEnum.OTHER.label) {
       return (
@@ -122,8 +157,8 @@ const AppStack = (props) => {
       return getStudentRoutes();
     }
     if (userType === UserTypeEnum.TUTOR.label) {
-      console.log("tutorInfo",tutorInfo)
-      if (tutorInfo && tutorInfo.certified) {
+      console.log('tutorInfo', tutorInfo);
+      if (tutorInfo) {
         return getTutorRoutes();
       }
 
@@ -217,6 +252,7 @@ const AppStack = (props) => {
           <Stack.Screen name={NavigationRouteNames.ADDRESS} component={Address} options={{ headerShown: false }} />
         </>
       )}
+      {isUserLoggedIn && !isEmpty(userType) && getCommonRoutes()}
     </Stack.Navigator>
   );
 };

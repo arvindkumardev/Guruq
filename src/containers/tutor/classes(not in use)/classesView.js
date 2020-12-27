@@ -9,7 +9,7 @@ import { Colors, Fonts, Images } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
 import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
-import styles from '../../student/classes/styles';
+import styles from '../../myClasses/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 import { SEARCH_ORDER_ITEMS } from '../../student/booking.query';
@@ -34,12 +34,6 @@ function ClassView() {
     },
     onCompleted: (data) => {
       if (data && data?.searchOrderItems && data?.searchOrderItems.edges.length > 0) {
-        // const orderList = [];
-        // for (const booking of data.searchBookings) {
-        //   for (const orderItem of booking.orderItems) {
-        //     orderList.push({ booking, orderItem });
-        //   }
-        // }
         setOrderItems(data?.searchOrderItems.edges);
         setIsEmpty(false);
       } else {

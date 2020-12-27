@@ -7,24 +7,27 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { studentDetails } from '../../../apollo/cache';
-import { IconButtonWrapper, Loader } from '../../../components';
-import routeNames from '../../../routes/screenNames';
-import { Colors, Images } from '../../../theme';
-import { getBoxColor } from '../../../theme/colors';
-import commonStyles from '../../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getSubjectIcons, printTime, RfH, RfW } from '../../../utils/helpers';
-import { GET_SCHEDULED_CLASSES } from '../booking.query';
+import { IconButtonWrapper, Loader } from '../../components';
+import routeNames from '../../routes/screenNames';
+import { Colors, Images } from '../../theme';
+import { getBoxColor } from '../../theme/colors';
+import commonStyles from '../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { getSubjectIcons, printTime, RfH, RfW } from '../../utils/helpers';
+import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
+import { userType } from '../../apollo/cache';
+import { UserTypeEnum } from '../../common/userType.enum';
 
 function CalendarView(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
+  const userTypeVal = useReactiveVar(userType);
+  const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
   const { changeTab } = props;
-  const studentInfo = useReactiveVar(studentDetails);
 
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [scheduledClasses, setScheduledClasses] = useState([]);
 
@@ -38,6 +41,7 @@ function CalendarView(props) {
     onCompleted: (data) => {
       setScheduledClasses(data.getScheduledClasses);
       setIsEmpty(data.getScheduledClasses.length === 0);
+      setRefresh((refresh) => !refresh);
     },
   });
 
@@ -70,7 +74,9 @@ function CalendarView(props) {
         </View>
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
           <Text style={commonStyles.headingPrimaryText}>
-            {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
+            {isStudent
+              ? `${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`
+              : `${classDetails?.offering?.displayName} Class for ${classDetails.students[0].contactDetail.firstName} ${classDetails.students[0].contactDetail.lastName}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>
             {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
@@ -98,7 +104,6 @@ function CalendarView(props) {
     getScheduledClasses({
       variables: {
         classesSearchDto: {
-          studentId: studentInfo.id,
           startDate: moment(date).startOf('day').toDate(),
           endDate: moment(date).endOf('day').toDate(),
         },
@@ -186,21 +191,23 @@ function CalendarView(props) {
                     commonStyles.pageTitleThirdRow,
                     { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
                   ]}>
-                  You Haven't scheduled class
+                  {isStudent?"You Haven't scheduled class":"You don't have scheduled classes"}
                 </Text>
                 <Text
                   style={[
                     commonStyles.regularMutedText,
                     { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
                   ]}>
-                  Looks like you have not scheduled any class yet.
+                  {isStudent
+                    ? 'Looks like you have not scheduled any class yet.'
+                    : "Looks like you don't have  scheduled classes for the selected day."}
                 </Text>
                 <View style={{ height: RfH(40) }} />
                 <Button
                   block
                   style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
                   onPress={() => changeTab(3)}>
-                  <Text style={commonStyles.textButtonPrimary}>Schedule Now</Text>
+                  <Text style={commonStyles.textButtonPrimary}>{isStudent ? 'Schedule Now' : 'View Classes'}</Text>
                 </Button>
               </View>
             ) : (
@@ -210,6 +217,7 @@ function CalendarView(props) {
                 renderItem={({ item }) => renderClassItem(item)}
                 keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={{ paddingBottom: RfH(170) }}
+                extraData={refresh}
               />
             )}
           </ScrollView>

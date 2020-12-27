@@ -10,7 +10,13 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
 import { isEmpty } from 'lodash';
 import { offeringsMasterData, studentDetails, userDetails, interestingOfferingData } from '../../../../apollo/cache';
-import { IconButtonWrapper, SelectSubjectModal, Loader, TutorImageComponent } from '../../../../components';
+import {
+  IconButtonWrapper,
+  SelectSubjectModal,
+  Loader,
+  TutorImageComponent,
+  UpcomingClassComponent,
+} from '../../../../components';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
@@ -365,9 +371,7 @@ function StudentDashboard(props) {
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <TutorImageComponent
             tutor={item?.tutor}
-            height={80}
-            width={80}
-            styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
+            styling={{ alignSelf: 'center', borderRadius: RfH(40), width: RfH(80), height: RfH(80) }}
           />
 
           <Text
@@ -392,105 +396,12 @@ function StudentDashboard(props) {
     </TouchableWithoutFeedback>
   );
 
-  const classDetailNavigation = (classId) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
-  };
-
   const handleStudentOfferingModal = () => {
     if (isEmpty(selectedOffering)) {
       alertBox('Please select the interesting offering');
     } else {
       setStudentOfferingModalVisible(false);
     }
-  };
-
-  const renderUpcomingClasses = (classDetails, index) => {
-    return (
-      <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={() => classDetailNavigation(classDetails.id)}>
-          <View
-            style={{
-              backgroundColor: Colors.lightBlue,
-              borderRadius: 20,
-              marginTop: RfH(20),
-              padding: RfH(16),
-              width: index === 0 ? Dimensions.get('window').width - RfW(32) : Dimensions.get('window').width - RfW(54),
-              marginRight: RfW(8),
-            }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              <View style={{ flex: 0.3 }}>
-                <TutorImageComponent
-                  tutor={classDetails?.tutor}
-                  height={98}
-                  width={98}
-                  styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
-                />
-              </View>
-              <View
-                style={{
-                  flex: 0.7,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  alignItems: 'stretch',
-                  marginLeft: RfW(8),
-                }}>
-                <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
-                  {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
-                </Text>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    type="FontAwesome"
-                    name="calendar-o"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {printDate(classDetails.startDate)}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    type="Feather"
-                    name="clock"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    type="MaterialIcons"
-                    name="computer"
-                    style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-                  />
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {classDetails.onlineClass ? 'Online' : 'Offline'} Class
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
-    );
   };
 
   return (
@@ -631,7 +542,7 @@ function StudentDashboard(props) {
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   data={upcomingClasses}
-                  renderItem={({ item, index }) => renderUpcomingClasses(item, index)}
+                  renderItem={({ item, index }) => <UpcomingClassComponent classDetails={item} index={index} />}
                   keyExtractor={(item, index) => index.toString()}
                 />
               </View>
@@ -730,23 +641,26 @@ function StudentDashboard(props) {
               </View>
             </View>
           )}
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING, { selectedOffering })}>
-            <View style={{ marginTop: RfH(20) }}>
-              <Image
-                style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}
-                source={Images.post_needs}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}>
-            <View>
-              <Image
-                style={{ width: Dimensions.get('window').width - 32, height: RfH(184) }}
-                source={Images.refer_earn}
-              />
-            </View>
-          </TouchableWithoutFeedback>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING, { selectedOffering })}
+            style={{ marginTop: RfH(20) }}
+            activeOpacity={0.8}>
+            <Image
+              style={{ width: Dimensions.get('window').width, height: RfH(170) }}
+              source={Images.post_needs}
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
+            style={{ marginBottom: RfH(15) }}
+            activeOpacity={0.8}>
+            <Image
+              style={{ width: Dimensions.get('window').width, height: RfH(200) }}
+              source={Images.refer_earn}
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
         </ScrollView>
       </View>
 

@@ -1,5 +1,4 @@
 /* eslint-disable no-nested-ternary */
-import { useNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FlatList, Modal, Text, View } from 'react-native';
@@ -11,9 +10,7 @@ import commonStyles from '../../../../theme/styles';
 import { getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
 
 const TutorSubjectsModal = (props) => {
-  const navigation = useNavigation();
-
-  const { visible, onClose, onSelect, subjects } = props;
+  const { visible, onClose, subjects } = props;
 
   const renderItem = (item) => {
     return (
@@ -33,7 +30,6 @@ const TutorSubjectsModal = (props) => {
           }}>
           <IconButtonWrapper
             iconWidth={RfW(48)}
-            styling={{ alignSelf: 'center' }}
             iconHeight={RfH(56)}
             styling={{ alignSelf: 'flex-start' }}
             iconImage={getSubjectIcons(item?.offering?.displayName)}
@@ -53,13 +49,7 @@ const TutorSubjectsModal = (props) => {
   };
 
   return (
-    <Modal
-      animationType="fade"
-      transparent
-      visible={visible}
-      onRequestClose={() => {
-        onClose(false);
-      }}>
+    <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
       <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
         <View style={{ backgroundColor: Colors.black, opacity: 0.5, flex: 1 }} />
         <View
@@ -72,22 +62,28 @@ const TutorSubjectsModal = (props) => {
             justifyContent: 'flex-start',
             alignItems: 'stretch',
             backgroundColor: Colors.white,
-            paddingHorizontal: RfW(16),
           }}>
-          <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
-            styling={{ alignSelf: 'flex-end', marginVertical: RfH(16), marginRight: RfW(16) }}
-            iconImage={Images.cross}
-            submitFunction={() => onClose(false)}
-          />
+          <View
+            style={[
+              commonStyles.horizontalChildrenSpaceView,
+              { backgroundColor: Colors.lightBlue, paddingHorizontal: RfW(16) },
+            ]}>
+            <Text style={commonStyles.headingPrimaryText}>All Subjects</Text>
+            <IconButtonWrapper
+              iconHeight={RfH(24)}
+              iconWidth={RfW(24)}
+              styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
+              iconImage={Images.cross}
+              submitFunction={onClose}
+            />
+          </View>
           <FlatList
             showsHorizontalScrollIndicator={false}
             numColumns={2}
             data={subjects}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ paddingBottom: RfH(34) }}
+            contentContainerStyle={{ paddingBottom: RfH(34), paddingHorizontal: RfH(16) }}
           />
         </View>
       </View>

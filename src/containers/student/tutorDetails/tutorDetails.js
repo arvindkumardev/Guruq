@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import ProgressCircle from 'react-native-progress-circle';
-import { Button, Icon } from 'native-base';
+import { Button } from 'native-base';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Rating } from 'react-native-ratings';
 import { isEmpty } from 'lodash';
@@ -54,8 +54,6 @@ function TutorDetails(props) {
 
   const parentOffering = route?.params?.parentOffering;
 
-  const parentParentOffering = route?.params?.parentParentOffering;
-
   const [showDateSlotModal, setShowDateSlotModal] = useState(false);
   const [showClassModePopup, setShowClassModePopup] = useState(false);
   const [hideTutorPersonal, setHideTutorPersonal] = useState(false);
@@ -68,6 +66,15 @@ function TutorDetails(props) {
   const [isDemo, setIsDemo] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [overallRating, setOverallRating] = useState(0);
+  const [reviewProgress, setReviewProgress] = useState([
+    { typeName: 'Course Understanding', image: Images.methodology, percentage: 0, key: 'courseUnderstanding' },
+    { typeName: 'Helpfulness', image: Images.chat, percentage: 0, key: 'helpfulness' },
+    { typeName: 'Professional Attitude', image: Images.professional, percentage: 0, key: 'professionalAttitude' },
+    { typeName: 'Teaching Methodology', image: Images.methodology, percentage: 0, key: 'teachingMethodology' },
+    { typeName: 'Accessibility', image: Images.thumb_range, percentage: 0, key: 'accessibility' },
+    { typeName: 'Improvement in Results', image: Images.stats, percentage: 0, key: 'resultImprovement' },
+  ]);
+  const [userReviews, setUserReviews] = useState([]);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
@@ -168,22 +175,12 @@ function TutorDetails(props) {
           setSelectedSubject(subjectList[0]);
         }
         setSubjects(subjectList);
-        console.log('subjectList', subjectList);
         setRefreshList(!refreshList);
       }
     },
   });
 
   const getPercentage = (value) => value * 20;
-
-  const [reviewProgress, setReviewProgress] = useState([
-    { typeName: 'Course Understanding', image: Images.methodology, percentage: 0, key: 'courseUnderstanding' },
-    { typeName: 'Helpfulness', image: Images.chat, percentage: 0, key: 'helpfulness' },
-    { typeName: 'Professional Attitude', image: Images.professional, percentage: 0, key: 'professionalAttitude' },
-    { typeName: 'Teaching Methodology', image: Images.methodology, percentage: 0, key: 'teachingMethodology' },
-    { typeName: 'Accessibility', image: Images.thumb_range, percentage: 0, key: 'accessibility' },
-    { typeName: 'Improvement in Results', image: Images.stats, percentage: 0, key: 'resultImprovement' },
-  ]);
 
   const [getAverageRating, { loading: ratingLoading }] = useLazyQuery(GET_AVERAGE_RATINGS, {
     fetchPolicy: 'no-cache',
@@ -206,8 +203,6 @@ function TutorDetails(props) {
       }
     },
   });
-
-  const [userReviews, setUserReviews] = useState([]);
 
   const [searchReview, { loading: reviewLoading }] = useLazyQuery(SEARCH_REVIEW, {
     fetchPolicy: 'no-cache',
@@ -306,7 +301,6 @@ function TutorDetails(props) {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            // backgroundColor: selectedSubject.id === item.id ? Colors.lightBlue : Colors.lightPurple,
             height: RfH(70),
             width: RfH(70),
             marginHorizontal: RfW(8),
@@ -500,10 +494,6 @@ function TutorDetails(props) {
     setHideTutorPersonal(scrollPosition > 90);
   };
 
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
-  };
-
   const markFavouriteTutor = () => {
     if (isFavourite) {
       removeFavourite({
@@ -552,7 +542,7 @@ function TutorDetails(props) {
       <View style={[commonStyles.horizontalChildrenStartView, { justifyContent: 'center', alignItems: 'center' }]}>
         {!hideTutorPersonal && (
           <View>
-          <Text>Compare</Text>
+            <Text>Compare</Text>
           </View>
         )}
         <TouchableOpacity onPress={addToCompare} style={[styles.markFavouriteView]}>
@@ -562,6 +552,7 @@ function TutorDetails(props) {
             iconImage={
               compareData.some((item) => item.id === tutorData.id) ? Images.checkbox_selected : Images.checkbox
             }
+            imageResizeMode="contain"
             styling={{ marginHorizontal: RfW(8) }}
           />
         </TouchableOpacity>
@@ -581,9 +572,7 @@ function TutorDetails(props) {
     <View style={styles.topContainer}>
       <TutorImageComponent
         tutor={tutorData}
-        width={98}
-        height={98}
-        styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
+        styling={{ alignSelf: 'center', borderRadius: RfH(49), height: RfH(98), width: RfH(98) }}
       />
       <View style={{ marginLeft: RfW(16), width: '70%' }}>
         <Text style={styles.tutorName}>
@@ -699,6 +688,7 @@ function TutorDetails(props) {
               justifyContent: selectedSubject.demoClass ? 'space-between' : 'center',
               marginTop: RfH(8),
               paddingHorizontal: RfW(30),
+              paddingVertical: RfH(20),
             }}>
             {selectedSubject.demoClass && (
               <Button

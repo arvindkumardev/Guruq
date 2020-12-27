@@ -38,6 +38,7 @@ export const GET_TUTION_NEED_LISTING = gql`
   }
 `;
 
+
 export const GET_ACCEPTED_TUTOR_NEED = gql`
   query GetStudentPytnAccepted($acceptedSearchDto: StudentPytnAcceptedSearchDto!) {
     getStudentPytnAccepted(acceptedSearchDto: $acceptedSearchDto) {

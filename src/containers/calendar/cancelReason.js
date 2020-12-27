@@ -6,28 +6,29 @@ import { useMutation } from '@apollo/client';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
-import { CustomRadioButton, ScreenHeader } from '../../../components';
-import commonStyles from '../../../theme/styles';
-import { Colors } from '../../../theme';
-import { alertBox, RfH, RfW } from '../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { CANCEL_CLASS } from '../class.mutation';
-import NavigationRouteNames from '../../../routes/screenNames';
-import Loader from "../../../components/Loader";
+import { CustomRadioButton, ScreenHeader, Loader } from '../../components';
+import commonStyles from '../../theme/styles';
+import { Colors } from '../../theme';
+import { alertBox, RfH, RfW } from '../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { CANCEL_CLASS } from '../student/class.mutation';
+import NavigationRouteNames from '../../routes/screenNames';
+
+const CANCEL_REASONS = [
+  { reason: 'I am unavailable to take classes at this moment.', selected: false, isCustom: false },
+  { reason: 'I want to replace the tutor with other.', selected: false, isCustom: false },
+  { reason: 'I did not find tutor reliable.', selected: false, isCustom: false },
+  { reason: 'I am unsatisfied with the quality of tutor.', selected: false, isCustom: false },
+  { reason: 'Others', selected: false, isCustom: true },
+];
 
 function CancelReason(props) {
   const { route } = props;
   const navigation = useNavigation();
   const { classId } = route.params;
-  const [cancelReason, setCancelReason] = useState('');
 
-  const [reasons, setReasons] = useState([
-    { reason: 'I am unavailable to take classes at this moment.', selected: false, isCustom: false },
-    { reason: 'I want to replace the tutor with other.', selected: false, isCustom: false },
-    { reason: 'I did not find tutor reliable.', selected: false, isCustom: false },
-    { reason: 'I am unsatisfied with the quality of tutor.', selected: false, isCustom: false },
-    { reason: 'Others', selected: false, isCustom: true },
-  ]);
+  const [cancelReason, setCancelReason] = useState('');
+  const [reasons, setReasons] = useState([...CANCEL_REASONS]);
 
   const [cancelClass, { loading: cancelLoading }] = useMutation(CANCEL_CLASS, {
     fetchPolicy: 'no-cache',

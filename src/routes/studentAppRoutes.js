@@ -8,25 +8,20 @@ import ClassSelector from '../containers/student/studyArea/classSelector';
 import CompareTutors from '../containers/student/tutorListing/compareTutors';
 import TutorListing from '../containers/student/tutorListing/tutorListing';
 import TutorDetails from '../containers/student/tutorDetails/tutorDetails';
-import myCart from '../containers/student/tutorListing/bookingTutor/myCart';
+import myCart from '../containers/student/myCart/myCart';
 import BookingConfirmed from '../containers/student/payment/bookingConfirmed';
 import paymentReceived from '../containers/student/payment/paymentReceived';
-import MyClasses from '../containers/student/classes/classes';
-import scheduleClass from '../containers/student/classes/scheduleClass';
-import scheduledClassDetails from '../containers/student/calendar/scheduledClassDetails';
 import PaymentMethod from '../containers/student/payment/paymentMethod';
-import cancelReason from '../containers/student/calendar/cancelReason';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
-import CalendarView from '../containers/student/calendar/calendarView';
 import FavouriteTutors from '../containers/student/dashboard/favouriteTutors';
 import ReferEarn from '../containers/referAndEarn/referEarn';
-import PytnSubjectSelection from '../containers/tutionNeeds/pytnSubjectSelection';
-import PytnSubmit from '../containers/tutionNeeds/pytnSubmit';
+import PytnSubjectSelection from '../containers/pytn/pytnSubjectSelection';
+import PytnSubmit from '../containers/pytn/pytnSubmit';
 import WebViewPages from '../containers/student/profile/webViewPages';
-import PytnListing from '../containers/tutionNeeds/pytnListing';
-import PytnDetail from '../containers/tutionNeeds/pytnDetail';
+import PytnListing from '../containers/pytn/pytnListing';
+import PytnDetail from '../containers/pytn/pytnDetail';
 import WebViewPage from '../components/WebViewPage';
 import Notifications from '../containers/student/dashboard/notifications';
 import SendFeedback from '../containers/common/sendFeedback';
@@ -100,26 +95,7 @@ export const getStudentRoutes = () => {
         component={paymentReceived}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.MY_CLASSES}
-        component={MyClasses}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SCHEDULE_CLASS}
-        component={scheduleClass}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
-        component={scheduledClassDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.CANCEL_REASON}
-        component={cancelReason}
-        options={{ headerShown: false }}
-      />
+
       {/* <Stack.Screen
         name={NavigationRouteNames.STUDENT.ONLINE_CLASS}
         component={onlineClass}
@@ -135,11 +111,11 @@ export const getStudentRoutes = () => {
         component={DetailedRating}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.CALENDAR}
-        component={CalendarView}
-        options={{ headerShown: false }}
-      />
+      {/* <Stack.Screen */}
+      {/*  name={NavigationRouteNames.STUDENT.CALENDAR} */}
+      {/*  component={CalendarView} */}
+      {/*  options={{ headerShown: false }} */}
+      {/* /> */}
       <Stack.Screen
         name={NavigationRouteNames.ONLINE_CLASS}
         component={OnlineClass}

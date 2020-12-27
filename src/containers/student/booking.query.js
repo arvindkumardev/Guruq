@@ -148,6 +148,15 @@ export const SEARCH_ORDER_ITEMS = gql`
             lastName
           }
         }
+        createdBy {
+          id
+          profileImage {
+            id
+            filename
+          }
+          firstName
+          lastName
+        }
         order {
           id
           uuid

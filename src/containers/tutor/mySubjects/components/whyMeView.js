@@ -2,11 +2,11 @@ import { Alert, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { Button, Input, Item, Textarea } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { RfH, RfW } from '../../../../../utils/helpers';
-import commonStyles from '../../../../../theme/styles';
-import { Colors } from '../../../../../theme';
-import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../../../tutor.mutation';
-import { tutorDetails } from '../../../../../apollo/cache';
+import { RfH, RfW } from '../../../../utils/helpers';
+import commonStyles from '../../../../theme/styles';
+import { Colors } from '../../../../theme';
+import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../../tutor.mutation';
+import { tutorDetails } from '../../../../apollo/cache';
 
 function WhyMeView(props) {
   const [description, setDescription] = useState('');

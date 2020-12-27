@@ -1,25 +1,30 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { IconButtonWrapper, SelectSubjectModal, TutorImageComponent } from '../../../components';
-import Loader from '../../../components/Loader';
-import { Colors, Fonts, Images } from '../../../theme';
-import commonStyles from '../../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getTutorImage, getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
-import { SEARCH_ORDER_ITEMS } from '../booking.query';
-import { OrderStatus } from '../enums';
+import { SelectSubjectModal, TutorImageComponent } from '../../components';
+import Loader from '../../components/Loader';
+import { Colors, Fonts, Images } from '../../theme';
+import commonStyles from '../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { RfH, RfW } from '../../utils/helpers';
+import { SEARCH_ORDER_ITEMS } from '../student/booking.query';
+import { OrderStatus } from '../student/enums';
 import styles from './styles';
-import { GET_TUTOR_OFFERINGS } from '../tutor-query';
-import ClassModeSelectModal from '../tutorDetails/components/classModeSelectModal';
-import NavigationRouteNames from '../../../routes/screenNames';
+import { GET_TUTOR_OFFERINGS } from '../student/tutor-query';
+import ClassModeSelectModal from '../student/tutorDetails/components/classModeSelectModal';
+import NavigationRouteNames from '../../routes/screenNames';
+import { userType } from '../../apollo/cache';
+import { UserTypeEnum } from '../../common/userType.enum';
 
 function MyClasses() {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
+  const userTypeVal = useReactiveVar(userType);
+  const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
+
   const [isHistorySelected, setIsHistorySelected] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -134,6 +139,26 @@ function MyClasses() {
     });
   };
 
+  const handleRightButton = (item) => {
+    if (!isStudent) {
+      goToScheduleClasses(item);
+    } else if (isHistorySelected) {
+      renewClass(item);
+    } else {
+      goToScheduleClasses(item);
+    }
+  };
+
+  const rightButtonText = () => {
+    if (!isStudent) {
+      return 'View Details';
+    }
+    if (isHistorySelected) {
+      return 'Renew Class';
+    }
+    return 'Schedule Class';
+  };
+
   const renderClassItem = (item) => {
     return (
       <View style={{ marginTop: RfH(30) }}>
@@ -144,7 +169,7 @@ function MyClasses() {
             {' | '}
             {item.offering?.parentOffering?.displayName}
           </Text>
-          {!isHistorySelected && (
+          {!isHistorySelected && isStudent && (
             <TouchableOpacity activeOpacity={0.6} onPress={() => renewClass(item)}>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
             </TouchableOpacity>
@@ -155,9 +180,13 @@ function MyClasses() {
           <TouchableOpacity
             style={commonStyles.horizontalChildrenStartView}
             onPress={() => tutorDetail(item)}
-            activeOpacity={0.8}>
+            activeOpacity={0.8}
+            disabled={!isStudent}>
             <View style={commonStyles.verticallyStretchedItemsView}>
-              <TutorImageComponent tutor={item?.tutor} height={64} width={64} styling={{ borderRadius: RfH(32) }} />
+              <TutorImageComponent
+                tutor={isStudent ? item?.tutor : { contactDetail: item?.createdBy }}
+                styling={{ borderRadius: RfH(32), width: RfH(64), height: RfH(64) }}
+              />
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
@@ -165,13 +194,16 @@ function MyClasses() {
                   fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
-                }}
-                onPress={() => tutorDetail(item)}>
-                {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
+                }}>
+                {isStudent
+                  ? `${item.tutor.contactDetail.firstName} ${item.tutor.contactDetail.lastName}`
+                  : `${item?.createdBy.firstName} ${item?.createdBy.lastName}`}
               </Text>
-              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                T{item.tutor.id}
-              </Text>
+              {isStudent && (
+                <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                  T{item.tutor.id}
+                </Text>
+              )}
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 {item.onlineClass ? 'Online' : 'Offline'} - Individual Class
               </Text>
@@ -193,10 +225,10 @@ function MyClasses() {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: isHistorySelected ? 'space-between' : 'flex-end',
+            justifyContent: isHistorySelected ? (isStudent ? 'space-between' : 'flex-end') : 'flex-end',
             alignItems: 'center',
           }}>
-          {isHistorySelected && (
+          {isHistorySelected && isStudent && (
             <TouchableOpacity activeOpacity={0.6} onPress={() => goToScheduleClasses(item)}>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
                 View Details
@@ -214,7 +246,7 @@ function MyClasses() {
             </Text>
           )}
           <Button
-            onPress={() => (isHistorySelected ? renewClass(item) : goToScheduleClasses(item))}
+            onPress={() => handleRightButton(item)}
             style={[
               commonStyles.buttonPrimary,
               {
@@ -223,7 +255,7 @@ function MyClasses() {
                 marginLeft: RfW(16),
               },
             ]}>
-            <Text style={commonStyles.textButtonPrimary}>{isHistorySelected ? 'Renew Class' : 'Schedule Class'}</Text>
+            <Text style={commonStyles.textButtonPrimary}>{rightButtonText()}</Text>
           </Button>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5 }} />
@@ -310,15 +342,19 @@ function MyClasses() {
                     commonStyles.regularMutedText,
                     { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
                   ]}>
-                  Looks like you haven't booked any class.
+                  {isStudent
+                    ? "Looks like you haven't booked any class."
+                    : "Looks like you don't have any booked classes."}
                 </Text>
                 <View style={{ height: RfH(40) }} />
-                <Button
-                  block
-                  style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-                  onPress={() => setShowAllSubjects(true)}>
-                  <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
-                </Button>
+                {isStudent && (
+                  <Button
+                    block
+                    style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+                    onPress={() => setShowAllSubjects(true)}>
+                    <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
+                  </Button>
+                )}
               </View>
             )}
           </View>

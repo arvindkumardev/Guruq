@@ -20,7 +20,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
 import initializeApollo from '../../../../apollo/apollo';
 import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../../apollo/cache';
-import { IconButtonWrapper } from '../../../../components';
+import { IconButtonWrapper, UpcomingClassComponent } from '../../../../components';
 import Loader from '../../../../components/Loader';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import { Colors, Images } from '../../../../theme';
@@ -42,15 +42,11 @@ import TutorSubjectsModal from './tutorSubjectsModal';
 
 function TutorDashboard(props) {
   const navigation = useNavigation();
-  const [searchLocation, setSearchLocation] = useState('');
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
   const [refreshSubjectList, setRefreshSubjectList] = useState(false);
-  const client = initializeApollo();
-
   const { changeTab } = props;
-
   const tutorInfo = useReactiveVar(tutorDetails);
   const userInfo = useReactiveVar(userDetails);
 
@@ -61,29 +57,29 @@ function TutorDashboard(props) {
       }
     },
     onCompleted: (data) => {
-      const array = [];
-      for (const obj of data.getScheduledClasses) {
-        const startHours = new Date(obj.startDate).getHours();
-        const startMinutes = new Date(obj.startDate).getMinutes();
-        const endHours = new Date(obj.endDate).getHours();
-        const endMinutes = new Date(obj.endDate).getMinutes();
-        const timing = `${startHours < 10 ? `0${startHours}` : startHours}:${
-          startMinutes < 10 ? `0${startMinutes}` : startMinutes
-        } - ${endHours < 10 ? `0${endHours}` : endHours}:${endMinutes < 10 ? `0${endMinutes}` : endMinutes} ${
-          endHours < 12 ? `AM` : 'PM'
-        }`;
-        const item = {
-          startDate: obj.startDate,
-          uuid: obj.uuid,
-          classTitle: obj.offering.displayName,
-          board: obj.offering.parentOffering.parentOffering.displayName,
-          class: obj.offering.parentOffering.displayName,
-          timing,
-          classData: obj,
-        };
-        array.push(item);
+      setUpcomingClasses(data.getScheduledClasses);
+    },
+  });
+
+  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    variables: { tutorId: tutorInfo?.id },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
       }
-      setUpcomingClasses(array);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const subjectList = [];
+        data?.getTutorOfferings?.map((item) => {
+          if (item.offering && subjectList.findIndex((obj) => obj.offering.id === item.offering.id) === -1) {
+            subjectList.push(item);
+          }
+        });
+        setSubjects(subjectList);
+        setRefreshSubjectList(!refreshSubjectList);
+      }
     },
   });
 
@@ -99,104 +95,12 @@ function TutorDashboard(props) {
     });
   }, []);
 
-  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
-    fetchPolicy: 'no-cache',
-    variables: { tutorId: tutorInfo?.id },
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        data?.getTutorOfferings?.map((item) => {
-          if (item.offering && subjects.findIndex((obj) => obj.offering.id === item.offering.id) === -1) {
-            subjects.push(item);
-          }
-        });
-        setRefreshSubjectList(!refreshSubjectList);
-      }
-    },
-  });
-
   useEffect(() => {
     getTutorOffering();
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getTutorOffering();
-    }, [])
-  );
-
   const getTutorImage = (tutor) => {
     return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
-  };
-
-  const renderUpcomingClasses = (item, index) => {
-    return (
-      <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback>
-          <View
-            style={{
-              backgroundColor: Colors.lightBlue,
-              borderRadius: 20,
-              marginTop: RfH(20),
-              padding: RfH(16),
-              marginRight: RfW(8),
-            }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-              <View style={{ flex: 0.3 }}>
-                <IconButtonWrapper
-                  iconWidth={RfH(98)}
-                  iconHeight={RfH(98)}
-                  iconImage={getTutorImage(item.classData.tutor)}
-                  imageResizeMode="cover"
-                  styling={{ alignSelf: 'center', borderRadius: RfH(49) }}
-                />
-              </View>
-              <View
-                style={{
-                  flex: 0.7,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  alignItems: 'stretch',
-                  marginLeft: RfW(8),
-                }}>
-                <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
-                  {item.classData?.students[0]?.contactDetail?.firstName}{' '}
-                  {item.classData?.students[0]?.contactDetail?.lastName}
-                </Text>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  {`${item.board} | ${item.class}`}
-                </Text>
-                <View style={commonStyles.horizontalChildrenSpaceView}>
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {item.classTitle}
-                  </Text>
-                  <IconButtonWrapper
-                    iconHeight={RfH(16)}
-                    iconWidth={RfW(16)}
-                    iconImage={item.classData.onlineClass ? Images.laptop : Images.home}
-                  />
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                    {new Date(item.startDate).toDateString()} | {item.timing}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
-    );
   };
 
   const renderSubjects = (item, index) => {
@@ -208,8 +112,6 @@ function TutorDashboard(props) {
             flex: 0.5,
             backgroundColor: getBoxColor(item?.offering?.displayName),
             padding: RfH(8),
-            // marginHorizontal: RfW(8),
-            // width: '48%',
             marginRight: index % 2 === 0 ? RfW(0) : RfW(0),
             marginLeft: index % 2 !== 0 ? RfW(8) : RfW(0),
             marginVertical: RfH(8),
@@ -239,9 +141,8 @@ function TutorDashboard(props) {
     <>
       <StatusBar barStyle="dark-content" />
       <Loader isLoading={loadingScheduledClasses || loadingTutorsOffering} />
-
       <View style={commonStyles.mainContainer}>
-        <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View style={{ height: RfH(44), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flexDirection: 'row' }} />
           <View>
             <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}>
@@ -271,51 +172,9 @@ function TutorDashboard(props) {
                 styling={{ borderRadius: RfH(32) }}
                 submitFunction={() => changeTab(5)}
               />
-              {/* <Image
-                source={Images.user}
-                style={{
-                  height: RfH(32),
-                  width: RfW(32),
-                  borderTopLeftRadius: RfH(32),
-                  borderTopRightRadius: RfH(32),
-                  borderBottomLeftRadius: RfH(32),
-                  borderBottomRightRadius: RfH(32),
-                }}
-              /> */}
             </View>
           </View>
 
-          {/* <View style={{ height: RfH(24) }} />
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <View>
-            <Text
-              style={{
-                fontFamily: Fonts.semiBold,
-                fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-                color: Colors.primaryText,
-              }}>
-              Hi
-            </Text>
-            <Text
-              style={{
-                fontFamily: Fonts.semiBold,
-                fontSize: RFValue(28, STANDARD_SCREEN_SIZE),
-                color: Colors.primaryText,
-              }}>
-              {userInfo.firstName}
-            </Text>
-          </View>
-          <View>
-            <Image
-              source={Images.user}
-              style={{
-                height: RfH(40),
-                width: RfH(40),
-                borderRadius: RfH(8),
-              }}
-            />
-          </View>
-        </View> */}
           <View style={{ height: RfH(220), marginTop: RfH(24) }}>
             <Swiper horizontal style={{ overflow: 'visible' }}>
               <View
@@ -362,7 +221,7 @@ function TutorDashboard(props) {
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   data={upcomingClasses}
-                  renderItem={({ item, index }) => renderUpcomingClasses(item, index)}
+                  renderItem={({ item, index }) => <UpcomingClassComponent classDetails={item} index={index} />}
                   keyExtractor={(item, index) => index.toString()}
                 />
               </View>
@@ -390,22 +249,27 @@ function TutorDashboard(props) {
               </View>
             </View>
           )}
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS)}>
-            <View style={{ marginTop: RfH(20) }}>
-              <Image
-                style={{ width: Dimensions.get('window').width - 32, height: RfH(152) }}
-                source={Images.requests}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}>
-            <View>
-              <Image
-                style={{ width: Dimensions.get('window').width - 32, height: RfH(184) }}
-                source={Images.refer_earn}
-              />
-            </View>
-          </TouchableWithoutFeedback>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS)}
+            style={{ marginTop: RfH(20) }}
+            activeOpacity={0.8}>
+            <Image
+              style={{ width: Dimensions.get('window').width, height: RfH(170) }}
+              source={Images.requests}
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
+            style={{ marginBottom: RfH(15) }}
+            activeOpacity={0.8}>
+            <Image
+              style={{ width: Dimensions.get('window').width, height: RfH(200) }}
+              source={Images.refer_earn}
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
 
           <TutorSubjectsModal visible={showAllSubjects} onClose={() => setShowAllSubjects(false)} subjects={subjects} />
         </ScrollView>

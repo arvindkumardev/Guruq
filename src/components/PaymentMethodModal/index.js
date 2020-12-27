@@ -329,6 +329,7 @@ const PaymentMethod = (props) => {
               marginTop: RfH(16),
               marginBottom: RfH(16),
             }}
+            imageResizeMode={'contain'}
             iconImage={Images.cross}
             submitFunction={() => onClose(false)}
           />
@@ -428,9 +429,10 @@ const PaymentMethod = (props) => {
                 backgroundColor: Colors.white,
                 paddingTop: RfH(8),
                 paddingHorizontal: RfW(16),
-                paddingBottom: RfH(34),
+                paddingBottom: RfH(10),
                 borderTopWidth: RfH(1),
                 borderTopColor: Colors.lightGrey,
+
               },
             ]}>
             <View>

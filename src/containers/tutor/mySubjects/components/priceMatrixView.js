@@ -3,11 +3,11 @@ import { Text, View, FlatList, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { Button, Input, Item } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { RfH, RfW } from '../../../../../utils/helpers';
-import commonStyles from '../../../../../theme/styles';
-import { Colors } from '../../../../../theme';
-import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../../../tutor.mutation';
-import { tutorDetails } from '../../../../../apollo/cache';
+import { RfH, RfW } from '../../../../utils/helpers';
+import commonStyles from '../../../../theme/styles';
+import { Colors } from '../../../../theme';
+import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../../tutor.mutation';
+import { tutorDetails } from '../../../../apollo/cache';
 
 function PriceMatrixView(props) {
   const [martixValues, setMartixValues] = useState([

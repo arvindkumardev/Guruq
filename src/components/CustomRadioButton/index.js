@@ -12,15 +12,18 @@ function CustomRadioButton(props) {
       <TouchableOpacity onPress={submitFunction} activeOpacity={1}>
         {enabled ? (
           <View>
-            <Image source={Images.radio} style={[styling, { height: iconHeight, width: iconWidth }]} />
+            <Image
+              source={Images.radio}
+              style={[styling, { height: iconHeight, width: iconWidth }]}
+              resizeMode="contain"
+            />
           </View>
         ) : (
           <View
             style={{
-              height: RfH(18),
-              width: RfW(18),
-              borderRadius: RfW(9),
-              borderColor: Colors.inputLabel,
+              height: iconHeight,
+              width: iconHeight,
+              borderRadius: iconHeight,
               borderWidth: 1,
             }}
           />

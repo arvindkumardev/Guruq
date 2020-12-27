@@ -150,6 +150,7 @@ const ClassModeSelectModal = (props) => {
               iconWidth={RfW(24)}
               iconImage={Images.cross}
               submitFunction={() => onClose(false)}
+              imageResizeMode="contain"
             />
           </View>
         </View>
@@ -162,13 +163,13 @@ const ClassModeSelectModal = (props) => {
               <Text style={commonStyles.mediumPrimaryText}>Mode of {isDemoClass && 'demo'} Class</Text>
               <View style={commonStyles.horizontalChildrenCenterView}>
                 {selectedSubject.onlineClass > 0 && (
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row' ,alignItems:'center'}}>
                     <CustomRadioButton enabled={isOnlineClassMode} submitFunction={() => changeClassMode(true)} />
                     <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
                   </View>
                 )}
                 {selectedSubject.homeTution && (
-                  <View style={{ flexDirection: 'row', marginLeft: RfW(16) }}>
+                  <View style={{ flexDirection: 'row', marginLeft: RfW(16),alignItems:'center' }}>
                     <CustomRadioButton enabled={!isOnlineClassMode} submitFunction={() => changeClassMode(false)} />
                     <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Home Tuition</Text>
                   </View>
