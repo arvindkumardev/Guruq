@@ -6,8 +6,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-import { clearAllLocalStorage, getToken } from './utils/helpers';
-import { isLoggedIn, isTokenLoading, userType, isSplashScreenVisible } from './apollo/cache';
+import { clearAllLocalStorage, getToken, removeToken } from './utils/helpers';
+import {
+  isLoggedIn,
+  isTokenLoading,
+  userType,
+  isSplashScreenVisible,
+  networkConnectivityError,
+  userDetails,
+  studentDetails,
+  tutorDetails,
+  userLocation,
+  offeringsMasterData,
+  interestingOfferingData,
+  notificationPayload,
+} from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
 
@@ -77,11 +90,33 @@ function App() {
     // clearAllLocalStorage();
     // Fetch the token from storage then navigate to our appropriate place
     bootstrapAsync();
+
+    // FIXME: TO CLEAR CACHE - TEMP CODE ONLY TO BE USED IN DEV MODE
+    // const client = initializeApollo();
+    // clearAllLocalStorage().then(() => {
+    //   client.resetStore().then(() => {
+    //     removeToken().then(() => {
+    //       // // set in apollo cache
+    //       isTokenLoading(true);
+    //       isLoggedIn(false);
+    //       isSplashScreenVisible(true);
+    //       userType('');
+    //       networkConnectivityError(false);
+    //       userDetails({});
+    //       studentDetails({});
+    //       tutorDetails({});
+    //       userLocation({});
+    //       offeringsMasterData([]);
+    //       interestingOfferingData([]);
+    //       notificationPayload({});
+    //     });
+    //   });
+    // });
   }, []);
 
   const onStateChangeHandle = async (state) => {
     routeNameRef.current = getActiveRouteName(state);
-    console.log("getActiveRouteName(state)",getActiveRouteName(state))
+    console.log('getActiveRouteName(state)', getActiveRouteName(state));
   };
 
   return (

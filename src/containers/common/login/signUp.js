@@ -6,7 +6,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import { RfH, RfW, storeData } from '../../../utils/helpers';
+import {removeToken, RfH, RfW, storeData} from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
@@ -35,12 +35,13 @@ function SignUp(props) {
       }
     },
     onCompleted: async (data) => {
+      console.log(data);
       if (data) {
-        await storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token);
-        isLoggedIn(true);
-        //     .then(() => {
-        //   isLoggedIn(true);
-        // });
+        removeToken().then(() => {
+          storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
+            isLoggedIn(true);
+          });
+        });
       }
     },
   });
