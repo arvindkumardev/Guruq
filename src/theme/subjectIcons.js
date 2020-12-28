@@ -57,6 +57,8 @@ const SubjectIcons = {
   arabic_gray: require('../assets/images/subject/arabic.png'),
   arabic_disable: require('../assets/images/subject/arabic-d.png'),
   sociology: require('../assets/images/subject/sociology-c.png'),
+  sociology_gray: require('../assets/images/subject/sociology.png'),
+  sociology_disable: require('../assets/images/subject/sociology-d.png'),
   russian: require('../assets/images/subject/russian-c.png'),
   russian_gray: require('../assets/images/subject/russian.png'),
   russian_disable: require('../assets/images/subject/russian-d.png'),

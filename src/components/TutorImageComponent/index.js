@@ -34,7 +34,7 @@ const TutorImageComponent = (props) => {
             height: RfH(height),
             width: RfW(width),
             ...styling,
-            backgroundColor: Colors.lightGrey,
+            backgroundColor: Colors.lightPurple,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
