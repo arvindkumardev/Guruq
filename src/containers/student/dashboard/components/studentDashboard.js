@@ -293,7 +293,7 @@ function StudentDashboard(props) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <TutorImageComponent tutor={item?.tutor} height={70} width={70} styling={{}} />
+              <TutorImageComponent tutor={item?.tutor} height={70} width={70} styling={{ borderRadius: RfH(70) }} />
             </View>
             <View
               style={{
@@ -438,7 +438,7 @@ function StudentDashboard(props) {
                     // borderRadius: RfH(20),
                     position: 'absolute',
                     top: RfH(0),
-                    left: RfW(17),
+                    left: RfW(16),
                     alignItems: 'center',
                     justifyContent: 'center',
                     height: RfH(13),
