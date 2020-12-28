@@ -166,18 +166,17 @@ function Profile(props) {
     return (
       <TouchableWithoutFeedback
         onPress={() => personalDetails(item)}
-        // disabled={}
         style={[
           styles.userMenuParentView,
           {
-            height: 44,
+            height: RfH(44),
             justifyContent: 'space-between',
             paddingLeft: RfW(48),
             borderBottomColor: Colors.lightGrey,
           },
         ]}>
-        <View style={{ flexDirection: 'row' }}>
-          <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
           <Text style={[commonStyles.mediumMutedText, { marginLeft: RfW(16) }]}>{item.name}</Text>
         </View>
         <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
@@ -221,11 +220,7 @@ function Profile(props) {
         </View>
       </View>
 
-      <ScrollView
-        // stickyHeaderIndices={[0]}
-        showsVerticalScrollIndicator={false}
-        // onScroll={(event) => handleScroll(event)}
-        scrollEventThrottle={16}>
+      <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
         <View style={{ paddingHorizontal: RfW(16), height: 54 }}>
           <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
         </View>
@@ -263,7 +258,12 @@ function Profile(props) {
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
             style={[styles.userMenuParentView, { height: RfH(60) }]}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
+            <IconWrapper
+              iconHeight={RfH(16)}
+              iconWidth={RfW(16)}
+              iconImage={Images.profile}
+              imageResizeMode="contain"
+            />
 
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>My Account</Text>
@@ -279,19 +279,22 @@ function Profile(props) {
           </TouchableWithoutFeedback>
         </View>
         {isAccountMenuOpen && (
-          <SafeAreaView>
-            <FlatList
-              data={accountData}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </SafeAreaView>
+          <FlatList
+            data={accountData}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => renderItem(item)}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         <TouchableWithoutFeedback onPress={() => setIsStudyMenuOpen(!isStudyMenuOpen)}>
           <View style={styles.userMenuParentView}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.profile} />
+            <IconWrapper
+              iconHeight={RfH(16)}
+              iconWidth={RfW(16)}
+              iconImage={Images.profile}
+              imageResizeMode="contain"
+            />
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Scheduler</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -322,7 +325,7 @@ function Profile(props) {
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Classes</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Classes, Students, Tuitions Requests
+                Classes, Students, Tuition Requests
               </Text>
             </View>
             <IconWrapper
@@ -352,11 +355,6 @@ function Profile(props) {
                 Add price for the classes, Subject profile
               </Text>
             </View>
-            <IconWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={isMyClassesMenuOpen ? Images.collapse_grey : Images.expand_gray}
-            />
           </View>
         </TouchableWithoutFeedback>
 
@@ -371,13 +369,6 @@ function Profile(props) {
                 Send invitation to friend and earn
               </Text>
             </View>
-            <TouchableWithoutFeedback>
-              <IconWrapper
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-                iconImage={isReferFriendMenuOpen ? Images.collapse_grey : Images.expand_gray}
-              />
-            </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
 
@@ -413,22 +404,25 @@ function Profile(props) {
 
         <View style={commonStyles.blankGreyViewSmall} />
 
-        <View style={[styles.userMenuParentView]}>
+        <TouchableOpacity
+          style={[styles.userMenuParentView]}
+          onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}
+          activeOpacity={1}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
           <View style={styles.menuItemParentView}>
-            <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
+            <View>
               <Text style={styles.menuItemPrimaryText}>Help</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                 Customer Care, FAQ's, Send feedback
               </Text>
-            </TouchableWithoutFeedback>
+            </View>
           </View>
           <IconWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
             iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
           />
-        </View>
+        </TouchableOpacity>
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         {isInformationMenuOpen && (
           <SafeAreaView>
@@ -486,7 +480,7 @@ function Profile(props) {
           <IconWrapper
             iconWidth={RfW(24)}
             iconHeight={RfH(24)}
-            
+
             iconImage={isLogout ? Images.collapse_grey : Images.expand_gray}
           />
         </TouchableWithoutFeedback> */}
@@ -510,7 +504,7 @@ function Profile(props) {
           </View>
 
           <View>
-            <IconButtonWrapper iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} />
+            <IconButtonWrapper iconWidth={RfW(65)} iconImage={Images.profile_footer_logo} imageResizeMode="contain" />
           </View>
 
           <View>

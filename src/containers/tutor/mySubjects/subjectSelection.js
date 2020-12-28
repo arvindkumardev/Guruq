@@ -16,9 +16,9 @@ function SubjectSelection() {
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader homeIcon label="Post your tution needs" horizontalPadding={RfW(16)} />
+      <ScreenHeader homeIcon label="Select Subject" horizontalPadding={RfW(16)} />
       <ChooseSubjectComponent
-        isMultipleSubjectSelectionAllowed
+        isMultipleSubjectSelectionAllowed={false}
         submitButtonHandle={goToOtherDetails}
         submitButtonText="Next"
       />
