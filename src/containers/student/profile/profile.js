@@ -26,7 +26,7 @@ import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
-import {UserTypeEnum} from '../../../common/userType.enum';
+import { UserTypeEnum } from '../../../common/userType.enum';
 
 function Profile(props) {
   const navigation = useNavigation();
@@ -119,6 +119,8 @@ function Profile(props) {
       navigation.navigate(routeNames.ADDRESS);
     } else if (item.name === 'Education') {
       navigation.navigate(routeNames.EDUCATION);
+    } else if (item.name === 'Parents Details') {
+      navigation.navigate(routeNames.PARENTS);
     } else if (item.name === 'Experience') {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
@@ -261,7 +263,7 @@ function Profile(props) {
                 <Text style={styles.userMobDetails}>
                   +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
                 </Text>
-                <Text style={styles.userMobDetails}>S{userInfo?.type===UserTypeEnum.STUDENT}</Text>
+                <Text style={styles.userMobDetails}>S{userInfo?.type === UserTypeEnum.STUDENT}</Text>
               </View>
             </View>
           </View>

@@ -16,14 +16,7 @@ function AddEditEducation() {
   const userInfo = useReactiveVar(userDetails);
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader
-        homeIcon
-        label="Education"
-        horizontalPadding={RfW(16)}
-        showRightIcon
-        rightIcon={Images.moreInformation}
-        lineVisible={false}
-      />
+      <ScreenHeader homeIcon label="Education" horizontalPadding={RfW(16)} lineVisible={false} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={{ height: RfH(44) }} />
         <View>

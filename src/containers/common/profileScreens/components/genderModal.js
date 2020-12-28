@@ -8,10 +8,23 @@ import { RfH, RfW } from '../../../../utils/helpers';
 import commonStyles from '../../../../theme/styles';
 import { IconButtonWrapper, CustomRadioButton } from '../../../../components';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { GenderEnum } from '../../enums';
 
 const GenderModal = (props) => {
+  const [selectedItem, setSelectedItem] = useState(1);
   const { visible, onClose, onGenderSelect } = props;
 
+  const onSelect = (val) => {
+    setSelectedItem(val);
+    if (val === 1) {
+      onGenderSelect(GenderEnum.MALE.label);
+    } else if (val === 2) {
+      onGenderSelect(GenderEnum.FEMALE.label);
+    } else if (val === 3) {
+      onGenderSelect(GenderEnum.OTHER.label);
+    }
+    onClose(false);
+  };
   return (
     <Modal
       animationType="fade"
@@ -64,20 +77,26 @@ const GenderModal = (props) => {
         </View>
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(24) }} />
-          <View style={commonStyles.horizontalChildrenView}>
-            <CustomRadioButton enabled />
-            <Text style={{ marginLeft: RfW(8) }}>Male</Text>
-          </View>
+          <TouchableWithoutFeedback onPress={() => onSelect(1)}>
+            <View style={commonStyles.horizontalChildrenView}>
+              <CustomRadioButton enabled={selectedItem === 1} />
+              <Text style={{ marginLeft: RfW(8) }}>Male</Text>
+            </View>
+          </TouchableWithoutFeedback>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
-          <View style={commonStyles.horizontalChildrenView}>
-            <CustomRadioButton enabled={false} />
-            <Text style={{ marginLeft: RfW(8) }}>Female</Text>
-          </View>
+          <TouchableWithoutFeedback onPress={() => onSelect(2)}>
+            <View style={commonStyles.horizontalChildrenView}>
+              <CustomRadioButton enabled={selectedItem === 2} />
+              <Text style={{ marginLeft: RfW(8) }}>Female</Text>
+            </View>
+          </TouchableWithoutFeedback>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
-          <View style={commonStyles.horizontalChildrenView}>
-            <CustomRadioButton enabled={false} />
-            <Text style={{ marginLeft: RfW(8) }}>Other</Text>
-          </View>
+          <TouchableWithoutFeedback onPress={() => onSelect(3)}>
+            <View style={commonStyles.horizontalChildrenView}>
+              <CustomRadioButton enabled={selectedItem === 3} />
+              <Text style={{ marginLeft: RfW(8) }}>Other</Text>
+            </View>
+          </TouchableWithoutFeedback>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
         </View>
       </View>

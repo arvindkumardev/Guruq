@@ -156,3 +156,194 @@ export const REGISTER_DEVICE = gql`
     }
   }
 `;
+
+export const UPDATE_TUTOR_CONTACT_DETAILS = gql`
+  mutation UpdateTutor($tutorDto: CreateUpdateTutorDto!) {
+    updateTutor(tutorDto: $tutorDto) {
+      contactDetail {
+        firstName
+        lastName
+        gender
+      }
+    }
+  }
+`;
+
+export const UPDATE_STUDENT_CONTACT_DETAILS = gql`
+  mutation UpdateStudent($studentDto: CreateUpdateStudentDto!) {
+    updateStudent(studentDto: $studentDto) {
+      contactDetail {
+        firstName
+        lastName
+        gender
+      }
+    }
+  }
+`;
+
+export const ADD_UPDATE_TUTOR_ADDRESS = gql`
+  mutation AddUpdateTutorAddress($addressDto: CreateUpdateAddressDto!) {
+    addUpdateTutorAddress(addressDto: $addressDto) {
+      addresses {
+        id
+        type
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        landmark
+        fullAddress
+        latitude
+        longitude
+      }
+    }
+  }
+`;
+
+export const DELETE_TUTOR_ADDRESS = gql`
+  mutation DeleteTutorAddress($addressDto: CreateUpdateAddressDto!) {
+    deleteTutorAddress(addressDto: $addressDto) {
+      addresses {
+        id
+        type
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        landmark
+        fullAddress
+        latitude
+        longitude
+      }
+    }
+  }
+`;
+
+export const ADD_UPDATE_STUDENT_ADDRESS = gql`
+  mutation AddUpdateStudentAddress($addressDto: CreateUpdateAddressDto!) {
+    addUpdateStudentAddress(addressDto: $addressDto) {
+      addresses {
+        id
+        type
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        landmark
+        fullAddress
+        latitude
+        longitude
+      }
+    }
+  }
+`;
+
+export const DELETE_STUDENT_ADDRESS = gql`
+  mutation DeleteStudentAddress($addressDto: CreateUpdateAddressDto!) {
+    deleteStudentAddress(addressDto: $addressDto) {
+      addresses {
+        id
+        type
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        landmark
+        fullAddress
+        latitude
+        longitude
+      }
+    }
+  }
+`;
+
+export const ADD_UPDATE_TUTOR_EDUCATION_DETAILS = gql`
+  mutation AddUpdateEducationDetail($educationDto: CreateUpdateEducationDto!) {
+    addUpdateEducationDetail(educationDto: $educationDto) {
+      id
+      school {
+        name
+      }
+      degree {
+        id
+        name
+        degreeLevel
+      }
+      board
+      grade
+      subjects
+      fieldOfStudy
+      startDate
+      endDate
+      isCurrent
+    }
+  }
+`;
+
+export const DELETE_TUTOR_EDUCATION_DETAILS = gql`
+  mutation DeleteEducationDetail($id: Int!) {
+    deleteEducationDetail(id: $id) {
+      id
+    }
+  }
+`;
+
+export const ADD_UPDATE_TUTOR_EXPERIENCE_DETAILS = gql`
+  mutation AddUpdateExperienceDetail($experienceDto: CreateUpdateExperienceDto!) {
+    addUpdateExperienceDetail(experienceDto: $experienceDto) {
+      id
+      title
+      employmentType
+      institution {
+        name
+        # address {
+        #   fullAddress
+        # }
+      }
+      startDate
+      endDate
+      current
+    }
+  }
+`;
+export const DELETE_TUTOR_EXPERIENCE_DETAILS = gql`
+  mutation DeleteExperienceDetail($id: Int!) {
+    deleteExperienceDetail(id: $id) {
+      id
+    }
+  }
+`;
+
+export const ADD_TUTOR_DOCUMENT_DETAILS = gql`
+  mutation AddUpdateDocumentDetail($documentDto: CreateUpdateDocumentDto!) {
+    addUpdateDocumentDetail(documentDto: $documentDto) {
+      id
+      name
+      type
+      attachment {
+        id
+        name
+        type
+        filename
+        size
+      }
+    }
+  }
+`;
+export const DELETE_TUTOR_DOCUMENT_DETAILS = gql`
+  mutation DeleteDocumentDetail($id: Int!) {
+    deleteDocumentDetail(id: $id) {
+      id
+      name
+      type
+    }
+  }
+`;

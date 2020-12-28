@@ -24,6 +24,8 @@ const NavigationRouteNames = {
   ADDRESS_MAP_VIEW: 'address_map_view',
   EDUCATION: 'education',
   ADD_EDIT_EDUCATION: 'add_edit_education',
+  PARENTS: 'parents',
+  ADD_EDIT_PARENTS: 'add_edit_parents',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',

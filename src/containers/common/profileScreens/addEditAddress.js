@@ -15,14 +15,7 @@ function AddEditAddress() {
   const userInfo = useReactiveVar(userDetails);
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader
-        homeIcon
-        label="Address"
-        horizontalPadding={RfW(16)}
-        showRightIcon
-        rightIcon={Images.moreInformation}
-        lineVisible={false}
-      />
+      <ScreenHeader homeIcon label="Address" horizontalPadding={RfW(16)} lineVisible={false} />
       <View style={{ height: RfH(24) }} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.ADDRESS_MAP_VIEW)}>
