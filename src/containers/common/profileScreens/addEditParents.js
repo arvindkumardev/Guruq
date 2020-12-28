@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Picker } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { CustomCheckBox, CustomMobileNumber, IconButtonWrapper, ScreenHeader } from '../../../components';
 import { userDetails } from '../../../apollo/cache';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
-import { IND_COUNTRY_OBJ } from '../../../utils/constants';
+import { IND_COUNTRY_OBJ, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 function AddEditParents() {
   const navigation = useNavigation();
@@ -30,7 +31,7 @@ function AddEditParents() {
               Header="Select board"
               mode="dropdown"
               placeholder="Select Board"
-              placeholderStyle={{ fontSize: 15 }}
+              placeholderStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }}
               selectedValue={selectedGuadian}
               onValueChange={(value) => setSelectedGuadian(value)}>
               <Picker.Item label="Father" value="Father" key="Father" />

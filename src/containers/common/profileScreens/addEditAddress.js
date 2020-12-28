@@ -30,6 +30,7 @@ function AddEditAddress() {
             <View style={{ flex: 0.9 }}>
               <GooglePlacesAutocomplete
                 placeholder="Search"
+                fetchDetails
                 onPress={(data, details = null) => {
                   // 'details' is provided when fetchDetails = true
                   console.log(data, details);

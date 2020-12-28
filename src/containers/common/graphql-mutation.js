@@ -265,7 +265,7 @@ export const DELETE_STUDENT_ADDRESS = gql`
   }
 `;
 
-export const ADD_UPDATE_TUTOR_EDUCATION_DETAILS = gql`
+export const ADD_UPDATE_EDUCATION_DETAILS = gql`
   mutation AddUpdateEducationDetail($educationDto: CreateUpdateEducationDto!) {
     addUpdateEducationDetail(educationDto: $educationDto) {
       id

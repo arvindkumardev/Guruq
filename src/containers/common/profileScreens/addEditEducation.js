@@ -1,23 +1,82 @@
-import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Picker } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { CustomCheckBox, CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../components';
-import { userDetails } from '../../../apollo/cache';
+import { studentDetails, tutorDetails, userDetails } from '../../../apollo/cache';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import routeNames from '../../../routes/screenNames';
+import { ADD_UPDATE_EDUCATION_DETAILS } from '../graphql-mutation';
 
 function AddEditEducation() {
   const navigation = useNavigation();
-  const userInfo = useReactiveVar(userDetails);
+  const studentInfo = useReactiveVar(studentDetails);
+  const tutorInfo = useReactiveVar(tutorDetails);
+  console.log(studentInfo);
+  console.log(tutorInfo);
+
+  const [schoolName, setSchoolName] = useState('');
   const [selectedBoard, setSelectedBoard] = useState('CBSE');
+  const [selectedDegree, setSelectedDegree] = useState('B.Tech');
   const [selectedClass, setSelectedClass] = useState('1');
   const [selectedStream, setSelectedStream] = useState('Commerce');
+  const [fieldOfStudy, setFieldOfStudy] = useState('');
+  const [isCurrent, setIsCurrent] = useState(false);
   const [educationType, setEducationType] = useState(0);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        Alert.alert('Details updated!');
+      }
+    },
+  });
+
+  const onSavingEducation = () => {
+    const dto = {
+      school: {
+        name: schoolName,
+      },
+      startDate,
+      endDate,
+      isCurrent,
+      student: {
+        id: 27716,
+      },
+      tutor: {
+        id: 27716,
+      },
+    };
+    if (educationType === 0) {
+      dto.board = selectedBoard;
+      dto.grade = selectedClass;
+      if (selectedClass > 10) {
+        dto.subjects = selectedStream;
+      }
+    } else if (educationType === 1) {
+      dto.degree.name = selectedDegree;
+      dto.fieldOfStudy = fieldOfStudy;
+    }
+    console.log(dto);
+    saveEducation({
+      variables: {
+        educationDto: dto,
+      },
+    });
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader homeIcon label="Education" horizontalPadding={RfW(16)} lineVisible={false} />
@@ -26,7 +85,7 @@ function AddEditEducation() {
         <View>
           <Text style={commonStyles.smallMutedText}>Name of School or Institute</Text>
           <Item>
-            <Input value="Delhi Public School" />
+            <Input value={schoolName} onChangeText={(text) => setSchoolName(text)} />
           </Item>
         </View>
         <View style={{ height: RfH(24) }} />
@@ -140,17 +199,17 @@ function AddEditEducation() {
             <View>
               <Item style={commonStyles.horizontalChildrenSpaceView}>
                 <Picker
-                  iosHeader="Select board"
-                  Header="Select board"
+                  iosHeader="Select degree"
+                  Header="Select degree"
                   mode="dropdown"
-                  placeholder="Select Board"
+                  placeholder="Select degree"
                   placeholderStyle={{ fontSize: 15 }}
-                  selectedValue={selectedBoard}
-                  onValueChange={(value) => setSelectedBoard(value)}>
-                  <Picker.Item label="CBSE" value="CBSE" key="CBSE" />
-                  <Picker.Item label="ICSE" value="ICSE" key="ICSE" />
-                  <Picker.Item label="IB" value="IB" key="IB" />
-                  <Picker.Item label="IGSCE" value="IGSCE" key="IGSCE" />
+                  selectedValue={selectedDegree}
+                  onValueChange={(value) => setSelectedDegree(value)}>
+                  <Picker.Item label="B.Tech" value="B.Tech" key="B.Tech" />
+                  <Picker.Item label="MBA" value="MBA" key="MBA" />
+                  <Picker.Item label="MSC" value="MSC" key="MSC" />
+                  <Picker.Item label="BBA" value="BBA" key="BBA" />
                 </Picker>
                 <IconButtonWrapper
                   styling={{ alignSelf: 'flex-end' }}
@@ -164,7 +223,7 @@ function AddEditEducation() {
             <View>
               <Text style={commonStyles.smallMutedText}>Field of Study</Text>
               <Item>
-                <Input value="Civil Engineering" />
+                <Input value={fieldOfStudy} onChangeText={(text) => setFieldOfStudy(text)} />
               </Item>
             </View>
           </View>
@@ -175,25 +234,30 @@ function AddEditEducation() {
             <View style={{ flex: 0.5, marginRight: RfW(16) }}>
               <Text style={commonStyles.smallMutedText}>Start Date</Text>
               <View style={{ height: RfH(56), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-                <CustomDatePicker value={new Date()} />
+                <CustomDatePicker value={startDate} onChangeHandler={(d) => setStartDate(d)} />
               </View>
             </View>
             <View style={{ flex: 0.5, marfinLeft: RfW(16) }}>
               <Text style={commonStyles.smallMutedText}>End Date</Text>
               <View style={{ height: RfH(56), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-                <CustomDatePicker value={new Date()} />
+                <CustomDatePicker value={endDate} onChangeHandler={(d) => setEndDate(d)} />
               </View>
             </View>
           </View>
         </View>
         <View style={{ height: RfH(24) }} />
-        <View style={commonStyles.horizontalChildrenView}>
-          <CustomCheckBox enabled />
-          <Text style={{ marginLeft: RfW(16) }}>Currently studying</Text>
-        </View>
+        <TouchableWithoutFeedback onPress={() => setIsCurrent(!isCurrent)}>
+          <View style={commonStyles.horizontalChildrenView}>
+            <CustomCheckBox enabled={isCurrent} />
+            <Text style={{ marginLeft: RfW(16) }}>Currently studying</Text>
+          </View>
+        </TouchableWithoutFeedback>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+          <Button
+            onPress={() => onSavingEducation()}
+            block
+            style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
             <Text style={commonStyles.textButtonPrimary}>Save</Text>
           </Button>
         </View>
