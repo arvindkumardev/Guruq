@@ -11,6 +11,8 @@ export const SEARCH_TUTOR_OFFERINGS = gql`
       tutor {
         id
       }
+      stage
+      description
       offering {
         id
         displayName

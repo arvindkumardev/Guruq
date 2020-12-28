@@ -40,9 +40,8 @@ export const PtStatus = {
 export const TutorOfferingStageEnum = {
   PT_PENDING: { value: 1, label: 'PT_PENDING' },
   BUDGET_PENDING: { value: 2, label: 'BUDGET_PENDING' },
-  AVAILABILITY_PENDING: { value: 3, label: 'AVAILABILITY_PENDING' },
-  OFFERING_DETAILED_PENDING: { value: 4, label: 'OFFERING_DETAILED_PENDING' },
-  COMPLETED: { value: 5, label: 'COMPLETED' },
+  OFFERING_DETAILED_PENDING: { value: 3, label: 'OFFERING_DETAILED_PENDING' },
+  COMPLETED: { value: 4, label: 'COMPLETED' },
 };
 
 export const BackgroundCheckStatus = {

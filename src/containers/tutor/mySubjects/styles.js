@@ -2,23 +2,20 @@ import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Colors, Fonts } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { RfH } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
-  activeRightButton: {
+  rightButton: {
     flex: 1,
-    // marginLeft: RfW(-4),
     zIndex: 3,
-    height: 40,
-
+    height: RfH(40),
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
   },
-  activeLeftButton: {
+  leftButton: {
     flex: 1,
-    // marginRight: RfW(-4),
     zIndex: 3,
-    height: 40,
-
+    height: RfH(40),
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
   },
