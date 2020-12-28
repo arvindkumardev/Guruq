@@ -1,4 +1,4 @@
-import { ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Item, Input, Button } from 'native-base';
@@ -10,7 +10,7 @@ import { IND_COUNTRY_OBJ } from '../../../../utils/constants';
 import { Colors, Images } from '../../../../theme';
 import CustomDatePicker from '../../../../components/CustomDatePicker';
 import GenderModal from './genderModal';
-import { UPDATE_STUDENT_CONTACT_DETAILS } from '../../graphql-mutation';
+import { UPDATE_STUDENT_CONTACT_DETAILS, UPDATE_TUTOR_CONTACT_DETAILS } from '../../graphql-mutation';
 import { GenderEnum } from '../../enums';
 
 function PersonalInformation(props) {
@@ -30,7 +30,7 @@ function PersonalInformation(props) {
     setShowGenderModal(true);
   };
 
-  const [saveDetails, { loading: updateLoading }] = useMutation(UPDATE_STUDENT_CONTACT_DETAILS, {
+  const [saveStudentDetails, { loading: updateLoading }] = useMutation(UPDATE_STUDENT_CONTACT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -39,14 +39,27 @@ function PersonalInformation(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log(data);
+        Alert.alert('Details updated!');
+      }
+    },
+  });
+
+  const [saveTutorDetails, { loading: updateTutorLoading }] = useMutation(UPDATE_TUTOR_CONTACT_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        Alert.alert('Details updated!');
       }
     },
   });
 
   const onSavingDetails = () => {
-    console.log(mobileObj);
-    saveDetails({
+    saveStudentDetails({
       variables: {
         studentDto: {
           contactDetail: {

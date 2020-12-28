@@ -1,8 +1,9 @@
 import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import { userDetails } from '../../../apollo/cache';
 import commonStyles from '../../../theme/styles';
@@ -13,27 +14,46 @@ import routeNames from '../../../routes/screenNames';
 function AddEditAddress() {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader homeIcon label="Address" horizontalPadding={RfW(16)} lineVisible={false} />
       <View style={{ height: RfH(24) }} />
       <View style={{ paddingHorizontal: RfW(16) }}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.ADDRESS_MAP_VIEW)}>
+        <View>
+          <Text style={commonStyles.smallMutedText}>Set your location</Text>
           <View
             style={[
               commonStyles.horizontalChildrenView,
-              {
-                paddingHorizontal: RfW(16),
-                paddingVertical: RfH(8),
-                backgroundColor: Colors.lightBlue,
-                borderRadius: 8,
-              },
+              { borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, height: RfH(56) },
             ]}>
-            <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.gprs} />
-            <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(16) }]}>Use My Current Location</Text>
+            <View style={{ flex: 0.9 }}>
+              <GooglePlacesAutocomplete
+                placeholder="Search"
+                onPress={(data, details = null) => {
+                  // 'details' is provided when fetchDetails = true
+                  console.log(data, details);
+                }}
+                onFail={(error) => {
+                  console.log(error);
+                }}
+                query={{
+                  key: 'AIzaSyD8MaEzNhuejY2yBx6No7-TfkAvQ2X_wyk',
+                  language: 'en',
+                }}
+              />
+            </View>
+            <View style={{ flex: 0.1 }}>
+              <IconButtonWrapper
+                submitFunction={() => navigation.navigate(routeNames.ADDRESS_MAP_VIEW)}
+                iconImage={Images.gprs}
+                iconHeight={RfH(24)}
+                iconWidth={RfW(24)}
+              />
+            </View>
           </View>
-        </TouchableWithoutFeedback>
-        <View style={{ height: RfH(44) }} />
+        </View>
+        <View style={{ height: RfH(24) }} />
         <View>
           <Text style={commonStyles.smallMutedText}>House no. Buliding Name</Text>
           <Item>

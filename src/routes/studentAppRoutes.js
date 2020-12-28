@@ -61,7 +61,7 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.PERSONAL_DETAILS}
+        name={NavigationRouteNames.PERSONAL_DETAILS}
         component={PersonalDetails}
         options={{ headerShown: false }}
       />

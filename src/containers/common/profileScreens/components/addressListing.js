@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import commonStyles from '../../../../theme/styles';
 import { RfH, RfW } from '../../../../utils/helpers';
-import { IND_COUNTRY_OBJ } from '../../../../utils/constants';
 import { Colors, Images } from '../../../../theme';
 import { IconButtonWrapper } from '../../../../components';
 import routeNames from '../../../../routes/screenNames';

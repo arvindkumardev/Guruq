@@ -14,7 +14,7 @@ function Parents() {
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader
         homeIcon
-        label="Parents Details"
+        label="Guardians Details"
         horizontalPadding={RfW(16)}
         showRightIcon
         rightIcon={Images.moreInformation}

@@ -26,6 +26,7 @@ const NavigationRouteNames = {
   ADD_EDIT_EDUCATION: 'add_edit_education',
   PARENTS: 'parents',
   ADD_EDIT_PARENTS: 'add_edit_parents',
+  PERSONAL_DETAILS: 'personal_details',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
@@ -37,7 +38,6 @@ const NavigationRouteNames = {
     CLASSES: 'student_classes',
     TUTOR: 'student_tutor',
     PROFILE: 'student_profile',
-    PERSONAL_DETAILS: 'personal_details',
     COMPARE_TUTORS: 'compare_tutors',
     TUTOR_DETAILS: 'tutor_details',
     MY_CART: 'my_cart',

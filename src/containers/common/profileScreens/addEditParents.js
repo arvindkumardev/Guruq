@@ -1,9 +1,9 @@
 import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
-import { Button, Input, Item } from 'native-base';
+import { Button, Input, Item, Picker } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { CustomCheckBox, CustomMobileNumber, ScreenHeader } from '../../../components';
+import { CustomCheckBox, CustomMobileNumber, IconButtonWrapper, ScreenHeader } from '../../../components';
 import { userDetails } from '../../../apollo/cache';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
@@ -12,17 +12,42 @@ import { IND_COUNTRY_OBJ } from '../../../utils/constants';
 
 function AddEditParents() {
   const navigation = useNavigation();
+  const [selectedGuadian, setSelectedGuadian] = useState('Father');
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
   });
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader homeIcon label="Parents Details" horizontalPadding={RfW(16)} lineVisible={false} />
+      <ScreenHeader homeIcon label="Guardians Details" horizontalPadding={RfW(16)} lineVisible={false} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={{ height: RfH(44) }} />
+        <Text style={commonStyles.smallMutedText}>Board</Text>
         <View>
-          <Text style={commonStyles.smallMutedText}>Parents Name</Text>
+          <Item style={commonStyles.horizontalChildrenSpaceView}>
+            <Picker
+              iosHeader="Select board"
+              Header="Select board"
+              mode="dropdown"
+              placeholder="Select Board"
+              placeholderStyle={{ fontSize: 15 }}
+              selectedValue={selectedGuadian}
+              onValueChange={(value) => setSelectedGuadian(value)}>
+              <Picker.Item label="Father" value="Father" key="Father" />
+              <Picker.Item label="Mother" value="Mother" key="Mother" />
+              <Picker.Item label="Other" value="Other" key="Other" />
+            </Picker>
+            <IconButtonWrapper
+              styling={{ alignSelf: 'flex-end' }}
+              iconHeight={RfH(24)}
+              iconWidth={RfW(24)}
+              iconImage={Images.expand}
+            />
+          </Item>
+        </View>
+        <View style={{ height: RfH(24) }} />
+        <View>
+          <Text style={commonStyles.smallMutedText}>Gurdians Name</Text>
           <Item>
             <Input value="Ravi Kumar" />
           </Item>

@@ -114,7 +114,7 @@ function Profile(props) {
 
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
-      navigation.navigate(routeNames.STUDENT.PERSONAL_DETAILS);
+      navigation.navigate(routeNames.PERSONAL_DETAILS);
     } else if (item.name === 'Address') {
       navigation.navigate(routeNames.ADDRESS);
     } else if (item.name === 'Education') {
