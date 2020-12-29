@@ -1,4 +1,4 @@
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, KeyboardAvoidingView, Text, View, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -49,7 +49,7 @@ function PytnRequests() {
         alertBox(`Request ${isEmpty(selectedPytn.acceptedPytns) ? 'accepted' : 'edited'} successfully`, '', {
           positiveText: 'Ok',
           onPositiveClick: () => {
-            getPytnRequests({ variables: { searchDto: { size: 15 } } });
+            getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asec' } } });
           },
         });
       }
@@ -97,7 +97,7 @@ function PytnRequests() {
 
   useEffect(() => {
     if (isFocussed) {
-      getPytnRequests({ variables: { searchDto: { size: 15 } } });
+      getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asec' } } });
     }
   }, [isFocussed]);
 
@@ -169,7 +169,9 @@ function PytnRequests() {
           marginVertical: RfH(5),
           alignItems: 'center',
         }}>
-        {!isEmpty(item.acceptedPytns) && <Text style={commonStyles.mediumPrimaryText}>Request accepted</Text>}
+        {!isEmpty(item.acceptedPytns) && (
+          <Text style={commonStyles.mediumPrimaryText}>Accepted at ₹{item.acceptedPytns[0].price}</Text>
+        )}
         <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]} onPress={() => handleAccept(item)}>
           <Text style={commonStyles.textButtonPrimary}>
             {!isEmpty(item.acceptedPytns) ? 'Edit Request' : 'Accept Request'}
@@ -183,24 +185,32 @@ function PytnRequests() {
   return (
     <>
       <Loader isLoading={acceptStudentPytnLoading || pytnRequestLoading} />
-      <ScreenHeader label="Student Requests" homeIcon horizontalPadding={RfW(16)} />
-      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
-        <FlatList
-          data={requests}
-          renderItem={({ item, index }) => renderClassItem(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: RfH(120) }}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-      <PriceInputModal
-        visible={showPriceModal}
-        onClose={() => setShowPriceModal(false)}
-        onSubmit={onSubmit}
-        onPriceChange={(val) => setPriceVal(val)}
-        price={priceVal}
-        selectedPytn={selectedPytn}
-      />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.select({ android: '', ios: 'padding' })}
+        // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
+        enabled>
+        <ScreenHeader label="Student Requests" homeIcon horizontalPadding={RfW(16)} />
+        <ScrollView>
+          <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
+            <FlatList
+              data={requests}
+              renderItem={({ item, index }) => renderClassItem(item, index)}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{ paddingBottom: RfH(120) }}
+              showsVerticalScrollIndicator={false}
+            />
+          </View>
+          <PriceInputModal
+            visible={showPriceModal}
+            onClose={() => setShowPriceModal(false)}
+            onSubmit={onSubmit}
+            onPriceChange={(val) => setPriceVal(val)}
+            price={priceVal}
+            selectedPytn={selectedPytn}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }

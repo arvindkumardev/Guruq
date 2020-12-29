@@ -1,10 +1,11 @@
-import { View, FlatList, Text, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
-import { IconButtonWrapper, ScreenHeader, Loader } from '../../../components';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { Switch } from 'native-base';
+import { IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
-import { Images, Colors } from '../../../theme';
+import { Colors, Images } from '../../../theme';
 import { getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
 import { tutorDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
@@ -57,40 +58,40 @@ function SubjectList() {
   };
 
   const renderSubjects = (item) => (
-    <TouchableWithoutFeedback onPress={() => handleSubjectClick(item)}>
-      <View style={{ paddingHorizontal: RfW(16) }}>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(16) }]}>
-          <View style={commonStyles.horizontalChildrenView}>
-            <IconButtonWrapper iconImage={getSubjectIcons(item.offering.displayName)} />
-            <View style={{ marginLeft: RfW(16) }}>
-              <Text style={commonStyles.regularPrimaryText}>{item?.offering?.displayName}</Text>
-              <Text
-                style={[
-                  commonStyles.mediumPrimaryText,
-                  { marginTop: RfH(5) },
-                ]}>{` ${item?.offering?.parentOffering?.parentOffering?.displayName} | ${item?.offering?.parentOffering?.displayName}`}</Text>
-            </View>
+    <View style={{ paddingHorizontal: RfW(16) }}>
+      <View style={commonStyles.horizontalChildrenSpaceView}>
+        <TouchableOpacity
+          style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(16), width: '70%' }]}
+          onPress={() => handleSubjectClick(item)}
+          activeOpacity={0.8}>
+          <IconButtonWrapper iconImage={getSubjectIcons(item.offering.displayName)} />
+          <View style={{ marginLeft: RfW(16) }}>
+            <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
+              {item?.offering?.displayName}
+            </Text>
+            <Text
+              style={[
+                commonStyles.mediumPrimaryText,
+                { marginTop: RfH(5) },
+              ]}>{`${item?.offering?.parentOffering?.parentOffering?.displayName} | ${item?.offering?.parentOffering?.displayName}`}</Text>
           </View>
+        </TouchableOpacity>
 
-          <IconButtonWrapper
-            iconImage={Images.chevronRight}
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
-            styling={{ alignSelf: 'flex-end' }}
-          />
+        <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+          <Switch value={item.active} />
         </View>
-        {item.stage === TutorOfferingStageEnum.PT_PENDING.label && (
-          <Text style={commonStyles.regularPrimaryText}> Please take the proficiency test</Text>
-        )}
-        {item.stage === TutorOfferingStageEnum.BUDGET_PENDING.label && (
-          <Text style={commonStyles.regularPrimaryText}> Please provide the price matrix</Text>
-        )}
-        {item.stage === TutorOfferingStageEnum.OFFERING_DETAILED_PENDING.label && (
-          <Text style={commonStyles.regularPrimaryText}> Please provide the a short description</Text>
-        )}
-        <View style={commonStyles.lineSeparatorWithMargin} />
       </View>
-    </TouchableWithoutFeedback>
+      {item.stage === TutorOfferingStageEnum.PT_PENDING.label && (
+        <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>Proficiency test pending</Text>
+      )}
+      {item.stage === TutorOfferingStageEnum.BUDGET_PENDING.label && (
+        <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}> Price matrix pending</Text>
+      )}
+      {item.stage === TutorOfferingStageEnum.OFFERING_DETAILED_PENDING.label && (
+        <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>Short description pending</Text>
+      )}
+      <View style={commonStyles.lineSeparatorWithMargin} />
+    </View>
   );
 
   return (
@@ -110,7 +111,7 @@ function SubjectList() {
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => renderSubjects(item, index)}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: RfH(84) }}
+          contentContainerStyle={{ paddingBottom: RfH(100), paddingTop: RfH(20) }}
         />
       </View>
     </View>

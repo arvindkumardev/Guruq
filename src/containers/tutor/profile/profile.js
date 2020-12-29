@@ -21,21 +21,21 @@ import {
 } from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
-import { default as NavigationRouteNames, default as routeNames } from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function Profile(props) {
   const navigation = useNavigation();
   const { changeTab } = props;
   const userInfo = useReactiveVar(userDetails);
-  const tutorInfo = useReactiveVar(tutorDetails);
 
-  // console.log('navigation===>',props)
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
-  const [isPersonalMenuOpen, setIsPersonalMenuOpen] = useState(true);
+  const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
+  const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
 
   const [accountData, setAccountData] = useState([
     { name: 'Personal Details', icon: Images.personal },
@@ -45,21 +45,11 @@ function Profile(props) {
     { name: 'Documents', icon: Images.book },
     { name: 'Bank Details', icon: Images.bank },
   ]);
-  const [myStudyData, setMyStudyData] = useState([
-    { name: 'View Schedule', icon: Images.calendar },
-    { name: 'Update Schedule', icon: Images.calendar },
-  ]);
-  const [bookingData, setBookingData] = useState([{ name: 'Purchased History', icon: Images.personal }]);
+
   const [myClassesData, setMyClassesData] = useState([
     { name: 'My Classes', icon: Images.laptop },
     { name: 'My Students', icon: Images.home },
   ]);
-  const [isStudyMenuOpen, setIsStudyMenuOpen] = useState(false);
-  const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
-  const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
-  const [isReferFriendMenuOpen, setIsReferFriendMenuOpen] = useState(false);
-  const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
-  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
 
   const [settingsData, setSettingsData] = useState([
     { name: 'Change Password', icon: Images.personal },
@@ -101,104 +91,90 @@ function Profile(props) {
     });
   };
 
+  const logoutConfirmation = () => {
+    alertBox('Do you really want to logout?', '', {
+      positiveText: 'Yes',
+      onPositiveClick: logout,
+      negativeText: 'No',
+    });
+  };
+
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/personal-information`,
         label: 'Personal Details',
       });
     } else if (item.name === 'Address') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/addresses`,
         label: 'Address Details',
       });
     } else if (item.name === 'Education') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/education`,
         label: 'Education Details',
       });
     } else if (item.name === 'Experience') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
         label: 'Experience Details',
       });
     } else if (item.name === 'Documents') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
         label: 'Documents',
       });
     } else if (item.name === 'Bank Details') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
         label: 'Bank Details',
       });
     } else if (item.name === 'Customer Care') {
-      navigation.navigate(routeNames.CUSTOMER_CARE);
+      navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
         label: "FAQ's",
       });
     } else if (item.name === 'Send Feedback') {
-      navigation.navigate(routeNames.SEND_FEEDBACK);
+      navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
     } else if (item.name === 'About') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
         label: 'About',
       });
     } else if (item.name === 'Team') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
         label: 'Team',
       });
     } else if (item.name === 'My Classes' || item.name === 'My Students') {
       changeTab(3);
-    } else if (item.name === 'View Schedule') {
-      navigation.navigate(routeNames.TUTOR.VIEW_SCHEDULE);
-    } else if (item.name === 'Update Schedule') {
-      navigation.navigate(routeNames.TUTOR.UPDATE_SCHEDULE);
     } else {
       return null;
     }
     return null;
   };
-  const renderItem = (item) => {
-    return (
-      <TouchableWithoutFeedback
-        onPress={() => personalDetails(item)}
-        style={[
-          styles.userMenuParentView,
-          {
-            height: RfH(44),
-            justifyContent: 'space-between',
-            paddingLeft: RfW(48),
-            borderBottomColor: Colors.lightGrey,
-          },
-        ]}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
-          <Text style={[commonStyles.mediumMutedText, { marginLeft: RfW(16) }]}>{item.name}</Text>
-        </View>
-        <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
-      </TouchableWithoutFeedback>
-    );
-  };
-
-  // const renderActionIcons = () => {
-  //   return (
-  //     <View style={[styles.userMenuParentView, { justifyContent: 'space-evenly', alignItems: 'center' }]}>
-  //       <View
-  //         style={[styles.actionIconParentView, { flex: 0.5, borderRightColor: Colors.darkGrey, borderRightWidth: 1 }]}>
-  //         <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.bell} />
-  //         <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Notification</Text>
-  //       </View>
-  //       <View style={[styles.actionIconParentView, { flex: 0.5 }]}>
-  //         <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.qpoint} />
-  //         <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Q Points</Text>
-  //       </View>
-  //     </View>
-  //   );
-  // };
+  const renderItem = (item) => (
+    <TouchableWithoutFeedback
+      onPress={() => personalDetails(item)}
+      style={[
+        styles.userMenuParentView,
+        {
+          height: RfH(44),
+          justifyContent: 'space-between',
+          paddingLeft: RfW(48),
+          borderBottomColor: Colors.lightGrey,
+        },
+      ]}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
+        <Text style={[commonStyles.mediumMutedText, { marginLeft: RfW(16) }]}>{item.name}</Text>
+      </View>
+      <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
+    </TouchableWithoutFeedback>
+  );
 
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
@@ -232,7 +208,6 @@ function Profile(props) {
             justifyContent: 'center',
           }}>
           <View style={styles.userDetailsView}>
-            {/* <Image style={styles.userIcon} source={Images.user} /> */}
             <IconButtonWrapper
               style={styles.userIcon}
               iconHeight={RfH(64)}
@@ -247,12 +222,10 @@ function Profile(props) {
               <Text style={styles.userMobDetails}>
                 +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
               </Text>
-              <Text style={styles.userMobDetails}>T{userInfo?.id}</Text>
+              <Text style={styles.userMobDetails}>T-{userInfo?.id}</Text>
             </View>
           </View>
         </View>
-        {/* <View style={commonStyles.lineSeparator} /> */}
-        {/* <View style={{ paddingVertical: RfH(16) }}>{renderActionIcons()}</View> */}
         <View style={commonStyles.blankGreyViewSmall} />
         <View>
           <TouchableWithoutFeedback
@@ -264,7 +237,6 @@ function Profile(props) {
               iconImage={Images.profile}
               imageResizeMode="contain"
             />
-
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>My Account</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -287,38 +259,6 @@ function Profile(props) {
           />
         )}
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-        <TouchableWithoutFeedback onPress={() => setIsStudyMenuOpen(!isStudyMenuOpen)}>
-          <View style={styles.userMenuParentView}>
-            <IconWrapper
-              iconHeight={RfH(16)}
-              iconWidth={RfW(16)}
-              iconImage={Images.profile}
-              imageResizeMode="contain"
-            />
-            <View style={styles.menuItemParentView}>
-              <Text style={styles.menuItemPrimaryText}>Scheduler</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Mark your Availability - date and time slots
-              </Text>
-            </View>
-            <IconWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={isStudyMenuOpen ? Images.collapse_grey : Images.expand_gray}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-        {isStudyMenuOpen && (
-          <SafeAreaView>
-            <FlatList
-              data={myStudyData}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </SafeAreaView>
-        )}
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
           <View style={styles.userMenuParentView}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
@@ -336,17 +276,33 @@ function Profile(props) {
           </View>
         </TouchableWithoutFeedback>
         {isBookingMenuOpen && (
-          <SafeAreaView>
-            <FlatList
-              data={myClassesData}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </SafeAreaView>
+          <FlatList
+            data={myClassesData}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => renderItem(item)}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.SUBJECTS_LIST)}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.VIEW_SCHEDULE)}>
+          <View style={styles.userMenuParentView}>
+            <IconWrapper
+              iconHeight={RfH(16)}
+              iconWidth={RfW(16)}
+              iconImage={Images.calendar}
+              imageResizeMode="contain"
+            />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>Scheduler</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Modify, View and create schedule
+              </Text>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECTS_LIST)}>
           <View style={styles.userMenuParentView}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
             <View style={styles.menuItemParentView}>
@@ -360,7 +316,7 @@ function Profile(props) {
 
         <View style={commonStyles.blankGreyViewSmall} />
 
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.REFER_EARN)}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}>
           <View style={[styles.userMenuParentView]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
             <View style={styles.menuItemParentView}>
@@ -390,16 +346,14 @@ function Profile(props) {
             iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
           />
         </View>
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
         {isSettingsMenuOpen && (
-          <SafeAreaView>
-            <FlatList
-              data={settingsData}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </SafeAreaView>
+          <FlatList
+            data={settingsData}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => renderItem(item)}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
 
         <View style={commonStyles.blankGreyViewSmall} />
@@ -425,14 +379,12 @@ function Profile(props) {
         </TouchableOpacity>
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         {isInformationMenuOpen && (
-          <SafeAreaView>
-            <FlatList
-              data={informationData}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </SafeAreaView>
+          <FlatList
+            data={informationData}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => renderItem(item)}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
         <TouchableWithoutFeedback onPress={() => setIsAboutGuruMenuOpen(!isAboutGuruMenuOpen)}>
           <View style={styles.userMenuParentView}>
@@ -450,16 +402,14 @@ function Profile(props) {
             />
           </View>
         </TouchableWithoutFeedback>
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
         {isAboutGuruMenuOpen && (
-          <SafeAreaView>
-            <FlatList
-              data={about}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => renderItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </SafeAreaView>
+          <FlatList
+            data={about}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => renderItem(item)}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
 
         <View style={commonStyles.blankGreyViewSmall} />
@@ -467,25 +417,12 @@ function Profile(props) {
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.logOut} />
           <View style={styles.menuItemParentView}>
-            <TouchableOpacity onPress={() => logout()}>
+            <TouchableOpacity onPress={logoutConfirmation}>
               <Text style={styles.menuItemPrimaryText}>Logout</Text>
             </TouchableOpacity>
-
-            {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-            Calendar, Schedule Class, Renew Class, Class...
-         </Text> */}
           </View>
-
-          {/* <TouchableWithoutFeedback onPress={() => setIsLogout(!isLogout)}>
-          <IconWrapper
-            iconWidth={RfW(24)}
-            iconHeight={RfH(24)}
-
-            iconImage={isLogout ? Images.collapse_grey : Images.expand_gray}
-          />
-        </TouchableWithoutFeedback> */}
         </View>
-        {/* <View style={commonStyles.lineSeparator} /> */}
+
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         <View
           style={{

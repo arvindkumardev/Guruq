@@ -1,5 +1,5 @@
 /* eslint-disable radix */
-import { Alert, FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Button, CheckBox, Input, Item, Switch } from 'native-base';
 import { useMutation } from '@apollo/client';
@@ -19,13 +19,9 @@ function PriceMatrixView(props) {
   const navigation = useNavigation();
   const { offering, showLoader } = props;
   const [priceMatrix, setPriceMatrix] = useState(PM);
-  const [demoClassPm, setDemoClassPM] = useState({
-    online: 0,
-    offline: 0,
-  });
+  const [demoClassPm, setDemoClassPM] = useState({ online: 0, offline: 0 });
   const [isDemoClass, setIsDemoClass] = useState(offering.demoClass);
   const [modeDemoClass, setModeDemoClass] = useState(offering.onlineClass);
-
 
   useEffect(() => {
     if (!isEmpty(offering.budgets)) {
@@ -98,7 +94,7 @@ function PriceMatrixView(props) {
     },
   });
 
-    showLoader(offeringLoading);
+  showLoader(offeringLoading);
   const onUpdatingOffering = () => {
     showLoader(offeringLoading);
     const budgetArray = [];
@@ -220,7 +216,7 @@ function PriceMatrixView(props) {
           style={{
             flex: 0.32,
             backgroundColor: Colors.lightBlue,
-            height: RfH(64),
+            height: RfH(50),
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -230,7 +226,7 @@ function PriceMatrixView(props) {
           style={{
             flex: 0.32,
             backgroundColor: Colors.lightBlue,
-            height: RfH(64),
+            height: RfH(50),
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -240,7 +236,7 @@ function PriceMatrixView(props) {
           style={{
             flex: 0.32,
             backgroundColor: Colors.lightBlue,
-            height: RfH(64),
+            height: RfH(50),
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -305,7 +301,7 @@ function PriceMatrixView(props) {
       )}
       {isDemoClass && (
         <View style={{ marginTop: RfH(30), marginBottom: RfH(10) }}>
-          <Text style={commonStyles.regularPrimaryText}>Demo Class Price Matrix</Text>
+          <Text style={commonStyles.regularPrimaryText}>Demo Class Price Matrix **</Text>
           <View style={{ flexDirection: 'row', marginTop: RfH(15), justifyContent: 'space-around' }}>
             {modeDemoClass !== 0 && (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -362,6 +358,7 @@ function PriceMatrixView(props) {
               </View>
             )}
           </View>
+          <Text style={[commonStyles.smallMutedText,{marginTop:RfH(20),textAlign:'right'}]}> ** Zero price means the demo class is free</Text>
         </View>
       )}
       <View
@@ -372,7 +369,7 @@ function PriceMatrixView(props) {
         }}>
         <Button
           onPress={onUpdatingOffering}
-          style={[commonStyles.buttonPrimary, { width: RfW(160), alignSelf: 'center' }]}>
+          style={[commonStyles.buttonPrimary, { width: RfW(200), alignSelf: 'center' }]}>
           <Text style={commonStyles.textButtonPrimary}>Update price matrix</Text>
         </Button>
       </View>
