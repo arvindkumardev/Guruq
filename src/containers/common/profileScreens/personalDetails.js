@@ -26,7 +26,7 @@ function PersonalDetails() {
         <PersonalInformation
           referenceType={userInfo.type}
           referenceId={userInfo.id}
-          details={userInfo.contactDetail}
+          details={userInfo}
           isUpdateAllowed={isEditClicked}
         />
       </View>

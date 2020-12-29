@@ -109,20 +109,14 @@ function Profile(props) {
     } else if (item.name === 'Education') {
       navigation.navigate(routeNames.EDUCATION);
     } else if (item.name === 'Experience') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
-        label: 'Experience Details',
-      });
+      navigation.navigate(routeNames.EXPERIENCE);
     } else if (item.name === 'Documents') {
       navigation.navigate(routeNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
         label: 'Documents',
       });
     } else if (item.name === 'Bank Details') {
-      navigation.navigate(routeNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
-        label: 'Bank Details',
-      });
+      navigation.navigate(routeNames.BANK_DETAILS);
     } else if (item.name === 'Customer Care') {
       navigation.navigate(routeNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {

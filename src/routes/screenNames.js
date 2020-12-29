@@ -27,6 +27,10 @@ const NavigationRouteNames = {
   PARENTS: 'parents',
   ADD_EDIT_PARENTS: 'add_edit_parents',
   PERSONAL_DETAILS: 'personal_details',
+  EXPERIENCE: 'experience',
+  ADD_EDIT_EXPERIENCE: 'add_edit_experience',
+  BANK_DETAILS: 'bank_details',
+  ADD_EDIT_BANK_DETAILS: 'add_edit_bank_details',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',

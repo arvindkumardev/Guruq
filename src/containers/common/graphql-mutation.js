@@ -347,3 +347,21 @@ export const DELETE_TUTOR_DOCUMENT_DETAILS = gql`
     }
   }
 `;
+
+export const ADD_UPDATE_GUARDIAN_DETAILS = gql`
+  mutation AddUpdateStudentParentInfo($guardianInfoDto: CreateUpdateGuardianInfoDto!) {
+    addUpdateStudentParentInfo(guardianInfoDto: $guardianInfoDto) {
+      id
+    }
+  }
+`;
+
+export const ADD_UPDATE_BANK_DETAILS = gql`
+  mutation UpdateBankDetails($bankDetailsDto: CreateUpdateBankDetailsDto!) {
+    updateBankDetails(bankDetailsDto: $bankDetailsDto) {
+      id
+      bankName
+      accountNumber
+    }
+  }
+`;

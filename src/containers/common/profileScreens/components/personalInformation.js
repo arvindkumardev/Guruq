@@ -1,5 +1,5 @@
 import { Alert, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Item, Input, Button } from 'native-base';
 import { useMutation } from '@apollo/client';
@@ -21,6 +21,7 @@ function PersonalInformation(props) {
   const [dob, setDOB] = useState(new Date());
   const [gender, setGender] = useState(GenderEnum.MALE.label);
   const { referenceType, referenceId, details, onUpdate, isUpdateAllowed } = props;
+  console.log(details);
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
@@ -29,6 +30,14 @@ function PersonalInformation(props) {
   const showModal = () => {
     setShowGenderModal(true);
   };
+
+  useEffect(() => {
+    setFirstName(details?.firstName);
+    setLastName(details?.lastName);
+    setEmail(details?.email);
+    setMobileObj({ mobile: details?.phoneNumber?.number, country: IND_COUNTRY_OBJ });
+    setGender(details?.gender);
+  });
 
   const [saveStudentDetails, { loading: updateLoading }] = useMutation(UPDATE_STUDENT_CONTACT_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -95,7 +104,7 @@ function PersonalInformation(props) {
             <Input value={firstName} onChangeText={(text) => setFirstName(text)} />
           </Item>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>Sheena</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.firstName}</Text>
         )}
 
         <View style={{ height: RfH(24) }} />
@@ -105,7 +114,7 @@ function PersonalInformation(props) {
             <Input value={lastName} onChangeText={(text) => setLastName(text)} />
           </Item>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>Jain</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.lastName}</Text>
         )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Email Id</Text>
@@ -114,7 +123,7 @@ function PersonalInformation(props) {
             <Input value={email} onChangeText={(text) => setEmail(text)} />
           </Item>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>Sheenajain123@gmail.com</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.email}</Text>
         )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Phone Number</Text>
@@ -131,7 +140,7 @@ function PersonalInformation(props) {
             />
           </View>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>9876543210</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.phoneNumber?.number}</Text>
         )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Date of birth</Text>
@@ -151,7 +160,7 @@ function PersonalInformation(props) {
             </View>
           </TouchableWithoutFeedback>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>Male</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.gender}</Text>
         )}
         <View style={{ height: RfH(24) }} />
         {isUpdateAllowed && (

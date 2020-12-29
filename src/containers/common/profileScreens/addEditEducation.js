@@ -16,8 +16,6 @@ function AddEditEducation() {
   const navigation = useNavigation();
   const studentInfo = useReactiveVar(studentDetails);
   const tutorInfo = useReactiveVar(tutorDetails);
-  console.log(studentInfo);
-  console.log(tutorInfo);
 
   const [schoolName, setSchoolName] = useState('');
   const [selectedBoard, setSelectedBoard] = useState('CBSE');
@@ -69,7 +67,6 @@ function AddEditEducation() {
       dto.degree.name = selectedDegree;
       dto.fieldOfStudy = fieldOfStudy;
     }
-    console.log(dto);
     saveEducation({
       variables: {
         educationDto: dto,

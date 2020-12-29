@@ -1,6 +1,7 @@
-import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useEffect, useRef } from 'react';
-import { useReactiveVar } from '@apollo/client';
+/* eslint-disable radix */
+import { Alert, Image, Text, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -10,10 +11,55 @@ import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import routeNames from '../../../routes/screenNames';
+import { ADD_UPDATE_STUDENT_ADDRESS } from '../graphql-mutation';
+import { AddressTypeEnum } from '../enums';
 
 function AddEditAddress() {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
+  const [addressType, setAddressType] = useState(AddressTypeEnum.HOME.label);
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setstate] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [country, setCountry] = useState('');
+  const [area, setArea] = useState('');
+  const [fullAddress, setFullAddress] = useState('Delhi, India.');
+
+  const [saveAddress, { loading: studentAddressLoading }] = useMutation(ADD_UPDATE_STUDENT_ADDRESS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        Alert.alert('Details updated!');
+      }
+    },
+  });
+
+  const onSavingAddress = () => {
+    saveAddress({
+      variables: {
+        addressDto: {
+          type: addressType,
+          street,
+          city,
+          state,
+          subArea: area,
+          country,
+          postalCode: parseInt(pincode),
+          fullAddress,
+          location: {
+            latitude: 28.23456788997,
+            longitude: 77.23445667784,
+          },
+        },
+      },
+    });
+  };
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
@@ -32,11 +78,7 @@ function AddEditAddress() {
                 placeholder="Search"
                 fetchDetails
                 onPress={(data, details = null) => {
-                  // 'details' is provided when fetchDetails = true
                   console.log(data, details);
-                }}
-                onFail={(error) => {
-                  console.log(error);
                 }}
                 query={{
                   key: 'AIzaSyD8MaEzNhuejY2yBx6No7-TfkAvQ2X_wyk',
@@ -58,14 +100,14 @@ function AddEditAddress() {
         <View>
           <Text style={commonStyles.smallMutedText}>House no. Buliding Name</Text>
           <Item>
-            <Input value="12/27" />
+            <Input value={street} onChangeText={(text) => setStreet(text)} />
           </Item>
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
           <Text style={commonStyles.smallMutedText}>Area , locality</Text>
           <Item>
-            <Input value="Ashok Nagar" />
+            <Input value={area} onChangeText={(text) => setArea(text)} />
           </Item>
         </View>
         <View style={{ height: RfH(24) }} />
@@ -74,14 +116,14 @@ function AddEditAddress() {
             <View style={{ flex: 0.5, marginRight: RfW(16) }}>
               <Text style={commonStyles.smallMutedText}>City</Text>
               <Item>
-                <Input value="New Delhi" />
+                <Input value={city} onChangeText={(text) => setCity(text)} />
                 <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.searchIcon} />
               </Item>
             </View>
             <View style={{ flex: 0.5, marfinLeft: RfW(16) }}>
               <Text style={commonStyles.smallMutedText}>State</Text>
               <Item>
-                <Input value="Delhi" />
+                <Input value={state} onChangeText={(text) => setstate(text)} />
                 <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.searchIcon} />
               </Item>
             </View>
@@ -92,39 +134,87 @@ function AddEditAddress() {
           <View style={{ flex: 0.5, marginRight: RfW(16) }}>
             <Text style={commonStyles.smallMutedText}>Pincode </Text>
             <Item>
-              <Input value="110047" />
+              <Input value={pincode} onChangeText={(text) => setPincode(text)} />
             </Item>
           </View>
           <View style={{ flex: 0.5, marfinLeft: RfW(16) }}>
             <Text style={commonStyles.smallMutedText}>Country</Text>
             <Item>
-              <Input value="India" />
+              <Input value={country} onChangeText={(text) => setCountry(text)} />
             </Item>
           </View>
         </View>
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Save as</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <View
-            style={[
-              commonStyles.horizontalChildrenView,
-              { borderBottomWidth: 1, borderBottomColor: Colors.brandBlue2, paddingVertical: RfH(8) },
-            ]}>
-            <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-            <Text style={{ marginLeft: RfW(12), color: Colors.brandBlue2 }}>Home</Text>
-          </View>
-          <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(8) }]}>
-            <IconButtonWrapper iconImage={Images.work_office} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-            <Text style={{ marginLeft: RfW(12) }}>Work</Text>
-          </View>
-          <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(8) }]}>
-            <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-            <Text style={{ marginLeft: RfW(12) }}>Other</Text>
-          </View>
+          <TouchableWithoutFeedback onPress={() => setAddressType(AddressTypeEnum.HOME.label)}>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                {
+                  borderBottomWidth: 1,
+                  borderBottomColor: addressType === AddressTypeEnum.HOME.label ? Colors.brandBlue2 : Colors.darkGrey,
+                  paddingVertical: RfH(8),
+                },
+              ]}>
+              <IconButtonWrapper
+                iconImage={addressType === AddressTypeEnum.HOME.label ? Images.home_active : Images.home}
+                iconWidth={RfW(16)}
+                iconHeight={RfH(20)}
+              />
+              <Text
+                style={{
+                  marginLeft: RfW(12),
+                  color: addressType === AddressTypeEnum.HOME.label ? Colors.brandBlue2 : Colors.darkGrey,
+                }}>
+                Home
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => setAddressType(AddressTypeEnum.WORK.label)}>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                {
+                  borderBottomWidth: 1,
+                  borderBottomColor: addressType === AddressTypeEnum.WORK.label ? Colors.brandBlue2 : Colors.darkGrey,
+                  paddingVertical: RfH(8),
+                },
+              ]}>
+              <IconButtonWrapper iconImage={Images.work_office} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+              <Text
+                style={{
+                  marginLeft: RfW(12),
+                  color: addressType === AddressTypeEnum.WORK.label ? Colors.brandBlue2 : Colors.darkGrey,
+                }}>
+                Work
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => setAddressType(AddressTypeEnum.OTHER.label)}>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                {
+                  borderBottomWidth: 1,
+                  borderBottomColor: addressType === AddressTypeEnum.OTHER.label ? Colors.brandBlue2 : Colors.darkGrey,
+                  paddingVertical: RfH(8),
+                },
+              ]}>
+              <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+              <Text
+                style={{
+                  marginLeft: RfW(12),
+                  color: addressType === AddressTypeEnum.OTHER.label ? Colors.brandBlue2 : Colors.darkGrey,
+                }}>
+                Other
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+          <Button onPress={() => onSavingAddress()} block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
             <Text style={commonStyles.textButtonPrimary}>Save</Text>
           </Button>
         </View>
