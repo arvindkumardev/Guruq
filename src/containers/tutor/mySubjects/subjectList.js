@@ -1,16 +1,17 @@
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Switch } from 'native-base';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
 import { tutorDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { SEARCH_TUTOR_OFFERINGS } from './subject.query';
 import { TutorOfferingStageEnum } from '../enums';
+import { DISABLE_TUTOR_OFFERING, ENABLE_TUTOR_OFFERING } from '../tutor.mutation';
 
 function SubjectList() {
   const navigation = useNavigation();
@@ -28,12 +29,36 @@ function SubjectList() {
     },
     onCompleted: (data) => {
       if (data) {
-        const subjectList = [];
-        data?.searchTutorOfferings?.map((item) => {
-          if (item.offering && subjectList.findIndex((obj) => obj.offering.id === item.offering.id) === -1) {
-            subjectList.push(item);
-          }
-          setSubjects(subjectList);
+        setSubjects(data?.searchTutorOfferings);
+      }
+    },
+  });
+
+  const [enableTutorOffering, { loading: enableTutorOfferingLoading }] = useMutation(ENABLE_TUTOR_OFFERING, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        alertBox(`Enabled Successfully`, '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => getTutorOffering(),
+        });
+      }
+    },
+  });
+
+  const [disableTutorOffering, { loading: disableTutorOfferingLoading }] = useMutation(DISABLE_TUTOR_OFFERING, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        alertBox(`Disabled Successfully`, '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => getTutorOffering(),
         });
       }
     },
@@ -54,6 +79,21 @@ function SubjectList() {
           offering.stage === TutorOfferingStageEnum.BUDGET_PENDING.label ||
           offering.stage === TutorOfferingStageEnum.COMPLETED.label,
       });
+    }
+  };
+
+  const markActiveInactive = (item) => {
+    if (item.stage === TutorOfferingStageEnum.COMPLETED.label) {
+      alertBox(`Do you really want to ${item.active ? 'disable' : 'enable'} the subject!`, '', {
+        positiveText: 'Yes',
+        onPositiveClick: () =>
+          item.active
+            ? disableTutorOffering({ variables: { tutorOfferingId: item.id } })
+            : enableTutorOffering({ variables: { tutorOfferingId: item.id } }),
+        negativeText: 'No',
+      });
+    } else {
+      alertBox('Making subject active  is not possible at this stage');
     }
   };
 
@@ -78,7 +118,7 @@ function SubjectList() {
         </TouchableOpacity>
 
         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Switch value={item.active} />
+          <Switch value={item.active} onValueChange={() => markActiveInactive(item)} />
         </View>
       </View>
       {item.stage === TutorOfferingStageEnum.PT_PENDING.label && (
@@ -95,26 +135,28 @@ function SubjectList() {
   );
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <Loader isLoading={loadingTutorsOffering} />
-      <ScreenHeader
-        label="My Subjects"
-        homeIcon
-        showRightIcon
-        rightIcon={Images.moreInformation}
-        horizontalPadding={RfW(16)}
-        onRightIconClick={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECT_SELECTION)}
-      />
-      <View style={commonStyles.verticallyStretchedItemsView}>
-        <FlatList
-          data={subjects}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => renderSubjects(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: RfH(100), paddingTop: RfH(20) }}
+    <>
+      <Loader isLoading={loadingTutorsOffering || enableTutorOfferingLoading || disableTutorOfferingLoading} />
+      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
+        <ScreenHeader
+          label="My Subjects"
+          homeIcon
+          showRightIcon
+          rightIcon={Images.moreInformation}
+          horizontalPadding={RfW(16)}
+          onRightIconClick={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECT_SELECTION)}
         />
+        <View style={commonStyles.verticallyStretchedItemsView}>
+          <FlatList
+            data={subjects}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => renderSubjects(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ paddingBottom: RfH(100), paddingTop: RfH(20) }}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 

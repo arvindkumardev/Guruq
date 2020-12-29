@@ -23,7 +23,15 @@ import { IconButtonWrapper } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
+import {
+  alertBox,
+  clearAllLocalStorage,
+  comingSoonAlert,
+  getUserImageUrl,
+  removeToken,
+  RfH,
+  RfW,
+} from '../../../utils/helpers';
 import styles from './styles';
 import NavigationRouteNames from '../../../routes/screenNames';
 
@@ -49,6 +57,7 @@ function Profile(props) {
   const [myClassesData, setMyClassesData] = useState([
     { name: 'My Classes', icon: Images.laptop },
     { name: 'My Students', icon: Images.home },
+    { name: 'Student Request', icon: Images.classes },
   ]);
 
   const [settingsData, setSettingsData] = useState([
@@ -101,35 +110,20 @@ function Profile(props) {
 
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/personal-information`,
-        label: 'Personal Details',
-      });
+      navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS);
     } else if (item.name === 'Address') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/addresses`,
-        label: 'Address Details',
-      });
+      navigation.navigate(NavigationRouteNames.ADDRESS);
     } else if (item.name === 'Education') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/education`,
-        label: 'Education Details',
-      });
+      navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Experience') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
-        label: 'Experience Details',
-      });
+      navigation.navigate(NavigationRouteNames.EXPERIENCE);
     } else if (item.name === 'Documents') {
       navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
         label: 'Documents',
       });
     } else if (item.name === 'Bank Details') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
-        label: 'Bank Details',
-      });
+      navigation.navigate(NavigationRouteNames.BANK_DETAILS);
     } else if (item.name === 'Customer Care') {
       navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
@@ -149,8 +143,12 @@ function Profile(props) {
         url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
         label: 'Team',
       });
-    } else if (item.name === 'My Classes' || item.name === 'My Students') {
+    } else if (item.name === 'My Classes') {
       changeTab(3);
+    } else if (item.name === 'My Students') {
+      comingSoonAlert();
+    } else if (item.name === 'Student Request') {
+      navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS);
     } else {
       return null;
     }

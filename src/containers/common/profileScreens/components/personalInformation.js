@@ -1,7 +1,8 @@
-import { ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useState } from 'react';
+import { Alert, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Item, Input } from 'native-base';
+import { Item, Input, Button } from 'native-base';
+import { useMutation } from '@apollo/client';
 import commonStyles from '../../../../theme/styles';
 import { CustomMobileNumber, IconButtonWrapper } from '../../../../components';
 import { RfH, RfW } from '../../../../utils/helpers';
@@ -9,22 +10,87 @@ import { IND_COUNTRY_OBJ } from '../../../../utils/constants';
 import { Colors, Images } from '../../../../theme';
 import CustomDatePicker from '../../../../components/CustomDatePicker';
 import GenderModal from './genderModal';
+import { UPDATE_STUDENT_CONTACT_DETAILS, UPDATE_TUTOR_CONTACT_DETAILS } from '../../graphql-mutation';
+import { GenderEnum } from '../../enums';
 
 function PersonalInformation(props) {
   const [showGenderModal, setShowGenderModal] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [dob, setDOB] = useState(new Date());
+  const [gender, setGender] = useState(GenderEnum.MALE.label);
   const { referenceType, referenceId, details, onUpdate, isUpdateAllowed } = props;
+  console.log(details);
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
   });
 
   const showModal = () => {
-    console.log('triggred');
     setShowGenderModal(true);
   };
+
+  useEffect(() => {
+    setFirstName(details?.firstName);
+    setLastName(details?.lastName);
+    setEmail(details?.email);
+    setMobileObj({ mobile: details?.phoneNumber?.number, country: IND_COUNTRY_OBJ });
+    setGender(details?.gender);
+  });
+
+  const [saveStudentDetails, { loading: updateLoading }] = useMutation(UPDATE_STUDENT_CONTACT_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        Alert.alert('Details updated!');
+      }
+    },
+  });
+
+  const [saveTutorDetails, { loading: updateTutorLoading }] = useMutation(UPDATE_TUTOR_CONTACT_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        Alert.alert('Details updated!');
+      }
+    },
+  });
+
+  const onSavingDetails = () => {
+    saveStudentDetails({
+      variables: {
+        studentDto: {
+          contactDetail: {
+            firstName,
+            lastName,
+            gender,
+            dob,
+            email,
+            phoneNumber: {
+              countryCode: mobileObj.country.dialCode,
+              number: mobileObj.mobile,
+            },
+          },
+        },
+      },
+    });
+  };
+
   return (
     <View style={{ paddingHorizontal: RfW(16) }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: RfH(32) }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: RfH(32) }}>
+        <View style={{ height: RfH(44) }} />
         <IconButtonWrapper
           iconHeight={RfH(80)}
           iconWidth={RfW(80)}
@@ -33,47 +99,86 @@ function PersonalInformation(props) {
         />
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>First name</Text>
-        <Item>
-          <Input value="Sheena" />
-        </Item>
+        {isUpdateAllowed ? (
+          <Item>
+            <Input value={firstName} onChangeText={(text) => setFirstName(text)} />
+          </Item>
+        ) : (
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.firstName}</Text>
+        )}
+
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Last name</Text>
-        <Item>
-          <Input value="Jain" />
-        </Item>
+        {isUpdateAllowed ? (
+          <Item>
+            <Input value={lastName} onChangeText={(text) => setLastName(text)} />
+          </Item>
+        ) : (
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.lastName}</Text>
+        )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Email Id</Text>
-        <Item>
-          <Input value="Sheenajain123@gmail.com" />
-        </Item>
+        {isUpdateAllowed ? (
+          <Item>
+            <Input value={email} onChangeText={(text) => setEmail(text)} />
+          </Item>
+        ) : (
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.email}</Text>
+        )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Phone Number</Text>
-        <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-          <CustomMobileNumber
-            value={mobileObj}
-            topMargin={0}
-            onChangeHandler={(m) => setMobileObj(m)}
-            returnKeyType="done"
-            refKey="mobileNumber"
-            placeholder="Mobile number"
-            label={' '}
-          />
-        </View>
+        {isUpdateAllowed ? (
+          <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
+            <CustomMobileNumber
+              value={mobileObj}
+              topMargin={0}
+              onChangeHandler={(m) => setMobileObj(m)}
+              returnKeyType="done"
+              refKey="mobileNumber"
+              placeholder="Mobile number"
+              label={' '}
+            />
+          </View>
+        ) : (
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.phoneNumber?.number}</Text>
+        )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Date of birth</Text>
-
-        <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-          <CustomDatePicker value={new Date()} />
-        </View>
+        {isUpdateAllowed ? (
+          <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
+            <CustomDatePicker value={dob} onChangeHandler={(value) => setDOB(value)} />
+          </View>
+        ) : (
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>15/10/1991</Text>
+        )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Gender</Text>
-        <TouchableWithoutFeedback onPress={() => showModal()}>
-          <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-            <Text>Female</Text>
+        {isUpdateAllowed ? (
+          <TouchableWithoutFeedback onPress={() => showModal()}>
+            <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
+              <Text>{gender}</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        ) : (
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.gender}</Text>
+        )}
+        <View style={{ height: RfH(24) }} />
+        {isUpdateAllowed && (
+          <View>
+            <Button
+              block
+              onPress={() => onSavingDetails()}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+              <Text style={commonStyles.textButtonPrimary}>Save</Text>
+            </Button>
           </View>
-        </TouchableWithoutFeedback>
+        )}
       </ScrollView>
-      <GenderModal visible={showGenderModal} onClose={() => setShowGenderModal(false)} />
+      <GenderModal
+        visible={showGenderModal}
+        onClose={() => setShowGenderModal(false)}
+        onGenderSelect={(val) => setGender(val)}
+      />
     </View>
   );
 }

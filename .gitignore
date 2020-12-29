@@ -81,6 +81,9 @@ local.properties
 #
 npm-debug.log
 yarn-error.log
+yarn.lock
+
+ios/Podfile.lock
 
 # BUCK
 buck-out/

@@ -6,9 +6,10 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { ScreenHeader, Loader } from '../../../components';
+import moment from 'moment';
+import { Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
-import { endOfDay, RfH, RfW, startOfDay } from '../../../utils/helpers';
+import { endOfDay, printTime, RfH, RfW, startOfDay } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_AVAILABILITY_DATA } from '../../student/class.query';
@@ -19,11 +20,12 @@ function ViewSchedule() {
   const isFocussed = useIsFocused();
   const navigation = useNavigation();
   const [timeSlots, setTimeSlots] = useState([]);
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [isListEmpty, setIsListEmpty] = useState(false);
   const tutorInfo = useReactiveVar(tutorDetails);
 
   const [getAvailability, { loading: getAvailabilityLoader }] = useLazyQuery(GET_AVAILABILITY_DATA, {
+    fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -50,20 +52,24 @@ function ViewSchedule() {
 
   useEffect(() => {
     if (isFocussed) {
-      getAvailabilityData(new Date());
+      getAvailabilityData(selectedDate);
     }
   }, [isFocussed]);
 
-  const handleCreateSchedule = (date) => {
-    navigation.navigate(NavigationRouteNames.TUTOR.UPDATE_SCHEDULE, { date });
+  const handleCreateSchedule = (selectedDate) => {
+    navigation.navigate(NavigationRouteNames.TUTOR.UPDATE_SCHEDULE, { selectedDate, timeSlots });
   };
 
   const renderItem = (item) => {
     return (
       <View style={{ marginTop: RfH(16) }}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(10) }]}>
-          <Text>{item.slot}</Text>
-          <View style={{ marginBottom: RfH(8) }} />
+          <Text style={commonStyles.regularPrimaryText}>
+            {printTime(item.startDate)} - {printTime(item.endDate)}
+          </Text>
+          <Text style={[commonStyles.regularPrimaryText, { color: item.active ? Colors.green : Colors.orangeRed }]}>
+            {item.active ? (item.classScheduled ? 'Class Scheduled' : 'Active') : 'Inactive'}
+          </Text>
         </View>
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
       </View>
@@ -152,12 +158,14 @@ function ViewSchedule() {
               Looks like you have not provide the schedule for the day.
             </Text>
             <View style={{ height: RfH(40) }} />
-            <Button
-              block
-              style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-              onPress={() => handleCreateSchedule(selectedDate)}>
-              <Text style={commonStyles.textButtonPrimary}>Create Schedule</Text>
-            </Button>
+            {moment(selectedDate).isSameOrAfter(new Date()) && (
+              <Button
+                block
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+                onPress={() => handleCreateSchedule(selectedDate)}>
+                <Text style={commonStyles.textButtonPrimary}>Create Schedule</Text>
+              </Button>
+            )}
           </View>
         )}
         {!isListEmpty && (
@@ -172,7 +180,9 @@ function ViewSchedule() {
               position: 'absolute',
             }}>
             <View style={{ paddingBottom: RfH(32), paddingTop: RfH(8) }}>
-              <Button style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]}>
+              <Button
+                style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]}
+                onPress={() => handleCreateSchedule(selectedDate)}>
                 <Text style={commonStyles.textButtonPrimary}>Edit Availability</Text>
               </Button>
             </View>

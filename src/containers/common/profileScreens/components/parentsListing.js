@@ -8,27 +8,26 @@ import { Colors, Images } from '../../../../theme';
 import { IconButtonWrapper } from '../../../../components';
 import routeNames from '../../../../routes/screenNames';
 
-function AddressListing(props) {
+function ParentsListing(props) {
   const navigation = useNavigation();
   const { referenceType, referenceId, details, onUpdate, isUpdateAllowed } = props;
   const [addresses, setAddresses] = useState([
-    { type: 'Home Address', firstrow: '28/13, Vasant Vihar', secondrow: 'Delhi', thirdRow: 'Delhi, India , 110024' },
+    { name: 'Ravi Kumar', mobile: '+91-9876543210', email: 'Ravikumar123@gmail.com' },
   ]);
 
   const renderAddress = (item) => {
     return (
       <View>
         <View style={commonStyles.horizontalChildrenStartView}>
-          <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+          <IconButtonWrapper iconImage={Images.parent_details} iconWidth={RfW(16)} iconHeight={RfH(20)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.regularPrimaryText}>{item.type}</Text>
-            <Text style={commonStyles.mediumMutedText}>{item.firstrow}</Text>
-            <Text style={commonStyles.mediumMutedText}>{item.secondrow}</Text>
-            <Text style={commonStyles.mediumMutedText}>{item.thirdRow}</Text>
+            <Text style={commonStyles.regularPrimaryText}>{item.name}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.mobile}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.email}</Text>
           </View>
         </View>
         <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.ADD_EDIT_ADDRESS)}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.ADD_EDIT_PARENTS)}>
             <Text style={{ color: Colors.orange }}>Edit</Text>
           </TouchableWithoutFeedback>
           <Text style={{ color: Colors.orange }}>Delete</Text>
@@ -49,7 +48,7 @@ function AddressListing(props) {
   );
 }
 
-AddressListing.propTypes = {
+ParentsListing.propTypes = {
   referenceType: PropTypes.string,
   referenceId: PropTypes.number,
   details: PropTypes.object,
@@ -57,7 +56,7 @@ AddressListing.propTypes = {
   isUpdateAllowed: PropTypes.bool,
 };
 
-AddressListing.defaultProps = {
+ParentsListing.defaultProps = {
   referenceType: '',
   referenceId: 0,
   details: {},
@@ -65,4 +64,4 @@ AddressListing.defaultProps = {
   isUpdateAllowed: false,
 };
 
-export default AddressListing;
+export default ParentsListing;

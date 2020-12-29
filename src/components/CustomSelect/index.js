@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Platform, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './style';
@@ -8,6 +8,7 @@ import { RfH } from '../../utils/helpers';
 
 function CustomSelect(props) {
   const { disabled, error, containerStyle, placeholder, onChangeHandler, data, value } = props;
+  const [val, setVal] = useState(value);
 
   const handleChange = (value) => {
     onChangeHandler(value);
@@ -21,7 +22,7 @@ function CustomSelect(props) {
           value: '',
         }}
         items={data}
-        onValueChange={(value) => handleChange(value)}
+        onValueChange={(value) => (Platform.OS === 'ios' ? setVal(value) : handleChange(value))}
         useNativeAndroidPickerStyle={false}
         style={{
           viewContainer: { ...containerStyle },
@@ -35,8 +36,10 @@ function CustomSelect(props) {
             right: 5,
           },
         }}
-        value={value}
+        value={val}
         disabled={disabled}
+        onDonePress={() => onChangeHandler(val)}
+        onClose={() => onChangeHandler(val)}
         Icon={() => {
           return (
             <View

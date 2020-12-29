@@ -24,6 +24,13 @@ const NavigationRouteNames = {
   ADDRESS_MAP_VIEW: 'address_map_view',
   EDUCATION: 'education',
   ADD_EDIT_EDUCATION: 'add_edit_education',
+  PARENTS: 'parents',
+  ADD_EDIT_PARENTS: 'add_edit_parents',
+  PERSONAL_DETAILS: 'personal_details',
+  EXPERIENCE: 'experience',
+  ADD_EDIT_EXPERIENCE: 'add_edit_experience',
+  BANK_DETAILS: 'bank_details',
+  ADD_EDIT_BANK_DETAILS: 'add_edit_bank_details',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
@@ -35,7 +42,6 @@ const NavigationRouteNames = {
     CLASSES: 'student_classes',
     TUTOR: 'student_tutor',
     PROFILE: 'student_profile',
-    PERSONAL_DETAILS: 'personal_details',
     COMPARE_TUTORS: 'compare_tutors',
     TUTOR_DETAILS: 'tutor_details',
     MY_CART: 'my_cart',

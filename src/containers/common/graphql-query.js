@@ -15,6 +15,7 @@ export const ME_QUERY = gql`
       firstName
       lastName
       email
+      gender
       phoneNumber {
         countryCode
         number
