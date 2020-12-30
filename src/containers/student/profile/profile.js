@@ -1,6 +1,6 @@
-import { useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
@@ -27,6 +27,7 @@ import commonStyles from '../../../theme/styles';
 import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 import { UserTypeEnum } from '../../../common/userType.enum';
+import { GET_CURRENT_STUDENT_QUERY, GET_STUDENT_DETAILS } from '../../common/graphql-query';
 
 function Profile(props) {
   const navigation = useNavigation();
@@ -37,7 +38,22 @@ function Profile(props) {
 
   // console.log('navigation===>',props)
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const [studentDetails, setStudentDetails] = useState([]);
   const [isPersonalMenuOpen, setIsPersonalMenuOpen] = useState(true);
+
+  const [getStudentDetails, { data: details }] = useLazyQuery(GET_STUDENT_DETAILS, {
+    fetchPolicy: 'no-cache',
+  });
+
+  useEffect(() => {
+    getStudentDetails();
+  }, []);
+
+  useEffect(() => {
+    if (details && details?.getStudentDetails) {
+      setStudentDetails(details?.getStudentDetails);
+    }
+  }, [details]);
 
   const [accountData, setAccountData] = useState([
     { name: 'Personal Details', icon: Images.personal },
@@ -116,7 +132,7 @@ function Profile(props) {
     if (item.name === 'Personal Details') {
       navigation.navigate(routeNames.PERSONAL_DETAILS);
     } else if (item.name === 'Address') {
-      navigation.navigate(routeNames.ADDRESS);
+      navigation.navigate(routeNames.ADDRESS, { addresses: studentDetails?.addresses });
     } else if (item.name === 'Education') {
       navigation.navigate(routeNames.EDUCATION);
     } else if (item.name === 'Parents Details') {

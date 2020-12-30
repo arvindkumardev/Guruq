@@ -21,7 +21,6 @@ function PersonalInformation(props) {
   const [dob, setDOB] = useState(new Date());
   const [gender, setGender] = useState(GenderEnum.MALE.label);
   const { referenceType, referenceId, details, onUpdate, isUpdateAllowed } = props;
-  console.log(details);
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
@@ -37,7 +36,8 @@ function PersonalInformation(props) {
     setEmail(details?.email);
     setMobileObj({ mobile: details?.phoneNumber?.number, country: IND_COUNTRY_OBJ });
     setGender(details?.gender);
-  });
+    setDOB(details?.dob);
+  }, []);
 
   const [saveStudentDetails, { loading: updateLoading }] = useMutation(UPDATE_STUDENT_CONTACT_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -149,7 +149,7 @@ function PersonalInformation(props) {
             <CustomDatePicker value={dob} onChangeHandler={(value) => setDOB(value)} />
           </View>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>15/10/1991</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.dob}</Text>
         )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Gender</Text>

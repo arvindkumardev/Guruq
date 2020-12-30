@@ -11,9 +11,6 @@ import routeNames from '../../../../routes/screenNames';
 function AddressListing(props) {
   const navigation = useNavigation();
   const { referenceType, referenceId, details, onUpdate, isUpdateAllowed } = props;
-  const [addresses, setAddresses] = useState([
-    { type: 'Home Address', firstrow: '28/13, Vasant Vihar', secondrow: 'Delhi', thirdRow: 'Delhi, India , 110024' },
-  ]);
 
   const renderAddress = (item) => {
     return (
@@ -22,9 +19,9 @@ function AddressListing(props) {
           <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(16)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.regularPrimaryText}>{item.type}</Text>
-            <Text style={commonStyles.mediumMutedText}>{item.firstrow}</Text>
-            <Text style={commonStyles.mediumMutedText}>{item.secondrow}</Text>
-            <Text style={commonStyles.mediumMutedText}>{item.thirdRow}</Text>
+            <Text style={commonStyles.mediumMutedText}>{`${item.street}, ${item.subArea}`}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.city}</Text>
+            <Text style={commonStyles.mediumMutedText}>{`${item.State}, ${item.country}`}</Text>
           </View>
         </View>
         <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
@@ -41,7 +38,7 @@ function AddressListing(props) {
     <View style={{ paddingHorizontal: RfW(16) }}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={addresses}
+        data={details}
         renderItem={({ item, index }) => renderAddress(item, index)}
         keyExtractor={(item, index) => index.toString()}
       />
