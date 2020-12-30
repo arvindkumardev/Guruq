@@ -14,24 +14,24 @@ function CustomCheckBox(props) {
         {enabled ? (
           <View
             style={{
-              height: RfH(32),
-              width: RfH(32),
-              borderRadius: RfH(8),
+              height: RfH(22),
+              width: RfH(22),
+              borderRadius: RfH(5),
               alignItems: 'center',
               justifyContent: 'center',
               borderColor: Colors.brandBlue2,
               backgroundColor: Colors.brandBlue2,
               borderWidth: 1,
             }}>
-            <Image source={Images.tick} style={[styling, { height: iconHeight, width: iconWidth }]} />
+            <Image source={Images.tick} style={[styling, { height: RfH(12), width: RfH(12) }]} resizeMode="contain" />
           </View>
         ) : (
           <View
             style={{
-              height: RfH(32),
-              width: RfH(32),
-              borderRadius: RfH(8),
-              borderColor: Colors.inputLabel,
+              height: RfH(22),
+              width: RfH(22),
+              borderRadius: RfH(5),
+              borderColor: Colors.black,
               borderWidth: 1,
             }}
           />

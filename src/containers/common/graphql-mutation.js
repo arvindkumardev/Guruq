@@ -265,63 +265,6 @@ export const DELETE_STUDENT_ADDRESS = gql`
   }
 `;
 
-export const ADD_UPDATE_EDUCATION_DETAILS = gql`
-  mutation AddUpdateEducationDetail($educationDto: CreateUpdateEducationDto!) {
-    addUpdateEducationDetail(educationDto: $educationDto) {
-      id
-      school {
-        name
-      }
-      degree {
-        id
-        name
-        degreeLevel
-      }
-      board
-      grade
-      subjects
-      fieldOfStudy
-      startDate
-      endDate
-      isCurrent
-    }
-  }
-`;
-
-export const DELETE_TUTOR_EDUCATION_DETAILS = gql`
-  mutation DeleteEducationDetail($id: Int!) {
-    deleteEducationDetail(id: $id) {
-      id
-    }
-  }
-`;
-
-export const ADD_UPDATE_TUTOR_EXPERIENCE_DETAILS = gql`
-  mutation AddUpdateExperienceDetail($experienceDto: CreateUpdateExperienceDto!) {
-    addUpdateExperienceDetail(experienceDto: $experienceDto) {
-      id
-      title
-      employmentType
-      institution {
-        name
-        # address {
-        #   fullAddress
-        # }
-      }
-      startDate
-      endDate
-      current
-    }
-  }
-`;
-export const DELETE_TUTOR_EXPERIENCE_DETAILS = gql`
-  mutation DeleteExperienceDetail($id: Int!) {
-    deleteExperienceDetail(id: $id) {
-      id
-    }
-  }
-`;
-
 export const ADD_TUTOR_DOCUMENT_DETAILS = gql`
   mutation AddUpdateDocumentDetail($documentDto: CreateUpdateDocumentDto!) {
     addUpdateDocumentDetail(documentDto: $documentDto) {
@@ -352,16 +295,6 @@ export const ADD_UPDATE_GUARDIAN_DETAILS = gql`
   mutation AddUpdateStudentParentInfo($guardianInfoDto: CreateUpdateGuardianInfoDto!) {
     addUpdateStudentParentInfo(guardianInfoDto: $guardianInfoDto) {
       id
-    }
-  }
-`;
-
-export const ADD_UPDATE_BANK_DETAILS = gql`
-  mutation UpdateBankDetails($bankDetailsDto: CreateUpdateBankDetailsDto!) {
-    updateBankDetails(bankDetailsDto: $bankDetailsDto) {
-      id
-      bankName
-      accountNumber
     }
   }
 `;

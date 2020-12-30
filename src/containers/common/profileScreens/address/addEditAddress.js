@@ -5,14 +5,14 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { IconButtonWrapper, ScreenHeader } from '../../../components';
-import { userDetails } from '../../../apollo/cache';
-import commonStyles from '../../../theme/styles';
-import { Colors, Images } from '../../../theme';
-import { RfH, RfW } from '../../../utils/helpers';
-import routeNames from '../../../routes/screenNames';
-import { ADD_UPDATE_STUDENT_ADDRESS } from '../graphql-mutation';
-import { AddressTypeEnum } from '../enums';
+import { IconButtonWrapper, ScreenHeader } from '../../../../components';
+import { userDetails } from '../../../../apollo/cache';
+import commonStyles from '../../../../theme/styles';
+import { Colors, Images } from '../../../../theme';
+import { RfH, RfW } from '../../../../utils/helpers';
+import routeNames from '../../../../routes/screenNames';
+import { ADD_UPDATE_STUDENT_ADDRESS } from '../../graphql-mutation';
+import { AddressTypeEnum } from '../../enums';
 
 function AddEditAddress() {
   const navigation = useNavigation();
@@ -63,7 +63,7 @@ function AddEditAddress() {
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader homeIcon label="Address" horizontalPadding={RfW(16)} lineVisible={false} />
+      <ScreenHeader homeIcon label="AddressListing" horizontalPadding={RfW(16)} lineVisible={false} />
       <View style={{ height: RfH(24) }} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View>
@@ -78,7 +78,7 @@ function AddEditAddress() {
                 placeholder="Search"
                 fetchDetails
                 onPress={(data, details = null) => {
-                  console.log(data, details);
+                  console.log("ddddd",data, details);
                 }}
                 query={{
                   key: 'AIzaSyD8MaEzNhuejY2yBx6No7-TfkAvQ2X_wyk',
@@ -88,7 +88,7 @@ function AddEditAddress() {
             </View>
             <View style={{ flex: 0.1 }}>
               <IconButtonWrapper
-                submitFunction={() => navigation.navigate(routeNames.ADDRESS_MAP_VIEW)}
+                // submitFunction={() => navigation.navigate(routeNames.ADDRESS_MAP_VIEW)}
                 iconImage={Images.gprs}
                 iconHeight={RfH(24)}
                 iconWidth={RfW(24)}
@@ -98,16 +98,16 @@ function AddEditAddress() {
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>House no. Buliding Name</Text>
+          <Text style={commonStyles.smallMutedText}>House no/Building Name</Text>
           <Item>
-            <Input value={street} onChangeText={(text) => setStreet(text)} />
+            <Input value={street} onChangeText={(text) => setStreet(text)} style={commonStyles.regularPrimaryText} />
           </Item>
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>Area , locality</Text>
+          <Text style={commonStyles.smallMutedText}>Area , Locality</Text>
           <Item>
-            <Input value={area} onChangeText={(text) => setArea(text)} />
+            <Input value={area} onChangeText={(text) => setArea(text)} style={commonStyles.regularPrimaryText} />
           </Item>
         </View>
         <View style={{ height: RfH(24) }} />
@@ -117,14 +117,12 @@ function AddEditAddress() {
               <Text style={commonStyles.smallMutedText}>City</Text>
               <Item>
                 <Input value={city} onChangeText={(text) => setCity(text)} />
-                <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.searchIcon} />
               </Item>
             </View>
             <View style={{ flex: 0.5, marfinLeft: RfW(16) }}>
               <Text style={commonStyles.smallMutedText}>State</Text>
               <Item>
                 <Input value={state} onChangeText={(text) => setstate(text)} />
-                <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.searchIcon} />
               </Item>
             </View>
           </View>
@@ -146,7 +144,7 @@ function AddEditAddress() {
         </View>
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.smallMutedText}>Save as</Text>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(10) }]}>
           <TouchableWithoutFeedback onPress={() => setAddressType(AddressTypeEnum.HOME.label)}>
             <View
               style={[
@@ -160,7 +158,8 @@ function AddEditAddress() {
               <IconButtonWrapper
                 iconImage={addressType === AddressTypeEnum.HOME.label ? Images.home_active : Images.home}
                 iconWidth={RfW(16)}
-                iconHeight={RfH(20)}
+                iconHeight={RfH(16)}
+                imageResizeMode="contain"
               />
               <Text
                 style={{
@@ -181,7 +180,12 @@ function AddEditAddress() {
                   paddingVertical: RfH(8),
                 },
               ]}>
-              <IconButtonWrapper iconImage={Images.work_office} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+              <IconButtonWrapper
+                iconImage={Images.work_office}
+                iconWidth={RfW(16)}
+                iconHeight={RfH(16)}
+                imageResizeMode="contain"
+              />
               <Text
                 style={{
                   marginLeft: RfW(12),
@@ -201,7 +205,12 @@ function AddEditAddress() {
                   paddingVertical: RfH(8),
                 },
               ]}>
-              <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+              <IconButtonWrapper
+                iconImage={Images.pin}
+                iconWidth={RfW(16)}
+                iconHeight={RfH(16)}
+                imageResizeMode="contain"
+              />
               <Text
                 style={{
                   marginLeft: RfW(12),
@@ -212,7 +221,7 @@ function AddEditAddress() {
             </View>
           </TouchableWithoutFeedback>
         </View>
-        <View style={{ height: RfH(24) }} />
+        <View style={{ height: RfH(40) }} />
         <View>
           <Button onPress={() => onSavingAddress()} block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
             <Text style={commonStyles.textButtonPrimary}>Save</Text>

@@ -25,7 +25,7 @@ import { TutorCertificationStageEnum } from '../containers/tutor/enums';
 import CertificationCompletedView from '../containers/tutor/certficationProcess/certificationCompletedView';
 import WebViewPage from '../components/WebViewPage';
 import InterviewPending from '../containers/tutor/interviewPending/interviewPending';
-import Address from '../containers/common/profileScreens/address';
+import AddressListing from '../containers/common/profileScreens/address/addressListing';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
 import { DUPLICATE_FOUND } from '../common/errorCodes';
 import { alertBox, createPayload } from '../utils/helpers';
@@ -33,7 +33,11 @@ import scheduledClassDetails from '../containers/calendar/scheduledClassDetails'
 import cancelReason from '../containers/calendar/cancelReason';
 import MyClasses from '../containers/myClasses/classes';
 import scheduleClass from '../containers/myClasses/scheduleClass';
-import CalendarView from "../containers/calendar/calendarView";
+import CalendarView from '../containers/calendar/calendarView';
+import AddEditAddress from '../containers/common/profileScreens/address/addEditAddress';
+import AddressMapView from '../containers/common/profileScreens/addressMapView';
+import EducationListing from '../containers/common/profileScreens/education/educationListing';
+import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
 
 const Stack = createStackNavigator();
 
@@ -136,6 +140,23 @@ const AppStack = (props) => {
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.SCHEDULE_CLASS}
         component={scheduleClass}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.ADDRESS} component={AddressListing} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.ADD_EDIT_ADDRESS}
+        component={AddEditAddress}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.ADDRESS_MAP_VIEW}
+        component={AddressMapView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.EDUCATION} component={EducationListing} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.ADD_EDIT_EDUCATION}
+        component={AddEditEducation}
         options={{ headerShown: false }}
       />
     </>
@@ -249,7 +270,6 @@ const AppStack = (props) => {
             component={UserTypeSelector}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name={NavigationRouteNames.ADDRESS} component={Address} options={{ headerShown: false }} />
         </>
       )}
       {isUserLoggedIn && !isEmpty(userType) && getCommonRoutes()}

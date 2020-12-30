@@ -40,7 +40,7 @@ const ACCOUNT_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
   { name: 'Address', icon: Images.home },
   { name: 'Education', icon: Images.education },
-  { name: 'Experience', icon: Images.education },
+  { name: 'Experience', icon: Images.work_office },
   { name: 'Documents', icon: Images.book },
   { name: 'Bank Details', icon: Images.bank },
 ];

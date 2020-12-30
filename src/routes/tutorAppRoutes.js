@@ -18,17 +18,17 @@ import PytnRequests from '../containers/tutor/pytn/pytnRequests';
 import SendFeedback from '../containers/common/sendFeedback';
 import CustomerCare from '../containers/common/customerCare';
 import SubjectSelection from '../containers/tutor/mySubjects/subjectSelection';
-import Address from '../containers/common/profileScreens/address';
-import AddEditAddress from '../containers/common/profileScreens/addEditAddress';
+import AddressListing from '../containers/common/profileScreens/address/addressListing';
+import AddEditAddress from '../containers/common/profileScreens/address/addEditAddress';
 import AddressMapView from '../containers/common/profileScreens/addressMapView';
-import Education from '../containers/common/profileScreens/education';
-import AddEditEducation from '../containers/common/profileScreens/addEditEducation';
+import EducationListing from '../containers/common/profileScreens/education/educationListing';
+import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
 import Parents from '../containers/common/profileScreens/parents';
 import AddEditParents from '../containers/common/profileScreens/addEditParents';
-import Experience from '../containers/common/profileScreens/experience';
-import AddEditExperience from '../containers/common/profileScreens/addEditExperience';
-import BankDetails from '../containers/common/profileScreens/bankDetails';
-import AddEditBankDetails from '../containers/common/profileScreens/addEditBankDetails';
+import ExperienceListing from '../containers/common/profileScreens/experience/experienceListing';
+import AddEditExperience from '../containers/common/profileScreens/experience/addEditExperience';
+import BankDetailsList from '../containers/common/profileScreens/bankDetails/bankDetailsList';
+import AddEditBankDetails from '../containers/common/profileScreens/bankDetails/addEditBankDetails';
 
 const Stack = createStackNavigator();
 
@@ -112,36 +112,23 @@ export const getTutorRoutes = () => {
         component={CustomerCare}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.ADDRESS} component={Address} options={{ headerShown: false }} />
-      <Stack.Screen
-        name={NavigationRouteNames.ADD_EDIT_ADDRESS}
-        component={AddEditAddress}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.ADDRESS_MAP_VIEW}
-        component={AddressMapView}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name={NavigationRouteNames.EDUCATION} component={Education} options={{ headerShown: false }} />
-      <Stack.Screen
-        name={NavigationRouteNames.ADD_EDIT_EDUCATION}
-        component={AddEditEducation}
-        options={{ headerShown: false }}
-      />
       <Stack.Screen name={NavigationRouteNames.PARENTS} component={Parents} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_PARENTS}
         component={AddEditParents}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.EXPERIENCE} component={Experience} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.EXPERIENCE}
+        component={ExperienceListing}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_EXPERIENCE}
         component={AddEditExperience}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.BANK_DETAILS} component={BankDetails} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.BANK_DETAILS} component={BankDetailsList} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_BANK_DETAILS}
         component={AddEditBankDetails}

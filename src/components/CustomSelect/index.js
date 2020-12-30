@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './style';
@@ -9,6 +9,10 @@ import { RfH } from '../../utils/helpers';
 function CustomSelect(props) {
   const { disabled, error, containerStyle, placeholder, onChangeHandler, data, value } = props;
   const [val, setVal] = useState(value);
+
+  useEffect(() => {
+    setVal(value);
+  }, [value]);
 
   const handleChange = (value) => {
     onChangeHandler(value);

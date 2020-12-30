@@ -22,12 +22,12 @@ const DEFAULT_SLOT = {
 };
 
 function UpdateSchedule(props) {
+  const navigation = useNavigation();
   const timeSlots = props?.route?.params.timeSlots;
   const selectedDate = props?.route?.params.selectedDate;
   const [startDate, setStartDate] = useState(selectedDate);
   const [endDate, setEndDate] = useState(selectedDate);
   const [refreshSlots, setRefreshSlots] = useState(false);
-  const navigation = useNavigation();
   const [slots, setSlots] = useState([]);
 
   const [updateAvailability, { loading: availabilityLoading }] = useMutation(UPDATE_AVAILABILITY, {

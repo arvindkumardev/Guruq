@@ -26,10 +26,9 @@ function PriceMatrix(props) {
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.select({ android: '', ios: 'padding' })}
-      // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
       enabled>
+      <Loader isLoading={showLoader()} />
       <View style={{ paddingHorizontal: RfW(16), backgroundColor: Colors.white, flex: 1 }}>
-        <Loader isLoading={showLoader()} />
         <ScreenHeader homeIcon label={offering.offering?.displayName} />
         <View style={{ marginTop: RfH(20) }}>
           <View style={[commonStyles.horizontalChildrenCenterView]}>

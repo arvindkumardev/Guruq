@@ -1,6 +1,6 @@
-import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
@@ -21,79 +21,63 @@ import {
 } from '../../../apollo/cache';
 import { IconButtonWrapper } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
-import { default as NavigationRouteNames, default as routeNames } from '../../../routes/screenNames';
+import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 import { UserTypeEnum } from '../../../common/userType.enum';
-import { GET_CURRENT_STUDENT_QUERY, GET_STUDENT_DETAILS } from '../../common/graphql-query';
+
+const PERSONAL_OPTIONS = [
+  { name: 'Personal Details', icon: Images.personal },
+  { name: 'Address', icon: Images.home },
+  { name: 'Parents Details', icon: Images.parent_details },
+  { name: 'Education', icon: Images.education },
+];
+
+const MY_STUDY_DATA_OPTIONS = [
+  { name: 'Add Study Area', icon: Images.study_area },
+  { name: 'Modify Study Area', icon: Images.edit },
+];
+
+const BOOKING_DATA_OPTIONS = [
+  { name: 'Purchased History', icon: Images.personal },
+  { name: 'My Cart', icon: Images.cart },
+];
+
+const MY_CLASSES_OPTIONS = [
+  { name: 'Calendar', icon: Images.personal },
+  { name: 'Upcoming Classes', icon: Images.home },
+];
+
+const SETTINGS_OPTIONS = [
+  { name: 'Change Password', icon: Images.personal },
+  { name: 'Update Mobile and Email', icon: Images.home },
+  { name: 'Notifications', icon: Images.parent_details },
+];
+
+const ABOUT_US_OPTIONS = [
+  { name: 'About', icon: Images.aboutGuru },
+  { name: 'Team', icon: Images.multiple_user },
+];
+
+const HELP_OPTIONS = [
+  { name: 'Customer Care', icon: Images.personal },
+  { name: "FAQ's", icon: Images.home },
+  { name: 'Send Feedback', icon: Images.parent_details },
+];
 
 function Profile(props) {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
-  const studentInfo = useReactiveVar(studentDetails);
-
   const { changeTab } = props;
 
-  // console.log('navigation===>',props)
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
-  const [studentDetails, setStudentDetails] = useState([]);
-  const [isPersonalMenuOpen, setIsPersonalMenuOpen] = useState(true);
-
-  const [getStudentDetails, { data: details }] = useLazyQuery(GET_STUDENT_DETAILS, {
-    fetchPolicy: 'no-cache',
-  });
-
-  useEffect(() => {
-    getStudentDetails();
-  }, []);
-
-  useEffect(() => {
-    if (details && details?.getStudentDetails) {
-      setStudentDetails(details?.getStudentDetails);
-    }
-  }, [details]);
-
-  const [accountData, setAccountData] = useState([
-    { name: 'Personal Details', icon: Images.personal },
-    { name: 'Address', icon: Images.home },
-    { name: 'Parents Details', icon: Images.parent_details },
-    { name: 'Education', icon: Images.education },
-  ]);
-  const [myStudyData, setMyStudyData] = useState([
-    { name: 'Add Study Area', icon: Images.study_area },
-    { name: 'Modify Study Area', icon: Images.edit },
-  ]);
-  const [bookingData, setBookingData] = useState([
-    { name: 'Purchased History', icon: Images.personal },
-    { name: 'My Cart', icon: Images.cart },
-  ]);
-  const [myClassesData, setMyClassesData] = useState([
-    { name: 'Calendar', icon: Images.personal },
-    { name: 'Upcoming Classes', icon: Images.home },
-  ]);
-  const [aboutData, setAboutData] = useState([
-    { name: 'About', icon: Images.aboutGuru },
-    { name: 'Team', icon: Images.multiple_user },
-  ]);
   const [isStudyMenuOpen, setIsStudyMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
-  const [isReferFriendMenuOpen, setIsReferFriendMenuOpen] = useState(false);
   const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
-  const [isFavouriteOpen, setIsFavouriteOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [settingsData, setSettingsData] = useState([
-    { name: 'Change Password', icon: Images.personal },
-    { name: 'Change Mobile and email', icon: Images.home },
-    { name: 'Notifications', icon: Images.parent_details },
-  ]);
-  const [informationData, setInformationData] = useState([
-    { name: 'Customer Care', icon: Images.personal },
-    { name: "FAQ's", icon: Images.home },
-    { name: 'Send Feedback', icon: Images.parent_details },
-  ]);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
 
   const client = initializeApollo();
@@ -130,39 +114,39 @@ function Profile(props) {
 
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
-      navigation.navigate(routeNames.PERSONAL_DETAILS);
+      navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS);
     } else if (item.name === 'Address') {
-      navigation.navigate(routeNames.ADDRESS, { addresses: studentDetails?.addresses });
+      navigation.navigate(NavigationRouteNames.ADDRESS);
     } else if (item.name === 'Education') {
-      navigation.navigate(routeNames.EDUCATION);
+      navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Parents Details') {
-      navigation.navigate(routeNames.PARENTS);
+      navigation.navigate(NavigationRouteNames.PARENTS);
     } else if (item.name === 'Experience') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: 'Experience Details',
       });
     } else if (item.name === 'Customer Care') {
-      navigation.navigate(routeNames.CUSTOMER_CARE);
+      navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: "FAQ's",
       });
     } else if (item.name === 'Send Feedback') {
-      navigation.navigate(routeNames.SEND_FEEDBACK);
+      navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
     } else if (item.name === 'About') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: 'About',
       });
     } else if (item.name === 'Team') {
-      navigation.navigate(routeNames.WEB_VIEW, {
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
         label: 'Team',
       });
     } else if (item.name === 'My Cart') {
-      navigation.navigate(routeNames.STUDENT.MY_CART);
+      navigation.navigate(NavigationRouteNames.STUDENT.MY_CART);
     } else if (item.name === 'Calendar') {
       changeTab(2);
     } else if (item.name === 'Upcoming Classes') {
@@ -177,7 +161,7 @@ function Profile(props) {
 
   const renderItem = (item) => {
     return (
-      <TouchableWithoutFeedback
+      <TouchableOpacity
         onPress={() => personalDetails(item)}
         style={[
           styles.userMenuParentView,
@@ -187,13 +171,13 @@ function Profile(props) {
             paddingLeft: RfW(48),
             borderBottomColor: Colors.lightGrey,
           },
-        ]}>
-        <View style={{ flexDirection: 'row' }}>
+        ]} activeOpacity={0.8}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
           <Text style={{ fontSize: 15, color: Colors.primaryText, marginLeft: RfW(16) }}>{item.name}</Text>
         </View>
         <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
     );
   };
 
@@ -315,7 +299,7 @@ function Profile(props) {
           {isAccountMenuOpen && (
             <SafeAreaView>
               <FlatList
-                data={accountData}
+                data={PERSONAL_OPTIONS}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => renderItem(item)}
                 keyExtractor={(item, index) => index.toString()}
@@ -345,7 +329,7 @@ function Profile(props) {
           {isStudyMenuOpen && (
             <SafeAreaView>
               <FlatList
-                data={myStudyData}
+                data={MY_STUDY_DATA_OPTIONS}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => renderItem(item)}
                 keyExtractor={(item, index) => index.toString()}
@@ -374,7 +358,7 @@ function Profile(props) {
           {isBookingMenuOpen && (
             <SafeAreaView>
               <FlatList
-                data={bookingData}
+                data={BOOKING_DATA_OPTIONS}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => renderItem(item)}
                 keyExtractor={(item, index) => index.toString()}
@@ -386,7 +370,12 @@ function Profile(props) {
 
           <TouchableWithoutFeedback onPress={() => setIsMyClassesMenuOpen(!isMyClassesMenuOpen)}>
             <View style={styles.userMenuParentView}>
-              <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.classes} />
+              <IconWrapper
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                iconImage={Images.classes}
+                imageResizeMode="contain"
+              />
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>My Classes</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -403,7 +392,7 @@ function Profile(props) {
           {isMyClassesMenuOpen && (
             <SafeAreaView>
               <FlatList
-                data={myClassesData}
+                data={MY_CLASSES_OPTIONS}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => renderItem(item)}
                 keyExtractor={(item, index) => index.toString()}
@@ -413,7 +402,7 @@ function Profile(props) {
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
           <TouchableOpacity
-            onPress={() => navigation.navigate(routeNames.STUDENT.FAVOURITE_TUTOR)}
+            onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}
             style={styles.userMenuParentView}
             activeOpacity={0.8}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
@@ -428,7 +417,7 @@ function Profile(props) {
           <View style={commonStyles.blankGreyViewSmall} />
 
           <TouchableOpacity
-            onPress={() => navigation.navigate(routeNames.REFER_EARN)}
+            onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
             style={[styles.userMenuParentView]}
             activeOpacity={0.8}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
@@ -483,7 +472,7 @@ function Profile(props) {
           {isInformationMenuOpen && (
             <SafeAreaView>
               <FlatList
-                data={informationData}
+                data={HELP_OPTIONS}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => renderItem(item)}
                 keyExtractor={(item, index) => index.toString()}
@@ -510,7 +499,7 @@ function Profile(props) {
           {isAboutGuruMenuOpen && (
             <SafeAreaView>
               <FlatList
-                data={aboutData}
+                data={ABOUT_US_OPTIONS}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => renderItem(item)}
                 keyExtractor={(item, index) => index.toString()}

@@ -1,16 +1,15 @@
-import { Alert, Image, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Picker } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { CustomCheckBox, CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../components';
-import { studentDetails, tutorDetails, userDetails } from '../../../apollo/cache';
-import commonStyles from '../../../theme/styles';
-import { Colors, Images } from '../../../theme';
-import { RfH, RfW } from '../../../utils/helpers';
-import CustomDatePicker from '../../../components/CustomDatePicker';
-import routeNames from '../../../routes/screenNames';
-import { ADD_UPDATE_EDUCATION_DETAILS } from '../graphql-mutation';
+import { CustomCheckBox, CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../../components';
+import { studentDetails, tutorDetails } from '../../../../apollo/cache';
+import commonStyles from '../../../../theme/styles';
+import { Colors, Images } from '../../../../theme';
+import { RfH, RfW } from '../../../../utils/helpers';
+import CustomDatePicker from '../../../../components/CustomDatePicker';
+import { ADD_UPDATE_EDUCATION_DETAILS } from './education.mutation';
 
 function AddEditEducation() {
   const navigation = useNavigation();
@@ -76,29 +75,33 @@ function AddEditEducation() {
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader homeIcon label="Education" horizontalPadding={RfW(16)} lineVisible={false} />
+      <ScreenHeader homeIcon label="Education" horizontalPadding={RfW(16)} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={{ height: RfH(44) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>Name of School or Institute</Text>
+          <Text style={commonStyles.smallMutedText}>Name of School/Institute</Text>
           <Item>
-            <Input value={schoolName} onChangeText={(text) => setSchoolName(text)} />
+            <Input
+              value={schoolName}
+              onChangeText={(text) => setSchoolName(text)}
+              style={commonStyles.regularPrimaryText}
+            />
           </Item>
         </View>
-        <View style={{ height: RfH(24) }} />
-        <View style={commonStyles.horizontalChildrenSpaceView}>
+        <View style={{ height: RfH(30) }} />
+        <View style={{ flexDirection: 'row', paddingHorizontal: RfW(10) }}>
           <TouchableWithoutFeedback onPress={() => setEducationType(0)}>
             <View style={commonStyles.horizontalChildrenView}>
               <CustomRadioButton submitFunction={() => setEducationType(0)} enabled={educationType === 0} />
               <Text style={{ marginLeft: RfW(8) }}>K12 Education</Text>
             </View>
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => setEducationType(1)}>
-            <View style={commonStyles.horizontalChildrenView}>
-              <CustomRadioButton submitFunction={() => setEducationType(1)} enabled={educationType === 1} />
-              <Text style={{ marginLeft: RfW(8) }}>Higher Education</Text>
-            </View>
-          </TouchableWithoutFeedback>
+          <TouchableOpacity
+            onPress={() => setEducationType(1)}
+            style={[commonStyles.horizontalChildrenView, { marginLeft: RfW(20) }]} activeOpacity={0.8}>
+            <CustomRadioButton submitFunction={() => setEducationType(1)} enabled={educationType === 1} />
+            <Text style={{ marginLeft: RfW(8) }}>Higher Education</Text>
+          </TouchableOpacity>
         </View>
         {educationType === 0 ? (
           <View>
@@ -230,25 +233,40 @@ function AddEditEducation() {
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <View style={{ flex: 0.5, marginRight: RfW(16) }}>
               <Text style={commonStyles.smallMutedText}>Start Date</Text>
-              <View style={{ height: RfH(56), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-                <CustomDatePicker value={startDate} onChangeHandler={(d) => setStartDate(d)} />
+              <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
+                <CustomDatePicker
+                  value={startDate}
+                  onChangeHandler={(d) => {
+                    setStartDate(d);
+                    setEndDate('');
+                  }}
+                  maximumDate={new Date()}
+                />
               </View>
             </View>
-            <View style={{ flex: 0.5, marfinLeft: RfW(16) }}>
-              <Text style={commonStyles.smallMutedText}>End Date</Text>
-              <View style={{ height: RfH(56), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-                <CustomDatePicker value={endDate} onChangeHandler={(d) => setEndDate(d)} />
+            {!isCurrent && (
+              <View style={{ flex: 0.5, marginLeft: RfW(16) }}>
+                <Text style={commonStyles.smallMutedText}>End Date</Text>
+                <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
+                  <CustomDatePicker
+                    value={endDate}
+                    onChangeHandler={(d) => setEndDate(d)}
+                    minimumDate={new Date(startDate)}
+                    maximumDate={new Date()}
+                  />
+                </View>
               </View>
-            </View>
+            )}
           </View>
         </View>
         <View style={{ height: RfH(24) }} />
-        <TouchableWithoutFeedback onPress={() => setIsCurrent(!isCurrent)}>
-          <View style={commonStyles.horizontalChildrenView}>
-            <CustomCheckBox enabled={isCurrent} />
-            <Text style={{ marginLeft: RfW(16) }}>Currently studying</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <TouchableOpacity
+          onPress={() => setIsCurrent(!isCurrent)}
+          style={commonStyles.horizontalChildrenView}
+          activeOpacity={0.8}>
+          <CustomCheckBox enabled={isCurrent} submitFunction={() => setIsCurrent(!isCurrent)} />
+          <Text style={{ marginLeft: RfW(16) }}>Currently studying</Text>
+        </TouchableOpacity>
         <View style={{ height: RfH(24) }} />
         <View>
           <Button

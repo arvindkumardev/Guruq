@@ -76,6 +76,7 @@ export const GET_STUDENT_DETAILS = gql`
         filename
       }
       addresses {
+        id
         type
         street
         subArea
@@ -84,6 +85,20 @@ export const GET_STUDENT_DETAILS = gql`
         country
         postalCode
         fullAddress
+      }
+      educationDetails {
+        id
+        school {
+          name
+        }
+        degree {
+          name
+        }
+        fieldOfStudy
+        higherSecondaryStream
+        board
+        grade
+        subjects
       }
       guardians {
         contactDetail {
