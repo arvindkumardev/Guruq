@@ -34,6 +34,39 @@ import {
 } from '../../../utils/helpers';
 import styles from './styles';
 import NavigationRouteNames from '../../../routes/screenNames';
+import { WEBVIEW_URLS } from '../../../utils/webviewUrls';
+
+const ACCOUNT_OPTIONS = [
+  { name: 'Personal Details', icon: Images.personal },
+  { name: 'Address', icon: Images.home },
+  { name: 'Education', icon: Images.education },
+  { name: 'Experience', icon: Images.education },
+  { name: 'Documents', icon: Images.book },
+  { name: 'Bank Details', icon: Images.bank },
+];
+
+const MY_CLASS_OPTIONS = [
+  { name: 'My Classes', icon: Images.laptop },
+  { name: 'My Students', icon: Images.home },
+  { name: 'Student Request', icon: Images.classes },
+];
+
+const SETTINGS_OPTIONS = [
+  { name: 'Change Password', icon: Images.personal },
+  { name: 'Update Mobile and Email', icon: Images.home },
+  { name: 'Notifications', icon: Images.parent_details },
+];
+
+const HELP_OPTIONS = [
+  { name: 'Customer Care', icon: Images.personal },
+  { name: "FAQ's", icon: Images.home },
+  { name: 'Send Feedback', icon: Images.parent_details },
+];
+
+const ABOUTUS_OPTIONS = [
+  { name: 'About', icon: Images.personal },
+  { name: 'Team', icon: Images.home },
+];
 
 function Profile(props) {
   const navigation = useNavigation();
@@ -44,37 +77,7 @@ function Profile(props) {
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
-
-  const [accountData, setAccountData] = useState([
-    { name: 'Personal Details', icon: Images.personal },
-    { name: 'Address', icon: Images.home },
-    { name: 'Education', icon: Images.education },
-    { name: 'Experience', icon: Images.education },
-    { name: 'Documents', icon: Images.book },
-    { name: 'Bank Details', icon: Images.bank },
-  ]);
-
-  const [myClassesData, setMyClassesData] = useState([
-    { name: 'My Classes', icon: Images.laptop },
-    { name: 'My Students', icon: Images.home },
-    { name: 'Student Request', icon: Images.classes },
-  ]);
-
-  const [settingsData, setSettingsData] = useState([
-    { name: 'Change Password', icon: Images.personal },
-    { name: 'Update Mobile and Email', icon: Images.home },
-    { name: 'Notifications', icon: Images.parent_details },
-  ]);
-  const [informationData, setInformationData] = useState([
-    { name: 'Customer Care', icon: Images.personal },
-    { name: "FAQ's", icon: Images.home },
-    { name: 'Send Feedback', icon: Images.parent_details },
-  ]);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
-  const [about, setAbout] = useState([
-    { name: 'About', icon: Images.personal },
-    { name: 'Team', icon: Images.home },
-  ]);
 
   const client = initializeApollo();
 
@@ -82,7 +85,6 @@ function Profile(props) {
     clearAllLocalStorage().then(() => {
       client.resetStore().then(() => {
         removeToken().then(() => {
-          // // set in apollo cache
           isTokenLoading(true);
           isLoggedIn(false);
           isSplashScreenVisible(true);
@@ -128,19 +130,19 @@ function Profile(props) {
       navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
       navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/bankDetails`,
+        url: WEBVIEW_URLS.FAQ,
         label: "FAQ's",
       });
     } else if (item.name === 'Send Feedback') {
       navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
     } else if (item.name === 'About') {
       navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
+        url: WEBVIEW_URLS.ABOUT_US,
         label: 'About',
       });
     } else if (item.name === 'Team') {
       navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/experience`,
+        url: WEBVIEW_URLS.TEAM,
         label: 'Team',
       });
     } else if (item.name === 'My Classes') {
@@ -250,7 +252,7 @@ function Profile(props) {
         </View>
         {isAccountMenuOpen && (
           <FlatList
-            data={accountData}
+            data={ACCOUNT_OPTIONS}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
@@ -275,7 +277,7 @@ function Profile(props) {
         </TouchableWithoutFeedback>
         {isBookingMenuOpen && (
           <FlatList
-            data={myClassesData}
+            data={MY_CLASS_OPTIONS}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
@@ -347,7 +349,7 @@ function Profile(props) {
 
         {isSettingsMenuOpen && (
           <FlatList
-            data={settingsData}
+            data={SETTINGS_OPTIONS}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
@@ -378,7 +380,7 @@ function Profile(props) {
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         {isInformationMenuOpen && (
           <FlatList
-            data={informationData}
+            data={HELP_OPTIONS}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
@@ -403,7 +405,7 @@ function Profile(props) {
 
         {isAboutGuruMenuOpen && (
           <FlatList
-            data={about}
+            data={ABOUTUS_OPTIONS}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => renderItem(item)}
             keyExtractor={(item, index) => index.toString()}
