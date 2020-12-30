@@ -47,9 +47,54 @@ export const GET_CURRENT_STUDENT_QUERY = gql`
           number
         }
         email
+        dob
+        gender
       }
       profileImage {
         filename
+      }
+    }
+  }
+`;
+
+export const GET_STUDENT_DETAILS = gql`
+  query GetStudentDetails {
+    getStudentDetails {
+      id
+      contactDetail {
+        firstName
+        lastName
+        phoneNumber {
+          countryCode
+          number
+        }
+        email
+        dob
+        gender
+      }
+      profileImage {
+        filename
+      }
+      addresses {
+        type
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        fullAddress
+      }
+      guardians {
+        contactDetail {
+          firstName
+          lastName
+          email
+          phoneNumber {
+            countryCode
+            number
+          }
+        }
       }
     }
   }
