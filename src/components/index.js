@@ -19,6 +19,7 @@ import SelectSubjectModal from './SelectSubjectModal';
 import ChooseSubjectComponent from './ChooseSubjectsComponent';
 import TutorImageComponent from './TutorImageComponent';
 import UpcomingClassComponent from './UpcomingClassComponent';
+import CustomSelect from './CustomSelect';
 
 export {
   IconButtonWrapper,
@@ -40,5 +41,6 @@ export {
   SelectSubjectModal,
   ChooseSubjectComponent,
   TutorImageComponent,
-  UpcomingClassComponent
+  UpcomingClassComponent,
+  CustomSelect,
 };

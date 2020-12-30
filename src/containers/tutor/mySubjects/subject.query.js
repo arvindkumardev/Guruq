@@ -13,6 +13,7 @@ export const SEARCH_TUTOR_OFFERINGS = gql`
       }
       stage
       description
+      active
       offering {
         id
         displayName

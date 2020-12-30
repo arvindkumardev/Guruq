@@ -14,6 +14,7 @@ import styles from './styles';
 import { offeringsMasterData } from '../../../apollo/cache';
 import { GET_ACCEPTED_TUTOR_NEED } from './pytn.query';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function PytnDetail(props) {
   const { route } = props;
@@ -75,6 +76,16 @@ function PytnDetail(props) {
         deletePYTN({ variables: { studentPytnId: item.id } });
       },
       negativeText: 'No',
+    });
+  };
+
+  const goToTutorDetails = (item) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
+      tutorData: item.tutor,
+      parentOffering: classData?.offering?.parentOffering?.id,
+      parentParentOffering: classData?.offering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: classData?.offering?.parentOffering?.displayName,
+      parentParentOfferingName: classData?.offering?.parentOffering?.parentOffering?.displayName,
     });
   };
 
@@ -142,7 +153,7 @@ function PytnDetail(props) {
 
   const renderTutorItem = (item) => (
     <View style={styles.listItemParent}>
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
             <TutorImageComponent tutor={item.tutor} />

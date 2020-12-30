@@ -6,6 +6,7 @@ export const GET_AVAILABILITY_DATA = gql`
       active
       startDate
       endDate
+      classScheduled
     }
   }
 `;

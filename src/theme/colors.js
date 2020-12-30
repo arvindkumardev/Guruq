@@ -16,6 +16,7 @@ const Colors = {
   orangeRed: '#fe3d3d',
   lightPurple: '#e7e5f2',
   lightGreen: '#e6fce7',
+  green: '#2cbe5a',
   lightOrange: '#fff7f0',
   skyBlue: '#cbe7ff',
   lightBlue: '#e8f7fe',

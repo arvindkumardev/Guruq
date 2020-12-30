@@ -45,12 +45,29 @@ export const ADD_TUTOR_DOCUMENT_DETAILS = gql`
     }
   }
 `;
+
 export const DELETE_TUTOR_DOCUMENT_DETAILS = gql`
   mutation DeleteDocumentDetail($id: Int!) {
     deleteDocumentDetail(id: $id) {
       id
       name
       type
+    }
+  }
+`;
+
+export const ENABLE_TUTOR_OFFERING = gql`
+  mutation EnableTutorOffering($tutorOfferingId: Int!) {
+    enableTutorOffering(tutorOfferingId: $tutorOfferingId) {
+      id
+    }
+  }
+`;
+
+export const DISABLE_TUTOR_OFFERING = gql`
+  mutation DisableTutorOffering($tutorOfferingId: Int!) {
+    disableTutorOffering(tutorOfferingId: $tutorOfferingId) {
+      id
     }
   }
 `;

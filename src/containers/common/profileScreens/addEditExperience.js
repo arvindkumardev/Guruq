@@ -141,7 +141,7 @@ function AddEditExperience() {
                 <CustomDatePicker value={startDate} onChangeHandler={(d) => setStartDate(d)} />
               </View>
             </View>
-            <View style={{ flex: 0.5, marfinLeft: RfW(16) }}>
+            <View style={{ flex: 0.5, marginLeft: RfW(16) }}>
               <Text style={commonStyles.smallMutedText}>End Date</Text>
               <View style={{ height: RfH(56), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                 <CustomDatePicker value={endDate} onChangeHandler={(d) => setEndDate(d)} />
