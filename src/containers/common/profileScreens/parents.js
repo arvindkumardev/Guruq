@@ -6,22 +6,22 @@ import { userDetails } from '../../../apollo/cache';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
-import EducationListing from './components/educationListing';
+import ParentsListing from './components/parentsListing';
 
-function Education() {
+function Parents() {
   const userInfo = useReactiveVar(userDetails);
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader
         homeIcon
-        label="Education"
+        label="Guardians Details"
         horizontalPadding={RfW(16)}
         showRightIcon
         rightIcon={Images.moreInformation}
         lineVisible={false}
       />
       <View style={{ height: RfH(44) }} />
-      <EducationListing
+      <ParentsListing
         referenceType={userInfo.type}
         referenceId={userInfo.id}
         details={userInfo.contactDetail}
@@ -31,4 +31,4 @@ function Education() {
   );
 }
 
-export default Education;
+export default Parents;

@@ -293,7 +293,7 @@ function StudentDashboard(props) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <TutorImageComponent tutor={item?.tutor} height={70} width={70} styling={{}} />
+              <TutorImageComponent tutor={item?.tutor} height={70} width={70} styling={{ borderRadius: RfH(70) }} />
             </View>
             <View
               style={{
@@ -434,17 +434,17 @@ function StudentDashboard(props) {
               {cartCount > 0 && (
                 <View
                   style={{
-                    backgroundColor: Colors.brandBlue2,
-                    borderRadius: RfH(20),
+                    // backgroundColor: Colors.brandBlue2,
+                    // borderRadius: RfH(20),
                     position: 'absolute',
-                    top: RfH(2),
-                    left: RfW(17),
+                    top: RfH(0),
+                    left: RfW(16),
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: RfH(11),
-                    width: RfH(11),
+                    height: RfH(13),
+                    width: RfH(13),
                   }}>
-                  <Text style={{ fontSize: 7, color: Colors.white }}>{cartCount}</Text>
+                  <Text style={{ font: Fonts.bold, fontSize: 13, color: Colors.brandBlue }}>{cartCount}</Text>
                 </View>
               )}
             </TouchableOpacity>

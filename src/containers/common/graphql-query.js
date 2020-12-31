@@ -15,6 +15,7 @@ export const ME_QUERY = gql`
       firstName
       lastName
       email
+      gender
       phoneNumber {
         countryCode
         number
@@ -46,9 +47,69 @@ export const GET_CURRENT_STUDENT_QUERY = gql`
           number
         }
         email
+        dob
+        gender
       }
       profileImage {
         filename
+      }
+    }
+  }
+`;
+
+export const GET_STUDENT_DETAILS = gql`
+  query GetStudentDetails {
+    getStudentDetails {
+      id
+      contactDetail {
+        firstName
+        lastName
+        phoneNumber {
+          countryCode
+          number
+        }
+        email
+        dob
+        gender
+      }
+      profileImage {
+        filename
+      }
+      addresses {
+        id
+        type
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        fullAddress
+      }
+      educationDetails {
+        id
+        school {
+          name
+        }
+        degree {
+          name
+        }
+        fieldOfStudy
+        higherSecondaryStream
+        board
+        grade
+        subjects
+      }
+      guardians {
+        contactDetail {
+          firstName
+          lastName
+          email
+          phoneNumber {
+            countryCode
+            number
+          }
+        }
       }
     }
   }

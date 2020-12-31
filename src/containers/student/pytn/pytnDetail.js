@@ -4,16 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { Colors, Fonts, Images } from '../../theme';
-import { alertBox, getSubjectIcons, RfH, RfW, titleCaseIfExists } from '../../utils/helpers';
-import commonStyles from '../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { IconButtonWrapper, ScreenHeader, TutorImageComponent } from '../../components';
-import Loader from '../../components/Loader';
+import { Colors, Fonts, Images } from '../../../theme';
+import { alertBox, getSubjectIcons, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
+import commonStyles from '../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { IconButtonWrapper, ScreenHeader, TutorImageComponent } from '../../../components';
+import Loader from '../../../components/Loader';
 import styles from './styles';
-import { offeringsMasterData } from '../../apollo/cache';
+import { offeringsMasterData } from '../../../apollo/cache';
 import { GET_ACCEPTED_TUTOR_NEED } from './pytn.query';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function PytnDetail(props) {
   const { route } = props;
@@ -75,6 +76,16 @@ function PytnDetail(props) {
         deletePYTN({ variables: { studentPytnId: item.id } });
       },
       negativeText: 'No',
+    });
+  };
+
+  const goToTutorDetails = (item) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
+      tutorData: item.tutor,
+      parentOffering: classData?.offering?.parentOffering?.id,
+      parentParentOffering: classData?.offering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: classData?.offering?.parentOffering?.displayName,
+      parentParentOfferingName: classData?.offering?.parentOffering?.parentOffering?.displayName,
     });
   };
 
@@ -142,7 +153,7 @@ function PytnDetail(props) {
 
   const renderTutorItem = (item) => (
     <View style={styles.listItemParent}>
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
             <TutorImageComponent tutor={item.tutor} />

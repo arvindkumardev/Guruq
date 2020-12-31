@@ -11,13 +11,7 @@ import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { sum } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
-import {
-  IconButtonWrapper,
-  Loader,
-  PaymentMethodModal,
-  ScreenHeader,
-  TutorImageComponent,
-} from '../../../components';
+import { IconButtonWrapper, Loader, PaymentMethodModal, ScreenHeader, TutorImageComponent } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
@@ -426,7 +420,7 @@ const MyCart = () => {
           iconHeight={RfH(20)}
           iconImage={applyQPoints ? Images.checkbox_selected : Images.checkbox}
           submitFunction={enableApplyQPoints}
-          imageResizeMode={'contain'}
+          imageResizeMode="contain"
         />
       </View>
 
@@ -434,12 +428,12 @@ const MyCart = () => {
         <View
           style={{
             backgroundColor: Colors.white,
-            height: RfH(44),
+            height: RfH(50),
             paddingHorizontal: RfW(16),
           }}>
           <View style={commonStyles.lineSeparator} />
 
-          <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(50), alignItems: 'center' }]}>
             <Text style={commonStyles.secondaryText}>{qPoints} Available Points</Text>
             <View
               style={[

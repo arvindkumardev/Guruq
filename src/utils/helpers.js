@@ -162,6 +162,8 @@ export const alertBox = (
   Alert.alert(alertTitle, alertMsg, configuration, { cancelable: config.cancelable });
 };
 
+export const comingSoonAlert = () => alertBox('Coming Soon');
+
 export const monthNames = [
   'January',
   'February',
@@ -281,6 +283,10 @@ export const formatDate = (date, format) => {
   return moment(date).format(format);
 };
 
+export const convertDateTime = (date) => {
+  return `${moment(date).format('YYYY-MM-DDTHH:mm:00')}Z`;
+};
+
 export const printDate = (date) => {
   return formatDate(date, 'MMM DD, YYYY');
 };
@@ -299,7 +305,6 @@ export const startOfDay = (date) => {
 export const endOfDay = (date) => {
   return `${moment(date).format('YYYY-MM-DDT23:59:59')}Z`;
 };
-
 
 export const createPayload = async (user, token) => {
   const payload = {

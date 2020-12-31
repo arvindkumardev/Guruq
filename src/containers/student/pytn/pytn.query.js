@@ -22,6 +22,10 @@ export const GET_TUTION_NEED_LISTING = gql`
         onlineClass
         minPrice
         maxPrice
+        acceptedPytns {
+          id
+          price
+        }
         student {
           id
           contactDetail {
@@ -37,7 +41,6 @@ export const GET_TUTION_NEED_LISTING = gql`
     }
   }
 `;
-
 
 export const GET_ACCEPTED_TUTOR_NEED = gql`
   query GetStudentPytnAccepted($acceptedSearchDto: StudentPytnAcceptedSearchDto!) {
@@ -96,6 +99,37 @@ export const GET_ACCEPTED_TUTOR_NEED = gql`
         }
         id
         price
+      }
+    }
+  }
+`;
+
+export const SEARCH_TUTOR_PYTN_REQUESTS = gql`
+  query SearchTutorPYTN($searchDto: StudentPYTNSearchDto!) {
+    searchTutorPYTN(searchDto: $searchDto) {
+      edges {
+        id
+        offering {
+          id
+          displayName
+          parentOffering {
+            id
+            displayName
+            parentOffering {
+              id
+              displayName
+            }
+          }
+        }
+        count
+        groupSize
+        onlineClass
+        minPrice
+        maxPrice
+        acceptedPytns {
+          id
+          price
+        }
       }
     }
   }

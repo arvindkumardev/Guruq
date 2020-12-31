@@ -9,7 +9,7 @@ import { RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import { offeringsMasterData } from '../../apollo/cache';
 import { STUDY_AREA_LEVELS } from '../../utils/constants';
-import styles from '../../containers/pytn/styles';
+import styles from '../../containers/student/pytn/styles';
 
 const ChooseSubjectComponent = (props) => {
   const { submitButtonText, submitButtonHandle, isMultipleSubjectSelectionAllowed } = props;

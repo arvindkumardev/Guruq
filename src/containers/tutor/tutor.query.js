@@ -9,3 +9,35 @@ export const GET_INTERVIEW_SCHEDULE_AVAILABILITY = gql`
     }
   }
 `;
+
+export const GET_TUTOR_DETAILS = gql`
+  query GetTutorDetails {
+    getTutorDetails {
+      addresses {
+        id
+        type
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        fullAddress
+      }
+      educationDetails {
+        id
+        school {
+          name
+        }
+        degree {
+          name
+        }
+        fieldOfStudy
+        higherSecondaryStream
+        board
+        grade
+        subjects
+      }
+    }
+  }
+`;

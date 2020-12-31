@@ -17,21 +17,23 @@ import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import FavouriteTutors from '../containers/student/dashboard/favouriteTutors';
 import ReferEarn from '../containers/referAndEarn/referEarn';
-import PytnSubjectSelection from '../containers/pytn/pytnSubjectSelection';
-import PytnSubmit from '../containers/pytn/pytnSubmit';
+import PytnSubjectSelection from '../containers/student/pytn/pytnSubjectSelection';
+import PytnSubmit from '../containers/student/pytn/pytnSubmit';
 import WebViewPages from '../containers/student/profile/webViewPages';
-import PytnListing from '../containers/pytn/pytnListing';
-import PytnDetail from '../containers/pytn/pytnDetail';
+import PytnListing from '../containers/student/pytn/pytnListing';
+import PytnDetail from '../containers/student/pytn/pytnDetail';
 import WebViewPage from '../components/WebViewPage';
 import Notifications from '../containers/student/dashboard/notifications';
 import SendFeedback from '../containers/common/sendFeedback';
 import CustomerCare from '../containers/common/customerCare';
 import PersonalDetails from '../containers/common/profileScreens/personalDetails';
-import Address from '../containers/common/profileScreens/address';
-import AddEditAddress from '../containers/common/profileScreens/addEditAddress';
+import AddressListing from '../containers/common/profileScreens/address/addressListing';
+import AddEditAddress from '../containers/common/profileScreens/address/addEditAddress';
 import AddressMapView from '../containers/common/profileScreens/addressMapView';
-import Education from '../containers/common/profileScreens/education';
-import AddEditEducation from '../containers/common/profileScreens/addEditEducation';
+import EducationListing from '../containers/common/profileScreens/education/educationListing';
+import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
+import Parents from '../containers/common/profileScreens/parents';
+import AddEditParents from '../containers/common/profileScreens/addEditParents';
 
 const Stack = createStackNavigator();
 
@@ -59,7 +61,7 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.PERSONAL_DETAILS}
+        name={NavigationRouteNames.PERSONAL_DETAILS}
         component={PersonalDetails}
         options={{ headerShown: false }}
       />
@@ -168,21 +170,10 @@ export const getStudentRoutes = () => {
         component={CustomerCare}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.ADDRESS} component={Address} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.PARENTS} component={Parents} options={{ headerShown: false }} />
       <Stack.Screen
-        name={NavigationRouteNames.ADD_EDIT_ADDRESS}
-        component={AddEditAddress}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.ADDRESS_MAP_VIEW}
-        component={AddressMapView}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name={NavigationRouteNames.EDUCATION} component={Education} options={{ headerShown: false }} />
-      <Stack.Screen
-        name={NavigationRouteNames.ADD_EDIT_EDUCATION}
-        component={AddEditEducation}
+        name={NavigationRouteNames.ADD_EDIT_PARENTS}
+        component={AddEditParents}
         options={{ headerShown: false }}
       />
     </>
