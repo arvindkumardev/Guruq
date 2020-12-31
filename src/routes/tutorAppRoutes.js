@@ -23,11 +23,11 @@ import AddEditAddress from '../containers/common/profileScreens/address/addEditA
 import AddressMapView from '../containers/common/profileScreens/addressMapView';
 import EducationListing from '../containers/common/profileScreens/education/educationListing';
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
-import Parents from '../containers/common/profileScreens/parents';
-import AddEditParents from '../containers/common/profileScreens/addEditParents';
+import ParentListing from '../containers/common/profileScreens/parentsDetail/parentListing';
+import AddEditParents from '../containers/common/profileScreens/parentsDetail/addEditParents';
 import ExperienceListing from '../containers/common/profileScreens/experience/experienceListing';
 import AddEditExperience from '../containers/common/profileScreens/experience/addEditExperience';
-import BankDetailsList from '../containers/common/profileScreens/bankDetails/bankDetailsList';
+import BankDetails from '../containers/common/profileScreens/bankDetails/bankDetails';
 import AddEditBankDetails from '../containers/common/profileScreens/bankDetails/addEditBankDetails';
 
 const Stack = createStackNavigator();
@@ -112,7 +112,11 @@ export const getTutorRoutes = () => {
         component={CustomerCare}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.PARENTS} component={Parents} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.PARENTS_LIST}
+        component={ParentListing}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_PARENTS}
         component={AddEditParents}
@@ -128,11 +132,7 @@ export const getTutorRoutes = () => {
         component={AddEditExperience}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.BANK_DETAILS}
-        component={BankDetailsList}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.BANK_DETAILS} component={BankDetails} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_BANK_DETAILS}
         component={AddEditBankDetails}

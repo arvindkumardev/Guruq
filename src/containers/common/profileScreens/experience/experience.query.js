@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_EXPERIENCE_LIST = gql`
-  query GetTutorDetails {
-    getTutorDetails {
+  query GetTutorExperienceDetails {
+    getTutorExperienceDetails {
       experienceDetails {
         id
         employmentType

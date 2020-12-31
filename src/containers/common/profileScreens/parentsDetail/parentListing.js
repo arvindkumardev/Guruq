@@ -9,17 +9,17 @@ import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
 import { alertBox, RfH, RfW } from '../../../../utils/helpers';
 import NavigationRouteNames from '../../../../routes/screenNames';
-import { DELETE_BANK_DETAIL } from './bank.mutation';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { GET_BANK_DEATILS_LIST } from './bank.query';
+import { GET_PARENT_DETAILS } from './parentDetail.query';
+import { DELETE_PARENT_INFO } from './parentDetail.mutation';
 
-function BankDetailsList() {
+function ParentListing() {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
-  const [bankList, setBankList] = useState([]);
+  const [parentsList, setParentsList] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
 
-  const [getBankList, { loading: bankListLoading }] = useLazyQuery(GET_BANK_DEATILS_LIST, {
+  const [getParentList, { loading: parentListLoading }] = useLazyQuery(GET_PARENT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -28,13 +28,13 @@ function BankDetailsList() {
     },
     onCompleted: (data) => {
       if (data) {
-        setBankList(data?.getTutorDetails?.bankDetails);
-        setIsListEmpty(data?.getTutorDetails?.bankDetails ? data?.getTutorDetails?.bankDetails?.length === 0 : true);
+        setParentsList(data?.getStudentDetails?.guardians);
+        setIsListEmpty(data?.getStudentDetails?.guardians.length === 0);
       }
     },
   });
 
-  const [deleteBankDetail, { loading: bankDeleteLoading }] = useMutation(DELETE_BANK_DETAIL, {
+  const [deleteParentsDetail, { loading: parentDetailDeleteLoading }] = useMutation(DELETE_PARENT_INFO, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -43,45 +43,60 @@ function BankDetailsList() {
     },
     onCompleted: (data) => {
       if (data) {
-        getBankList();
+        alertBox(`Your parents/guardians details has been deleted successfully`, '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => getParentList(),
+        });
       }
     },
   });
 
   useEffect(() => {
     if (isFocussed) {
-      getBankList();
+      getParentList();
     }
   }, [isFocussed]);
 
   const handleDelete = (item) => {
-    deleteBankDetail({ variables: { id: item.id } });
+    deleteParentsDetail({ variables: { id: item.id } });
   };
 
   const handleDeleteConfirmation = (item) => {
-    alertBox(`Do you really want to delete your bank details!`, '', {
+    alertBox(`Do you really want to delete parents/guardians detail!`, '', {
       positiveText: 'Yes',
       onPositiveClick: () => handleDelete(item),
       negativeText: 'No',
     });
   };
 
-  const handleAddEditBankDetail = (item) => {
-    navigation.navigate(NavigationRouteNames.ADD_EDIT_BANK_DETAILS, { detail: item || {} });
+  const handleAddEditParents = (item) => {
+    navigation.navigate(NavigationRouteNames.ADD_EDIT_PARENTS, { detail: item || {} });
   };
 
-  const bankDetail = (item) => (
-    <View>
+  const renderParentDetails = (item) => (
+    <View style={{ marginTop: RfH(20) }}>
       <View style={commonStyles.horizontalChildrenStartView}>
-        <IconButtonWrapper iconImage={Images.bank} iconWidth={RfW(16)} iconHeight={RfH(20)} imageResizeMode="contain" />
+        <IconButtonWrapper
+          iconImage={Images.parent_details}
+          iconWidth={RfW(16)}
+          iconHeight={RfH(16)}
+          imageResizeMode="contain"
+          styling={{ marginTop: RfH(5) }}
+        />
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.regularPrimaryText}>{item.type}</Text>
-          <Text style={commonStyles.mediumMutedText}>{item.firstrow}</Text>
-          <Text style={commonStyles.mediumMutedText}>{item.secondrow}</Text>
+          <Text style={commonStyles.regularPrimaryText}>
+            {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
+          </Text>
+          {item.contactDetail.phoneNumber && (
+            <Text style={commonStyles.mediumMutedText}>
+              +{item?.contactDetail?.phoneNumber.countryCode}-{item?.contactDetail?.phoneNumber.number}
+            </Text>
+          )}
+          <Text style={commonStyles.mediumMutedText}>{item?.contactDetail?.email}</Text>
         </View>
       </View>
       <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-        <TouchableWithoutFeedback onPress={() => handleAddEditBankDetail(item)}>
+        <TouchableWithoutFeedback onPress={() => handleAddEditParents(item)}>
           <Text style={{ color: Colors.orange }}>Edit</Text>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
@@ -94,25 +109,25 @@ function BankDetailsList() {
 
   return (
     <>
-      <Loader isLoading={bankListLoading || bankDeleteLoading} />
+      <Loader isLoading={parentListLoading || parentDetailDeleteLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader
           homeIcon
-          label="Manage Bank Detail"
+          label="Parents/Guardians Details"
           horizontalPadding={RfW(16)}
           showRightIcon
           rightIcon={Images.moreInformation}
-          onRightIconClick={handleAddEditBankDetail}
+          onRightIconClick={handleAddEditParents}
         />
         <View style={{ height: RfH(24) }} />
         {!isListEmpty ? (
           <View style={{ paddingHorizontal: RfW(16) }}>
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={bankList}
-              renderItem={({ item, index }) => bankDetail(item, index)}
+              data={parentsList}
+              renderItem={({ item, index }) => renderParentDetails(item, index)}
               keyExtractor={(item, index) => index.toString()}
-              scrollEnabled={bankList.length > 3}
+              scrollEnabled={parentsList.length > 3}
             />
           </View>
         ) : (
@@ -138,12 +153,12 @@ function BankDetailsList() {
                 commonStyles.regularMutedText,
                 { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
               ]}>
-              Looks like you haven't provided your bank details.
+              Looks like you haven't provided your Parents/Guardians details.
             </Text>
             <Button
-              onPress={() => handleAddEditBankDetail()}
+              onPress={() => handleAddEditParents()}
               style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
-              <Text style={commonStyles.textButtonPrimary}>Add Bank Details</Text>
+              <Text style={commonStyles.textButtonPrimary}>Add Parents/Guardians</Text>
             </Button>
           </View>
         )}
@@ -152,4 +167,4 @@ function BankDetailsList() {
   );
 }
 
-export default BankDetailsList;
+export default ParentListing;

@@ -33,6 +33,7 @@
     "emoji-utils": "^1.0.1",
     "graphql": "^15.3.0",
     "iterall": "^1.3.0",
+    "libphonenumber-js": "^1.9.6",
     "lodash": "^4.17.20",
     "lottie-react-native": "^3.5.0",
     "moment": "^2.29.1",

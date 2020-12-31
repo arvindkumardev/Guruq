@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const GET_BANK_DEATILS_LIST = gql`
-  query GetTutorDetails {
-    getTutorDetails {
+export const GET_BANK_DETAILS_DATA = gql`
+  query GetTutorBankDetails {
+    getTutorBankDetails {
       bankDetails {
         id
         accountHolder

@@ -7,19 +7,19 @@ import { useNavigation } from '@react-navigation/native';
 import { CustomCheckBox, CustomSelect, Loader, ScreenHeader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors } from '../../../../theme';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, printDateTime, RfH, RfW, startOfDay } from '../../../../utils/helpers';
 import CustomDatePicker from '../../../../components/CustomDatePicker';
 import { ADD_UPDATE_TUTOR_EXPERIENCE_DETAILS } from './experience.mutation';
 import { EmploymentTypeEnum } from '../../enums';
 import { tutorDetails } from '../../../../apollo/cache';
 
 const EMPLOYMENT_TYPE = [
-  { value: 1, label: 'FULL TIME' },
-  { value: 2, label: 'PART TIME' },
-  { value: 3, label: 'SELF EMPLOYED' },
-  { value: 4, label: 'FREELANCE' },
-  { value: 5, label: 'INTERNSHIP' },
-  { value: 6, label: 'TRAINEE' },
+  { value: 'FULL_TIME', label: 'FULL TIME' },
+  { value: 'PART_TIME', label: 'PART TIME' },
+  { value: 'SELF_EMPLOYED', label: 'SELF EMPLOYED' },
+  { value: 'FREELANCE', label: 'FREELANCE' },
+  { value: 'INTERNSHIP', label: 'INTERNSHIP' },
+  { value: 'TRAINEE', label: 'TRAINEE' },
 ];
 function AddEditExperience(props) {
   const navigation = useNavigation();
@@ -28,8 +28,8 @@ function AddEditExperience(props) {
   const [companyName, setCompanyName] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [selectedType, setSelectedType] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [isCurrent, setIsCurrent] = useState(false);
   const [expId, setExpId] = useState('');
 
@@ -38,7 +38,7 @@ function AddEditExperience(props) {
       setIsCurrent(experienceDetail.current);
       setEndDate(experienceDetail.endDate);
       setStartDate(experienceDetail.startDate);
-      setSelectedType(EmploymentTypeEnum[experienceDetail.employmentType].value);
+      setSelectedType(EmploymentTypeEnum[experienceDetail.employmentType].label);
       setJobTitle(experienceDetail.title);
       setCompanyName(experienceDetail?.institution?.name);
       setExpId(experienceDetail?.id);
@@ -74,27 +74,27 @@ function AddEditExperience(props) {
     } else if (isEmpty(endDate) && !isCurrent) {
       alertBox('Please select the end date of the employment');
     } else {
+      const payload = {
+        title: jobTitle,
+        startDate: startOfDay(startDate),
+        endDate: endDate ? startOfDay(endDate) : null,
+        current: isCurrent,
+        employmentType: EMPLOYMENT_TYPE.find((item) => item.value === selectedType).value,
+        institution: {
+          name: companyName,
+        },
+        tutor: {
+          id: tutorInfo.id,
+        },
+        ...(expId && { id: expId }),
+      };
       saveExperience({
         variables: {
-          experienceDto: {
-            id: expId,
-            title: jobTitle,
-            startDate,
-            endDate,
-            current: isCurrent,
-            employmentType: EMPLOYMENT_TYPE.find((item) => item.value === selectedType).label,
-            institution: {
-              name: companyName,
-            },
-            tutor: {
-              id: tutorInfo.id,
-            },
-          },
+          experienceDto: payload,
         },
       });
     }
   };
-  console.log('endDate', endDate);
 
   return (
     <>

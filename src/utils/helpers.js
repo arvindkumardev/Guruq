@@ -2,13 +2,15 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import AsyncStorage from '@react-native-community/async-storage';
-import { isEmpty, isNumber } from 'lodash';
 import { Alert, Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import moment from 'moment';
+import { isEmpty, isNil, isNull, isNumber, isUndefined } from 'lodash';
+import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mobile';
 import Images from '../theme/images';
-import SubjectIcons from '../theme/subjectIcons';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+
+const countryData = require('../components/NationalityDropdown/country/countries.json');
 
 let token;
 
@@ -304,6 +306,18 @@ export const startOfDay = (date) => {
 
 export const endOfDay = (date) => {
   return `${moment(date).format('YYYY-MM-DDT23:59:59')}Z`;
+};
+
+export const isValidMobile = (mobile, dialCode) => {
+  if (!isEmpty(mobile) && !isUndefined(mobile)) {
+    const parsedMobile = parseMobile(`+${dialCode}${mobile}`);
+    return !isUndefined(parsedMobile) ? parsedMobile.isValid() : false;
+  }
+  return false;
+};
+
+export const getCountryObj = (dialCode) => {
+  return countryData.find((item) => item.dialCode === dialCode);
 };
 
 export const createPayload = async (user, token) => {

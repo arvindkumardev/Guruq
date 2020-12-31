@@ -38,7 +38,12 @@ import AddEditAddress from '../containers/common/profileScreens/address/addEditA
 import AddressMapView from '../containers/common/profileScreens/addressMapView';
 import EducationListing from '../containers/common/profileScreens/education/educationListing';
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
+<<<<<<< HEAD
 import PersonalDetails from '../containers/common/profileScreens/personalDetails';
+=======
+import AwardListing from "../containers/common/profileScreens/awards/awardListing";
+import AddEditAward from "../containers/common/profileScreens/awards/addEditAward";
+>>>>>>> 48f1a5f3d762f90e282543c0e5055ce0d965966c
 
 const Stack = createStackNavigator();
 
@@ -165,10 +170,16 @@ const AppStack = (props) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.PERSONAL_DETAILS}
-        component={PersonalDetails}
+        name={NavigationRouteNames.AWARD_LISTING}
+        component={AwardListing}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name={NavigationRouteNames.ADD_EDIT_AWARD_DETAILS}
+        component={AddEditAward}
+        options={{ headerShown: false }}
+      />
+      {/* <Stack.Screen name={NavigationRouteNames.A} component={EducationListing} options={{ headerShown: false }} /> */}
     </>
   );
 

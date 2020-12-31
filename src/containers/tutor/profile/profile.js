@@ -43,6 +43,8 @@ const ACCOUNT_OPTIONS = [
   { name: 'Experience', icon: Images.work_office },
   { name: 'Documents', icon: Images.book },
   { name: 'Bank Details', icon: Images.bank },
+  { name: 'Business Details', icon: Images.award },
+  { name: 'Awards & Achievement', icon: Images.award },
 ];
 
 const MY_CLASS_OPTIONS = [
@@ -126,6 +128,8 @@ function Profile(props) {
       });
     } else if (item.name === 'Bank Details') {
       navigation.navigate(NavigationRouteNames.BANK_DETAILS);
+    } else if (item.name === 'Awards & Achievement') {
+      navigation.navigate(NavigationRouteNames.AWARD_LISTING);
     } else if (item.name === 'Customer Care') {
       navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
