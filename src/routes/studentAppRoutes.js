@@ -34,6 +34,9 @@ import EducationListing from '../containers/common/profileScreens/education/educ
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
 import Parents from '../containers/common/profileScreens/parents';
 import AddEditParents from '../containers/common/profileScreens/addEditParents';
+import BookingDetails from '../containers/student/profile/purchasedHistory/bookingDetails';
+import ViewBookingDetails from '../containers/student/profile/purchasedHistory/viewBookingDetails';
+import Refund from '../containers/student/profile/purchasedHistory/refund';
 
 const Stack = createStackNavigator();
 
@@ -176,6 +179,17 @@ export const getStudentRoutes = () => {
         component={AddEditParents}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.BOOKING_DETAILS}
+        component={BookingDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.VIEW_BOOKING_DETAILS}
+        component={ViewBookingDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.STUDENT.REFUND} component={Refund} options={{ headerShown: false }} />
     </>
   );
 };

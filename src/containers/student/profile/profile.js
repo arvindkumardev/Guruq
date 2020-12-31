@@ -121,6 +121,8 @@ function Profile(props) {
       navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Parents Details') {
       navigation.navigate(NavigationRouteNames.PARENTS);
+    } else if (item.name === 'Purchased History') {
+      navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_DETAILS);
     } else if (item.name === 'Experience') {
       navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,
@@ -171,7 +173,8 @@ function Profile(props) {
             paddingLeft: RfW(48),
             borderBottomColor: Colors.lightGrey,
           },
-        ]} activeOpacity={0.8}>
+        ]}
+        activeOpacity={0.8}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
           <Text style={{ fontSize: 15, color: Colors.primaryText, marginLeft: RfW(16) }}>{item.name}</Text>

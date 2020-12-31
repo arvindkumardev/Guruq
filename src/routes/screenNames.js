@@ -58,6 +58,9 @@ const NavigationRouteNames = {
     COMPARE_MODAL: 'compare_modal',
     FAVOURITE_TUTOR: 'favourite_tutor',
     NOTIFICATIONS: 'notifications',
+    BOOKING_DETAILS: 'booking_details',
+    VIEW_BOOKING_DETAILS: 'view_booking_details',
+    REFUND: 'refund',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',
