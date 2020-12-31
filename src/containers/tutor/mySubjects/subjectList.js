@@ -21,7 +21,7 @@ function SubjectList() {
 
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(SEARCH_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
-    variables: { tutorId: tutorInfo?.id },
+    variables: { tutorId: 27716 },
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -29,7 +29,51 @@ function SubjectList() {
     },
     onCompleted: (data) => {
       if (data) {
-        setSubjects(data?.searchTutorOfferings);
+        console.log(data);
+        const arrSubject = [];
+        let currentSubject = '';
+        let classes = '';
+        for (let i = 0; i < data?.searchTutorOfferings.length; i++) {
+          if (i === 0) {
+            if (
+              data.searchTutorOfferings[i + 1] &&
+              data?.searchTutorOfferings[i].offering?.displayName ===
+                data?.searchTutorOfferings[i + 1].offering?.displayName
+            ) {
+              currentSubject = data?.searchTutorOfferings[i].offering?.displayName;
+              classes = data?.searchTutorOfferings[i].offering?.parentOffering?.displayName;
+            } else if (
+              data.searchTutorOfferings[i + 1] &&
+              data?.searchTutorOfferings[i].offering?.displayName !==
+                data?.searchTutorOfferings[i + 1].offering?.displayName
+            ) {
+              arrSubject.push(data?.searchTutorOfferings[i]);
+            }
+          } else if (currentSubject === data?.searchTutorOfferings[i].offering?.displayName) {
+            const otherClass = data?.searchTutorOfferings[i].offering?.parentOffering?.displayName.substring(6, 8);
+            if (classes === 'Class') {
+              classes = `${classes} ${otherClass}`;
+            } else {
+              classes = `${classes}, ${otherClass}`;
+            }
+            if (data.searchTutorOfferings[i + 1]) {
+              if (currentSubject !== data?.searchTutorOfferings[i + 1].offering?.displayName) {
+                let obj = {};
+                obj = data?.searchTutorOfferings[i];
+                obj.offering.parentOffering.displayName = classes;
+                arrSubject.push(obj);
+                currentSubject = data?.searchTutorOfferings[i + 1].offering?.displayName;
+                classes = 'Class';
+              }
+            } else {
+              let obj = {};
+              obj = data?.searchTutorOfferings[i];
+              obj.offering.parentOffering.displayName = classes;
+              arrSubject.push(obj);
+            }
+          }
+        }
+        setSubjects(arrSubject);
       }
     },
   });
@@ -107,18 +151,17 @@ function SubjectList() {
           <IconButtonWrapper iconImage={getSubjectIcons(item.offering.displayName)} />
           <View style={{ marginLeft: RfW(16) }}>
             <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
-              {item?.offering?.displayName}
+              {`${item?.offering?.rootOffering?.displayName} | ${item?.offering?.parentOffering?.parentOffering?.displayName}`}
             </Text>
-            <Text
-              style={[
-                commonStyles.mediumPrimaryText,
-                { marginTop: RfH(5) },
-              ]}>{`${item?.offering?.parentOffering?.parentOffering?.displayName} | ${item?.offering?.parentOffering?.displayName}`}</Text>
+            <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
+              {`${item?.offering?.parentOffering?.displayName} | ${item?.offering?.displayName}`}
+            </Text>
           </View>
         </TouchableOpacity>
 
         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Switch value={item.active} onValueChange={() => markActiveInactive(item)} />
+          {/* <Switch value={item.active} onValueChange={() => markActiveInactive(item)} /> */}
+          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} />
         </View>
       </View>
       {item.stage === TutorOfferingStageEnum.PT_PENDING.label && (
