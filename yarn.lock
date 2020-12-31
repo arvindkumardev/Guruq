@@ -5309,7 +5309,7 @@ lodash._reinterpolate@^3.0.0:
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
   integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
 
-lodash.debounce@4.0.8:
+lodash.debounce@4.0.8, lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
@@ -6762,6 +6762,11 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
+qs@~6.9.1:
+  version "6.9.4"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
+  integrity sha512-A1kFqHekCTM7cz0udomYUoYNWjBebHm/5wzU/XqrBRBNWectVH0QIiN+NEcZ0Dte5hvzHwbr8+XQmguPhJ6WdQ==
+
 query-string@^6.13.6:
   version "6.13.7"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.13.7.tgz#af53802ff6ed56f3345f92d40a056f93681026ee"
@@ -6881,6 +6886,11 @@ react-native-device-info@^6.2.1:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-6.2.1.tgz#6b63faeef833d8959d636c0413ccd5066eada2bf"
   integrity sha512-+9Li07jD+7IiSIn9VVmb1YWYfJtgERVMsgO/hG+aUzsFD6uFklpM2TOEBlfKPWP/8J6s8MZgpGfA/Dl1WZrn2g==
 
+react-native-document-picker@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-4.2.0.tgz#2d6f560fd902c5f9034c287941a9505f037b6eeb"
+  integrity sha512-bZlQ3ooOO+2G0J0vSvcWWv1OojMwhEhiF5M7gCKp3LT/VPikZnmzIGgCkhcu8HexxWLuaGToSAQAUL2VcSo5oQ==
+
 react-native-drawer@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"
@@ -6934,10 +6944,24 @@ react-native-global-font@^1.0.2:
   dependencies:
     lodash.wrap "^4.1.1"
 
+react-native-google-places-autocomplete@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-google-places-autocomplete/-/react-native-google-places-autocomplete-2.1.2.tgz#1cf1462216d2bddfaa01a6db11077b8eac8d123b"
+  integrity sha512-daCLjXu2n5iIwfBWrfexF+ssCjhCnAboZvv+SKnsB+86zKlEq7TD4ERLq+XoNtt/JW5jaoBSk0SxATNKTrMqAA==
+  dependencies:
+    lodash.debounce "^4.0.8"
+    prop-types "^15.7.2"
+    qs "~6.9.1"
+
 react-native-gridview@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/react-native-gridview/-/react-native-gridview-0.1.2.tgz#324a13189f3e06b77311fd924b23d548dff3b040"
   integrity sha512-YtlbXEJ19SI2dbgv04r67PQcKEKJvHws+qT5z0ndbu8W2jRnVEhVjmNnaPTKDflsuva0GyjXTR0PN+KoHXnhYA==
+
+react-native-image-crop-picker@^0.35.2:
+  version "0.35.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.35.2.tgz#21e085e40cb5724e1e986b8eba59ef23df19598c"
+  integrity sha512-4nHAYwnemFJLzVJPl5dhNB+WQgNp41MLJjyYCypatMZl2GJD+EVXnu5eSUQE+UOpaIEhSVtqK5Y3OQ93hMhosQ==
 
 react-native-iphone-x-helper@^1.0.2, react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.1, react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"
@@ -7145,6 +7169,11 @@ react-tween-state@^0.1.5:
   dependencies:
     raf "^3.1.0"
     tween-functions "^1.0.1"
+
+react-uuid@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-uuid/-/react-uuid-1.0.2.tgz#c77cea91cf38eafb1aaa7910f92621b2ed91b969"
+  integrity sha512-5e0GM16uuQj9MdRJlZ0GdLC8LKMwpU9PIqYmF27s3fIV2z+rLyASTaiW4aKzSY4DyGanz+ImzsECkftwGWfAwA==
 
 react@16.14.0:
   version "16.14.0"

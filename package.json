@@ -49,12 +49,14 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-debugger": "^1.1.0",
     "react-native-device-info": "^6.2.1",
+    "react-native-document-picker": "^4.2.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-get-location": "^1.4.3",
     "react-native-gifted-chat": "^0.16.3",
     "react-native-global-font": "^1.0.2",
     "react-native-google-places-autocomplete": "^2.1.2",
     "react-native-gridview": "^0.1.2",
+    "react-native-image-crop-picker": "^0.35.2",
     "react-native-maps": "^0.27.1",
     "react-native-modal-datetime-picker": "^9.0.0",
     "react-native-progress-circle": "^2.1.0",
@@ -69,6 +71,7 @@
     "react-native-swiper": "^1.6.0",
     "react-native-webview": "^11.0.1",
     "react-navigation": "^4.4.2",
+    "react-uuid": "^1.0.2",
     "subscriptions-transport-ws": "^0.9.18"
   },
   "devDependencies": {

@@ -242,6 +242,11 @@ const Images = {
   filledStar: require('../assets/images/filledStar.png'),
   unFilledStar: require('../assets/images/unfilledStar.png'),
   ...SubjectIcons,
+  document: require('../assets/images/document.png'),
+  gallery: require('../assets/images/gallery.png'),
+  close: require('../assets/images/close.png'),
+  plusWhite: require('../assets/images/plus_white.png'),
+  deleteWhite: require('../assets/images/delete_white.png'),
 };
 
 export default Images;

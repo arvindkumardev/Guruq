@@ -301,6 +301,8 @@ PODS:
   - react-native-agora (3.2.1):
     - AgoraRtcEngine_iOS (= 3.2.1)
     - React
+  - react-native-document-picker (4.2.0):
+    - React-Core
   - react-native-maps (0.27.1):
     - React
   - react-native-netinfo (5.9.9):
@@ -397,10 +399,20 @@ PODS:
     - RNFBApp
   - RNGestureHandler (1.9.0):
     - React-Core
+  - RNImageCropPicker (0.35.2):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.35.2)
+    - TOCropViewController
+  - RNImageCropPicker/QBImagePickerController (0.35.2):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController
   - RNReanimated (1.13.2):
     - React-Core
   - RNScreens (2.16.1):
     - React-Core
+  - TOCropViewController (2.5.5)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -444,6 +456,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-agora (from `../node_modules/react-native-agora`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-razorpay (from `../node_modules/react-native-razorpay`)
@@ -470,6 +483,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -500,6 +514,7 @@ SPEC REPOS:
     - OpenSSL-Universal
     - PromisesObjC
     - razorpay-pod
+    - TOCropViewController
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -537,6 +552,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-agora:
     :path: "../node_modules/react-native-agora"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-netinfo:
@@ -589,6 +606,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -638,6 +657,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b56c03e61c0dd5f5801255f2160a815f4a53d451
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
   react-native-agora: 2ca7d0af0d06fff540aec80d12ca7eae55acf958
+  react-native-document-picker: 44ecae7103090b6789cca010f06f5205fd1cb66e
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-netinfo: 0212ce8604e88edf686f1481b925b17a42a52449
   react-native-razorpay: bb19c0aa50ee004ddb4b51615f07f3435aae4901
@@ -664,8 +684,10 @@ SPEC CHECKSUMS:
   RNFBApp: d5bc110403b55ba26ac441716259bd514d559cc5
   RNFBMessaging: b2f402097f6643e733586bcb6d5f65dec7a6bce1
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
+  RNImageCropPicker: 9e0bf18cf4184a846fed55747c8e622208b39947
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
+  TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
