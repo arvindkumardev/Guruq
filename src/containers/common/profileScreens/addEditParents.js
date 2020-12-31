@@ -1,7 +1,7 @@
 import { Alert, Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { Button, Input, Item, Picker } from 'native-base';
+import { Button, Input, Item, Label, Picker } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import {
@@ -70,7 +70,7 @@ function AddEditParents() {
       <ScreenHeader homeIcon label="Guardians Details" horizontalPadding={RfW(16)} lineVisible={false} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={{ height: RfH(44) }} />
-        <Text style={commonStyles.smallMutedText}>Guardian</Text>
+        <Text style={commonStyles.regularMutedText}>Guardian</Text>
         <View style={{ marginTop: RfH(16) }}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <TouchableWithoutFeedback onPress={() => setSelectedGuadian(ParentInfoType.PARENT.label)}>
@@ -95,20 +95,20 @@ function AddEditParents() {
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>First Name</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>First Name</Label>
             <Input value={firstName} onChangeText={(text) => setFirstName(text)} />
           </Item>
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>Last Name</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>Last Name</Label>
             <Input value={lastName} onChangeText={(text) => setLastName(text)} />
           </Item>
         </View>
         <View style={{ height: RfH(24) }} />
-        <Text style={commonStyles.smallMutedText}>Phone Number</Text>
+        <Text style={commonStyles.regularMutedText}>Phone Number</Text>
         <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
           <CustomMobileNumber
             value={mobileObj}
@@ -122,8 +122,8 @@ function AddEditParents() {
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>Email Id</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>Email Id</Label>
             <Input value={email} onChangeText={(text) => setEmail(text)} />
           </Item>
         </View>

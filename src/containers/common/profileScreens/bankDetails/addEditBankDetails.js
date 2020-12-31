@@ -1,6 +1,6 @@
-import { KeyboardAvoidingView, Text, View,ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Text, View, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Item } from 'native-base';
+import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
 import { useMutation } from '@apollo/client';
@@ -84,33 +84,33 @@ function AddEditBankDetails(props) {
         <ScreenHeader homeIcon label="Bank Details" horizontalPadding={RfW(16)} lineVisible={false} />
         <ScrollView contentContainerStyle={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(44) }} />
-          <Text style={commonStyles.smallMutedText}>A/C holder Name</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>A/C holder Name</Label>
             <Input value={accountHolder} onChangeText={(text) => setAccountHolder(text)} />
           </Item>
           <View style={{ height: RfH(24) }} />
           <View>
-            <Text style={commonStyles.smallMutedText}>Account number</Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Account number</Label>
               <Input value={accountNumber} onChangeText={(text) => setAccountNumber(text)} keyboardType="numeric" />
             </Item>
           </View>
           <View style={{ height: RfH(24) }} />
-          <Text style={commonStyles.smallMutedText}>IFSC Code</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>IFSC Code</Label>
             <Input value={ifscCode} onChangeText={(text) => setIfscCode(text)} />
           </Item>
           <View style={{ height: RfH(24) }} />
           <View>
-            <Text style={commonStyles.smallMutedText}>Bank Name</Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Bank Name</Label>
               <Input value={bankName} onChangeText={(text) => setBankName(text)} />
             </Item>
           </View>
           <View style={{ height: RfH(24) }} />
           <View>
-            <Text style={commonStyles.smallMutedText}>Branch Address</Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Branch Address</Label>
               <Input value={branchAddress} onChangeText={(text) => setBranchAddress(text)} />
             </Item>
           </View>

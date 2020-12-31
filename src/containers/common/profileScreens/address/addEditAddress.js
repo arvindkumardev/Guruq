@@ -2,7 +2,7 @@
 import { Alert, Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { Button, Input, Item } from 'native-base';
+import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
@@ -63,11 +63,11 @@ function AddEditAddress() {
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader homeIcon label="AddressListing" horizontalPadding={RfW(16)} lineVisible={false} />
+      <ScreenHeader homeIcon label="Address" horizontalPadding={RfW(16)} lineVisible={false} />
       <View style={{ height: RfH(24) }} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View>
-          <Text style={commonStyles.smallMutedText}>Set your location</Text>
+          <Text style={commonStyles.regularMutedText}>Set your location</Text>
           <View
             style={[
               commonStyles.horizontalChildrenView,
@@ -78,7 +78,7 @@ function AddEditAddress() {
                 placeholder="Search"
                 fetchDetails
                 onPress={(data, details = null) => {
-                  console.log("ddddd",data, details);
+                  console.log('ddddd', data, details);
                 }}
                 query={{
                   key: 'AIzaSyD8MaEzNhuejY2yBx6No7-TfkAvQ2X_wyk',
@@ -98,15 +98,15 @@ function AddEditAddress() {
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>House no/Building Name</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>House no/Building Name</Label>
             <Input value={street} onChangeText={(text) => setStreet(text)} style={commonStyles.regularPrimaryText} />
           </Item>
         </View>
         <View style={{ height: RfH(24) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>Area , Locality</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>Area , Locality</Label>
             <Input value={area} onChangeText={(text) => setArea(text)} style={commonStyles.regularPrimaryText} />
           </Item>
         </View>
@@ -114,14 +114,14 @@ function AddEditAddress() {
         <View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <View style={{ flex: 0.5, marginRight: RfW(16) }}>
-              <Text style={commonStyles.smallMutedText}>City</Text>
-              <Item>
+              <Item floatingLabel>
+                <Label>City</Label>
                 <Input value={city} onChangeText={(text) => setCity(text)} />
               </Item>
             </View>
             <View style={{ flex: 0.5, marfinLeft: RfW(16) }}>
-              <Text style={commonStyles.smallMutedText}>State</Text>
-              <Item>
+              <Item floatingLabel>
+                <Label>State</Label>
                 <Input value={state} onChangeText={(text) => setstate(text)} />
               </Item>
             </View>
@@ -130,14 +130,14 @@ function AddEditAddress() {
         <View style={{ height: RfH(24) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <View style={{ flex: 0.5, marginRight: RfW(16) }}>
-            <Text style={commonStyles.smallMutedText}>Pincode </Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Pincode</Label>
               <Input value={pincode} onChangeText={(text) => setPincode(text)} />
             </Item>
           </View>
           <View style={{ flex: 0.5, marfinLeft: RfW(16) }}>
-            <Text style={commonStyles.smallMutedText}>Country</Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Country</Label>
               <Input value={country} onChangeText={(text) => setCountry(text)} />
             </Item>
           </View>

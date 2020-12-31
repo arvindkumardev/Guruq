@@ -1,7 +1,7 @@
 import { Alert, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { Button, Input, Item, Picker } from 'native-base';
+import { Button, Input, Item, Label, Picker } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { CustomCheckBox, CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../../components';
 import { studentDetails, tutorDetails } from '../../../../apollo/cache';
@@ -50,10 +50,10 @@ function AddEditEducation() {
       endDate,
       isCurrent,
       student: {
-        id: 27716,
+        id: studentInfo.id,
       },
       tutor: {
-        id: 27716,
+        id: tutorInfo.id,
       },
     };
     if (educationType === 0) {
@@ -79,8 +79,8 @@ function AddEditEducation() {
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={{ height: RfH(44) }} />
         <View>
-          <Text style={commonStyles.smallMutedText}>Name of School/Institute</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>Name of School/Institute</Label>
             <Input
               value={schoolName}
               onChangeText={(text) => setSchoolName(text)}
@@ -98,7 +98,8 @@ function AddEditEducation() {
           </TouchableWithoutFeedback>
           <TouchableOpacity
             onPress={() => setEducationType(1)}
-            style={[commonStyles.horizontalChildrenView, { marginLeft: RfW(20) }]} activeOpacity={0.8}>
+            style={[commonStyles.horizontalChildrenView, { marginLeft: RfW(20) }]}
+            activeOpacity={0.8}>
             <CustomRadioButton submitFunction={() => setEducationType(1)} enabled={educationType === 1} />
             <Text style={{ marginLeft: RfW(8) }}>Higher Education</Text>
           </TouchableOpacity>
@@ -106,7 +107,7 @@ function AddEditEducation() {
         {educationType === 0 ? (
           <View>
             <View style={{ height: RfH(24) }} />
-            <Text style={commonStyles.smallMutedText}>Board</Text>
+            <Text style={commonStyles.regularMutedText}>Board</Text>
             <View>
               <Item style={commonStyles.horizontalChildrenSpaceView}>
                 <Picker
@@ -132,7 +133,7 @@ function AddEditEducation() {
             </View>
             <View style={{ height: RfH(24) }} />
             <View>
-              <Text style={commonStyles.smallMutedText}>Class</Text>
+              <Text style={commonStyles.regularMutedText}>Class</Text>
               <Item style={commonStyles.horizontalChildrenSpaceView}>
                 <Picker
                   iosHeader="Select Class"
@@ -166,7 +167,7 @@ function AddEditEducation() {
             {selectedClass > 10 && (
               <View>
                 <View style={{ height: RfH(24) }} />
-                <Text style={commonStyles.smallMutedText}>High School Stream</Text>
+                <Text style={commonStyles.regularMutedText}>High School Stream</Text>
                 <View>
                   <Item style={commonStyles.horizontalChildrenSpaceView}>
                     <Picker
@@ -195,7 +196,7 @@ function AddEditEducation() {
         ) : (
           <View>
             <View style={{ height: RfH(24) }} />
-            <Text style={commonStyles.smallMutedText}>Degree</Text>
+            <Text style={commonStyles.regularMutedText}>Degree</Text>
             <View>
               <Item style={commonStyles.horizontalChildrenSpaceView}>
                 <Picker
@@ -221,7 +222,7 @@ function AddEditEducation() {
             </View>
             <View style={{ height: RfH(24) }} />
             <View>
-              <Text style={commonStyles.smallMutedText}>Field of Study</Text>
+              <Text style={commonStyles.regularMutedText}>Field of Study</Text>
               <Item>
                 <Input value={fieldOfStudy} onChangeText={(text) => setFieldOfStudy(text)} />
               </Item>
@@ -232,7 +233,7 @@ function AddEditEducation() {
         <View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <View style={{ flex: 0.5, marginRight: RfW(16) }}>
-              <Text style={commonStyles.smallMutedText}>Start Date</Text>
+              <Text style={commonStyles.regularMutedText}>Start Date</Text>
               <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                 <CustomDatePicker
                   value={startDate}
@@ -246,7 +247,7 @@ function AddEditEducation() {
             </View>
             {!isCurrent && (
               <View style={{ flex: 0.5, marginLeft: RfW(16) }}>
-                <Text style={commonStyles.smallMutedText}>End Date</Text>
+                <Text style={commonStyles.regularMutedText}>End Date</Text>
                 <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                   <CustomDatePicker
                     value={endDate}

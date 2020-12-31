@@ -38,6 +38,7 @@ import AddEditAddress from '../containers/common/profileScreens/address/addEditA
 import AddressMapView from '../containers/common/profileScreens/addressMapView';
 import EducationListing from '../containers/common/profileScreens/education/educationListing';
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
+import PersonalDetails from '../containers/common/profileScreens/personalDetails';
 
 const Stack = createStackNavigator();
 
@@ -153,10 +154,19 @@ const AppStack = (props) => {
         component={AddressMapView}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.EDUCATION} component={EducationListing} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.EDUCATION}
+        component={EducationListing}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_EDUCATION}
         component={AddEditEducation}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.PERSONAL_DETAILS}
+        component={PersonalDetails}
         options={{ headerShown: false }}
       />
     </>

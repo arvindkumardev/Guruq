@@ -128,7 +128,11 @@ export const getTutorRoutes = () => {
         component={AddEditExperience}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.BANK_DETAILS} component={BankDetailsList} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.BANK_DETAILS}
+        component={BankDetailsList}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_BANK_DETAILS}
         component={AddEditBankDetails}
