@@ -120,7 +120,7 @@ function Profile(props) {
     } else if (item.name === 'Education') {
       navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Parents Details') {
-      navigation.navigate(NavigationRouteNames.PARENTS);
+      navigation.navigate(NavigationRouteNames.PARENTS_LIST);
     } else if (item.name === 'Experience') {
       navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/student/embed/experience`,

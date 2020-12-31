@@ -1,10 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const DELETE_BANK_DETAIL = gql`
-  mutation DeleteExperienceDetail($id: Int!) {
-    deleteExperienceDetail(id: $id) {
-      id
-    }
+  mutation DeleteBankDetails($id: Int!) {
+    deleteBankDetails(id: $id)
   }
 `;
 

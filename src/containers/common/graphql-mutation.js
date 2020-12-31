@@ -291,10 +291,4 @@ export const DELETE_TUTOR_DOCUMENT_DETAILS = gql`
   }
 `;
 
-export const ADD_UPDATE_GUARDIAN_DETAILS = gql`
-  mutation AddUpdateStudentParentInfo($guardianInfoDto: CreateUpdateGuardianInfoDto!) {
-    addUpdateStudentParentInfo(guardianInfoDto: $guardianInfoDto) {
-      id
-    }
-  }
-`;
+

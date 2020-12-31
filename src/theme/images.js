@@ -241,6 +241,7 @@ const Images = {
   referAndEarn: require('../assets/images/referAndEarn.png'),
   filledStar: require('../assets/images/filledStar.png'),
   unFilledStar: require('../assets/images/unfilledStar.png'),
+  award: require('../assets/images/awards.png'),
   ...SubjectIcons,
 };
 
