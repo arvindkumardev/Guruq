@@ -72,7 +72,7 @@ function PytnDetail(props) {
   }, [studentPytnId]);
 
   const removePytn = (item) => {
-    alertBox('Do you really want to remove the request', '', {
+    alertBox('Are you sure you want to remove this PYTN request', '', {
       positiveText: 'Delete PYTN',
       onPositiveClick: () => {
         deletePYTN({ variables: { studentPytnId: item.id } });
