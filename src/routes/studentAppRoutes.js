@@ -34,6 +34,9 @@ import EducationListing from '../containers/common/profileScreens/education/educ
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
 import ParentListing from '../containers/common/profileScreens/parentsDetail/parentListing';
 import AddEditParents from '../containers/common/profileScreens/parentsDetail/addEditParents';
+import BookingDetails from '../containers/student/profile/purchasedHistory/bookingDetails';
+import ViewBookingDetails from '../containers/student/profile/purchasedHistory/viewBookingDetails';
+import Refund from '../containers/student/profile/purchasedHistory/refund';
 
 const Stack = createStackNavigator();
 

@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Item } from 'native-base';
+import { Button, Input, Item, Label } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
@@ -83,21 +83,21 @@ function AddEditAward(props) {
         <ScreenHeader homeIcon label="Experience" horizontalPadding={RfW(16)} lineVisible={false} />
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(44) }} />
-          <Text style={commonStyles.smallMutedText}>Title</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>Title</Label>
             <Input value={title} onChangeText={(text) => setTitle(text)} />
           </Item>
           <View style={{ height: RfH(24) }} />
           <View>
-            <Text style={commonStyles.smallMutedText}>Issuer</Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Issuer</Label>
               <Input value={issuer} onChangeText={(text) => setIssuer(text)} />
             </Item>
           </View>
           <View style={{ height: RfH(24) }} />
           <View>
-            <Text style={commonStyles.smallMutedText}>Description</Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Description</Label>
               <Input value={description} onChangeText={(text) => setDescription(text)} />
             </Item>
           </View>
@@ -105,7 +105,7 @@ function AddEditAward(props) {
           <View>
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <View style={{ flex: 1 }}>
-                <Text style={commonStyles.smallMutedText}>Issue Date</Text>
+                <Text style={commonStyles.regularMutedText}>Issue Date</Text>
                 <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                   <CustomDatePicker value={date} onChangeHandler={(d) => setDate(d)} maximumDate={new Date()} />
                 </View>
