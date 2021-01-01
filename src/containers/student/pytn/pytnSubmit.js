@@ -93,7 +93,7 @@ function PytnSubmit(props) {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <Loader isLoading={pytnLoading} />
-      <ScreenHeader homeIcon label="Post your tution needs" horizontalPadding={RfW(16)} />
+      <ScreenHeader homeIcon label="Post Your Tuition Need" horizontalPadding={RfW(16)} />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'position' })} enabled>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -115,7 +115,7 @@ function PytnSubmit(props) {
               })}
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>Mode of Tution</Text>
+          <Text style={commonStyles.headingPrimaryText}>Mode of Tuition</Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           <View>
             <TouchableWithoutFeedback onPress={() => setIsOnline(true)}>
@@ -137,12 +137,12 @@ function PytnSubmit(props) {
                   enabled={!isOnline}
                   submitFunction={() => setIsOnline(false)}
                 />
-                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Home Tution</Text>
+                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Home Tuition</Text>
               </View>
             </TouchableWithoutFeedback>
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>Type of Tution</Text>
+          <Text style={commonStyles.headingPrimaryText}>Type of Tuition</Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           <View>
             <TouchableWithoutFeedback onPress={() => setIsIndividual(true)}>

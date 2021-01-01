@@ -338,3 +338,7 @@ export const createPayload = async (user, token) => {
   };
   return Promise.resolve(payload);
 };
+
+export const getFullName = (contactDetail) => {
+  return contactDetail ? `${contactDetail?.firstName} ${contactDetail?.lastName}` : '';
+};

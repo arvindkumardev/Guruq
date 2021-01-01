@@ -158,7 +158,7 @@ function compareTutors() {
           </Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginTop: RfH(6) }]} />
-        <Text style={styles.infoCategoryText}>Mode of Tution</Text>
+        <Text style={styles.infoCategoryText}>Mode of Tuition</Text>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12) }]}>
           <View style={commonStyles.verticallyStretchedItemsView}>
             <View style={commonStyles.horizontalChildrenView}>
