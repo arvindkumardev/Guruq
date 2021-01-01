@@ -171,7 +171,7 @@ const ClassModeSelectModal = (props) => {
                 {selectedSubject.homeTution && (
                   <View style={{ flexDirection: 'row', marginLeft: RfW(16),alignItems:'center' }}>
                     <CustomRadioButton enabled={!isOnlineClassMode} submitFunction={() => changeClassMode(false)} />
-                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Home Tuition</Text>
+                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Offline</Text>
                   </View>
                 )}
               </View>

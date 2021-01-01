@@ -143,7 +143,7 @@ function PytnRequests() {
                 {item.groupSize > 1 ? 'Group' : 'Individual'} Class
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online Class' : 'Home Tuition'}
+                {item.onlineClass ? 'Online Class' : 'Offline Class'}
               </Text>
             </View>
           </View>

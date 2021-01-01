@@ -449,7 +449,7 @@ function TutorDetails(props) {
           iconImage={selectedSubject?.homeTution ? Images.home_tuition_filled : Images.home_tuition}
           styling={{ marginHorizontal: RfW(16) }}
         />
-        <Text style={styles.classMeta}>Home Tuition</Text>
+        <Text style={styles.classMeta}>Offline</Text>
       </View>
     </View>
   );
