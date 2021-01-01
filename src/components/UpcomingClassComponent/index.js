@@ -5,7 +5,7 @@ import { Icon } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useReactiveVar } from '@apollo/client';
 import { Colors } from '../../theme';
-import { printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import { TutorImageComponent } from '../index';
 import Fonts from '../../theme/fonts';
 import NavigationRouteNames from '../../routes/screenNames';
@@ -50,8 +50,8 @@ const UpcomingClassComponent = (props) => {
             }}>
             <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
               {isStudent
-                ? `${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName} `
-                : `${classDetails?.offering?.displayName} for ${classDetails?.students[0]?.contactDetail?.firstName} ${classDetails?.students[0]?.contactDetail?.lastName} `}
+                ? `${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)} `
+                : `${classDetails?.offering?.displayName} for ${getFullName(classDetails?.students[0]?.contactDetail)}`}
             </Text>
             <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
               {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName} `}

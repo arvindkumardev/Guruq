@@ -10,7 +10,7 @@ import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader, TutorImage
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { RfH, RfW } from '../../utils/helpers';
+import { getFullName, RfH, RfW } from '../../utils/helpers';
 import { SCHEDULE_CLASS } from '../student/class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
 import { studentDetails, userType } from '../../apollo/cache';
@@ -152,9 +152,7 @@ function ScheduleClass(props) {
                 fontFamily: Fonts.semiBold,
                 marginTop: RfH(2),
               }}>
-              {isStudent
-                ? `${classData.tutor.contactDetail.firstName} ${classData.tutor.contactDetail.lastName}`
-                : `${classData?.createdBy.firstName} ${classData?.createdBy.lastName}`}
+              {isStudent ? `${getFullName(classData?.tutor?.contactDetail)}` : `${getFullName(classData?.createdBy)}`}
             </Text>
             {isStudent && (
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>

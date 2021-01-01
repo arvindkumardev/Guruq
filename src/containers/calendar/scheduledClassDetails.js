@@ -15,7 +15,7 @@ import NavigationRouteNames from '../../routes/screenNames';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { alertBox, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import { RE_SCHEDULE_CLASS } from '../student/booking.mutation';
 import { GET_CLASS_DETAILS } from '../student/class.query';
 import styles from '../student/tutorListing/styles';
@@ -138,9 +138,7 @@ function ScheduledClassDetails(props) {
       <View style={[commonStyles.horizontalChildrenView]}>
         <TutorImageComponent tutor={item} height={36} width={36} fontSize={16} styling={{ borderRadius: RfH(36) }} />
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.headingPrimaryText}>
-            {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
-          </Text>
+          <Text style={commonStyles.headingPrimaryText}>{getFullName(item?.contactDetail)}</Text>
           <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
         </View>
       </View>
@@ -192,7 +190,9 @@ function ScheduledClassDetails(props) {
 
               <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
                 <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                  {`${classData?.classEntity?.offering?.displayName} by ${classData?.classEntity?.tutor?.contactDetail?.firstName} ${classData?.classEntity?.tutor?.contactDetail?.lastName}`}
+                  {`${classData?.classEntity?.offering?.displayName} by ${getFullName(
+                    classData?.classEntity?.tutor?.contactDetail
+                  )}`}
                 </Text>
                 <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                   {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
@@ -347,8 +347,7 @@ function ScheduledClassDetails(props) {
             />
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text style={commonStyles.headingPrimaryText}>
-                {classData?.classEntity?.tutor?.contactDetail?.firstName}{' '}
-                {classData?.classEntity?.tutor?.contactDetail?.lastName}
+                {getFullName(classData?.classEntity?.tutor?.contactDetail)}
               </Text>
               <Text style={commonStyles.mediumMutedText}>T{classData?.classEntity?.tutor?.id}</Text>
             </View>
