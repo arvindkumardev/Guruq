@@ -41,10 +41,10 @@ function PytnSubmit(props) {
   });
 
   const submitPYTN = () => {
-    if (minPrice === 0 || maxPrice === 0) {
+    if ( maxPrice === 0) {
       alertBox('Please provide minimum and maximum price');
-    } else if (parseFloat(maxPrice) < parseFloat(minPrice)) {
-      alertBox('Maximum price should be greater than or equal to minimum price');
+    // } else if (parseFloat(maxPrice) < parseFloat(minPrice)) {
+    //   alertBox('Maximum price should be greater than or equal to minimum price');
     } else {
       const offeringArray = [];
       if (!isEmpty(subjectData?.subject)) {
@@ -62,7 +62,7 @@ function PytnSubmit(props) {
             count: noOfClasses,
             groupSize: noOfGroupClasses,
             onlineClass: isOnline,
-            minPrice: parseFloat(minPrice),
+            minPrice: parseFloat(maxPrice),
             maxPrice: parseFloat(maxPrice),
           },
         },

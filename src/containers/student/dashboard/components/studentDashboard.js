@@ -415,7 +415,7 @@ function StudentDashboard(props) {
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => setStudentOfferingModalVisible(true)}>
             {selectedOffering && (
-              <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4) }}>
+              <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4), width:"75%" }}>
                 {selectedOffering?.parentOffering?.displayName} - {selectedOffering?.displayName}
               </Text>
             )}

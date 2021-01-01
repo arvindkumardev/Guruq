@@ -70,6 +70,7 @@ const HELP_OPTIONS = [
 function Profile(props) {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
+  const studentInfo = useReactiveVar(studentDetails);
   const { changeTab } = props;
 
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
@@ -83,25 +84,24 @@ function Profile(props) {
   const client = initializeApollo();
 
   const logout = () => {
-    clearAllLocalStorage().then(() => {
-      client.resetStore().then(() => {
-        removeToken().then(() => {
-          // // set in apollo cache
-          isTokenLoading(true);
-          isLoggedIn(false);
-          isSplashScreenVisible(true);
-          userType('');
-          networkConnectivityError(false);
-          userDetails({});
-          studentDetails({});
-          tutorDetails({});
-          userLocation({});
-          offeringsMasterData([]);
-          interestingOfferingData([]);
-          notificationPayload({});
-        });
-      });
+    removeToken().then(() => {
+      isTokenLoading(true);
+      isLoggedIn(false);
+      isSplashScreenVisible(true);
+      userType('');
+      networkConnectivityError(false);
+      userDetails({});
+      studentDetails({});
+      tutorDetails({});
+      userLocation({});
+      offeringsMasterData([]);
+      interestingOfferingData([]);
+      notificationPayload({});
     });
+
+    clearAllLocalStorage(); // .then(() => {
+    client.resetStore(); // .then(() => {});
+    // });
   };
 
   const logoutConfirmation = () => {
@@ -264,7 +264,7 @@ function Profile(props) {
                 <Text style={styles.userMobDetails}>
                   +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
                 </Text>
-                <Text style={styles.userMobDetails}>S{userInfo?.type === UserTypeEnum.STUDENT}</Text>
+                <Text style={styles.userMobDetails}>S-{studentInfo?.id}</Text>
               </View>
             </View>
           </View>

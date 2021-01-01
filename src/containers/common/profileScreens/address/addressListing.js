@@ -4,10 +4,11 @@ import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
+import Badge from '@react-navigation/bottom-tabs/src/views/Badge';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../../../components';
 import { userType } from '../../../../apollo/cache';
 import commonStyles from '../../../../theme/styles';
-import { Colors, Images } from '../../../../theme';
+import { Colors, Fonts, Images } from '../../../../theme';
 import { alertBox, RfH, RfW } from '../../../../utils/helpers';
 import routeNames from '../../../../routes/screenNames';
 import { GET_STUDENT_DETAILS } from '../../graphql-query';
@@ -114,23 +115,49 @@ function AddressListing() {
   const renderAddress = (item) => (
     <View>
       <View style={commonStyles.horizontalChildrenStartView}>
-        <IconButtonWrapper iconImage={Images.home} iconWidth={RfW(16)} iconHeight={RfH(16)} imageResizeMode="contain" styling={{marginTop:RfH(5)}} />
-        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.regularPrimaryText}>{item.type}</Text>
-          <Text style={commonStyles.mediumMutedText}>{`${item.street}, ${item.subArea}`}</Text>
-          <Text style={commonStyles.mediumMutedText}>{item.city}</Text>
-          <Text style={commonStyles.mediumMutedText}>{`${item.State}, ${item.country}`}</Text>
+        <IconButtonWrapper
+          iconImage={Images.home}
+          iconWidth={RfW(16)}
+          iconHeight={RfH(16)}
+          imageResizeMode="contain"
+          styling={{ marginTop: RfH(5) }}
+        />
+        <View style={commonStyles.verticallyStretchedItemsView}>
+          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+            <View style={{ alignSelf: 'flex-start' }}>
+              <Text
+                style={[
+                  commonStyles.smallPrimaryText,
+                  {
+                    backgroundColor: Colors.lightPurple,
+                    paddingHorizontal: 4,
+                    fontFamily: Fonts.semiBold,
+                  },
+                ]}>
+                {item.type}
+              </Text>
+            </View>
+
+            <Text style={commonStyles.mediumPrimaryText}>
+              {item.city}, {item.state}, {item.country}
+            </Text>
+            {/* <Text style={commonStyles.mediumMutedText}>{`${item.street}, ${item.subArea}`}</Text> */}
+            <Text style={commonStyles.mediumMutedText}>{item.fullAddress}</Text>
+            {/* <Text style={commonStyles.mediumMutedText}>{`${item.State}, ${item.country}`}</Text> */}
+          </View>
+
+          <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>
+            <TouchableWithoutFeedback onPress={handleAddEditAddress}>
+              <Text style={{ color: Colors.orangeRed }}>EDIT</Text>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
+              <Text style={{ color: Colors.orangeRed, marginLeft: RfW(16) }}>DELETE</Text>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
       </View>
-      <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-        <TouchableWithoutFeedback onPress={handleAddEditAddress}>
-          <Text style={{ color: Colors.orange }}>Edit</Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
-          <Text style={{ color: Colors.orange }}>Delete</Text>
-        </TouchableWithoutFeedback>
-      </View>
-      <View style={commonStyles.lineSeparator} />
+
+      <View style={[commonStyles.lineSeparator, { marginBottom: RfH(16) }]} />
     </View>
   );
 

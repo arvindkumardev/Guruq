@@ -143,7 +143,7 @@ function PytnRequests() {
                 {item.groupSize > 1 ? 'Group' : 'Individual'} Class
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online Class' : 'Offline Class'}
+                {item.onlineClass ? 'Online' : 'Offline'} Class
               </Text>
             </View>
           </View>
@@ -190,7 +190,7 @@ function PytnRequests() {
         behavior={Platform.select({ android: '', ios: 'padding' })}
         // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
         enabled>
-        <ScreenHeader label="Student Requests" homeIcon horizontalPadding={RfW(16)} />
+        <ScreenHeader label="PYTN Student Requests" homeIcon horizontalPadding={RfW(16)} />
         <ScrollView>
           <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
             <FlatList

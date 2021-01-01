@@ -84,24 +84,24 @@ function Profile(props) {
   const client = initializeApollo();
 
   const logout = () => {
-    clearAllLocalStorage().then(() => {
-      client.resetStore().then(() => {
-        removeToken().then(() => {
-          isTokenLoading(true);
-          isLoggedIn(false);
-          isSplashScreenVisible(true);
-          userType('');
-          networkConnectivityError(false);
-          userDetails({});
-          studentDetails({});
-          tutorDetails({});
-          userLocation({});
-          offeringsMasterData([]);
-          interestingOfferingData([]);
-          notificationPayload({});
-        });
-      });
+    removeToken().then(() => {
+      isTokenLoading(true);
+      isLoggedIn(false);
+      isSplashScreenVisible(true);
+      userType('');
+      networkConnectivityError(false);
+      userDetails({});
+      studentDetails({});
+      tutorDetails({});
+      userLocation({});
+      offeringsMasterData([]);
+      interestingOfferingData([]);
+      notificationPayload({});
     });
+
+    clearAllLocalStorage(); // .then(() => {
+    client.resetStore(); // .then(() => {});
+    // });
   };
 
   const logoutConfirmation = () => {
