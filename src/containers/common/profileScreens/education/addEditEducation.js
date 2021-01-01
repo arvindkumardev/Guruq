@@ -206,18 +206,18 @@ function AddEditEducation() {
                   placeholderStyle={{ fontSize: 15 }}
                   selectedValue={selectedClass}
                   onValueChange={(value) => setSelectedClass(value)}>
-                  <Picker.Item label="1" value="1" key="1" />
-                  <Picker.Item label="2" value="2" key="2" />
-                  <Picker.Item label="3" value="3" key="3" />
-                  <Picker.Item label="4" value="4" key="4" />
-                  <Picker.Item label="5" value="5" key="5" />
-                  <Picker.Item label="6" value="6" key="6" />
-                  <Picker.Item label="7" value="7" key="7" />
-                  <Picker.Item label="8" value="8" key="8" />
-                  <Picker.Item label="9" value="9" key="9" />
-                  <Picker.Item label="10" value="10" key="10" />
-                  <Picker.Item label="11" value="11" key="11" />
-                  <Picker.Item label="12" value="12" key="12" />
+                  <Picker.Item label="Class 1" value="1" key="1" />
+                  <Picker.Item label="Class 2" value="2" key="2" />
+                  <Picker.Item label="Class 3" value="3" key="3" />
+                  <Picker.Item label="Class 4" value="4" key="4" />
+                  <Picker.Item label="Class 5" value="5" key="5" />
+                  <Picker.Item label="Class 6" value="6" key="6" />
+                  <Picker.Item label="Class 7" value="7" key="7" />
+                  <Picker.Item label="Class 8" value="8" key="8" />
+                  <Picker.Item label="Class 9" value="9" key="9" />
+                  <Picker.Item label="Class 10" value="10" key="10" />
+                  <Picker.Item label="Class 11" value="11" key="11" />
+                  <Picker.Item label="Class 12" value="12" key="12" />
                 </Picker>
                 <IconButtonWrapper
                   styling={{ alignSelf: 'flex-end' }}

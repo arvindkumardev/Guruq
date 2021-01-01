@@ -65,3 +65,5 @@ export const STUDY_AREA_LEVELS = {
     { level: 2, name: 'level', label: 'Language Level' },
   ],
 };
+
+export const GOOGLE_API_KEY = 'AIzaSyD8MaEzNhuejY2yBx6No7-TfkAvQ2X_wyk';

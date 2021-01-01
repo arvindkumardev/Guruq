@@ -6,7 +6,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import {removeToken, RfH, RfW, storeData} from '../../../utils/helpers';
+import { removeToken, RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';

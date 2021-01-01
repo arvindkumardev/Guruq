@@ -9,8 +9,8 @@ export const CREATE_STUDENT_PYTN = gql`
 `;
 
 export const DELETE_STUDENT_PYTN = gql`
-  mutation DeleteStudentPYTN($studentPytnId: Int!) {
-    deleteStudentPYTN(studentPytnId: $studentPytnId) {
+  mutation DeleteStudentPYTN($id: Int!) {
+    deleteStudentPYTN(id: $id) {
       id
     }
   }

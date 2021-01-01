@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const DELETE_PARENT_INFO= gql`
+export const DELETE_PARENT_INFO = gql`
   mutation DeleteStudentParentInfo($id: Int!) {
     deleteStudentParentInfo(id: $id)
   }
