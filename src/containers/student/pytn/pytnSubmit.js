@@ -192,7 +192,7 @@ function PytnSubmit(props) {
             </View>
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>No of Classes</Text>
+          <Text style={commonStyles.headingPrimaryText}>No of Classes Required</Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           <View>
             <View style={styles.bookingSelectorParent}>
@@ -212,17 +212,17 @@ function PytnSubmit(props) {
             </View>
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>Maximum price/ hour willing to pay </Text>
+          <Text style={commonStyles.headingPrimaryText}>Maximum price/ hour you are willing to pay </Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(10) }]} />
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Item floatingLabel style={{ flex: 0.48 }}>
-              <Input
-                placeholder="Min Price"
-                value={minPrice}
-                onChangeText={(text) => setMinPrice(text)}
-                keyboardType="numeric"
-              />
-            </Item>
+            {/*<Item floatingLabel style={{ flex: 0.48 }}>*/}
+            {/*  <Input*/}
+            {/*    placeholder="Min Price"*/}
+            {/*    value={minPrice}*/}
+            {/*    onChangeText={(text) => setMinPrice(text)}*/}
+            {/*    keyboardType="numeric"*/}
+            {/*  />*/}
+            {/*</Item>*/}
             <Item floatingLabel style={{ flex: 0.48, marginLeft: RfW(8) }}>
               <Input
                 placeholder="Max Price"
