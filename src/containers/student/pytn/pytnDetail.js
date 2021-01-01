@@ -16,6 +16,8 @@ import { GET_ACCEPTED_TUTOR_NEED } from './pytn.query';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
 import NavigationRouteNames from '../../../routes/screenNames';
 
+lea;
+
 function PytnDetail(props) {
   const { route } = props;
 
@@ -71,7 +73,7 @@ function PytnDetail(props) {
 
   const removePytn = (item) => {
     alertBox('Do you really want to remove the request', '', {
-      positiveText: 'Yes',
+      positiveText: 'Delete PYTN',
       onPositiveClick: () => {
         deletePYTN({ variables: { studentPytnId: item.id } });
       },
