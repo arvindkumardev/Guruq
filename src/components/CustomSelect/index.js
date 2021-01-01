@@ -30,7 +30,7 @@ function CustomSelect(props) {
         useNativeAndroidPickerStyle={false}
         style={{
           viewContainer: { ...containerStyle },
-          placeholder: { ...styles.inputStyle, color: Colors.lightGrey },
+          placeholder: { ...styles.inputStyle, color: Colors.black },
           done: { color: Colors.brandBlue },
           inputIOS: { ...styles.inputStyle },
           inputAndroid: { ...styles.inputStyle },

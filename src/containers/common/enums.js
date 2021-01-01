@@ -27,3 +27,20 @@ export const ParentInfoType = {
   PARENT: { value: 1, label: 'PARENT' },
   GUARDIAN: { value: 2, label: 'GUARDIAN' },
 };
+
+export const HighSchoolStreamEnum = {
+  SCIENCE: { value: 'Science Stream', label: 'Science Stream' },
+  COMMERCE: { value: 'Commerce Stream', label: 'Commerce Stream' },
+  ARTS: { value: 'Art / Humanities  Stream', label: 'Art / Humanities  Stream' },
+};
+
+export const DegreeLevelEnum = {
+  SECONDARY: { value: 1, label: 'SECONDARY' },
+  HIGHER_SECONDARY: { value: 2, label: 'HIGHER_SECONDARY' },
+  DIPLOMA: { value: 3, label: 'DIPLOMA' },
+  BACHELORS: { value: 4, label: 'BACHELORS' },
+  PG_DIPLOMA: { value: 5, label: 'PG_DIPLOMA' },
+  MASTERS: { value: 6, label: 'MASTERS' },
+  DOCTORAL: { value: 7, label: 'DOCTORAL' },
+  OTHER: { value: 8, label: 'OTHER' },
+};

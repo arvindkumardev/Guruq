@@ -3,29 +3,55 @@ import React, { useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Label, Picker } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { CustomCheckBox, CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../../components';
-import { studentDetails, tutorDetails } from '../../../../apollo/cache';
+import { isEmpty } from 'lodash';
+import {
+  CustomCheckBox,
+  CustomRadioButton,
+  CustomSelect,
+  IconButtonWrapper,
+  ScreenHeader,
+} from '../../../../components';
+import { offeringsMasterData, studentDetails, tutorDetails, userType } from '../../../../apollo/cache';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, RfH, RfW, startOfDay } from '../../../../utils/helpers';
 import CustomDatePicker from '../../../../components/CustomDatePicker';
 import { ADD_UPDATE_EDUCATION_DETAILS } from './education.mutation';
+import { SCHOOL_EDUCATION } from '../../../../utils/constants';
+import { DegreeLevelEnum, HighSchoolStreamEnum } from '../../enums';
+import { UserTypeEnum } from '../../../../common/userType.enum';
 
 function AddEditEducation() {
   const navigation = useNavigation();
+  const userTypeVal = useReactiveVar(userType);
+  const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
   const studentInfo = useReactiveVar(studentDetails);
   const tutorInfo = useReactiveVar(tutorDetails);
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
+
+  const schoolEducation = offeringMasterData.find((s) => s.level === 0 && s.name === SCHOOL_EDUCATION);
+  const boards = offeringMasterData.filter((s) => s?.parentOffering?.id === schoolEducation?.id);
+
+  const degreeData = [];
+  Object.keys(DegreeLevelEnum).forEach(function (key) {
+    degreeData.push({ value: DegreeLevelEnum[key], label: key });
+  });
+
+  const highSchoolStreams = [];
+  Object.keys(HighSchoolStreamEnum).forEach(function (key) {
+    highSchoolStreams.push({ value: HighSchoolStreamEnum[key], label: key });
+  });
 
   const [schoolName, setSchoolName] = useState('');
-  const [selectedBoard, setSelectedBoard] = useState('CBSE');
-  const [selectedDegree, setSelectedDegree] = useState('B.Tech');
-  const [selectedClass, setSelectedClass] = useState('1');
-  const [selectedStream, setSelectedStream] = useState('Commerce');
+  const [selectedBoard, setSelectedBoard] = useState({});
+  const [selectedDegree, setSelectedDegree] = useState({});
+  const [selectedClass, setSelectedClass] = useState({});
+  const [selectedStream, setSelectedStream] = useState({});
   const [fieldOfStudy, setFieldOfStudy] = useState('');
   const [isCurrent, setIsCurrent] = useState(false);
   const [educationType, setEducationType] = useState(0);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -36,41 +62,78 @@ function AddEditEducation() {
     },
     onCompleted: (data) => {
       if (data) {
-        Alert.alert('Details updated!');
+        alertBox('Education details saved successfully!', '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => navigation.goBack(),
+        });
       }
     },
   });
 
-  const onSavingEducation = () => {
-    const dto = {
-      school: {
-        name: schoolName,
-      },
-      startDate,
-      endDate,
-      isCurrent,
-      student: {
-        id: studentInfo.id,
-      },
-      tutor: {
-        id: tutorInfo.id,
-      },
-    };
-    if (educationType === 0) {
-      dto.board = selectedBoard;
-      dto.grade = selectedClass;
-      if (selectedClass > 10) {
-        dto.subjects = selectedStream;
-      }
-    } else if (educationType === 1) {
-      dto.degree.name = selectedDegree;
-      dto.fieldOfStudy = fieldOfStudy;
+  const checkValues = () => {
+    if (isEmpty(schoolName)) {
+      alertBox('Please provide the school/institute name');
+    } else if (educationType === 0 && isEmpty(selectedBoard)) {
+      alertBox('Please select the board');
+    } else if (educationType === 0 && isEmpty(selectedClass)) {
+      alertBox('Please select the class');
+    } else if (
+      educationType === 0 &&
+      (selectedClass.name === 'Class 11' || selectedClass.name === 'Class 12') &&
+      isEmpty(selectedStream)
+    ) {
+      alertBox('Please select the stream');
+    } else if (educationType === 1 && isEmpty(selectedDegree)) {
+      alertBox('Please select the degree');
+    } else if (educationType === 1 && isEmpty(fieldOfStudy)) {
+      alertBox('Please provide the field of study');
+    } else if (isEmpty(startDate)) {
+      alertBox('Please select the start date of education');
+    } else if (isEmpty(endDate) && !isCurrent) {
+      alertBox('Please select the end date of education');
+    } else {
+      return false;
     }
-    saveEducation({
-      variables: {
-        educationDto: dto,
-      },
-    });
+    return true;
+  };
+
+  const onSavingEducation = () => {
+    if (!checkValues()) {
+      const dto = {
+        school: {
+          name: schoolName,
+        },
+        startDate: startOfDay(startDate),
+        endDate: endDate ? startOfDay(endDate) : null,
+        isCurrent,
+        ...(isStudent && {
+          student: {
+            id: studentInfo.id,
+          },
+        }),
+        ...(!isStudent && {
+          tutor: {
+            id: tutorInfo.id,
+          },
+        }),
+      };
+      if (educationType === 0) {
+        dto.board = selectedBoard.name;
+        dto.grade = selectedClass.name;
+        if (selectedClass.name === 'Class 11' || selectedClass.name === 'Class 12') {
+          dto.subjects = selectedStream.label;
+        }
+      } else if (educationType === 1) {
+        dto.degree = { name: selectedDegree.label };
+        dto.fieldOfStudy = fieldOfStudy;
+      }
+      console.log('dto', dto);
+      saveEducation({
+        variables: {
+          educationDto: dto,
+        },
+      });
+    }
   };
 
   return (
@@ -170,23 +233,18 @@ function AddEditEducation() {
                 <Text style={commonStyles.regularMutedText}>High School Stream</Text>
                 <View>
                   <Item style={commonStyles.horizontalChildrenSpaceView}>
-                    <Picker
-                      iosHeader="Select Stream"
-                      Header="Select Stream"
-                      mode="dropdown"
-                      placeholder="Select Stream"
-                      placeholderStyle={{ fontSize: 15 }}
-                      selectedValue={selectedStream}
-                      onValueChange={(value) => setSelectedStream(value)}>
-                      <Picker.Item label="Commerce" value="Commerce" key="Commerce" />
-                      <Picker.Item label="Humanities" value="Humanities" key="Humanities" />
-                      <Picker.Item label="Science" value="Science" key="Science" />
-                    </Picker>
-                    <IconButtonWrapper
-                      styling={{ alignSelf: 'flex-end' }}
-                      iconHeight={RfH(24)}
-                      iconWidth={RfW(24)}
-                      iconImage={Images.expand}
+                    <CustomSelect
+                      data={offeringMasterData
+                        .filter((item) => item?.parentOffering?.id === selectedBoard?.id)
+                        .map((item) => ({ ...item, label: item.name, value: item }))}
+                      value={selectedClass}
+                      onChangeHandler={(value) => setSelectedClass(value)}
+                      placeholder="Select Class"
+                      containerStyle={{
+                        flex: 1,
+                        height: RfH(44),
+                        justifyContent: 'center',
+                      }}
                     />
                   </Item>
                 </View>
@@ -250,9 +308,11 @@ function AddEditEducation() {
                 <Text style={commonStyles.regularMutedText}>End Date</Text>
                 <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                   <CustomDatePicker
-                    value={endDate}
-                    onChangeHandler={(d) => setEndDate(d)}
-                    minimumDate={new Date(startDate)}
+                    value={startDate}
+                    onChangeHandler={(d) => {
+                      setStartDate(d);
+                      setEndDate('');
+                    }}
                     maximumDate={new Date()}
                   />
                 </View>
