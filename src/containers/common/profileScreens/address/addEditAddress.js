@@ -1,20 +1,29 @@
 /* eslint-disable radix */
 import { Alert, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Label } from 'native-base';
 import Geolocation from '@react-native-community/geolocation';
+import { useNavigation } from '@react-navigation/native';
 import { IconButtonWrapper, ScreenHeader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
-import { ADD_UPDATE_STUDENT_ADDRESS } from '../../graphql-mutation';
+import { alertBox, RfH, RfW } from '../../../../utils/helpers';
+import { ADD_UPDATE_STUDENT_ADDRESS, ADD_UPDATE_TUTOR_ADDRESS } from '../../graphql-mutation';
 import { AddressTypeEnum } from '../../enums';
 import GoogleAutoCompleteModal from '../../../../components/GoogleAutoCompleteModal';
+import { UserTypeEnum } from '../../../../common/userType.enum';
+import { studentDetails, tutorDetails, userType } from '../../../../apollo/cache';
 
 function AddEditAddress(props) {
+  const { route } = props;
+  const { address: editAddress } = route.params;
+  console.log(editAddress);
+
+  const navigation = useNavigation();
+
   const [address, setAddress] = useState(
-    {
+    editAddress || {
       type: AddressTypeEnum.HOME.label,
       street: '',
       subArea: '',
@@ -26,10 +35,15 @@ function AddEditAddress(props) {
       longitude: 0,
       landmark: '',
       fullAddress: '',
-    } || props.address
+    }
   );
 
-  const [saveAddress, { loading: loadingSaveAddress }] = useMutation(ADD_UPDATE_STUDENT_ADDRESS, {
+  const userTypeVal = useReactiveVar(userType);
+  const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
+  const studentInfo = useReactiveVar(studentDetails);
+  const tutorInfo = useReactiveVar(tutorDetails);
+
+  const [saveStudentAddress, { loading: loadingSaveStudentAddress }] = useMutation(ADD_UPDATE_STUDENT_ADDRESS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -43,12 +57,37 @@ function AddEditAddress(props) {
     },
   });
 
+  const [saveTutorAddress, { loading: loadingSaveTutorAddress }] = useMutation(ADD_UPDATE_TUTOR_ADDRESS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        alertBox('Address saved successfully!', '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => navigation.goBack(),
+        });
+      }
+    },
+  });
+
   const onSavingAddress = () => {
-    saveAddress({
+    const addressValue = { ...address };
+    delete addressValue.__typename;
+
+    const variables = {
       variables: {
-        addressDto: { ...address, postalCode: parseInt(address.postalCode, 10) },
+        addressDto: { ...addressValue, postalCode: parseInt(addressValue.postalCode, 10) },
       },
-    });
+    };
+    if (isStudent) {
+      saveStudentAddress(variables);
+    } else {
+      saveTutorAddress(variables);
+    }
   };
 
   const [showGoogleSearchModal, setShowGoogleSearchModal] = useState(false);
@@ -59,7 +98,7 @@ function AddEditAddress(props) {
       <View style={commonStyles.blankViewSmall} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View>
-          <Text style={commonStyles.regularMutedText}>Set your location</Text>
+          <Text style={commonStyles.regularMutedText}>Search your location</Text>
           <View
             style={[
               commonStyles.horizontalChildrenView,
@@ -67,7 +106,7 @@ function AddEditAddress(props) {
             ]}>
             <View style={{ flex: 0.9 }}>
               <TouchableWithoutFeedback onPress={() => setShowGoogleSearchModal(true)}>
-                <Text>selected place</Text>
+                <Text>{address.fullAddress || 'Type here to search...'}</Text>
               </TouchableWithoutFeedback>
               {/* <GooglePlacesInput onSelect={(address) => console.log(address)} /> */}
             </View>
@@ -124,8 +163,11 @@ function AddEditAddress(props) {
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <View style={{ flex: 0.5, marginRight: RfW(16) }}>
             <Item floatingLabel>
-              <Label>Pincode</Label>
-              <Input value={address.postalCode} onChangeText={(text) => setAddress({ ...address, postalCode: text })} />
+              <Label>Postal Code</Label>
+              <Input
+                value={String(address.postalCode)}
+                onChangeText={(text) => setAddress({ ...address, postalCode: text })}
+              />
             </Item>
           </View>
           <View style={{ flex: 0.5, marginLeft: RfW(0) }}>

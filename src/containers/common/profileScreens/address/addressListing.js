@@ -108,8 +108,8 @@ function AddressListing() {
     });
   };
 
-  const handleAddEditAddress = () => {
-    navigation.navigate(routeNames.ADD_EDIT_ADDRESS);
+  const handleAddEditAddress = (address) => {
+    navigation.navigate(routeNames.ADD_EDIT_ADDRESS, { address });
   };
 
   const renderAddress = (item) => (
@@ -147,7 +147,7 @@ function AddressListing() {
           </View>
 
           <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>
-            <TouchableWithoutFeedback onPress={handleAddEditAddress}>
+            <TouchableWithoutFeedback onPress={() => handleAddEditAddress(item)}>
               <Text style={{ color: Colors.orangeRed }}>EDIT</Text>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>

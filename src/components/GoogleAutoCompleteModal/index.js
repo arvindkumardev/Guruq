@@ -3,17 +3,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Colors, Images } from '../../theme';
-import { deviceHeight, RfH, RfW } from '../../utils/helpers';
+import { deviceHeight, RfW } from '../../utils/helpers';
 import { GOOGLE_API_KEY } from '../../utils/constants';
 import ScreenHeader from '../ScreenHeader';
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
 const GoogleAutoCompleteModal = (props) => {
-  const navigation = useNavigation();
   const { visible, onClose, onSelect } = props;
 
   const handleSelectSuggest = (geoData) => {
