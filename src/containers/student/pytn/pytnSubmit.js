@@ -41,10 +41,10 @@ function PytnSubmit(props) {
   });
 
   const submitPYTN = () => {
-    if ( maxPrice === 0) {
+    if (maxPrice === 0) {
       alertBox('Please provide minimum and maximum price');
-    // } else if (parseFloat(maxPrice) < parseFloat(minPrice)) {
-    //   alertBox('Maximum price should be greater than or equal to minimum price');
+      // } else if (parseFloat(maxPrice) < parseFloat(minPrice)) {
+      //   alertBox('Maximum price should be greater than or equal to minimum price');
     } else {
       const offeringArray = [];
       if (!isEmpty(subjectData?.subject)) {
@@ -115,7 +115,7 @@ function PytnSubmit(props) {
               })}
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>Mode of Tuition</Text>
+          <Text style={commonStyles.headingPrimaryText}>Mode of Class</Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           <View>
             <TouchableWithoutFeedback onPress={() => setIsOnline(true)}>
@@ -126,7 +126,7 @@ function PytnSubmit(props) {
                   enabled={isOnline}
                   submitFunction={() => setIsOnline(true)}
                 />
-                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Online Class</Text>
+                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Online</Text>
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => setIsOnline(false)}>
@@ -215,17 +215,17 @@ function PytnSubmit(props) {
           <Text style={commonStyles.headingPrimaryText}>Maximum price/ hour you are willing to pay </Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(10) }]} />
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            {/*<Item floatingLabel style={{ flex: 0.48 }}>*/}
-            {/*  <Input*/}
-            {/*    placeholder="Min Price"*/}
-            {/*    value={minPrice}*/}
-            {/*    onChangeText={(text) => setMinPrice(text)}*/}
-            {/*    keyboardType="numeric"*/}
-            {/*  />*/}
-            {/*</Item>*/}
+            {/* <Item floatingLabel style={{ flex: 0.48 }}> */}
+            {/*  <Input */}
+            {/*    placeholder="Min Price" */}
+            {/*    value={minPrice} */}
+            {/*    onChangeText={(text) => setMinPrice(text)} */}
+            {/*    keyboardType="numeric" */}
+            {/*  /> */}
+            {/* </Item> */}
             <Item floatingLabel style={{ flex: 0.48, marginLeft: RfW(8) }}>
               <Input
-                placeholder="Max Price"
+                placeholder="Max Price per hour"
                 value={maxPrice}
                 onChangeText={(text) => setMaxPrice(text)}
                 keyboardType="numeric"

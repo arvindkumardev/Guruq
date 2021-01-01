@@ -77,7 +77,7 @@ const PriceInputModal = (props) => {
                 marginVertical: RfH(10),
               }}>
               <Text style={commonStyles.regularPrimaryText}>
-                Amount should be in range ₹{selectedPytn.minPrice}-{selectedPytn.maxPrice}{' '}
+                Amount should be less than or equal to {selectedPytn.maxPrice}{' '}
               </Text>
             </View>
 

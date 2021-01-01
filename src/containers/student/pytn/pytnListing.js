@@ -71,8 +71,8 @@ function PytnListing(props) {
     offeringMasterData.find((item) => item.id === offering?.offering?.id)?.rootOffering?.displayName;
 
   const removePytn = (item) => {
-    alertBox('Do you really want to remove the request', '', {
-      positiveText: 'Yes',
+    alertBox('Are you sure you want to remove this PYTN request?', '', {
+      positiveText: 'Delete PYTN',
       onPositiveClick: () => {
         deletePYTN({ variables: { id: item.id } });
       },
@@ -121,7 +121,7 @@ function PytnListing(props) {
                 {item.groupSize > 1 ? 'Group' : 'Individual'} Class
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online Class' : 'Home Tution'}
+                {item.onlineClass ? 'Online' : 'Offline'} Class
               </Text>
             </View>
           </View>
@@ -206,7 +206,7 @@ function PytnListing(props) {
                 commonStyles.pageTitleThirdRow,
                 { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
               ]}>
-              {/*No data found*/}
+              {/* No data found */}
               Looks like you haven't posted your tuition need.
             </Text>
             <Text
@@ -214,7 +214,7 @@ function PytnListing(props) {
                 commonStyles.regularMutedText,
                 { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
               ]}>
-              {/*Looks like you haven't posted your tuition need.*/}
+              {/* Looks like you haven't posted your tuition need. */}
               Post your tuition need to broadcast your tuition requirements to all relevant tutors.
             </Text>
             <Button
