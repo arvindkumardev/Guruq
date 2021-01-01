@@ -19,7 +19,7 @@ import {
   userLocation,
   userType,
 } from '../../../apollo/cache';
-import { IconButtonWrapper } from '../../../components';
+import { IconButtonWrapper, TutorImageComponent } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
@@ -212,13 +212,8 @@ function Profile(props) {
             justifyContent: 'center',
           }}>
           <View style={styles.userDetailsView}>
-            <IconButtonWrapper
-              style={styles.userIcon}
-              iconHeight={RfH(64)}
-              iconWidth={RfH(64)}
-              iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
-              styling={{ borderRadius: RfH(64) }}
-            />
+            <TutorImageComponent tutor={{ profileImage: userInfo.profile, contactDetail: userInfo }} />
+
             <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16) }}>
               <Text style={styles.userName}>
                 {userInfo?.firstName} {userInfo?.lastName}

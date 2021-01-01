@@ -572,13 +572,13 @@ function TutorDetails(props) {
     <View style={styles.topContainer}>
       <TutorImageComponent
         tutor={tutorData}
-        styling={{ alignSelf: 'center', borderRadius: RfH(49), height: RfH(98), width: RfH(98) }}
+        styling={{ alignSelf: 'center', borderRadius: RfH(80), height: RfH(80), width: RfH(80) }}
       />
       <View style={{ marginLeft: RfW(16), width: '70%' }}>
         <Text style={styles.tutorName}>
           {tutorData?.contactDetail?.firstName} {tutorData?.contactDetail?.lastName}
         </Text>
-        <Text style={styles.tutorDetails}>GURUQT{tutorData?.id}</Text>
+        <Text style={styles.tutorDetails}>T-{tutorData?.id}</Text>
         {tutorData?.educationDetails?.length > 0 && (
           <Text style={[styles.tutorDetails, { color: Colors.primaryText }]} numberOfLines={1}>
             {titleCaseIfExists(tutorData?.educationDetails[0]?.degree?.degreeLevel)}

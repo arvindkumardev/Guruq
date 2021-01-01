@@ -18,7 +18,7 @@ import { isEmpty } from 'lodash';
 import { Button } from 'native-base';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { getSaveData, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { deviceWidth, getSaveData, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { CompareModal, IconButtonWrapper, SelectSubjectModal } from '../../../components';
 import { GET_FAVOURITE_TUTORS, SEARCH_TUTORS } from '../tutor-query';
@@ -266,7 +266,7 @@ function TutorListing(props) {
   };
 
   const filtersView = () => (
-    <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(100) }]}>
+    <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(44) }]}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
         {Object.entries(filterObj).map(([key, value]) => (
           <>
@@ -305,15 +305,15 @@ function TutorListing(props) {
         onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}>
         <View style={styles.topView}>
-          {topHeaderSticky && (
+          {/*{topHeaderSticky && (*/}
             <View style={styles.headerComponent}>
-              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start'}}>
                 <BackArrow action={onBackPress} />
-                <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginLeft: RfW(8) }}>
+                <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginLeft: RfW(8), flex: 0.9 }}>
                   <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
                     {offering?.displayName} Tutors
                   </Text>
-                  <Text style={[styles.classText, {}]}>
+                  <Text style={[styles.classText, {}]} numberOfLines={1}>
                     {offering?.parentOffering?.parentOffering?.displayName}
                     {' | '}
                     {offering?.parentOffering?.displayName}
@@ -326,33 +326,38 @@ function TutorListing(props) {
                 submitFunction={() => setShowAllSubjects(true)}
               />
             </View>
-          )}
-          {!topHeaderSticky && (
-            <View style={styles.stickyHeader}>
-              <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                <View style={{}}>
-                  <BackArrow action={onBackPress} />
-                </View>
-                <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>
-                  <Text style={[styles.subjectTitle, { fontSize: RFValue(20, STANDARD_SCREEN_SIZE) }]}>
-                    {offering?.displayName} Tutors
-                  </Text>
-                  <Text style={[styles.classText, { fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }]}>
-                    {offering?.parentOffering?.parentOffering?.displayName}
-                    {' | '}
-                    {offering?.parentOffering?.displayName}
-                  </Text>
-                </View>
-              </View>
-              <IconButtonWrapper
-                iconWidth={RfH(40)}
-                iconHeight={RfH(40)}
-                styling={{ alignSelf: 'flex-end' }}
-                iconImage={Images.subjectSwitcher}
-                submitFunction={() => setShowAllSubjects(true)}
-              />
-            </View>
-          )}
+          {/*)}*/}
+          {/*{!topHeaderSticky && (*/}
+          {/*  <View style={styles.stickyHeader}>*/}
+          {/*    <View style={{ flexDirection: 'column', justifyContent: 'center', flex: 1 }}>*/}
+          {/*      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>*/}
+          {/*        <BackArrow action={onBackPress} />*/}
+          {/*        <IconButtonWrapper*/}
+          {/*          styling={styles.bookIcon}*/}
+          {/*          iconImage={Images.subjectSwitcher}*/}
+          {/*          submitFunction={() => setShowAllSubjects(true)}*/}
+          {/*        />*/}
+          {/*      </View>*/}
+          {/*      <View style={{ height: RfH(54), justifyContent: 'center', paddingHorizontal: RfW(0) }}>*/}
+          {/*        <Text style={[styles.subjectTitle, { fontSize: RFValue(20, STANDARD_SCREEN_SIZE) }]}>*/}
+          {/*          {offering?.displayName} Tutors*/}
+          {/*        </Text>*/}
+          {/*        <Text style={[styles.classText, { fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }]}>*/}
+          {/*          {offering?.parentOffering?.parentOffering?.displayName}*/}
+          {/*          {' | '}*/}
+          {/*          {offering?.parentOffering?.displayName}*/}
+          {/*        </Text>*/}
+          {/*      </View>*/}
+          {/*    </View>*/}
+          {/*    /!* <IconButtonWrapper *!/*/}
+          {/*    /!*  iconWidth={RfH(40)} *!/*/}
+          {/*    /!*  iconHeight={RfH(40)} *!/*/}
+          {/*    /!*  styling={{ alignSelf: 'flex-end' }} *!/*/}
+          {/*    /!*  iconImage={Images.subjectSwitcher} *!/*/}
+          {/*    /!*  submitFunction={() => setShowAllSubjects(true)} *!/*/}
+          {/*    /!* /> *!/*/}
+          {/*  </View>*/}
+          {/*)}*/}
 
           <View style={styles.filterParentView}>
             <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>

@@ -211,7 +211,7 @@ const Images = {
   user_board: require('../assets/images/user_board.png'),
   user: require('../assets/images/user.png'),
   vertical_dots: require('../assets/images/vertical-dots.png'),
-  vertical_dots_b: require('../assets/images/vertical_dots_b.png'),
+  vertical_dots_b: require('../assets/images/vertical-dots_b.png'),
   video_call: require('../assets/images/video-call.png'),
   video_call2: require('../assets/images/video-call2.png'),
   video_call_mute: require('../assets/images/video-call-mute.png'),

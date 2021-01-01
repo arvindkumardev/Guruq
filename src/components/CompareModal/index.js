@@ -6,7 +6,7 @@ import { Modal, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { Colors, Images } from '../../theme';
-import { getSaveData, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
+import {getFullName, getSaveData, getUserImageUrl, RfH, RfW} from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
 import routeNames from '../../routes/screenNames';
 import commonStyles from '../../theme/styles';
@@ -67,7 +67,7 @@ const compareModal = (props) => {
           />
         )}
         <Text style={styles.compareTutorName}>
-          {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
+            {getFullName(item?.contactDetail)}
         </Text>
       </View>
     );

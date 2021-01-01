@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import styles from '../styles';
 import commonStyles from '../../../../theme/styles';
 import { IconButtonWrapper, TutorImageComponent } from '../../../../components';
-import {getFullName, RfH, RfW, titleCaseIfExists} from '../../../../utils/helpers';
+import { getFullName, RfH, RfW, titleCaseIfExists } from '../../../../utils/helpers';
 import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
@@ -63,6 +63,7 @@ function TutorListCard(props) {
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
             <TutorImageComponent tutor={tutor} />
+
             {isSponsored && (
               <View
                 style={{
@@ -99,9 +100,7 @@ function TutorListCard(props) {
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-                <Text style={styles.tutorName}>
-                  {getFullName(tutor.contactDetail)}
-                </Text>
+                <Text style={styles.tutorName}>{getFullName(tutor.contactDetail)}</Text>
                 {tutor.educationDetails.length > 0 && (
                   <Text style={styles.tutorDetails} numberOfLines={1}>
                     {titleCaseIfExists(tutor.educationDetails[0].degree?.degreeLevel)}

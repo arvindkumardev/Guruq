@@ -22,7 +22,16 @@ import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { alertBox, getSubjectIcons, getUserImageUrl, printDate, printTime, RfH, RfW } from '../../../../utils/helpers';
+import {
+  alertBox,
+  getFullName,
+  getSubjectIcons,
+  getUserImageUrl,
+  printDate,
+  printTime,
+  RfH,
+  RfW,
+} from '../../../../utils/helpers';
 import { GET_CART_ITEMS, GET_SCHEDULED_CLASSES } from '../../booking.query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
@@ -274,10 +283,12 @@ function StudentDashboard(props) {
           alignItems: 'stretch',
         }}>
         <View
-          style={{
-            backgroundColor: 'rgb(230,252,231)',
-            borderRadius: 8,
-          }}>
+          style={
+            {
+              // backgroundColor: 'rgb(230,252,231)',
+              // borderRadius: 8,
+            }
+          }>
           <View
             style={{
               flexDirection: 'row',
@@ -293,7 +304,7 @@ function StudentDashboard(props) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <TutorImageComponent tutor={item?.tutor} height={70} width={70} styling={{ borderRadius: RfH(70) }} />
+              <TutorImageComponent tutor={item?.tutor} height={64} width={64} styling={{ borderRadius: RfH(64) }} />
             </View>
             <View
               style={{
@@ -308,49 +319,50 @@ function StudentDashboard(props) {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={{ fontSize: 16, color: 'rgb(49,48,48)' }}>
-                  {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
+                <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+                  {getFullName(item?.tutor?.contactDetail)}
                 </Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <IconButtonWrapper
-                    iconImage={item.tutor.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
-                    iconHeight={RfH(20)}
-                    iconWidth={RfW(20)}
-                    imageResizeMode="contain"
-                    styling={{ marginRight: RfW(8) }}
-                  />
-                  {item?.tutor?.averageRating > 0 ? (
-                    <Text
-                      style={{
-                        alignSelf: 'center',
-                        color: Colors.primaryText,
-                        fontWeight: '600',
-                      }}>
-                      {parseFloat(item?.tutor?.averageRating)}
-                    </Text>
-                  ) : (
-                    <Text
-                      style={{
-                        color: Colors.secondaryText,
-                        fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
-                      }}>
-                      NOT RATED
-                    </Text>
-                  )}
-                </View>
               </View>
               <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                 {item?.tutor?.teachingExperience ? `${item?.tutor?.teachingExperience} years of Experience` : ''}
               </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                  {getSubjects(item)}
-                </Text>
+              {/* <View */}
+              {/*  style={{ */}
+              {/*    flexDirection: 'row', */}
+              {/*    justifyContent: 'space-between', */}
+              {/*    alignItems: 'center', */}
+              {/*  }}> */}
+              {/*  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}> */}
+              {/*    {getSubjects(item)} */}
+              {/*  </Text> */}
+              {/* </View> */}
+
+              <View style={{ flexDirection: 'row', marginTop: RfH(8) }}>
+                <IconButtonWrapper
+                  iconImage={item.tutor.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
+                  iconHeight={RfH(16)}
+                  iconWidth={RfW(16)}
+                  imageResizeMode="contain"
+                  styling={{ marginRight: RfW(8) }}
+                />
+                {item?.tutor?.averageRating > 0 ? (
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      color: Colors.primaryText,
+                      fontFamily: Fonts.bold,
+                    }}>
+                    {parseFloat(item?.tutor?.averageRating)}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      color: Colors.secondaryText,
+                      fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+                    }}>
+                    NOT RATED
+                  </Text>
+                )}
               </View>
             </View>
           </View>
@@ -371,13 +383,13 @@ function StudentDashboard(props) {
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <TutorImageComponent
             tutor={item?.tutor}
-            styling={{ alignSelf: 'center', borderRadius: RfH(40), width: RfH(80), height: RfH(80) }}
+            styling={{ alignSelf: 'center', borderRadius: RfH(64), width: RfH(64), height: RfH(64) }}
           />
 
           <Text
-            numberOfLines={2}
-            style={{ marginTop: 8, fontSize: 13, color: Colors.primaryText, textAlign: 'center' }}>
-            {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
+            numberOfLines={1}
+            style={[commonStyles.mediumPrimaryText, { marginTop: 8, fontFamily: Fonts.semiBold, textAlign: 'center' }]}>
+            {getFullName(item?.tutor?.contactDetail)}
           </Text>
           <Text
             numberOfLines={1}
@@ -413,13 +425,15 @@ function StudentDashboard(props) {
 
       <View style={[commonStyles.mainContainer]}>
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => setStudentOfferingModalVisible(true)}>
-            {selectedOffering && (
-              <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4), width:"75%" }}>
-                {selectedOffering?.parentOffering?.displayName} - {selectedOffering?.displayName}
-              </Text>
-            )}
-            <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
+          <TouchableOpacity onPress={() => setStudentOfferingModalVisible(true)}>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '75%' }}>
+              {selectedOffering && (
+                <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4) }}>
+                  {selectedOffering?.parentOffering?.displayName} - {selectedOffering?.displayName}
+                </Text>
+              )}
+              <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
+            </View>
           </TouchableOpacity>
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity
@@ -488,17 +502,19 @@ function StudentDashboard(props) {
               </Text>
             </View>
             <View>
-              <IconButtonWrapper
-                iconHeight={RfH(32)}
-                iconWidth={RfH(32)}
-                iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
-                styling={{ borderRadius: RfH(32) }}
-                submitFunction={() => changeTab(5)}
-              />
+              <TouchableWithoutFeedback onPress={() => changeTab(5)}>
+                <TutorImageComponent
+                  tutor={{ profileImage: userInfo.profileImage, contactDetail: userInfo }}
+                  height={32}
+                  width={32}
+                  fontSize={16}
+                  styling={{ borderRadius: RfH(32) }}
+                />
+              </TouchableWithoutFeedback>
             </View>
           </View>
           <View style={{ height: RfH(220), marginTop: RfH(29) }}>
-            <Swiper horizontal style={{ overflow: 'visible' }}>
+            <Swiper horizontal style={{ overflow: 'visible' }} paginationStyle={{ position: 'absolute', bottom: 10 }}>
               <View
                 style={{
                   backgroundColor: '#ceecfe',

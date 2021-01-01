@@ -136,7 +136,7 @@ function ScheduledClassDetails(props) {
   const renderAttendees = (item) => (
     <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(12) }]}>
       <View style={[commonStyles.horizontalChildrenView]}>
-        <TutorImageComponent tutor={item} height={48} width={48} fontSize={30} styling={{ borderRadius: RfH(8) }} />
+        <TutorImageComponent tutor={item} height={36} width={36} fontSize={16} styling={{ borderRadius: RfH(36) }} />
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
           <Text style={commonStyles.headingPrimaryText}>
             {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
@@ -170,144 +170,166 @@ function ScheduledClassDetails(props) {
       onPress={() => setOpenMenu(false)}>
       <Loader isLoading={classDetailsLoading || scheduleLoading} />
       <ScrollView
-        stickyHeaderIndices={[0]}
+        // stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
         scrollEventThrottle={16}
         scrollEnabled={classData?.students?.length > 2}>
-        <View style={[styles.topView, showBackButton ? { height: RfH(88) } : { height: RfH(98) }]}>
-          {showBackButton && (
-            <View
-              style={{
-                height: RfH(88),
-                marginTop: RfH(44),
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingHorizontal: RfW(16),
-              }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <BackArrow action={onBackPress} />
+        <View style={[styles.topView, {}]}>
+          {/* {showBackButton && ( */}
+          <View
+            style={{
+              // height: RfH(88),
+              // marginTop: RfH(44),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingHorizontal: RfW(16),
+              flex: 1,
+            }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <BackArrow action={onBackPress} />
 
-                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-                  <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                    {`${classData?.classEntity?.offering?.displayName} by ${classData?.classEntity?.tutor?.contactDetail?.firstName} ${classData?.classEntity?.tutor?.contactDetail?.lastName}`}
-                  </Text>
-                  <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
-                    {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
-                  </Text>
-                </View>
+              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+                <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
+                  {`${classData?.classEntity?.offering?.displayName} by ${classData?.classEntity?.tutor?.contactDetail?.firstName} ${classData?.classEntity?.tutor?.contactDetail?.lastName}`}
+                </Text>
+                <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
+                  {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
+                </Text>
               </View>
+            </View>
 
-              {classData?.isClassJoinAllowed && (
-                <View style={{}}>
-                  <Button
-                    block
-                    onPress={goToOnlineClass}
-                    style={[
-                      commonStyles.buttonPrimary,
-                      {
-                        height: 36,
-                        width: RfH(100),
-                        borderRadius: 4,
-                        marginHorizontal: 0,
-                      },
-                    ]}>
-                    <IconButtonWrapper
-                      iconImage={Images.video}
-                      iconHeight={RfH(16)}
-                      iconWidth={RfW(16)}
-                      styling={{ alignSelf: 'center' }}
-                    />
-                    <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join</Text>
-                  </Button>
+            <View>
+              {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
+                <IconButtonWrapper
+                  iconImage={Images.vertical_dots_b}
+                  iconHeight={RfH(20)}
+                  iconWidth={RfW(20)}
+                  submitFunction={() => setOpenMenu(!openMenu)}
+                  styling={{ alignSelf: 'center' }}
+                />
+              )}
+              {openMenu && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: RfH(24),
+                    right: RfW(0),
+                    backgroundColor: Colors.white,
+                    width: 180,
+                    paddingVertical: RfH(8),
+
+                    borderWidth: 0.5,
+                    borderColor: Colors.darkGrey,
+                  }}>
+                  {classData?.isRescheduleAllowed && (
+                    <TouchableOpacity
+                      onPress={openRescheduleModal}
+                      style={{
+                        paddingHorizontal: RfH(16),
+                        paddingBottom: RfH(10),
+                        borderBottomWidth: 0.5,
+                        borderColor: Colors.lightGrey,
+                      }}>
+                      <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Reschedule Class</Text>
+                    </TouchableOpacity>
+                  )}
+                  {classData?.isCancelAllowed && (
+                    <TouchableOpacity
+                      onPress={goToCancelReason}
+                      style={{ paddingHorizontal: RfH(16), paddingTop: RfH(10) }}>
+                      <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               )}
             </View>
-          )}
+          </View>
+          {/* // )} */}
 
-          {!showBackButton && (
-            <View
-              style={{
-                height: RfH(98),
-                marginTop: RfH(68),
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingHorizontal: RfW(16),
-                backgroundColor: Colors.lightPurple,
-              }}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'stretch',
-                }}>
-                <BackArrow action={onBackPress} />
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <View
-                    style={{
-                      height: RfH(54),
-                      justifyContent: 'center',
-                      paddingHorizontal: RfW(0),
-                      marginRight: RfH(16),
-                    }}>
-                    <Text style={commonStyles.headingPrimaryText} numberOfLines={1}>
-                      {isStudent
-                        ? `${classData?.classEntity?.offering?.displayName} by ${classData?.classEntity?.tutor?.contactDetail?.firstName} ${classData?.classEntity?.tutor?.contactDetail?.lastName}`
-                        : `${classData?.classEntity?.offering?.displayName} for ${classData?.classEntity?.students[0]?.contactDetail?.firstName} ${classData?.classEntity?.students[0]?.contactDetail?.lastName}`}
-                    </Text>
-                    <Text style={[commonStyles.mediumMutedText, { marginTop: RfH(4) }]}>
-                      {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
-                    </Text>
-                  </View>
+          {/* {!showBackButton && ( */}
+          {/*  <View */}
+          {/*    style={{ */}
+          {/*      height: RfH(98), */}
+          {/*      marginTop: RfH(68), */}
+          {/*      flexDirection: 'row', */}
+          {/*      justifyContent: 'space-between', */}
+          {/*      alignItems: 'center', */}
+          {/*      paddingHorizontal: RfW(16), */}
+          {/*      backgroundColor: Colors.lightPurple, */}
+          {/*    }}> */}
+          {/*    <View */}
+          {/*      style={{ */}
+          {/*        flex: 1, */}
+          {/*        flexDirection: 'column', */}
+          {/*        justifyContent: 'center', */}
+          {/*        alignItems: 'stretch', */}
+          {/*      }}> */}
+          {/*      <BackArrow action={onBackPress} /> */}
+          {/*      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
+          {/*        <View */}
+          {/*          style={{ */}
+          {/*            height: RfH(54), */}
+          {/*            justifyContent: 'center', */}
+          {/*            paddingHorizontal: RfW(0), */}
+          {/*            marginRight: RfH(16), */}
+          {/*          }}> */}
+          {/*          <Text style={commonStyles.headingPrimaryText} numberOfLines={1}> */}
+          {/*            {isStudent */}
+          {/*              ? `${classData?.classEntity?.offering?.displayName} by ${classData?.classEntity?.tutor?.contactDetail?.firstName} ${classData?.classEntity?.tutor?.contactDetail?.lastName}` */}
+          {/*              : `${classData?.classEntity?.offering?.displayName} for ${classData?.classEntity?.students[0]?.contactDetail?.firstName} ${classData?.classEntity?.students[0]?.contactDetail?.lastName}`} */}
+          {/*          </Text> */}
+          {/*          <Text style={[commonStyles.mediumMutedText, { marginTop: RfH(4) }]}> */}
+          {/*            {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`} */}
+          {/*          </Text> */}
+          {/*        </View> */}
 
-                  {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
-                    <IconButtonWrapper
-                      iconImage={Images.vertical_dots}
-                      iconHeight={RfH(20)}
-                      iconWidth={RfW(20)}
-                      submitFunction={() => setOpenMenu(!openMenu)}
-                      styling={{ alignSelf: 'center' }}
-                    />
-                  )}
-                  {openMenu && (
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: RfH(23),
-                        right: RfW(10),
-                        backgroundColor: Colors.white,
-                        width: '45%',
-                        padding: RfH(16),
-                        borderWidth: 0.3,
-                        borderColor: Colors.darkGrey,
-                      }}>
-                      {classData?.isRescheduleAllowed && (
-                        <TouchableOpacity onPress={openRescheduleModal} style={{ paddingVertical: RfH(10), borderBottomWidth: 0.5, borderColor: Colors.black }}>
-                          <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>
-                            Reschedule Class
-                          </Text>
-                        </TouchableOpacity>
-                      )}
-                      {classData?.isCancelAllowed && (
-                        <TouchableOpacity
-                          onPress={goToCancelReason}
-                          style={{ paddingVertical: RfH(10) }}>
-                          <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text>
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-          )}
+          {/*        {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && ( */}
+          {/*          <IconButtonWrapper */}
+          {/*            iconImage={Images.vertical_dots} */}
+          {/*            iconHeight={RfH(20)} */}
+          {/*            iconWidth={RfW(20)} */}
+          {/*            submitFunction={() => setOpenMenu(!openMenu)} */}
+          {/*            styling={{ alignSelf: 'center' }} */}
+          {/*          /> */}
+          {/*        )} */}
+          {/*        {openMenu && ( */}
+          {/*          <View */}
+          {/*            style={{ */}
+          {/*              position: 'absolute', */}
+          {/*              top: RfH(23), */}
+          {/*              right: RfW(10), */}
+          {/*              backgroundColor: Colors.white, */}
+          {/*              width: '45%', */}
+          {/*              padding: RfH(16), */}
+          {/*              borderWidth: 0.3, */}
+          {/*              borderColor: Colors.darkGrey, */}
+          {/*            }}> */}
+          {/*            {classData?.isRescheduleAllowed && ( */}
+          {/*              <TouchableOpacity */}
+          {/*                onPress={openRescheduleModal} */}
+          {/*                style={{ paddingVertical: RfH(10), borderBottomWidth: 0.5, borderColor: Colors.black }}> */}
+          {/*                <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}> */}
+          {/*                  Reschedule Class */}
+          {/*                </Text> */}
+          {/*              </TouchableOpacity> */}
+          {/*            )} */}
+          {/*            {classData?.isCancelAllowed && ( */}
+          {/*              <TouchableOpacity onPress={goToCancelReason} style={{ paddingVertical: RfH(10) }}> */}
+          {/*                <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text> */}
+          {/*              </TouchableOpacity> */}
+          {/*            )} */}
+          {/*          </View> */}
+          {/*        )} */}
+          {/*      </View> */}
+          {/*    </View> */}
+          {/*  </View> */}
+          {/* )} */}
         </View>
 
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(80) }]}>
-          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.tutor_icon} />
+        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(36) }]}>
+          <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.tutor_icon} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
         </View>
         {!isEmpty(classData) && (
@@ -318,10 +340,10 @@ function ScheduledClassDetails(props) {
             disabled={!isStudent}>
             <TutorImageComponent
               tutor={classData?.classEntity?.tutor}
-              height={48}
-              width={48}
-              fontSize={30}
-              styling={{ borderRadius: RfH(8) }}
+              height={36}
+              width={36}
+              fontSize={16}
+              styling={{ borderRadius: RfH(36) }}
             />
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text style={commonStyles.headingPrimaryText}>
@@ -336,7 +358,7 @@ function ScheduledClassDetails(props) {
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-          <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+          <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(16)} iconHeight={RfH(16)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>{printDate(classData?.classEntity?.startDate)}</Text>
             <Text style={commonStyles.mediumMutedText}>
@@ -350,8 +372,8 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper
             iconImage={Images.bell}
-            iconWidth={RfW(24)}
-            iconHeight={RfH(24)}
+            iconWidth={RfW(16)}
+            iconHeight={RfH(16)}
             imageResizeMode="contain"
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -365,8 +387,8 @@ function ScheduledClassDetails(props) {
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper
             iconImage={Images.attendees}
-            iconWidth={RfW(24)}
-            iconHeight={RfH(24)}
+            iconWidth={RfW(16)}
+            iconHeight={RfH(16)}
             imageResizeMode="contain"
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -406,7 +428,7 @@ function ScheduledClassDetails(props) {
         {classData?.classEntity?.address && (
           <>
             <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-              <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(16)} />
               <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
                 <Text style={commonStyles.headingPrimaryText}>Class Location </Text>
               </View>
@@ -440,8 +462,8 @@ function ScheduledClassDetails(props) {
           style={[commonStyles.horizontalChildrenView, { marginTop: RfH(16), paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper
             iconImage={Images.personal}
-            iconWidth={RfW(24)}
-            iconHeight={RfH(24)}
+            iconWidth={RfW(16)}
+            iconHeight={RfH(16)}
             imageResizeMode="contain"
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -451,40 +473,42 @@ function ScheduledClassDetails(props) {
               {new Date().getMonth()}
               {classData?.classEntity?.id}
             </Text>
+            {/* <Text style={commonStyles.mediumMutedText}>classData?. */}
+            {/* </Text> */}
           </View>
         </View>
 
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-        {classData?.isClassJoinAllowed && (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: RfH(16),
-              marginBottom: RfH(34),
-            }}>
-            <Button
-              block
-              onPress={goToOnlineClass}
-              style={[
-                commonStyles.buttonPrimary,
-                {
-                  borderRadius: 4,
-                  marginHorizontal: 0,
-                },
-              ]}>
-              <IconButtonWrapper
-                iconImage={Images.video}
-                iconHeight={RfH(16)}
-                iconWidth={RfW(16)}
-                styling={{ alignSelf: 'center' }}
-              />
-              <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
-            </Button>
-          </View>
-        )}
+        {/* {classData?.isClassJoinAllowed && ( */}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: RfH(16),
+            marginBottom: RfH(34),
+          }}>
+          <Button
+            block
+            onPress={goToOnlineClass}
+            style={[
+              commonStyles.buttonPrimary,
+              {
+                borderRadius: 4,
+                marginHorizontal: 0,
+              },
+            ]}>
+            <IconButtonWrapper
+              iconImage={Images.video}
+              iconHeight={RfH(16)}
+              iconWidth={RfW(16)}
+              styling={{ alignSelf: 'center' }}
+            />
+            <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
+          </Button>
+        </View>
+        {/* )} */}
       </ScrollView>
       {showReschedulePopup && (
         <DateSlotSelectorModal
