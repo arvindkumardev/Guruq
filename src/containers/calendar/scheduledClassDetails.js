@@ -101,6 +101,10 @@ function ScheduledClassDetails(props) {
     setOpenMenu(false);
     navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId });
   };
+  const goToHelp = () => {
+    setOpenMenu(false);
+    navigation.navigate(NavigationRouteNames.CUSTOMER_CARE, { classId });
+  };
 
   const goToOnlineClass = () => {
     navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData?.classEntity });
@@ -222,6 +226,7 @@ function ScheduledClassDetails(props) {
 
                     borderWidth: 0.5,
                     borderColor: Colors.darkGrey,
+                    zIndex: 99,
                   }}>
                   {classData?.isRescheduleAllowed && (
                     <TouchableOpacity
@@ -242,6 +247,11 @@ function ScheduledClassDetails(props) {
                       <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text>
                     </TouchableOpacity>
                   )}
+                  <TouchableOpacity
+                    onPress={goToHelp}
+                    style={{ paddingHorizontal: RfH(16), paddingTop: RfH(16), paddingBottom: RfH(10) }}>
+                    <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Help</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             </View>

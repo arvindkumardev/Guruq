@@ -175,7 +175,7 @@ function AddressListing() {
           horizontalPadding={RfW(16)}
           showRightIcon
           onRightIconClick={handleAddEditAddress}
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           lineVisible={false}
         />
         <View style={{ height: RfH(44) }} />

@@ -86,7 +86,7 @@ export const RfH = (value) => {
 
 export const isIntegerString = (str) => /^\+?(0|[1-9]\d*)$/.test(str);
 
-export const isValidEmail = (str) => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(str);
+export const isValidEmail = (str) => /^([a-zA-Z0-9_+\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(str);
 
 export const isDisplayWithNotch = () => DeviceInfo.hasNotch();
 
@@ -301,9 +301,9 @@ export const endOfDay = (date) => {
   return `${moment(date).format('YYYY-MM-DDT23:59:59')}Z`;
 };
 
-export const isValidMobile = (mobile, dialCode) => {
-  if (!isEmpty(mobile) && !isUndefined(mobile)) {
-    const parsedMobile = parseMobile(`+${dialCode}${mobile}`);
+export const isValidMobile = (mobileObject) => {
+  if (!isEmpty(mobileObject) && !isUndefined(mobileObject)) {
+    const parsedMobile = parseMobile(`+${mobileObject.country.dialCode}${mobileObject.mobile}`);
     return !isUndefined(parsedMobile) ? parsedMobile.isValid() : false;
   }
   return false;

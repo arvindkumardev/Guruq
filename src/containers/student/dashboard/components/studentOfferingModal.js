@@ -82,7 +82,7 @@ const StudentOfferingModal = (props) => {
           <View style={{ height: 8 }} />
 
           <FlatList
-            data={offerings}
+            data={offerings.filter((o) => o.active)}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => renderItem(item, index, offerings.length - 1 > index)}
             keyExtractor={(item, index) => index.toString()}

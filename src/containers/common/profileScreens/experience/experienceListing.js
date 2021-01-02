@@ -114,7 +114,7 @@ function ExperienceListing() {
           label="Manage Experiences"
           horizontalPadding={RfW(16)}
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           onRightIconClick={handleAddEditExperience}
         />
         <View style={{ height: RfH(24) }} />

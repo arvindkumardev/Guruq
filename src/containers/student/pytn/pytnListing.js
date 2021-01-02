@@ -172,7 +172,7 @@ function PytnListing(props) {
           homeIcon
           label="Post Your Tuition Needs"
           horizontalPadding={RfW(16)}
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           showRightIcon
           onRightIconClick={addRequestHandle}
         />

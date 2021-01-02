@@ -185,7 +185,7 @@ function SubjectList() {
           label="My Subjects"
           homeIcon
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           horizontalPadding={RfW(16)}
           onRightIconClick={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECT_SELECTION)}
         />

@@ -66,6 +66,7 @@ export const SIGNIN_MUTATION = gql`
       isEmailVerified
       token
       type
+      referralCode
       phoneNumber {
         countryCode
         number
@@ -86,6 +87,7 @@ export const SET_PASSWORD_MUTATION = gql`
       isEmailVerified
       token
       type
+      referralCode
       phoneNumber {
         countryCode
         number

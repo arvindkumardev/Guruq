@@ -85,7 +85,7 @@ function ViewSchedule() {
           label="Schedule"
           horizontalPadding={RfW(16)}
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           onRightIconClick={() => handleCreateSchedule(new Date())}
         />
         <View style={{ height: RfH(44) }} />

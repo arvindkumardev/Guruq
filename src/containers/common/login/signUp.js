@@ -6,7 +6,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import { removeToken, RfH, RfW, storeData } from '../../../utils/helpers';
+import { alertBox, isValidEmail, removeToken, RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
@@ -31,7 +31,7 @@ function SignUp(props) {
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       if (error.errorCode === DUPLICATE_FOUND) {
-        Alert.alert('Email already being used by another user, please use different email!');
+        alertBox('Email already being used by another user, please use different email!');
       }
     },
     onCompleted: async (data) => {
@@ -52,34 +52,31 @@ function SignUp(props) {
 
   const onClickContinue = () => {
     if (!firstName) {
-      Alert.alert('Please enter first name.');
-      return;
+      alertBox('Please enter first name.');
     }
     if (!lastName) {
-      Alert.alert('Please enter last name.');
-      return;
+      alertBox('Please enter last name.');
     }
-    if (!email) {
-      Alert.alert('Please enter email.');
-      return;
+    if (!isValidEmail(email)) {
+      alertBox('Please enter email.');
     }
     if (!password) {
-      Alert.alert('Please enter password.');
-      return;
-    }
-    addUser({
-      variables: {
-        phoneNumber: {
-          countryCode: route.params.countryCode,
-          number: route.params.number,
+      alertBox('Please enter password.');
+    } else {
+      addUser({
+        variables: {
+          phoneNumber: {
+            countryCode: route.params.countryCode,
+            number: route.params.number,
+          },
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.toLowerCase().trim(),
+          password,
+          referCode,
         },
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.toLowerCase().trim(),
-        password,
-        referCode,
-      },
-    });
+      });
+    }
   };
 
   return (

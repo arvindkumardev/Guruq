@@ -38,6 +38,8 @@ export const GET_OFFERINGS_MASTER_DATA = gql`
 export const GET_INTERESTED_OFFERINGS = gql`
   query GetInterestedOfferings {
     getInterestedOfferings {
+      id
+      active
       selected
       offering {
         id
@@ -51,13 +53,6 @@ export const GET_INTERESTED_OFFERINGS = gql`
           displayName
           slug
           level
-          #parentOffering {
-          #  id
-          #  name
-          #  displayName
-          #  slug
-          #  level
-          #}
         }
         rootOffering {
           id

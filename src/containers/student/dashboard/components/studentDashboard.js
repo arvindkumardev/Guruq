@@ -425,17 +425,19 @@ function StudentDashboard(props) {
 
       <View style={[commonStyles.mainContainer]}>
         <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <TouchableOpacity onPress={() => setStudentOfferingModalVisible(true)}>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '75%' }}>
-              {selectedOffering && (
-                <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4) }}>
-                  {selectedOffering?.parentOffering?.displayName} - {selectedOffering?.displayName}
-                </Text>
-              )}
-              <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
-            </View>
-          </TouchableOpacity>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flex: 0.7 }}>
+            <TouchableOpacity onPress={() => setStudentOfferingModalVisible(true)}>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                {selectedOffering && (
+                  <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4) }}>
+                    {selectedOffering?.parentOffering?.displayName} - {selectedOffering?.displayName}
+                  </Text>
+                )}
+                <Image source={Images.expand_gray} style={{ height: RfH(24), width: RfW(24), marginTop: 4 }} />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_CART)}
               style={{ paddingHorizontal: RfW(8) }}>
@@ -496,12 +498,12 @@ function StudentDashboard(props) {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <View>
+            <View style={{ flex: 0.7 }}>
               <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
                 Hi {userInfo.firstName}
               </Text>
             </View>
-            <View>
+            <View style={{flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
               <TouchableWithoutFeedback onPress={() => changeTab(5)}>
                 <TutorImageComponent
                   tutor={{ profileImage: userInfo.profileImage, contactDetail: userInfo }}

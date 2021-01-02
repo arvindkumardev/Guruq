@@ -361,7 +361,7 @@ function Profile(props) {
           style={[styles.userMenuParentView]}
           onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}
           activeOpacity={1}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
+          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.add} />
           <View style={styles.menuItemParentView}>
             <View>
               <Text style={styles.menuItemPrimaryText}>Help</Text>

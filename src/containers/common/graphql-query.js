@@ -24,6 +24,7 @@ export const ME_QUERY = gql`
       isPhoneNumberVerified
       isEmailVerified
       type
+      referralCode
       role {
         name
       }

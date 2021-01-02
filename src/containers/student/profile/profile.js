@@ -47,13 +47,13 @@ const BOOKING_DATA_OPTIONS = [
 
 const MY_CLASSES_OPTIONS = [
   { name: 'Calendar', icon: Images.personal },
-  { name: 'Upcoming Classes', icon: Images.home },
+  { name: 'Classes', icon: Images.home },
 ];
 
 const SETTINGS_OPTIONS = [
   { name: 'Change Password', icon: Images.personal },
-  { name: 'Update Mobile and Email', icon: Images.home },
-  { name: 'Notifications', icon: Images.parent_details },
+  // { name: 'Update Mobile and Email', icon: Images.home },
+  // { name: 'Notifications', icon: Images.parent_details },
 ];
 
 const ABOUT_US_OPTIONS = [
@@ -78,7 +78,7 @@ function Profile(props) {
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
   const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
 
   const client = initializeApollo();
@@ -285,7 +285,7 @@ function Profile(props) {
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>My Account</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Personal Details, Address, Parent Details, Education
+                  Personal, Addresses, Parents & Education Detail
                 </Text>
               </View>
               <IconWrapper
@@ -309,33 +309,33 @@ function Profile(props) {
 
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-          <TouchableWithoutFeedback onPress={() => setIsStudyMenuOpen(!isStudyMenuOpen)}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_STUDY_AREAS)}>
             <View style={styles.userMenuParentView}>
               <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.book} imageResizeMode="contain" />
               <View style={styles.menuItemParentView}>
-                <Text style={styles.menuItemPrimaryText}>My Study Area</Text>
+                <Text style={styles.menuItemPrimaryText}>My Study Areas</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Add/Modify study area
+                  Manage Study Areas
                 </Text>
               </View>
-              <IconWrapper
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-                imageResizeMode="cover"
-                iconImage={isStudyMenuOpen ? Images.collapse_grey : Images.expand_gray}
-              />
+              {/* <IconWrapper */}
+              {/*  iconWidth={RfW(24)} */}
+              {/*  iconHeight={RfH(24)} */}
+              {/*  imageResizeMode="cover" */}
+              {/*  iconImage={isStudyMenuOpen ? Images.collapse_grey : Images.expand_gray} */}
+              {/* /> */}
             </View>
           </TouchableWithoutFeedback>
-          {isStudyMenuOpen && (
-            <SafeAreaView>
-              <FlatList
-                data={MY_STUDY_DATA_OPTIONS}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => renderItem(item)}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </SafeAreaView>
-          )}
+          {/* {isStudyMenuOpen && ( */}
+          {/*  <SafeAreaView> */}
+          {/*    <FlatList */}
+          {/*      data={MY_STUDY_DATA_OPTIONS} */}
+          {/*      showsVerticalScrollIndicator={false} */}
+          {/*      renderItem={({ item }) => renderItem(item)} */}
+          {/*      keyExtractor={(item, index) => index.toString()} */}
+          {/*    /> */}
+          {/*  </SafeAreaView> */}
+          {/* )} */}
 
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
@@ -345,7 +345,7 @@ function Profile(props) {
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>Booking Details</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Purchased History
+                  Purchased History & Cart
                 </Text>
               </View>
               <IconWrapper
@@ -379,7 +379,7 @@ function Profile(props) {
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>My Classes</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Calendar, Schedule Class, Renew Class, Class...
+                  Calendar & Upcoming Class, Schedule Class & Renew Class
                 </Text>
               </View>
               <IconWrapper
@@ -432,82 +432,99 @@ function Profile(props) {
           <View style={commonStyles.blankGreyViewSmall} />
 
           <View style={[styles.userMenuParentView]}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.personal} />
             <View style={styles.menuItemParentView}>
-              <TouchableWithoutFeedback onPress={() => setIsSettingsOpen(!isSettingsOpen)}>
-                <Text style={styles.menuItemPrimaryText}>Settings</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Account Settings, Change Password, Notifications
-                </Text>
-              </TouchableWithoutFeedback>
-            </View>
-            <IconWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={isSettingsOpen ? Images.collapse_grey : Images.expand_gray}
-            />
-          </View>
-
-          <View style={commonStyles.blankGreyViewSmall} />
-
-          <View style={[styles.userMenuParentView]}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.moreInformation} />
-            <View style={styles.menuItemParentView}>
-              <TouchableWithoutFeedback onPress={() => setIsInformationMenuOpen(!isInformationMenuOpen)}>
+              <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}>
                 <Text style={styles.menuItemPrimaryText}>Help</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Customer Care, FAQ's, Send feedback
+                  Customer Care, FAQs, Send feedback
                 </Text>
               </TouchableWithoutFeedback>
             </View>
-            <IconWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray}
-            />
+            {/* <IconWrapper */}
+            {/*  iconWidth={RfW(24)} */}
+            {/*  iconHeight={RfH(24)} */}
+            {/*  iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray} */}
+            {/* /> */}
           </View>
 
-          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+          {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
 
-          {isInformationMenuOpen && (
-            <SafeAreaView>
-              <FlatList
-                data={HELP_OPTIONS}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => renderItem(item)}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </SafeAreaView>
-          )}
+          {/* {isInformationMenuOpen && ( */}
+          {/*  <SafeAreaView> */}
+          {/*    <FlatList */}
+          {/*      data={HELP_OPTIONS} */}
+          {/*      showsVerticalScrollIndicator={false} */}
+          {/*      renderItem={({ item }) => renderItem(item)} */}
+          {/*      keyExtractor={(item, index) => index.toString()} */}
+          {/*    /> */}
+          {/*  </SafeAreaView> */}
+          {/* )} */}
+
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
           <TouchableWithoutFeedback onPress={() => setIsAboutGuruMenuOpen(!isAboutGuruMenuOpen)}>
             <View style={styles.userMenuParentView}>
               <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
               <View style={styles.menuItemParentView}>
-                <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  About, team
-                </Text>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.ABOUT_US)}>
+                  <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
+                  <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                    About Us, Team, Know More
+                  </Text>
+                </TouchableWithoutFeedback>
               </View>
-              <IconWrapper
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-                iconImage={isAboutGuruMenuOpen ? Images.collapse_grey : Images.expand_gray}
-              />
+              {/* <IconWrapper */}
+              {/*  iconWidth={RfW(24)} */}
+              {/*  iconHeight={RfH(24)} */}
+              {/*  iconImage={isAboutGuruMenuOpen ? Images.collapse_grey : Images.expand_gray} */}
+              {/* /> */}
             </View>
           </TouchableWithoutFeedback>
-          {isAboutGuruMenuOpen && (
-            <SafeAreaView>
-              <FlatList
-                data={ABOUT_US_OPTIONS}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => renderItem(item)}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </SafeAreaView>
-          )}
+
+          {/* {isAboutGuruMenuOpen && ( */}
+          {/*  <SafeAreaView> */}
+          {/*    <FlatList */}
+          {/*      data={ABOUT_US_OPTIONS} */}
+          {/*      showsVerticalScrollIndicator={false} */}
+          {/*      renderItem={({ item }) => renderItem(item)} */}
+          {/*      keyExtractor={(item, index) => index.toString()} */}
+          {/*    /> */}
+          {/*  </SafeAreaView> */}
+          {/* )} */}
 
           <View style={commonStyles.blankGreyViewSmall} />
+
+          <View style={[styles.userMenuParentView]}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
+            <View style={styles.menuItemParentView}>
+              <TouchableWithoutFeedback onPress={() => alertBox('coming soon!')}>
+                <Text style={styles.menuItemPrimaryText}>Change Password</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                  Reset your password
+                </Text>
+              </TouchableWithoutFeedback>
+            </View>
+            {/* <IconWrapper */}
+            {/*  iconWidth={RfW(24)} */}
+            {/*  iconHeight={RfH(24)} */}
+            {/*  iconImage={isSettingsMenuOpen ? Images.collapse_grey : Images.expand_gray} */}
+            {/* /> */}
+          </View>
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+          {/* {isSettingsMenuOpen && ( */}
+          {/*  <SafeAreaView> */}
+          {/*    <FlatList */}
+          {/*      data={SETTINGS_OPTIONS} */}
+          {/*      showsVerticalScrollIndicator={false} */}
+          {/*      renderItem={({ item }) => renderItem(item)} */}
+          {/*      keyExtractor={(item, index) => index.toString()} */}
+          {/*    /> */}
+          {/*  </SafeAreaView> */}
+          {/* )} */}
+
+          {/* <View style={commonStyles.blankGreyViewSmall} /> */}
 
           <View style={[styles.userMenuParentView]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" iconImage={Images.logOut} />
@@ -518,6 +535,9 @@ function Profile(props) {
             </View>
           </View>
           {/* <View style={commonStyles.lineSeparator} /> */}
+
+          <View style={commonStyles.blankGreyViewSmall} />
+
           <View
             style={{
               justifyContent: 'space-between',

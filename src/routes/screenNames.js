@@ -18,6 +18,7 @@ const NavigationRouteNames = {
   WEB_VIEW: 'web_view',
   NOTIFICATIONS: 'notifications',
   SEND_FEEDBACK: 'send_feedback',
+  ABOUT_US: 'about_us',
   CUSTOMER_CARE: 'customer_care',
   ADDRESS: 'address',
   ADD_EDIT_ADDRESS: 'add_edit_address',
@@ -38,6 +39,7 @@ const NavigationRouteNames = {
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
+    MY_STUDY_AREAS: 'my_study_areas',
     STUDY_AREA: 'student_study_area',
     BOARD: 'student_board',
     CLASS: 'student_class',

@@ -116,7 +116,7 @@ function ParentListing() {
           label="Parents/Guardians Details"
           horizontalPadding={RfW(16)}
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           onRightIconClick={handleAddEditParents}
         />
         <View style={{ height: RfH(24) }} />

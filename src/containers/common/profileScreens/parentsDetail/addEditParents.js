@@ -68,7 +68,7 @@ function AddEditParents(props) {
       alertBox('Please provide a valid email');
     } else if (isEmpty(mobileObj.mobile)) {
       alertBox('Please provide the phone number');
-    } else if (!isValidMobile(mobileObj.mobile, mobileObj.country.dialCode)) {
+    } else if (!isValidMobile(mobileObj)) {
       alertBox('Please provide a valid mobile number');
     } else {
       saveParents({

@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Item, Input, Button, Label } from 'native-base';
 import { useMutation } from '@apollo/client';
-import commonStyles from '../../../../theme/styles';
-import { CustomMobileNumber, IconButtonWrapper } from '../../../../components';
-import { RfH, RfW } from '../../../../utils/helpers';
-import { IND_COUNTRY_OBJ } from '../../../../utils/constants';
-import { Colors, Images } from '../../../../theme';
-import CustomDatePicker from '../../../../components/CustomDatePicker';
+import commonStyles from '../../../../../theme/styles';
+import { CustomMobileNumber, IconButtonWrapper } from '../../../../../components';
+import { alertBox, isValidMobile, printDate, RfH, RfW } from '../../../../../utils/helpers';
+import { IND_COUNTRY_OBJ } from '../../../../../utils/constants';
+import { Colors, Images } from '../../../../../theme';
+import CustomDatePicker from '../../../../../components/CustomDatePicker';
 import GenderModal from './genderModal';
-import { UPDATE_STUDENT_CONTACT_DETAILS, UPDATE_TUTOR_CONTACT_DETAILS } from '../../graphql-mutation';
-import { GenderEnum } from '../../enums';
+import { UPDATE_STUDENT_CONTACT_DETAILS, UPDATE_TUTOR_CONTACT_DETAILS } from '../../../graphql-mutation';
+import { GenderEnum } from '../../../enums';
 
 function PersonalInformation(props) {
   const [showGenderModal, setShowGenderModal] = useState(false);
@@ -48,7 +48,8 @@ function PersonalInformation(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        Alert.alert('Details updated!');
+        alertBox('Details updated!');
+        onUpdate()
       }
     },
   });
@@ -62,29 +63,33 @@ function PersonalInformation(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        Alert.alert('Details updated!');
+        alertBox('Details updated!');
       }
     },
   });
 
   const onSavingDetails = () => {
-    saveStudentDetails({
-      variables: {
-        studentDto: {
-          contactDetail: {
-            firstName,
-            lastName,
-            gender,
-            dob,
-            email,
-            phoneNumber: {
-              countryCode: mobileObj.country.dialCode,
-              number: mobileObj.mobile,
+    if (isValidMobile(mobileObj)) {
+      saveStudentDetails({
+        variables: {
+          studentDto: {
+            contactDetail: {
+              firstName,
+              lastName,
+              gender,
+              dob,
+              email,
+              phoneNumber: {
+                countryCode: mobileObj.country.dialCode,
+                number: mobileObj.mobile,
+              },
             },
           },
         },
-      },
-    });
+      });
+    } else {
+      alertBox('Please enter valid phone number!');
+    }
   };
 
   return (
@@ -123,34 +128,34 @@ function PersonalInformation(props) {
           </View>
         )}
         <View style={{ height: RfH(24) }} />
-        {isUpdateAllowed ? (
-          <Item floatingLabel>
-            <Label>Email Id</Label>
-            <Input value={email} onChangeText={(text) => setEmail(text)} />
-          </Item>
-        ) : (
-          <View>
-            <Text style={commonStyles.mediumMutedText}>Email Id</Text>
-            <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.email}</Text>
-          </View>
-        )}
+        {/* {isUpdateAllowed ? ( */}
+        {/*  <Item floatingLabel> */}
+        {/*    <Label>Email Id</Label> */}
+        {/*    <Input value={email} onChangeText={(text) => setEmail(text)} /> */}
+        {/*  </Item> */}
+        {/* ) : ( */}
+        <View>
+          <Text style={commonStyles.mediumMutedText}>Email Id</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.email}</Text>
+        </View>
+        {/* )} */}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.regularMutedText}>Phone Number</Text>
-        {isUpdateAllowed ? (
-          <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-            <CustomMobileNumber
-              value={mobileObj}
-              topMargin={0}
-              onChangeHandler={(m) => setMobileObj(m)}
-              returnKeyType="done"
-              refKey="mobileNumber"
-              placeholder="Mobile number"
-              label={' '}
-            />
-          </View>
-        ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.phoneNumber?.number}</Text>
-        )}
+        {/* {isUpdateAllowed ? ( */}
+        {/*  <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}> */}
+        {/*    <CustomMobileNumber */}
+        {/*      value={mobileObj} */}
+        {/*      topMargin={0} */}
+        {/*      onChangeHandler={(m) => setMobileObj(m)} */}
+        {/*      returnKeyType="done" */}
+        {/*      refKey="mobileNumber" */}
+        {/*      placeholder="Mobile number" */}
+        {/*      label={' '} */}
+        {/*    /> */}
+        {/*  </View> */}
+        {/* ) : ( */}
+        <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.phoneNumber?.number}</Text>
+        {/* )} */}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.regularMutedText}>Date of birth</Text>
         {isUpdateAllowed ? (
@@ -158,7 +163,7 @@ function PersonalInformation(props) {
             <CustomDatePicker value={dob} onChangeHandler={(value) => setDOB(value)} />
           </View>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.dob}</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{printDate(details?.dob)}</Text>
         )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.regularMutedText}>Gender</Text>

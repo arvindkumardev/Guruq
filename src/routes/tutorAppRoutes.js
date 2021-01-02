@@ -16,7 +16,7 @@ import ReferEarn from '../containers/referAndEarn/referEarn';
 import Notifications from '../containers/student/dashboard/notifications';
 import PytnRequests from '../containers/tutor/pytn/pytnRequests';
 import SendFeedback from '../containers/common/sendFeedback';
-import CustomerCare from '../containers/common/customerCare';
+import CustomerCare from '../containers/common/customerCare/customerCare';
 import SubjectSelection from '../containers/tutor/mySubjects/subjectSelection';
 import AddressListing from '../containers/common/profileScreens/address/addressListing';
 import AddEditAddress from '../containers/common/profileScreens/address/addEditAddress';
@@ -29,6 +29,7 @@ import ExperienceListing from '../containers/common/profileScreens/experience/ex
 import AddEditExperience from '../containers/common/profileScreens/experience/addEditExperience';
 import BankDetails from '../containers/common/profileScreens/bankDetails/bankDetails';
 import AddEditBankDetails from '../containers/common/profileScreens/bankDetails/addEditBankDetails';
+import AboutUs from '../containers/common/about/about';
 
 const Stack = createStackNavigator();
 
@@ -112,6 +113,7 @@ export const getTutorRoutes = () => {
         component={CustomerCare}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.PARENTS_LIST}
         component={ParentListing}

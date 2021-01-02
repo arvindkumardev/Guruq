@@ -40,7 +40,7 @@ import EducationListing from '../containers/common/profileScreens/education/educ
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
 import AwardListing from '../containers/common/profileScreens/awards/awardListing';
 import AddEditAward from '../containers/common/profileScreens/awards/addEditAward';
-import PersonalDetails from '../containers/common/profileScreens/personalDetails';
+import PersonalDetails from '../containers/common/profileScreens/personalInformation/personalDetails';
 
 const Stack = createStackNavigator();
 

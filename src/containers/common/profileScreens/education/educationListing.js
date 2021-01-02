@@ -146,7 +146,7 @@ function EducationListing() {
           label="Education"
           horizontalPadding={RfW(16)}
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           onRightIconClick={handleAddEditAddress}
         />
         <View style={{ height: RfH(24) }} />
