@@ -178,7 +178,7 @@ function TutorDashboard(props) {
           </View>
 
           <View style={{ height: RfH(220), marginTop: RfH(24) }}>
-            <Swiper horizontal style={{ overflow: 'visible' }}>
+            <Swiper horizontal style={{ overflow: 'visible' }} paginationStyle={{ position: 'absolute', bottom: 10 }}>
               <View
                 style={{
                   backgroundColor: '#ceecfe',
