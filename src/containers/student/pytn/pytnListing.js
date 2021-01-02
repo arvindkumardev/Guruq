@@ -5,6 +5,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button } from 'native-base';
+import { isEmpty } from 'lodash';
 import { Colors, Fonts, Images } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
 import { alertBox, getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
@@ -15,7 +16,6 @@ import Loader from '../../../components/Loader';
 import { GET_TUTION_NEED_LISTING } from './pytn.query';
 import { offeringsMasterData, studentDetails } from '../../../apollo/cache';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
-import {isEmpty} from 'lodash'
 
 function PytnListing(props) {
   const navigation = useNavigation();
@@ -71,10 +71,10 @@ function PytnListing(props) {
     offeringMasterData.find((item) => item.id === offering?.offering?.id)?.rootOffering?.displayName;
 
   const removePytn = (item) => {
-    alertBox('Do you really want to remove the request', '', {
-      positiveText: 'Yes',
+    alertBox('Are you sure you want to remove this PYTN request?', '', {
+      positiveText: 'Delete PYTN',
       onPositiveClick: () => {
-        deletePYTN({ variables: { studentPytnId: item.id } });
+        deletePYTN({ variables: { id: item.id } });
       },
       negativeText: 'No',
     });
@@ -83,7 +83,7 @@ function PytnListing(props) {
   const renderClassItem = (item) => (
     <>
       <TouchableOpacity
-        onPress={() => navigation.navigate(routeNames.TUTION_NEEDS_HISTORY, { data: item, studentPytnId: item.id })}
+        onPress={() => navigation.navigate(routeNames.PYTN_HISTORY, { data: item, studentPytnId: item.id })}
         activeOpacity={1}>
         <View style={{ height: RfH(35) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -95,7 +95,7 @@ function PytnListing(props) {
               {item?.offering?.parentOffering?.displayName}
             </Text>
           </View>
-          <Text style={commonStyles.headingPrimaryText}>₹ {`${item.minPrice}-${item.maxPrice}`}</Text>
+          <Text style={commonStyles.headingPrimaryText}>₹ {item.maxPrice}</Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
@@ -121,7 +121,7 @@ function PytnListing(props) {
                 {item.groupSize > 1 ? 'Group' : 'Individual'} Class
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online Class' : 'Home Tution'}
+                {item.onlineClass ? 'Online' : 'Offline'} Class
               </Text>
             </View>
           </View>
@@ -147,7 +147,11 @@ function PytnListing(props) {
           alignItems: 'center',
           paddingVertical: RfH(20),
         }}>
-        <Text style={commonStyles.mediumPrimaryText}>{!isEmpty(item.acceptedPytns)?`Your request has been accepted by ${item.acceptedPytns.length} tutors`:'Not accepted yet'}</Text>
+        <Text style={commonStyles.mediumPrimaryText}>
+          {!isEmpty(item.acceptedPytns)
+            ? `Your request has been accepted by ${item.acceptedPytns.length} tutors`
+            : 'Not accepted yet'}
+        </Text>
         <TouchableOpacity onPress={() => removePytn(item)}>
           <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
         </TouchableOpacity>
@@ -157,7 +161,7 @@ function PytnListing(props) {
   );
 
   const addRequestHandle = () => {
-    navigation.navigate(routeNames.POST_TUTION_NEEDS);
+    navigation.navigate(routeNames.PYTN_ADD);
   };
 
   return (
@@ -166,9 +170,9 @@ function PytnListing(props) {
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader
           homeIcon
-          label="Post your tuition needs"
+          label="Post Your Tuition Needs"
           horizontalPadding={RfW(16)}
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           showRightIcon
           onRightIconClick={addRequestHandle}
         />
@@ -202,19 +206,21 @@ function PytnListing(props) {
                 commonStyles.pageTitleThirdRow,
                 { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
               ]}>
-              No data found
+              {/* No data found */}
+              Looks like you haven't posted your tuition need.
             </Text>
             <Text
               style={[
                 commonStyles.regularMutedText,
                 { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
               ]}>
-              Looks like you haven't Requested for any class.
+              {/* Looks like you haven't posted your tuition need. */}
+              Post your tuition need to broadcast your tuition requirements to all relevant tutors.
             </Text>
             <Button
               onPress={addRequestHandle}
               style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
-              <Text style={commonStyles.textButtonPrimary}>Post your tuition needs</Text>
+              <Text style={commonStyles.textButtonPrimary}>Post Your Tuition Need</Text>
             </Button>
           </View>
         )}

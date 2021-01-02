@@ -50,7 +50,7 @@ const VideoMoreAction = (props) => {
               }}>
               {/* <Text style={{ color: Colors.primaryText, fontSize: 18, fontFamily: Fonts.semiBold }}>More Options</Text> */}
               <TouchableOpacity onPress={() => onClose(false)}>
-                <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(20)} iconHeight={RfH(20)} />
               </TouchableOpacity>
             </View>
 

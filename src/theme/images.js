@@ -7,6 +7,7 @@ const Images = {
   abroad: require('../assets/images/abroad.png'),
   active_blue_circle: require('../assets/images/active_blue_circle.png'),
   moreInformation: require('../assets/images/add.png'),
+  add: require('../assets/images/add.png'),
   activities: require('../assets/images/activities.png'),
   attachment: require('../assets/images/attachment.png'),
   backArrow: require('../assets/images/back.png'),
@@ -41,6 +42,7 @@ const Images = {
   classes_active: require('../assets/images/classes-active.png'),
   classes: require('../assets/images/classes.png'),
   collapse_grey: require('../assets/images/collapse_grey.png'),
+  right_arrow_grey: require('../assets/images/right_arrow_grey.png'),
   collapse: require('../assets/images/collapse.png'),
   confirmed_booking: require('../assets/images/confirmed_booking.png'),
   cross: require('../assets/images/cross.png'),
@@ -110,6 +112,7 @@ const Images = {
   m3: require('../assets/images/m3.png'),
   map: require('../assets/images/map.png'),
   methodology: require('../assets/images/methodology.png'),
+  messaging: require('../assets/images/messaging.png'),
   messaging_white: require('../assets/images/messaging-white.png'),
   microphone_mute: require('../assets/images/microphone-mute.png'),
   microphone_mute_white: require('../assets/images/microphone-mute-white.png'),
@@ -211,6 +214,7 @@ const Images = {
   user_board: require('../assets/images/user_board.png'),
   user: require('../assets/images/user.png'),
   vertical_dots: require('../assets/images/vertical-dots.png'),
+  vertical_dots_b: require('../assets/images/vertical-dots_b.png'),
   video_call: require('../assets/images/video-call.png'),
   video_call2: require('../assets/images/video-call2.png'),
   video_call_mute: require('../assets/images/video-call-mute.png'),
@@ -245,6 +249,9 @@ const Images = {
   ...SubjectIcons,
   tutorWelcome: require('../assets/images/tutorWelcome.png'),
   ptTest: require('../assets/images/ptTest.png'),
+  experienceOrange: require('../assets/images/experienceOrange.png'),
+  personalGreen: require('../assets/images/personalGreen.png'),
+  addressBlue: require('../assets/images/addressBlue.png'),
 };
 
 export default Images;

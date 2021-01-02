@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Modal, View, Text, TouchableWithoutFeedback } from 'react-native';
 import { Item, Input } from 'native-base';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Colors, Fonts, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
-import commonStyles from '../../../../theme/styles';
-import { IconButtonWrapper, CustomRadioButton } from '../../../../components';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { GenderEnum } from '../../enums';
+import { Colors, Fonts, Images } from '../../../../../theme';
+import { RfH, RfW } from '../../../../../utils/helpers';
+import commonStyles from '../../../../../theme/styles';
+import { IconButtonWrapper, CustomRadioButton } from '../../../../../components';
+import { STANDARD_SCREEN_SIZE } from '../../../../../utils/constants';
+import { GenderEnum } from '../../../enums';
 
 const GenderModal = (props) => {
   const [selectedItem, setSelectedItem] = useState(1);
@@ -68,8 +68,8 @@ const GenderModal = (props) => {
           ]}>
           <Text style={commonStyles.regularPrimaryText}>Gender</Text>
           <IconButtonWrapper
-            iconHeight={RfH(16)}
-            iconWidth={RfW(16)}
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
             styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
             iconImage={Images.cross}
             submitFunction={() => onClose(false)}

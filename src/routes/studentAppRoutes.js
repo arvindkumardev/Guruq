@@ -25,15 +25,14 @@ import PytnDetail from '../containers/student/pytn/pytnDetail';
 import WebViewPage from '../components/WebViewPage';
 import Notifications from '../containers/student/dashboard/notifications';
 import SendFeedback from '../containers/common/sendFeedback';
-import CustomerCare from '../containers/common/customerCare';
-import PersonalDetails from '../containers/common/profileScreens/personalDetails';
-import AddressListing from '../containers/common/profileScreens/address/addressListing';
-import AddEditAddress from '../containers/common/profileScreens/address/addEditAddress';
-import AddressMapView from '../containers/common/profileScreens/addressMapView';
-import EducationListing from '../containers/common/profileScreens/education/educationListing';
-import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
+import CustomerCare from '../containers/common/customerCare/customerCare';
 import ParentListing from '../containers/common/profileScreens/parentsDetail/parentListing';
 import AddEditParents from '../containers/common/profileScreens/parentsDetail/addEditParents';
+import BookingDetails from '../containers/student/profile/purchasedHistory/bookingDetails';
+import ViewBookingDetails from '../containers/student/profile/purchasedHistory/viewBookingDetails';
+import Refund from '../containers/student/profile/purchasedHistory/refund';
+import AboutUs from '../containers/common/about/about';
+import MyStudyAreas from '../containers/student/studyArea/myStudyAreas';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +42,11 @@ export const getStudentRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.DASHBOARD}
         component={StudentDashboardContainer}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.MY_STUDY_AREAS}
+        component={MyStudyAreas}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -125,12 +129,12 @@ export const getStudentRoutes = () => {
       />
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
       <Stack.Screen
-        name={NavigationRouteNames.POST_TUTION_NEEDS}
+        name={NavigationRouteNames.PYTN_ADD}
         component={PytnSubjectSelection}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.POST_TUTION_NEED_DETAILS}
+        name={NavigationRouteNames.PYTN_DETAILS}
         component={PytnSubmit}
         options={{ headerShown: false }}
       />
@@ -140,12 +144,12 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.TUTION_NEEDS_LISTING}
+        name={NavigationRouteNames.PYTN_LISTING}
         component={PytnListing}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.TUTION_NEEDS_HISTORY}
+        name={NavigationRouteNames.PYTN_HISTORY}
         component={PytnDetail}
         options={{ headerShown: false }}
       />
@@ -165,12 +169,28 @@ export const getStudentRoutes = () => {
         component={CustomerCare}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.PARENTS_LIST} component={ParentListing} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.PARENTS_LIST}
+        component={ParentListing}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_PARENTS}
         component={AddEditParents}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.BOOKING_DETAILS}
+        component={BookingDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.VIEW_BOOKING_DETAILS}
+        component={ViewBookingDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.STUDENT.REFUND} component={Refund} options={{ headerShown: false }} />
     </>
   );
 };

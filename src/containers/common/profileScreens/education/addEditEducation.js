@@ -1,6 +1,6 @@
-import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
+import { Alert, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useState } from 'react';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
@@ -12,14 +12,12 @@ import { alertBox, RfH, RfW, startOfDay } from '../../../../utils/helpers';
 import CustomDatePicker from '../../../../components/CustomDatePicker';
 import { ADD_UPDATE_EDUCATION_DETAILS } from './education.mutation';
 import { SCHOOL_EDUCATION } from '../../../../utils/constants';
-import { HighSchoolStreamEnum } from '../../enums';
+import { DegreeLevelEnum, HighSchoolStreamEnum } from '../../enums';
 import { UserTypeEnum } from '../../../../common/userType.enum';
-import { GET_DEGREE_LIST } from './education.query';
 
-function AddEditEducation(props) {
+function AddEditEducation() {
   const navigation = useNavigation();
   const userTypeVal = useReactiveVar(userType);
-  const educationDetail = props?.route?.params?.detail;
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
   const studentInfo = useReactiveVar(studentDetails);
   const tutorInfo = useReactiveVar(tutorDetails);
@@ -28,7 +26,11 @@ function AddEditEducation(props) {
   const schoolEducation = offeringMasterData.find((s) => s.level === 0 && s.name === SCHOOL_EDUCATION);
   const boards = offeringMasterData.filter((s) => s?.parentOffering?.id === schoolEducation?.id);
 
-  console.log('educationDetail', educationDetail);
+  const degreeData = [];
+  Object.keys(DegreeLevelEnum).forEach(function (key) {
+    degreeData.push({ value: DegreeLevelEnum[key], label: key });
+  });
+
   const highSchoolStreams = [];
   Object.keys(HighSchoolStreamEnum).forEach(function (key) {
     highSchoolStreams.push({ value: HighSchoolStreamEnum[key], label: key });
@@ -44,7 +46,6 @@ function AddEditEducation(props) {
   const [educationType, setEducationType] = useState(0);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [degreeData, setDegreeData] = useState([]);
 
   const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -62,25 +63,6 @@ function AddEditEducation(props) {
       }
     },
   });
-
-  const [getDegreeList, { loading: degreeListLoading }] = useLazyQuery(GET_DEGREE_LIST, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        const degrees = data.getDegrees.edges;
-        setDegreeData(degrees.map((item) => ({ label: item.name, value: item })));
-      }
-    },
-  });
-
-  useEffect(() => {
-    getDegreeList();
-  }, []);
 
   const checkValues = () => {
     if (isEmpty(schoolName)) {
@@ -136,9 +118,10 @@ function AddEditEducation(props) {
           dto.subjects = selectedStream.label;
         }
       } else if (educationType === 1) {
-        dto.degree = { name: selectedDegree.name, degreeLevel: selectedDegree.degreeLevel, id: selectedDegree.id };
+        dto.degree = { name: selectedDegree.label };
         dto.fieldOfStudy = fieldOfStudy;
       }
+      console.log('dto', dto);
       saveEducation({
         variables: {
           educationDto: dto,
@@ -149,7 +132,7 @@ function AddEditEducation(props) {
 
   return (
     <>
-      <Loader isLoading={educationLoading || degreeListLoading} />
+      <Loader isLoading={educationLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader homeIcon label="Education" horizontalPadding={RfW(16)} />
         <View style={{ paddingHorizontal: RfW(16) }}>
@@ -294,6 +277,7 @@ function AddEditEducation(props) {
                       value={endDate}
                       onChangeHandler={(d) => setEndDate(d)}
                       minimumDate={new Date(startDate)}
+                      maximumDate={new Date()}
                     />
                   </View>
                 </View>

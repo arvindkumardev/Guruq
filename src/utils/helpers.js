@@ -12,8 +12,6 @@ import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants'
 
 const countryData = require('../components/NationalityDropdown/country/countries.json');
 
-let token;
-
 export const storeData = async (key, value) => {
   try {
     let v = value;
@@ -38,17 +36,12 @@ export const removeData = async (key) => {
 };
 
 export const getToken = async () => {
-  if (token) {
-    return Promise.resolve(token);
-  }
-
-  token = await AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+  const token = await AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
   return token;
 };
 
 export const removeToken = async () => {
   removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-  token = null;
 };
 
 export const clearAllLocalStorage = async () => {
@@ -93,7 +86,7 @@ export const RfH = (value) => {
 
 export const isIntegerString = (str) => /^\+?(0|[1-9]\d*)$/.test(str);
 
-export const isValidEmail = (str) => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(str);
+export const isValidEmail = (str) => /^([a-zA-Z0-9_+\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(str);
 
 export const isDisplayWithNotch = () => DeviceInfo.hasNotch();
 
@@ -308,9 +301,9 @@ export const endOfDay = (date) => {
   return `${moment(date).format('YYYY-MM-DDT23:59:59')}Z`;
 };
 
-export const isValidMobile = (mobile, dialCode) => {
-  if (!isEmpty(mobile) && !isUndefined(mobile)) {
-    const parsedMobile = parseMobile(`+${dialCode}${mobile}`);
+export const isValidMobile = (mobileObject) => {
+  if (!isEmpty(mobileObject) && !isUndefined(mobileObject)) {
+    const parsedMobile = parseMobile(`+${mobileObject.country.dialCode}${mobileObject.mobile}`);
     return !isUndefined(parsedMobile) ? parsedMobile.isValid() : false;
   }
   return false;
@@ -337,4 +330,21 @@ export const createPayload = async (user, token) => {
     networkInfo: await DeviceInfo.getIpAddress(),
   };
   return Promise.resolve(payload);
+};
+
+export const getFullName = (contactDetail) => {
+  return contactDetail ? `${contactDetail?.firstName} ${contactDetail?.lastName}` : '';
+};
+
+export const getNameInitials = (contactDetails) => {
+  const names = getFullName(contactDetails).split(' ');
+  let initials = names[0].substring(0, 1).toUpperCase();
+
+  if (names.length > 1) {
+    initials += names[names.length - 1].substring(0, 1).toUpperCase();
+  }
+  return initials;
+};
+export const printCurrency = (number) => {
+  return new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(number);
 };

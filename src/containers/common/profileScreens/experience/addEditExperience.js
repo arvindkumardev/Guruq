@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Item } from 'native-base';
+import { Button, Input, Item, Label } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
@@ -103,19 +103,19 @@ function AddEditExperience(props) {
         <ScreenHeader homeIcon label="Experience" horizontalPadding={RfW(16)} lineVisible={false} />
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(44) }} />
-          <Text style={commonStyles.smallMutedText}>Name of Company/Institute</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>Name of Company/Institute</Label>
             <Input value={companyName} onChangeText={(text) => setCompanyName(text)} />
           </Item>
           <View style={{ height: RfH(24) }} />
           <View>
-            <Text style={commonStyles.smallMutedText}>Job Title</Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Job Title</Label>
               <Input value={jobTitle} onChangeText={(text) => setJobTitle(text)} />
             </Item>
           </View>
           <View style={{ height: RfH(24) }} />
-          <Text style={commonStyles.smallMutedText}>Employment type</Text>
+          <Text style={commonStyles.regularMutedText}>Employment type</Text>
           <View>
             <Item>
               <CustomSelect
@@ -135,7 +135,7 @@ function AddEditExperience(props) {
           <View>
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <View style={{ flex: 0.5, marginRight: RfW(16) }}>
-                <Text style={commonStyles.smallMutedText}>Start Date</Text>
+                <Text style={commonStyles.regularMutedText}>Start Date</Text>
                 <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                   <CustomDatePicker
                     value={startDate}
@@ -149,7 +149,7 @@ function AddEditExperience(props) {
               </View>
               {!isCurrent && (
                 <View style={{ flex: 0.5, marginLeft: RfW(16) }}>
-                  <Text style={commonStyles.smallMutedText}>End Date</Text>
+                  <Text style={commonStyles.regularMutedText}>End Date</Text>
                   <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                     <CustomDatePicker
                       value={endDate}

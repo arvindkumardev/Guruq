@@ -45,6 +45,7 @@ export const GET_TUTOR_OFFERING_DETAIL = gql`
       offerings {
         id
         displayName
+        level
         parentOffering {
           id
           level
@@ -60,6 +61,8 @@ export const GET_TUTOR_OFFERING_DETAIL = gql`
           displayName
         }
       }
+      stage
+      allowedPTAttempts
 
       tutorProficiencyTests {
         id
@@ -67,6 +70,148 @@ export const GET_TUTOR_OFFERING_DETAIL = gql`
         score
         notAttempted
         maxMarks
+      }
+    }
+  }
+`;
+
+export const GET_TUTOR_ALL_DETAILS = gql`
+  query GetTutorDetails {
+    getTutorDetails {
+      id
+      contactDetail {
+        firstName
+        lastName
+        email
+        dob
+        phoneNumber {
+          countryCode
+          number
+        }
+        gender
+      }
+      lead {
+        certificationStage
+      }
+      profileCompletion
+      certified
+      certifiedDate
+      addresses {
+        id
+        type
+        street
+        subArea
+        city
+        state
+        country
+        postalCode
+        landmark
+        fullAddress
+        latitude
+        longitude
+        primary
+      }
+      tutorOfferings {
+        id
+        offerings {
+          id
+          name
+          displayName
+        }
+        offering {
+          id
+          name
+          displayName
+          parentOffering {
+            id
+            name
+            displayName
+          }
+          rootOffering {
+            name
+            displayName
+          }
+        }
+        tutorProficiencyTests {
+          status
+          score
+        }
+      }
+      educationDetails {
+        id
+        school {
+          name
+        }
+        degree {
+          id
+          name
+          degreeLevel
+        }
+        board
+        grade
+        subjects
+        fieldOfStudy
+        startDate
+        endDate
+        isCurrent
+        active
+      }
+      experienceDetails {
+        id
+        title
+        employmentType
+        institution {
+          name
+        }
+        startDate
+        endDate
+        current
+        active
+      }
+      awards {
+        id
+        title
+        description
+        issuer
+        address {
+          id
+          city
+          state
+          country
+        }
+        date
+        document {
+          id
+          name
+          type
+          attachment {
+            id
+            name
+            type
+            filename
+            size
+          }
+        }
+      }
+      documents {
+        id
+        name
+        type
+        attachment {
+          id
+          name
+          type
+          filename
+          size
+        }
+      }
+      bankDetails {
+        id
+        accountHolder
+        bankName
+        branchAddress
+        accountNumber
+        ifscCode
       }
     }
   }

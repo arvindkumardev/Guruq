@@ -45,8 +45,8 @@ const qPointPayModal = (props) => {
           paddingBottom: RfH(34),
         }}>
         <IconButtonWrapper
-          iconHeight={RfH(24)}
-          iconWidth={RfW(24)}
+          iconHeight={RfH(20)}
+          iconWidth={RfW(20)}
           styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
           iconImage={Images.cross}
           submitFunction={() => onClose(false)}

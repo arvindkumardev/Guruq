@@ -15,7 +15,7 @@ import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
+import { getFullName, getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
 import { SCHEDULE_CLASS } from '../../student/booking.mutation';
 import { GET_CLASS_DETAILS } from '../../student/class.query';
 import styles from '../../student/tutorListing/styles';
@@ -93,9 +93,7 @@ function ScheduledClassDetails(props) {
             styling={{ borderRadius: RfH(22.5) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>
-              {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
-            </Text>
+            <Text style={commonStyles.headingPrimaryText}>{getFullName(item?.contactDetail)}</Text>
             <Text style={commonStyles.mediumMutedText}>GURUQ{item?.id}</Text>
           </View>
         </View>
@@ -343,9 +341,7 @@ function ScheduledClassDetails(props) {
             styling={{ borderRadius: RfH(48) }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>
-              {classData?.tutor?.contactDetail?.firstName} {classData?.tutor?.contactDetail?.lastName}
-            </Text>
+            <Text style={commonStyles.headingPrimaryText}>{getFullName(classData?.tutor?.contactDetail)}</Text>
             <Text style={commonStyles.mediumMutedText}>T{classData?.tutor?.id}</Text>
           </View>
         </View>
@@ -493,8 +489,8 @@ function ScheduledClassDetails(props) {
             }}>
             <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}>
               <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
+                iconHeight={RfH(20)}
+                iconWidth={RfW(20)}
                 styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
                 iconImage={Images.cross}
                 submitFunction={() => setShowClassStartedPopup(false)}
@@ -536,8 +532,8 @@ function ScheduledClassDetails(props) {
             }}>
             <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}>
               <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
+                iconHeight={RfH(20)}
+                iconWidth={RfW(20)}
                 styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
                 iconImage={Images.cross}
                 submitFunction={() => setShowCancelClassStartedPopup(false)}

@@ -111,7 +111,7 @@ function AwardListing() {
           label="Manage Awards & Achievements"
           horizontalPadding={RfW(16)}
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           onRightIconClick={handleAddEditAward}
         />
         <View style={{ height: RfH(24) }} />

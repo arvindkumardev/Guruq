@@ -73,6 +73,16 @@ function BoardSelector(props) {
     }
   };
 
+  const slugify = (name) => {
+    return name
+      ? name
+          .split(' ')
+          .filter((s) => s.trim().length > 0)
+          .join('_')
+          .toLowerCase()
+      : '';
+  };
+
   const renderItem = (item, index) => (
     <TouchableWithoutFeedback onPress={() => onClick(item)}>
       <View
@@ -89,8 +99,9 @@ function BoardSelector(props) {
         ]}>
         <View style={{ alignItems: 'center' }}>
           <IconButtonWrapper
-            iconHeight={RfH(70)}
-            iconImage={Images[item.name.toLowerCase()]}
+            iconWidth={RfH(64)}
+            iconHeight={RfH(64)}
+            iconImage={Images[slugify(item.name)]}
             imageResizeMode="contain"
           />
           <Text style={styles.areaTitleOne}>{item.displayName}</Text>

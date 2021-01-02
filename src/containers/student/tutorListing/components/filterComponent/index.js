@@ -113,8 +113,8 @@ function FilterComponent(props) {
             <IconButtonWrapper
               submitFunction={handleCloseFilter}
               iconImage={Images.cross}
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
+              iconWidth={RfW(20)}
+              iconHeight={RfH(20)}
               styling={{ marginRight: RfW(8) }}
             />
           </View>

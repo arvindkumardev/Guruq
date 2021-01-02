@@ -1,4 +1,4 @@
-import { Text, View,KeyboardAvoidingView } from 'react-native';
+import { Text, View, KeyboardAvoidingView } from 'react-native';
 import React, { useState } from 'react';
 import { Button } from 'native-base';
 import { ScreenHeader } from '../../../components';
@@ -23,10 +23,7 @@ function PriceMatrix(props) {
   const showLoader = (loading) => loading;
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.select({ android: '', ios: 'padding' })}
-      enabled>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'padding' })} enabled>
       <Loader isLoading={showLoader()} />
       <View style={{ paddingHorizontal: RfW(16), backgroundColor: Colors.white, flex: 1 }}>
         <ScreenHeader homeIcon label={offering.offering?.displayName} />

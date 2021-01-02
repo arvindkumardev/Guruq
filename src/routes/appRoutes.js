@@ -40,12 +40,16 @@ import EducationListing from '../containers/common/profileScreens/education/educ
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
 import AwardListing from '../containers/common/profileScreens/awards/awardListing';
 import AddEditAward from '../containers/common/profileScreens/awards/addEditAward';
-import PersonalDetails from '../containers/common/profileScreens/personalDetails';
 import TutorWelcomeScreen from '../containers/certficationProcess/tutorWelcomeScreen';
 import CertificationProcessSteps from '../containers/certficationProcess/certificationProcessSteps';
 import SubjectSelection from '../containers/tutor/mySubjects/subjectSelection';
 import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
-import ProficiencyTest from "../containers/tutor/proficiencyTest";
+import ProficiencyTest from '../containers/tutor/proficiencyTest';
+import PersonalDetails from '../containers/common/profileScreens/personalInformation/personalDetails';
+import CompleteYourProfile from '../containers/certficationProcess/completeYourProfile';
+import ExperienceListing from '../containers/common/profileScreens/experience/experienceListing';
+import AddEditExperience from '../containers/common/profileScreens/experience/addEditExperience';
+import InterviewAndDocument from '../containers/certficationProcess/interviewAndDocuments';
 
 const Stack = createStackNavigator();
 
@@ -199,6 +203,27 @@ const AppStack = (props) => {
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.PROFICIENCY_TEST}
         component={ProficiencyTest}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.COMPLETE_PROFILE}
+        component={CompleteYourProfile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.INTERVIEW_AND_DOCUMENTS}
+        component={InterviewAndDocument}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name={NavigationRouteNames.EXPERIENCE}
+        component={ExperienceListing}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.ADD_EDIT_EXPERIENCE}
+        component={AddEditExperience}
         options={{ headerShown: false }}
       />
 

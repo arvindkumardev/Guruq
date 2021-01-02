@@ -30,10 +30,13 @@ function CustomMobileNumber(props) {
     modalTitle,
     editable,
   } = props;
-  const [country, setCountry] = useState(value.country);
 
-  const onChangeMobile = (mobile) => {
-    onChangeHandler({ country, mobile });
+  const [country, setCountry] = useState(value.country);
+  const [mobile, setMobile] = useState(value.mobile);
+
+  const onChangeMobile = (mobileText) => {
+    setMobile(mobileText);
+    onChangeHandler({ country, mobile: mobileText });
     setShowModal(false);
   };
 
@@ -79,12 +82,13 @@ function CustomMobileNumber(props) {
                 keyboardType="phone-pad"
                 placeholder={placeholder}
                 blurOnSubmit
-                value={value.mobile}
+                value={mobile}
                 editable={editable}
                 onChangeText={onChangeMobile}
+                maxLength={10}
                 style={[
                   styles.inputStyle,
-                  !value.mobile && { color: Colors.secondaryText },
+                  !mobile && { color: Colors.secondaryText },
                   { flex: 1 },
                   { paddingBottom: RfH(12) },
                 ]}
@@ -98,9 +102,9 @@ function CustomMobileNumber(props) {
                 onBlur={() => setIsFocussed(false)}
               />
 
-              {showClearButton && !isEmpty(value.mobile) && isFocussed && (
+              {showClearButton && !isEmpty(mobile) && isFocussed && (
                 <Icon
-                  onPress={() => onChangeHandler({ country, mobile: '' })}
+                  onPress={() => onChangeMobile('')}
                   style={styles.iconStyle}
                   type="Entypo"
                   name="circle-with-cross"

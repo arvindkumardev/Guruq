@@ -7,14 +7,14 @@ import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import { CustomRadioButton, IconButtonWrapper, Loader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
-import { Colors, Images } from '../../../../theme';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
+import { Colors, Fonts, Images } from '../../../../theme';
+import { alertBox, printCurrency, RfH, RfW } from '../../../../utils/helpers';
 import routeNames from '../../../../routes/screenNames';
 import styles from './styles';
 import { ADD_TO_CART } from '../../booking.mutation';
 import PriceMatrixComponent from './priceMatrixComponent';
 
-const ClassModeSelectModal = (props) => {
+const AddToCartModal = (props) => {
   const { visible, onClose, selectedSubject, isDemoClass, isRenewal } = props;
   const { budgetDetails } = selectedSubject;
   const navigation = useNavigation();
@@ -27,9 +27,7 @@ const ClassModeSelectModal = (props) => {
   const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -42,13 +40,14 @@ const ClassModeSelectModal = (props) => {
   const calculateAmount = (noClasses, isOnline) => {
     const applicableBudgets = budgetDetails
       .filter((budget) => budget.onlineClass === isOnline && budget.demo === isDemoClass)
-      .sort((a, b) => a.count < b.count);
+      .sort((a, b) => a.count > b.count);
     let perClassPrice = 0;
     applicableBudgets.forEach((budget) => {
       if (noClasses >= budget.count && budget.price !== 0) {
         perClassPrice = budget.price;
       }
     });
+
     setClassPrice(perClassPrice);
     return noClasses * perClassPrice;
   };
@@ -146,8 +145,8 @@ const ClassModeSelectModal = (props) => {
             <IconButtonWrapper
               styling={{ alignSelf: 'flex-end' }}
               containerStyling={{ paddingHorizontal: RfW(16) }}
-              iconHeight={RfH(24)}
-              iconWidth={RfW(24)}
+              iconHeight={RfH(20)}
+              iconWidth={RfW(20)}
               iconImage={Images.cross}
               submitFunction={() => onClose(false)}
               imageResizeMode="contain"
@@ -156,23 +155,38 @@ const ClassModeSelectModal = (props) => {
         </View>
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
           <View>
-            <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(16), alignSelf: 'flex-start' }]}>
-              {isDemoClass ? 'Select mode of demo class' : 'Select mode of class and number of Classes'}
-            </Text>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'flex-start' }]}>
-              <Text style={commonStyles.mediumPrimaryText}>Mode of {isDemoClass && 'demo'} Class</Text>
+            {/* <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(16), alignSelf: 'flex-start' }]}> */}
+            {/*  {isDemoClass ? 'Select mode of demo class' : 'Select mode of class and number of Classes'} */}
+            {/* </Text> */}
+            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'center' }]}>
+              <Text style={commonStyles.mediumPrimaryText}>{`Mode of ${isDemoClass ? 'Demo ' : ''}Class`}</Text>
               <View style={commonStyles.horizontalChildrenCenterView}>
                 {selectedSubject.onlineClass > 0 && (
-                  <View style={{ flexDirection: 'row' ,alignItems:'center'}}>
-                    <CustomRadioButton enabled={isOnlineClassMode} submitFunction={() => changeClassMode(true)} />
-                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
-                  </View>
+                  <TouchableWithoutFeedback onPress={() => changeClassMode(true)}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 8,
+                      }}>
+                      <CustomRadioButton enabled={isOnlineClassMode} />
+                      <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
                 )}
-                {selectedSubject.homeTution && (
-                  <View style={{ flexDirection: 'row', marginLeft: RfW(16),alignItems:'center' }}>
-                    <CustomRadioButton enabled={!isOnlineClassMode} submitFunction={() => changeClassMode(false)} />
-                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Home Tuition</Text>
-                  </View>
+                {selectedSubject.offlineClass && (
+                  <TouchableWithoutFeedback onPress={() => changeClassMode(false)}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginLeft: RfW(16),
+                        alignItems: 'center',
+                        paddingVertical: 8,
+                      }}>
+                      <CustomRadioButton enabled={!isOnlineClassMode} />
+                      <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Offline</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
                 )}
               </View>
             </View>
@@ -185,45 +199,60 @@ const ClassModeSelectModal = (props) => {
             )}
             {!isDemoClass && (
               <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-                <Text style={commonStyles.regularPrimaryText}>Total Classes</Text>
+                <Text style={commonStyles.regularPrimaryText}>Number of Classes</Text>
                 <View style={styles.bookingSelectorParent}>
                   <TouchableWithoutFeedback onPress={removeClass}>
-                    <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                    <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                       <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                     </View>
                   </TouchableWithoutFeedback>
 
-                  <Text>{numberOfClass}</Text>
+                  <Text style={{ fontFamily: Fonts.semiBold }}>{numberOfClass}</Text>
 
                   <TouchableWithoutFeedback onPress={addClass}>
-                    <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                    <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                       <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                     </View>
                   </TouchableWithoutFeedback>
                 </View>
               </View>
             )}
-            {amount !== 0 && (
-              <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-                <Text style={commonStyles.regularPrimaryText}>Amount Payable</Text>
-                <Text style={commonStyles.headingPrimaryText}>
-                  {numberOfClass} x ₹{classPrice} = ₹{amount}
-                </Text>
-              </View>
-            )}
-            <View style={{ alignSelf: 'center', marginTop: RfH(32) }}>
-              <Button onPress={onAddingIntoCart} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
-                <Text style={commonStyles.textButtonPrimary}>Add to Cart</Text>
-              </Button>
+            {/* {amount !== 0 && ( */}
+            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), marginBottom: RfH(34) }]}>
+              <Text style={commonStyles.regularPrimaryText}>Total Amount</Text>
+              <Text style={commonStyles.headingPrimaryText}>
+                {numberOfClass} x ₹{classPrice} = ₹{printCurrency(amount)}
+              </Text>
             </View>
+            {/* )} */}
           </View>
+        </View>
+
+        <View style={commonStyles.lineSeparator} />
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            // alignSelf: 'center',
+            alignContent: 'center',
+            paddingVertical: RfH(8),
+            paddingHorizontal: RfW(16),
+          }}>
+          <View style={{ alignSelf: 'center' }}>
+            <Text style={commonStyles.headingPrimaryText}>₹{printCurrency(amount)}</Text>
+            <Text style={commonStyles.smallMutedText}>Item Price</Text>
+          </View>
+          <Button onPress={onAddingIntoCart} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+            <Text style={commonStyles.textButtonPrimary}>Add to Cart</Text>
+          </Button>
         </View>
       </View>
     </Modal>
   );
 };
 
-ClassModeSelectModal.propTypes = {
+AddToCartModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
   selectedSubject: PropTypes.object,
@@ -231,7 +260,7 @@ ClassModeSelectModal.propTypes = {
   isRenewal: PropTypes.bool,
 };
 
-ClassModeSelectModal.defaultProps = {
+AddToCartModal.defaultProps = {
   visible: false,
   onClose: null,
   selectedSubject: {},
@@ -239,4 +268,4 @@ ClassModeSelectModal.defaultProps = {
   isRenewal: false,
 };
 
-export default ClassModeSelectModal;
+export default AddToCartModal;

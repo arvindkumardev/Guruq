@@ -281,9 +281,9 @@ const styles = StyleSheet.create({
     marginBottom: RfH(34),
   },
   bookingSelectorParent: {
-    borderRadius: 8,
-    width: RfW(72),
-    height: RfH(32),
+    borderRadius: 4,
+    width: RfW(80),
+    height: RfH(36),
     borderWidth: 1,
     borderColor: Colors.brandBlue2,
     justifyContent: 'space-evenly',

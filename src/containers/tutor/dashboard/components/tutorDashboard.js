@@ -20,7 +20,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
 import { isEmpty } from 'lodash';
 import { tutorDetails, userDetails } from '../../../../apollo/cache';
-import { IconButtonWrapper, UpcomingClassComponent } from '../../../../components';
+import { IconButtonWrapper, UpcomingClassComponent,TutorImageComponent } from '../../../../components';
 import Loader from '../../../../components/Loader';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import { Colors, Images } from '../../../../theme';
@@ -148,19 +148,21 @@ function TutorDashboard(props) {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <View>
+            <View style={{ flex: 0.7 }}>
               <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
                 Hi {userInfo.firstName}
               </Text>
             </View>
-            <View>
-              <IconButtonWrapper
-                iconHeight={RfH(32)}
-                iconWidth={RfH(32)}
-                iconImage={getUserImageUrl(userInfo?.profileImage?.filename, userInfo?.gender, userInfo?.id)}
-                styling={{ borderRadius: RfH(32) }}
-                submitFunction={() => changeTab(5)}
-              />
+            <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
+              <TouchableWithoutFeedback onPress={() => changeTab(5)}>
+                <TutorImageComponent
+                  tutor={{ profileImage: userInfo.profileImage, contactDetail: userInfo }}
+                  height={32}
+                  width={32}
+                  fontSize={16}
+                  styling={{ borderRadius: RfH(32) }}
+                />
+              </TouchableWithoutFeedback>
             </View>
           </View>
 

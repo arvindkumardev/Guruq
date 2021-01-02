@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import styles from '../styles';
 import commonStyles from '../../../../theme/styles';
 import { IconButtonWrapper, TutorImageComponent } from '../../../../components';
-import { RfH, RfW, titleCaseIfExists } from '../../../../utils/helpers';
+import { getFullName, RfH, RfW, titleCaseIfExists } from '../../../../utils/helpers';
 import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
@@ -28,8 +28,8 @@ function TutorListCard(props) {
   const getTutorBudget = () => {
     const tutorOffering =
       tutor.tutorOfferings && tutor.tutorOfferings.find((s) => s.offerings.find((o) => o.id === offering.id));
-    const onlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === true);
-    const offlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === false);
+    const onlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === true && s.count === 1);
+    const offlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === false && s.count === 1);
     if (onlineBudget && offlineBudget) {
       return onlineBudget.price > offlineBudget.price ? offlineBudget.price : onlineBudget.price;
     }
@@ -63,6 +63,7 @@ function TutorListCard(props) {
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
             <TutorImageComponent tutor={tutor} />
+
             {isSponsored && (
               <View
                 style={{
@@ -99,9 +100,7 @@ function TutorListCard(props) {
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-                <Text style={styles.tutorName}>
-                  {tutor.contactDetail.firstName} {tutor.contactDetail.lastName}
-                </Text>
+                <Text style={styles.tutorName}>{getFullName(tutor.contactDetail)}</Text>
                 {tutor.educationDetails.length > 0 && (
                   <Text style={styles.tutorDetails} numberOfLines={1}>
                     {titleCaseIfExists(tutor.educationDetails[0].degree?.degreeLevel)}

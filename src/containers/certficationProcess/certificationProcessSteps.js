@@ -57,6 +57,16 @@ const CertificationProcessSteps = (props) => {
         offeringId: leadDetail.tutorOffering?.id,
       });
     }
+    if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFILE_COMPLETION_PENDING.label) {
+      navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
+        isOnBoarding: true,
+      });
+    }
+    if (leadDetail.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING.label) {
+      navigation.navigate(NavigationRouteNames.TUTOR.INTERVIEW_AND_DOCUMENTS, {
+        isOnBoarding: true,
+      });
+    }
   };
 
   useEffect(() => {
@@ -75,6 +85,12 @@ const CertificationProcessSteps = (props) => {
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFICIENCY_TEST_PENDING.label) {
       return 'Start proficiency test';
+    }
+    if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFILE_COMPLETION_PENDING.label) {
+      return 'Complete profile';
+    }
+    if (leadDetail.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING.label) {
+      return 'Schedule Interview';
     }
   };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import { Button } from 'native-base';
-import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
 import { getSubjectIcons, RfH, RfW } from '../../utils/helpers';
@@ -10,20 +10,21 @@ import Images from '../../theme/images';
 import { Colors } from '../../theme';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
 import NavigationRouteNames from '../../routes/screenNames';
-import { GET_TUTOR_LEAD_DETAIL, GET_TUTOR_OFFERING_DETAIL } from './certification-query';
+import { GET_TUTOR_OFFERING_DETAIL } from './certification-query';
 import { offeringsMasterData } from '../../apollo/cache';
 import { PtStatus } from '../tutor/enums';
+import { MARK_CERTIFIED } from './certification-mutation';
 
 const PtStartScreen = (props) => {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const offeringId = props?.route.params.offeringId;
   const isOnBoarding = props?.route.params.isOnBoarding;
-  const [leadDetail, setLeadDetail] = useState({});
+  const [ptDetail, setPtDetail] = useState({});
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const [offering, setOffering] = useState({});
 
-  const [getTutorOfferingDetails, { loading: tutorLeadDetaixlLoading }] = useLazyQuery(GET_TUTOR_OFFERING_DETAIL, {
+  const [getTutorOfferingDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_OFFERING_DETAIL, {
     fetchPolicy: 'no-cache',
     variables: { tutorOfferingId: offeringId },
     onError: (e) => {
@@ -33,22 +34,26 @@ const PtStartScreen = (props) => {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log('data', data);
+        setOffering(
+          offeringMasterData.find(
+            (item) => item.id === data.getTutorOfferingDetails.offerings.find((item) => item.level === 3).id
+          )
+        );
+        const ptTest = data.getTutorOfferingDetails.tutorProficiencyTests.sort((a, b) => (a.id < b.id ? 1 : -1));
+        setPtDetail(ptTest[0]);
+        console.log('data', ptTest);
       }
     },
   });
 
-  const [getTutorLeadDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_LEAD_DETAIL, {
+  const [markCertified, { loading: markTutorCertifiedLoading }] = useMutation(MARK_CERTIFIED, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
-        setLeadDetail(data.getTutorLeadDetails);
-        setOffering(offeringMasterData.find((item) => item.id === data.getTutorLeadDetails.tutorOffering?.offering.id));
+        navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE,{isOnBoarding});
       }
     },
   });
@@ -56,42 +61,34 @@ const PtStartScreen = (props) => {
   useEffect(() => {
     if (isFocussed) {
       getTutorOfferingDetails();
-      getTutorLeadDetails();
     }
   }, [isFocussed]);
 
   const handleClick = () => {
-    if (
-      leadDetail?.tutorProficiencyTest?.status === PtStatus.PENDING.label ||
-      leadDetail?.tutorProficiencyTest?.status === PtStatus.FAILED.label
-    ) {
+    if (ptDetail?.status === PtStatus.PENDING.label || ptDetail?.status === PtStatus.FAILED.label) {
       navigation.navigate(NavigationRouteNames.TUTOR.PROFICIENCY_TEST, {
-        offeringId: leadDetail.tutorOffering?.id,
+        offeringId,
       });
     }
 
-    if (
-      leadDetail?.tutorProficiencyTest?.status === PtStatus.PASSED.label ||
-      leadDetail?.tutorProficiencyTest?.status === PtStatus.EXEMPTED.label
-    ) {
-      navigation.navigate(NavigationRouteNames.TUTOR.PROFICIENCY_TEST, {
-        offeringId: leadDetail.tutorOffering?.id,
-      });
+    if (ptDetail?.status === PtStatus.PASSED.label || ptDetail?.status === PtStatus.EXEMPTED.label) {
+      if (isOnBoarding) {
+        markCertified();
+      } else {
+        navigation.goBack();
+      }
     }
   };
 
   const getButtonText = () => {
-    if (leadDetail?.tutorProficiencyTest?.status === PtStatus.PENDING.label) {
+    if (ptDetail?.status === PtStatus.PENDING.label) {
       return 'Start Test';
     }
-    if (leadDetail?.tutorProficiencyTest?.status === PtStatus.FAILED.label) {
+    if (ptDetail?.status === PtStatus.FAILED.label) {
       return 'Retake Test';
     }
-    if (
-      leadDetail?.tutorProficiencyTest?.status === PtStatus.PASSED.label ||
-      leadDetail?.tutorProficiencyTest?.status === PtStatus.EXEMPTED.label
-    ) {
-      return 'Next Step';
+    if (ptDetail?.status === PtStatus.PASSED.label || ptDetail?.status === PtStatus.EXEMPTED.label) {
+      return isOnBoarding ? 'Next Step' : 'Go back';
     }
   };
 
@@ -117,7 +114,7 @@ const PtStartScreen = (props) => {
   const renderScore = () => (
     <View style={{ marginTop: RfH(20) }}>
       <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
-        Total Score {leadDetail?.tutorProficiencyTest?.score} (out of {leadDetail?.tutorProficiencyTest?.maxMarks})
+        Total Score {ptDetail?.score} (out of {ptDetail?.maxMarks})
       </Text>
       <View style={{ marginTop: RfH(30) }}>
         <View
@@ -132,7 +129,7 @@ const PtStartScreen = (props) => {
               width: '28%',
               alignItems: 'center',
             }}>
-            <Text style={commonStyles.regularPrimaryText}>{leadDetail?.tutorProficiencyTest?.score}</Text>
+            <Text style={commonStyles.regularPrimaryText}>{ptDetail?.score}</Text>
           </View>
         </View>
 
@@ -148,7 +145,9 @@ const PtStartScreen = (props) => {
               width: '28%',
               alignItems: 'center',
             }}>
-            <Text style={commonStyles.regularPrimaryText}>{leadDetail?.tutorProficiencyTest?.score}</Text>
+            <Text style={commonStyles.regularPrimaryText}>
+              {ptDetail?.maxMarks - ptDetail?.score - ptDetail?.notAttempted}
+            </Text>
           </View>
         </View>
 
@@ -164,7 +163,7 @@ const PtStartScreen = (props) => {
               width: '28%',
               alignItems: 'center',
             }}>
-            <Text style={commonStyles.regularPrimaryText}>{leadDetail?.tutorProficiencyTest?.notAttempted}</Text>
+            <Text style={commonStyles.regularPrimaryText}>{ptDetail?.notAttempted}</Text>
           </View>
         </View>
 
@@ -180,7 +179,7 @@ const PtStartScreen = (props) => {
               width: '28%',
               alignItems: 'center',
             }}>
-            <Text style={commonStyles.regularPrimaryText}>{leadDetail?.tutorProficiencyTest?.maxMarks}</Text>
+            <Text style={commonStyles.regularPrimaryText}>{ptDetail?.maxMarks}</Text>
           </View>
         </View>
 
@@ -195,11 +194,10 @@ const PtStartScreen = (props) => {
               borderRadius: RfH(8),
               width: '28%',
               alignItems: 'center',
-              backgroundColor:
-                leadDetail?.tutorProficiencyTest?.status === PtStatus.PASSED.label ? Colors.green : Colors.orangeRed,
+              backgroundColor: ptDetail?.status === PtStatus.PASSED.label ? Colors.green : Colors.orangeRed,
             }}>
             <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
-              {leadDetail?.tutorProficiencyTest?.status === PtStatus.PASSED.label ? 'PASS' : 'FAIL'}
+              {ptDetail?.status === PtStatus.PASSED.label ? 'PASS' : 'FAIL'}
             </Text>
           </View>
         </View>
@@ -209,7 +207,7 @@ const PtStartScreen = (props) => {
 
   return (
     <>
-      <Loader isLoading={tutorLeadDetailLoading} />
+      <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading} />
       <ScreenHeader label="Proficiency Test" homeIcon horizontalPadding={RfW(16)} />
       <View
         style={{
@@ -217,7 +215,7 @@ const PtStartScreen = (props) => {
           backgroundColor: Colors.white,
           paddingHorizontal: RfH(20),
         }}>
-        {leadDetail?.tutorProficiencyTest?.status === PtStatus.PENDING.label && (
+        {ptDetail?.status === PtStatus.PENDING.label && (
           <>
             <View style={{ alignItems: 'center', marginVertical: RfH(50) }}>
               <Text style={[commonStyles.regularPrimaryText, { marginBottom: RfH(60), textAlign: 'center' }]}>
@@ -229,15 +227,14 @@ const PtStartScreen = (props) => {
           </>
         )}
 
-        {(leadDetail?.tutorProficiencyTest?.status === PtStatus.FAILED.label ||
-          leadDetail?.tutorProficiencyTest?.status === PtStatus.PASSED.label) && (
+        {(ptDetail?.status === PtStatus.FAILED.label || ptDetail?.status === PtStatus.PASSED.label) && (
           <View style={{ marginTop: RfH(15) }}>
             {renderOffering()}
             {renderScore()}
           </View>
         )}
 
-        {leadDetail?.tutorProficiencyTest?.status === PtStatus.EXEMPTED.label && (
+        {ptDetail?.status === PtStatus.EXEMPTED.label && (
           <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(20) }}>
             <Text style={commonStyles.headingPrimaryText}> You are exempted from the test</Text>
           </View>

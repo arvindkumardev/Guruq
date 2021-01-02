@@ -25,6 +25,8 @@ export const ADD_INTERESTED_OFFERINGS = gql`
 export const REMOVE_INTERESTED_OFFERINGS = gql`
   mutation RemoveInterestedOffering($offeringId: Int!) {
     removeInterestedOffering(offeringId: $offeringId) {
+      id
+      active
       selected
       offering {
         id

@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import { Colors, Images } from '../../../theme';
-import { getSaveData, getTutorImage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { getFullName, getSaveData, getTutorImage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
@@ -29,8 +29,8 @@ function compareTutors() {
     return (
       <View style={commonStyles.verticallyStretchedItemsView}>
         <IconButtonWrapper
-          iconWidth={RfH(18)}
-          iconHeight={RfH(18)}
+          iconWidth={RfH(20)}
+          iconHeight={RfH(20)}
           iconImage={Images.cross}
           imageResizeMode="contain"
           styling={styles.crossIcon}
@@ -43,9 +43,7 @@ function compareTutors() {
           imageResizeMode="contain"
           styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
         />
-        <Text style={styles.compareTutorName}>
-          {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
-        </Text>
+        <Text style={styles.compareTutorName}>{getFullName(item?.contactDetail)}</Text>
         <Text style={{ color: Colors.darkGrey, alignSelf: 'center' }}>₹ 350/ hour</Text>
         <View style={[commonStyles.horizontalChildrenCenterView, { marginTop: RfH(8) }]}>
           <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfH(18)} iconImage={Images.user_board} />
@@ -53,7 +51,7 @@ function compareTutors() {
             iconHeight={RfH(18)}
             iconWidth={RfH(18)}
             iconImage={Images.heart}
-            imageResizeMode={'contain'}
+            imageResizeMode="contain"
             styling={{ marginHorizontal: RfW(16) }}
           />
           <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfH(18)} iconImage={Images.share} />
@@ -158,7 +156,7 @@ function compareTutors() {
           </Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginTop: RfH(6) }]} />
-        <Text style={styles.infoCategoryText}>Mode of Tution</Text>
+        <Text style={styles.infoCategoryText}>Mode of Tuition</Text>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12) }]}>
           <View style={commonStyles.verticallyStretchedItemsView}>
             <View style={commonStyles.horizontalChildrenView}>

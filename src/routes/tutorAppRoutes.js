@@ -16,7 +16,7 @@ import ReferEarn from '../containers/referAndEarn/referEarn';
 import Notifications from '../containers/student/dashboard/notifications';
 import PytnRequests from '../containers/tutor/pytn/pytnRequests';
 import SendFeedback from '../containers/common/sendFeedback';
-import CustomerCare from '../containers/common/customerCare';
+import CustomerCare from '../containers/common/customerCare/customerCare';
 import SubjectSelection from '../containers/tutor/mySubjects/subjectSelection';
 import AddressListing from '../containers/common/profileScreens/address/addressListing';
 import AddEditAddress from '../containers/common/profileScreens/address/addEditAddress';
@@ -29,6 +29,7 @@ import ExperienceListing from '../containers/common/profileScreens/experience/ex
 import AddEditExperience from '../containers/common/profileScreens/experience/addEditExperience';
 import BankDetails from '../containers/common/profileScreens/bankDetails/bankDetails';
 import AddEditBankDetails from '../containers/common/profileScreens/bankDetails/addEditBankDetails';
+import AboutUs from '../containers/common/about/about';
 
 const Stack = createStackNavigator();
 
@@ -82,7 +83,7 @@ export const getTutorRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.POST_TUTION_NEED_DETAILS}
+        name={NavigationRouteNames.PYTN_DETAILS}
         component={PytnSubmit}
         options={{ headerShown: false }}
       />
@@ -107,20 +108,15 @@ export const getTutorRoutes = () => {
         component={CustomerCare}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.PARENTS_LIST} component={ParentListing} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.PARENTS_LIST}
+        component={ParentListing}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_PARENTS}
         component={AddEditParents}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.EXPERIENCE}
-        component={ExperienceListing}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.ADD_EDIT_EXPERIENCE}
-        component={AddEditExperience}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.BANK_DETAILS} component={BankDetails} options={{ headerShown: false }} />

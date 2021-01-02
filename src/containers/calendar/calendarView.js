@@ -13,7 +13,7 @@ import { Colors, Images } from '../../theme';
 import { getBoxColor } from '../../theme/colors';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { getSubjectIcons, printTime, RfH, RfW } from '../../utils/helpers';
+import { getFullName, getSubjectIcons, printTime, RfH, RfW } from '../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
@@ -72,11 +72,13 @@ function CalendarView(props) {
             iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
           />
         </View>
-        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.headingPrimaryText}>
+        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8), flex: 1 }]}>
+          <Text style={commonStyles.headingPrimaryText} numberOfLines={2}>
             {isStudent
-              ? `${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`
-              : `${classDetails?.offering?.displayName} Class for ${classDetails.students[0].contactDetail.firstName} ${classDetails.students[0].contactDetail.lastName}`}
+              ? `${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)}`
+              : `${classDetails?.offering?.displayName} Class for ${getFullName(
+                  classDetails?.students[0].contactDetail
+                )}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>
             {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
@@ -191,7 +193,7 @@ function CalendarView(props) {
                     commonStyles.pageTitleThirdRow,
                     { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
                   ]}>
-                  {isStudent?"You Haven't scheduled class":"You don't have scheduled classes"}
+                  {isStudent ? "You Haven't scheduled class" : "You don't have scheduled classes"}
                 </Text>
                 <Text
                   style={[

@@ -8,16 +8,17 @@ const NavigationRouteNames = {
   REGISTER: 'register',
   USER_TYPE_SELECTOR: 'user_type_selector',
   REFER_EARN: 'refer_and_earn',
-  POST_TUTION_NEEDS: 'post_your_tuition_needs',
-  POST_TUTION_NEED_DETAILS: 'post_your_tuition_need_details',
   WEB_VIEW_PAGES: 'web_view_pages',
-  TUTION_NEEDS_LISTING: 'tution_needs_listing',
-  TUTION_NEEDS_HISTORY: 'tution_needs_history',
+  PYTN_LISTING: 'pytn_listing',
+  PYTN_HISTORY: 'pytn_history',
+  PYTN_ADD: 'pytn_add',
+  PYTN_DETAILS: 'pytn_details',
   ONLINE_CLASS: 'online_class1',
 
   WEB_VIEW: 'web_view',
   NOTIFICATIONS: 'notifications',
   SEND_FEEDBACK: 'send_feedback',
+  ABOUT_US: 'about_us',
   CUSTOMER_CARE: 'customer_care',
   ADDRESS: 'address',
   ADD_EDIT_ADDRESS: 'add_edit_address',
@@ -38,6 +39,7 @@ const NavigationRouteNames = {
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
+    MY_STUDY_AREAS: 'my_study_areas',
     STUDY_AREA: 'student_study_area',
     BOARD: 'student_board',
     CLASS: 'student_class',
@@ -62,6 +64,9 @@ const NavigationRouteNames = {
     COMPARE_MODAL: 'compare_modal',
     FAVOURITE_TUTOR: 'favourite_tutor',
     NOTIFICATIONS: 'notifications',
+    BOOKING_DETAILS: 'booking_details',
+    VIEW_BOOKING_DETAILS: 'view_booking_details',
+    REFUND: 'refund',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',
@@ -80,6 +85,8 @@ const NavigationRouteNames = {
     SCHEDULE_YOUR_INTERVIEW: 'schedule_your_interview',
     PT_START_SCREEN: 'pt_start_screen',
     PROFICIENCY_TEST: 'proficiency_test',
+    COMPLETE_PROFILE: 'complete_profile',
+    INTERVIEW_AND_DOCUMENTS: 'interview_and_documents',
   },
 };
 

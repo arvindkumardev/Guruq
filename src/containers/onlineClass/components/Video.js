@@ -12,7 +12,7 @@ import IconButtonWrapper from '../../../components/IconWrapper';
 import { Colors } from '../../../theme';
 import Images from '../../../theme/images';
 import commonStyles from '../../../theme/styles';
-import { deviceWidth, RfH, RfW, printDate, printTime } from '../../../utils/helpers';
+import {deviceWidth, RfH, RfW, printDate, printTime, getFullName} from '../../../utils/helpers';
 import ClassDetailsModal from './classDetailsModal';
 import requestCameraAndAudioPermission from './permission';
 import styles from './style';
@@ -316,8 +316,7 @@ export default class Video extends Component<Props, State> {
                   numberOfLines={1}>
                   {this.props.classDetails?.offering?.parentOffering?.displayName}{' '}
                   {this.props.classDetails?.offering?.displayName} by{' '}
-                  {this.props.classDetails?.tutor?.contactDetail?.firstName}{' '}
-                  {this.props.classDetails?.tutor?.contactDetail?.lastName}
+                  {getFullName(this.props.classDetails?.tutor?.contactDetail)}
                 </Text>
               </View>
             </TouchableWithoutFeedback>
@@ -1009,7 +1008,7 @@ export default class Video extends Component<Props, State> {
               </View>
               <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
                 <Text style={commonStyles.headingPrimaryText}>
-                  {`${this.props.classDetails?.offering?.displayName} by ${this.props.classDetails?.tutor?.contactDetail?.firstName} ${this.props.classDetails?.tutor?.contactDetail?.lastName}`}
+                  {`${this.props.classDetails?.offering?.displayName} by ${getFullName(this.props.classDetails?.tutor?.contactDetail)}`}
                 </Text>
                 <Text style={commonStyles.mediumMutedText}>
                   {`${this.props.classDetails?.offering?.parentOffering?.displayName} | ${this.props.classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}

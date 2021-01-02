@@ -27,6 +27,7 @@ const ScreenHeader = (props) => {
     rightText,
     onRightTextClick,
     handleBack,
+    rightTextStyle,
   } = props;
 
   const onBackPress = () => {
@@ -57,7 +58,7 @@ const ScreenHeader = (props) => {
               <Text style={commonStyles.headingPrimaryText}>{label}</Text>
             </View>
           </View>
-          <View style={{ position: 'absolute', right: 0 }}>
+          <View style={{ position: 'absolute', right: 0, padding: RfW(10) }}>
             {showRightIcon && (
               <IconButtonWrapper
                 iconImage={rightIcon}
@@ -68,7 +69,7 @@ const ScreenHeader = (props) => {
             )}
             {showRightText && (
               <TouchableWithoutFeedback onPress={() => onRightTextClick()}>
-                <Text>{rightText}</Text>
+                <Text style={rightTextStyle}>{rightText}</Text>
               </TouchableWithoutFeedback>
             )}
           </View>
@@ -94,6 +95,7 @@ ScreenHeader.propTypes = {
   onRightIconClick: PropTypes.func,
   onRightTextClick: PropTypes.func,
   handleBack: PropTypes.func,
+  rightTextStyle: PropTypes.object,
 };
 
 ScreenHeader.defaultProps = {
@@ -111,6 +113,7 @@ ScreenHeader.defaultProps = {
   onRightIconClick: null,
   onRightTextClick: null,
   handleBack: null,
+  rightTextStyle: {},
 };
 
 export default ScreenHeader;

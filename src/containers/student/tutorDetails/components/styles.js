@@ -10,9 +10,9 @@ const styles = StyleSheet.create({
     color: Colors.darkGrey,
   },
   bookingSelectorParent: {
-    borderRadius: 8,
-    width: RfW(72),
-    height: RfH(32),
+    borderRadius: 4,
+    width: RfW(100),
+    height: RfH(36),
     borderWidth: 1,
     borderColor: Colors.brandBlue2,
     justifyContent: 'space-evenly',
