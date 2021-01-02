@@ -12,8 +12,8 @@ function PriceMatrixComponent(props) {
   useEffect(() => {
     if (!isEmpty(budgets)) {
       const pm = {
-        online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-        offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+        online: { c1: 0, c6: 0, c11: 0, c26: 0, c51: 0 },
+        offline: { c1: 0, c6: 0, c11: 0, c26: 0, c51: 0 },
       };
       const demoPrice = {
         online: 0,

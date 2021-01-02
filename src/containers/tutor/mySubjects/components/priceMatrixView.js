@@ -58,6 +58,8 @@ function PriceMatrixView(props) {
           pm.offline[key] = maxValue;
         }
       });
+
+      console.log(pm);
       setPriceMatrix(pm);
       setDemoClassPM(demoPrice);
     }

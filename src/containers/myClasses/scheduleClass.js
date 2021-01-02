@@ -156,7 +156,7 @@ function ScheduleClass(props) {
             </Text>
             {isStudent && (
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                T{classData?.tutor.id}
+                T-{classData?.tutor.id}
               </Text>
             )}
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>

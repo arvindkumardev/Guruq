@@ -146,7 +146,7 @@ function ScheduledClassDetails(props) {
         <TutorImageComponent tutor={item} height={36} width={36} fontSize={16} styling={{ borderRadius: RfH(36) }} />
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
           <Text style={commonStyles.headingPrimaryText}>{getFullName(item?.contactDetail)}</Text>
-          <Text style={commonStyles.mediumMutedText}>{item?.id}</Text>
+          <Text style={commonStyles.mediumMutedText}>S-{item?.id}</Text>
         </View>
       </View>
     </View>
@@ -361,7 +361,7 @@ function ScheduledClassDetails(props) {
               <Text style={commonStyles.headingPrimaryText}>
                 {getFullName(classData?.classEntity?.tutor?.contactDetail)}
               </Text>
-              <Text style={commonStyles.mediumMutedText}>T{classData?.classEntity?.tutor?.id}</Text>
+              <Text style={commonStyles.mediumMutedText}>T-{classData?.classEntity?.tutor?.id}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -420,10 +420,15 @@ function ScheduledClassDetails(props) {
         />
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 44 }]}>
-          <IconButtonWrapper iconImage={Images.attachment} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>Attachments</Text>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfH(16), height: 44 }]}>
+          <View style={{ flexDirection: 'row' }}>
+            <IconButtonWrapper iconImage={Images.attachment} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+              <Text style={commonStyles.headingPrimaryText}>Attachments</Text>
+            </View>
+          </View>
+          <View>
+            <IconButtonWrapper iconImage={Images.add} iconWidth={24} iconHeight={24} />
           </View>
         </View>
 
@@ -434,7 +439,8 @@ function ScheduledClassDetails(props) {
           renderItem={({ item, index }) => renderAttachments(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+        <View style={commonStyles.lineSeparatorWithMargin} />
 
         {classData?.classEntity?.address && (
           <>
@@ -469,8 +475,8 @@ function ScheduledClassDetails(props) {
             </View>
           </>
         )}
-        <View
-          style={[commonStyles.horizontalChildrenView, { marginTop: RfH(16), paddingHorizontal: RfH(16), height: 60 }]}>
+
+        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper
             iconImage={Images.personal}
             iconWidth={RfW(16)}

@@ -49,7 +49,7 @@ function PytnRequests() {
         alertBox(`Request ${isEmpty(selectedPytn.acceptedPytns) ? 'accepted' : 'edited'} successfully`, '', {
           positiveText: 'Ok',
           onPositiveClick: () => {
-            getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asec' } } });
+            getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asc' } } });
           },
         });
       }
@@ -97,7 +97,7 @@ function PytnRequests() {
 
   useEffect(() => {
     if (isFocussed) {
-      getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asec' } } });
+      getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asc' } } });
     }
   }, [isFocussed]);
 
