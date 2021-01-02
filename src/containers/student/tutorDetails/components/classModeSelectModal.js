@@ -8,7 +8,7 @@ import { useMutation } from '@apollo/client';
 import { CustomRadioButton, IconButtonWrapper, Loader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
+import {alertBox, printCurrency, RfH, RfW} from '../../../../utils/helpers';
 import routeNames from '../../../../routes/screenNames';
 import styles from './styles';
 import { ADD_TO_CART } from '../../booking.mutation';
@@ -207,7 +207,7 @@ const ClassModeSelectModal = (props) => {
               <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
                 <Text style={commonStyles.regularPrimaryText}>Amount Payable</Text>
                 <Text style={commonStyles.headingPrimaryText}>
-                  {numberOfClass} x ₹{classPrice} = ₹{amount}
+                  {numberOfClass} x ₹{classPrice} = ₹{printCurrency(amount)}
                 </Text>
               </View>
             )}

@@ -290,7 +290,7 @@ function ClassView() {
                   ]}>
                   Looks like you haven't booked any class.
                 </Text>
-                <View style={{ height: RfH(40) }} />
+                <View style={{ height: RfH(32) }} />
                 <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
                   <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
                 </Button>

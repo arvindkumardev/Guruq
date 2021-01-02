@@ -345,3 +345,6 @@ export const getNameInitials = (contactDetails) => {
   }
   return initials;
 };
+export const printCurrency = (number) => {
+  return new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(number);
+};
