@@ -15,7 +15,7 @@ import { IconButtonWrapper, Loader, PaymentMethodModal, ScreenHeader, TutorImage
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
-import { alertBox, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getFullName, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
@@ -343,9 +343,7 @@ const MyCart = () => {
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <View>
             <Text style={styles.buttonText}>{item?.offering?.displayName}</Text>
-            <Text style={styles.buttonText}>
-              by {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
-            </Text>
+            <Text style={styles.buttonText}>by {getFullName(item?.tutor?.contactDetail)}</Text>
           </View>
           <View style={styles.bookingSelectorParent}>
             <View style={styles.bookingSelectorParent}>

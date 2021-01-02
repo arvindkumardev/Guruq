@@ -112,6 +112,7 @@ const Images = {
   m3: require('../assets/images/m3.png'),
   map: require('../assets/images/map.png'),
   methodology: require('../assets/images/methodology.png'),
+  messaging: require('../assets/images/messaging.png'),
   messaging_white: require('../assets/images/messaging-white.png'),
   microphone_mute: require('../assets/images/microphone-mute.png'),
   microphone_mute_white: require('../assets/images/microphone-mute-white.png'),

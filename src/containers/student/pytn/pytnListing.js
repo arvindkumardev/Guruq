@@ -83,7 +83,7 @@ function PytnListing(props) {
   const renderClassItem = (item) => (
     <>
       <TouchableOpacity
-        onPress={() => navigation.navigate(routeNames.TUTION_NEEDS_HISTORY, { data: item, studentPytnId: item.id })}
+        onPress={() => navigation.navigate(routeNames.PYTN_HISTORY, { data: item, studentPytnId: item.id })}
         activeOpacity={1}>
         <View style={{ height: RfH(35) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -161,7 +161,7 @@ function PytnListing(props) {
   );
 
   const addRequestHandle = () => {
-    navigation.navigate(routeNames.POST_TUTION_NEEDS);
+    navigation.navigate(routeNames.PYTN_ADD);
   };
 
   return (

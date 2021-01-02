@@ -1,4 +1,4 @@
-import { Alert, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Label, Picker } from 'native-base';

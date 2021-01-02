@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import { Colors, Images } from '../../../theme';
-import { getSaveData, getTutorImage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { getFullName, getSaveData, getTutorImage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
@@ -43,9 +43,7 @@ function compareTutors() {
           imageResizeMode="contain"
           styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
         />
-        <Text style={styles.compareTutorName}>
-          {item?.contactDetail?.firstName} {item?.contactDetail?.lastName}
-        </Text>
+        <Text style={styles.compareTutorName}>{getFullName(item?.contactDetail)}</Text>
         <Text style={{ color: Colors.darkGrey, alignSelf: 'center' }}>₹ 350/ hour</Text>
         <View style={[commonStyles.horizontalChildrenCenterView, { marginTop: RfH(8) }]}>
           <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfH(18)} iconImage={Images.user_board} />
@@ -53,7 +51,7 @@ function compareTutors() {
             iconHeight={RfH(18)}
             iconWidth={RfH(18)}
             iconImage={Images.heart}
-            imageResizeMode={'contain'}
+            imageResizeMode="contain"
             styling={{ marginHorizontal: RfW(16) }}
           />
           <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfH(18)} iconImage={Images.share} />

@@ -28,6 +28,7 @@ import {
 } from '../tutor-query';
 import styles from './styles';
 import {
+  getFullName,
   getSaveData,
   getSubjectIcons,
   getUserImageUrl,
@@ -216,7 +217,7 @@ function TutorDetails(props) {
         const review = [];
         for (const obj of data.searchReview.edges) {
           const item = {
-            name: `${obj.createdBy.firstName} ${obj.createdBy.lastName}`,
+            name: getFullName(obj.createdBy),
             icon: obj.createdBy,
             rating: obj.overallRating,
             date: new Date(obj.createdDate).toDateString(),
@@ -534,7 +535,7 @@ function TutorDetails(props) {
               fontSize={15}
             />
             <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>
-              {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
+              {getFullName(tutorData.contactDetail)}
             </Text>
           </View>
         )}
@@ -575,9 +576,7 @@ function TutorDetails(props) {
         styling={{ alignSelf: 'center', borderRadius: RfH(80), height: RfH(80), width: RfH(80) }}
       />
       <View style={{ marginLeft: RfW(16), width: '70%' }}>
-        <Text style={styles.tutorName}>
-          {tutorData?.contactDetail?.firstName} {tutorData?.contactDetail?.lastName}
-        </Text>
+        <Text style={styles.tutorName}>{getFullName(tutorData?.contactDetail)}</Text>
         <Text style={styles.tutorDetails}>T-{tutorData?.id}</Text>
         {tutorData?.educationDetails?.length > 0 && (
           <Text style={[styles.tutorDetails, { color: Colors.primaryText }]} numberOfLines={1}>

@@ -193,7 +193,7 @@ function AddEditAddress(props) {
 
         <Text style={commonStyles.regularMutedText}>Save as</Text>
         <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(10) }]}>
-          {[AddressTypeEnum.HOME.label, AddressTypeEnum.WORK.label].map((at) => {
+          {[AddressTypeEnum.HOME.label, AddressTypeEnum.WORK.label, AddressTypeEnum.BILLING.label].map((at) => {
             return (
               <TouchableWithoutFeedback onPress={() => setAddress({ ...address, type: at })}>
                 <View

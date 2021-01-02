@@ -117,7 +117,7 @@ function PytnRequests() {
               {item?.offering?.parentOffering?.displayName}
             </Text>
           </View>
-          <Text style={commonStyles.headingPrimaryText}>₹ {`${item.minPrice}-${item.maxPrice}`}</Text>
+          <Text style={commonStyles.headingPrimaryText}>₹ {item.maxPrice}</Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>

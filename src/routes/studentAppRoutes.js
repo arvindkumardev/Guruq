@@ -129,12 +129,12 @@ export const getStudentRoutes = () => {
       />
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
       <Stack.Screen
-        name={NavigationRouteNames.POST_TUTION_NEEDS}
+        name={NavigationRouteNames.PYTN_ADD}
         component={PytnSubjectSelection}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.POST_TUTION_NEED_DETAILS}
+        name={NavigationRouteNames.PYTN_DETAILS}
         component={PytnSubmit}
         options={{ headerShown: false }}
       />
@@ -144,12 +144,12 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.TUTION_NEEDS_LISTING}
+        name={NavigationRouteNames.PYTN_LISTING}
         component={PytnListing}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.TUTION_NEEDS_HISTORY}
+        name={NavigationRouteNames.PYTN_HISTORY}
         component={PytnDetail}
         options={{ headerShown: false }}
       />

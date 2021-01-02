@@ -5,7 +5,7 @@ import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Colors, Images } from '../../../theme';
-import { RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
+import { getFullName, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import styles from '../tutorListing/styles';
@@ -111,9 +111,7 @@ function FavouriteTutors() {
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row' }}>
             <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-              <Text style={styles.tutorName}>
-                {item?.tutor?.contactDetail?.firstName} {item?.tutor?.contactDetail?.lastName}
-              </Text>
+              <Text style={styles.tutorName}>{getFullName(item?.tutor?.contactDetail)}</Text>
               {item?.tutor?.educationDetails?.length > 0 && (
                 <Text style={styles.tutorDetails} numberOfLines={1}>
                   {titleCaseIfExists(item?.tutor?.educationDetails[0]?.degree?.degreeLevel)}

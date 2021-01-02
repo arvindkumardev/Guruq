@@ -35,7 +35,7 @@ function PytnSubmit(props) {
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        navigation.navigate(routeNames.TUTION_NEEDS_LISTING);
+        navigation.navigate(routeNames.PYTN_LISTING);
       }
     },
   });

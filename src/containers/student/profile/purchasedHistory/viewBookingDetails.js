@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { CustomRadioButton, IconButtonWrapper, ScreenHeader, TutorImageComponent } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import {getFullName, RfH, RfW} from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import { tutorDetails } from '../../../../apollo/cache';
 import routeNames from '../../../../routes/screenNames';
@@ -67,7 +67,7 @@ function ViewBookingDetails() {
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
                 }}>
-                {`${item.tutor.contactDetail.firstName} ${item.tutor.contactDetail.lastName}`}
+                {getFullName(item?.tutor?.contactDetail)}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 {item.onlineClass ? 'Online' : 'Offline'} - Individual Class

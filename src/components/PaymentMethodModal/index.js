@@ -10,7 +10,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { CustomRadioButton, IconButtonWrapper } from '..';
-import { alertBox, RfH, RfW } from '../../utils/helpers';
+import {alertBox, getFullName, RfH, RfW} from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import routeNames from '../../routes/screenNames';
 import { userDetails } from '../../apollo/cache';
@@ -94,11 +94,11 @@ const PaymentMethod = (props) => {
       currency: 'INR',
       key: 'rzp_test_0kNEbt0JJ60aiz',
       amount: `${amount * 100}`,
-      name: `${userInfo?.firstName} ${userInfo?.lastName}`,
+      name: getFullName(userInfo),
       prefill: {
         email: userInfo?.email,
         contact: `${userInfo?.phoneNumber?.countryCode}${userInfo?.phoneNumber?.number}`,
-        name: `${userInfo?.firstName} ${userInfo?.lastName}`,
+        name: getFullName(userInfo),
       },
       theme: { color: '#1E5AA0' },
     };

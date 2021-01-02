@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
-import { getUserImageUrl, RfH, RfW } from '../../../utils/helpers';
+import {getFullName, getUserImageUrl, RfH, RfW} from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import styles from '../../myClasses/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -110,10 +110,10 @@ function ClassView() {
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
                 }}>
-                {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
+                {getFullName(item.tutor.contactDetail)}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                GURUS{item.tutor.id}
+                T-{item.tutor.id}
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
                 {item.onlineClass ? 'Online' : 'Offline'} Individual Class

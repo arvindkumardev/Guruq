@@ -1,13 +1,13 @@
-import { Image, Text, View } from 'react-native';
+import { View } from 'react-native';
 import React, { useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import PersonalInformation from './components/personalInformation';
 import { ScreenHeader } from '../../../../components';
-import { userDetails, studentDetails } from '../../../../apollo/cache';
+import { studentDetails, userDetails } from '../../../../apollo/cache';
 import commonStyles from '../../../../theme/styles';
-import { Colors } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { Colors, Fonts } from '../../../../theme';
+import { RfW } from '../../../../utils/helpers';
 
 function PersonalDetails() {
   const navigation = useNavigation();
@@ -24,7 +24,7 @@ function PersonalDetails() {
         horizontalPadding={RfW(16)}
         showRightText
         rightText={isEditClicked ? '' : 'EDIT'}
-        rightTextStyle={{ color: Colors.orangeRed }}
+        rightTextStyle={{ color: Colors.orangeRed, fontFamily: Fonts.semiBold }}
         onRightTextClick={() => setIsEditClicked(true)}
         lineVisible={false}
         handleBack={() => {

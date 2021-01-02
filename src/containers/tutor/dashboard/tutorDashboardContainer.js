@@ -50,7 +50,7 @@ function TutorDashboardContainer(props) {
           {activeTab === 2 && <CalendarView changeTab={changeTab} />}
           {activeTab === 3 && <MyClasses />}
           {activeTab === 4 && <Wallet />}
-          {activeTab === 5 && <Profile changeTab={() => changeTab(3)} />}
+          {activeTab === 5 && <Profile changeTab={changeTab} />}
         </View>
         <BottomTab activeTab={activeTab} changeTab={changeTab} />
       </Container>

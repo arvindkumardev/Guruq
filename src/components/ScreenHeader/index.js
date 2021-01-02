@@ -58,7 +58,7 @@ const ScreenHeader = (props) => {
               <Text style={commonStyles.headingPrimaryText}>{label}</Text>
             </View>
           </View>
-          <View style={{ position: 'absolute', right: 0 }}>
+          <View style={{ position: 'absolute', right: 0, padding: RfW(10) }}>
             {showRightIcon && (
               <IconButtonWrapper
                 iconImage={rightIcon}

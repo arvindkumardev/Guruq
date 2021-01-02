@@ -21,6 +21,7 @@ import { GET_CLASS_DETAILS } from '../student/class.query';
 import styles from '../student/tutorListing/styles';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
+import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -30,6 +31,8 @@ function ScheduledClassDetails(props) {
 
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
+
+  const [showMessageModal, setShowMessageModal] = useState(false);
 
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [showBackButton, setShowBackButton] = useState(false);
@@ -400,11 +403,19 @@ function ScheduledClassDetails(props) {
             iconHeight={RfH(16)}
             imageResizeMode="contain"
           />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 1 }]}>
             <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
             <Text style={commonStyles.mediumMutedText}>
               {classData?.classEntity?.students?.length} participants to join the Class
             </Text>
+          </View>
+          <View>
+            <IconButtonWrapper
+              iconImage={Images.messaging}
+              iconHeight={24}
+              iconWidth={24}
+              submitFunction={() => setShowMessageModal(true)}
+            />
           </View>
         </View>
         <FlatList
@@ -519,6 +530,15 @@ function ScheduledClassDetails(props) {
         </View>
         {/* )} */}
       </ScrollView>
+
+      {classData && (
+        <VideoMessagingModal
+          onClose={() => setShowMessageModal(false)}
+          visible={showMessageModal}
+          channelName={classData?.uuid}
+        />
+      )}
+
       {showReschedulePopup && (
         <DateSlotSelectorModal
           visible={showReschedulePopup}

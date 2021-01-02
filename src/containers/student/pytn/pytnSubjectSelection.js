@@ -11,7 +11,7 @@ function PytnSubjectSelection() {
   const navigation = useNavigation();
 
   const goToOtherDetails = (subjectData) => {
-    navigation.navigate(NavigationRouteNames.POST_TUTION_NEED_DETAILS, { subjectData });
+    navigation.navigate(NavigationRouteNames.PYTN_DETAILS, { subjectData });
   };
 
   return (

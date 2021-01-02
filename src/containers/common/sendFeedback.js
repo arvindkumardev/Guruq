@@ -5,7 +5,7 @@ import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors, Fonts } from '../../theme';
-import { RfH, RfW } from '../../utils/helpers';
+import {getFullName, RfH, RfW} from '../../utils/helpers';
 import { ADD_ENQUIRY } from './graphql-mutation';
 import { userDetails } from '../../apollo/cache';
 import { SEARCH_IN_INQUIRY } from './graphql-query';
@@ -48,7 +48,7 @@ function SendFeedback() {
       addEnquiry({
         variables: {
           inquiryDto: {
-            name: `${userInfo.firstName} ${userInfo.lastName}`,
+            name: getFullName(userInfo),
             mobile: userInfo.phoneNumber.number,
             email: userInfo.email,
             title: query,

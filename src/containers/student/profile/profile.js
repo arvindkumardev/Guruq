@@ -24,7 +24,15 @@ import IconWrapper from '../../../components/IconWrapper';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { alertBox, clearAllLocalStorage, getUserImageUrl, removeToken, RfH, RfW } from '../../../utils/helpers';
+import {
+  alertBox,
+  clearAllLocalStorage,
+  getFullName,
+  getUserImageUrl,
+  removeToken,
+  RfH,
+  RfW,
+} from '../../../utils/helpers';
 import styles from './styles';
 import { UserTypeEnum } from '../../../common/userType.enum';
 
@@ -47,7 +55,7 @@ const BOOKING_DATA_OPTIONS = [
 
 const MY_CLASSES_OPTIONS = [
   { name: 'Calendar', icon: Images.personal },
-  { name: 'Classes', icon: Images.home },
+  { name: 'Schedule Classes', icon: Images.home },
 ];
 
 const SETTINGS_OPTIONS = [
@@ -122,10 +130,11 @@ function Profile(props) {
     } else if (item.name === 'Parents Details') {
       navigation.navigate(NavigationRouteNames.PARENTS_LIST);
     } else if (item.name === 'Experience') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/experience`,
-        label: 'Experience Details',
-      });
+      navigation.navigate(NavigationRouteNames.EXPERIENCE);
+      // , {
+      //   url: `http://dashboardv2.guruq.in/student/embed/experience`,
+      //   label: 'Experience Details',
+      // });
     } else if (item.name === 'Customer Care') {
       navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
     } else if (item.name === "FAQ's") {
@@ -135,21 +144,21 @@ function Profile(props) {
       });
     } else if (item.name === 'Send Feedback') {
       navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
-    } else if (item.name === 'About') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/experience`,
-        label: 'About',
-      });
-    } else if (item.name === 'Team') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/experience`,
-        label: 'Team',
-      });
+      // } else if (item.name === 'About') {
+      //   navigation.navigate(NavigationRouteNames.WEB_VIEW, {
+      //     url: `http://dashboardv2.guruq.in/student/embed/experience`,
+      //     label: 'About',
+      //   });
+      // } else if (item.name === 'Team') {
+      //   navigation.navigate(NavigationRouteNames.WEB_VIEW, {
+      //     url: WEB`http://dashboardv2.guruq.in/student/embed/experience`,
+      //     label: 'Team',
+      //   });
     } else if (item.name === 'My Cart') {
       navigation.navigate(NavigationRouteNames.STUDENT.MY_CART);
     } else if (item.name === 'Calendar') {
       changeTab(2);
-    } else if (item.name === 'Upcoming Classes') {
+    } else if (item.name === 'Schedule Classes') {
       changeTab(3);
     } else if (item.name === 'Add Study Area') {
       navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
@@ -182,31 +191,6 @@ function Profile(props) {
     );
   };
 
-  const renderActionIcons = () => {
-    return (
-      <View style={[styles.userMenuParentView, { justifyContent: 'space-evenly', alignItems: 'center' }]}>
-        <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
-          <Text style={styles.actionText}>Favourites</Text>
-        </View>
-        <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bell} />
-          <Text style={styles.actionText}>Notification</Text>
-        </View>
-        <View style={styles.actionIconParentView}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.qpoint} />
-          <Text style={styles.actionText}>Q Points</Text>
-        </View>
-        <View style={styles.actionIconParentView}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.STUDENT.MY_CART)}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.cart} />
-            <Text style={styles.actionText}>Cart</Text>
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
-    );
-  };
-
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -220,12 +204,13 @@ function Profile(props) {
           alignItems: 'center',
         }}>
         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-          <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
+            style={{ padding: 10 }}>
             <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} />
           </TouchableOpacity>
-
           <TouchableOpacity
-            style={{ marginLeft: RfW(16) }}
+            style={{ padding: 10 }}
             onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
             <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} />
           </TouchableOpacity>
@@ -256,9 +241,9 @@ function Profile(props) {
                 height={64}
                 styling={{ borderRadius: 64 }}
               />
-              <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16) }}>
-                <Text style={styles.userName}>
-                  {userInfo?.firstName} {userInfo?.lastName}
+              <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16), flex: 1 }}>
+                <Text style={styles.userName} numberOfLines={2}>
+                  {getFullName(userInfo)}
                 </Text>
                 <Text style={styles.userMobDetails}>
                   +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
@@ -313,29 +298,75 @@ function Profile(props) {
             <View style={styles.userMenuParentView}>
               <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.book} imageResizeMode="contain" />
               <View style={styles.menuItemParentView}>
-                <Text style={styles.menuItemPrimaryText}>My Study Areas</Text>
+                <Text style={styles.menuItemPrimaryText}>Study Areas</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                   Manage Study Areas
                 </Text>
               </View>
-              {/* <IconWrapper */}
-              {/*  iconWidth={RfW(24)} */}
-              {/*  iconHeight={RfH(24)} */}
-              {/*  imageResizeMode="cover" */}
-              {/*  iconImage={isStudyMenuOpen ? Images.collapse_grey : Images.expand_gray} */}
-              {/* /> */}
             </View>
           </TouchableWithoutFeedback>
-          {/* {isStudyMenuOpen && ( */}
-          {/*  <SafeAreaView> */}
-          {/*    <FlatList */}
-          {/*      data={MY_STUDY_DATA_OPTIONS} */}
-          {/*      showsVerticalScrollIndicator={false} */}
-          {/*      renderItem={({ item }) => renderItem(item)} */}
-          {/*      keyExtractor={(item, index) => index.toString()} */}
-          {/*    /> */}
-          {/*  </SafeAreaView> */}
-          {/* )} */}
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}
+            style={styles.userMenuParentView}
+            activeOpacity={0.8}>
+            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>Favourites</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Manage your favourite tutors
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <View style={commonStyles.blankGreyViewSmall} />
+
+          <TouchableWithoutFeedback onPress={() => setIsMyClassesMenuOpen(!isMyClassesMenuOpen)}>
+            <View style={styles.userMenuParentView}>
+              <IconWrapper
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                iconImage={Images.classes}
+                imageResizeMode="contain"
+              />
+              <View style={styles.menuItemParentView}>
+                <Text style={styles.menuItemPrimaryText}>Classes</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                  Calendar & Upcoming Class, Schedule Class & Renew Class
+                </Text>
+              </View>
+              <IconWrapper
+                iconWidth={RfW(24)}
+                iconHeight={RfH(24)}
+                iconImage={isMyClassesMenuOpen ? Images.collapse_grey : Images.expand_gray}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+          {isMyClassesMenuOpen && (
+            <SafeAreaView>
+              <FlatList
+                data={MY_CLASSES_OPTIONS}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => renderItem(item)}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </SafeAreaView>
+          )}
+
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.PYTN_LISTING)}>
+            <View style={styles.userMenuParentView}>
+              <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.book} imageResizeMode="contain" />
+              <View style={styles.menuItemParentView}>
+                <Text style={styles.menuItemPrimaryText}>Post Your Tuition Needs</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                  Manage Your PYTN Requests
+                </Text>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
 
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
@@ -366,54 +397,6 @@ function Profile(props) {
             </SafeAreaView>
           )}
 
-          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-          <TouchableWithoutFeedback onPress={() => setIsMyClassesMenuOpen(!isMyClassesMenuOpen)}>
-            <View style={styles.userMenuParentView}>
-              <IconWrapper
-                iconHeight={RfH(16)}
-                iconWidth={RfW(16)}
-                iconImage={Images.classes}
-                imageResizeMode="contain"
-              />
-              <View style={styles.menuItemParentView}>
-                <Text style={styles.menuItemPrimaryText}>My Classes</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Calendar & Upcoming Class, Schedule Class & Renew Class
-                </Text>
-              </View>
-              <IconWrapper
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-                iconImage={isMyClassesMenuOpen ? Images.collapse_grey : Images.expand_gray}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          {isMyClassesMenuOpen && (
-            <SafeAreaView>
-              <FlatList
-                data={MY_CLASSES_OPTIONS}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => renderItem(item)}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </SafeAreaView>
-          )}
-          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}
-            style={styles.userMenuParentView}
-            activeOpacity={0.8}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
-            <View style={styles.menuItemParentView}>
-              <Text style={styles.menuItemPrimaryText}>My Favourites</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Manage your favourite tutors
-              </Text>
-            </View>
-          </TouchableOpacity>
-
           <View style={commonStyles.blankGreyViewSmall} />
 
           <TouchableOpacity
@@ -441,25 +424,7 @@ function Profile(props) {
                 </Text>
               </TouchableWithoutFeedback>
             </View>
-            {/* <IconWrapper */}
-            {/*  iconWidth={RfW(24)} */}
-            {/*  iconHeight={RfH(24)} */}
-            {/*  iconImage={isInformationMenuOpen ? Images.collapse_grey : Images.expand_gray} */}
-            {/* /> */}
           </View>
-
-          {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
-
-          {/* {isInformationMenuOpen && ( */}
-          {/*  <SafeAreaView> */}
-          {/*    <FlatList */}
-          {/*      data={HELP_OPTIONS} */}
-          {/*      showsVerticalScrollIndicator={false} */}
-          {/*      renderItem={({ item }) => renderItem(item)} */}
-          {/*      keyExtractor={(item, index) => index.toString()} */}
-          {/*    /> */}
-          {/*  </SafeAreaView> */}
-          {/* )} */}
 
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
@@ -474,24 +439,8 @@ function Profile(props) {
                   </Text>
                 </TouchableWithoutFeedback>
               </View>
-              {/* <IconWrapper */}
-              {/*  iconWidth={RfW(24)} */}
-              {/*  iconHeight={RfH(24)} */}
-              {/*  iconImage={isAboutGuruMenuOpen ? Images.collapse_grey : Images.expand_gray} */}
-              {/* /> */}
             </View>
           </TouchableWithoutFeedback>
-
-          {/* {isAboutGuruMenuOpen && ( */}
-          {/*  <SafeAreaView> */}
-          {/*    <FlatList */}
-          {/*      data={ABOUT_US_OPTIONS} */}
-          {/*      showsVerticalScrollIndicator={false} */}
-          {/*      renderItem={({ item }) => renderItem(item)} */}
-          {/*      keyExtractor={(item, index) => index.toString()} */}
-          {/*    /> */}
-          {/*  </SafeAreaView> */}
-          {/* )} */}
 
           <View style={commonStyles.blankGreyViewSmall} />
 
@@ -505,26 +454,8 @@ function Profile(props) {
                 </Text>
               </TouchableWithoutFeedback>
             </View>
-            {/* <IconWrapper */}
-            {/*  iconWidth={RfW(24)} */}
-            {/*  iconHeight={RfH(24)} */}
-            {/*  iconImage={isSettingsMenuOpen ? Images.collapse_grey : Images.expand_gray} */}
-            {/* /> */}
           </View>
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-          {/* {isSettingsMenuOpen && ( */}
-          {/*  <SafeAreaView> */}
-          {/*    <FlatList */}
-          {/*      data={SETTINGS_OPTIONS} */}
-          {/*      showsVerticalScrollIndicator={false} */}
-          {/*      renderItem={({ item }) => renderItem(item)} */}
-          {/*      keyExtractor={(item, index) => index.toString()} */}
-          {/*    /> */}
-          {/*  </SafeAreaView> */}
-          {/* )} */}
-
-          {/* <View style={commonStyles.blankGreyViewSmall} /> */}
 
           <View style={[styles.userMenuParentView]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" iconImage={Images.logOut} />
@@ -534,7 +465,6 @@ function Profile(props) {
               </TouchableOpacity>
             </View>
           </View>
-          {/* <View style={commonStyles.lineSeparator} /> */}
 
           <View style={commonStyles.blankGreyViewSmall} />
 

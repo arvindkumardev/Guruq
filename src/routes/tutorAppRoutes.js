@@ -88,7 +88,7 @@ export const getTutorRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.POST_TUTION_NEED_DETAILS}
+        name={NavigationRouteNames.PYTN_DETAILS}
         component={PytnSubmit}
         options={{ headerShown: false }}
       />

@@ -503,7 +503,7 @@ function StudentDashboard(props) {
                 Hi {userInfo.firstName}
               </Text>
             </View>
-            <View style={{flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
+            <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
               <TouchableWithoutFeedback onPress={() => changeTab(5)}>
                 <TutorImageComponent
                   tutor={{ profileImage: userInfo.profileImage, contactDetail: userInfo }}
@@ -660,7 +660,7 @@ function StudentDashboard(props) {
             </View>
           )}
           <TouchableOpacity
-            onPress={() => navigation.navigate(NavigationRouteNames.TUTION_NEEDS_LISTING, { selectedOffering })}
+            onPress={() => navigation.navigate(NavigationRouteNames.PYTN_LISTING, { selectedOffering })}
             style={{ marginTop: RfH(20) }}
             activeOpacity={0.8}>
             <Image
