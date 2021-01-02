@@ -201,7 +201,7 @@ function MyClasses() {
               </Text>
               {isStudent && (
                 <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                  T{item.tutor.id}
+                  T-{item.tutor.id}
                 </Text>
               )}
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>

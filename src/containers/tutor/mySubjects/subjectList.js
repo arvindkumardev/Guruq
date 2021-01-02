@@ -21,7 +21,7 @@ function SubjectList() {
 
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(SEARCH_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
-    variables: { tutorId: 27716 },
+    variables: { tutorId: tutorInfo.id },
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;

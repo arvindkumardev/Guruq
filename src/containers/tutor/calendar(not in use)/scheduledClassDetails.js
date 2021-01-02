@@ -342,7 +342,7 @@ function ScheduledClassDetails(props) {
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.headingPrimaryText}>{getFullName(classData?.tutor?.contactDetail)}</Text>
-            <Text style={commonStyles.mediumMutedText}>T{classData?.tutor?.id}</Text>
+            <Text style={commonStyles.mediumMutedText}>T-{classData?.tutor?.id}</Text>
           </View>
         </View>
 
