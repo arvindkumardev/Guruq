@@ -27,9 +27,7 @@ const ClassModeSelectModal = (props) => {
   const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -42,13 +40,14 @@ const ClassModeSelectModal = (props) => {
   const calculateAmount = (noClasses, isOnline) => {
     const applicableBudgets = budgetDetails
       .filter((budget) => budget.onlineClass === isOnline && budget.demo === isDemoClass)
-      .sort((a, b) => a.count < b.count);
+      .sort((a, b) => a.count > b.count);
     let perClassPrice = 0;
     applicableBudgets.forEach((budget) => {
-      if (noClasses >= budget.count && budget.price !== 0) {
+      if (noClasses > budget.count && budget.price !== 0) {
         perClassPrice = budget.price;
       }
     });
+
     setClassPrice(perClassPrice);
     return noClasses * perClassPrice;
   };
@@ -159,20 +158,35 @@ const ClassModeSelectModal = (props) => {
             <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(16), alignSelf: 'flex-start' }]}>
               {isDemoClass ? 'Select mode of demo class' : 'Select mode of class and number of Classes'}
             </Text>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'flex-start' }]}>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'center' }]}>
               <Text style={commonStyles.mediumPrimaryText}>Mode of {isDemoClass && 'demo'} Class</Text>
               <View style={commonStyles.horizontalChildrenCenterView}>
                 {selectedSubject.onlineClass > 0 && (
-                  <View style={{ flexDirection: 'row' ,alignItems:'center'}}>
-                    <CustomRadioButton enabled={isOnlineClassMode} submitFunction={() => changeClassMode(true)} />
-                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
-                  </View>
+                  <TouchableWithoutFeedback onPress={() => changeClassMode(true)}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 8,
+                      }}>
+                      <CustomRadioButton enabled={isOnlineClassMode} />
+                      <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
                 )}
-                {selectedSubject.homeTution && (
-                  <View style={{ flexDirection: 'row', marginLeft: RfW(16),alignItems:'center' }}>
-                    <CustomRadioButton enabled={!isOnlineClassMode} submitFunction={() => changeClassMode(false)} />
-                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Offline</Text>
-                  </View>
+                {selectedSubject.offlineClass && (
+                  <TouchableWithoutFeedback onPress={() => changeClassMode(false)}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginLeft: RfW(16),
+                        alignItems: 'center',
+                        paddingVertical: 8,
+                      }}>
+                      <CustomRadioButton enabled={!isOnlineClassMode} />
+                      <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Offline</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
                 )}
               </View>
             </View>
