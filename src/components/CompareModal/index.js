@@ -42,8 +42,8 @@ const compareModal = (props) => {
       <View>
         {item && (
           <IconButtonWrapper
-            iconWidth={RfH(18)}
-            iconHeight={RfH(18)}
+            iconWidth={RfH(20)}
+            iconHeight={RfH(20)}
             iconImage={Images.cross}
             styling={styles.crossIcon}
             submitFunction={() => removeFromCompare(index)}
@@ -51,11 +51,11 @@ const compareModal = (props) => {
         )}
         {item ? (
           <IconButtonWrapper
-            iconWidth={RfH(70)}
-            iconHeight={RfH(70)}
+            iconWidth={RfH(64)}
+            iconHeight={RfH(64)}
             iconImage={getTutorImage(item)}
             imageResizeMode="contain"
-            styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
+            styling={{ alignSelf: 'center', borderRadius: RfH(64) }}
           />
         ) : (
           <IconButtonWrapper
@@ -101,8 +101,8 @@ const compareModal = (props) => {
           ]}>
           <Text style={commonStyles.headingPrimaryText}>Compare Tutor</Text>
           <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
             styling={{ alignSelf: 'flex-end' }}
             iconImage={Images.cross}
             submitFunction={onClose}

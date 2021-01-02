@@ -14,7 +14,7 @@ import { SEARCH_ORDER_ITEMS } from '../student/booking.query';
 import { OrderStatus } from '../student/enums';
 import styles from './styles';
 import { GET_TUTOR_OFFERINGS } from '../student/tutor-query';
-import ClassModeSelectModal from '../student/tutorDetails/components/classModeSelectModal';
+import AddToCartModal from '../student/tutorDetails/components/addToCartModal';
 import NavigationRouteNames from '../../routes/screenNames';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
@@ -360,7 +360,7 @@ function MyClasses() {
           </View>
         </ScrollView>
         {openClassModal && (
-          <ClassModeSelectModal
+          <AddToCartModal
             visible={openClassModal}
             onClose={() => setOpenClassModal(false)}
             selectedSubject={selectedSubject}

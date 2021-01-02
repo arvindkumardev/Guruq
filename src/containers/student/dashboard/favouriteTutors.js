@@ -54,7 +54,7 @@ function FavouriteTutors() {
       if (data) {
         getFavouriteTutors({
           variables: {
-            parentOfferingId: selectedOffering?.id,
+            parentOfferingId: 0,
           },
         });
         setRefreshTutorList(!refreshTutorList);
@@ -72,7 +72,7 @@ function FavouriteTutors() {
     if (selectedOffering && isFocussed) {
       getFavouriteTutors({
         variables: {
-          parentOfferingId: selectedOffering?.id,
+          parentOfferingId: 0,
         },
       });
     }

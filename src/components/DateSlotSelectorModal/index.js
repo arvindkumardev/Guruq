@@ -82,8 +82,8 @@ const DateSlotSelectorModal = (props) => {
           <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Available Slots</Text>
             <IconButtonWrapper
-              iconHeight={RfH(24)}
-              iconWidth={RfW(24)}
+              iconHeight={RfH(20)}
+              iconWidth={RfW(20)}
               styling={{ alignSelf: 'flex-end' }}
               iconImage={Images.cross}
               submitFunction={() => onClose(false)}

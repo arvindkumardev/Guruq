@@ -29,8 +29,8 @@ function compareTutors() {
     return (
       <View style={commonStyles.verticallyStretchedItemsView}>
         <IconButtonWrapper
-          iconWidth={RfH(18)}
-          iconHeight={RfH(18)}
+          iconWidth={RfH(20)}
+          iconHeight={RfH(20)}
           iconImage={Images.cross}
           imageResizeMode="contain"
           styling={styles.crossIcon}

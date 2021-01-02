@@ -40,7 +40,7 @@ import {
 } from '../../../utils/helpers';
 import { BackArrow, CompareModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import ClassModeSelectModal from './components/classModeSelectModal';
+import AddToCartModal from './components/addToCartModal';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import PriceMatrixComponent from './components/priceMatrixComponent';
 import TutorAvailabilitySlots from '../../../components/TutorAvailabilitySlots';
@@ -192,11 +192,11 @@ function TutorDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        const ratingArray = reviewProgress;
-        Object.entries(data.getAverageRating).forEach(([key, value]) => {
-          ratingArray.map((item) => ({
+        let ratingArray = reviewProgress;
+        Object.keys(data.getAverageRating).forEach((key) => {
+          ratingArray = ratingArray.map((item) => ({
             ...item,
-            percentage: item.key === key ? getPercentage(value) : item.percentage,
+            percentage: item.key === key ? getPercentage(data.getAverageRating[key]) : item.percentage,
           }));
         });
         setReviewProgress(ratingArray);
@@ -333,7 +333,7 @@ function TutorDetails(props) {
         percent={item.percentage}
         radius={32}
         borderWidth={6}
-        color="rgb(203,231,255)"
+        color={Colors.brandBlue2}
         shadowColor={Colors.lightGrey}
         bgColor={Colors.white}>
         <IconButtonWrapper iconWidth={RfW(22)} iconHeight={RfH(22)} imageResizeMode="contain" iconImage={item.image} />
@@ -684,10 +684,11 @@ function TutorDetails(props) {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: selectedSubject.demoClass ? 'space-between' : 'center',
-              marginTop: RfH(8),
-              paddingHorizontal: RfW(30),
-              paddingVertical: RfH(20),
+              justifyContent: 'space-evenly',
+              // marginTop: RfH(8),
+              // paddingHorizontal: RfW(30),
+              // paddingVertical: RfH(20),
+              paddingVertical: RfH(8),
             }}>
             {selectedSubject.demoClass && (
               <Button
@@ -709,7 +710,7 @@ function TutorDetails(props) {
             tutorId={tutorData?.id}
           />
           {showClassModePopup && (
-            <ClassModeSelectModal
+            <AddToCartModal
               visible={showClassModePopup}
               onClose={() => setShowClassModePopup(false)}
               selectedSubject={selectedSubject}

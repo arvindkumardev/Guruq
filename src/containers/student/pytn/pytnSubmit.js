@@ -173,7 +173,7 @@ function PytnSubmit(props) {
                   <View style={styles.bookingSelectorParent}>
                     <View style={styles.bookingSelectorParent}>
                       <TouchableWithoutFeedback onPress={() => removeNoOfGroupClass()}>
-                        <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                           <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                         </View>
                       </TouchableWithoutFeedback>
@@ -181,7 +181,7 @@ function PytnSubmit(props) {
                       <Text>{noOfGroupClasses}</Text>
 
                       <TouchableWithoutFeedback onPress={() => addNoOfGroupClass()}>
-                        <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                           <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                         </View>
                       </TouchableWithoutFeedback>
@@ -198,13 +198,13 @@ function PytnSubmit(props) {
             <View style={styles.bookingSelectorParent}>
               <View style={styles.bookingSelectorParent}>
                 <TouchableWithoutFeedback onPress={removeNoOfClass}>
-                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                     <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                   </View>
                 </TouchableWithoutFeedback>
                 <Text>{noOfClasses}</Text>
                 <TouchableWithoutFeedback onPress={addNoOfClass}>
-                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                     <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                   </View>
                 </TouchableWithoutFeedback>

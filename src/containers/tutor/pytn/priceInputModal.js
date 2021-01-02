@@ -34,8 +34,8 @@ const PriceInputModal = (props) => {
               ]}>
               <Text style={commonStyles.headingPrimaryText}>Enter per class price</Text>
               <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
+                iconHeight={RfH(20)}
+                iconWidth={RfW(20)}
                 styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
                 iconImage={Images.cross}
                 submitFunction={onClose}

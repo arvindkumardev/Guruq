@@ -274,8 +274,8 @@ function ViewBookingDetails() {
           <IconButtonWrapper
             styling={{ alignSelf: 'flex-end' }}
             containerStyling={{ paddingHorizontal: RfW(16) }}
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
             iconImage={Images.cross}
             submitFunction={() => setCancelReason(false)}
             imageResizeMode="contain"

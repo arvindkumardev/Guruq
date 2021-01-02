@@ -11,8 +11,8 @@ import { Colors } from '../../../../theme';
 import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../../tutor.mutation';
 
 const PM = {
-  online: { 1: 0, 5: 0, 10: 0, 25: 0, 50: 0 },
-  offline: { 1: 0, 5: 0, 10: 0, 25: 0, 50: 0 },
+  online: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
+  offline: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
 };
 
 function PriceMatrixView(props) {
@@ -26,8 +26,8 @@ function PriceMatrixView(props) {
   useEffect(() => {
     if (!isEmpty(offering.budgets)) {
       const pm = {
-        online: { 1: 0, 5: 0, 10: 0, 25: 0, 50: 0 },
-        offline: { 1: 0, 5: 0, 10: 0, 25: 0, 50: 0 },
+        online: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
+        offline: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
       };
       const demoPrice = {
         online: 0,
@@ -250,10 +250,10 @@ function PriceMatrixView(props) {
         <FlatList
           data={[
             { value: 1, label: 'Upto 5' },
-            { value: 5, label: '6-10' },
-            { value: 10, label: '11-25' },
-            { value: 25, label: '26-50' },
-            { value: 50, label: '>50' },
+            { value: 6, label: '6-10' },
+            { value: 11, label: '11-25' },
+            { value: 26, label: '26-50' },
+            { value: 51, label: '>50' },
           ]}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => renderItem(item, index)}

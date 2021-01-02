@@ -72,8 +72,8 @@ function CalendarView(props) {
             iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
           />
         </View>
-        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.headingPrimaryText}>
+        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8), flex: 1 }]}>
+          <Text style={commonStyles.headingPrimaryText} numberOfLines={2}>
             {isStudent
               ? `${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)}`
               : `${classDetails?.offering?.displayName} Class for ${getFullName(

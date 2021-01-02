@@ -15,7 +15,7 @@ import { IconButtonWrapper, Loader, PaymentMethodModal, ScreenHeader, TutorImage
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
-import { alertBox, getFullName, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getFullName, printCurrency, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
@@ -34,7 +34,7 @@ const MyCart = () => {
   const [amount, setAmount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(0);
-  const [qPointsRedeem, setQPointsRedeem] = useState(0);
+  const [qPointsRedeemed, setQPointsRedeemed] = useState(0);
   const [applyQPoints, setApplyQPoints] = useState(false);
 
   const [paymentModal, setPaymentModal] = useState(false);
@@ -89,7 +89,7 @@ const MyCart = () => {
   });
 
   const createBookingHandle = () => {
-    const bookingData = { itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeem) };
+    const bookingData = { itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeemed) };
     bookingData.convenienceCharges = 0;
     bookingData.orderPayment = { paymentMethod: PaymentMethodEnum.ONLINE.label, amount: 0 };
     bookingData.orderPayment.amount = amount;
@@ -212,7 +212,7 @@ const MyCart = () => {
 
   const enableApplyQPoints = () => {
     setApplyQPoints(!applyQPoints);
-    setQPointsRedeem(0);
+    setQPointsRedeemed(0);
   };
 
   const handlePaytmPayment = (bookingId) => {
@@ -337,90 +337,98 @@ const MyCart = () => {
   };
 
   const renderCartItems = (item, index) => (
-    <View style={[commonStyles.horizontalChildrenStartView, { marginBottom: RfH(16) }]}>
-      <TutorImageComponent tutor={item?.tutor} width={80} height={80} styling={{ flex: 0.3, borderRadius: 8 }} />
-      <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <View>
-            <Text style={styles.buttonText}>{item?.offering?.displayName}</Text>
-            <Text style={styles.buttonText}>by {getFullName(item?.tutor?.contactDetail)}</Text>
-          </View>
-          <View style={styles.bookingSelectorParent}>
+    <>
+      <View style={commonStyles.horizontalChildrenStartView}>
+        <TutorImageComponent tutor={item?.tutor} width={80} height={80} styling={{ flex: 0.3, borderRadius: 8 }} />
+        <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.buttonText}>{item?.offering?.displayName}</Text>
+              <Text style={styles.buttonText} numberOfLines={2}>
+                by {getFullName(item?.tutor?.contactDetail)}
+              </Text>
+            </View>
             <View style={styles.bookingSelectorParent}>
               <TouchableWithoutFeedback onPress={() => removeClass(item)}>
-                <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                   <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                 </View>
               </TouchableWithoutFeedback>
-              <Text>{item?.count}</Text>
+              <Text style={commonStyles.headingPrimaryText}>{item?.count}</Text>
               <TouchableWithoutFeedback onPress={() => addClass(item)}>
-                <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                   <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                 </View>
               </TouchableWithoutFeedback>
             </View>
           </View>
-        </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={styles.tutorDetails}>
-            {item?.offering?.parentOffering?.parentOffering?.displayName}, {item?.offering?.parentOffering?.displayName}
-          </Text>
-        </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={styles.tutorDetails}>
-            {item?.onlineClass ? 'Online' : 'Offline'} {item.groupSize === 1 ? 'Individual' : 'Group'} Class
-          </Text>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={styles.tutorDetails}>
+              {item?.offering?.parentOffering?.parentOffering?.displayName},{' '}
+              {item?.offering?.parentOffering?.displayName}
+            </Text>
+          </View>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={styles.tutorDetails}>
+              {item?.onlineClass ? 'Online' : 'Offline'} {item.groupSize === 1 ? 'Individual' : 'Group'} Class
+            </Text>
 
-          <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>₹{item?.price}</Text>
-        </View>
+            <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>
+              ₹{printCurrency(item?.price)}
+            </Text>
+          </View>
 
-        <View style={{ marginTop: RfH(8) }}>
-          <TouchableWithoutFeedback onPress={() => removeCartItem(item)}>
-            <Text style={[commonStyles.mediumPrimaryText, { color: Colors.orangeRed }]}>REMOVE</Text>
-          </TouchableWithoutFeedback>
+          <View style={{ marginTop: RfH(8) }}>
+            <TouchableWithoutFeedback onPress={() => removeCartItem(item)}>
+              <Text style={[commonStyles.mediumPrimaryText, { color: Colors.orangeRed }]}>REMOVE</Text>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
       </View>
-    </View>
+      <View style={commonStyles.blankViewSmall} />
+    </>
   );
 
   const onSetQPoints = (val) => {
     if (val <= qPoints) {
-      setQPointsRedeem(val);
+      setQPointsRedeemed(val);
     }
   };
 
   const renderQPointView = () => (
     <View>
-      <View
-        style={[
-          commonStyles.horizontalChildrenSpaceView,
-          {
-            backgroundColor: Colors.white,
-            height: RfH(44),
-            alignItems: 'center',
-            paddingHorizontal: RfW(16),
-          },
-        ]}>
-        <View style={commonStyles.horizontalChildrenStartView}>
-          <Text
-            style={[
-              commonStyles.mediumPrimaryText,
-              {
-                fontFamily: Fonts.semiBold,
-              },
-            ]}>
-            Apply Q Points
-          </Text>
-        </View>
+      {amount > 0 && (
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            {
+              backgroundColor: Colors.white,
+              height: RfH(44),
+              alignItems: 'center',
+              paddingHorizontal: RfW(16),
+            },
+          ]}>
+          <View style={commonStyles.horizontalChildrenStartView}>
+            <Text
+              style={[
+                commonStyles.primaryText,
+                {
+                  fontFamily: Fonts.semiBold,
+                },
+              ]}>
+              Apply Q Points
+            </Text>
+          </View>
 
-        <IconButtonWrapper
-          iconWidth={RfW(20)}
-          iconHeight={RfH(20)}
-          iconImage={applyQPoints ? Images.checkbox_selected : Images.checkbox}
-          submitFunction={enableApplyQPoints}
-          imageResizeMode="contain"
-        />
-      </View>
+          <IconButtonWrapper
+            iconWidth={RfW(20)}
+            iconHeight={RfH(20)}
+            iconImage={applyQPoints ? Images.checkbox_selected : Images.checkbox}
+            submitFunction={enableApplyQPoints}
+            imageResizeMode="contain"
+          />
+        </View>
+      )}
 
       {applyQPoints && (
         <View
@@ -444,7 +452,7 @@ const MyCart = () => {
               <TextInput
                 onChangeText={onSetQPoints}
                 style={{ width: RfW(70), paddingVertical: RfH(8) }}
-                value={qPointsRedeem}
+                value={qPointsRedeemed}
                 keyboardType="numeric"
                 editable={qPoints !== 0}
                 returnKeyType="done"
@@ -456,122 +464,15 @@ const MyCart = () => {
     </View>
   );
 
-  // const removeCoupon = () => {
-  //   setAppliedCouponCode('');
-  //   setAppliedCouponValue('');
-  //   setCouponCode('');
-  //   setApplyCoupons(false);
-  // };
-  //
-  // const renderCouponView = () => {
-  //   return (
-  //     <TouchableWithoutFeedback>
-  //       <View
-  //         style={{
-  //           height: 44,
-  //           justifyContent: 'center',
-  //         }}>
-  //         <Text
-  //           style={[
-  //             commonStyles.mediumMutedText,
-  //             {
-  //               paddingHorizontal: RfW(16),
-  //             },
-  //           ]}>
-  //           COUPONS
-  //         </Text>
-  //       </View>
-  //       {!applyCoupons && (
-  //         <View
-  //           style={[
-  //             commonStyles.horizontalChildrenSpaceView,
-  //             {
-  //               backgroundColor: Colors.white,
-  //               alignItems: 'center',
-  //               paddingHorizontal: RfW(16),
-  //             },
-  //           ]}>
-  //           <View
-  //             style={[
-  //               commonStyles.horizontalChildrenStartView,
-  //               {
-  //                 justifyContent: 'space-between',
-  //                 alignItems: 'center',
-  //               },
-  //             ]}>
-  //             <TextInput
-  //               style={{
-  //                 flex: 1,
-  //                 height: RfH(40),
-  //                 borderColor: Colors.borderColor,
-  //                 borderWidth: 0.5,
-  //                 borderRadius: RfH(10),
-  //                 fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-  //                 marginVertical: RfH(4),
-  //                 paddingLeft: 8,
-  //               }}
-  //               placeholder="Enter coupon code"
-  //               value={couponCode}
-  //               onChangeText={(text) => setCouponCode(text)}
-  //             />
-  //             <TouchableWithoutFeedback
-  //               onPress={() => checkCoupon()}
-  //               style={{
-  //                 color: Colors.brandBlue2,
-  //                 height: RfH(48),
-  //                 marginLeft: RfW(16),
-  //                 flexDirection: 'column',
-  //                 justifyContent: 'center',
-  //                 alignItems: 'center',
-  //               }}>
-  //               <Text
-  //                 style={[
-  //                   commonStyles.textButtonPrimary,
-  //                   { color: Colors.brandBlue2, fontSize: RFValue(17, STANDARD_SCREEN_SIZE) },
-  //                 ]}>
-  //                 APPLY
-  //               </Text>
-  //             </TouchableWithoutFeedback>
-  //           </View>
-  //         </View>
-  //       )}
-  //
-  //       {applyCoupons && (
-  //         <View
-  //           style={{
-  //             backgroundColor: Colors.white,
-  //             paddingHorizontal: RfW(16),
-  //           }}>
-  //           <View style={[commonStyles.horizontalChildrenSpaceView, { alignItems: 'center', marginVertical: RfH(16) }]}>
-  //             <View>
-  //               <Text style={commonStyles.secondaryText}>{appliedCouponCode}</Text>
-  //               <Text style={commonStyles.smallMutedText}>Offer applied on the bill</Text>
-  //             </View>
-  //             <TouchableWithoutFeedback onPress={() => removeCoupon()}>
-  //               <View
-  //                 style={{
-  //                   height: RfH(24),
-  //                   width: RfH(24),
-  //                   borderRadius: RfH(12),
-  //                   backgroundColor: Colors.lightGrey,
-  //                   justifyContent: 'center',
-  //                   alignItems: 'center',
-  //                 }}>
-  //                 <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.cross} />
-  //               </View>
-  //             </TouchableWithoutFeedback>
-  //           </View>
-  //         </View>
-  //       )}
-  //     </TouchableWithoutFeedback>
-  //   );
-  // };
+  const getPayableAmount = () => {
+    return amount - qPointsRedeemed;
+  };
 
   const renderCartDetails = () => (
     <View style={{ backgroundColor: Colors.white, paddingHorizontal: RfW(16) }}>
       <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-        <Text style={commonStyles.mediumPrimaryText}>Amount</Text>
-        <Text style={commonStyles.mediumPrimaryText}>₹{amount}</Text>
+        <Text style={commonStyles.mediumPrimaryText}>Sub Total</Text>
+        <Text style={commonStyles.mediumPrimaryText}>₹{printCurrency(amount)}</Text>
       </View>
       {/* {applyCoupons && ( */}
       {/*  <View> */}
@@ -583,13 +484,13 @@ const MyCart = () => {
       {/*  </View> */}
       {/* )} */}
 
-      {qPointsRedeem !== 0 && (
+      {qPointsRedeemed !== 0 && (
         <>
           <View style={commonStyles.lineSeparator} />
           <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
             <Text style={[commonStyles.mediumPrimaryText, { color: Colors.darkGrey }]}>Paid by Q points</Text>
             <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2, fontWeight: 'bold' }]}>
-              -₹{qPointsRedeem}
+              - ₹{printCurrency(qPointsRedeemed) * 1}
             </Text>
           </View>
         </>
@@ -598,7 +499,7 @@ const MyCart = () => {
       <View style={commonStyles.lineSeparator} />
       <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
         <Text style={commonStyles.regularPrimaryText}>Payable Amount</Text>
-        <Text style={commonStyles.regularPrimaryText}>₹{amount - qPointsRedeem}</Text>
+        <Text style={commonStyles.regularPrimaryText}>₹{printCurrency(getPayableAmount())}</Text>
       </View>
     </View>
   );
@@ -653,6 +554,9 @@ const MyCart = () => {
 
             {renderCartDetails()}
           </ScrollView>
+
+          <View style={commonStyles.lineSeparator} />
+
           <View
             style={[
               commonStyles.horizontalChildrenSpaceView,
@@ -666,10 +570,11 @@ const MyCart = () => {
               },
             ]}>
             <View>
-              <Text style={commonStyles.headingPrimaryText}>₹{amount - qPointsRedeem}</Text>
+              <Text style={commonStyles.headingPrimaryText}>₹{printCurrency(getPayableAmount())}</Text>
+              <Text style={commonStyles.smallMutedText}>Payable Amount</Text>
             </View>
             <Button
-              onPress={() => (amount - qPointsRedeem === 0 ? createBookingHandle() : setShowPaymentModal(true))}
+              onPress={() => (getPayableAmount() === 0 ? createBookingHandle() : setShowPaymentModal(true))}
               style={[
                 commonStyles.buttonPrimary,
                 {
@@ -679,7 +584,7 @@ const MyCart = () => {
                 },
               ]}>
               <Text style={commonStyles.textButtonPrimary}>
-                {amount - qPointsRedeem === 0 ? 'Create Booking' : 'Pay Now'}
+                {getPayableAmount() === 0 ? 'Create Booking' : 'Pay Now'}
               </Text>
             </Button>
           </View>
@@ -730,9 +635,9 @@ const MyCart = () => {
       <PaymentMethodModal
         visible={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
-        bookingData={{ itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeem) }}
+        bookingData={{ itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeemed) }}
         amount={amount}
-        deductedAgaintQPoint={qPointsRedeem}
+        qPointsRedeemed={qPointsRedeemed}
         handlePaytmPayment={handlePaytmPayment}
         // discount={appliedCouponValue}
         hidePaymentPopup={() => setShowPaymentModal(false)}

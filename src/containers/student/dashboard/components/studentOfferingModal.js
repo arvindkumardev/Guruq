@@ -75,7 +75,7 @@ const StudentOfferingModal = (props) => {
               Choose your study area
             </Text>
             <TouchableOpacity onPress={onClose}>
-              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(20)} iconHeight={RfH(20)} />
             </TouchableOpacity>
           </View>
 

@@ -489,8 +489,8 @@ function ScheduledClassDetails(props) {
             }}>
             <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}>
               <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
+                iconHeight={RfH(20)}
+                iconWidth={RfW(20)}
                 styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
                 iconImage={Images.cross}
                 submitFunction={() => setShowClassStartedPopup(false)}
@@ -532,8 +532,8 @@ function ScheduledClassDetails(props) {
             }}>
             <View style={{ backgroundColor: Colors.white, opacity: 1, padding: RfW(16) }}>
               <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
+                iconHeight={RfH(20)}
+                iconWidth={RfW(20)}
                 styling={{ alignSelf: 'flex-end', marginRight: RfW(16), marginTop: RfH(16) }}
                 iconImage={Images.cross}
                 submitFunction={() => setShowCancelClassStartedPopup(false)}

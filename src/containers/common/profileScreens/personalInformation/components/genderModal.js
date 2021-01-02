@@ -68,8 +68,8 @@ const GenderModal = (props) => {
           ]}>
           <Text style={commonStyles.regularPrimaryText}>Gender</Text>
           <IconButtonWrapper
-            iconHeight={RfH(16)}
-            iconWidth={RfW(16)}
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
             styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
             iconImage={Images.cross}
             submitFunction={() => onClose(false)}

@@ -166,7 +166,7 @@ const VideoMessagingModal = (props) => {
               Messages
             </Text>
             <TouchableOpacity onPress={() => onClose(false)}>
-              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(20)} iconHeight={RfH(20)} />
             </TouchableOpacity>
           </View>
 

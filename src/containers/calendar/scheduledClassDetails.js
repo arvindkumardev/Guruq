@@ -152,21 +152,21 @@ function ScheduledClassDetails(props) {
     </View>
   );
 
-  // const renderAttachments = (item) => {
-  //   return (
-  //     <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(16) }]}>
-  //       <View style={commonStyles.horizontalChildrenView}>
-  //         <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
-  //         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-  //           <Text style={commonStyles.headingPrimaryText}>{item.chapter}</Text>
-  //           <Text style={commonStyles.mediumMutedText}>
-  //             {item.size} | {item.date}
-  //           </Text>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
-  // };
+  const renderAttachments = (item) => {
+    return (
+      <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(16) }]}>
+        <View style={commonStyles.horizontalChildrenView}>
+          <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
+          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+            <Text style={commonStyles.headingPrimaryText}>{item?.attachment?.filename}</Text>
+            <Text style={commonStyles.mediumMutedText}>
+              {item?.attachment?.size} | {item?.attachment?.createdDate}
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <TouchableOpacity
@@ -340,7 +340,6 @@ function ScheduledClassDetails(props) {
           {/*  </View> */}
           {/* )} */}
         </View>
-
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(36) }]}>
           <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.tutor_icon} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
@@ -366,9 +365,7 @@ function ScheduledClassDetails(props) {
             </View>
           </TouchableOpacity>
         )}
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(16)} iconHeight={RfH(16)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -378,9 +375,7 @@ function ScheduledClassDetails(props) {
             </Text>
           </View>
         </View>
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper
             iconImage={Images.bell}
@@ -393,9 +388,7 @@ function ScheduledClassDetails(props) {
             <Text style={commonStyles.mediumMutedText}>20 minutes before</Text>
           </View>
         </View>
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
         <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
           <IconButtonWrapper
             iconImage={Images.attendees}
@@ -425,10 +418,9 @@ function ScheduledClassDetails(props) {
           renderItem={({ item, index }) => renderAttendees(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
-
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-        {/* <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 44 }]}>
+        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 44 }]}>
           <IconButtonWrapper iconImage={Images.attachment} iconWidth={RfW(24)} iconHeight={RfH(24)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Attachments</Text>
@@ -438,12 +430,11 @@ function ScheduledClassDetails(props) {
         <FlatList
           style={{ marginBottom: RfH(16), marginLeft: 40 }}
           showsHorizontalScrollIndicator={false}
-          data={attachments}
+          data={classData.documents}
           renderItem={({ item, index }) => renderAttachments(item, index)}
           keyExtractor={(item, index) => index.toString()}
         />
-
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         {classData?.classEntity?.address && (
           <>
@@ -497,9 +488,7 @@ function ScheduledClassDetails(props) {
             {/* </Text> */}
           </View>
         </View>
-
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
-
         {/* {classData?.isClassJoinAllowed && ( */}
         <View
           style={{
