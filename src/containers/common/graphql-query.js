@@ -132,6 +132,9 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
       profileImage {
         filename
       }
+      lead {
+        certificationStage
+      }
     }
   }
 `;

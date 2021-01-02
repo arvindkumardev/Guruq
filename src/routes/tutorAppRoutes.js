@@ -67,11 +67,6 @@ export const getTutorRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.TUTOR.SUBJECT_SELECTION}
-        component={SubjectSelection}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name={NavigationRouteNames.TUTOR.PRICE_MATRIX}
         component={PriceMatrix}
         options={{ headerShown: false }}

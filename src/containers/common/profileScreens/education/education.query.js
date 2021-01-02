@@ -42,3 +42,15 @@ export const GET_STUDENT_EDUCATION_DETAILS = gql`
     }
   }
 `;
+
+export const GET_DEGREE_LIST = gql`
+  query GetDegrees {
+    getDegrees {
+      edges {
+        id
+        name
+        degreeLevel
+      }
+    }
+  }
+`;

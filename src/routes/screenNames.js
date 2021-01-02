@@ -68,6 +68,8 @@ const NavigationRouteNames = {
     DASHBOARD: 'tutor_dashboard',
     CANCEL_REASON: 'cancel_reason',
     ONLINE_CLASS: 'online_class',
+    WELCOME_SCREEN: 'welcome_screen',
+    CERTIFICATE_STEPS: 'certificate_steps',
     CERTIFICATION_COMPLETED_VIEW: 'certification_completed_view',
     SUBJECTS_LIST: 'subjects_list',
     SUBJECT_SELECTION: 'subject_selection',
@@ -76,6 +78,8 @@ const NavigationRouteNames = {
     UPDATE_SCHEDULE: 'update_schedule',
     STUDENT_REQUESTS: 'student_requests',
     SCHEDULE_YOUR_INTERVIEW: 'schedule_your_interview',
+    PT_START_SCREEN: 'pt_start_screen',
+    PROFICIENCY_TEST: 'proficiency_test',
   },
 };
 

@@ -196,8 +196,8 @@ function MyClasses() {
                   marginTop: RfH(2),
                 }}>
                 {isStudent
-                  ? `${item.tutor.contactDetail.firstName} ${item.tutor.contactDetail.lastName}`
-                  : `${item?.createdBy.firstName} ${item?.createdBy.lastName}`}
+                  ? `${item.tutor?.contactDetail?.firstName} ${item?.tutor?.contactDetail?.lastName}`
+                  : `${item?.createdBy?.firstName} ${item?.createdBy?.lastName}`}
               </Text>
               {isStudent && (
                 <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>

@@ -22,7 +22,7 @@ import NavigationRouteNames from './screenNames';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
 import { TutorCertificationStageEnum } from '../containers/tutor/enums';
-import CertificationCompletedView from '../containers/tutor/certficationProcess/certificationCompletedView';
+import CertificationCompletedView from '../containers/certficationProcess/certificationCompletedView';
 import WebViewPage from '../components/WebViewPage';
 import InterviewPending from '../containers/tutor/interviewPending/interviewPending';
 import AddressListing from '../containers/common/profileScreens/address/addressListing';
@@ -38,8 +38,14 @@ import AddEditAddress from '../containers/common/profileScreens/address/addEditA
 import AddressMapView from '../containers/common/profileScreens/addressMapView';
 import EducationListing from '../containers/common/profileScreens/education/educationListing';
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
-import AwardListing from "../containers/common/profileScreens/awards/awardListing";
-import AddEditAward from "../containers/common/profileScreens/awards/addEditAward";
+import AwardListing from '../containers/common/profileScreens/awards/awardListing';
+import AddEditAward from '../containers/common/profileScreens/awards/addEditAward';
+import PersonalDetails from '../containers/common/profileScreens/personalDetails';
+import TutorWelcomeScreen from '../containers/certficationProcess/tutorWelcomeScreen';
+import CertificationProcessSteps from '../containers/certficationProcess/certificationProcessSteps';
+import SubjectSelection from '../containers/tutor/mySubjects/subjectSelection';
+import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
+import ProficiencyTest from "../containers/tutor/proficiencyTest";
 
 const Stack = createStackNavigator();
 
@@ -175,6 +181,27 @@ const AppStack = (props) => {
         component={AddEditAward}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name={NavigationRouteNames.PERSONAL_DETAILS}
+        component={PersonalDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.SUBJECT_SELECTION}
+        component={SubjectSelection}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PT_START_SCREEN}
+        component={PtStartScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PROFICIENCY_TEST}
+        component={ProficiencyTest}
+        options={{ headerShown: false }}
+      />
+
       {/* <Stack.Screen name={NavigationRouteNames.A} component={EducationListing} options={{ headerShown: false }} /> */}
     </>
   );
@@ -196,47 +223,60 @@ const AppStack = (props) => {
     }
     if (userType === UserTypeEnum.TUTOR.label) {
       console.log('tutorInfo', tutorInfo);
-      if (tutorInfo) {
+      if (
+        tutorInfo &&
+        tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
+      ) {
         return getTutorRoutes();
       }
 
-      if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING) {
+      // if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING) {
+      //   return (
+      //     <>
+      //       <Stack.Screen
+      //         name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
+      //         component={InterviewPending}
+      //         options={{ headerShown: false }}
+      //       />
+      //     </>
+      //   );
+      // }
+
+      // if (tutorInfo && tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.INTERVIEW_PENDING) {
+      //   return (
+      //     <>
+      //       <Stack.Screen
+      //         name={NavigationRouteNames.WEB_VIEW}
+      //         component={WebViewPage}
+      //         options={{
+      //           url: `http://dashboardv2.guruq.in/tutor/on-boarding`,
+      //           label: 'Tutor Certification Process',
+      //           headerShown: false,
+      //         }}
+      //       />
+      //     </>
+      //   );
+      // }
+      if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.REGISTERED.label) {
         return (
           <>
             <Stack.Screen
-              name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
-              component={InterviewPending}
+              name={NavigationRouteNames.TUTOR.WELCOME_SCREEN}
+              component={TutorWelcomeScreen}
               options={{ headerShown: false }}
             />
           </>
         );
       }
-
-      if (tutorInfo && tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.INTERVIEW_PENDING) {
-        return (
-          <>
-            <Stack.Screen
-              name={NavigationRouteNames.WEB_VIEW}
-              component={WebViewPage}
-              options={{
-                url: `http://dashboardv2.guruq.in/tutor/on-boarding`,
-                label: 'Tutor Certification Process',
-                headerShown: false,
-              }}
-            />
-          </>
-        );
-      }
-
       if (
         tutorInfo &&
-        tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
+        tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
       ) {
         return (
           <>
             <Stack.Screen
-              name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
-              component={CertificationCompletedView}
+              name={NavigationRouteNames.TUTOR.CERTIFICATE_STEPS}
+              component={CertificationProcessSteps}
               options={{ headerShown: false }}
             />
           </>

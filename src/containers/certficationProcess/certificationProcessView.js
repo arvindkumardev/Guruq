@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
-import { ScreenHeader } from '../../../components';
-import { getToken, RfW } from '../../../utils/helpers';
+import { ScreenHeader } from '../../components';
+import { getToken, RfW } from '../../utils/helpers';
 
 // const url = 'http://dashboardv2.guruq.in/tutor/embed/on-boarding';
 const url = 'http://10.0.0.9:3000/tutor/embed/on-boarding';
@@ -48,7 +48,5 @@ const CertificationProcessView = (props) => {
     </>
   );
 };
-
-CertificationProcessView.propTypes = {};
 
 export default CertificationProcessView;

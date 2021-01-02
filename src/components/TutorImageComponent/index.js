@@ -13,8 +13,8 @@ const TutorImageComponent = (props) => {
   const { styling, width, height, tutor, fontSize } = props;
 
   const getInitials = () => {
-    const firstInitial = tutor?.contactDetail.firstName ? tutor?.contactDetail.firstName[0].toUpperCase() : '';
-    const lastInitial = tutor?.contactDetail.lastName ? tutor?.contactDetail.lastName[0].toUpperCase() : '';
+    const firstInitial = tutor?.contactDetail?.firstName ? tutor?.contactDetail?.firstName[0].toUpperCase() : '';
+    const lastInitial = tutor?.contactDetail?.lastName ? tutor?.contactDetail?.lastName[0].toUpperCase() : '';
     return firstInitial + lastInitial;
   };
 

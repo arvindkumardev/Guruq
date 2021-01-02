@@ -7,9 +7,24 @@ import { alertBox, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { ChooseSubjectComponent, ScreenHeader, Loader } from '../../../components';
 import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../tutor.mutation';
+import { MARK_CERTIFIED } from '../../certficationProcess/certification-mutation';
+import NavigationRouteNames from '../../../routes/screenNames';
 
-function SubjectSelection() {
+function SubjectSelection(props) {
   const navigation = useNavigation();
+  const isOnBoarding = props?.route?.params?.isOnBoarding;
+
+  const [markCertified, { loading: markTutorCertifiedLoading }] = useMutation(MARK_CERTIFIED, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW);
+      }
+    },
+  });
 
   const [createTutorOffering, { loading: createTutorOfferingLoading }] = useMutation(CREATE_UPDATE_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
@@ -24,7 +39,12 @@ function SubjectSelection() {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.goBack();
+        if (isOnBoarding) {
+          markCertified();
+          navigation.goBack();
+        } else {
+          navigation.goBack();
+        }
       }
     },
   });
@@ -41,7 +61,7 @@ function SubjectSelection() {
 
   return (
     <>
-      <Loader isLoading={createTutorOfferingLoading} />
+      <Loader isLoading={createTutorOfferingLoading || markTutorCertifiedLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader homeIcon label="Select Subject" horizontalPadding={RfW(16)} />
         <ChooseSubjectComponent

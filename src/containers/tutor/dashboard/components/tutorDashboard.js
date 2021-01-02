@@ -1,7 +1,7 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -18,8 +18,8 @@ import {
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
-import initializeApollo from '../../../../apollo/apollo';
-import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../../apollo/cache';
+import { isEmpty } from 'lodash';
+import { tutorDetails, userDetails } from '../../../../apollo/cache';
 import { IconButtonWrapper, UpcomingClassComponent } from '../../../../components';
 import Loader from '../../../../components/Loader';
 import NavigationRouteNames from '../../../../routes/screenNames';
@@ -28,14 +28,7 @@ import { getBoxColor } from '../../../../theme/colors';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import {
-  clearAllLocalStorage,
-  getSubjectIcons,
-  getUserImageUrl,
-  removeToken,
-  RfH,
-  RfW,
-} from '../../../../utils/helpers';
+import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
@@ -51,6 +44,7 @@ function TutorDashboard(props) {
   const userInfo = useReactiveVar(userDetails);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -84,24 +78,19 @@ function TutorDashboard(props) {
   });
 
   useEffect(() => {
-    getScheduledClasses({
-      variables: {
-        classesSearchDto: {
-          tutorId: tutorInfo.id,
-          startDate: moment().toDate(),
-          endDate: moment().endOf('day').toDate(),
+    if (!isEmpty(tutorInfo)) {
+      getScheduledClasses({
+        variables: {
+          classesSearchDto: {
+            tutorId: tutorInfo.id,
+            startDate: moment().toDate(),
+            endDate: moment().endOf('day').toDate(),
+          },
         },
-      },
-    });
-  }, []);
-
-  useEffect(() => {
-    getTutorOffering();
-  }, []);
-
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
-  };
+      });
+      getTutorOffering();
+    }
+  }, [tutorInfo]);
 
   const renderSubjects = (item, index) => {
     return (

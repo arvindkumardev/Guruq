@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { Button } from 'native-base';
 import { Colors } from '../../theme';
-import { RfH, RfW } from '../../utils/helpers';
+import { alertBox, RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import { offeringsMasterData } from '../../apollo/cache';
 import { STUDY_AREA_LEVELS } from '../../utils/constants';
 import styles from '../../containers/student/pytn/styles';
+import { GET_OFFERINGS_MASTER_DATA } from '../../containers/student/dashboard-query';
+import Loader from '../Loader';
 
 const ChooseSubjectComponent = (props) => {
   const { submitButtonText, submitButtonHandle, isMultipleSubjectSelectionAllowed } = props;
@@ -21,6 +23,25 @@ const ChooseSubjectComponent = (props) => {
   const [selectedStudyAreaObj, setSelectedStudyAreaObj] = useState({});
   const [showSubmitButton, setShowSubmitButton] = useState(false);
 
+  const [getOfferingMasterData, { loading: loadingOfferingMasterData }] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        console.log('e', e);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        offeringsMasterData(data.offerings.edges);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (isEmpty(offeringMasterData)) {
+      getOfferingMasterData();
+    }
+  }, [offeringMasterData]);
   const goToOtherDetails = () => {
     submitButtonHandle({
       studyArea: selectedStudyArea,
@@ -183,6 +204,7 @@ const ChooseSubjectComponent = (props) => {
 
   return (
     <>
+      <Loader isLoading={loadingOfferingMasterData} />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: RfH(16) }}>
         <View style={{ height: RfH(44) }} />
         <View style={{ marginHorizontal: RfW(16) }}>

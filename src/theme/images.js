@@ -243,6 +243,8 @@ const Images = {
   unFilledStar: require('../assets/images/unfilledStar.png'),
   award: require('../assets/images/awards.png'),
   ...SubjectIcons,
+  tutorWelcome: require('../assets/images/tutorWelcome.png'),
+  ptTest: require('../assets/images/ptTest.png'),
 };
 
 export default Images;
