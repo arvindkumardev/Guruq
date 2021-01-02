@@ -73,7 +73,7 @@ function MyClasses() {
             groupClass: selectedOffering.groupClass === 0 || selectedOffering.groupClass === 1,
             onlineClass: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 1,
             individualClass: selectedOffering.groupClass === 0 || selectedOffering.groupClass === 2,
-            homeTution: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 2,
+            offlineClass: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 2,
             budgetDetails: selectedOffering.budgets,
           });
           setOpenClassModal(true);

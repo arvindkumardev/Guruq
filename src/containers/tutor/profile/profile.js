@@ -216,7 +216,12 @@ function Profile(props) {
             justifyContent: 'center',
           }}>
           <View style={styles.userDetailsView}>
-            <TutorImageComponent tutor={{ profileImage: userInfo.profile, contactDetail: userInfo }} />
+            <TutorImageComponent
+              tutor={{ profileImage: userInfo.profile, contactDetail: userInfo }}
+              width={64}
+              height={64}
+              styling={{ borderRadius: 64 }}
+            />
 
             <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16) }}>
               <Text style={styles.userName}>{getFullName(userInfo)}</Text>

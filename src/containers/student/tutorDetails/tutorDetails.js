@@ -169,7 +169,7 @@ function TutorDetails(props) {
           groupClass: item.groupClass === 0 || item.groupClass === 1,
           onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
           individualClass: item.groupClass === 0 || item.groupClass === 2,
-          homeTution: item.onlineClass === 0 || item.onlineClass === 2,
+          offlineClass: item.onlineClass === 0 || item.onlineClass === 2,
           budgetDetails: item.budgets,
         }));
         if (!isEmpty(subjectList)) {
@@ -447,7 +447,7 @@ function TutorDetails(props) {
         <IconButtonWrapper
           iconWidth={RfW(24)}
           iconHeight={RfH(24)}
-          iconImage={selectedSubject?.homeTution ? Images.home_tuition_filled : Images.home_tuition}
+          iconImage={selectedSubject?.offlineClass ? Images.home_tuition_filled : Images.home_tuition}
           styling={{ marginHorizontal: RfW(16) }}
         />
         <Text style={styles.classMeta}>Offline</Text>
@@ -657,7 +657,7 @@ function TutorDetails(props) {
                 <PriceMatrixComponent
                   budgets={selectedSubject.budgetDetails}
                   showOnline={selectedSubject.onlineClass}
-                  showOffline={selectedSubject.homeTution}
+                  showOffline={selectedSubject.offlineClass}
                 />
               )}
             </View>
