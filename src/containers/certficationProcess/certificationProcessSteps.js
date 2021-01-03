@@ -3,6 +3,7 @@ import { ScrollView, Text, View } from 'react-native';
 import { useLazyQuery } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
+import { WebView } from 'react-native-webview';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
 import { RfH, RfW } from '../../utils/helpers';
 import Loader from '../../components/Loader';
@@ -14,7 +15,6 @@ import { TutorCertificationStageEnum } from '../tutor/enums';
 import NavigationRouteNames from '../../routes/screenNames';
 import { GET_OFFERINGS_MASTER_DATA } from '../student/dashboard-query';
 import { offeringsMasterData } from '../../apollo/cache';
-import {WebView} from "react-native-webview";
 
 const CertificationProcessSteps = (props) => {
   const isFocussed = useIsFocused();
@@ -68,6 +68,9 @@ const CertificationProcessSteps = (props) => {
         isOnBoarding: true,
       });
     }
+    if (leadDetail.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label) {
+      navigation.navigate(NavigationRouteNames.TUTOR.BACKGROUND_CHECK);
+    }
   };
 
   useEffect(() => {
@@ -91,7 +94,10 @@ const CertificationProcessSteps = (props) => {
       return 'Complete profile';
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING.label) {
-      return 'Schedule Interview';
+      return 'Interview & Documents';
+    }
+    if (leadDetail.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label) {
+      return 'Background Check';
     }
   };
 
@@ -99,7 +105,7 @@ const CertificationProcessSteps = (props) => {
     <View style={{ backgroundColor: Colors.white }}>
       <Loader isLoading={tutorLeadDetailLoading} />
       <ScreenHeader label="Certification Process" homeIcon={false} horizontalPadding={RfW(16)} />
-      <ScrollView contentContainerStyle={{ backgroundColor: Colors.white }}  showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ backgroundColor: Colors.white }} showsVerticalScrollIndicator={false}>
         <View style={[styles.stepCard, { borderLeftColor: Colors.lightGreen }]}>
           <IconButtonWrapper iconImage={Images.subjects} />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>
@@ -129,14 +135,19 @@ const CertificationProcessSteps = (props) => {
         </View>
 
         <View style={[styles.stepCard, { borderLeftColor: Colors.lightGreen }]}>
-          <IconButtonWrapper iconImage={Images.upload} />
+          <IconButtonWrapper
+            iconImage={Images.documentUpload}
+            imageResizeMode="contain"
+            iconHeight={RfH(30)}
+            iconWidth={RfW(24)}
+          />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
             Upload the required documents
           </Text>
         </View>
 
         <View style={[styles.stepCard, { borderLeftColor: Colors.lightPurple }]}>
-          <IconButtonWrapper iconImage={Images.background_check} />
+          <IconButtonWrapper iconImage={Images.background_check} imageResizeMode="contain" />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
             Background Check by GuruQ team to verify credentials
           </Text>

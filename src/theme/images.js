@@ -252,6 +252,8 @@ const Images = {
   experienceOrange: require('../assets/images/experienceOrange.png'),
   personalGreen: require('../assets/images/personalGreen.png'),
   addressBlue: require('../assets/images/addressBlue.png'),
+  documentUpload: require('../assets/images/documentUpload.png'),
+  pendingStatus: require('../assets/images/pendingStatus.png'),
 };
 
 export default Images;

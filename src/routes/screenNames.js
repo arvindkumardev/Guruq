@@ -87,6 +87,9 @@ const NavigationRouteNames = {
     PROFICIENCY_TEST: 'proficiency_test',
     COMPLETE_PROFILE: 'complete_profile',
     INTERVIEW_AND_DOCUMENTS: 'interview_and_documents',
+    UPLOAD_DOCUMENTS: 'upload_documents',
+    BACKGROUND_CHECK: 'background_check',
+    VERIFICATION:'verification'
   },
 };
 

@@ -77,6 +77,9 @@ function SubjectList() {
 
   const handleSubjectClick = (offering) => {
     if (offering.stage === TutorOfferingStageEnum.PT_PENDING.label) {
+      navigation.navigate(NavigationRouteNames.TUTOR.PT_START_SCREEN, {
+        offeringId: offering?.id,
+      });
     } else {
       navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX, {
         offering,

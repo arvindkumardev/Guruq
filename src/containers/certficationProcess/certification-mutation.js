@@ -7,3 +7,11 @@ export const MARK_CERTIFIED = gql`
     }
   }
 `;
+
+export const UPDATE_BACKGROUND_CHECK = gql`
+  mutation UpdateBackgroundCheck {
+    updateBackgroundCheck {
+      id
+    }
+  }
+`;

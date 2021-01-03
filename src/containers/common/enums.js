@@ -44,3 +44,12 @@ export const DegreeLevelEnum = {
   DOCTORAL: { value: 7, label: 'DOCTORAL' },
   OTHER: { value: 8, label: 'OTHER' },
 };
+
+
+export const BackgroundCheckStatusEnum = {
+  NOT_STARTED: { value: 1, label: 'NOT_STARTED' },
+  PENDING: { value: 2, label: 'PENDING' },
+  COMPLETED: { value: 3, label: 'COMPLETED' },
+  EXEMPTED: { value: 4, label: 'EXEMPTED' },
+  FAILED: { value: 5, label: 'FAILED' },
+}

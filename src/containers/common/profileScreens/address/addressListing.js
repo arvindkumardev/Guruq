@@ -216,7 +216,7 @@ function AddressListing() {
             <Button
               onPress={handleAddEditAddress}
               style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
-              <Text style={commonStyles.textButtonPrimary}>Create AddressListing</Text>
+              <Text style={commonStyles.textButtonPrimary}>Add Address</Text>
             </Button>
           </View>
         )}

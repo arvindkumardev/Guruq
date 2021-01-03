@@ -153,18 +153,12 @@ export const getStudentRoutes = () => {
         component={PytnDetail}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.NOTIFICATIONS}
         component={Notifications}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.SEND_FEEDBACK}
-        component={SendFeedback}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
+
       <Stack.Screen
         name={NavigationRouteNames.PARENTS_LIST}
         component={ParentListing}

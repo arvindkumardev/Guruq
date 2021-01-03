@@ -16,5 +16,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: RfH(10),
     alignItems: 'center',
   },
+  interviewCard: {
+    paddingVertical: RfH(31),
+    borderWidth: RfW(0.3),
+    borderColor: Colors.darkGrey,
+    borderLeftWidth: RfW(10),
+    marginTop: RfH(20),
+    borderTopRightRadius: RfH(8),
+    borderBottomRightRadius: RfH(8),
+    marginHorizontal: RfW(16),
+    paddingHorizontal: RfH(10),
+    justifyContent: 'center',
+  },
 });
 export default styles;
