@@ -153,7 +153,9 @@ const AppStack = (props) => {
         component={scheduleClass}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.ADDRESS} component={AddressListing} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.ADDRESS}
+                    component={AddressListing}
+                    options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_ADDRESS}
         component={AddEditAddress}

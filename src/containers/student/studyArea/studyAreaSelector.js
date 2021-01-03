@@ -72,19 +72,21 @@ function StudyAreaSelector() {
   );
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
-      <ScreenHeader label="Select Your Study Area" homeIcon />
-      <Text style={styles.subHeading}>Select Your Study Area</Text>
-      <Text style={styles.subHeadingText}>This will help us to find the best tutors for you</Text>
-      <View style={[styles.areaParentView, { marginTop: RfH(50) }]}>
-        <FlatList
-          data={offeringMasterData && offeringMasterData.filter((s) => s.level === 0)}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => renderItem(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
-          scrollEnabled={false}
-        />
+    <View style={[commonStyles.mainContainer, { backgroundColor: '#fff', paddingHorizontal: 0 }]}>
+      <ScreenHeader label="Select Your Study Area" homeIcon horizontalPadding={RfW(16)} />
+      <View style={{ paddingHorizontal: RfW(16) }}>
+        <Text style={styles.subHeading}>Select Your Study Area</Text>
+        <Text style={styles.subHeadingText}>This will help us to find the best tutors for you</Text>
+        <View style={[styles.areaParentView, { marginTop: RfH(50) }]}>
+          <FlatList
+            data={offeringMasterData && offeringMasterData.filter((s) => s.level === 0)}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => renderItem(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={2}
+            scrollEnabled={false}
+          />
+        </View>
       </View>
     </View>
   );

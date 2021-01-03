@@ -9,6 +9,7 @@ import { isEmpty, isNil, isNull, isNumber, isUndefined } from 'lodash';
 import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mobile';
 import Images from '../theme/images';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+import 'intl';
 
 const countryData = require('../components/NationalityDropdown/country/countries.json');
 
@@ -346,5 +347,6 @@ export const getNameInitials = (contactDetails) => {
   return initials;
 };
 export const printCurrency = (number) => {
-  return new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(number);
+  return number;
+  // return new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(number);
 };

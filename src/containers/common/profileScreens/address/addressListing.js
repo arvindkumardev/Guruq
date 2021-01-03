@@ -176,9 +176,8 @@ function AddressListing() {
           showRightIcon
           onRightIconClick={handleAddEditAddress}
           rightIcon={Images.add}
-          lineVisible={false}
         />
-        <View style={{ height: RfH(44) }} />
+        <View style={{ height: RfH(24) }} />
         {!isListEmpty ? (
           <View style={{ paddingHorizontal: RfW(16) }}>
             <FlatList

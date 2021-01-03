@@ -14,7 +14,15 @@ import { GET_TUTOR_LEAD_DETAIL } from './certification-query';
 import { TutorCertificationStageEnum } from '../tutor/enums';
 import NavigationRouteNames from '../../routes/screenNames';
 import { GET_OFFERINGS_MASTER_DATA } from '../student/dashboard-query';
-import { offeringsMasterData } from '../../apollo/cache';
+import {
+  isLoggedIn,
+  isSplashScreenVisible,
+  offeringsMasterData,
+  tutorDetails,
+  userDetails,
+  userType,
+} from '../../apollo/cache';
+import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 
 const CertificationProcessSteps = (props) => {
   const isFocussed = useIsFocused();
@@ -44,6 +52,16 @@ const CertificationProcessSteps = (props) => {
     onCompleted: (data) => {
       if (data) {
         offeringsMasterData(data.offerings.edges);
+      }
+    },
+  });
+
+  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        tutorDetails(data?.getCurrentTutor);
       }
     },
   });
@@ -80,6 +98,7 @@ const CertificationProcessSteps = (props) => {
   useEffect(() => {
     if (isFocussed) {
       getTutorLeadDetails();
+      getCurrentTutor();
     }
   }, [isFocussed]);
 
@@ -107,28 +126,48 @@ const CertificationProcessSteps = (props) => {
       <ScreenHeader label="Certification Process" homeIcon={false} horizontalPadding={RfW(16)} />
       <ScrollView contentContainerStyle={{ backgroundColor: Colors.white }} showsVerticalScrollIndicator={false}>
         <View style={[styles.stepCard, { borderLeftColor: Colors.lightGreen }]}>
-          <IconButtonWrapper iconImage={Images.subjects} />
+          <IconButtonWrapper
+            iconImage={Images.subjects}
+            imageResizeMode="contain"
+            iconHeight={RfH(30)}
+            iconWidth={RfW(24)}
+          />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>
             Select Subject you want to teach
           </Text>
         </View>
 
         <View style={[styles.stepCard, { borderLeftColor: Colors.lightPurple }]}>
-          <IconButtonWrapper iconImage={Images.proficiency_test} />
+          <IconButtonWrapper
+            iconImage={Images.proficiency_test}
+            imageResizeMode="contain"
+            iconHeight={RfH(30)}
+            iconWidth={RfW(24)}
+          />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
             Pass the Proficiency test to become a Tutor
           </Text>
         </View>
 
         <View style={[styles.stepCard, { borderLeftColor: Colors.skyBlue }]}>
-          <IconButtonWrapper iconImage={Images.education_g} />
+          <IconButtonWrapper
+            iconImage={Images.education_g}
+            imageResizeMode="contain"
+            iconHeight={RfH(30)}
+            iconWidth={RfW(24)}
+          />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
             Fill in the Personal details, address Education and Experience
           </Text>
         </View>
 
         <View style={[styles.stepCard, { borderLeftColor: Colors.lightOrange }]}>
-          <IconButtonWrapper iconImage={Images.schedule_interview} />
+          <IconButtonWrapper
+            iconImage={Images.schedule_interview}
+            imageResizeMode="contain"
+            iconHeight={RfH(30)}
+            iconWidth={RfW(24)}
+          />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
             Schedule your Interview on your preferences
           </Text>
@@ -138,7 +177,7 @@ const CertificationProcessSteps = (props) => {
           <IconButtonWrapper
             iconImage={Images.documentUpload}
             imageResizeMode="contain"
-            iconHeight={RfH(30)}
+            iconHeight={RfH(24)}
             iconWidth={RfW(24)}
           />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
@@ -147,7 +186,12 @@ const CertificationProcessSteps = (props) => {
         </View>
 
         <View style={[styles.stepCard, { borderLeftColor: Colors.lightPurple }]}>
-          <IconButtonWrapper iconImage={Images.background_check} imageResizeMode="contain" />
+          <IconButtonWrapper
+            iconImage={Images.background_check}
+            imageResizeMode="contain"
+            iconHeight={RfH(30)}
+            iconWidth={RfW(24)}
+          />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
             Background Check by GuruQ team to verify credentials
           </Text>
