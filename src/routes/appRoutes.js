@@ -24,11 +24,11 @@ import { getTutorRoutes } from './tutorAppRoutes';
 import { TutorCertificationStageEnum } from '../containers/tutor/enums';
 import CertificationCompletedView from '../containers/certficationProcess/certificationCompletedView';
 import WebViewPage from '../components/WebViewPage';
-import InterviewPending from '../containers/tutor/interviewPending/interviewPending';
+import InterviewPending from '../containers/certficationProcess/interviewPending/interviewPending';
 import AddressListing from '../containers/common/profileScreens/address/addressListing';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
 import { DUPLICATE_FOUND } from '../common/errorCodes';
-import { alertBox, createPayload } from '../utils/helpers';
+import { alertBox, clearAllLocalStorage, createPayload } from '../utils/helpers';
 import scheduledClassDetails from '../containers/calendar/scheduledClassDetails';
 import cancelReason from '../containers/calendar/cancelReason';
 import MyClasses from '../containers/myClasses/classes';
@@ -50,6 +50,8 @@ import CompleteYourProfile from '../containers/certficationProcess/completeYourP
 import ExperienceListing from '../containers/common/profileScreens/experience/experienceListing';
 import AddEditExperience from '../containers/common/profileScreens/experience/addEditExperience';
 import InterviewAndDocument from '../containers/certficationProcess/interviewAndDocuments';
+import InterviewScheduling from '../containers/certficationProcess/interviewScheduling';
+import CustomerCare from '../containers/common/customerCare/customerCare';
 
 const Stack = createStackNavigator();
 
@@ -57,12 +59,10 @@ const AppStack = (props) => {
   const { isUserLoggedIn, userType, showSplashScreen } = props;
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
-
-  console.log('tutorInfo', tutorInfo);
-
   const userDetailsObj = useReactiveVar(userDetails);
 
   useEffect(() => {
+    // clearAllLocalStorage();
     AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then((val) => {
       setIsGettingStartedVisible(isEmpty(val));
     });
@@ -70,14 +70,7 @@ const AppStack = (props) => {
 
   const [registerDevice, { loading: scheduleLoading }] = useMutation(REGISTER_DEVICE, {
     fetchPolicy: 'no-cache',
-    onError: (e) => {
-      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-      //   const error = e.graphQLErrors[0].extensions.exception.response;
-      //   if (error.errorCode === DUPLICATE_FOUND) {
-      //     Alert.alert(error.message);
-      //   }
-      // }
-    },
+    onError: (e) => {},
     onCompleted: (data) => {
       if (data) {
         console.log(data);
@@ -226,6 +219,16 @@ const AppStack = (props) => {
         component={AddEditExperience}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
+        component={InterviewScheduling}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.CUSTOMER_CARE}
+        component={CustomerCare}
+        options={{ headerShown: false }}
+      />
 
       {/* <Stack.Screen name={NavigationRouteNames.A} component={EducationListing} options={{ headerShown: false }} /> */}
     </>
@@ -255,33 +258,6 @@ const AppStack = (props) => {
         return getTutorRoutes();
       }
 
-      // if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING) {
-      //   return (
-      //     <>
-      //       <Stack.Screen
-      //         name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
-      //         component={InterviewPending}
-      //         options={{ headerShown: false }}
-      //       />
-      //     </>
-      //   );
-      // }
-
-      // if (tutorInfo && tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.INTERVIEW_PENDING) {
-      //   return (
-      //     <>
-      //       <Stack.Screen
-      //         name={NavigationRouteNames.WEB_VIEW}
-      //         component={WebViewPage}
-      //         options={{
-      //           url: `http://dashboardv2.guruq.in/tutor/on-boarding`,
-      //           label: 'Tutor Certification Process',
-      //           headerShown: false,
-      //         }}
-      //       />
-      //     </>
-      //   );
-      // }
       if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.REGISTERED.label) {
         return (
           <>

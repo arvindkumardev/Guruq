@@ -164,11 +164,6 @@ export const getStudentRoutes = () => {
         component={SendFeedback}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.CUSTOMER_CARE}
-        component={CustomerCare}
-        options={{ headerShown: false }}
-      />
       <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.PARENTS_LIST}

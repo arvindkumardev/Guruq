@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Image, Text, View } from 'react-native';
 import { Button } from 'native-base';
-import { useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import { alertBox, RfH, RfW } from '../../utils/helpers';
+import { RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import Images from '../../theme/images';
 import { Colors } from '../../theme';
 import { MARK_CERTIFIED } from './certification-mutation';
 import { Loader } from '../../components';
-import NavigationRouteNames from '../../routes/screenNames';
+import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
+import { tutorDetails } from '../../apollo/cache';
 
 const TutorWelcomeScreen = () => {
   const navigation = useNavigation();
+  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        tutorDetails(data?.getCurrentTutor);
+      }
+    },
+  });
+
   const [markCertified, { loading: markTutorCertifiedLoading }] = useMutation(MARK_CERTIFIED, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -20,7 +31,7 @@ const TutorWelcomeScreen = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW);
+        getCurrentTutor();
       }
     },
   });
@@ -31,7 +42,7 @@ const TutorWelcomeScreen = () => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', paddingTop: RfH(140), backgroundColor: Colors.white }}>
-      <Loader isLoading={markTutorCertifiedLoading} />
+      <Loader isLoading={markTutorCertifiedLoading || getCurrentTutorLoading} />
       <Image source={Images.tutorWelcome} height={RfH(259)} weight={RfW(302)} />
       <View style={{ marginTop: RfH(52), alignItems: 'center' }}>
         <Text style={commonStyles.headingPrimaryText}> Welcome to GuruQ!</Text>

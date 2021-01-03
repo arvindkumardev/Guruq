@@ -79,7 +79,7 @@ const InterviewAndDocument = () => {
       <TouchableOpacity
         style={[styles.stepCard, { borderLeftColor: Colors.lightOrange, justifyContent: 'space-between' }]}
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS)}>
+        onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW)}>
         <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper
             iconImage={Images.schedule_interview}

@@ -14,6 +14,7 @@ import { TutorCertificationStageEnum } from '../tutor/enums';
 import NavigationRouteNames from '../../routes/screenNames';
 import { GET_OFFERINGS_MASTER_DATA } from '../student/dashboard-query';
 import { offeringsMasterData } from '../../apollo/cache';
+import {WebView} from "react-native-webview";
 
 const CertificationProcessSteps = (props) => {
   const isFocussed = useIsFocused();
@@ -97,8 +98,8 @@ const CertificationProcessSteps = (props) => {
   return (
     <View style={{ backgroundColor: Colors.white }}>
       <Loader isLoading={tutorLeadDetailLoading} />
-      <ScreenHeader label="Certification Process" homeIcon={false} horizontalPadding={RfW(16)} lineVisible={false} />
-      <ScrollView contentContainerStyle={{ backgroundColor: Colors.white }}>
+      <ScreenHeader label="Certification Process" homeIcon={false} horizontalPadding={RfW(16)} />
+      <ScrollView contentContainerStyle={{ backgroundColor: Colors.white }}  showsVerticalScrollIndicator={false}>
         <View style={[styles.stepCard, { borderLeftColor: Colors.lightGreen }]}>
           <IconButtonWrapper iconImage={Images.subjects} />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>

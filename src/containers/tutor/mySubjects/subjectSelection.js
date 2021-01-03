@@ -5,10 +5,9 @@ import { useMutation } from '@apollo/client';
 import { Colors } from '../../../theme';
 import { alertBox, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
-import { ChooseSubjectComponent, ScreenHeader, Loader } from '../../../components';
+import { ChooseSubjectComponent, Loader, ScreenHeader } from '../../../components';
 import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../tutor.mutation';
 import { MARK_CERTIFIED } from '../../certficationProcess/certification-mutation';
-import NavigationRouteNames from '../../../routes/screenNames';
 
 function SubjectSelection(props) {
   const navigation = useNavigation();
@@ -21,7 +20,7 @@ function SubjectSelection(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW);
+        navigation.goBack();
       }
     },
   });
@@ -41,7 +40,6 @@ function SubjectSelection(props) {
       if (data) {
         if (isOnBoarding) {
           markCertified();
-          navigation.goBack();
         } else {
           navigation.goBack();
         }

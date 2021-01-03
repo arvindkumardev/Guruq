@@ -10,10 +10,10 @@ import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import CustomDatePicker from '../../../components/CustomDatePicker';
-import { GET_INTERVIEW_SCHEDULE_AVAILABILITY } from '../tutor.query';
-import { ADD_INTERVIEW_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS, ADD_TUTOR_DOCUMENT_DETAILS } from '../tutor.mutation';
+import { GET_INTERVIEW_SCHEDULE_AVAILABILITY } from '../../tutor/tutor.query';
+import { ADD_INTERVIEW_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS, ADD_TUTOR_DOCUMENT_DETAILS } from '../../tutor/tutor.mutation';
 import { tutorDetails } from '../../../apollo/cache';
-import { InterviewMode, InterviewStatus } from '../enums';
+import { InterviewMode, InterviewStatus } from '../../tutor/enums';
 
 function InterviewPending() {
   const [interviewDate, setInterviewDate] = useState('');

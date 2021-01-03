@@ -20,9 +20,10 @@ const PtStartScreen = (props) => {
   const isFocussed = useIsFocused();
   const offeringId = props?.route.params.offeringId;
   const isOnBoarding = props?.route.params.isOnBoarding;
-  const [ptDetail, setPtDetail] = useState({});
   const offeringMasterData = useReactiveVar(offeringsMasterData);
+  const [ptDetail, setPtDetail] = useState({});
   const [offering, setOffering] = useState({});
+  const [attemptExhausted, setAttemptExhausted] = useState(false);
 
   const [getTutorOfferingDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_OFFERING_DETAIL, {
     fetchPolicy: 'no-cache',
@@ -41,7 +42,7 @@ const PtStartScreen = (props) => {
         );
         const ptTest = data.getTutorOfferingDetails.tutorProficiencyTests.sort((a, b) => (a.id < b.id ? 1 : -1));
         setPtDetail(ptTest[0]);
-        console.log('data', ptTest);
+        setAttemptExhausted(data.getTutorOfferingDetails.allowedPTAttempts === 0);
       }
     },
   });
@@ -53,7 +54,7 @@ const PtStartScreen = (props) => {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE,{isOnBoarding});
+        navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, { isOnBoarding });
       }
     },
   });
@@ -240,11 +241,25 @@ const PtStartScreen = (props) => {
           </View>
         )}
 
-        <Button
-          onPress={handleClick}
-          style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
-          <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
-        </Button>
+        {!attemptExhausted && (
+          <Button
+            onPress={handleClick}
+            style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
+            <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
+          </Button>
+        )}
+        {attemptExhausted && (
+          <View style={{ marginTop: RfH(30), justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
+              Your all the attempts to take the exam are exhausted please contact the customer care
+            </Text>
+            <Button
+              onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
+              <Text style={commonStyles.textButtonPrimary}>Customer care</Text>
+            </Button>
+          </View>
+        )}
       </View>
     </>
   );

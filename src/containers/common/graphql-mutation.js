@@ -136,6 +136,9 @@ export const CREATE_TUTOR = gql`
         }
         email
       }
+      lead {
+        certificationStage
+      }
     }
   }
 `;
@@ -292,5 +295,3 @@ export const DELETE_TUTOR_DOCUMENT_DETAILS = gql`
     }
   }
 `;
-
-

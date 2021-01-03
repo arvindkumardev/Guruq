@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import React, { useEffect } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { isEmpty } from 'lodash';
 import { GET_CURRENT_STUDENT_QUERY, GET_CURRENT_TUTOR_QUERY, ME_QUERY } from '../graphql-query';
 import {
   isLoggedIn,
@@ -18,84 +17,72 @@ import { createPayload } from '../../../utils/helpers';
 import { REGISTER_DEVICE } from '../graphql-mutation';
 
 function LoginCheck() {
-  // const { error, data } = useQuery(ME_QUERY, { fetchPolicy: 'no-cache' });
-
-  const [registerDevice, { loading: scheduleLoading }] = useMutation(REGISTER_DEVICE, {
+  const [registerDevice, { loading: registerDeviceLoading }] = useMutation(REGISTER_DEVICE, {
     fetchPolicy: 'no-cache',
-    onError: (e) => {
-      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-    },
+    onError: (e) => {},
     onCompleted: (data) => {
       if (data) {
         console.log(data);
       }
     },
   });
-  const [getMe, { data: userData, error: userError }] = useLazyQuery(ME_QUERY, {
+
+  const [getCurrentStudent, { loading: getCurrentLoading }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
     fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        studentDetails(data?.getCurrentStudent);
+        isLoggedIn(true);
+        isSplashScreenVisible(false);
+      }
+    },
   });
 
-  const [getCurrentStudent, { data: currentStudent }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
+  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        tutorDetails(data?.getCurrentTutor);
+        isLoggedIn(true);
+        isSplashScreenVisible(false);
+      }
+    },
   });
-  const [getCurrentTutor, { data: currentTutor }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, { fetchPolicy: 'no-cache' });
 
-  useEffect(() => {
-    getMe();
-  }, []);
-
-  useEffect(() => {
-    if (userError) {
+  const [getMe, { loading: getMeLoading }] = useLazyQuery(ME_QUERY, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
       isLoggedIn(false);
       isTokenLoading(false);
       userDetails({});
       isSplashScreenVisible(false);
-    }
-  }, [userError]);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        userDetails(data.me);
+        userType(data.me.type);
 
-  useEffect(() => {
-    if (!isEmpty(userData)) {
-      userDetails(userData.me);
-      userType(userData.me.type);
-
-      getFcmToken().then((token) => {
-        if (token) {
-          createPayload(userData.me, token).then((payload) => {
-            registerDevice({ variables: { deviceDto: payload } });
-          });
+        getFcmToken().then((token) => {
+          if (token) {
+            createPayload(data.me, token).then((payload) => {
+              registerDevice({ variables: { deviceDto: payload } });
+            });
+          }
+        });
+        if (data.me.type === UserTypeEnum.STUDENT.label) {
+          getCurrentStudent();
+        } else if (data.me.type === UserTypeEnum.TUTOR.label) {
+          getCurrentTutor();
         }
-      });
-
-      // registerDevice({variables:{deviceDto:{
-      //   deviceId:
-      //   deviceToken:
-      //   buildVersion:
-      //   userId:
-      //   deviceModel:
-      //     }}})
-      if (userData.me.type === UserTypeEnum.STUDENT.label) {
-        getCurrentStudent();
-      } else if (userData.me.type === UserTypeEnum.TUTOR.label) {
-        getCurrentTutor();
       }
-    }
-  }, [userData]);
+    },
+  });
 
   useEffect(() => {
-    if (currentStudent && currentStudent?.getCurrentStudent) {
-      studentDetails(currentStudent?.getCurrentStudent);
-      isLoggedIn(true);
-      isSplashScreenVisible(false);
-    }
-  }, [currentStudent]);
-
-  useEffect(() => {
-    if (currentTutor && currentTutor?.getCurrentTutor) {
-      tutorDetails(currentTutor?.getCurrentTutor);
-      isLoggedIn(true);
-      isSplashScreenVisible(false);
-    }
-  }, [currentTutor]);
+    getMe();
+  }, []);
 
   return <View />;
 }
