@@ -9,7 +9,7 @@ import IconButtonWrapper from '../../../components/IconWrapper';
 import Colors from '../../../theme/colors';
 import Fonts from '../../../theme/fonts';
 import Images from '../../../theme/images';
-import {getFullName, RfH, RfW} from '../../../utils/helpers';
+import { getFullName, RfH, RfW } from '../../../utils/helpers';
 import { GET_CHAT_MESSAGES, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
 import { dimensions } from './style';
 
@@ -22,9 +22,9 @@ const VideoMessagingModal = (props) => {
   const getMessageToRender = (message) => {
     return {
       ...message,
-      _id: message.uuid,
-      createdAt: message.createdDate,
-      user: { _id: message.createdBy.id, name: getFullName(message.createdBy) },
+      _id: message?.id,
+      createdAt: message?.createdDate,
+      user: { _id: message?.createdBy.id, name: getFullName(message?.createdBy) },
     };
   };
 
@@ -53,16 +53,19 @@ const VideoMessagingModal = (props) => {
         console.log(e);
       },
       onCompleted: (data) => {
-        console.log('getChatMessages', data);
+        console.log('getChatMessages', data, channelName);
         if (data) {
           if (data?.getChatMessages) {
+            let ms = [];
             // eslint-disable-next-line no-restricted-syntax
             for (const message of data.getChatMessages) {
               if (!chatMessageIds.includes(message.id)) {
-                setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+                ms = GiftedChat.append(ms, getMessageToRender(message));
                 setChatMessageIds([...chatMessageIds, message.id]);
               }
             }
+
+            setChatMessages(ms);
           }
         }
         console.log('getChatMessages - setChatMessageIds', chatMessageIds);
@@ -71,7 +74,7 @@ const VideoMessagingModal = (props) => {
   );
   useEffect(() => {
     getChatMessages({ variables: { channelName: props.channelName } });
-  }, []);
+  }, [channelName]);
 
   const { loading: loadingNewMessageEvent } = useSubscription(NEW_CHAT_MESSAGE, {
     onSubscriptionData: ({ subscriptionData: { data } }) => {
@@ -104,6 +107,8 @@ const VideoMessagingModal = (props) => {
       currentMessage: { text: currText },
     } = props;
 
+    console.log('props', props);
+
     let messageTextStyle;
 
     // Make "pure emoji" messages much bigger than plain text.
@@ -115,7 +120,7 @@ const VideoMessagingModal = (props) => {
       };
     }
 
-    return <SlackMessage {...props} messageTextStyle={messageTextStyle} user={userInfo?.id} />;
+    return <SlackMessage {...props} messageTextStyle={messageTextStyle} />;
   };
 
   return (

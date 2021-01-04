@@ -1033,11 +1033,11 @@ export default class Video extends Component<Props, State> {
               </TouchableWithoutFeedback>
 
               {/* FIXME: REMOVE ME */}
-              <TouchableWithoutFeedback onPress={this.endCall}>
-                <View style={styles.button}>
-                  <Text style={styles.buttonText}> End Call </Text>
-                </View>
-              </TouchableWithoutFeedback>
+              {/*<TouchableWithoutFeedback onPress={this.endCall}>*/}
+              {/*  <View style={styles.button}>*/}
+              {/*    <Text style={styles.buttonText}> End Call </Text>*/}
+              {/*  </View>*/}
+              {/*</TouchableWithoutFeedback>*/}
             </View>
           </View>
         </View>

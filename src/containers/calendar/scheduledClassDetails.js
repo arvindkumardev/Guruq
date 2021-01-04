@@ -195,13 +195,13 @@ function ScheduledClassDetails(props) {
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
               <BackArrow action={onBackPress} />
 
-              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-                <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
+              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 0.9 }]}>
+                <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]} numberOfLines={1}>
                   {`${classData?.classEntity?.offering?.displayName} by ${getFullName(
                     classData?.classEntity?.tutor?.contactDetail
                   )}`}
                 </Text>
-                <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}>
+                <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]} numberOfLines={1}>
                   {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
                 </Text>
               </View>
@@ -530,7 +530,7 @@ function ScheduledClassDetails(props) {
         <VideoMessagingModal
           onClose={() => setShowMessageModal(false)}
           visible={showMessageModal}
-          channelName={classData?.uuid}
+          channelName={classData?.classEntity?.uuid}
         />
       )}
 
