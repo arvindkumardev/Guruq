@@ -56,6 +56,7 @@ import SendFeedback from '../containers/common/sendFeedback';
 import AboutUs from '../containers/common/about/about';
 import BackgroundCheck from '../containers/certficationProcess/backgroundCheck';
 import TutorVerificationScreen from '../containers/certficationProcess/tutorVerificationScreen';
+import { BackgroundCheckStatusEnum } from '../containers/common/enums';
 
 const Stack = createStackNavigator();
 
@@ -153,9 +154,7 @@ const AppStack = (props) => {
         component={scheduleClass}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.ADDRESS}
-                    component={AddressListing}
-                    options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.ADDRESS} component={AddressListing} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_ADDRESS}
         component={AddEditAddress}
@@ -286,7 +285,9 @@ const AppStack = (props) => {
       if (
         tutorInfo &&
         !tutorInfo?.certified &&
-        tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label
+        (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label ||
+          (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&
+            tutorInfo?.lead?.backgroundCheck?.status !== BackgroundCheckStatusEnum.NOT_STARTED.label))
       ) {
         return (
           <>
