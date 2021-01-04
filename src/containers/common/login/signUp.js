@@ -118,7 +118,7 @@ function SignUp(props) {
                 <Label>Referral Code</Label>
                 <Input onChangeText={(text) => setReferCode(text)} />
               </Item>
-              <Text style={styles.applyIcon}>APPLY</Text>
+              {/*<Text style={styles.applyIcon}>APPLY</Text>*/}
             </View>
           </View>
           <TouchableOpacity

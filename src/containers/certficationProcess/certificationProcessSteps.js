@@ -102,94 +102,122 @@ const CertificationProcessSteps = (props) => {
     }
   }, [isFocussed]);
 
-  const getButtonText = () => {
+  const [step, setStep] = useState(0);
+  const [buttonText, setButtonText] = useState(0);
+
+  useEffect(() => {
     if (leadDetail.certificationStage === TutorCertificationStageEnum.OFFERING_PENDING.label) {
-      return 'Start';
+      setStep(1);
+      setButtonText('Start');
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFICIENCY_TEST_PENDING.label) {
-      return 'Start proficiency test';
+      setStep(2);
+      setButtonText('Start proficiency Test');
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFILE_COMPLETION_PENDING.label) {
-      return 'Complete profile';
+      setStep(3);
+      setButtonText('Complete Profile');
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING.label) {
-      return 'Interview & Documents';
+      setStep(4);
+      setButtonText('Interview & Documents');
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label) {
-      return 'Background Check';
+      setStep(5);
+      setButtonText('Background Check');
     }
-  };
+  }, [leadDetail]);
 
   return (
     <View style={{ backgroundColor: Colors.white }}>
       <Loader isLoading={tutorLeadDetailLoading} />
       <ScreenHeader label="Certification Process" homeIcon={false} horizontalPadding={RfW(16)} />
       <ScrollView contentContainerStyle={{ backgroundColor: Colors.white }} showsVerticalScrollIndicator={false}>
-        <View style={[styles.stepCard, { borderLeftColor: Colors.lightGreen }]}>
+        <View
+          style={[
+            styles.stepCard,
+            { borderColor: step === 1 ? Colors.brandBlue2 : step > 1 ? Colors.green : Colors.lightGrey },
+          ]}>
           <IconButtonWrapper
             iconImage={Images.subjects}
             imageResizeMode="contain"
-            iconHeight={RfH(30)}
+            iconHeight={RfH(24)}
             iconWidth={RfW(24)}
           />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>
-            Select Subject you want to teach
+            Select Subject You Want To Teach
           </Text>
         </View>
 
-        <View style={[styles.stepCard, { borderLeftColor: Colors.lightPurple }]}>
+        <View
+          style={[
+            styles.stepCard,
+            { borderColor: step === 2 ? Colors.brandBlue2 : step > 2 ? Colors.green : Colors.lightGrey },
+          ]}>
           <IconButtonWrapper
             iconImage={Images.proficiency_test}
-            imageResizeMode="contain"
-            iconHeight={RfH(30)}
-            iconWidth={RfW(24)}
-          />
-          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
-            Pass the Proficiency test to become a Tutor
-          </Text>
-        </View>
-
-        <View style={[styles.stepCard, { borderLeftColor: Colors.skyBlue }]}>
-          <IconButtonWrapper
-            iconImage={Images.education_g}
-            imageResizeMode="contain"
-            iconHeight={RfH(30)}
-            iconWidth={RfW(24)}
-          />
-          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
-            Fill in the Personal details, address Education and Experience
-          </Text>
-        </View>
-
-        <View style={[styles.stepCard, { borderLeftColor: Colors.lightOrange }]}>
-          <IconButtonWrapper
-            iconImage={Images.schedule_interview}
-            imageResizeMode="contain"
-            iconHeight={RfH(30)}
-            iconWidth={RfW(24)}
-          />
-          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
-            Schedule your Interview on your preferences
-          </Text>
-        </View>
-
-        <View style={[styles.stepCard, { borderLeftColor: Colors.lightGreen }]}>
-          <IconButtonWrapper
-            iconImage={Images.documentUpload}
             imageResizeMode="contain"
             iconHeight={RfH(24)}
             iconWidth={RfW(24)}
           />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
-            Upload the required documents
+            Pass the Proficiency Test
           </Text>
         </View>
 
-        <View style={[styles.stepCard, { borderLeftColor: Colors.lightPurple }]}>
+        <View
+          style={[
+            styles.stepCard,
+            { borderColor: step === 3 ? Colors.brandBlue2 : step > 3 ? Colors.green : Colors.lightGrey },
+          ]}>
+          <IconButtonWrapper
+            iconImage={Images.education_g}
+            imageResizeMode="contain"
+            iconHeight={RfH(24)}
+            iconWidth={RfW(24)}
+          />
+          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
+            Complete Your Profile - Personal, Address, Education and Experience
+          </Text>
+        </View>
+
+        <View
+          style={[
+            styles.stepCard,
+            { borderColor: step === 4 ? Colors.brandBlue2 : step > 4 ? Colors.green : Colors.lightGrey },
+          ]}>
+          <IconButtonWrapper
+            iconImage={Images.schedule_interview}
+            imageResizeMode="contain"
+            iconHeight={RfH(24)}
+            iconWidth={RfW(24)}
+          />
+          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
+            Upload The Required Documents and Schedule Your Interview
+          </Text>
+        </View>
+
+        {/* <View style={[styles.stepCard, { borderLeftColor: Colors.lightGreen }]}> */}
+        {/*  <IconButtonWrapper */}
+        {/*    iconImage={Images.documentUpload} */}
+        {/*    imageResizeMode="contain" */}
+        {/*    iconHeight={RfH(24)} */}
+        {/*    iconWidth={RfW(24)} */}
+        {/*  /> */}
+        {/*  <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}> */}
+        {/*    Upload the required documents */}
+        {/*  </Text> */}
+        {/* </View> */}
+
+        <View
+          style={[
+            styles.stepCard,
+            { borderColor: step === 5 ? Colors.brandBlue2 : step > 5 ? Colors.green : Colors.lightGrey },
+          ]}>
           <IconButtonWrapper
             iconImage={Images.background_check}
             imageResizeMode="contain"
-            iconHeight={RfH(30)}
+            iconHeight={RfH(24)}
             iconWidth={RfW(24)}
           />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
@@ -200,7 +228,7 @@ const CertificationProcessSteps = (props) => {
         <Button
           onPress={handleClick}
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(70), width: RfW(230) }]}>
-          <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
+          <Text style={commonStyles.textButtonPrimary}>{buttonText}</Text>
         </Button>
 
         <View style={{ height: RfH(150) }} />

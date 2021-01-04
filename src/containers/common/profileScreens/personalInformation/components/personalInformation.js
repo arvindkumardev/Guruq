@@ -12,6 +12,8 @@ import CustomDatePicker from '../../../../../components/CustomDatePicker';
 import GenderModal from './genderModal';
 import { UPDATE_STUDENT_CONTACT_DETAILS, UPDATE_TUTOR_CONTACT_DETAILS } from '../../../graphql-mutation';
 import { GenderEnum } from '../../../enums';
+import { userType } from '../../../../../apollo/cache';
+import { UserTypeEnum } from '../../../../../common/userType.enum';
 
 function PersonalInformation(props) {
   const [showGenderModal, setShowGenderModal] = useState(false);
@@ -49,7 +51,7 @@ function PersonalInformation(props) {
     onCompleted: (data) => {
       if (data) {
         alertBox('Details updated!');
-        onUpdate()
+        onUpdate();
       }
     },
   });
@@ -69,24 +71,51 @@ function PersonalInformation(props) {
   });
 
   const onSavingDetails = () => {
+    console.log({
+      firstName,
+      lastName,
+      gender,
+      dob,
+    });
+
     if (isValidMobile(mobileObj)) {
-      saveStudentDetails({
-        variables: {
-          studentDto: {
-            contactDetail: {
-              firstName,
-              lastName,
-              gender,
-              dob,
-              email,
-              phoneNumber: {
-                countryCode: mobileObj.country.dialCode,
-                number: mobileObj.mobile,
+      if (referenceType === UserTypeEnum.STUDENT.label) {
+        saveStudentDetails({
+          variables: {
+            studentDto: {
+              contactDetail: {
+                firstName,
+                lastName,
+                gender,
+                dob,
+                // email,
+                // phoneNumber: {
+                //   countryCode: mobileObj.country.dialCode,
+                //   number: mobileObj.mobile,
+                // },
               },
             },
           },
-        },
-      });
+        });
+      } else {
+        saveTutorDetails({
+          variables: {
+            tutorDto: {
+              contactDetail: {
+                firstName,
+                lastName,
+                gender,
+                dob,
+                // email,
+                // phoneNumber: {
+                //   countryCode: mobileObj.country.dialCode,
+                //   number: mobileObj.mobile,
+                // },
+              },
+            },
+          },
+        });
+      }
     } else {
       alertBox('Please enter valid phone number!');
     }

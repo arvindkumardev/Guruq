@@ -82,23 +82,24 @@ const PtStartScreen = (props) => {
   };
 
   const getButtonText = () => {
+    let text = '';
     if (ptDetail?.status === PtStatus.PENDING.label) {
-      return 'Start Test';
+      text = 'Start Your Test';
     }
     if (ptDetail?.status === PtStatus.FAILED.label) {
-      return 'Retake Test';
+      text = 'Retake Test';
     }
     if (ptDetail?.status === PtStatus.PASSED.label || ptDetail?.status === PtStatus.EXEMPTED.label) {
-      return 'Continue';
+      text = 'Continue';
     }
+    return text;
   };
 
   const renderOffering = () => (
-    <View
-      style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(16), width: '70%', marginLeft: RfW(10) }]}>
+    <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(16), width: '70%' }]}>
       {!isEmpty(offering) && (
         <>
-          <IconButtonWrapper iconImage={getSubjectIcons(offering?.displayName)} />
+          <IconButtonWrapper iconImage={getSubjectIcons(offering?.displayName)} iconWidth={64} iconHeight={64} />
           <View style={{ marginLeft: RfW(16) }}>
             <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
               {`${offering?.rootOffering?.displayName} | ${offering?.parentOffering?.parentOffering?.displayName}`}
@@ -214,25 +215,44 @@ const PtStartScreen = (props) => {
         style={{
           flex: 1,
           backgroundColor: Colors.white,
-          paddingHorizontal: RfH(20),
+          paddingHorizontal: RfH(16),
         }}>
-        {ptDetail?.status === PtStatus.PENDING.label && (
-          <>
-            <View style={{ alignItems: 'center', marginVertical: RfH(50) }}>
-              <Text style={[commonStyles.regularPrimaryText, { marginBottom: RfH(60), textAlign: 'center' }]}>
-                You will get 30 minutes for 30 questions, Click begin to resume your test. GOOD LUCK{' '}
-              </Text>
-              <Image source={Images.ptTest} height={RfH(181)} weight={RfW(150)} />
-            </View>
-            {renderOffering()}
-          </>
-        )}
-
         {(ptDetail?.status === PtStatus.FAILED.label || ptDetail?.status === PtStatus.PASSED.label) && (
           <View style={{ marginTop: RfH(15) }}>
             {renderOffering()}
             {renderScore()}
           </View>
+        )}
+
+        {ptDetail?.status === PtStatus.PENDING.label && (
+          <>
+            <View style={{ marginVertical: RfH(15) }}>
+              <View>{renderOffering()}</View>
+              <View style={{ alignItems: 'center', marginVertical: RfH(40) }}>
+                <Image source={Images.ptTest} height={RfH(181)} weight={RfW(150)} />
+              </View>
+              <Text
+                style={[
+                  commonStyles.headingPrimaryText,
+                  { marginTop: RfH(40), marginBottom: RfH(20), textAlign: 'center' },
+                ]}>
+                Test Overview
+              </Text>
+              <View style={{ marginHorizontal: RfW(16) }}>
+                <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center' }]}>
+                  <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
+                  <Text style={{ marginLeft: RfW(16) }}>There will be 30 questions.</Text>
+                </View>
+                <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center', marginTop: RfH(8) }]}>
+                  <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
+                  <Text style={{ marginLeft: RfW(16) }}>You will have 30 minutes to complete the test.</Text>
+                </View>
+              </View>
+              <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(40), textAlign: 'center' }]}>
+                GOOD LUCK!
+              </Text>
+            </View>
+          </>
         )}
 
         {ptDetail?.status === PtStatus.EXEMPTED.label && (
@@ -244,7 +264,7 @@ const PtStartScreen = (props) => {
         {!attemptExhausted && (
           <Button
             onPress={handleClick}
-            style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
+            style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
             <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
           </Button>
         )}

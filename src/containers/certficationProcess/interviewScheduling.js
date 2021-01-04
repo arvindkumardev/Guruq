@@ -80,7 +80,7 @@ function InterviewScheduling() {
   const onAddingDetails = () => {
     if (!interviewDate) {
       alertBox('Please select the interview date');
-    } else if (!selectedTime) {
+    } else if (!selectedTime || !selectedTime.startDate) {
       alertBox('Please select the interview time');
     } else {
       addInterviewDetails({

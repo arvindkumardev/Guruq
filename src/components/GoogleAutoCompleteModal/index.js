@@ -95,7 +95,7 @@ const GoogleAutoCompleteModal = (props) => {
             height: deviceHeight(),
             // paddingVertical: RfH(44),
             // marginBottom: 10,
-            // backgroundColor: '#ffffff',
+            backgroundColor: '#dddddd',
           }}>
           <GooglePlacesAutocomplete
             placeholder="Search"

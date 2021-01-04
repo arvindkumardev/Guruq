@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
@@ -63,7 +63,7 @@ const CompleteYourProfile = () => {
     return !(
       !checkForPersonalDetails() ||
       isEmpty(tutorDetail.educationDetails) ||
-      isEmpty(tutorDetail.experienceDetails) ||
+      // isEmpty(tutorDetail.experienceDetails) ||
       isEmpty(tutorDetail.addresses)
     );
   };
@@ -176,7 +176,8 @@ const CompleteYourProfile = () => {
         <Button
           onPress={handleNext}
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(70), width: RfW(230) }]}>
-          <Text style={commonStyles.textButtonPrimary}>Next Step</Text>
+          <Text style={[commonStyles.textButtonPrimary, { marginRight: RfW(16) }]}>Next Step</Text>
+          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.rightArrow_white} />
         </Button>
       )}
     </View>
