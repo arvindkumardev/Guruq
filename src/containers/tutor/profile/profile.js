@@ -79,8 +79,6 @@ function Profile(props) {
 
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
-  const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
-  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
 
   const client = initializeApollo();
@@ -123,6 +121,8 @@ function Profile(props) {
       navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Experience') {
       navigation.navigate(NavigationRouteNames.EXPERIENCE);
+    } else if (item.name === 'Business Details') {
+      navigation.navigate(NavigationRouteNames.TUTOR.BUSINESS_DETAILS);
     } else if (item.name === 'Documents') {
       navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
@@ -197,11 +197,11 @@ function Profile(props) {
           alignItems: 'center',
         }}>
         <View style={{ flexDirection: 'row' }} />
-        <View>
-          <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
-            <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
-          </TouchableOpacity>
-        </View>
+        {/* <View> */}
+        {/*  <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}> */}
+        {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} /> */}
+        {/*  </TouchableOpacity> */}
+        {/* </View> */}
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>

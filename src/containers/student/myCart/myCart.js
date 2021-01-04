@@ -15,7 +15,7 @@ import { IconButtonWrapper, Loader, PaymentMethodModal, ScreenHeader, TutorImage
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
-import { alertBox, getFullName, printCurrency, RfH, RfW } from '../../../utils/helpers';
+import {alertBox, getFullName, getToken, printCurrency, RfH, RfW} from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
@@ -36,6 +36,7 @@ const MyCart = () => {
   const [qPoints, setQPoints] = useState(0);
   const [qPointsRedeemed, setQPointsRedeemed] = useState(0);
   const [applyQPoints, setApplyQPoints] = useState(false);
+  const [token, setToken] = useState();
 
   const [paymentModal, setPaymentModal] = useState(false);
   const [bookingId, setBookingId] = useState('');
@@ -136,6 +137,12 @@ const MyCart = () => {
   useEffect(() => {
     getCartItems();
     getMyQpointBalance();
+  }, []);
+
+  useEffect(() => {
+    getToken().then((tk) => {
+      setToken(tk);
+    });
   }, []);
 
   // useEffect(() => {
@@ -644,7 +651,7 @@ const MyCart = () => {
       />
       {paymentModal && bookingId !== '' && (
         <CustomModalWebView
-          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}`}
+          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}?token=${token}`}
           headerText="Payment"
           modalVisible={paymentModal}
           onNavigationStateChange={handlePaymentAuthorization}

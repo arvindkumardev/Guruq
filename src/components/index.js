@@ -21,6 +21,7 @@ import TutorImageComponent from './TutorImageComponent';
 import UpcomingClassComponent from './UpcomingClassComponent';
 import CustomSelect from './CustomSelect';
 import CustomDatePicker from './CustomDatePicker';
+import ActionSheet from './ActionSheet';
 
 export {
   IconButtonWrapper,
@@ -44,5 +45,6 @@ export {
   TutorImageComponent,
   UpcomingClassComponent,
   CustomSelect,
-  CustomDatePicker
+  CustomDatePicker,
+  ActionSheet,
 };

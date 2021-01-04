@@ -13,7 +13,7 @@ import { Colors, Images } from '../../theme';
 import { getBoxColor } from '../../theme/colors';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { getFullName, getSubjectIcons, printTime, RfH, RfW } from '../../utils/helpers';
+import { endOfDay, getFullName, getSubjectIcons, printTime, RfH, RfW, startOfDay } from '../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
@@ -106,8 +106,8 @@ function CalendarView(props) {
     getScheduledClasses({
       variables: {
         classesSearchDto: {
-          startDate: moment(date).startOf('day').toDate(),
-          endDate: moment(date).endOf('day').toDate(),
+          startDate: startOfDay(date),
+          endDate: endOfDay(date),
         },
       },
     });
@@ -142,8 +142,8 @@ function CalendarView(props) {
                 }}
                 highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
                 highlightDateNameStyle={{ color: Colors.brandBlue2 }}
-                disabledDateNameStyle={{ color: Colors.darkGrey }}
-                disabledDateNumberStyle={{ color: Colors.darkGrey }}
+                disabledDateNameStyle={{ color: Colors.black }}
+                disabledDateNumberStyle={{ color: Colors.black }}
                 selectedDate={new Date()}
                 dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
                 dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}

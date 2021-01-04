@@ -1,18 +1,16 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
-import { Button } from 'native-base';
-import { useLazyQuery } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
-import { RfH, RfW } from '../../utils/helpers';
+import {Image, Text, View} from 'react-native';
+import {Button} from 'native-base';
+import {useLazyQuery} from '@apollo/client';
+import {RfH, RfW} from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import Images from '../../theme/images';
-import { Colors } from '../../theme';
-import { Loader } from '../../components';
-import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
-import { tutorDetails } from '../../apollo/cache';
+import {Colors} from '../../theme';
+import {Loader} from '../../components';
+import {GET_CURRENT_TUTOR_QUERY} from '../common/graphql-query';
+import {tutorDetails} from '../../apollo/cache';
 
 const TutorVerificationScreen = () => {
-  const navigation = useNavigation();
   const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {},

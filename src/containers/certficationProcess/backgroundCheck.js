@@ -15,6 +15,8 @@ import { BackgroundCheckStatusEnum } from '../common/enums';
 import NavigationRouteNames from '../../routes/screenNames';
 import { Images } from '../../theme';
 import { WEBSITE_URL } from '../../utils/constants';
+import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
+import { isLoggedIn, isSplashScreenVisible, tutorDetails, userDetails, userType } from '../../apollo/cache';
 
 function BackgroundCheck() {
   const isFocussed = useIsFocused();
@@ -22,6 +24,16 @@ function BackgroundCheck() {
   const [consentCheckBox, setConsentCheckBox] = useState(false);
   const [tncCheckBox, setTncCheckBox] = useState(false);
   const [backgroundStatus, setBackgroundStatus] = useState('');
+
+  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        tutorDetails(data?.getCurrentTutor);
+      }
+    },
+  });
 
   const [getTutorLeadDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_LEAD_DETAIL, {
     fetchPolicy: 'no-cache',
@@ -33,6 +45,7 @@ function BackgroundCheck() {
     onCompleted: (data) => {
       if (data) {
         setBackgroundStatus(data.getTutorLeadDetails.backgroundCheck.status);
+        getCurrentTutor();
       }
     },
   });
@@ -65,12 +78,7 @@ function BackgroundCheck() {
     <>
       <Loader isLoading={updateBackgroundCheckLoading || tutorLeadDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, flex: 1 }]}>
-        <ScreenHeader
-          label="Background Verification"
-          horizontalPadding={RfW(8)}
-          homeIcon
-          handleBack={() => navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATE_STEPS)}
-        />
+        <ScreenHeader label="Background Verification" horizontalPadding={RfW(8)} homeIcon />
         {backgroundStatus === BackgroundCheckStatusEnum.NOT_STARTED.label && (
           <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(20) }}>
             <View
@@ -132,7 +140,9 @@ function BackgroundCheck() {
               backgroundStatus && backgroundStatus.replace('_', ' ').toLowerCase()
             }`}</Text>
             <View style={{ marginTop: RfH(20) }}>
-              <Button onPress={onClick} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+              <Button
+                onPress={() => getTutorLeadDetails()}
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
                 <Text style={commonStyles.textButtonPrimary}>Check Status</Text>
               </Button>
             </View>

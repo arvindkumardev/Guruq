@@ -133,11 +133,11 @@ function TutorDashboard(props) {
       <View style={commonStyles.mainContainer}>
         <View style={{ height: RfH(44), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flexDirection: 'row' }} />
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}>
-              <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
-            </TouchableOpacity>
-          </View>
+          {/*<View>*/}
+          {/*  <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}>*/}
+          {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />*/}
+          {/*  </TouchableOpacity>*/}
+          {/*</View>*/}
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>

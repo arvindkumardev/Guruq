@@ -1,19 +1,18 @@
 import {
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback,
   Alert,
+  FlatList,
+  Modal,
   ScrollView,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button, Textarea } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
-import { isEmpty } from 'lodash';
 import {
   CustomRadioButton,
   IconButtonWrapper,
@@ -27,7 +26,6 @@ import { alertBox, getFullName, getToken, RfH, RfW } from '../../../../utils/hel
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import { tutorDetails } from '../../../../apollo/cache';
 import routeNames from '../../../../routes/screenNames';
-import { CANCEL_CLASS } from '../../class.mutation';
 import { CANCEL_BOOKINGS } from '../../booking.mutation';
 
 function ViewBookingDetails(props) {
@@ -47,7 +45,13 @@ function ViewBookingDetails(props) {
   const [cancelReason, setCancelReason] = useState('');
   const [reasons, setReasons] = useState([...cancelReasons]);
   const [comment, setComment] = useState('');
-  const token = getToken();
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    getToken().then((tk) => {
+      setToken(tk);
+    });
+  }, []);
   const renderClassItem = (item) => {
     return (
       <View style={{ marginTop: RfH(30), paddingHorizontal: RfW(16) }}>
@@ -70,13 +74,6 @@ function ViewBookingDetails(props) {
                 tutor={item?.tutor}
                 styling={{ borderRadius: RfH(32), width: RfH(64), height: RfH(64) }}
               />
-              <Text
-                style={[
-                  commonStyles.xSmallPrimaryText,
-                  { alignSelf: 'center', marginTop: RfH(4), textDecorationLine: 'underline' },
-                ]}>
-                Detail
-              </Text>
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
@@ -221,7 +218,7 @@ function ViewBookingDetails(props) {
             marginHorizontal: RfW(16),
             borderWidth: 1,
             borderRadius: 8,
-            borderColor: Colors.lightGrey,
+            borderColor: Colors.darkGrey,
             paddingVertical: RfH(16),
             paddingHorizontal: RfW(16),
           }}>
@@ -246,20 +243,20 @@ function ViewBookingDetails(props) {
             </Text>
           </View>
         </View>
-        <View style={{ height: RfH(20) }} />
-        <TouchableWithoutFeedback onPress={() => goToRefund()}>
-          <View
-            style={{
-              marginHorizontal: RfW(16),
-              borderWidth: 1,
-              borderRadius: 8,
-              borderColor: Colors.lightGrey,
-              paddingVertical: RfH(16),
-              paddingHorizontal: RfW(16),
-            }}>
-            <Text style={{ color: Colors.brandBlue2 }}>View Refund Details</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <View style={{ height: RfH(10) }} />
+        {/* <TouchableWithoutFeedback onPress={() => goToRefund()}> */}
+        {/*  <View */}
+        {/*    style={{ */}
+        {/*      marginHorizontal: RfW(16), */}
+        {/*      borderWidth: 1, */}
+        {/*      borderRadius: 8, */}
+        {/*      borderColor: Colors.lightGrey, */}
+        {/*      paddingVertical: RfH(16), */}
+        {/*      paddingHorizontal: RfW(16), */}
+        {/*    }}> */}
+        {/*    <Text style={{ color: Colors.brandBlue2 }}>View Refund Details</Text> */}
+        {/*  </View> */}
+        {/* </TouchableWithoutFeedback> */}
         <FlatList
           showsVerticalScrollIndicator={false}
           data={bookingData?.orderItems}

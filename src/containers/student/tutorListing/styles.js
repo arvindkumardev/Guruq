@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
     paddingTop: RfH(44),
   },
   headerComponent: {
-    height: RfH(50),
-    marginTop: RfH(16),
+    height: RfH(70),
+    marginTop: RfH(30),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
