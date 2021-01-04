@@ -35,6 +35,7 @@ import {
 import styles from './styles';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { WEBVIEW_URLS } from '../../../utils/webviewUrls';
+import UploadDocument from '../../../components/UploadDocument';
 
 const ACCOUNT_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
@@ -80,6 +81,7 @@ function Profile(props) {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const client = initializeApollo();
 
@@ -124,10 +126,11 @@ function Profile(props) {
     } else if (item.name === 'Business Details') {
       navigation.navigate(NavigationRouteNames.TUTOR.BUSINESS_DETAILS);
     } else if (item.name === 'Documents') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
-        label: 'Documents',
-      });
+      // navigation.navigate(NavigationRouteNames.WEB_VIEW, {
+      //   url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
+      //   label: 'Documents',
+      // });
+      setIsUploadModalOpen(true);
     } else if (item.name === 'Bank Details') {
       navigation.navigate(NavigationRouteNames.BANK_DETAILS);
     } else if (item.name === 'Awards & Achievement') {
@@ -436,6 +439,13 @@ function Profile(props) {
           </Text>
         </View>
       </ScrollView>
+      <UploadDocument
+        isVisible={isUploadModalOpen}
+        handleClose={() => setIsUploadModalOpen(!isUploadModalOpen)}
+        isFilePickerVisible
+        handleUpload={() => {}}
+        snapCount={1}
+      />
     </View>
   );
 }

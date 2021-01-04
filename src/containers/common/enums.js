@@ -53,6 +53,20 @@ export const BackgroundCheckStatusEnum = {
   FAILED: { value: 5, label: 'FAILED' },
 };
 
+export const DocumentTypeEnum = {
+  OTHER: { value: 1, label: 'OTHER' },
+  PASSPORT: { value: 2, label: 'PASSPORT' },
+  VOTER_ID: { value: 3, label: 'VOTER_ID' },
+  RATION_CARD: { value: 4, label: 'RATION_CARD' },
+  AADHAAR_CARD: { value: 5, label: 'AADHAAR_CARD' },
+  PAN_CARD: { value: 6, label: 'PAN_CARD' },
+  DRIVING_LICENSE: { value: 7, label: 'DRIVING_LICENSE' },
+  UTILITY_BILL: { value: 8, label: 'UTILITY_BILL' },
+  ADDRESS_PROOF: { value: 9, label: 'ADDRESS_PROOF' },
+  GOVT_IDENTITY_CARD: { value: 10, label: 'GOVT_IDENTITY_CARD' },
+  GST_CERTIFICATE: { value: 11, label: 'GST_CERTIFICATE' },
+};
+
 export const ClassCancelReasonEnum = {
   NOT_AVAILABLE: { label: 'NOT_AVAILABLE', value: 1, displayName: 'Unavailable to take classes at the scheduled time' },
   TUTOR_NOT_RELIABLE: { label: 'TUTOR_NOT_RELIABLE', value: 1, displayName: 'Did not find tutor reliable' },

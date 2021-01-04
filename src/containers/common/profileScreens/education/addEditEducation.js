@@ -1,6 +1,6 @@
-import { Alert, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import React, { useState } from 'react';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
@@ -12,8 +12,9 @@ import { alertBox, RfH, RfW, startOfDay } from '../../../../utils/helpers';
 import CustomDatePicker from '../../../../components/CustomDatePicker';
 import { ADD_UPDATE_EDUCATION_DETAILS } from './education.mutation';
 import { SCHOOL_EDUCATION } from '../../../../utils/constants';
-import { DegreeLevelEnum, HighSchoolStreamEnum } from '../../enums';
+import { HighSchoolStreamEnum } from '../../enums';
 import { UserTypeEnum } from '../../../../common/userType.enum';
+import { GET_DEGREE_LIST } from './education.query';
 
 function AddEditEducation() {
   const navigation = useNavigation();
@@ -25,11 +26,6 @@ function AddEditEducation() {
 
   const schoolEducation = offeringMasterData.find((s) => s.level === 0 && s.name === SCHOOL_EDUCATION);
   const boards = offeringMasterData.filter((s) => s?.parentOffering?.id === schoolEducation?.id);
-
-  const degreeData = [];
-  Object.keys(DegreeLevelEnum).forEach(function (key) {
-    degreeData.push({ value: DegreeLevelEnum[key], label: key });
-  });
 
   const highSchoolStreams = [];
   Object.keys(HighSchoolStreamEnum).forEach(function (key) {
@@ -46,6 +42,7 @@ function AddEditEducation() {
   const [educationType, setEducationType] = useState(0);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [degree, setDegree] = useState([]);
 
   const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -63,6 +60,23 @@ function AddEditEducation() {
       }
     },
   });
+
+  const [getDegreeData, { loading: degreeDataLoading }] = useLazyQuery(GET_DEGREE_LIST, {
+    fetchPolicy: 'no-cache',
+    variables: { limit: 200 },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setDegree(data?.getDegrees?.edges);
+      }
+    },
+  });
+
+  console.log('degree', degree);
 
   const checkValues = () => {
     if (isEmpty(schoolName)) {
@@ -118,7 +132,7 @@ function AddEditEducation() {
           dto.subjects = selectedStream.label;
         }
       } else if (educationType === 1) {
-        dto.degree = { degreeLevel: selectedDegree.label, name: selectedDegree.label };
+        dto.degree = { degreeLevel: selectedDegree.degreeLevel, name: selectedDegree.name, id: selectedDegree.id };
         dto.fieldOfStudy = fieldOfStudy;
       }
       console.log('dto', dto);
@@ -130,9 +144,13 @@ function AddEditEducation() {
     }
   };
 
+  useEffect(() => {
+    getDegreeData();
+  }, []);
+
   return (
     <>
-      <Loader isLoading={educationLoading} />
+      <Loader isLoading={educationLoading || degreeDataLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader homeIcon label="Education" horizontalPadding={RfW(16)} />
         <View style={{ paddingHorizontal: RfW(16) }}>
@@ -232,7 +250,7 @@ function AddEditEducation() {
               <View>
                 <Item style={commonStyles.horizontalChildrenSpaceView}>
                   <CustomSelect
-                    data={degreeData}
+                    data={degree.map((item) => ({ label: item.name, value: item }))}
                     value={selectedDegree}
                     onChangeHandler={(value) => setSelectedDegree(value)}
                     placeholder="Please select degree"

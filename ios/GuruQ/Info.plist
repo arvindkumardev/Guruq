@@ -60,6 +60,11 @@
 	<string>$(PRODUCT_NAME) needs Location access for finding the best tutors near your.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs Location access for finding the best tutors near your.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) need access to photos for uploading documents.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) need access to photos for uploading documents.</string>
+	
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone</string>
 	<key>UIAppFonts</key>
