@@ -123,6 +123,8 @@ function Profile(props) {
       navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Experience') {
       navigation.navigate(NavigationRouteNames.EXPERIENCE);
+    } else if (item.name === 'Business Details') {
+      navigation.navigate(NavigationRouteNames.TUTOR.BUSINESS_DETAILS);
     } else if (item.name === 'Documents') {
       navigation.navigate(NavigationRouteNames.WEB_VIEW, {
         url: `http://dashboardv2.guruq.in/tutor/embed/documents`,

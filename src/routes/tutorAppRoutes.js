@@ -30,6 +30,8 @@ import AddEditExperience from '../containers/common/profileScreens/experience/ad
 import BankDetails from '../containers/common/profileScreens/bankDetails/bankDetails';
 import AddEditBankDetails from '../containers/common/profileScreens/bankDetails/addEditBankDetails';
 import AboutUs from '../containers/common/about/about';
+import BusinessDetails from '../containers/common/profileScreens/businessDetails/businessDetails';
+import AddEditBusinessDetails from '../containers/common/profileScreens/businessDetails/addEditBusinessDetails';
 
 const Stack = createStackNavigator();
 
@@ -81,11 +83,7 @@ export const getTutorRoutes = () => {
         component={UpdateSchedule}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.PYTN_DETAILS}
-        component={PytnSubmit}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.PYTN_DETAILS} component={PytnSubmit} options={{ headerShown: false }} />
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.NOTIFICATIONS}
@@ -111,6 +109,16 @@ export const getTutorRoutes = () => {
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_BANK_DETAILS}
         component={AddEditBankDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.BUSINESS_DETAILS}
+        component={BusinessDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.ADD_EDIT_BUSINESS_DETAILS}
+        component={AddEditBusinessDetails}
         options={{ headerShown: false }}
       />
     </>

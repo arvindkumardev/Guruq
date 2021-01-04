@@ -89,7 +89,9 @@ const NavigationRouteNames = {
     INTERVIEW_AND_DOCUMENTS: 'interview_and_documents',
     UPLOAD_DOCUMENTS: 'upload_documents',
     BACKGROUND_CHECK: 'background_check',
-    VERIFICATION:'verification'
+    VERIFICATION: 'verification',
+    BUSINESS_DETAILS: 'business_details',
+    ADD_EDIT_BUSINESS_DETAILS: 'add_edit_business_details',
   },
 };
 

@@ -55,6 +55,7 @@ const Images = {
   demo: require('../assets/images/demo.png'),
   discount: require('../assets/images/discount.png'),
   documents: require('../assets/images/documents.png'),
+  document_upload: require('../assets/images/document_upload.png'),
   dots: require('../assets/images/dots.png'),
   expand: require('../assets/images/dropdown.png'),
   earn: require('../assets/images/earn.png'),
