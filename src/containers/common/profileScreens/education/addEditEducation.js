@@ -188,7 +188,7 @@ function AddEditEducation() {
               <View>
                 <Item style={commonStyles.horizontalChildrenSpaceView}>
                   <CustomSelect
-                    data={boards.map((item) => ({ ...item, label: item.name, value: item }))}
+                    data={boards.map((item) => ({ ...item, label: item.displayName, value: item }))}
                     value={selectedBoard}
                     onChangeHandler={(value) => setSelectedBoard(value)}
                     placeholder="Select Board"
