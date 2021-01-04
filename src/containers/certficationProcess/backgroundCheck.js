@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'native-base';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import { isEmpty } from 'lodash';
 import Colors from '../../theme/colors';
@@ -129,7 +129,9 @@ function BackgroundCheck() {
               backgroundStatus && backgroundStatus.replace('_', ' ').toLowerCase()
             }`}</Text>
             <View style={{ marginTop: RfH(20) }}>
-              <Button onPress={onClick} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+              <Button
+                onPress={() => getTutorLeadDetails()}
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
                 <Text style={commonStyles.textButtonPrimary}>Check Status</Text>
               </Button>
             </View>
