@@ -43,6 +43,7 @@ function compareTutors() {
           imageResizeMode="contain"
           styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
         />
+        {/* FIXME */}
         <Text style={styles.compareTutorName}>{getFullName(item?.contactDetail)}</Text>
         <Text style={{ color: Colors.darkGrey, alignSelf: 'center' }}>₹ 350/ hour</Text>
         <View style={[commonStyles.horizontalChildrenCenterView, { marginTop: RfH(8) }]}>

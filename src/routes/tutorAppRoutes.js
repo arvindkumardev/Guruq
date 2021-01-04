@@ -15,7 +15,6 @@ import ParentListing from '../containers/common/profileScreens/parentsDetail/par
 import AddEditParents from '../containers/common/profileScreens/parentsDetail/addEditParents';
 import BankDetails from '../containers/common/profileScreens/bankDetails/bankDetails';
 import AddEditBankDetails from '../containers/common/profileScreens/bankDetails/addEditBankDetails';
-import AboutUs from '../containers/common/about/about';
 import BusinessDetails from '../containers/common/profileScreens/businessDetails/businessDetails';
 import AddEditBusinessDetails from '../containers/common/profileScreens/businessDetails/addEditBusinessDetails';
 import PriceAndSchedule from '../containers/certficationProcess/priceAndSchedule';
@@ -40,10 +39,11 @@ export const getTutorRoutes = (tutorInfo) => {
       )}
 
       <Stack.Screen
-        name={NavigationRouteNames.TUTOR.ONLINE_CLASS}
+        name={NavigationRouteNames.ONLINE_CLASS}
         component={OnlineClass}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, gestureEnabled: false }}
       />
+
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.SUBJECTS_LIST}
         component={SubjectList}

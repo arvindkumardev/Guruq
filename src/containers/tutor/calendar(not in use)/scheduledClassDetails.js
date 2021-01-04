@@ -125,7 +125,7 @@ function ScheduledClassDetails(props) {
 
   const goToOnlineClass = () => {
     setShowClassStartedPopup(false);
-    navigation.navigate(NavigationRouteNames.TUTOR.ONLINE_CLASS, { classDetails: classData });
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData });
   };
 
   const getTutorImage = (tutor) => {
