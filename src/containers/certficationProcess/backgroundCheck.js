@@ -7,16 +7,14 @@ import { WebView } from 'react-native-webview';
 import { isEmpty } from 'lodash';
 import Colors from '../../theme/colors';
 import { RfH, RfW } from '../../utils/helpers';
-import { CustomCheckBox, IconButtonWrapper, Loader, ScreenHeader } from '../../components';
+import { CustomCheckBox, Loader, ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { UPDATE_BACKGROUND_CHECK } from './certification-mutation';
 import { GET_TUTOR_LEAD_DETAIL } from './certification-query';
 import { BackgroundCheckStatusEnum } from '../common/enums';
-import NavigationRouteNames from '../../routes/screenNames';
-import { Images } from '../../theme';
 import { WEBSITE_URL } from '../../utils/constants';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
-import { isLoggedIn, isSplashScreenVisible, tutorDetails, userDetails, userType } from '../../apollo/cache';
+import { tutorDetails } from '../../apollo/cache';
 
 function BackgroundCheck() {
   const isFocussed = useIsFocused();

@@ -135,6 +135,9 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
       }
       lead {
         certificationStage
+        backgroundCheck {
+          status
+        }
       }
       activeForListing
     }

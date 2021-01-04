@@ -101,14 +101,14 @@ function UploadDocument(props) {
       .then((image) => {
         console.log('image-', image);
         handleUpload({
-          name: image.filename,
+          name: image.filename?image.filename:`${uuid()}.jpg`,
           type: image.mime,
           uri: image.path,
         });
-        const tempImageName = `${uuid()}.jpg`;
-        updateImageSet([...imageSet, { path: image.path, fileName: tempImageName, mime: image.mime }]);
-        setPreviewVisibility(true);
-        setRecentImage({ path: image.path, fileName: tempImageName, mime: image.mime });
+        // const tempImageName = `${uuid()}.jpg`;
+        // updateImageSet([...imageSet, { path: image.path, fileName: tempImageName, mime: image.mime }]);
+        // setPreviewVisibility(true);
+        // setRecentImage({ path: image.path, fileName: tempImageName, mime: image.mime });
       })
       .catch((err) => {
         console.log('err', err);
@@ -136,10 +136,10 @@ function UploadDocument(props) {
           type: images.mime,
           uri: images.path,
         });
-        const temp = images.map((item) => ({ path: item.path, fileName: `${uuid()}.jpg`, mime: item.mime }));
-        updateImageSet([...imageSet, ...temp]);
-        setPreviewVisibility(true);
-        setRecentImage(temp[0]);
+        // const temp = images.map((item) => ({ path: item.path, fileName: `${uuid()}.jpg`, mime: item.mime }));
+        // updateImageSet([...imageSet, ...temp]);
+        // setPreviewVisibility(true);
+        // setRecentImage(temp[0]);
       })
       .catch((err) => {
         closeWindow();

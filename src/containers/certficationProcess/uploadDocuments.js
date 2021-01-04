@@ -119,12 +119,16 @@ function UploadDocuments() {
   }, [idProofDetails]);
 
   const handleAcceptedFiles = async (file) => {
+    setIsUploadModalOpen(false);
     const headers = new Headers();
     headers.append('Authorization', `Bearer ${token}`);
     headers.append('Content-Type', `multipart/form-data`);
     const formdata = new FormData();
     formdata.append('file', file);
     setIsFileUploading(true);
+
+    console.log('file', file);
+
     try {
       const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
         headers,
@@ -132,9 +136,11 @@ function UploadDocuments() {
         body: formdata,
       }).then((response) => response.json());
 
+      console.log('res...res...', res);
+
       const documentDto = {
         attachment: {
-          name: file.filename,
+          name: res.filename,
           type: res.type,
           filename: res.filename,
           size: res.size,
@@ -175,7 +181,7 @@ function UploadDocuments() {
       setIsFileUploading(false);
     } catch (error) {
       setIsFileUploading(false);
-      console.log(error);
+      console.log('error', error);
     }
   };
 
@@ -415,13 +421,16 @@ function UploadDocuments() {
             </View>
           </View>
         </ScrollView>
-        <UploadDocument
-          isVisible={isUploadModalOpen}
-          handleClose={() => setIsUploadModalOpen(!isUploadModalOpen)}
-          isFilePickerVisible
-          handleUpload={handleAcceptedFiles}
-          snapCount={1}
-        />
+
+        {isUploadModalOpen && (
+          <UploadDocument
+            isVisible={isUploadModalOpen}
+            handleClose={() => setIsUploadModalOpen(!isUploadModalOpen)}
+            isFilePickerVisible
+            handleUpload={handleAcceptedFiles}
+            snapCount={1}
+          />
+        )}
       </View>
     </>
   );
