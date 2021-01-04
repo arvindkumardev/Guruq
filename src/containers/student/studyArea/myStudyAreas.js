@@ -50,9 +50,8 @@ const MyStudyAreas = (props) => {
           showRightIcon
           onRightIconClick={() => navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA)}
           rightIcon={Images.add}
-          lineVisible={false}
         />
-        <View style={{ height: RfH(44) }} />
+        <View style={{ height: RfH(24) }} />
 
         <FlatList
           data={interestedOfferings}

@@ -176,9 +176,8 @@ function AddressListing() {
           showRightIcon
           onRightIconClick={handleAddEditAddress}
           rightIcon={Images.add}
-          lineVisible={false}
         />
-        <View style={{ height: RfH(44) }} />
+        <View style={{ height: RfH(24) }} />
         {!isListEmpty ? (
           <View style={{ paddingHorizontal: RfW(16) }}>
             <FlatList
@@ -216,7 +215,7 @@ function AddressListing() {
             <Button
               onPress={handleAddEditAddress}
               style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
-              <Text style={commonStyles.textButtonPrimary}>Create AddressListing</Text>
+              <Text style={commonStyles.textButtonPrimary}>Add Address</Text>
             </Button>
           </View>
         )}

@@ -34,6 +34,9 @@ export const GET_TUTOR_LEAD_DETAIL = gql`
         maxMarks
       }
       certificationStage
+      backgroundCheck {
+        status
+      }
     }
   }
 `;
@@ -92,6 +95,12 @@ export const GET_TUTOR_ALL_DETAILS = gql`
       }
       lead {
         certificationStage
+        interview {
+          status
+          startDate
+          endDate
+          mode
+        }
       }
       profileCompletion
       certified
@@ -137,6 +146,7 @@ export const GET_TUTOR_ALL_DETAILS = gql`
           score
         }
       }
+
       educationDetails {
         id
         school {

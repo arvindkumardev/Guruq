@@ -113,9 +113,13 @@ function BoardSelector(props) {
   return (
     <>
       <Loader isLoading={interestedOfferingsLoading || addOfferingLoading} />
-      <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
-        <ScreenHeader label={`Select Your ${studyAreaObj.find((item) => item.level === 1)?.label}`} homeIcon />
-        <View style={styles.areaParentView}>
+      <View style={[commonStyles.mainContainer, { backgroundColor: '#fff', paddingHorizontal: 0 }]}>
+        <ScreenHeader
+          label={`Select Your ${studyAreaObj.find((item) => item.level === 1)?.label}`}
+          homeIcon
+          horizontalPadding={RfW(16)}
+        />
+        <View style={[styles.areaParentView, { paddingHorizontal: RfW(16) }]}>
           <FlatList
             data={listData}
             showsVerticalScrollIndicator={false}

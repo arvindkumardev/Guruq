@@ -42,12 +42,14 @@ const ScreenHeader = (props) => {
     <View style={style}>
       <View
         style={[
-          commonStyles.topActionView,
           {
-            marginTop: RfH(topMargin),
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             paddingHorizontal: RfW(horizontalPadding),
-            height: RfH(44),
+            height: Platform.OS === 'ios' ? RfH(50) : RfH(60),
           },
+          Platform.OS === 'ios' && { marginTop: RfH(topMargin) },
         ]}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { flex: 1 }]}>
           <View style={{ justifyContent: 'center', flexDirection: 'row', flex: 1 }}>
@@ -102,7 +104,7 @@ ScreenHeader.defaultProps = {
   style: { backgroundColor: Colors.white },
   label: '',
   labelStyle: {},
-  topMargin: RfH(44),
+  topMargin: 44,
   horizontalPadding: 0,
   lineVisible: true,
   homeIcon: false,

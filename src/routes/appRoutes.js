@@ -24,7 +24,7 @@ import { getTutorRoutes } from './tutorAppRoutes';
 import { TutorCertificationStageEnum } from '../containers/tutor/enums';
 import CertificationCompletedView from '../containers/certficationProcess/certificationCompletedView';
 import WebViewPage from '../components/WebViewPage';
-import InterviewPending from '../containers/certficationProcess/interviewPending/interviewPending';
+import UploadDocuments from '../containers/certficationProcess/uploadDocuments';
 import AddressListing from '../containers/common/profileScreens/address/addressListing';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
 import { DUPLICATE_FOUND } from '../common/errorCodes';
@@ -52,6 +52,10 @@ import AddEditExperience from '../containers/common/profileScreens/experience/ad
 import InterviewAndDocument from '../containers/certficationProcess/interviewAndDocuments';
 import InterviewScheduling from '../containers/certficationProcess/interviewScheduling';
 import CustomerCare from '../containers/common/customerCare/customerCare';
+import SendFeedback from '../containers/common/sendFeedback';
+import AboutUs from '../containers/common/about/about';
+import BackgroundCheck from '../containers/certficationProcess/backgroundCheck';
+import TutorVerificationScreen from '../containers/certficationProcess/tutorVerificationScreen';
 
 const Stack = createStackNavigator();
 
@@ -60,6 +64,8 @@ const AppStack = (props) => {
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
   const userDetailsObj = useReactiveVar(userDetails);
+
+  console.log('tutorInfo', tutorInfo);
 
   useEffect(() => {
     // clearAllLocalStorage();
@@ -147,7 +153,9 @@ const AppStack = (props) => {
         component={scheduleClass}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.ADDRESS} component={AddressListing} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.ADDRESS}
+                    component={AddressListing}
+                    options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_ADDRESS}
         component={AddEditAddress}
@@ -229,6 +237,27 @@ const AppStack = (props) => {
         component={CustomerCare}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
+
+      <Stack.Screen
+        name={NavigationRouteNames.SEND_FEEDBACK}
+        component={SendFeedback}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
+
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
+        component={UploadDocuments}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.BACKGROUND_CHECK}
+        component={BackgroundCheck}
+        options={{ headerShown: false }}
+      />
 
       {/* <Stack.Screen name={NavigationRouteNames.A} component={EducationListing} options={{ headerShown: false }} /> */}
     </>
@@ -250,9 +279,24 @@ const AppStack = (props) => {
       return getStudentRoutes();
     }
     if (userType === UserTypeEnum.TUTOR.label) {
-      console.log('tutorInfo', tutorInfo);
       if (tutorInfo && tutorInfo?.certified) {
         return getTutorRoutes();
+      }
+
+      if (
+        tutorInfo &&
+        !tutorInfo?.certified &&
+        tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label
+      ) {
+        return (
+          <>
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.VERIFICATION}
+              component={TutorVerificationScreen}
+              options={{ headerShown: false }}
+            />
+          </>
+        );
       }
 
       if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.REGISTERED.label) {
@@ -268,7 +312,7 @@ const AppStack = (props) => {
       }
       if (
         tutorInfo &&
-        tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
+        tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label
       ) {
         return (
           <>

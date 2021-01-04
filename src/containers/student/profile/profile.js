@@ -82,11 +82,8 @@ function Profile(props) {
   const { changeTab } = props;
 
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
-  const [isStudyMenuOpen, setIsStudyMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
-  const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
-  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
 
   const client = initializeApollo();

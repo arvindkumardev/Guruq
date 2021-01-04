@@ -6,7 +6,14 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
-import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../components';
+import {
+  BackArrow,
+  DateSlotSelectorModal,
+  IconButtonWrapper,
+  Loader,
+  ScreenHeader,
+  TutorImageComponent
+} from '../../components';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
@@ -232,13 +239,15 @@ function ScheduleClass(props) {
   return (
     <>
       <Loader isLoading={scheduleLoading || loadingScheduledClasses} />
-      <View style={[commonStyles.mainContainer, { paddingTop: RfH(44), backgroundColor: Colors.white }]}>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <View style={commonStyles.horizontalChildrenView}>
-            <BackArrow action={onBackPress} />
-            <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text>
-          </View>
-        </View>
+      <ScreenHeader label="Schedule Class" homeIcon horizontalPadding={RfW(16)} />
+      <View style={[commonStyles.mainContainer, {  backgroundColor: Colors.white }]}>
+
+        {/*<View style={commonStyles.horizontalChildrenSpaceView}>*/}
+        {/*  <View style={commonStyles.horizontalChildrenView}>*/}
+        {/*    <BackArrow action={onBackPress} />*/}
+        {/*    <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text>*/}
+        {/*  </View>*/}
+        {/*</View>*/}
         {renderTutorDetails()}
         <View style={{ height: RfH(20) }} />
         <FlatList

@@ -89,7 +89,7 @@ const PtStartScreen = (props) => {
       return 'Retake Test';
     }
     if (ptDetail?.status === PtStatus.PASSED.label || ptDetail?.status === PtStatus.EXEMPTED.label) {
-      return isOnBoarding ? 'Next Step' : 'Go back';
+      return 'Continue';
     }
   };
 
@@ -236,7 +236,7 @@ const PtStartScreen = (props) => {
         )}
 
         {ptDetail?.status === PtStatus.EXEMPTED.label && (
-          <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(20) }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
             <Text style={commonStyles.headingPrimaryText}> You are exempted from the test</Text>
           </View>
         )}

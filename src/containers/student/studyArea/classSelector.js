@@ -103,9 +103,13 @@ function ClassSelector(props) {
   return (
     <>
       <Loader isLoading={interestedOfferingsLoading || addOfferingLoading} />
-      <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
-        <ScreenHeader label={`Select Your ${studyAreaObj.find((item) => item.level === 2)?.label}`} homeIcon />
-        <View style={[commonStyles.areaParentView, { paddingTop: RfH(44), marginBottom: RfH(98) }]}>
+      <View style={[commonStyles.mainContainer, { backgroundColor: '#fff', paddingHorizontal: 0 }]}>
+        <ScreenHeader
+          label={`Select Your ${studyAreaObj.find((item) => item.level === 2)?.label}`}
+          homeIcon
+          horizontalPadding={RfW(16)}
+        />
+        <View style={[commonStyles.areaParentView, { paddingTop: RfH(24), paddingHorizontal: RfW(16) }]}>
           <FlatList
             data={listData}
             showsVerticalScrollIndicator={false}

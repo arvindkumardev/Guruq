@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { isEmpty } from 'lodash';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
-import { RfH, RfW } from '../../utils/helpers';
+import { printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import Loader from '../../components/Loader';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
@@ -13,6 +13,7 @@ import styles from './styles';
 import { GET_TUTOR_ALL_DETAILS } from './certification-query';
 import NavigationRouteNames from '../../routes/screenNames';
 import { MARK_CERTIFIED } from './certification-mutation';
+import { InterviewStatus } from '../tutor/enums';
 
 const InterviewAndDocument = () => {
   const isFocussed = useIsFocused();
@@ -40,7 +41,7 @@ const InterviewAndDocument = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, { isOnBoarding: true });
+        navigation.navigate(NavigationRouteNames.TUTOR.BACKGROUND_CHECK);
       }
     },
   });
@@ -51,35 +52,47 @@ const InterviewAndDocument = () => {
     }
   }, [isFocussed]);
 
-  const checkForPersonalDetails = () => {
-    if (!isEmpty(tutorDetail)) {
-      const { firstName, lastName, gender, email } = tutorDetail.contactDetail;
-      return !(isEmpty(firstName) || isEmpty(lastName) || isEmpty(gender) || isEmpty(email));
-    }
-    return false;
-  };
-
   const isButtonVisible = () => {
-    return !(
-      !checkForPersonalDetails() ||
-      isEmpty(tutorDetail.educationDetails) ||
-      isEmpty(tutorDetail.experienceDetails) ||
-      isEmpty(tutorDetail.addresses)
+    return (
+      !isEmpty(tutorDetail?.lead?.interview) &&
+      (tutorDetail?.lead?.interview.status === InterviewStatus.CLEARED.label ||
+        tutorDetail?.lead?.interview.status === InterviewStatus.EXEMPTED.label) &&
+      !isEmpty(tutorDetail?.documents) &&
+      tutorDetail?.documents.length === 4
     );
   };
 
   const handleNext = () => {
     markCertified();
   };
+  const isInterviewNotScheduled = () => tutorDetail?.lead?.interview.status === InterviewStatus.NOT_SCHEDULED.label;
+
+  const getInterviewText = () => {
+    if (
+      tutorDetail?.lead?.interview.status === InterviewStatus.SCHEDULED.label ||
+      tutorDetail?.lead?.interview.status === InterviewStatus.RESCHEDULED.label
+    ) {
+      return `Your interview is scheduled on ${printDate(tutorDetail?.lead?.interview.startDate)} at ${printTime(
+        tutorDetail?.lead?.interview.startDate
+      )}`;
+    }
+    return `Your interview status is ${tutorDetail?.lead?.interview.status.replace('_', ' ').toLowerCase()}`;
+  };
 
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading} />
-      <ScreenHeader label="Schedule interview & upload documents" horizontalPadding={RfW(16)} homeIcon />
+      <ScreenHeader
+        label="Interview & Documents"
+        horizontalPadding={RfW(16)}
+        homeIcon
+        handleBack={() => navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATE_STEPS)}
+      />
       <TouchableOpacity
-        style={[styles.stepCard, { borderLeftColor: Colors.lightOrange, justifyContent: 'space-between' }]}
+        style={[styles.interviewCard, { borderLeftColor: Colors.lightOrange }]}
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW)}>
+        onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW)}
+        disabled={!isInterviewNotScheduled()}>
         <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper
             iconImage={Images.schedule_interview}
@@ -87,43 +100,65 @@ const InterviewAndDocument = () => {
             iconHeight={RfW(24)}
             imageResizeMode="contain"
           />
-          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Schedule Interview</Text>
-        </View>
-        <View>
-          <Text
-            style={[
-              commonStyles.regularPrimaryText,
-              { color: !checkForPersonalDetails() ? Colors.orangeRed : Colors.green },
-            ]}>
-            {!checkForPersonalDetails() ? 'Pending' : 'Updated'}
-          </Text>
+          <View>
+            <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Schedule Interview</Text>
+            {!isInterviewNotScheduled() && (
+              <View style={{ paddingHorizontal: RfW(10), marginTop: RfH(5) }}>
+                <Text style={[commonStyles.mediumPrimaryText, { color: Colors.green }]}>{getInterviewText()}</Text>
+              </View>
+            )}
+          </View>
+          {isInterviewNotScheduled() && (
+            <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
+              <IconButtonWrapper
+                iconImage={Images.right_arrow_grey}
+                iconWidth={RfH(24)}
+                iconHeight={RfW(24)}
+                imageResizeMode="contain"
+              />
+            </View>
+          )}
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.stepCard, { borderLeftColor: Colors.lightPurple, justifyContent: 'space-between' }]}
+        style={[styles.interviewCard, { borderLeftColor: Colors.lightPurple }]}
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(NavigationRouteNames.ADDRESS)}>
+        onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS)}>
         <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper
-            iconImage={Images.upload}
+            iconImage={Images.documentUpload}
             iconWidth={RfH(24)}
             iconHeight={RfW(24)}
             imageResizeMode="contain"
           />
-          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Upload Documents</Text>
-        </View>
-        <View>
-          <Text
-            style={[
-              commonStyles.regularPrimaryText,
-              { color: isEmpty(tutorDetail?.addresses) ? Colors.orangeRed : Colors.green },
-            ]}>
-            {isEmpty(tutorDetail?.addresses) ? 'Pending' : 'Updated'}
-          </Text>
+          <View>
+            <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Upload Documents</Text>
+            <View style={{ paddingHorizontal: RfW(10), marginTop: RfH(5) }}>
+              <Text
+                style={[
+                  commonStyles.mediumPrimaryText,
+                  {
+                    color:
+                      isEmpty(tutorDetail?.documents) || tutorDetail?.documents.length !== 4
+                        ? Colors.orangeRed
+                        : Colors.green,
+                  },
+                ]}>
+                {isEmpty(tutorDetail?.documents) || tutorDetail?.documents.length !== 4 ? 'Pending' : 'Updated'}
+              </Text>
+            </View>
+          </View>
+          <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
+            <IconButtonWrapper
+              iconImage={Images.right_arrow_grey}
+              iconWidth={RfH(24)}
+              iconHeight={RfW(24)}
+              imageResizeMode="contain"
+            />
+          </View>
         </View>
       </TouchableOpacity>
-
       {!isEmpty(tutorDetail) && isButtonVisible() && (
         <Button
           onPress={handleNext}

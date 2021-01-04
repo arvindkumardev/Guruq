@@ -118,7 +118,7 @@ function AddEditEducation() {
           dto.subjects = selectedStream.label;
         }
       } else if (educationType === 1) {
-        dto.degree = { name: selectedDegree.label };
+        dto.degree = { degreeLevel: selectedDegree.label, name: selectedDegree.label };
         dto.fieldOfStudy = fieldOfStudy;
       }
       console.log('dto', dto);

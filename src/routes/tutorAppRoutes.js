@@ -61,7 +61,6 @@ export const getTutorRoutes = () => {
         component={OnlineClass}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.SUBJECTS_LIST}
         component={SubjectList}
@@ -98,12 +97,6 @@ export const getTutorRoutes = () => {
         component={PytnRequests}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.SEND_FEEDBACK}
-        component={SendFeedback}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.PARENTS_LIST}
         component={ParentListing}

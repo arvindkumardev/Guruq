@@ -129,7 +129,7 @@ const PaymentMethod = (props) => {
         <View style={commonStyles.blankViewSmall} />
         <View
           style={{
-            height: 44,
+            height: RfH(44),
             justifyContent: 'center',
           }}>
           <Text
@@ -429,7 +429,6 @@ const PaymentMethod = (props) => {
                 backgroundColor: Colors.white,
                 paddingTop: RfH(8),
                 paddingHorizontal: RfW(16),
-                paddingBottom: RfH(10),
                 borderTopWidth: RfH(1),
                 borderTopColor: Colors.lightGrey,
               },

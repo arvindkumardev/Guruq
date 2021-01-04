@@ -5,17 +5,21 @@ import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
 import { isArray, isStringEquals } from 'lodash';
 import { configs } from 'eslint-plugin-prettier';
-import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../components';
-import commonStyles from '../../../theme/styles';
-import { Colors, Fonts, Images } from '../../../theme';
-import { RfH, RfW } from '../../../utils/helpers';
-import CustomDatePicker from '../../../components/CustomDatePicker';
-import { GET_INTERVIEW_SCHEDULE_AVAILABILITY } from '../../tutor/tutor.query';
-import { ADD_INTERVIEW_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS, ADD_TUTOR_DOCUMENT_DETAILS } from '../../tutor/tutor.mutation';
-import { tutorDetails } from '../../../apollo/cache';
-import { InterviewMode, InterviewStatus } from '../../tutor/enums';
+import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../components';
+import commonStyles from '../../theme/styles';
+import { Colors, Fonts, Images } from '../../theme';
+import { RfH, RfW } from '../../utils/helpers';
+import CustomDatePicker from '../../components/CustomDatePicker';
+import { GET_INTERVIEW_SCHEDULE_AVAILABILITY } from '../tutor/tutor.query';
+import {
+  ADD_INTERVIEW_DETAILS,
+  DELETE_TUTOR_DOCUMENT_DETAILS,
+  ADD_TUTOR_DOCUMENT_DETAILS,
+} from '../tutor/tutor.mutation';
+import { tutorDetails } from '../../apollo/cache';
+import { InterviewMode, InterviewStatus } from '../tutor/enums';
 
-function InterviewPending() {
+function UploadDocuments() {
   const [interviewDate, setInterviewDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedId, setSelectedId] = useState(1);
@@ -228,73 +232,8 @@ function InterviewPending() {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <StatusBar barStyle="dark-content" />
-      <ScreenHeader label="Schedule Your Interview" horizontalPadding={RfW(8)} />
+      <ScreenHeader label="Documents" horizontalPadding={RfW(8)} homeIcon />
       <ScrollView showsVerticalScrollIndicator={false} style={{ paddingBottom: RfH(32) }}>
-        <View style={{ paddingHorizontal: RfW(16) }}>
-          <View style={{ height: RfH(24) }} />
-          <View style={[commonStyles.horizontalChildrenStartView]}>
-            <View style={{ flex: 0.5, paddingRight: RfW(16) }}>
-              <Text style={commonStyles.mediumMutedText}>Interview Date</Text>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: Colors.darkGrey,
-                  paddingRight: RfH(8),
-                  marginTop: RfH(16),
-                  borderRadius: RfH(4),
-                }}>
-                <Item style={{ borderBottomWidth: 0 }}>
-                  <Input
-                    style={{ borderWidth: 0, height: RfH(48) }}
-                    value={interviewDate}
-                    onChangeText={(text) => setInterviewDate(text)}
-                  />
-                  <CustomDatePicker value={interviewDate} onChangeHandler={(text) => getAvailability(text)} />
-                </Item>
-              </View>
-            </View>
-            <View style={{ flex: 0.5 }}>
-              <Text style={commonStyles.mediumMutedText}>Interview Time</Text>
-              <View
-                style={[
-                  commonStyles.horizontalChildrenView,
-                  {
-                    borderWidth: 1,
-                    borderColor: Colors.darkGrey,
-                    paddingRight: RfH(8),
-                    marginTop: RfH(16),
-                    borderRadius: RfH(4),
-                  },
-                ]}>
-                <Picker
-                  selectedValue={selectedTime}
-                  style={{ height: RfH(48), width: RfW(130) }}
-                  onValueChange={(value) => setSelectedTime(value)}>
-                  {availableTimes.map((obj) => {
-                    return (
-                      <Picker.Item
-                        label={`${moment(new Date(obj.startDate).toLocaleTimeString(), ['HH.mm']).format(
-                          'hh:mm a'
-                        )}-${moment(new Date(obj.endDate).toLocaleTimeString(), ['HH.mm']).format('hh:mm a')}`}
-                        value={obj}
-                      />
-                    );
-                  })}
-                </Picker>
-                <View style={[commonStyles.horizontalChildrenView, { justifyContent: 'center' }]}>
-                  <Text style={{ alignSelf: 'center' }}>|</Text>
-                  <IconButtonWrapper iconWidth={RfW(24)} iconHeight={RfH(16)} iconImage={Images.expand_gray} />
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={{ marginTop: RfH(24) }}>
-            <Button onPress={() => onAddingDetails()} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-              <Text style={commonStyles.textButtonPrimary}>Schedule Interview</Text>
-            </Button>
-          </View>
-        </View>
-        <View style={[commonStyles.blankGreyViewSmall, { marginTop: RfH(16) }]} />
         <View style={{ padding: RfW(16), paddingBottom: RfH(16) }}>
           <View>
             <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Documents</Text>
@@ -422,4 +361,4 @@ function InterviewPending() {
   );
 }
 
-export default InterviewPending;
+export default UploadDocuments;

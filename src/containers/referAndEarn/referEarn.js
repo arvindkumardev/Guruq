@@ -55,6 +55,7 @@ function ReferEarn() {
             iconWidth={deviceWidth() - 32}
             iconHeight={RfH((deviceWidth() - 32) * 1.3)}
             styling={{ alignSelf: 'flex-start' }}
+            imageResizeMode={'contain'}
           />
         </View>
       </View>
