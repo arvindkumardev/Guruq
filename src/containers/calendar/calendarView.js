@@ -80,7 +80,7 @@ function CalendarView(props) {
                   classDetails?.students[0].contactDetail
                 )}`}
           </Text>
-          <Text style={commonStyles.mediumMutedText}>
+          <Text style={commonStyles.mediumMutedText} numberOfLines={1}>
             {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>

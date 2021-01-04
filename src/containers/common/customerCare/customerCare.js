@@ -77,7 +77,7 @@ function CustomerCare(props) {
           }
           style={commonStyles.horizontalChildrenSpaceView}>
           <View style={{}}>
-            <Text>General Issues</Text>
+            <Text style={commonStyles.regularPrimaryText}>General Issues</Text>
             {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
             {/*  Personal, Addresses, Parents & Education Detail */}
             {/* </Text> */}
@@ -101,7 +101,7 @@ function CustomerCare(props) {
           }
           style={commonStyles.horizontalChildrenSpaceView}>
           <View style={{}}>
-            <Text>Q Points FAQs</Text>
+            <Text style={commonStyles.regularPrimaryText}>Q Points FAQs</Text>
             {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
             {/*  Personal, Addresses, Parents & Education Detail */}
             {/* </Text> */}
@@ -125,7 +125,7 @@ function CustomerCare(props) {
           }
           style={commonStyles.horizontalChildrenSpaceView}>
           <View style={{}}>
-            <Text>Booking FAQs</Text>
+            <Text style={commonStyles.regularPrimaryText}>Booking FAQs</Text>
             {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
             {/*  Personal, Addresses, Parents & Education Detail */}
             {/* </Text> */}
@@ -150,7 +150,7 @@ function CustomerCare(props) {
           }
           style={commonStyles.horizontalChildrenSpaceView}>
           <View style={{}}>
-            <Text>Legal Terms & Conditions</Text>
+            <Text style={commonStyles.regularPrimaryText}>Legal Terms & Conditions</Text>
             {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
             {/*  Personal, Addresses, Parents & Education Detail */}
             {/* </Text> */}

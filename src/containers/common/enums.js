@@ -45,11 +45,21 @@ export const DegreeLevelEnum = {
   OTHER: { value: 8, label: 'OTHER' },
 };
 
-
 export const BackgroundCheckStatusEnum = {
   NOT_STARTED: { value: 1, label: 'NOT_STARTED' },
   PENDING: { value: 2, label: 'PENDING' },
   COMPLETED: { value: 3, label: 'COMPLETED' },
   EXEMPTED: { value: 4, label: 'EXEMPTED' },
   FAILED: { value: 5, label: 'FAILED' },
-}
+};
+
+export const ClassCancelReasonEnum = {
+  NOT_AVAILABLE: { label: 'NOT_AVAILABLE', value: 1, displayName: 'Unavailable to take classes at the scheduled time' },
+  TUTOR_NOT_RELIABLE: { label: 'TUTOR_NOT_RELIABLE', value: 1, displayName: 'Did not find tutor reliable' },
+  TUTOR_QUALITY_NOT_SATISFACTORY: {
+    label: 'TUTOR_QUALITY_NOT_SATISFACTORY',
+    value: 1,
+    displayName: 'Unsatisfied with the quality of tutor',
+  },
+  OTHER: { label: 'OTHER', value: 1, displayName: 'Other' },
+};

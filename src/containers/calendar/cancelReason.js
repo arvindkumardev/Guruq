@@ -2,7 +2,7 @@ import { FlatList, Keyboard, Text, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
@@ -13,22 +13,23 @@ import { alertBox, RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { CANCEL_CLASS } from '../student/class.mutation';
 import NavigationRouteNames from '../../routes/screenNames';
-
-const CANCEL_REASONS = [
-  { reason: 'I am unavailable to take classes at this moment.', selected: false, isCustom: false },
-  { reason: 'I want to replace the tutor with other.', selected: false, isCustom: false },
-  { reason: 'I did not find tutor reliable.', selected: false, isCustom: false },
-  { reason: 'I am unsatisfied with the quality of tutor.', selected: false, isCustom: false },
-  { reason: 'Others', selected: false, isCustom: true },
-];
+import { ClassCancelReasonEnum } from '../common/enums';
+import { userDetails } from '../../apollo/cache';
+import { UserTypeEnum } from '../../common/userType.enum';
 
 function CancelReason(props) {
   const { route } = props;
   const navigation = useNavigation();
   const { classId } = route.params;
 
+  const userInfo = useReactiveVar(userDetails);
+
   const [cancelReason, setCancelReason] = useState('');
-  const [reasons, setReasons] = useState([...CANCEL_REASONS]);
+  const [reasons, setReasons] = useState(
+    Object.values(ClassCancelReasonEnum).map((c) => {
+      return { ...c, selected: false, isCustom: c.label === ClassCancelReasonEnum.OTHER.label };
+    })
+  );
 
   const [cancelClass, { loading: cancelLoading }] = useMutation(CANCEL_CLASS, {
     fetchPolicy: 'no-cache',
@@ -42,7 +43,7 @@ function CancelReason(props) {
         alertBox('Class cancelled successfully', '', {
           positiveText: 'Ok',
           onPositiveClick: () => {
-            navigation.navigate(NavigationRouteNames.STUDENT.DASHBOARD, { tabId: 2 });
+            navigation.navigate(NavigationRouteNames[userInfo.type].DASHBOARD, { tabId: 2 });
           },
         });
       }
@@ -54,7 +55,7 @@ function CancelReason(props) {
       setReasons((reasons) =>
         reasons.map((reasonItem, reasonIndex) => ({ ...reasonItem, selected: reasonIndex === index }))
       );
-      setCancelReason(reasons[index].isCustom ? '' : reasons[index].reason);
+      setCancelReason(reasons[index].isCustom ? '' : reasons[index].label);
     }
   };
 
@@ -62,7 +63,7 @@ function CancelReason(props) {
     <TouchableWithoutFeedback onPress={() => onReasonChange(index)}>
       <View style={commonStyles.horizontalChildrenView}>
         <CustomRadioButton enabled={item.selected} />
-        <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>{item.reason}</Text>
+        <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>{item.displayName}</Text>
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginVertical: RfH(16) }} />
     </TouchableWithoutFeedback>
@@ -76,6 +77,7 @@ function CancelReason(props) {
         variables: {
           classId,
           cancelReason,
+          comments: String(cancelReason),
         },
       });
     }
