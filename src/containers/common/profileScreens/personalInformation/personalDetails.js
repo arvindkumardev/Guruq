@@ -4,16 +4,19 @@ import { useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import PersonalInformation from './components/personalInformation';
 import { ScreenHeader } from '../../../../components';
-import { studentDetails, userDetails } from '../../../../apollo/cache';
+import { studentDetails, tutorDetails, userDetails } from '../../../../apollo/cache';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts } from '../../../../theme';
 import { RfW } from '../../../../utils/helpers';
+import { UserTypeEnum } from '../../../../common/userType.enum';
 
 function PersonalDetails() {
   const navigation = useNavigation();
 
   const userInfo = useReactiveVar(userDetails);
   const studentInfo = useReactiveVar(studentDetails);
+  const tutorInfo = useReactiveVar(tutorDetails);
+
   const [isEditClicked, setIsEditClicked] = useState(false);
 
   return (
@@ -38,8 +41,8 @@ function PersonalDetails() {
       <View style={{ flex: 1 }}>
         <PersonalInformation
           referenceType={userInfo.type}
-          referenceId={studentInfo.id}
-          details={studentInfo?.contactDetail}
+          referenceId={userInfo.type === UserTypeEnum.STUDENT.label ? studentInfo.id : tutorInfo.id}
+          details={userInfo.type === UserTypeEnum.STUDENT.label ? studentInfo?.contactDetail : tutorInfo?.contactDetail}
           isUpdateAllowed={isEditClicked}
           onUpdate={() => setIsEditClicked(false)}
         />
