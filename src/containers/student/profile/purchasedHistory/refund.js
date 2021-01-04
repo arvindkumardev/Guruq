@@ -1,20 +1,25 @@
 import { Text, View } from 'react-native';
 import React from 'react';
 import { Button } from 'native-base';
-import { ScreenHeader } from '../../../../components';
+import { Loader, ScreenHeader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
 
-function Refund() {
+function Refund(props) {
+  const { route } = props;
+  const bookingData = route?.params?.bookingData;
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader label="Refund" homeIcon horizontalPadding={RfW(16)} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={{ height: RfH(32) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Bookinggqid73839</Text>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Sept 25,2020</Text>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Booking Id {bookingData.id}</Text>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+            {new Date(bookingData.createdDate).toDateString()}
+          </Text>
         </View>
       </View>
       <View style={{ height: RfH(24) }} />
@@ -26,11 +31,15 @@ function Refund() {
           <View>
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <Text style={commonStyles.mediumMutedText}>Amount</Text>
-              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹1200</Text>
+              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
+                ₹{parseFloat(bookingData.payableAmount).toFixed(2)}
+              </Text>
             </View>
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <Text style={commonStyles.mediumMutedText}>Convenience charges</Text>
-              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹100</Text>
+              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
+                ₹{bookingData.convenienceCharges ? parseFloat(bookingData.convenienceCharges).toFixed(2) : '0.00'}
+              </Text>
             </View>
           </View>
           <View style={{ height: RfH(16) }} />
@@ -39,26 +48,32 @@ function Refund() {
             <View style={{ height: RfH(16) }} />
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <Text style={commonStyles.mediumMutedText}>Paid by Q points</Text>
-              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹300</Text>
+              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
+                ₹{bookingData.pointsRedeemed ? parseFloat(bookingData.pointsRedeemed).toFixed(2) : '0.00'}
+              </Text>
             </View>
-            <View style={commonStyles.horizontalChildrenSpaceView}>
-              <Text style={commonStyles.mediumMutedText}>GURUQ1ST Applied</Text>
-              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹200</Text>
-            </View>
+            {bookingData?.promotion?.code && (
+              <View style={commonStyles.horizontalChildrenSpaceView}>
+                <Text style={commonStyles.mediumMutedText}>{bookingData?.promotion?.code} Applied</Text>
+                <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹200</Text>
+              </View>
+            )}
             <View style={{ height: RfH(16) }} />
           </View>
           <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
           <View style={{ height: RfH(16) }} />
           <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(8) }]}>
             <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>Total amount paid</Text>
-            <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>₹800</Text>
+            <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>
+              ₹{bookingData?.payableAmount ? parseFloat(bookingData?.payableAmount).toFixed(2) : '0.00'}
+            </Text>
           </View>
         </View>
       </View>
       <View style={{ height: RfH(32) }} />
-      <Button style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+      {/* <Button style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
         <Text style={commonStyles.textButtonPrimary}>Submit</Text>
-      </Button>
+      </Button> */}
     </View>
   );
 }
