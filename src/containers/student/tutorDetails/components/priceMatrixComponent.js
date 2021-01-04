@@ -12,8 +12,8 @@ function PriceMatrixComponent(props) {
   useEffect(() => {
     if (!isEmpty(budgets)) {
       const pm = {
-        online: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
-        offline: { c1: 0, c5: 0, c10: 0, c25: 0, c50: 0 },
+        online: { c1: 0, c6: 0, c11: 0, c26: 0, c51: 0 },
+        offline: { c1: 0, c6: 0, c11: 0, c26: 0, c51: 0 },
       };
       const demoPrice = {
         online: 0,
@@ -72,15 +72,15 @@ function PriceMatrixComponent(props) {
                 flexDirection: 'row',
                 flex: 0.75,
               }}>
-              <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2, textAlign: 'center' }]}>1-4</Text>
+              <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2, textAlign: 'center' }]}>1-5</Text>
               <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2, textAlign: 'center' }]}>
-                5-9
+                6-10
               </Text>
               <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2, textAlign: 'center' }]}>
-                10-24
+                11-25
               </Text>
               <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2, textAlign: 'center' }]}>
-                25-50
+                26-50
               </Text>
               <Text style={[styles.tutorDetails, { fontFamily: Fonts.bold, flex: 0.2, textAlign: 'center' }]}>
                 {'> 50'}
@@ -122,7 +122,7 @@ function PriceMatrixComponent(props) {
                 },
               ]}>
               <View style={{ flex: 0.25 }}>
-                <Text style={styles.tutorDetails}>Home Tuition</Text>
+                <Text style={styles.tutorDetails}>Offline Class</Text>
               </View>
               <View
                 style={{

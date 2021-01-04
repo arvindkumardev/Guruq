@@ -75,14 +75,14 @@ const StudentOfferingModal = (props) => {
               Choose your study area
             </Text>
             <TouchableOpacity onPress={onClose}>
-              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(20)} iconHeight={RfH(20)} />
             </TouchableOpacity>
           </View>
 
           <View style={{ height: 8 }} />
 
           <FlatList
-            data={offerings}
+            data={offerings.filter((o) => o.active)}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => renderItem(item, index, offerings.length - 1 > index)}
             keyExtractor={(item, index) => index.toString()}

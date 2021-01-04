@@ -23,9 +23,9 @@ function CustomModalWebView(props) {
       backdropOpacity={1}
       transparent
       onRequestClose={isBackAllowed ? backButtonHandler : null}>
-      <ScreenHeader label={headerText} homeIcon={isBackAllowed} horizontalPadding={16} handleBack={backButtonHandler}/>
+      <ScreenHeader label={headerText} homeIcon={isBackAllowed} horizontalPadding={16} handleBack={backButtonHandler} />
       <WebView
-          cacheEnabled={false}
+        cacheEnabled={false}
         domStorageEnabled
         javaScriptEnabled
         onNavigationStateChange={onNavigationStateChange}

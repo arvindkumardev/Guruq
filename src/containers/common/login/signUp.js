@@ -2,17 +2,18 @@ import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Icon, Input, Item, Label } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import {useLazyQuery, useMutation, useReactiveVar} from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import {removeToken, RfH, RfW, storeData} from '../../../utils/helpers';
+import { alertBox, isValidEmail, removeToken, RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import { isLoggedIn } from '../../../apollo/cache';
+import {isLoggedIn, isSplashScreenVisible, tutorDetails} from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import LoginCheck from './loginCheck';
+import {GET_CURRENT_TUTOR_QUERY} from "../graphql-query";
 
 function SignUp(props) {
   const navigation = useNavigation();
@@ -31,11 +32,10 @@ function SignUp(props) {
     onError: (e) => {
       const error = e.graphQLErrors[0].extensions.exception.response;
       if (error.errorCode === DUPLICATE_FOUND) {
-        Alert.alert('Email already being used by another user, please use different email!');
+        alertBox('Email already being used by another user, please use different email!');
       }
     },
     onCompleted: async (data) => {
-      console.log(data);
       if (data) {
         removeToken().then(() => {
           storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
@@ -52,34 +52,31 @@ function SignUp(props) {
 
   const onClickContinue = () => {
     if (!firstName) {
-      Alert.alert('Please enter first name.');
-      return;
+      alertBox('Please enter first name.');
     }
     if (!lastName) {
-      Alert.alert('Please enter last name.');
-      return;
+      alertBox('Please enter last name.');
     }
-    if (!email) {
-      Alert.alert('Please enter email.');
-      return;
+    if (!isValidEmail(email)) {
+      alertBox('Please enter email.');
     }
     if (!password) {
-      Alert.alert('Please enter password.');
-      return;
-    }
-    addUser({
-      variables: {
-        phoneNumber: {
-          countryCode: route.params.countryCode,
-          number: route.params.number,
+      alertBox('Please enter password.');
+    } else {
+      addUser({
+        variables: {
+          phoneNumber: {
+            countryCode: route.params.countryCode,
+            number: route.params.number,
+          },
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.toLowerCase().trim(),
+          password,
+          referCode,
         },
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.toLowerCase().trim(),
-        password,
-        referCode,
-      },
-    });
+      });
+    }
   };
 
   return (
@@ -121,7 +118,7 @@ function SignUp(props) {
                 <Label>Referral Code</Label>
                 <Input onChangeText={(text) => setReferCode(text)} />
               </Item>
-              <Text style={styles.applyIcon}>APPLY</Text>
+              {/*<Text style={styles.applyIcon}>APPLY</Text>*/}
             </View>
           </View>
           <TouchableOpacity

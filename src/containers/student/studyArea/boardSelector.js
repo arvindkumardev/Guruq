@@ -73,6 +73,16 @@ function BoardSelector(props) {
     }
   };
 
+  const slugify = (name) => {
+    return name
+      ? name
+          .split(' ')
+          .filter((s) => s.trim().length > 0)
+          .join('_')
+          .toLowerCase()
+      : '';
+  };
+
   const renderItem = (item, index) => (
     <TouchableWithoutFeedback onPress={() => onClick(item)}>
       <View
@@ -89,8 +99,9 @@ function BoardSelector(props) {
         ]}>
         <View style={{ alignItems: 'center' }}>
           <IconButtonWrapper
-            iconHeight={RfH(70)}
-            iconImage={Images[item.name.toLowerCase()]}
+            iconWidth={RfH(64)}
+            iconHeight={RfH(64)}
+            iconImage={Images[slugify(item.name)]}
             imageResizeMode="contain"
           />
           <Text style={styles.areaTitleOne}>{item.displayName}</Text>
@@ -102,9 +113,13 @@ function BoardSelector(props) {
   return (
     <>
       <Loader isLoading={interestedOfferingsLoading || addOfferingLoading} />
-      <View style={[commonStyles.mainContainer, { backgroundColor: '#fff' }]}>
-        <ScreenHeader label={`Select Your ${studyAreaObj.find((item) => item.level === 1)?.label}`} homeIcon />
-        <View style={styles.areaParentView}>
+      <View style={[commonStyles.mainContainer, { backgroundColor: '#fff', paddingHorizontal: 0 }]}>
+        <ScreenHeader
+          label={`Select Your ${studyAreaObj.find((item) => item.level === 1)?.label}`}
+          homeIcon
+          horizontalPadding={RfW(16)}
+        />
+        <View style={[styles.areaParentView, { paddingHorizontal: RfW(16) }]}>
           <FlatList
             data={listData}
             showsVerticalScrollIndicator={false}

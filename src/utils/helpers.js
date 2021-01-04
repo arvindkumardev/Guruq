@@ -2,15 +2,16 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import AsyncStorage from '@react-native-community/async-storage';
-import { isEmpty, isNumber } from 'lodash';
 import { Alert, Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import moment from 'moment';
+import { isEmpty, isNil, isNull, isNumber, isUndefined } from 'lodash';
+import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mobile';
 import Images from '../theme/images';
-import SubjectIcons from '../theme/subjectIcons';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+import 'intl';
 
-let token;
+const countryData = require('../components/NationalityDropdown/country/countries.json');
 
 export const storeData = async (key, value) => {
   try {
@@ -36,17 +37,12 @@ export const removeData = async (key) => {
 };
 
 export const getToken = async () => {
-  if (token) {
-    return Promise.resolve(token);
-  }
-
-  token = await AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
+  const token = await AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
   return token;
 };
 
 export const removeToken = async () => {
   removeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN);
-  token = null;
 };
 
 export const clearAllLocalStorage = async () => {
@@ -91,7 +87,7 @@ export const RfH = (value) => {
 
 export const isIntegerString = (str) => /^\+?(0|[1-9]\d*)$/.test(str);
 
-export const isValidEmail = (str) => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(str);
+export const isValidEmail = (str) => /^([a-zA-Z0-9_+\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(str);
 
 export const isDisplayWithNotch = () => DeviceInfo.hasNotch();
 
@@ -306,6 +302,18 @@ export const endOfDay = (date) => {
   return `${moment(date).format('YYYY-MM-DDT23:59:59')}Z`;
 };
 
+export const isValidMobile = (mobileObject) => {
+  if (!isEmpty(mobileObject) && !isUndefined(mobileObject)) {
+    const parsedMobile = parseMobile(`+${mobileObject.country.dialCode}${mobileObject.mobile}`);
+    return !isUndefined(parsedMobile) ? parsedMobile.isValid() : false;
+  }
+  return false;
+};
+
+export const getCountryObj = (dialCode) => {
+  return countryData.find((item) => item.dialCode === dialCode);
+};
+
 export const createPayload = async (user, token) => {
   const payload = {
     userId: user?.id,
@@ -323,4 +331,22 @@ export const createPayload = async (user, token) => {
     networkInfo: await DeviceInfo.getIpAddress(),
   };
   return Promise.resolve(payload);
+};
+
+export const getFullName = (contactDetail) => {
+  return contactDetail ? `${contactDetail?.firstName} ${contactDetail?.lastName}` : '';
+};
+
+export const getNameInitials = (contactDetails) => {
+  const names = getFullName(contactDetails).split(' ');
+  let initials = names[0].substring(0, 1).toUpperCase();
+
+  if (names.length > 1) {
+    initials += names[names.length - 1].substring(0, 1).toUpperCase();
+  }
+  return initials;
+};
+export const printCurrency = (number) => {
+  return number;
+  // return new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(number);
 };

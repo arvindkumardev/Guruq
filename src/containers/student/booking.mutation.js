@@ -166,6 +166,14 @@ export const CHECK_COUPON = gql`
   }
 `;
 
+export const CANCEL_BOOKINGS = gql`
+  mutation CancelBooking($orderId: Int!) {
+    cancelBooking(orderId: $orderId) {
+      id
+    }
+  }
+`;
+
 export class OrderPaymentDto {
   amount: number;
 

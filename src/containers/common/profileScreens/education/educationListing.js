@@ -94,8 +94,8 @@ function EducationListing() {
     });
   };
 
-  const handleAddEditAddress = () => {
-    navigation.navigate(NavigationRouteNames.ADD_EDIT_EDUCATION);
+  const handleAddEditEducation = (item) => {
+    navigation.navigate(NavigationRouteNames.ADD_EDIT_EDUCATION, { detail: item });
   };
 
   const renderEducation = (item) => (
@@ -127,7 +127,7 @@ function EducationListing() {
         </View>
       </View>
       <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-        <TouchableWithoutFeedback onPress={handleAddEditAddress}>
+        <TouchableWithoutFeedback onPress={() => handleAddEditEducation(item)}>
           <Text style={{ color: Colors.orange }}>Edit</Text>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
@@ -146,8 +146,8 @@ function EducationListing() {
           label="Education"
           horizontalPadding={RfW(16)}
           showRightIcon
-          rightIcon={Images.moreInformation}
-          onRightIconClick={handleAddEditAddress}
+          rightIcon={Images.add}
+          onRightIconClick={handleAddEditEducation}
         />
         <View style={{ height: RfH(24) }} />
         {!isListEmpty ? (
@@ -185,7 +185,7 @@ function EducationListing() {
               Looks like you haven't provided your education qualification.
             </Text>
             <Button
-              onPress={handleAddEditAddress}
+              onPress={() => handleAddEditEducation()}
               style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
               <Text style={commonStyles.textButtonPrimary}>Add Education</Text>
             </Button>

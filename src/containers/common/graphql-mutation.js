@@ -66,6 +66,7 @@ export const SIGNIN_MUTATION = gql`
       isEmailVerified
       token
       type
+      referralCode
       phoneNumber {
         countryCode
         number
@@ -86,6 +87,7 @@ export const SET_PASSWORD_MUTATION = gql`
       isEmailVerified
       token
       type
+      referralCode
       phoneNumber {
         countryCode
         number
@@ -133,6 +135,9 @@ export const CREATE_TUTOR = gql`
           number
         }
         email
+      }
+      lead {
+        certificationStage
       }
     }
   }
@@ -287,14 +292,6 @@ export const DELETE_TUTOR_DOCUMENT_DETAILS = gql`
       id
       name
       type
-    }
-  }
-`;
-
-export const ADD_UPDATE_GUARDIAN_DETAILS = gql`
-  mutation AddUpdateStudentParentInfo($guardianInfoDto: CreateUpdateGuardianInfoDto!) {
-    addUpdateStudentParentInfo(guardianInfoDto: $guardianInfoDto) {
-      id
     }
   }
 `;

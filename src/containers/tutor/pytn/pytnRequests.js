@@ -49,7 +49,7 @@ function PytnRequests() {
         alertBox(`Request ${isEmpty(selectedPytn.acceptedPytns) ? 'accepted' : 'edited'} successfully`, '', {
           positiveText: 'Ok',
           onPositiveClick: () => {
-            getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asec' } } });
+            getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asc' } } });
           },
         });
       }
@@ -97,7 +97,7 @@ function PytnRequests() {
 
   useEffect(() => {
     if (isFocussed) {
-      getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asec' } } });
+      getPytnRequests({ variables: { searchDto: { size: 15, sortBy: 'createdDate', sortOrder: 'asc' } } });
     }
   }, [isFocussed]);
 
@@ -117,7 +117,7 @@ function PytnRequests() {
               {item?.offering?.parentOffering?.displayName}
             </Text>
           </View>
-          <Text style={commonStyles.headingPrimaryText}>₹ {`${item.minPrice}-${item.maxPrice}`}</Text>
+          <Text style={commonStyles.headingPrimaryText}>₹ {item.maxPrice}</Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
@@ -143,7 +143,7 @@ function PytnRequests() {
                 {item.groupSize > 1 ? 'Group' : 'Individual'} Class
               </Text>
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online Class' : 'Home Tution'}
+                {item.onlineClass ? 'Online' : 'Offline'} Class
               </Text>
             </View>
           </View>
@@ -190,7 +190,7 @@ function PytnRequests() {
         behavior={Platform.select({ android: '', ios: 'padding' })}
         // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
         enabled>
-        <ScreenHeader label="Student Requests" homeIcon horizontalPadding={RfW(16)} />
+        <ScreenHeader label="PYTN Student Requests" homeIcon horizontalPadding={RfW(16)} />
         <ScrollView>
           <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
             <FlatList

@@ -11,8 +11,8 @@ import { Colors } from '../../../../theme';
 import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../../tutor.mutation';
 
 const PM = {
-  online: { 1: 0, 5: 0, 10: 0, 25: 0, 50: 0 },
-  offline: { 1: 0, 5: 0, 10: 0, 25: 0, 50: 0 },
+  online: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
+  offline: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
 };
 
 function PriceMatrixView(props) {
@@ -26,8 +26,8 @@ function PriceMatrixView(props) {
   useEffect(() => {
     if (!isEmpty(offering.budgets)) {
       const pm = {
-        online: { 1: 0, 5: 0, 10: 0, 25: 0, 50: 0 },
-        offline: { 1: 0, 5: 0, 10: 0, 25: 0, 50: 0 },
+        online: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
+        offline: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
       };
       const demoPrice = {
         online: 0,
@@ -58,6 +58,8 @@ function PriceMatrixView(props) {
           pm.offline[key] = maxValue;
         }
       });
+
+      console.log(pm);
       setPriceMatrix(pm);
       setDemoClassPM(demoPrice);
     }
@@ -155,16 +157,16 @@ function PriceMatrixView(props) {
       <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(8) }]}>
         <View
           style={{
-            flex: 0.32,
+            flex: 0.24,
             height: RfH(44),
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Text>{item}</Text>
+          <Text>{item.label}</Text>
         </View>
         <View
           style={{
-            flex: 0.32,
+            flex: 0.36,
             backgroundColor: Colors.lightGrey,
             height: RfH(44),
             alignItems: 'center',
@@ -173,8 +175,8 @@ function PriceMatrixView(props) {
           }}>
           <Item>
             <Input
-              value={priceMatrix.online[`${item}`].toString()}
-              onChangeText={(text) => onOnlineChange(text, `${item}`)}
+              value={priceMatrix.online[`${item.value}`].toString()}
+              onChangeText={(text) => onOnlineChange(text, `${item.value}`)}
               style={{ textAlign: 'center' }}
               placeholder="Price"
               placeholderTextColor={Colors.darkGrey}
@@ -185,7 +187,7 @@ function PriceMatrixView(props) {
         </View>
         <View
           style={{
-            flex: 0.32,
+            flex: 0.36,
             backgroundColor: Colors.lightGrey,
             height: RfH(44),
             alignItems: 'center',
@@ -194,8 +196,8 @@ function PriceMatrixView(props) {
           }}>
           <Item>
             <Input
-              value={priceMatrix.offline[`${item}`].toString()}
-              onChangeText={(text) => onOfflineChange(text, `${item}`)}
+              value={priceMatrix.offline[`${item.value}`].toString()}
+              onChangeText={(text) => onOfflineChange(text, `${item.value}`)}
               style={{ textAlign: 'center' }}
               placeholder="Price"
               placeholderTextColor={Colors.darkGrey}
@@ -209,14 +211,17 @@ function PriceMatrixView(props) {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={{ marginTop: RfH(16) }}>
+        <Text style={commonStyles.regularPrimaryText}>Enter price per class per hour.</Text>
+      </View>
       <View style={{ height: RfH(20) }} />
       <View style={commonStyles.horizontalChildrenEqualSpaceView}>
         <View
           style={{
-            flex: 0.32,
+            flex: 0.24,
             backgroundColor: Colors.lightBlue,
-            height: RfH(50),
+            height: RfH(36),
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -224,9 +229,9 @@ function PriceMatrixView(props) {
         </View>
         <View
           style={{
-            flex: 0.32,
+            flex: 0.36,
             backgroundColor: Colors.lightBlue,
-            height: RfH(50),
+            height: RfH(36),
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -234,9 +239,9 @@ function PriceMatrixView(props) {
         </View>
         <View
           style={{
-            flex: 0.32,
+            flex: 0.36,
             backgroundColor: Colors.lightBlue,
-            height: RfH(50),
+            height: RfH(36),
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -245,19 +250,28 @@ function PriceMatrixView(props) {
       </View>
       <View>
         <FlatList
-          data={[1, 5, 10, 25, 50]}
+          data={[
+            { value: 1, label: 'Upto 5' },
+            { value: 6, label: '6-10' },
+            { value: 11, label: '11-25' },
+            { value: 26, label: '26-50' },
+            { value: 51, label: '>50' },
+          ]}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => renderItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
           scrollEnabled={false}
         />
       </View>
-      <View style={{ marginTop: RfH(40), justifyContent: 'space-between', flexDirection: 'row' }}>
+
+      <View style={[commonStyles.lineSeparator, { marginVertical: RfH(24) }]} />
+
+      <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
         <Text style={commonStyles.regularPrimaryText}> Is Demo Class Available</Text>
         <Switch value={isDemoClass} onValueChange={() => setIsDemoClass((isDemoClass) => !isDemoClass)} />
       </View>
       {isDemoClass && (
-        <View style={{ marginTop: RfH(30) }}>
+        <View style={{ marginTop: RfH(16) }}>
           <Text style={commonStyles.regularPrimaryText}> Mode of Demo Class</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: RfH(15) }}>
             <TouchableOpacity
@@ -301,7 +315,7 @@ function PriceMatrixView(props) {
       )}
       {isDemoClass && (
         <View style={{ marginTop: RfH(30), marginBottom: RfH(10) }}>
-          <Text style={commonStyles.regularPrimaryText}>Demo Class Price Matrix **</Text>
+          <Text style={commonStyles.regularPrimaryText}>Demo Class Price Matrix *</Text>
           <View style={{ flexDirection: 'row', marginTop: RfH(15), justifyContent: 'space-around' }}>
             {modeDemoClass !== 0 && (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -358,7 +372,9 @@ function PriceMatrixView(props) {
               </View>
             )}
           </View>
-          <Text style={[commonStyles.smallMutedText,{marginTop:RfH(20),textAlign:'right'}]}> ** Zero price means the demo class is free</Text>
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(20), textAlign: 'left' }]}>
+            * Zero price means the demo class is free
+          </Text>
         </View>
       )}
       <View

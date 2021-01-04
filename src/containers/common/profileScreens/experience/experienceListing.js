@@ -29,8 +29,8 @@ function ExperienceListing() {
     },
     onCompleted: (data) => {
       if (data) {
-        setExperienceList(data?.getTutorDetails?.experienceDetails);
-        setIsListEmpty(data?.getTutorDetails?.experienceDetails.length === 0);
+        setExperienceList(data?.getTutorExperienceDetails?.experienceDetails);
+        setIsListEmpty(data?.getTutorExperienceDetails?.experienceDetails.length === 0);
       }
     },
   });
@@ -44,7 +44,10 @@ function ExperienceListing() {
     },
     onCompleted: (data) => {
       if (data) {
-        getExperienceList();
+        alertBox(`Your experience details has been deleted successfully`, '', {
+          positiveText: 'Yes',
+          onPositiveClick: () => getExperienceList(),
+        });
       }
     },
   });
@@ -111,7 +114,7 @@ function ExperienceListing() {
           label="Manage Experiences"
           horizontalPadding={RfW(16)}
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           onRightIconClick={handleAddEditExperience}
         />
         <View style={{ height: RfH(24) }} />

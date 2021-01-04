@@ -27,6 +27,7 @@ const ScreenHeader = (props) => {
     rightText,
     onRightTextClick,
     handleBack,
+    rightTextStyle,
   } = props;
 
   const onBackPress = () => {
@@ -41,12 +42,14 @@ const ScreenHeader = (props) => {
     <View style={style}>
       <View
         style={[
-          commonStyles.topActionView,
           {
-            marginTop: RfH(topMargin),
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             paddingHorizontal: RfW(horizontalPadding),
-            height: RfH(44),
+            height: Platform.OS === 'ios' ? RfH(50) : RfH(60),
           },
+          Platform.OS === 'ios' && { marginTop: RfH(topMargin) },
         ]}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { flex: 1 }]}>
           <View style={{ justifyContent: 'center', flexDirection: 'row', flex: 1 }}>
@@ -57,7 +60,7 @@ const ScreenHeader = (props) => {
               <Text style={commonStyles.headingPrimaryText}>{label}</Text>
             </View>
           </View>
-          <View style={{ position: 'absolute', right: 0 }}>
+          <View style={{ position: 'absolute', right: 0, padding: RfW(10) }}>
             {showRightIcon && (
               <IconButtonWrapper
                 iconImage={rightIcon}
@@ -68,7 +71,7 @@ const ScreenHeader = (props) => {
             )}
             {showRightText && (
               <TouchableWithoutFeedback onPress={() => onRightTextClick()}>
-                <Text>{rightText}</Text>
+                <Text style={rightTextStyle}>{rightText}</Text>
               </TouchableWithoutFeedback>
             )}
           </View>
@@ -94,13 +97,14 @@ ScreenHeader.propTypes = {
   onRightIconClick: PropTypes.func,
   onRightTextClick: PropTypes.func,
   handleBack: PropTypes.func,
+  rightTextStyle: PropTypes.object,
 };
 
 ScreenHeader.defaultProps = {
   style: { backgroundColor: Colors.white },
   label: '',
   labelStyle: {},
-  topMargin: RfH(44),
+  topMargin: 44,
   horizontalPadding: 0,
   lineVisible: true,
   homeIcon: false,
@@ -111,6 +115,7 @@ ScreenHeader.defaultProps = {
   onRightIconClick: null,
   onRightTextClick: null,
   handleBack: null,
+  rightTextStyle: {},
 };
 
 export default ScreenHeader;

@@ -11,7 +11,7 @@ import routeNames from '../../../routes/screenNames';
 import { CHECK_USER_QUERY } from '../graphql-query';
 import { NOT_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import { RfH } from '../../../utils/helpers';
+import { alertBox, isValidMobile, RfH } from '../../../utils/helpers';
 
 function Login() {
   const navigation = useNavigation();
@@ -42,14 +42,14 @@ function Login() {
   });
 
   const onClickContinue = () => {
-    if (mobileObj.mobile) {
+    if (isValidMobile(mobileObj)) {
       const countryCode = mobileObj.country.dialCode;
       const number = mobileObj.mobile;
       checkUser({
         variables: { countryCode, number },
       });
     } else {
-      Alert.alert('Please enter mobile number.');
+      alertBox('Please enter mobile number.');
     }
   };
 

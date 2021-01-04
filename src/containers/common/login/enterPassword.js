@@ -11,7 +11,7 @@ import { RfH, RfW, storeData } from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
-import { isLoggedIn } from '../../../apollo/cache';
+import { isLoggedIn, userDetails, userType } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import MainContainer from './components/mainContainer';
 import LoginCheck from './loginCheck';
@@ -24,29 +24,34 @@ function EnterPassword(props) {
   const isUserLoggedIn = useReactiveVar(isLoggedIn);
   const { mobileObj } = route.params;
 
-  const [signIn, { data: signInData, error: signInError, loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
+  // const [loggedIn, setLoggedIn] = useState(false);
+
+  const [signIn, { loading: signInLoading }] = useMutation(SIGNIN_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { countryCode: mobileObj.country.dialCode, number: mobileObj.mobile, password },
-  });
 
-  useEffect(() => {
-    if (signInError && signInError.graphQLErrors && signInError.graphQLErrors.length > 0) {
-      const error = signInError.graphQLErrors[0].extensions.exception.response;
-      if (error.errorCode === INVALID_INPUT) {
-        Alert.alert('Incorrect password');
-      } else if (error.errorCode === NOT_FOUND) {
-        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+    onError: (e) => {
+      if (e && e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === INVALID_INPUT) {
+          Alert.alert('Incorrect password');
+        } else if (error.errorCode === NOT_FOUND) {
+          navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: true });
+        }
       }
-    }
-  }, [signInError]);
-
-  useEffect(() => {
-    if (signInData && signInData.signIn) {
-      storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, signInData.signIn.token).then(() => {
-        isLoggedIn(true);
-      });
-    }
-  }, [signInData]);
+    },
+    onCompleted: (data) => {
+      if (data && data.signIn) {
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token).then(() => {
+          isLoggedIn(true);
+          userDetails(data.me);
+          userType(data.me.type);
+          // setLoggedIn(true);
+          console.log(isUserLoggedIn);
+        });
+      }
+    },
+  });
 
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',

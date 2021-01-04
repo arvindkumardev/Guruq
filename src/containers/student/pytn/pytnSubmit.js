@@ -35,16 +35,16 @@ function PytnSubmit(props) {
     onCompleted: (data) => {
       if (data) {
         console.log('data', data);
-        navigation.navigate(routeNames.TUTION_NEEDS_LISTING);
+        navigation.navigate(routeNames.PYTN_LISTING);
       }
     },
   });
 
   const submitPYTN = () => {
-    if (minPrice === 0 || maxPrice === 0) {
+    if (maxPrice === 0) {
       alertBox('Please provide minimum and maximum price');
-    } else if (parseFloat(maxPrice) < parseFloat(minPrice)) {
-      alertBox('Maximum price should be greater than or equal to minimum price');
+      // } else if (parseFloat(maxPrice) < parseFloat(minPrice)) {
+      //   alertBox('Maximum price should be greater than or equal to minimum price');
     } else {
       const offeringArray = [];
       if (!isEmpty(subjectData?.subject)) {
@@ -62,7 +62,7 @@ function PytnSubmit(props) {
             count: noOfClasses,
             groupSize: noOfGroupClasses,
             onlineClass: isOnline,
-            minPrice: parseFloat(minPrice),
+            minPrice: parseFloat(maxPrice),
             maxPrice: parseFloat(maxPrice),
           },
         },
@@ -93,7 +93,7 @@ function PytnSubmit(props) {
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <Loader isLoading={pytnLoading} />
-      <ScreenHeader homeIcon label="Post your tution needs" horizontalPadding={RfW(16)} />
+      <ScreenHeader homeIcon label="Post Your Tuition Need" horizontalPadding={RfW(16)} />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'position' })} enabled>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -115,7 +115,7 @@ function PytnSubmit(props) {
               })}
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>Mode of Tution</Text>
+          <Text style={commonStyles.headingPrimaryText}>Mode of Class</Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           <View>
             <TouchableWithoutFeedback onPress={() => setIsOnline(true)}>
@@ -126,7 +126,7 @@ function PytnSubmit(props) {
                   enabled={isOnline}
                   submitFunction={() => setIsOnline(true)}
                 />
-                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Online Class</Text>
+                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Online</Text>
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => setIsOnline(false)}>
@@ -137,12 +137,12 @@ function PytnSubmit(props) {
                   enabled={!isOnline}
                   submitFunction={() => setIsOnline(false)}
                 />
-                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Home Tution</Text>
+                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Offline</Text>
               </View>
             </TouchableWithoutFeedback>
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>Type of Tution</Text>
+          <Text style={commonStyles.headingPrimaryText}>Type of Tuition</Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           <View>
             <TouchableWithoutFeedback onPress={() => setIsIndividual(true)}>
@@ -173,7 +173,7 @@ function PytnSubmit(props) {
                   <View style={styles.bookingSelectorParent}>
                     <View style={styles.bookingSelectorParent}>
                       <TouchableWithoutFeedback onPress={() => removeNoOfGroupClass()}>
-                        <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                           <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                         </View>
                       </TouchableWithoutFeedback>
@@ -181,7 +181,7 @@ function PytnSubmit(props) {
                       <Text>{noOfGroupClasses}</Text>
 
                       <TouchableWithoutFeedback onPress={() => addNoOfGroupClass()}>
-                        <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                           <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                         </View>
                       </TouchableWithoutFeedback>
@@ -192,19 +192,19 @@ function PytnSubmit(props) {
             </View>
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>No of Classes</Text>
+          <Text style={commonStyles.headingPrimaryText}>No of Classes Required</Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           <View>
             <View style={styles.bookingSelectorParent}>
               <View style={styles.bookingSelectorParent}>
                 <TouchableWithoutFeedback onPress={removeNoOfClass}>
-                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                     <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
                   </View>
                 </TouchableWithoutFeedback>
                 <Text>{noOfClasses}</Text>
                 <TouchableWithoutFeedback onPress={addNoOfClass}>
-                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(8) }}>
+                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
                     <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
                   </View>
                 </TouchableWithoutFeedback>
@@ -212,20 +212,20 @@ function PytnSubmit(props) {
             </View>
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
-          <Text style={commonStyles.headingPrimaryText}>Maximum price/ hour willing to pay </Text>
+          <Text style={commonStyles.headingPrimaryText}>Maximum price/ hour you are willing to pay </Text>
           <View style={[commonStyles.lineSeparator, { marginVertical: RfH(10) }]} />
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Item floatingLabel style={{ flex: 0.48 }}>
-              <Input
-                placeholder="Min Price"
-                value={minPrice}
-                onChangeText={(text) => setMinPrice(text)}
-                keyboardType="numeric"
-              />
-            </Item>
+            {/* <Item floatingLabel style={{ flex: 0.48 }}> */}
+            {/*  <Input */}
+            {/*    placeholder="Min Price" */}
+            {/*    value={minPrice} */}
+            {/*    onChangeText={(text) => setMinPrice(text)} */}
+            {/*    keyboardType="numeric" */}
+            {/*  /> */}
+            {/* </Item> */}
             <Item floatingLabel style={{ flex: 0.48, marginLeft: RfW(8) }}>
               <Input
-                placeholder="Max Price"
+                placeholder="Max Price per hour"
                 value={maxPrice}
                 onChangeText={(text) => setMaxPrice(text)}
                 keyboardType="numeric"

@@ -9,12 +9,12 @@ import Loader from '../../components/Loader';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { RfH, RfW } from '../../utils/helpers';
+import {getFullName, RfH, RfW} from '../../utils/helpers';
 import { SEARCH_ORDER_ITEMS } from '../student/booking.query';
 import { OrderStatus } from '../student/enums';
 import styles from './styles';
 import { GET_TUTOR_OFFERINGS } from '../student/tutor-query';
-import ClassModeSelectModal from '../student/tutorDetails/components/classModeSelectModal';
+import AddToCartModal from '../student/tutorDetails/components/addToCartModal';
 import NavigationRouteNames from '../../routes/screenNames';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
@@ -73,7 +73,7 @@ function MyClasses() {
             groupClass: selectedOffering.groupClass === 0 || selectedOffering.groupClass === 1,
             onlineClass: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 1,
             individualClass: selectedOffering.groupClass === 0 || selectedOffering.groupClass === 2,
-            homeTution: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 2,
+            offlineClass: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 2,
             budgetDetails: selectedOffering.budgets,
           });
           setOpenClassModal(true);
@@ -196,12 +196,12 @@ function MyClasses() {
                   marginTop: RfH(2),
                 }}>
                 {isStudent
-                  ? `${item.tutor.contactDetail.firstName} ${item.tutor.contactDetail.lastName}`
-                  : `${item?.createdBy.firstName} ${item?.createdBy.lastName}`}
+                  ? `${getFullName(item.tutor.contactDetail)}`
+                  : `${getFullName(item?.createdBy)}`}
               </Text>
               {isStudent && (
                 <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                  T{item.tutor.id}
+                  T-{item.tutor.id}
                 </Text>
               )}
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
@@ -360,7 +360,7 @@ function MyClasses() {
           </View>
         </ScrollView>
         {openClassModal && (
-          <ClassModeSelectModal
+          <AddToCartModal
             visible={openClassModal}
             onClose={() => setOpenClassModal(false)}
             selectedSubject={selectedSubject}

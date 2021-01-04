@@ -22,13 +22,13 @@ import NavigationRouteNames from './screenNames';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
 import { TutorCertificationStageEnum } from '../containers/tutor/enums';
-import CertificationCompletedView from '../containers/tutor/certficationProcess/certificationCompletedView';
+import CertificationCompletedView from '../containers/certficationProcess/certificationCompletedView';
 import WebViewPage from '../components/WebViewPage';
-import InterviewPending from '../containers/tutor/interviewPending/interviewPending';
+import UploadDocuments from '../containers/certficationProcess/uploadDocuments';
 import AddressListing from '../containers/common/profileScreens/address/addressListing';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
 import { DUPLICATE_FOUND } from '../common/errorCodes';
-import { alertBox, createPayload } from '../utils/helpers';
+import { alertBox, clearAllLocalStorage, createPayload } from '../utils/helpers';
 import scheduledClassDetails from '../containers/calendar/scheduledClassDetails';
 import cancelReason from '../containers/calendar/cancelReason';
 import MyClasses from '../containers/myClasses/classes';
@@ -38,6 +38,25 @@ import AddEditAddress from '../containers/common/profileScreens/address/addEditA
 import AddressMapView from '../containers/common/profileScreens/addressMapView';
 import EducationListing from '../containers/common/profileScreens/education/educationListing';
 import AddEditEducation from '../containers/common/profileScreens/education/addEditEducation';
+import AwardListing from '../containers/common/profileScreens/awards/awardListing';
+import AddEditAward from '../containers/common/profileScreens/awards/addEditAward';
+import TutorWelcomeScreen from '../containers/certficationProcess/tutorWelcomeScreen';
+import CertificationProcessSteps from '../containers/certficationProcess/certificationProcessSteps';
+import SubjectSelection from '../containers/tutor/mySubjects/subjectSelection';
+import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
+import ProficiencyTest from '../containers/tutor/proficiencyTest';
+import PersonalDetails from '../containers/common/profileScreens/personalInformation/personalDetails';
+import CompleteYourProfile from '../containers/certficationProcess/completeYourProfile';
+import ExperienceListing from '../containers/common/profileScreens/experience/experienceListing';
+import AddEditExperience from '../containers/common/profileScreens/experience/addEditExperience';
+import InterviewAndDocument from '../containers/certficationProcess/interviewAndDocuments';
+import InterviewScheduling from '../containers/certficationProcess/interviewScheduling';
+import CustomerCare from '../containers/common/customerCare/customerCare';
+import SendFeedback from '../containers/common/sendFeedback';
+import AboutUs from '../containers/common/about/about';
+import BackgroundCheck from '../containers/certficationProcess/backgroundCheck';
+import TutorVerificationScreen from '../containers/certficationProcess/tutorVerificationScreen';
+import { BackgroundCheckStatusEnum } from '../containers/common/enums';
 
 const Stack = createStackNavigator();
 
@@ -45,12 +64,10 @@ const AppStack = (props) => {
   const { isUserLoggedIn, userType, showSplashScreen } = props;
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
-
-  console.log('tutorInfo', tutorInfo);
-
   const userDetailsObj = useReactiveVar(userDetails);
 
   useEffect(() => {
+    // clearAllLocalStorage();
     AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then((val) => {
       setIsGettingStartedVisible(isEmpty(val));
     });
@@ -58,14 +75,7 @@ const AppStack = (props) => {
 
   const [registerDevice, { loading: scheduleLoading }] = useMutation(REGISTER_DEVICE, {
     fetchPolicy: 'no-cache',
-    onError: (e) => {
-      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-      //   const error = e.graphQLErrors[0].extensions.exception.response;
-      //   if (error.errorCode === DUPLICATE_FOUND) {
-      //     Alert.alert(error.message);
-      //   }
-      // }
-    },
+    onError: (e) => {},
     onCompleted: (data) => {
       if (data) {
         console.log(data);
@@ -153,10 +163,77 @@ const AppStack = (props) => {
         component={AddressMapView}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.EDUCATION} component={EducationListing} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.EDUCATION}
+        component={EducationListing}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_EDUCATION}
         component={AddEditEducation}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.AWARD_LISTING}
+        component={AwardListing}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.ADD_EDIT_AWARD_DETAILS}
+        component={AddEditAward}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.PERSONAL_DETAILS}
+        component={PersonalDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.SUBJECT_SELECTION}
+        component={SubjectSelection}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PT_START_SCREEN}
+        component={PtStartScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PROFICIENCY_TEST}
+        component={ProficiencyTest}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.COMPLETE_PROFILE}
+        component={CompleteYourProfile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.EXPERIENCE}
+        component={ExperienceListing}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.ADD_EDIT_EXPERIENCE}
+        component={AddEditExperience}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.CUSTOMER_CARE}
+        component={CustomerCare}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
+
+      <Stack.Screen
+        name={NavigationRouteNames.SEND_FEEDBACK}
+        component={SendFeedback}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
+        component={UploadDocuments}
         options={{ headerShown: false }}
       />
     </>
@@ -165,61 +242,72 @@ const AppStack = (props) => {
   const getLoggedInRoutes = () => {
     if (userType === UserTypeEnum.OTHER.label) {
       return (
-        <>
-          <Stack.Screen
-            name={NavigationRouteNames.USER_TYPE_SELECTOR}
-            component={UserTypeSelector}
-            options={{ headerShown: false }}
-          />
-        </>
+        <Stack.Screen
+          name={NavigationRouteNames.USER_TYPE_SELECTOR}
+          component={UserTypeSelector}
+          options={{ headerShown: false }}
+        />
       );
     }
     if (userType === UserTypeEnum.STUDENT.label) {
       return getStudentRoutes();
     }
     if (userType === UserTypeEnum.TUTOR.label) {
-      console.log('tutorInfo', tutorInfo);
-      if (tutorInfo) {
-        return getTutorRoutes();
+      if (tutorInfo && tutorInfo?.certified) {
+        return getTutorRoutes(tutorInfo);
       }
 
-      if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING) {
+      if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.REGISTERED.label) {
         return (
           <>
             <Stack.Screen
-              name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
-              component={InterviewPending}
+              name={NavigationRouteNames.TUTOR.WELCOME_SCREEN}
+              component={TutorWelcomeScreen}
               options={{ headerShown: false }}
             />
           </>
         );
       }
-
-      if (tutorInfo && tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.INTERVIEW_PENDING) {
+      if (
+        tutorInfo &&
+        !tutorInfo?.certified &&
+        (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label ||
+          (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&
+            tutorInfo?.lead?.backgroundCheck?.status !== BackgroundCheckStatusEnum.NOT_STARTED.label))
+      ) {
         return (
-          <>
-            <Stack.Screen
-              name={NavigationRouteNames.WEB_VIEW}
-              component={WebViewPage}
-              options={{
-                url: `http://dashboardv2.guruq.in/tutor/on-boarding`,
-                label: 'Tutor Certification Process',
-                headerShown: false,
-              }}
-            />
-          </>
+          <Stack.Screen
+            name={NavigationRouteNames.TUTOR.VERIFICATION}
+            component={TutorVerificationScreen}
+            options={{ headerShown: false }}
+          />
         );
       }
 
       if (
         tutorInfo &&
-        tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
+        tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label
       ) {
         return (
           <>
             <Stack.Screen
-              name={NavigationRouteNames.TUTOR.CERTIFICATION_COMPLETED_VIEW}
-              component={CertificationCompletedView}
+              name={NavigationRouteNames.TUTOR.CERTIFICATE_STEPS}
+              component={CertificationProcessSteps}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.BACKGROUND_CHECK}
+              component={BackgroundCheck}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.INTERVIEW_AND_DOCUMENTS}
+              component={InterviewAndDocument}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
+              component={InterviewScheduling}
               options={{ headerShown: false }}
             />
           </>

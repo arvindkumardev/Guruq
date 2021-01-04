@@ -1,25 +1,25 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Item } from 'native-base';
+import { Button, Input, Item, Label } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 import { CustomCheckBox, CustomSelect, Loader, ScreenHeader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors } from '../../../../theme';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, printDateTime, RfH, RfW, startOfDay } from '../../../../utils/helpers';
 import CustomDatePicker from '../../../../components/CustomDatePicker';
 import { ADD_UPDATE_TUTOR_EXPERIENCE_DETAILS } from './experience.mutation';
 import { EmploymentTypeEnum } from '../../enums';
 import { tutorDetails } from '../../../../apollo/cache';
 
 const EMPLOYMENT_TYPE = [
-  { value: 1, label: 'FULL TIME' },
-  { value: 2, label: 'PART TIME' },
-  { value: 3, label: 'SELF EMPLOYED' },
-  { value: 4, label: 'FREELANCE' },
-  { value: 5, label: 'INTERNSHIP' },
-  { value: 6, label: 'TRAINEE' },
+  { value: 'FULL_TIME', label: 'FULL TIME' },
+  { value: 'PART_TIME', label: 'PART TIME' },
+  { value: 'SELF_EMPLOYED', label: 'SELF EMPLOYED' },
+  { value: 'FREELANCE', label: 'FREELANCE' },
+  { value: 'INTERNSHIP', label: 'INTERNSHIP' },
+  { value: 'TRAINEE', label: 'TRAINEE' },
 ];
 function AddEditExperience(props) {
   const navigation = useNavigation();
@@ -28,8 +28,8 @@ function AddEditExperience(props) {
   const [companyName, setCompanyName] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [selectedType, setSelectedType] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [isCurrent, setIsCurrent] = useState(false);
   const [expId, setExpId] = useState('');
 
@@ -38,7 +38,7 @@ function AddEditExperience(props) {
       setIsCurrent(experienceDetail.current);
       setEndDate(experienceDetail.endDate);
       setStartDate(experienceDetail.startDate);
-      setSelectedType(EmploymentTypeEnum[experienceDetail.employmentType].value);
+      setSelectedType(EmploymentTypeEnum[experienceDetail.employmentType].label);
       setJobTitle(experienceDetail.title);
       setCompanyName(experienceDetail?.institution?.name);
       setExpId(experienceDetail?.id);
@@ -74,27 +74,27 @@ function AddEditExperience(props) {
     } else if (isEmpty(endDate) && !isCurrent) {
       alertBox('Please select the end date of the employment');
     } else {
+      const payload = {
+        title: jobTitle,
+        startDate: startOfDay(startDate),
+        endDate: endDate ? startOfDay(endDate) : null,
+        current: isCurrent,
+        employmentType: EMPLOYMENT_TYPE.find((item) => item.value === selectedType).value,
+        institution: {
+          name: companyName,
+        },
+        tutor: {
+          id: tutorInfo.id,
+        },
+        ...(expId && { id: expId }),
+      };
       saveExperience({
         variables: {
-          experienceDto: {
-            id: expId,
-            title: jobTitle,
-            startDate,
-            endDate,
-            current: isCurrent,
-            employmentType: EMPLOYMENT_TYPE.find((item) => item.value === selectedType).label,
-            institution: {
-              name: companyName,
-            },
-            tutor: {
-              id: tutorInfo.id,
-            },
-          },
+          experienceDto: payload,
         },
       });
     }
   };
-  console.log('endDate', endDate);
 
   return (
     <>
@@ -103,19 +103,19 @@ function AddEditExperience(props) {
         <ScreenHeader homeIcon label="Experience" horizontalPadding={RfW(16)} lineVisible={false} />
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(44) }} />
-          <Text style={commonStyles.smallMutedText}>Name of Company/Institute</Text>
-          <Item>
+          <Item floatingLabel>
+            <Label>Name of Company/Institute</Label>
             <Input value={companyName} onChangeText={(text) => setCompanyName(text)} />
           </Item>
           <View style={{ height: RfH(24) }} />
           <View>
-            <Text style={commonStyles.smallMutedText}>Job Title</Text>
-            <Item>
+            <Item floatingLabel>
+              <Label>Job Title</Label>
               <Input value={jobTitle} onChangeText={(text) => setJobTitle(text)} />
             </Item>
           </View>
           <View style={{ height: RfH(24) }} />
-          <Text style={commonStyles.smallMutedText}>Employment type</Text>
+          <Text style={commonStyles.regularMutedText}>Employment type</Text>
           <View>
             <Item>
               <CustomSelect
@@ -135,7 +135,7 @@ function AddEditExperience(props) {
           <View>
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <View style={{ flex: 0.5, marginRight: RfW(16) }}>
-                <Text style={commonStyles.smallMutedText}>Start Date</Text>
+                <Text style={commonStyles.regularMutedText}>Start Date</Text>
                 <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                   <CustomDatePicker
                     value={startDate}
@@ -149,7 +149,7 @@ function AddEditExperience(props) {
               </View>
               {!isCurrent && (
                 <View style={{ flex: 0.5, marginLeft: RfW(16) }}>
-                  <Text style={commonStyles.smallMutedText}>End Date</Text>
+                  <Text style={commonStyles.regularMutedText}>End Date</Text>
                   <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
                     <CustomDatePicker
                       value={endDate}

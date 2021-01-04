@@ -34,8 +34,8 @@ const PriceInputModal = (props) => {
               ]}>
               <Text style={commonStyles.headingPrimaryText}>Enter per class price</Text>
               <IconButtonWrapper
-                iconHeight={RfH(24)}
-                iconWidth={RfW(24)}
+                iconHeight={RfH(20)}
+                iconWidth={RfW(20)}
                 styling={{ alignSelf: 'flex-end', marginVertical: RfH(16) }}
                 iconImage={Images.cross}
                 submitFunction={onClose}
@@ -77,7 +77,7 @@ const PriceInputModal = (props) => {
                 marginVertical: RfH(10),
               }}>
               <Text style={commonStyles.regularPrimaryText}>
-                Amount should be in range ₹{selectedPytn.minPrice}-{selectedPytn.maxPrice}{' '}
+                Amount should be less than or equal to {selectedPytn.maxPrice}{' '}
               </Text>
             </View>
 

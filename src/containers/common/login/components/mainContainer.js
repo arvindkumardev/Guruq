@@ -28,7 +28,7 @@ function MainContainer(props) {
           )}
           <View style={{ flex: 1 }} />
 
-          <KeyboardAvoidingView behavior="padding">
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : ''}>
             <View style={{ flexDirection: 'column', alignItems: 'stretch' }}>{props.children}</View>
           </KeyboardAvoidingView>
         </View>

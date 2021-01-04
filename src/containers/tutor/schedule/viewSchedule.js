@@ -85,7 +85,7 @@ function ViewSchedule() {
           label="Schedule"
           horizontalPadding={RfW(16)}
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           onRightIconClick={() => handleCreateSchedule(new Date())}
         />
         <View style={{ height: RfH(44) }} />
@@ -158,7 +158,7 @@ function ViewSchedule() {
               Looks like you have not provide the schedule for the day.
             </Text>
             <View style={{ height: RfH(40) }} />
-            {moment(selectedDate).isSameOrAfter(new Date()) && (
+            {!moment(selectedDate).isBefore(new Date()) && (
               <Button
                 block
                 style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}

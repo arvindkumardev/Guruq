@@ -142,10 +142,19 @@ const styles = StyleSheet.create({
     // marginTop: RfH(24),
     height: RfH(17),
   },
+  blankViewMedium: {
+    // marginTop: RfH(24),
+    height: RfH(34),
+  },
 
   blankGreyViewSmall: {
     backgroundColor: Colors.lightGrey,
     height: RfH(17),
+  },
+
+  blankGreyViewMedium: {
+    backgroundColor: Colors.lightGrey,
+    height: RfH(36),
   },
 
   borderTop: {

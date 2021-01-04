@@ -23,6 +23,7 @@ export const GET_TUTOR_DETAILS = gql`
         country
         postalCode
         fullAddress
+        landmark
       }
       educationDetails {
         id

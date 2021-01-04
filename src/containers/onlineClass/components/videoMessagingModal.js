@@ -9,7 +9,7 @@ import IconButtonWrapper from '../../../components/IconWrapper';
 import Colors from '../../../theme/colors';
 import Fonts from '../../../theme/fonts';
 import Images from '../../../theme/images';
-import { RfH, RfW } from '../../../utils/helpers';
+import {getFullName, RfH, RfW} from '../../../utils/helpers';
 import { GET_CHAT_MESSAGES, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
 import { dimensions } from './style';
 
@@ -24,7 +24,7 @@ const VideoMessagingModal = (props) => {
       ...message,
       _id: message.uuid,
       createdAt: message.createdDate,
-      user: { _id: message.createdBy.id, name: `${message.createdBy.firstName} ${message.createdBy.lastName}` },
+      user: { _id: message.createdBy.id, name: getFullName(message.createdBy) },
     };
   };
 
@@ -166,7 +166,7 @@ const VideoMessagingModal = (props) => {
               Messages
             </Text>
             <TouchableOpacity onPress={() => onClose(false)}>
-              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(20)} iconHeight={RfH(20)} />
             </TouchableOpacity>
           </View>
 

@@ -5,7 +5,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../../theme';
-import { alertBox, getSubjectIcons, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
+import { alertBox, getFullName, getSubjectIcons, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper, ScreenHeader, TutorImageComponent } from '../../../components';
@@ -70,8 +70,8 @@ function PytnDetail(props) {
   }, [studentPytnId]);
 
   const removePytn = (item) => {
-    alertBox('Do you really want to remove the request', '', {
-      positiveText: 'Yes',
+    alertBox('Are you sure you want to remove this PYTN request?', '', {
+      positiveText: 'Delete PYTN',
       onPositiveClick: () => {
         deletePYTN({ variables: { studentPytnId: item.id } });
       },
@@ -127,7 +127,7 @@ function PytnDetail(props) {
               {classData.groupSize > 1 ? 'Group' : 'Individual'} Class
             </Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              {classData.onlineClass ? 'Online Class' : 'Home Tution'}
+              {classData.onlineClass ? 'Online' : 'Offline'} Class
             </Text>
           </View>
         </View>
@@ -161,9 +161,7 @@ function PytnDetail(props) {
           <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-                <Text style={styles.tutorName}>
-                  {item.tutor.contactDetail.firstName} {item.tutor.contactDetail.lastName}
-                </Text>
+                <Text style={styles.tutorName}>{getFullName(item?.tutor?.contactDetail)}</Text>
                 {item.tutor.educationDetails && item.tutor.educationDetails.length > 0 && (
                   <Text style={styles.tutorDetails} numberOfLines={1}>
                     {titleCaseIfExists(item.tutor.educationDetails[0].degree?.degreeLevel)}
@@ -270,7 +268,7 @@ function PytnDetail(props) {
                       commonStyles.regularMutedText,
                       { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
                     ]}>
-                    Looks like no tutor have accepted your request yet.
+                    No tutor have accepted your request yet.
                   </Text>
                 </View>
               </View>

@@ -6,11 +6,18 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
-import { BackArrow, DateSlotSelectorModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../components';
+import {
+  BackArrow,
+  DateSlotSelectorModal,
+  IconButtonWrapper,
+  Loader,
+  ScreenHeader,
+  TutorImageComponent
+} from '../../components';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { RfH, RfW } from '../../utils/helpers';
+import { getFullName, RfH, RfW } from '../../utils/helpers';
 import { SCHEDULE_CLASS } from '../student/class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
 import { studentDetails, userType } from '../../apollo/cache';
@@ -152,13 +159,11 @@ function ScheduleClass(props) {
                 fontFamily: Fonts.semiBold,
                 marginTop: RfH(2),
               }}>
-              {isStudent
-                ? `${classData.tutor.contactDetail.firstName} ${classData.tutor.contactDetail.lastName}`
-                : `${classData?.createdBy.firstName} ${classData?.createdBy.lastName}`}
+              {isStudent ? `${getFullName(classData?.tutor?.contactDetail)}` : `${getFullName(classData?.createdBy)}`}
             </Text>
             {isStudent && (
               <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                T{classData?.tutor.id}
+                T-{classData?.tutor.id}
               </Text>
             )}
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
@@ -234,13 +239,15 @@ function ScheduleClass(props) {
   return (
     <>
       <Loader isLoading={scheduleLoading || loadingScheduledClasses} />
-      <View style={[commonStyles.mainContainer, { paddingTop: RfH(44), backgroundColor: Colors.white }]}>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <View style={commonStyles.horizontalChildrenView}>
-            <BackArrow action={onBackPress} />
-            <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text>
-          </View>
-        </View>
+      <ScreenHeader label="Schedule Class" homeIcon horizontalPadding={RfW(16)} />
+      <View style={[commonStyles.mainContainer, {  backgroundColor: Colors.white }]}>
+
+        {/*<View style={commonStyles.horizontalChildrenSpaceView}>*/}
+        {/*  <View style={commonStyles.horizontalChildrenView}>*/}
+        {/*    <BackArrow action={onBackPress} />*/}
+        {/*    <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text>*/}
+        {/*  </View>*/}
+        {/*</View>*/}
         {renderTutorDetails()}
         <View style={{ height: RfH(20) }} />
         <FlatList

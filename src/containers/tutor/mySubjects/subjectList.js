@@ -1,8 +1,9 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { Switch } from 'native-base';
+import { Button, Switch } from 'native-base';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
@@ -12,16 +13,18 @@ import NavigationRouteNames from '../../../routes/screenNames';
 import { SEARCH_TUTOR_OFFERINGS } from './subject.query';
 import { TutorOfferingStageEnum } from '../enums';
 import { DISABLE_TUTOR_OFFERING, ENABLE_TUTOR_OFFERING } from '../tutor.mutation';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 function SubjectList() {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
-  const [subjects, setSubjects] = useState([]);
   const tutorInfo = useReactiveVar(tutorDetails);
+  const [subjects, setSubjects] = useState([]);
+  const [isListEmpty, setIsListEmpty] = useState(false);
 
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(SEARCH_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
-    variables: { tutorId: tutorInfo?.id },
+    variables: { tutorId: tutorInfo.id },
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -29,7 +32,9 @@ function SubjectList() {
     },
     onCompleted: (data) => {
       if (data) {
-        setSubjects(data?.searchTutorOfferings);
+        const subjectsList = data?.searchTutorOfferings;
+        setSubjects(subjectsList);
+        setIsListEmpty(subjectsList.length === 0);
       }
     },
   });
@@ -72,6 +77,9 @@ function SubjectList() {
 
   const handleSubjectClick = (offering) => {
     if (offering.stage === TutorOfferingStageEnum.PT_PENDING.label) {
+      navigation.navigate(NavigationRouteNames.TUTOR.PT_START_SCREEN, {
+        offeringId: offering?.id,
+      });
     } else {
       navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX, {
         offering,
@@ -107,18 +115,17 @@ function SubjectList() {
           <IconButtonWrapper iconImage={getSubjectIcons(item.offering.displayName)} />
           <View style={{ marginLeft: RfW(16) }}>
             <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
-              {item?.offering?.displayName}
+              {`${item?.offering?.rootOffering?.displayName} | ${item?.offering?.parentOffering?.parentOffering?.displayName}`}
             </Text>
-            <Text
-              style={[
-                commonStyles.mediumPrimaryText,
-                { marginTop: RfH(5) },
-              ]}>{`${item?.offering?.parentOffering?.parentOffering?.displayName} | ${item?.offering?.parentOffering?.displayName}`}</Text>
+            <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
+              {`${item?.offering?.parentOffering?.displayName} | ${item?.offering?.displayName}`}
+            </Text>
           </View>
         </TouchableOpacity>
 
         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-          <Switch value={item.active} onValueChange={() => markActiveInactive(item)} />
+          {/* <Switch value={item.active} onValueChange={() => markActiveInactive(item)} /> */}
+          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} />
         </View>
       </View>
       {item.stage === TutorOfferingStageEnum.PT_PENDING.label && (
@@ -134,6 +141,10 @@ function SubjectList() {
     </View>
   );
 
+  const handleSubjectSelection = () => {
+    navigation.navigate(NavigationRouteNames.TUTOR.SUBJECT_SELECTION);
+  };
+
   return (
     <>
       <Loader isLoading={loadingTutorsOffering || enableTutorOfferingLoading || disableTutorOfferingLoading} />
@@ -142,19 +153,52 @@ function SubjectList() {
           label="My Subjects"
           homeIcon
           showRightIcon
-          rightIcon={Images.moreInformation}
+          rightIcon={Images.add}
           horizontalPadding={RfW(16)}
-          onRightIconClick={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECT_SELECTION)}
+          onRightIconClick={handleSubjectSelection}
         />
-        <View style={commonStyles.verticallyStretchedItemsView}>
-          <FlatList
-            data={subjects}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => renderSubjects(item, index)}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ paddingBottom: RfH(100), paddingTop: RfH(20) }}
-          />
-        </View>
+        {!isListEmpty ? (
+          <View style={commonStyles.verticallyStretchedItemsView}>
+            <FlatList
+              data={subjects}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item, index }) => renderSubjects(item, index)}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{ paddingBottom: RfH(100), paddingTop: RfH(20) }}
+            />
+          </View>
+        ) : (
+          <View style={{ flex: 1, paddingTop: RfH(70), alignItems: 'center' }}>
+            <Image
+              source={Images.empty_cart}
+              style={{
+                height: RfH(264),
+                width: RfW(248),
+                marginBottom: RfH(32),
+              }}
+              resizeMode="contain"
+            />
+            <Text
+              style={[
+                commonStyles.pageTitleThirdRow,
+                { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+              ]}>
+              No data found
+            </Text>
+            <Text
+              style={[
+                commonStyles.regularMutedText,
+                { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
+              ]}>
+              Looks like you haven't provided your offering details.
+            </Text>
+            <Button
+              onPress={handleSubjectSelection}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
+              <Text style={commonStyles.textButtonPrimary}>Add Subject</Text>
+            </Button>
+          </View>
+        )}
       </View>
     </>
   );

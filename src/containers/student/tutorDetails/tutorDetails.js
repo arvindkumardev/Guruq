@@ -28,6 +28,7 @@ import {
 } from '../tutor-query';
 import styles from './styles';
 import {
+  getFullName,
   getSaveData,
   getSubjectIcons,
   getUserImageUrl,
@@ -39,7 +40,7 @@ import {
 } from '../../../utils/helpers';
 import { BackArrow, CompareModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import ClassModeSelectModal from './components/classModeSelectModal';
+import AddToCartModal from './components/addToCartModal';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import PriceMatrixComponent from './components/priceMatrixComponent';
 import TutorAvailabilitySlots from '../../../components/TutorAvailabilitySlots';
@@ -168,7 +169,7 @@ function TutorDetails(props) {
           groupClass: item.groupClass === 0 || item.groupClass === 1,
           onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
           individualClass: item.groupClass === 0 || item.groupClass === 2,
-          homeTution: item.onlineClass === 0 || item.onlineClass === 2,
+          offlineClass: item.onlineClass === 0 || item.onlineClass === 2,
           budgetDetails: item.budgets,
         }));
         if (!isEmpty(subjectList)) {
@@ -191,11 +192,11 @@ function TutorDetails(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        const ratingArray = reviewProgress;
-        Object.entries(data.getAverageRating).forEach(([key, value]) => {
-          ratingArray.map((item) => ({
+        let ratingArray = reviewProgress;
+        Object.keys(data.getAverageRating).forEach((key) => {
+          ratingArray = ratingArray.map((item) => ({
             ...item,
-            percentage: item.key === key ? getPercentage(value) : item.percentage,
+            percentage: item.key === key ? getPercentage(data.getAverageRating[key]) : item.percentage,
           }));
         });
         setReviewProgress(ratingArray);
@@ -216,7 +217,7 @@ function TutorDetails(props) {
         const review = [];
         for (const obj of data.searchReview.edges) {
           const item = {
-            name: `${obj.createdBy.firstName} ${obj.createdBy.lastName}`,
+            name: getFullName(obj.createdBy),
             icon: obj.createdBy,
             rating: obj.overallRating,
             date: new Date(obj.createdDate).toDateString(),
@@ -332,7 +333,7 @@ function TutorDetails(props) {
         percent={item.percentage}
         radius={32}
         borderWidth={6}
-        color="rgb(203,231,255)"
+        color={Colors.brandBlue2}
         shadowColor={Colors.lightGrey}
         bgColor={Colors.white}>
         <IconButtonWrapper iconWidth={RfW(22)} iconHeight={RfH(22)} imageResizeMode="contain" iconImage={item.image} />
@@ -446,10 +447,10 @@ function TutorDetails(props) {
         <IconButtonWrapper
           iconWidth={RfW(24)}
           iconHeight={RfH(24)}
-          iconImage={selectedSubject?.homeTution ? Images.home_tuition_filled : Images.home_tuition}
+          iconImage={selectedSubject?.offlineClass ? Images.home_tuition_filled : Images.home_tuition}
           styling={{ marginHorizontal: RfW(16) }}
         />
-        <Text style={styles.classMeta}>Home Tuition</Text>
+        <Text style={styles.classMeta}>Offline</Text>
       </View>
     </View>
   );
@@ -534,7 +535,7 @@ function TutorDetails(props) {
               fontSize={15}
             />
             <Text style={[styles.tutorName, { marginLeft: RfW(8), alignSelf: 'center' }]}>
-              {tutorData.contactDetail.firstName} {tutorData.contactDetail.lastName}
+              {getFullName(tutorData.contactDetail)}
             </Text>
           </View>
         )}
@@ -572,13 +573,11 @@ function TutorDetails(props) {
     <View style={styles.topContainer}>
       <TutorImageComponent
         tutor={tutorData}
-        styling={{ alignSelf: 'center', borderRadius: RfH(49), height: RfH(98), width: RfH(98) }}
+        styling={{ alignSelf: 'center', borderRadius: RfH(80), height: RfH(80), width: RfH(80) }}
       />
       <View style={{ marginLeft: RfW(16), width: '70%' }}>
-        <Text style={styles.tutorName}>
-          {tutorData?.contactDetail?.firstName} {tutorData?.contactDetail?.lastName}
-        </Text>
-        <Text style={styles.tutorDetails}>GURUQT{tutorData?.id}</Text>
+        <Text style={styles.tutorName}>{getFullName(tutorData?.contactDetail)}</Text>
+        <Text style={styles.tutorDetails}>T-{tutorData?.id}</Text>
         {tutorData?.educationDetails?.length > 0 && (
           <Text style={[styles.tutorDetails, { color: Colors.primaryText }]} numberOfLines={1}>
             {titleCaseIfExists(tutorData?.educationDetails[0]?.degree?.degreeLevel)}
@@ -658,7 +657,7 @@ function TutorDetails(props) {
                 <PriceMatrixComponent
                   budgets={selectedSubject.budgetDetails}
                   showOnline={selectedSubject.onlineClass}
-                  showOffline={selectedSubject.homeTution}
+                  showOffline={selectedSubject.offlineClass}
                 />
               )}
             </View>
@@ -685,10 +684,11 @@ function TutorDetails(props) {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: selectedSubject.demoClass ? 'space-between' : 'center',
-              marginTop: RfH(8),
-              paddingHorizontal: RfW(30),
-              paddingVertical: RfH(20),
+              justifyContent: 'space-evenly',
+              // marginTop: RfH(8),
+              // paddingHorizontal: RfW(30),
+              // paddingVertical: RfH(20),
+              paddingVertical: RfH(8),
             }}>
             {selectedSubject.demoClass && (
               <Button
@@ -710,7 +710,7 @@ function TutorDetails(props) {
             tutorId={tutorData?.id}
           />
           {showClassModePopup && (
-            <ClassModeSelectModal
+            <AddToCartModal
               visible={showClassModePopup}
               onClose={() => setShowClassModePopup(false)}
               selectedSubject={selectedSubject}

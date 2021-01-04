@@ -2,14 +2,23 @@ import { Image, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import styles from './style';
-import { isLoggedIn, studentDetails, tutorDetails, userDetails, userType } from '../../../apollo/cache';
+import {
+  isLoggedIn,
+  isSplashScreenVisible,
+  studentDetails,
+  tutorDetails,
+  userDetails,
+  userType,
+} from '../../../apollo/cache';
 import { CREATE_STUDENT, CREATE_TUTOR } from '../graphql-mutation';
+import { GET_CURRENT_TUTOR_QUERY } from '../graphql-query';
+import { Loader } from '../../../components';
 
 function UserTypeSelector(props) {
   const [userName, setUserName] = useState('');
@@ -43,6 +52,18 @@ function UserTypeSelector(props) {
     },
   });
 
+  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        tutorDetails(data?.getCurrentTutor);
+        userDetails({ ...userInfo, type: 'TUTOR' });
+        userType('TUTOR');
+      }
+    },
+  });
+
   const [createTutor, { loading: createTutorLoading }] = useMutation(CREATE_TUTOR, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -53,51 +74,43 @@ function UserTypeSelector(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        // storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, user.token);
-        // set in apollo cache
-        // isLoggedIn(true);
-        userDetails({ ...userInfo, type: 'TUTOR' });
-        tutorDetails(data);
-        userType('TUTOR');
+        getCurrentTutor();
       }
     },
   });
 
   return (
-    <View style={commonStyles.mainContainer}>
-      <StatusBar barStyle="dark-content" />
-      <View style={styles.helloView}>
-        {/* <Icon */}
-        {/*  onPress={() => onBackPress()} */}
-        {/*  type="MaterialIcons" */}
-        {/*  name="keyboard-backspace" */}
-        {/*  style={{ color: Colors.primaryText }} */}
-        {/* /> */}
-        <Text style={styles.helloText}>Hello</Text>
-        <Text style={styles.userName}>{userInfo.firstName}</Text>
-      </View>
-      <Text style={styles.subHeading}>Continue as </Text>
+    <>
+      <Loader isLoading={createTutorLoading || getCurrentTutorLoading} />
+      <View style={commonStyles.mainContainer}>
+        <StatusBar barStyle="dark-content" />
+        <View style={styles.helloView}>
+          <Text style={styles.helloText}>Hello</Text>
+          <Text style={styles.userName}>{userInfo.firstName}</Text>
+        </View>
+        <Text style={styles.subHeading}>Continue as </Text>
 
-      <View style={{ marginTop: RfH(16) }}>
-        <TouchableOpacity onPress={() => createStudent()}>
-          <Image
-            style={{ alignSelf: 'center', marginTop: 16, width: RfW(80), height: RfH(80) }}
-            source={Images.student}
-          />
-        </TouchableOpacity>
-      </View>
-      <Text style={[styles.subHeading, { marginTop: RfH(16) }]}>Student</Text>
+        <View style={{ marginTop: RfH(16) }}>
+          <TouchableOpacity onPress={() => createStudent()}>
+            <Image
+              style={{ alignSelf: 'center', marginTop: 16, width: RfW(80), height: RfH(80) }}
+              source={Images.student}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={[styles.subHeading, { marginTop: RfH(16) }]}>Student</Text>
 
-      <View style={{ marginTop: RfH(48) }}>
-        <TouchableOpacity onPress={() => createTutor()}>
-          <Image
-            style={{ alignSelf: 'center', marginTop: 12, width: RfW(80), height: RfH(80) }}
-            source={Images.tutor}
-          />
-        </TouchableOpacity>
+        <View style={{ marginTop: RfH(48) }}>
+          <TouchableOpacity onPress={createTutor}>
+            <Image
+              style={{ alignSelf: 'center', marginTop: 12, width: RfW(80), height: RfH(80) }}
+              source={Images.tutor}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={[styles.subHeading, { marginTop: RfH(16) }]}>Tutor</Text>
       </View>
-      <Text style={[styles.subHeading, { marginTop: RfH(16) }]}>Tutor</Text>
-    </View>
+    </>
   );
 }
 

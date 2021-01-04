@@ -24,6 +24,7 @@ export const ME_QUERY = gql`
       isPhoneNumberVerified
       isEmailVerified
       type
+      referralCode
       role {
         name
       }
@@ -132,6 +133,10 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
       profileImage {
         filename
       }
+      lead {
+        certificationStage
+      }
+      activeForListing
     }
   }
 `;

@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import ProgressCircle from 'react-native-progress-circle';
+import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
-import { printDateTime, RfH, RfW } from '../../../utils/helpers';
+import { printCurrency, printDateTime, RfH, RfW } from '../../../utils/helpers';
 import { Colors, Fonts } from '../../../theme';
 import { userDetails } from '../../../apollo/cache';
 import { Loader } from '../../../components';
 import { GET_MY_QPOINTS_BALANCE, SEARCH_QPOINTS_TRANSACTIONS } from '../graphql-query';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 function Wallet() {
   const isFocussed = useIsFocused();
@@ -41,7 +43,7 @@ function Wallet() {
 
   const [getQPointsTransactions, { loading: loadingPointsTransactions }] = useLazyQuery(SEARCH_QPOINTS_TRANSACTIONS, {
     fetchPolicy: 'no-cache',
-    variables: { searchDto: { userId: userInfo?.id } },
+    variables: { searchDto: { userId: userInfo?.id, sortBy: 'createdDate', sortOrder: 'desc' } },
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -74,24 +76,36 @@ function Wallet() {
             marginHorizontal: RfW(16),
           },
         ]}>
-        <ProgressCircle
-          percent={(balanceData.balance / balanceData.earn) * 100}
-          radius={32}
-          borderWidth={6}
-          color={Colors.brandBlue2}
-          shadowColor={Colors.lightGrey}
-          outerCircleStyle={{ backgroundColor: Colors.lightGrey }}
-          bgColor={Colors.lightPurple}
-        />
+        {/* <ProgressCircle */}
+        {/*  percent={(balanceData.balance / balanceData.earn) * 100} */}
+        {/*  radius={32} */}
+        {/*  borderWidth={6} */}
+        {/*  color={Colors.brandBlue2} */}
+        {/*  shadowColor={Colors.lightGrey} */}
+        {/*  outerCircleStyle={{ backgroundColor: Colors.lightGrey }} */}
+        {/*  bgColor={Colors.lightPurple} */}
+        {/* /> */}
+
+        <View style={commonStyles.verticallyCenterItemsView}>
+          <Text
+            style={[
+              commonStyles.headingPrimaryText,
+              { fontFamily: Fonts.semiBold, fontSize: RFValue(34, STANDARD_SCREEN_SIZE) },
+            ]}>
+            ₹ {printCurrency(balanceData.earn)}
+          </Text>
+          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Balance</Text>
+        </View>
+
         <View style={commonStyles.verticallyCenterItemsView}>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            ₹ {parseFloat(balanceData.earn).toFixed(2)}
+            ₹ {printCurrency(balanceData.earn)}
           </Text>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Total Points</Text>
         </View>
         <View style={commonStyles.verticallyCenterItemsView}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            ₹ {parseFloat(balanceData.redeem).toFixed(2)}
+          <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed, fontFamily: Fonts.semiBold }]}>
+            ₹ {printCurrency(balanceData.redeem)}
           </Text>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Points Redeemed</Text>
         </View>

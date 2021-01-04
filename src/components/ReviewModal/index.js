@@ -11,7 +11,7 @@ import { ADD_REVIEW } from '../../containers/student/tutor-mutation';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { alertBox, getUserImageUrl, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import {alertBox, getFullName, getUserImageUrl, printDate, printTime, RfH, RfW} from '../../utils/helpers';
 import Fonts from '../../theme/fonts';
 
 const ReviewModal = (props) => {
@@ -144,7 +144,7 @@ const ReviewModal = (props) => {
                     marginLeft: RfW(8),
                   }}>
                   <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
-                    {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
+                    {`${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)}`}
                   </Text>
                   <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                     {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}

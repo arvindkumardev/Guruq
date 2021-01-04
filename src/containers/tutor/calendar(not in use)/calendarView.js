@@ -17,7 +17,7 @@ import { Colors, Images } from '../../../theme';
 import { getBoxColor } from '../../../theme/colors';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { getSubjectIcons, monthNames, RfH, RfW } from '../../../utils/helpers';
+import { getFullName, getSubjectIcons, monthNames, RfH, RfW } from '../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../student/booking.query';
 
 function CalendarView(props) {
@@ -98,9 +98,7 @@ function CalendarView(props) {
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.headingPrimaryText}>
               {item.classTitle}{' '}
-              {item.students.length > 1
-                ? 'Group Class'
-                : `Class for ${item.students[0].contactDetail.firstName} ${item.students[0].contactDetail.lastName}`}
+              {item.students.length > 1 ? 'Group Class' : `Class for ${getFullName(item.students[0].contactDetail)}`}
             </Text>
             <Text style={commonStyles.mediumMutedText}>
               {item.board} | {item.class}

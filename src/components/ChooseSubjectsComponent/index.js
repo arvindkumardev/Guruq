@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { useReactiveVar } from '@apollo/client';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { Button } from 'native-base';
 import { Colors } from '../../theme';
@@ -10,6 +10,8 @@ import commonStyles from '../../theme/styles';
 import { offeringsMasterData } from '../../apollo/cache';
 import { STUDY_AREA_LEVELS } from '../../utils/constants';
 import styles from '../../containers/student/pytn/styles';
+import { GET_OFFERINGS_MASTER_DATA } from '../../containers/student/dashboard-query';
+import Loader from '../Loader';
 
 const ChooseSubjectComponent = (props) => {
   const { submitButtonText, submitButtonHandle, isMultipleSubjectSelectionAllowed } = props;
@@ -21,6 +23,25 @@ const ChooseSubjectComponent = (props) => {
   const [selectedStudyAreaObj, setSelectedStudyAreaObj] = useState({});
   const [showSubmitButton, setShowSubmitButton] = useState(false);
 
+  const [getOfferingMasterData, { loading: loadingOfferingMasterData }] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        console.log('e', e);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        offeringsMasterData(data.offerings.edges);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (isEmpty(offeringMasterData)) {
+      getOfferingMasterData();
+    }
+  }, [offeringMasterData]);
   const goToOtherDetails = () => {
     submitButtonHandle({
       studyArea: selectedStudyArea,
@@ -105,32 +126,22 @@ const ChooseSubjectComponent = (props) => {
   const renderStudyArea = () => (
     <View>
       <Text style={commonStyles.headingPrimaryText}>Area of Study</Text>
-      <FlatList
-        horizontal
-        data={offeringMasterData && offeringMasterData.filter((s) => s.level === 0)}
-        showsHorizontalScrollIndicator={false}
-        style={{ marginTop: RfH(24) }}
-        renderItem={({ item }) => renderArea(item)}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <View style={{ flexDirection: 'row', width: '100%', flexWrap: 'wrap' }}>
+        {offeringMasterData && offeringMasterData.filter((s) => s.level === 0).map((item) => renderArea(item))}
+      </View>
     </View>
   );
 
   const renderBoards = () => (
     <View>
       <Text style={commonStyles.headingPrimaryText}>{selectedStudyAreaObj.find((item) => item.level === 1).label}</Text>
-      <FlatList
-        horizontal
-        data={
-          selectedStudyArea &&
+      <View style={{ flexDirection: 'row', width: '100%', flexWrap: 'wrap' }}>
+        {selectedStudyArea &&
           offeringMasterData &&
-          offeringMasterData.filter((s) => s?.parentOffering?.id === selectedStudyArea?.id)
-        }
-        showsHorizontalScrollIndicator={false}
-        style={{ marginTop: RfH(24) }}
-        renderItem={({ item }) => renderBoard(item)}
-        keyExtractor={(item, index) => index.toString()}
-      />
+          offeringMasterData
+            .filter((s) => s?.parentOffering?.id === selectedStudyArea?.id)
+            .map((item) => renderBoard(item))}
+      </View>
     </View>
   );
 
@@ -183,6 +194,7 @@ const ChooseSubjectComponent = (props) => {
 
   return (
     <>
+      <Loader isLoading={loadingOfferingMasterData} />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: RfH(16) }}>
         <View style={{ height: RfH(44) }} />
         <View style={{ marginHorizontal: RfW(16) }}>

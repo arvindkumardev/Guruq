@@ -10,7 +10,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { CustomRadioButton, IconButtonWrapper } from '..';
-import { alertBox, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getFullName, printCurrency, RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import routeNames from '../../routes/screenNames';
 import { userDetails } from '../../apollo/cache';
@@ -26,7 +26,7 @@ const PaymentMethod = (props) => {
     bookingData,
     amount,
     discount,
-    deductedAgaintQPoint,
+    qPointsRedeemed,
     hidePaymentPopup,
     handlePaytmPayment,
   } = props;
@@ -94,11 +94,11 @@ const PaymentMethod = (props) => {
       currency: 'INR',
       key: 'rzp_test_0kNEbt0JJ60aiz',
       amount: `${amount * 100}`,
-      name: `${userInfo?.firstName} ${userInfo?.lastName}`,
+      name: getFullName(userInfo),
       prefill: {
         email: userInfo?.email,
         contact: `${userInfo?.phoneNumber?.countryCode}${userInfo?.phoneNumber?.number}`,
-        name: `${userInfo?.firstName} ${userInfo?.lastName}`,
+        name: getFullName(userInfo),
       },
       theme: { color: '#1E5AA0' },
     };
@@ -129,7 +129,7 @@ const PaymentMethod = (props) => {
         <View style={commonStyles.blankViewSmall} />
         <View
           style={{
-            height: 44,
+            height: RfH(44),
             justifyContent: 'center',
           }}>
           <Text
@@ -149,7 +149,7 @@ const PaymentMethod = (props) => {
                   fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
                   color: Colors.darkGrey,
                 }}>
-                Amount
+                Sub Total
               </Text>
               <Text
                 style={{
@@ -157,7 +157,7 @@ const PaymentMethod = (props) => {
                   color: Colors.darkGrey,
                   fontFamily: Fonts.semiBold,
                 }}>
-                ₹{parseFloat(amount).toFixed(2)}
+                ₹{printCurrency(amount)}
               </Text>
             </View>
             {paymentMethod === PaymentMethodEnum.CASH.value && (
@@ -175,7 +175,7 @@ const PaymentMethod = (props) => {
                     color: Colors.darkGrey,
                     fontFamily: Fonts.semiBold,
                   }}>
-                  ₹{parseFloat(convenienceCharges).toFixed(2)}
+                  ₹{printCurrency(convenienceCharges)}
                 </Text>
               </View>
             )}
@@ -200,13 +200,13 @@ const PaymentMethod = (props) => {
                       color: Colors.brandBlue2,
                       fontFamily: Fonts.semiBold,
                     }}>
-                    -₹{parseFloat(discount).toFixed(2)}
+                    -₹{printCurrency(discount)}
                   </Text>
                 </View>
               </>
             )}
 
-            {deductedAgaintQPoint !== 0 && (
+            {qPointsRedeemed !== 0 && (
               <>
                 <View style={commonStyles.lineSeparator} />
                 <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
@@ -219,7 +219,7 @@ const PaymentMethod = (props) => {
                       color: Colors.brandBlue2,
                       fontFamily: Fonts.semiBold,
                     }}>
-                    -₹{parseFloat(deductedAgaintQPoint).toFixed(2)}
+                    -₹{printCurrency(qPointsRedeemed)}
                   </Text>
                 </View>
               </>
@@ -321,15 +321,15 @@ const PaymentMethod = (props) => {
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Payment Details</Text>
           <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
             styling={{
               alignSelf: 'flex-end',
               marginRight: RfW(16),
               marginTop: RfH(16),
               marginBottom: RfH(16),
             }}
-            imageResizeMode={'contain'}
+            imageResizeMode="contain"
             iconImage={Images.cross}
             submitFunction={() => onClose(false)}
           />
@@ -429,21 +429,19 @@ const PaymentMethod = (props) => {
                 backgroundColor: Colors.white,
                 paddingTop: RfH(8),
                 paddingHorizontal: RfW(16),
-                paddingBottom: RfH(10),
                 borderTopWidth: RfH(1),
                 borderTopColor: Colors.lightGrey,
-
               },
             ]}>
             <View>
               <Text style={commonStyles.headingPrimaryText}>
                 ₹
-                {parseFloat(
+                {printCurrency(
                   amount +
                     (paymentMethod === PaymentMethodEnum.CASH.value ? convenienceCharges : 0) -
                     discount -
-                    deductedAgaintQPoint
-                ).toFixed(2)}
+                    qPointsRedeemed
+                )}
               </Text>
             </View>
             <View>
@@ -473,7 +471,7 @@ PaymentMethod.defaultProps = {
   bookingData: {},
   amount: 0,
   discount: 0,
-  deductedAgaintQPoint: 0,
+  qPointsRedeemed: 0,
   handlePaytmPayment: null,
 };
 
@@ -483,7 +481,7 @@ PaymentMethod.propTypes = {
   bookingData: PropTypes.object,
   amount: PropTypes.number,
   discount: PropTypes.number,
-  deductedAgaintQPoint: PropTypes.number,
+  qPointsRedeemed: PropTypes.number,
   hidePaymentPopup: PropTypes.func,
   handlePaytmPayment: PropTypes.func,
 };

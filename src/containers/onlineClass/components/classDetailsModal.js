@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../../../theme/colors';
-import { printDate, printTime, RfH, RfW } from '../../../utils/helpers';
+import {getFullName, printDate, printTime, RfH, RfW} from '../../../utils/helpers';
 import Images from '../../../theme/images';
 import IconButtonWrapper from '../../../components/IconWrapper';
 import Fonts from '../../../theme/fonts';
@@ -44,7 +44,7 @@ const ClassDetailsModal = (props) => {
             }}>
             <Text style={{ color: Colors.primaryText, fontSize: 18, fontFamily: Fonts.semiBold }}>Class Details</Text>
             <TouchableOpacity onPress={() => onClose(false)}>
-              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+              <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(20)} iconHeight={RfH(20)} />
             </TouchableOpacity>
           </View>
 
@@ -64,7 +64,7 @@ const ClassDetailsModal = (props) => {
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text style={commonStyles.headingPrimaryText}>
-                {`${classDetails?.offering?.displayName} by ${classDetails?.tutor?.contactDetail?.firstName} ${classDetails?.tutor?.contactDetail?.lastName}`}
+                {`${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)}`}
               </Text>
               <Text style={commonStyles.mediumMutedText}>
                 {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
