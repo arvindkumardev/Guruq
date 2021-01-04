@@ -205,12 +205,15 @@ function CalendarView(props) {
                     : "Looks like you don't have  scheduled classes for the selected day."}
                 </Text>
                 <View style={{ height: RfH(40) }} />
-                <Button
-                  block
-                  style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-                  onPress={() => changeTab(3)}>
-                  <Text style={commonStyles.textButtonPrimary}>{isStudent ? 'Schedule Now' : 'View Classes'}</Text>
-                </Button>
+
+                {isStudent && (
+                  <Button
+                    block
+                    style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+                    onPress={() => changeTab(3)}>
+                    <Text style={commonStyles.textButtonPrimary}>{isStudent ? 'Schedule Now' : 'View Classes'}</Text>
+                  </Button>
+                )}
               </View>
             ) : (
               <FlatList

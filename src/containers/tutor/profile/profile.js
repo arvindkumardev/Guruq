@@ -43,15 +43,15 @@ const ACCOUNT_OPTIONS = [
   { name: 'Education', icon: Images.education },
   { name: 'Experience', icon: Images.work_office },
   { name: 'Awards & Achievement', icon: Images.award },
-  { name: 'Documents', icon: Images.book },
+  // { name: 'Documents', icon: Images.book },
   { name: 'Bank Details', icon: Images.bank },
   { name: 'Business Details', icon: Images.award },
 ];
 
 const MY_CLASS_OPTIONS = [
   { name: 'Calendar', icon: Images.calendar },
-  { name: 'My Classes', icon: Images.laptop },
-  { name: 'My Students', icon: Images.home },
+  // { name: 'My Classes', icon: Images.laptop },
+  // { name: 'My Students', icon: Images.home },
   { name: 'Student Request', icon: Images.classes },
 ];
 
@@ -439,13 +439,6 @@ function Profile(props) {
           </Text>
         </View>
       </ScrollView>
-      <UploadDocument
-        isVisible={isUploadModalOpen}
-        handleClose={() => setIsUploadModalOpen(!isUploadModalOpen)}
-        isFilePickerVisible
-        handleUpload={() => {}}
-        snapCount={1}
-      />
     </View>
   );
 }
