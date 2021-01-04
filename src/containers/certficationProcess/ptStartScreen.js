@@ -229,7 +229,7 @@ const PtStartScreen = (props) => {
             <View style={{ marginVertical: RfH(15) }}>
               <View>{renderOffering()}</View>
               <View style={{ alignItems: 'center', marginVertical: RfH(40) }}>
-                <Image source={Images.ptTest} height={RfH(181)} weight={RfW(150)} />
+                <Image source={Images.ptTest} style={{ height: RfH(210), width: RfW(260) }} />
               </View>
               <Text
                 style={[

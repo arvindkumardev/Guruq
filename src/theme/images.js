@@ -248,7 +248,7 @@ const Images = {
   filledStar: require('../assets/images/filledStar.png'),
   unFilledStar: require('../assets/images/unfilledStar.png'),
   award: require('../assets/images/awards.png'),
-  ...SubjectIcons,
+
   tutorWelcome: require('../assets/images/tutorWelcome.png'),
   ptTest: require('../assets/images/ptTest.png'),
   experienceOrange: require('../assets/images/experienceOrange.png'),
@@ -263,6 +263,10 @@ const Images = {
   close: require('../assets/images/close.png'),
   plusWhite: require('../assets/images/plus_white.png'),
   deleteWhite: require('../assets/images/delete_white.png'),
+
+
+
+  ...SubjectIcons,
 };
 
 export default Images;
