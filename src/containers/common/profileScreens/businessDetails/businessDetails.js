@@ -21,7 +21,7 @@ function BusinessDetails() {
   const [gstNumber, setGstNumber] = useState('');
   const [legalName, setLegalName] = useState('');
   const [businessData, setBusinessData] = useState({});
-  const [registrationDate, setRegistrationDate] = useState();
+  const [isDataEmpty, setIsDataEmpty] = useState(false);
 
   const [getBusinessDetails, { loading: businessLoading }] = useLazyQuery(GET_BUSINESS_DETAILS_DATA, {
     fetchPolicy: 'no-cache',
@@ -33,6 +33,7 @@ function BusinessDetails() {
     onCompleted: (data) => {
       if (data.getTutorBusinessDetails.businessDetails) {
         setBusinessData(data.getTutorBusinessDetails.businessDetails);
+        setIsDataEmpty(isEmpty(data?.getTutorBusinessDetails?.businessDetails));
       }
     },
   });
@@ -58,37 +59,43 @@ function BusinessDetails() {
           horizontalPadding={RfW(16)}
           lineVisible={false}
           rightText="EDIT"
-          showRightText={Object.keys(businessData).length > 0}
+          showRightText={!isEmpty(businessData)}
           onRightTextClick={() =>
             navigation.navigate(routeNames.TUTOR.ADD_EDIT_BUSINESS_DETAILS, { businessDetails: businessData })
           }
         />
         <ScrollView contentContainerStyle={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(44) }} />
-          {Object.keys(businessData).length > 0 ? (
-            <View>
-              <View>
-                <Text style={commonStyles.mediumMutedText}>PAN Number</Text>
-                <Text>{businessData?.panNumber}</Text>
-              </View>
-              <View style={{ height: RfH(24) }} />
-              <View style={commonStyles.horizontalChildrenSpaceView}>
-                <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-                  Are you eligible for GST
-                </Text>
-                <CustomCheckBox enabled={businessData?.gstEligible} />
-              </View>
-              <View style={{ height: RfH(24) }} />
-              <View>
-                <Text style={commonStyles.mediumMutedText}>GSTIN</Text>
-                <Text>{businessData?.gstNumber}</Text>
-              </View>
-              <View style={{ height: RfH(24) }} />
-              <View>
-                <Text style={commonStyles.mediumMutedText}>Legal Name</Text>
-                <Text>{businessData?.businessName}</Text>
-              </View>
-            </View>
+          {!isDataEmpty ? (
+            <>
+              {!isEmpty(businessData) && (
+                <View>
+                  <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
+                    <Text style={commonStyles.mediumMutedText}>PAN Number</Text>
+                    <Text>{businessData?.panNumber}</Text>
+                  </View>
+                  <View style={{ height: RfH(24) }} />
+                  <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
+                    <View style={commonStyles.horizontalChildrenSpaceView}>
+                      <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+                        Are you eligible for GST
+                      </Text>
+                      <CustomCheckBox enabled={businessData?.gstEligible} />
+                    </View>
+                  </View>
+                  <View style={{ height: RfH(24) }} />
+                  <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
+                    <Text style={commonStyles.mediumMutedText}>GSTIN</Text>
+                    <Text>{businessData?.gstNumber}</Text>
+                  </View>
+                  <View style={{ height: RfH(24) }} />
+                  <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
+                    <Text style={commonStyles.mediumMutedText}>Legal Name</Text>
+                    <Text>{businessData?.businessName}</Text>
+                  </View>
+                </View>
+              )}
+            </>
           ) : (
             <View style={{ flex: 1, paddingTop: RfH(70), alignItems: 'center' }}>
               <Image
