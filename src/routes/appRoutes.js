@@ -251,10 +251,7 @@ const AppStack = (props) => {
     }
     if (userType === UserTypeEnum.TUTOR.label) {
       console.log('tutorInfo', tutorInfo);
-      if (
-        tutorInfo &&
-        tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED
-      ) {
+      if (tutorInfo && tutorInfo?.certified) {
         return getTutorRoutes();
       }
 
