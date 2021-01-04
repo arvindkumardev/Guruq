@@ -89,7 +89,7 @@ const InterviewAndDocument = () => {
         handleBack={() => navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATE_STEPS)}
       />
       <TouchableOpacity
-        style={[styles.interviewCard, { borderLeftColor: Colors.lightOrange }]}
+        style={styles.interviewCard}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW)}
         disabled={!isInterviewNotScheduled()}>
@@ -122,9 +122,10 @@ const InterviewAndDocument = () => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.interviewCard, { borderLeftColor: Colors.lightPurple }]}
+        style={styles.interviewCard}
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS)}>
+        onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS)}
+        disabled={!isEmpty(tutorDetail?.documents) && tutorDetail?.documents.length === 4}>
         <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper
             iconImage={Images.documentUpload}
@@ -149,21 +150,25 @@ const InterviewAndDocument = () => {
               </Text>
             </View>
           </View>
-          <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
-            <IconButtonWrapper
-              iconImage={Images.right_arrow_grey}
-              iconWidth={RfH(24)}
-              iconHeight={RfW(24)}
-              imageResizeMode="contain"
-            />
-          </View>
+          {isEmpty(tutorDetail?.documents) ||
+            (tutorDetail?.documents.length !== 4 && (
+              <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
+                <IconButtonWrapper
+                  iconImage={Images.right_arrow_grey}
+                  iconWidth={RfH(24)}
+                  iconHeight={RfW(24)}
+                  imageResizeMode="contain"
+                />
+              </View>
+            ))}
         </View>
       </TouchableOpacity>
       {!isEmpty(tutorDetail) && isButtonVisible() && (
         <Button
           onPress={handleNext}
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(70), width: RfW(230) }]}>
-          <Text style={commonStyles.textButtonPrimary}>Next Step</Text>
+          <Text style={[commonStyles.textButtonPrimary, { marginRight: RfW(16) }]}>Next Step</Text>
+          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.rightArrow_white} />
         </Button>
       )}
     </View>

@@ -1,20 +1,41 @@
-import { Text, View, FlatList, TouchableOpacity, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
+  Alert,
+  ScrollView,
+} from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Button } from 'native-base';
+import { Button, Textarea } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { CustomRadioButton, IconButtonWrapper, ScreenHeader, TutorImageComponent } from '../../../../components';
+import { useMutation } from '@apollo/client';
+import { isEmpty } from 'lodash';
+import {
+  CustomRadioButton,
+  IconButtonWrapper,
+  Loader,
+  ScreenHeader,
+  TutorImageComponent,
+} from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../../theme';
-import {getFullName, RfH, RfW} from '../../../../utils/helpers';
+import { alertBox, getFullName, getToken, RfH, RfW } from '../../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import { tutorDetails } from '../../../../apollo/cache';
 import routeNames from '../../../../routes/screenNames';
+import { CANCEL_CLASS } from '../../class.mutation';
+import { CANCEL_BOOKINGS } from '../../booking.mutation';
 
-function ViewBookingDetails() {
+function ViewBookingDetails(props) {
+  const { route } = props;
+  const bookingData = route?.params?.bookingData;
   const navigation = useNavigation();
   const [openMenu, setOpenMenu] = useState(false);
-  const [cancelReason, setCancelReason] = useState(false);
+  const [showCancelReason, setShowCancelReason] = useState(false);
   const [cancelReasons, setCancelReasons] = useState([
     { reason: 'I am unavailable to take classes at this moment.', selected: true },
     { reason: 'I want to replace the tutor with other.', selected: false },
@@ -22,34 +43,24 @@ function ViewBookingDetails() {
     { reason: 'I am unsatisfied with the quality of tutor.', selected: false },
     { reason: 'Others', selected: false },
   ]);
-  const [bookingData, setBookingData] = useState([
-    {
-      subject: 'Chemistry Class',
-      board: 'CBSE',
-      class: 'Class 9',
-      name: 'Booking Id 73829',
-      id: '25 Sept 2020',
-      onlineClass: 4,
-      count: '800.00',
-    },
-    { title: 'Booking Id 73829', date: '25 Sept 2020', count: 4, amount: '800.00' },
-    { title: 'Booking Id 73829', date: '25 Sept 2020', count: 4, amount: '800.00' },
-    { title: 'Booking Id 73829', date: '25 Sept 2020', count: 4, amount: '800.00' },
-  ]);
 
+  const [cancelReason, setCancelReason] = useState('');
+  const [reasons, setReasons] = useState([...cancelReasons]);
+  const [comment, setComment] = useState('');
+  const token = getToken();
   const renderClassItem = (item) => {
     return (
-      <View style={{ marginTop: RfH(30) }}>
-        <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName}</Text>
+      <View style={{ marginTop: RfH(30), paddingHorizontal: RfW(16) }}>
+        <Text style={commonStyles.headingPrimaryText}>{item.offering.name} Class</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-            {item.offering?.parentOffering?.parentOffering?.displayName}
+            {item.offering?.parentOffering?.parentOffering?.name}
             {' | '}
-            {item.offering?.parentOffering?.displayName}
+            {item.offering?.parentOffering?.name}
           </Text>
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
+        <View style={[commonStyles.horizontalChildrenSpaceView, { marginVertical: RfH(8) }]}>
           <TouchableOpacity
             style={commonStyles.horizontalChildrenStartView}
             onPress={() => tutorDetails(item)}
@@ -59,6 +70,13 @@ function ViewBookingDetails() {
                 tutor={item?.tutor}
                 styling={{ borderRadius: RfH(32), width: RfH(64), height: RfH(64) }}
               />
+              <Text
+                style={[
+                  commonStyles.xSmallPrimaryText,
+                  { alignSelf: 'center', marginTop: RfH(4), textDecorationLine: 'underline' },
+                ]}>
+                Detail
+              </Text>
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text
@@ -92,7 +110,7 @@ function ViewBookingDetails() {
 
   const openCancelReasonModal = () => {
     setOpenMenu(false);
-    setCancelReason(true);
+    setShowCancelReason(true);
   };
 
   const openCancelConfirm = () => {
@@ -103,6 +121,7 @@ function ViewBookingDetails() {
         {
           text: 'NO',
           style: 'cancel',
+          onPress: () => setOpenMenu(false),
         },
         {
           text: 'YES',
@@ -118,24 +137,75 @@ function ViewBookingDetails() {
     navigation.navigate(routeNames.CUSTOMER_CARE);
   };
 
-  const renderReasons = (item) => {
+  const [cancelBooking, { loading: cancelLoading }] = useMutation(CANCEL_BOOKINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        // const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        alertBox('Class cancelled successfully', '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => {
+            setShowCancelReason(false);
+            navigation.navigate(routeNames.STUDENT.BOOKING_DETAILS);
+          },
+        });
+      }
+    },
+  });
+
+  const onReasonChange = (index) => {
+    if (!reasons[index].selected) {
+      setReasons((reasons) =>
+        reasons.map((reasonItem, reasonIndex) => ({ ...reasonItem, selected: reasonIndex === index }))
+      );
+      setCancelReason(reasons[index].selected ? '' : reasons[index].reason);
+    }
+  };
+
+  const onCancelBooking = () => {
+    // if (isEmpty(cancelReason)) {
+    //   alertBox('Please provide the cancellation reason');
+    // } else {
+    cancelBooking({
+      variables: {
+        orderId: bookingData?.id,
+      },
+    });
+    // }
+  };
+
+  const renderReasons = (item, index) => {
     return (
-      <View style={{ padding: RfH(16) }}>
-        <View style={commonStyles.horizontalChildrenView}>
-          <CustomRadioButton enabled={item.selected} />
-          <Text style={{ marginLeft: RfW(8) }}>{item.reason}</Text>
+      <TouchableWithoutFeedback onPress={() => onReasonChange(index)}>
+        <View style={{ padding: RfH(16) }}>
+          <View style={commonStyles.horizontalChildrenView}>
+            <CustomRadioButton enabled={item.selected} submitFunction={() => onReasonChange(index)} />
+            <Text style={{ marginLeft: RfW(8) }}>{item.reason}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
   const goToRefund = () => {
-    setCancelReason(false);
-    navigation.navigate(routeNames.STUDENT.REFUND);
+    navigation.navigate(routeNames.STUDENT.REFUND, { bookingData });
+  };
+
+  const goToInvoice = () => {
+    setOpenMenu(false);
+    navigation.navigate(routeNames.WEB_VIEW, {
+      url: `http://dashboardv2.guruq.in/invoice/${bookingData?.id}?token=${token}`,
+      label: 'Invoice',
+    });
   };
 
   return (
     <View style={(commonStyles.mainContainer, { flex: 1, backgroundColor: Colors.white })}>
+      <Loader isLoading={cancelLoading} />
       <ScreenHeader
         label="View booking details"
         homeIcon
@@ -144,79 +214,113 @@ function ViewBookingDetails() {
         rightIcon={Images.vertical_dots_b}
         onRightIconClick={() => setOpenMenu(true)}
       />
-      <View style={{ height: RfH(20) }} />
-      <View
-        style={{
-          marginHorizontal: RfW(16),
-          borderWidth: 1,
-          borderRadius: 8,
-          borderColor: Colors.lightGrey,
-          paddingVertical: RfH(16),
-          paddingHorizontal: RfW(16),
-        }}>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>Booking Id</Text>
-          <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>73839</Text>
-        </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>Booking date</Text>
-          <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>25 Sept 2020</Text>
-        </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>Amount</Text>
-          <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>₹ 800.00</Text>
-        </View>
-      </View>
-      <View style={{ height: RfH(20) }} />
-      {/* <FlatList
-        showsVerticalScrollIndicator={false}
-        data={bookingData}
-        renderItem={({ item, index }) => renderClassItem(item, index)}
-        keyExtractor={(item, index) => index.toString()}
-      /> */}
-      <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
-      <View style={{ height: RfH(32) }} />
-      <View
-        style={{
-          marginHorizontal: RfW(16),
-          borderWidth: 1,
-          borderRadius: 8,
-          borderColor: Colors.lightGrey,
-        }}>
-        <Text style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(12) }}>Payment details</Text>
-        <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
-        <View style={{ height: RfH(16) }} />
-        <View style={{ paddingHorizontal: RfW(8) }}>
+      <ScrollView>
+        <View style={{ height: RfH(20) }} />
+        <View
+          style={{
+            marginHorizontal: RfW(16),
+            borderWidth: 1,
+            borderRadius: 8,
+            borderColor: Colors.lightGrey,
+            paddingVertical: RfH(16),
+            paddingHorizontal: RfW(16),
+          }}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.mediumMutedText}>Amount</Text>
-            <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹1200</Text>
+            <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>Booking Id</Text>
+            <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
+              {bookingData.id}
+            </Text>
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.mediumMutedText}>Convenience charges</Text>
-            <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹100</Text>
+            <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
+              Booking date
+            </Text>
+            <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
+              {new Date(bookingData.createdDate).toDateString()}
+            </Text>
+          </View>
+          <View style={commonStyles.horizontalChildrenSpaceView}>
+            <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>Amount</Text>
+            <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
+              ₹ {parseFloat(bookingData.payableAmount).toFixed(2)}
+            </Text>
           </View>
         </View>
-        <View style={{ height: RfH(16) }} />
+        <View style={{ height: RfH(20) }} />
+        <TouchableWithoutFeedback onPress={() => goToRefund()}>
+          <View
+            style={{
+              marginHorizontal: RfW(16),
+              borderWidth: 1,
+              borderRadius: 8,
+              borderColor: Colors.lightGrey,
+              paddingVertical: RfH(16),
+              paddingHorizontal: RfW(16),
+            }}>
+            <Text style={{ color: Colors.brandBlue2 }}>View Refund Details</Text>
+          </View>
+        </TouchableWithoutFeedback>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={bookingData?.orderItems}
+          renderItem={({ item, index }) => renderClassItem(item, index)}
+          keyExtractor={(item, index) => index.toString()}
+        />
         <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
-        <View style={{ paddingHorizontal: RfW(8) }}>
+        <View style={{ height: RfH(32) }} />
+        <View
+          style={{
+            marginHorizontal: RfW(16),
+            borderWidth: 1,
+            borderRadius: 8,
+            borderColor: Colors.lightGrey,
+          }}>
+          <Text style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(12) }}>Payment details</Text>
+          <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
           <View style={{ height: RfH(16) }} />
-          <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.mediumMutedText}>Paid by Q points</Text>
-            <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹300</Text>
-          </View>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.mediumMutedText}>GURUQ1ST Applied</Text>
-            <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹200</Text>
+          <View style={{ paddingHorizontal: RfW(8) }}>
+            <View style={commonStyles.horizontalChildrenSpaceView}>
+              <Text style={commonStyles.mediumMutedText}>Amount</Text>
+              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
+                {' '}
+                ₹{parseFloat(bookingData.subTotal).toFixed(2)}
+              </Text>
+            </View>
+            <View style={commonStyles.horizontalChildrenSpaceView}>
+              <Text style={commonStyles.mediumMutedText}>Convenience charges</Text>
+              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
+                ₹{bookingData.convenienceCharges ? parseFloat(bookingData.convenienceCharges).toFixed(2) : '0.00'}
+              </Text>
+            </View>
           </View>
           <View style={{ height: RfH(16) }} />
+          <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
+          <View style={{ paddingHorizontal: RfW(8) }}>
+            <View style={{ height: RfH(16) }} />
+            <View style={commonStyles.horizontalChildrenSpaceView}>
+              <Text style={commonStyles.mediumMutedText}>Paid by Q points</Text>
+              <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
+                ₹{bookingData.pointsRedeemed ? parseFloat(bookingData.pointsRedeemed).toFixed(2) : '0.00'}
+              </Text>
+            </View>
+            {bookingData?.promotion?.code && (
+              <View style={commonStyles.horizontalChildrenSpaceView}>
+                <Text style={commonStyles.mediumMutedText}>{bookingData?.promotion?.code} Applied</Text>
+                <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹200</Text>
+              </View>
+            )}
+            <View style={{ height: RfH(16) }} />
+          </View>
+          <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
+          <View style={{ height: RfH(16) }} />
+          <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(8), marginBottom: RfH(8) }]}>
+            <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>Total amount paid</Text>
+            <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>
+              ₹{bookingData?.payableAmount ? parseFloat(bookingData?.payableAmount).toFixed(2) : '0.00'}
+            </Text>
+          </View>
         </View>
-        <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
-        <View style={{ height: RfH(16) }} />
-        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(8), marginBottom: RfH(8) }]}>
-          <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>Total amount paid</Text>
-          <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>₹800</Text>
-        </View>
-      </View>
+      </ScrollView>
       <Modal animationType="fade" transparent visible={openMenu} onRequestClose={() => setOpenMenu(false)}>
         <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
           <TouchableWithoutFeedback onPress={() => setOpenMenu(false)}>
@@ -238,7 +342,7 @@ function ViewBookingDetails() {
                 <Text style={{ padding: RfH(16) }}>Cancel order</Text>
               </TouchableWithoutFeedback>
               <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
-              <TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => goToInvoice()}>
                 <Text style={{ padding: RfH(16) }}>Generate Invoice</Text>
               </TouchableWithoutFeedback>
               <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
@@ -252,9 +356,9 @@ function ViewBookingDetails() {
       <Modal
         animationType="fade"
         transparent
-        visible={cancelReason}
+        visible={showCancelReason}
         onRequestClose={() => {
-          setCancelReason(false);
+          setShowCancelReason(false);
         }}>
         <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
         <View
@@ -277,16 +381,34 @@ function ViewBookingDetails() {
             iconHeight={RfH(20)}
             iconWidth={RfW(20)}
             iconImage={Images.cross}
-            submitFunction={() => setCancelReason(false)}
+            submitFunction={() => setShowCancelReason(false)}
             imageResizeMode="contain"
           />
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={cancelReasons}
+            data={reasons}
             renderItem={({ item, index }) => renderReasons(item, index)}
             keyExtractor={(item, index) => index.toString()}
           />
-          <Button onPress={() => goToRefund()} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+          {cancelReason === 'Others' && (
+            <View
+              style={{
+                marginHorizontal: RfW(16),
+                borderRadius: RfH(8),
+                borderColor: Colors.darkGrey,
+                borderWidth: 1,
+              }}>
+              <Textarea
+                value={comment}
+                onChangeText={(text) => setComment(text)}
+                placeholder="Please specify reason"
+                numberOfLines={6}
+                style={{ height: RfH(120) }}
+              />
+            </View>
+          )}
+          <View style={{ height: RfH(24) }} />
+          <Button onPress={() => onCancelBooking()} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
             <Text style={commonStyles.textButtonPrimary}>Submit</Text>
           </Button>
         </View>

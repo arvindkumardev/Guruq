@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { Button } from 'native-base';
 import { Colors } from '../../theme';
-import { alertBox, RfH, RfW } from '../../utils/helpers';
+import { RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import { offeringsMasterData } from '../../apollo/cache';
 import { STUDY_AREA_LEVELS } from '../../utils/constants';
@@ -126,32 +126,22 @@ const ChooseSubjectComponent = (props) => {
   const renderStudyArea = () => (
     <View>
       <Text style={commonStyles.headingPrimaryText}>Area of Study</Text>
-      <FlatList
-        horizontal
-        data={offeringMasterData && offeringMasterData.filter((s) => s.level === 0)}
-        showsHorizontalScrollIndicator={false}
-        style={{ marginTop: RfH(24) }}
-        renderItem={({ item }) => renderArea(item)}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <View style={{ flexDirection: 'row', width: '100%', flexWrap: 'wrap' }}>
+        {offeringMasterData && offeringMasterData.filter((s) => s.level === 0).map((item) => renderArea(item))}
+      </View>
     </View>
   );
 
   const renderBoards = () => (
     <View>
       <Text style={commonStyles.headingPrimaryText}>{selectedStudyAreaObj.find((item) => item.level === 1).label}</Text>
-      <FlatList
-        horizontal
-        data={
-          selectedStudyArea &&
+      <View style={{ flexDirection: 'row', width: '100%', flexWrap: 'wrap' }}>
+        {selectedStudyArea &&
           offeringMasterData &&
-          offeringMasterData.filter((s) => s?.parentOffering?.id === selectedStudyArea?.id)
-        }
-        showsHorizontalScrollIndicator={false}
-        style={{ marginTop: RfH(24) }}
-        renderItem={({ item }) => renderBoard(item)}
-        keyExtractor={(item, index) => index.toString()}
-      />
+          offeringMasterData
+            .filter((s) => s?.parentOffering?.id === selectedStudyArea?.id)
+            .map((item) => renderBoard(item))}
+      </View>
     </View>
   );
 

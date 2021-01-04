@@ -59,14 +59,23 @@ export const GET_CART_ITEMS = gql`
 `;
 
 export const SEARCH_BOOKINGS = gql`
-  query SearchBookings($bookingSearchDto: BookingSearchDto!) {
-    searchBookings(searchDto: $bookingSearchDto) {
-      edged {
+  query SearchBookings($searchDto: BookingSearchDto!) {
+    searchBookings(searchDto: $searchDto) {
+      edges {
         id
         uuid
         orderStatus
         owner {
           id
+        }
+        subTotal
+        createdDate
+        convenienceCharges
+        pointsRedeemed
+        payableAmount
+        discount
+        promotion {
+          code
         }
         orderItems {
           id

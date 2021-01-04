@@ -7,12 +7,14 @@ import { WebView } from 'react-native-webview';
 import { isEmpty } from 'lodash';
 import Colors from '../../theme/colors';
 import { RfH, RfW } from '../../utils/helpers';
-import { CustomCheckBox, Loader, ScreenHeader } from '../../components';
+import { CustomCheckBox, IconButtonWrapper, Loader, ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { UPDATE_BACKGROUND_CHECK } from './certification-mutation';
 import { GET_TUTOR_LEAD_DETAIL } from './certification-query';
 import { BackgroundCheckStatusEnum } from '../common/enums';
 import NavigationRouteNames from '../../routes/screenNames';
+import { Images } from '../../theme';
+import { WEBSITE_URL } from '../../utils/constants';
 
 function BackgroundCheck() {
   const isFocussed = useIsFocused();
@@ -64,7 +66,7 @@ function BackgroundCheck() {
       <Loader isLoading={updateBackgroundCheckLoading || tutorLeadDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, flex: 1 }]}>
         <ScreenHeader
-          label="Background Check"
+          label="Background Verification"
           horizontalPadding={RfW(8)}
           homeIcon
           handleBack={() => navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATE_STEPS)}
@@ -77,13 +79,13 @@ function BackgroundCheck() {
                 borderColor: Colors.lightGrey,
                 borderRadius: RfH(8),
                 height: RfH(450),
-                marginVertical: RfH(15),
-                padding: RfH(5),
+                marginBottom: RfH(15),
+                // padding: RfH(5),
               }}>
               <Text />
               <WebView
                 source={{
-                  uri: 'https://www.google.co.in/',
+                  uri: `${WEBSITE_URL}/terms`,
                 }}
                 javaScriptEnabled
                 domStorageEnabled
@@ -102,7 +104,7 @@ function BackgroundCheck() {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setConsentCheckBox(!consentCheckBox)}
-              style={[commonStyles.horizontalChildrenView, { alignItems: 'center' }]}
+              style={[commonStyles.horizontalChildrenView, { alignItems: 'center', marginTop: RfH(16) }]}
               activeOpacity={0.8}>
               <CustomCheckBox enabled={consentCheckBox} submitFunction={() => setConsentCheckBox(!consentCheckBox)} />
               <Text style={[commonStyles.mediumPrimaryText, { marginLeft: RfW(16) }]}>
@@ -123,6 +125,7 @@ function BackgroundCheck() {
             </View>
           </View>
         )}
+
         {!isEmpty(backgroundStatus) && backgroundStatus !== BackgroundCheckStatusEnum.NOT_STARTED.label && (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={commonStyles.headingPrimaryText}>{`Your background status is ${

@@ -20,6 +20,7 @@ const Images = {
   black_star_half: require('../assets/images/black-star-half.png'),
   blue_star: require('../assets/images/blue-star.png'),
   backArrow_white: require('../assets/images/back-arrow-white.png'),
+  rightArrow_white: require('../assets/images/right-arrow-white.png'),
   blue_star_half: require('../assets/images/blue-star-half.png'),
   blue_cross: require('../assets/images/blue_cross.png'),
   bookingDetails: require('../assets/images/booking-details.png'),
@@ -254,6 +255,8 @@ const Images = {
   addressBlue: require('../assets/images/addressBlue.png'),
   documentUpload: require('../assets/images/documentUpload.png'),
   pendingStatus: require('../assets/images/pendingStatus.png'),
+
+  bgPending: require('../assets/images/bg-pending.png'),
 };
 
 export default Images;

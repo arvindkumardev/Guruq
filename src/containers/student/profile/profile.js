@@ -126,6 +126,8 @@ function Profile(props) {
       navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Parents Details') {
       navigation.navigate(NavigationRouteNames.PARENTS_LIST);
+    } else if (item.name === 'Purchased History') {
+      navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_DETAILS);
     } else if (item.name === 'Experience') {
       navigation.navigate(NavigationRouteNames.EXPERIENCE);
       // , {
