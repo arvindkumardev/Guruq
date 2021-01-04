@@ -236,15 +236,9 @@ function UploadDocuments() {
       <ScrollView showsVerticalScrollIndicator={false} style={{ paddingBottom: RfH(32) }}>
         <View style={{ padding: RfW(16), paddingBottom: RfH(16) }}>
           <View>
-            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Documents</Text>
             <Text style={[commonStyles.mediumMutedText, { marginTop: RfH(8) }]}>
               Please Upload all the documents listed below
             </Text>
-          </View>
-          <View style={{ height: RfH(24) }} />
-          <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Attach Documents</Text>
-            <Text style={commonStyles.regularMutedText}>Click to upload</Text>
           </View>
           <View style={[commonStyles.lineSeparator, { marginTop: RfH(32), marginBottom: RfH(16) }]} />
           <Text>ID Proof</Text>

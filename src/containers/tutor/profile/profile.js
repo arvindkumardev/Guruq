@@ -79,8 +79,6 @@ function Profile(props) {
 
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
-  const [isInformationMenuOpen, setIsInformationMenuOpen] = useState(false);
-  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
 
   const client = initializeApollo();
@@ -197,11 +195,11 @@ function Profile(props) {
           alignItems: 'center',
         }}>
         <View style={{ flexDirection: 'row' }} />
-        <View>
-          <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
-            <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />
-          </TouchableOpacity>
-        </View>
+        {/* <View> */}
+        {/*  <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}> */}
+        {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} /> */}
+        {/*  </TouchableOpacity> */}
+        {/* </View> */}
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>

@@ -48,7 +48,7 @@ function BookingDetails() {
             marginVertical: RfH(8),
             borderWidth: 1,
             borderRadius: 8,
-            borderColor: Colors.lightGrey,
+            borderColor: Colors.darkGrey,
             paddingHorizontal: RfW(8),
             paddingVertical: RfH(16),
           }}>

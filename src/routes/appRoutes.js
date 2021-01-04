@@ -66,8 +66,6 @@ const AppStack = (props) => {
   const tutorInfo = useReactiveVar(tutorDetails);
   const userDetailsObj = useReactiveVar(userDetails);
 
-  console.log('tutorInfo', tutorInfo);
-
   useEffect(() => {
     // clearAllLocalStorage();
     AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then((val) => {
@@ -211,12 +209,6 @@ const AppStack = (props) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.TUTOR.INTERVIEW_AND_DOCUMENTS}
-        component={InterviewAndDocument}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
         name={NavigationRouteNames.EXPERIENCE}
         component={ExperienceListing}
         options={{ headerShown: false }}
@@ -224,11 +216,6 @@ const AppStack = (props) => {
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_EXPERIENCE}
         component={AddEditExperience}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
-        component={InterviewScheduling}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -243,35 +230,23 @@ const AppStack = (props) => {
         component={SendFeedback}
         options={{ headerShown: false }}
       />
-
       <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
-
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
         component={UploadDocuments}
         options={{ headerShown: false }}
       />
-
-      <Stack.Screen
-        name={NavigationRouteNames.TUTOR.BACKGROUND_CHECK}
-        component={BackgroundCheck}
-        options={{ headerShown: false }}
-      />
-
-      {/* <Stack.Screen name={NavigationRouteNames.A} component={EducationListing} options={{ headerShown: false }} /> */}
     </>
   );
 
   const getLoggedInRoutes = () => {
     if (userType === UserTypeEnum.OTHER.label) {
       return (
-        <>
-          <Stack.Screen
-            name={NavigationRouteNames.USER_TYPE_SELECTOR}
-            component={UserTypeSelector}
-            options={{ headerShown: false }}
-          />
-        </>
+        <Stack.Screen
+          name={NavigationRouteNames.USER_TYPE_SELECTOR}
+          component={UserTypeSelector}
+          options={{ headerShown: false }}
+        />
       );
     }
     if (userType === UserTypeEnum.STUDENT.label) {
@@ -279,25 +254,7 @@ const AppStack = (props) => {
     }
     if (userType === UserTypeEnum.TUTOR.label) {
       if (tutorInfo && tutorInfo?.certified) {
-        return getTutorRoutes();
-      }
-
-      if (
-        tutorInfo &&
-        !tutorInfo?.certified &&
-        (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label ||
-          (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&
-            tutorInfo?.lead?.backgroundCheck?.status !== BackgroundCheckStatusEnum.NOT_STARTED.label))
-      ) {
-        return (
-          <>
-            <Stack.Screen
-              name={NavigationRouteNames.TUTOR.VERIFICATION}
-              component={TutorVerificationScreen}
-              options={{ headerShown: false }}
-            />
-          </>
-        );
+        return getTutorRoutes(tutorInfo);
       }
 
       if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.REGISTERED.label) {
@@ -313,6 +270,22 @@ const AppStack = (props) => {
       }
       if (
         tutorInfo &&
+        !tutorInfo?.certified &&
+        (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label ||
+          (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&
+            tutorInfo?.lead?.backgroundCheck?.status !== BackgroundCheckStatusEnum.NOT_STARTED.label))
+      ) {
+        return (
+          <Stack.Screen
+            name={NavigationRouteNames.TUTOR.VERIFICATION}
+            component={TutorVerificationScreen}
+            options={{ headerShown: false }}
+          />
+        );
+      }
+
+      if (
+        tutorInfo &&
         tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label
       ) {
         return (
@@ -320,6 +293,21 @@ const AppStack = (props) => {
             <Stack.Screen
               name={NavigationRouteNames.TUTOR.CERTIFICATE_STEPS}
               component={CertificationProcessSteps}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.BACKGROUND_CHECK}
+              component={BackgroundCheck}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.INTERVIEW_AND_DOCUMENTS}
+              component={InterviewAndDocument}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
+              component={InterviewScheduling}
               options={{ headerShown: false }}
             />
           </>
