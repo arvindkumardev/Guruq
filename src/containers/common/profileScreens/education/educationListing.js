@@ -9,7 +9,7 @@ import { IconButtonWrapper, Loader, ScreenHeader } from '../../../../components'
 import { userType } from '../../../../apollo/cache';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { alertBox, formatDate, RfH, RfW } from '../../../../utils/helpers';
+import {alertBox, printDate, printYear, RfH, RfW} from '../../../../utils/helpers';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import { UserTypeEnum } from '../../../../common/userType.enum';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
@@ -27,9 +27,7 @@ function EducationListing() {
   const [getStudentDetails, { loading: studentDetailLoading }] = useLazyQuery(GET_STUDENT_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -42,9 +40,7 @@ function EducationListing() {
   const [getTutorDetails, { loading: tutorDetailLoading }] = useLazyQuery(GET_TUTOR_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -57,9 +53,7 @@ function EducationListing() {
   const [deleteEducationDetail, { loading: educationDeleteLoading }] = useMutation(DELETE_TUTOR_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -122,7 +116,7 @@ function EducationListing() {
           )}
           <Text style={commonStyles.mediumMutedText}>{item?.school?.name}</Text>
           <Text style={commonStyles.mediumMutedText}>
-            {formatDate(item.startDate, 'YYYY')} - {!item.current ? formatDate(item.endDate, 'YYYY') : 'Present'}
+            {printYear(item.startDate)} - {!item.current ? printYear(item.endDate) : 'Present'}
           </Text>
         </View>
       </View>

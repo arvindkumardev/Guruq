@@ -1,28 +1,28 @@
-import { Alert, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Item, Input, Button, Label } from 'native-base';
+import { Button, Input, Item, Label } from 'native-base';
 import { useMutation } from '@apollo/client';
 import commonStyles from '../../../../../theme/styles';
-import { CustomMobileNumber, IconButtonWrapper } from '../../../../../components';
+import { TutorImageComponent } from '../../../../../components';
 import { alertBox, isValidMobile, printDate, RfH, RfW } from '../../../../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../../../../utils/constants';
-import { Colors, Images } from '../../../../../theme';
+import { Colors } from '../../../../../theme';
 import CustomDatePicker from '../../../../../components/CustomDatePicker';
 import GenderModal from './genderModal';
 import { UPDATE_STUDENT_CONTACT_DETAILS, UPDATE_TUTOR_CONTACT_DETAILS } from '../../../graphql-mutation';
 import { GenderEnum } from '../../../enums';
-import { userType } from '../../../../../apollo/cache';
 import { UserTypeEnum } from '../../../../../common/userType.enum';
 
 function PersonalInformation(props) {
+  const { referenceType, referenceId, userInfo, onUpdate, isUpdateAllowed } = props;
+
   const [showGenderModal, setShowGenderModal] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDOB] = useState(new Date());
   const [gender, setGender] = useState(GenderEnum.MALE.label);
-  const { referenceType, referenceId, details, onUpdate, isUpdateAllowed } = props;
   const [mobileObj, setMobileObj] = useState({
     mobile: '',
     country: IND_COUNTRY_OBJ,
@@ -33,12 +33,12 @@ function PersonalInformation(props) {
   };
 
   useEffect(() => {
-    setFirstName(details?.firstName);
-    setLastName(details?.lastName);
-    setEmail(details?.email);
-    setMobileObj({ mobile: details?.phoneNumber?.number, country: IND_COUNTRY_OBJ });
-    setGender(details?.gender);
-    setDOB(details?.dob);
+    setFirstName(userInfo?.firstName);
+    setLastName(userInfo?.lastName);
+    setEmail(userInfo?.email);
+    setMobileObj({ mobile: userInfo?.phoneNumber?.number, country: IND_COUNTRY_OBJ });
+    setGender(userInfo?.gender);
+    setDOB(userInfo?.dob);
   }, []);
 
   const [saveStudentDetails, { loading: updateLoading }] = useMutation(UPDATE_STUDENT_CONTACT_DETAILS, {
@@ -50,8 +50,8 @@ function PersonalInformation(props) {
     },
     onCompleted: (data) => {
       if (data) {
+        onUpdate(data.updateStudent);
         alertBox('Details updated!');
-        onUpdate();
       }
     },
   });
@@ -65,6 +65,7 @@ function PersonalInformation(props) {
     },
     onCompleted: (data) => {
       if (data) {
+        onUpdate(data.updateTutor);
         alertBox('Details updated!');
       }
     },
@@ -125,12 +126,14 @@ function PersonalInformation(props) {
     <View style={{ paddingHorizontal: RfW(16) }}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: RfH(32) }}>
         <View style={{ height: RfH(44) }} />
-        <IconButtonWrapper
-          iconHeight={RfH(80)}
-          iconWidth={RfW(80)}
-          iconImage={Images.user}
-          styling={{ borderRadius: RfH(8) }}
+        <TutorImageComponent
+          tutor={{ profileImage: userInfo.profileImage, contactDetail: userInfo }}
+          height={80}
+          width={80}
+          fontSize={24}
+          styling={{ borderRadius: RfH(80) }}
         />
+
         <View style={{ height: RfH(24) }} />
         {isUpdateAllowed ? (
           <Item floatingLabel>
@@ -140,7 +143,7 @@ function PersonalInformation(props) {
         ) : (
           <View>
             <Text style={commonStyles.mediumMutedText}>First name</Text>
-            <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.firstName}</Text>
+            <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.firstName}</Text>
           </View>
         )}
 
@@ -153,7 +156,7 @@ function PersonalInformation(props) {
         ) : (
           <View>
             <Text style={commonStyles.mediumMutedText}>Last name</Text>
-            <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.lastName}</Text>
+            <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.lastName}</Text>
           </View>
         )}
         <View style={{ height: RfH(24) }} />
@@ -165,7 +168,7 @@ function PersonalInformation(props) {
         {/* ) : ( */}
         <View>
           <Text style={commonStyles.mediumMutedText}>Email Id</Text>
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.email}</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.email}</Text>
         </View>
         {/* )} */}
         <View style={{ height: RfH(24) }} />
@@ -183,7 +186,7 @@ function PersonalInformation(props) {
         {/*    /> */}
         {/*  </View> */}
         {/* ) : ( */}
-        <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.phoneNumber?.number}</Text>
+        <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.phoneNumber?.number}</Text>
         {/* )} */}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.regularMutedText}>Date of birth</Text>
@@ -192,7 +195,7 @@ function PersonalInformation(props) {
             <CustomDatePicker value={dob} onChangeHandler={(value) => setDOB(value)} />
           </View>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{printDate(details?.dob)}</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{printDate(userInfo?.dob)}</Text>
         )}
         <View style={{ height: RfH(24) }} />
         <Text style={commonStyles.regularMutedText}>Gender</Text>
@@ -203,7 +206,7 @@ function PersonalInformation(props) {
             </View>
           </TouchableWithoutFeedback>
         ) : (
-          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{details?.gender}</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.gender}</Text>
         )}
         <View style={{ height: RfH(24) }} />
         {isUpdateAllowed && (
@@ -229,7 +232,7 @@ function PersonalInformation(props) {
 PersonalInformation.propTypes = {
   referenceType: PropTypes.string,
   referenceId: PropTypes.number,
-  details: PropTypes.object,
+  userInfo: PropTypes.object,
   onUpdate: PropTypes.func,
   isUpdateAllowed: PropTypes.bool,
 };
@@ -237,7 +240,7 @@ PersonalInformation.propTypes = {
 PersonalInformation.defaultProps = {
   referenceType: '',
   referenceId: 0,
-  details: {},
+  userInfo: {},
   onUpdate: null,
   isUpdateAllowed: false,
 };

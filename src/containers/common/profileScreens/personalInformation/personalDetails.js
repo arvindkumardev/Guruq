@@ -19,6 +19,21 @@ function PersonalDetails() {
 
   const [isEditClicked, setIsEditClicked] = useState(false);
 
+  const updateDetails = (data) => {
+    setIsEditClicked(false);
+
+    const newData = { ...data };
+
+    delete newData.phoneNumber;
+    delete newData.email;
+
+    if (userInfo.type === UserTypeEnum.STUDENT.label) {
+      studentDetails({ ...studentInfo, ...newData });
+    } else if (userInfo.type === UserTypeEnum.TUTOR.label) {
+      tutorDetails({ ...tutorInfo, ...newData });
+    }
+  };
+
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
       <ScreenHeader
@@ -42,9 +57,9 @@ function PersonalDetails() {
         <PersonalInformation
           referenceType={userInfo.type}
           referenceId={userInfo.type === UserTypeEnum.STUDENT.label ? studentInfo.id : tutorInfo.id}
-          details={userInfo.type === UserTypeEnum.STUDENT.label ? studentInfo?.contactDetail : tutorInfo?.contactDetail}
+          userInfo={userInfo}
           isUpdateAllowed={isEditClicked}
-          onUpdate={() => setIsEditClicked(false)}
+          onUpdate={(data) => updateDetails(data)}
         />
       </View>
     </View>

@@ -61,6 +61,7 @@ export const SIGNIN_MUTATION = gql`
       firstName
       lastName
       email
+      gender
       isPasswordSet
       isPhoneNumberVerified
       isEmailVerified
@@ -169,6 +170,7 @@ export const UPDATE_TUTOR_CONTACT_DETAILS = gql`
         firstName
         lastName
         gender
+        dob
       }
     }
   }
@@ -181,6 +183,7 @@ export const UPDATE_STUDENT_CONTACT_DETAILS = gql`
         firstName
         lastName
         gender
+        dob
       }
     }
   }
