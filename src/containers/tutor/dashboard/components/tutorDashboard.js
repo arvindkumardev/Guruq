@@ -20,7 +20,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
 import { isEmpty } from 'lodash';
 import { tutorDetails, userDetails } from '../../../../apollo/cache';
-import { IconButtonWrapper, UpcomingClassComponent,TutorImageComponent } from '../../../../components';
+import { IconButtonWrapper, UpcomingClassComponent, TutorImageComponent } from '../../../../components';
 import Loader from '../../../../components/Loader';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import { Colors, Images } from '../../../../theme';
@@ -32,6 +32,7 @@ import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/he
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
+import { TutorOfferingStageEnum } from '../../enums';
 
 function TutorDashboard(props) {
   const navigation = useNavigation();
@@ -94,35 +95,43 @@ function TutorDashboard(props) {
 
   const renderSubjects = (item, index) => {
     return (
-      <View
-        style={[
-          commonStyles.verticallyStretchedItemsView,
-          {
-            flex: 0.5,
-            backgroundColor: getBoxColor(item?.offering?.displayName),
-            padding: RfH(8),
-            marginRight: index % 2 === 0 ? RfW(0) : RfW(0),
-            marginLeft: index % 2 !== 0 ? RfW(8) : RfW(0),
-            marginVertical: RfH(8),
-            borderRadius: RfH(8),
-          },
-        ]}>
-        <IconButtonWrapper
-          iconWidth={RfW(48)}
-          iconHeight={RfH(48)}
-          styling={{ alignSelf: 'flex-start' }}
-          iconImage={getSubjectIcons(item?.offering?.displayName)}
-        />
-        <View style={commonStyles.horizontalChildrenView}>
-          <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            {item?.offerings[2]?.displayName}
+      <TouchableWithoutFeedback
+        onPress={() =>
+          navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX, {
+            offering: item,
+            priceMatrix: true,
+          })
+        }>
+        <View
+          style={[
+            commonStyles.verticallyStretchedItemsView,
+            {
+              flex: 0.5,
+              backgroundColor: getBoxColor(item?.offering?.displayName),
+              padding: RfH(8),
+              marginRight: index % 2 === 0 ? RfW(0) : RfW(0),
+              marginLeft: index % 2 !== 0 ? RfW(8) : RfW(0),
+              marginVertical: RfH(8),
+              borderRadius: RfH(8),
+            },
+          ]}>
+          <IconButtonWrapper
+            iconWidth={RfW(48)}
+            iconHeight={RfH(48)}
+            styling={{ alignSelf: 'flex-start' }}
+            iconImage={getSubjectIcons(item?.offering?.displayName)}
+          />
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+            {item?.offering?.displayName}
           </Text>
-          <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            -{item?.offerings[1]?.displayName}
-          </Text>
+
+          <View style={commonStyles.horizontalChildrenView}>
+            <Text style={[commonStyles.smallMutedText]}>
+              {item?.offerings[2]?.displayName} - {item?.offerings[1]?.displayName}
+            </Text>
+          </View>
         </View>
-        <Text style={commonStyles.smallMutedText}>{item?.offering?.displayName}</Text>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -133,11 +142,11 @@ function TutorDashboard(props) {
       <View style={commonStyles.mainContainer}>
         <View style={{ height: RfH(44), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flexDirection: 'row' }} />
-          {/*<View>*/}
-          {/*  <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}>*/}
-          {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} />*/}
-          {/*  </TouchableOpacity>*/}
-          {/*</View>*/}
+          {/* <View> */}
+          {/*  <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}> */}
+          {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} /> */}
+          {/*  </TouchableOpacity> */}
+          {/* </View> */}
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -222,8 +231,10 @@ function TutorDashboard(props) {
           {subjects.length > 0 && (
             <View style={{ marginTop: RfH(24) }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>My Subjects</Text>
-                <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
+                <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                  My Active Subjects
+                </Text>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECTS_LIST)}>
                   <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                     View All
                   </Text>

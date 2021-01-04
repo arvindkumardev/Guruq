@@ -44,7 +44,9 @@ const TutorWelcomeScreen = () => {
     <>
       <Loader isLoading={markTutorCertifiedLoading || getCurrentTutorLoading} />
       <View style={{ flex: 1, alignItems: 'center', paddingTop: RfH(140), backgroundColor: Colors.white }}>
-        <Image source={Images.tutorWelcome} height={RfH(259)} weight={RfW(302)} />
+
+        <Image source={Images.tutorWelcome} style={ { height: RfH(219), width: RfH(256) }} />
+
         <View style={{ marginTop: RfH(52), alignItems: 'center' }}>
           <Text style={commonStyles.headingPrimaryText}> Welcome to GuruQ!</Text>
           <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(14), textAlign: 'center' }]}>

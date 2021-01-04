@@ -35,6 +35,7 @@ import {
 import styles from './styles';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { WEBVIEW_URLS } from '../../../utils/webviewUrls';
+import UploadDocument from '../../../components/UploadDocument';
 
 const ACCOUNT_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
@@ -42,15 +43,15 @@ const ACCOUNT_OPTIONS = [
   { name: 'Education', icon: Images.education },
   { name: 'Experience', icon: Images.work_office },
   { name: 'Awards & Achievement', icon: Images.award },
-  { name: 'Documents', icon: Images.book },
+  // { name: 'Documents', icon: Images.book },
   { name: 'Bank Details', icon: Images.bank },
   { name: 'Business Details', icon: Images.award },
 ];
 
 const MY_CLASS_OPTIONS = [
   { name: 'Calendar', icon: Images.calendar },
-  { name: 'My Classes', icon: Images.laptop },
-  { name: 'My Students', icon: Images.home },
+  // { name: 'My Classes', icon: Images.laptop },
+  // { name: 'My Students', icon: Images.home },
   { name: 'Student Request', icon: Images.classes },
 ];
 
@@ -80,6 +81,7 @@ function Profile(props) {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const client = initializeApollo();
 
@@ -121,11 +123,14 @@ function Profile(props) {
       navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Experience') {
       navigation.navigate(NavigationRouteNames.EXPERIENCE);
+    } else if (item.name === 'Business Details') {
+      navigation.navigate(NavigationRouteNames.TUTOR.BUSINESS_DETAILS);
     } else if (item.name === 'Documents') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
-        label: 'Documents',
-      });
+      // navigation.navigate(NavigationRouteNames.WEB_VIEW, {
+      //   url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
+      //   label: 'Documents',
+      // });
+      setIsUploadModalOpen(true);
     } else if (item.name === 'Bank Details') {
       navigation.navigate(NavigationRouteNames.BANK_DETAILS);
     } else if (item.name === 'Awards & Achievement') {

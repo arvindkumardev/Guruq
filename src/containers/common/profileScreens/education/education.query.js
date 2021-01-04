@@ -12,6 +12,8 @@ export const GET_TUTOR_EDUCATION_DETAILS = gql`
           name
           degreeLevel
         }
+        startDate
+        endDate
         fieldOfStudy
         higherSecondaryStream
         board
@@ -33,6 +35,8 @@ export const GET_STUDENT_EDUCATION_DETAILS = gql`
         degree {
           name
         }
+        startDate
+        endDate
         fieldOfStudy
         higherSecondaryStream
         board

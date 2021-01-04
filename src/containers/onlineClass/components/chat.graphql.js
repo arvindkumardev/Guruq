@@ -27,6 +27,7 @@ export const GET_CHAT_MESSAGES = gql`
       uuid
       channel
       createdBy {
+        id
         firstName
         lastName
         profileImage {

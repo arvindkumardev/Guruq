@@ -104,7 +104,7 @@ const InterviewAndDocument = () => {
             <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Schedule Interview</Text>
             {!isInterviewNotScheduled() && (
               <View style={{ paddingHorizontal: RfW(10), marginTop: RfH(5) }}>
-                <Text style={[commonStyles.mediumPrimaryText, { color: Colors.green }]}>{getInterviewText()}</Text>
+                <Text style={[commonStyles.mediumPrimaryText, { color: Colors.orange }]}>{getInterviewText()}</Text>
               </View>
             )}
           </View>

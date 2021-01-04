@@ -56,6 +56,7 @@ const Images = {
   demo: require('../assets/images/demo.png'),
   discount: require('../assets/images/discount.png'),
   documents: require('../assets/images/documents.png'),
+  document_upload: require('../assets/images/document_upload.png'),
   dots: require('../assets/images/dots.png'),
   expand: require('../assets/images/dropdown.png'),
   earn: require('../assets/images/earn.png'),
@@ -247,7 +248,7 @@ const Images = {
   filledStar: require('../assets/images/filledStar.png'),
   unFilledStar: require('../assets/images/unfilledStar.png'),
   award: require('../assets/images/awards.png'),
-  ...SubjectIcons,
+
   tutorWelcome: require('../assets/images/tutorWelcome.png'),
   ptTest: require('../assets/images/ptTest.png'),
   experienceOrange: require('../assets/images/experienceOrange.png'),
@@ -257,6 +258,15 @@ const Images = {
   pendingStatus: require('../assets/images/pendingStatus.png'),
 
   bgPending: require('../assets/images/bg-pending.png'),
+  document: require('../assets/images/document.png'),
+  gallery: require('../assets/images/gallery.png'),
+  close: require('../assets/images/close.png'),
+  plusWhite: require('../assets/images/plus_white.png'),
+  deleteWhite: require('../assets/images/delete_white.png'),
+
+
+
+  ...SubjectIcons,
 };
 
 export default Images;

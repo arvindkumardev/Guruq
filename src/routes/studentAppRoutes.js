@@ -28,8 +28,8 @@ import SendFeedback from '../containers/common/sendFeedback';
 import CustomerCare from '../containers/common/customerCare/customerCare';
 import ParentListing from '../containers/common/profileScreens/parentsDetail/parentListing';
 import AddEditParents from '../containers/common/profileScreens/parentsDetail/addEditParents';
+import BookingList from '../containers/student/profile/purchasedHistory/bookingList';
 import BookingDetails from '../containers/student/profile/purchasedHistory/bookingDetails';
-import ViewBookingDetails from '../containers/student/profile/purchasedHistory/viewBookingDetails';
 import Refund from '../containers/student/profile/purchasedHistory/refund';
 import AboutUs from '../containers/common/about/about';
 import MyStudyAreas from '../containers/student/studyArea/myStudyAreas';
@@ -171,12 +171,12 @@ export const getStudentRoutes = () => {
       />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.BOOKING_DETAILS}
-        component={BookingDetails}
+        component={BookingList}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.VIEW_BOOKING_DETAILS}
-        component={ViewBookingDetails}
+        component={BookingDetails}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.REFUND} component={Refund} options={{ headerShown: false }} />

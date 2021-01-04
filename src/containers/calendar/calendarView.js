@@ -80,7 +80,7 @@ function CalendarView(props) {
                   classDetails?.students[0].contactDetail
                 )}`}
           </Text>
-          <Text style={commonStyles.mediumMutedText}>
+          <Text style={commonStyles.mediumMutedText} numberOfLines={1}>
             {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>
@@ -205,12 +205,15 @@ function CalendarView(props) {
                     : "Looks like you don't have  scheduled classes for the selected day."}
                 </Text>
                 <View style={{ height: RfH(40) }} />
-                <Button
-                  block
-                  style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-                  onPress={() => changeTab(3)}>
-                  <Text style={commonStyles.textButtonPrimary}>{isStudent ? 'Schedule Now' : 'View Classes'}</Text>
-                </Button>
+
+                {isStudent && (
+                  <Button
+                    block
+                    style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+                    onPress={() => changeTab(3)}>
+                    <Text style={commonStyles.textButtonPrimary}>{isStudent ? 'Schedule Now' : 'View Classes'}</Text>
+                  </Button>
+                )}
               </View>
             ) : (
               <FlatList

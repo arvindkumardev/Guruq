@@ -229,14 +229,14 @@ const PtStartScreen = (props) => {
             <View style={{ marginVertical: RfH(15) }}>
               <View>{renderOffering()}</View>
               <View style={{ alignItems: 'center', marginVertical: RfH(40) }}>
-                <Image source={Images.ptTest} height={RfH(181)} weight={RfW(150)} />
+                <Image source={Images.ptTest} style={{ height: RfH(210), width: RfW(260) }} />
               </View>
               <Text
                 style={[
                   commonStyles.headingPrimaryText,
                   { marginTop: RfH(40), marginBottom: RfH(20), textAlign: 'center' },
                 ]}>
-                Test Overview
+                Test Instructions
               </Text>
               <View style={{ marginHorizontal: RfW(16) }}>
                 <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center' }]}>
@@ -271,7 +271,7 @@ const PtStartScreen = (props) => {
         {attemptExhausted && (
           <View style={{ marginTop: RfH(30), justifyContent: 'center', alignItems: 'center' }}>
             <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
-              Your all the attempts to take the exam are exhausted please contact the customer care
+              All PT attempts Exhausted. Contact the customer care.
             </Text>
             <Button
               onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}

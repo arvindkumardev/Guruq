@@ -283,6 +283,9 @@ export const convertDateTime = (date) => {
   return `${moment(date).format('YYYY-MM-DDTHH:mm:00')}Z`;
 };
 
+export const printYear = (date) => {
+  return formatDate(date, 'YYYY');
+};
 export const printDate = (date) => {
   return formatDate(date, 'MMM DD, YYYY');
 };

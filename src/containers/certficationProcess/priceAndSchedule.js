@@ -34,7 +34,7 @@ const PriceAndSchedule = () => {
       <Loader isLoading={getCurrentTutorLoading} />
       <ScreenHeader label="Availability & Price" horizontalPadding={RfW(16)} homeIcon={false} />
       <View style={{ paddingHorizontal: RfW(20), paddingVertical: RfH(15) }}>
-        <Text style={commonStyles.regularPrimaryText}>
+        <Text style={commonStyles.headingPrimaryText}>
           Mark your availability and Update price metrics to make your course visible to students.
         </Text>
       </View>

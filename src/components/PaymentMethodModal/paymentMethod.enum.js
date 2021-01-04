@@ -8,7 +8,7 @@ export const PaymentMethodEnum = {
   Q_POINTS: { value: 7, label: 'Q_POINTS' },
 };
 
-export const OrderPaymentStatusEnum = {
+export const PaymentStatusEnum = {
   COMPLETE: { value: 1, label: 'COMPLETE' },
 
   PENDING: { value: 2, label: 'PENDING' },

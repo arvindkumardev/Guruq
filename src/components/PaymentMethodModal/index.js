@@ -16,7 +16,7 @@ import routeNames from '../../routes/screenNames';
 import { userDetails } from '../../apollo/cache';
 import { CREATE_BOOKING, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
 import Dash from '../Dash';
-import { OrderPaymentStatusEnum, OrderStatusEnum, PaymentMethodEnum } from './paymentMethod.enum';
+import { PaymentStatusEnum, OrderStatusEnum, PaymentMethodEnum } from './paymentMethod.enum';
 
 const convenienceCharges = 100;
 const PaymentMethod = (props) => {
@@ -79,7 +79,7 @@ const PaymentMethod = (props) => {
     onCompleted: (data) => {
       if (data) {
         onClose(false);
-        if (OrderPaymentStatusEnum.COMPLETE.value) {
+        if (PaymentStatusEnum.COMPLETE.value) {
           navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { uuid: data?.makePayment?.uuid, paymentMethod });
         }
       }
@@ -104,7 +104,7 @@ const PaymentMethod = (props) => {
     };
     RNRazorpayCheckout.open(options)
       .then((data) => {
-        completedPayment(bookingOrderId, OrderPaymentStatusEnum.COMPLETE.label, data.razorpay_payment_id);
+        completedPayment(bookingOrderId, PaymentStatusEnum.COMPLETE.label, data.razorpay_payment_id);
       })
       .catch((error) => {
         alertBox('Payment Failed', 'Please try again', {
