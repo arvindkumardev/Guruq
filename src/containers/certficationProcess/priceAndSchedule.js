@@ -34,7 +34,7 @@ const PriceAndSchedule = () => {
       <Loader isLoading={getCurrentTutorLoading} />
       <ScreenHeader label="Availability & Price" horizontalPadding={RfW(16)} homeIcon={false} />
       <View style={{ paddingHorizontal: RfW(20), paddingVertical: RfH(15) }}>
-        <Text style={commonStyles.regularMutedText}>
+        <Text style={commonStyles.headingPrimaryText}>
           Complete the information for availability of sessions and price metrics to go live.
         </Text>
       </View>
