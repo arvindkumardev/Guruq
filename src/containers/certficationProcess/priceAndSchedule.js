@@ -34,8 +34,8 @@ const PriceAndSchedule = () => {
       <Loader isLoading={getCurrentTutorLoading} />
       <ScreenHeader label="Availability & Price" horizontalPadding={RfW(16)} homeIcon={false} />
       <View style={{ paddingHorizontal: RfW(20), paddingVertical: RfH(15) }}>
-        <Text style={commonStyles.regularMutedText}>
-          Complete the information for availability of sessions and price metrics to go live.
+        <Text style={commonStyles.regularPrimaryText}>
+          Mark your availability and Update price metrics to make your course visible to students.
         </Text>
       </View>
       <TouchableOpacity
@@ -75,7 +75,7 @@ const PriceAndSchedule = () => {
             imageResizeMode="contain"
           />
           <View>
-            <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Add Price Matrix</Text>
+            <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Add Subject Price Matrix</Text>
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
             <IconButtonWrapper

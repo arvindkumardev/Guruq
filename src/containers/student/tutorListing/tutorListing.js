@@ -71,7 +71,7 @@ function TutorListing(props) {
 
   const openCompareTutor = async () => {
     if (JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID)) == null) {
-      Alert.alert('Add tutors before compare');
+      Alert.alert('Add Tutors To Compare');
     } else {
       setShowCompareModal(true);
     }

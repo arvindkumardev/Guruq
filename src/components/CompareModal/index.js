@@ -99,7 +99,7 @@ const compareModal = (props) => {
             commonStyles.horizontalChildrenSpaceView,
             { paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.lightBlue },
           ]}>
-          <Text style={commonStyles.headingPrimaryText}>Compare Tutor</Text>
+          <Text style={commonStyles.headingPrimaryText}>Compare Tutors</Text>
           <IconButtonWrapper
             iconHeight={RfH(20)}
             iconWidth={RfW(20)}
