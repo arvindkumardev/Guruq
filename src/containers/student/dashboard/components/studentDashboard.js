@@ -493,7 +493,7 @@ function StudentDashboard(props) {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
-              height: 54,
+              minHeight: RfH(55),
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',

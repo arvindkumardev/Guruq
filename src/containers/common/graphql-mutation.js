@@ -298,3 +298,19 @@ export const DELETE_TUTOR_DOCUMENT_DETAILS = gql`
     }
   }
 `;
+
+export const MARK_ON_BOARDED = gql`
+  mutation MarkOnBoarded {
+    markOnBoarded {
+      id
+    }
+  }
+`;
+
+export const REFRESH_TOKEN = gql`
+  mutation RefreshToken {
+    refreshToken {
+      token
+    }
+  }
+`;

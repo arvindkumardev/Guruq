@@ -133,6 +133,9 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
       profileImage {
         filename
       }
+      user {
+        onBoarded
+      }
       lead {
         certificationStage
         backgroundCheck {

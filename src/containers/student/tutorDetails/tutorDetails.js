@@ -644,9 +644,12 @@ function TutorDetails(props) {
             <View style={commonStyles.lineSeparator} />
             {selectedSubject && classView()}
             <View style={commonStyles.lineSeparator} />
-            <View>
+            <View style={{ marginBottom: RfH(16) }}>
               <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
-              <ScrollView style={{ marginBottom: RfH(16), paddingHorizontal: RfW(16) }} horizontal>
+              <ScrollView
+                containerStyle={{ paddingHorizontal: RfW(16) }}
+                horizontal
+                showsHorizontalScrollIndicator={false}>
                 {subjects.map((item, index) => renderSubjects(item, index))}
               </ScrollView>
             </View>

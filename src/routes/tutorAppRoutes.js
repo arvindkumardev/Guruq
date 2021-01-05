@@ -18,12 +18,20 @@ import AddEditBankDetails from '../containers/common/profileScreens/bankDetails/
 import BusinessDetails from '../containers/common/profileScreens/businessDetails/businessDetails';
 import AddEditBusinessDetails from '../containers/common/profileScreens/businessDetails/addEditBusinessDetails';
 import PriceAndSchedule from '../containers/certficationProcess/priceAndSchedule';
+import TutorOnBoard from '../containers/tutor/tutorOnboard';
 
 const Stack = createStackNavigator();
 
 export const getTutorRoutes = (tutorInfo) => {
   return (
     <>
+      {!tutorInfo.user.onBoarded && (
+        <Stack.Screen
+          name={NavigationRouteNames.TUTOR.ON_BOARDING}
+          component={TutorOnBoard}
+          options={{ headerShown: false }}
+        />
+      )}
       {tutorInfo.activeForListing ? (
         <Stack.Screen
           name={NavigationRouteNames.TUTOR.DASHBOARD}

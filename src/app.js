@@ -6,21 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-import { clearAllLocalStorage, getToken, removeToken } from './utils/helpers';
-import {
-  isLoggedIn,
-  isTokenLoading,
-  userType,
-  isSplashScreenVisible,
-  networkConnectivityError,
-  userDetails,
-  studentDetails,
-  tutorDetails,
-  userLocation,
-  offeringsMasterData,
-  interestingOfferingData,
-  notificationPayload,
-} from './apollo/cache';
+import { getToken } from './utils/helpers';
+import { isLoggedIn, isSplashScreenVisible, isTokenLoading, userType } from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
 
