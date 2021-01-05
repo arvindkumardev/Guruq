@@ -16,7 +16,7 @@ const TutorImageComponent = (props) => {
     <>
       {tutor?.profileImage?.filename ? (
         <CustomImage
-          imageWidth={RfW(width)}
+          imageWidth={RfH(width)}
           imageHeight={RfH(height)}
           image={getFileUrl(tutor?.profileImage?.filename)}
           imageResizeMode="cover"
@@ -26,7 +26,7 @@ const TutorImageComponent = (props) => {
         <View
           style={{
             height: RfH(height),
-            width: RfW(width),
+            width: RfH(width),
             ...styling,
             backgroundColor: Colors.lightPurple,
             justifyContent: 'center',

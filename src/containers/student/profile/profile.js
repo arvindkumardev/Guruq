@@ -49,7 +49,7 @@ const MY_STUDY_DATA_OPTIONS = [
 ];
 
 const BOOKING_DATA_OPTIONS = [
-  { name: 'Purchased History', icon: Images.personal },
+  // { name: 'Purchased History', icon: Images.personal },
   { name: 'My Cart', icon: Images.cart },
 ];
 
@@ -194,27 +194,27 @@ function Profile(props) {
     <>
       <StatusBar barStyle="dark-content" />
 
-      <View
-        style={{
-          height: 44,
-          paddingHorizontal: RfW(16),
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
-            style={{ padding: 10 }}>
-            <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ padding: 10 }}
-            onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
-            <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      {/*<View*/}
+      {/*  style={{*/}
+      {/*    height: 44,*/}
+      {/*    paddingHorizontal: RfW(16),*/}
+      {/*    flexDirection: 'row',*/}
+      {/*    justifyContent: 'space-between',*/}
+      {/*    alignItems: 'center',*/}
+      {/*  }}>*/}
+        {/*<View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>*/}
+        {/*  <TouchableOpacity*/}
+        {/*    onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}*/}
+        {/*    style={{ padding: 10 }}>*/}
+        {/*    <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} />*/}
+        {/*  </TouchableOpacity>*/}
+        {/*  <TouchableOpacity*/}
+        {/*    style={{ padding: 10 }}*/}
+        {/*    onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>*/}
+        {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} />*/}
+        {/*  </TouchableOpacity>*/}
+        {/*</View>*/}
+      {/*</View>*/}
 
       <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
         <ScrollView
@@ -222,12 +222,12 @@ function Profile(props) {
           showsVerticalScrollIndicator={false}
           // onScroll={(event) => handleScroll(event)}
           scrollEventThrottle={16}>
-          <View style={{ paddingHorizontal: RfW(16), height: 54 }}>
+          <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(25) }}>
             <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
           </View>
           <View
             style={{
-              height: 102,
+              paddingVertical:RfH(20),
               backgroundColor: Colors.white,
               paddingHorizontal: RfW(16),
               justifyContent: 'center',
@@ -247,7 +247,7 @@ function Profile(props) {
                 <Text style={styles.userMobDetails}>
                   +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
                 </Text>
-                <Text style={styles.userMobDetails}>S-{studentInfo?.id}</Text>
+                <Text style={styles.userMobDetails}>S-{userInfo?.id}</Text>
               </View>
             </View>
           </View>

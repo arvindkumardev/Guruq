@@ -16,7 +16,7 @@ import {
   userDetails,
   userType,
 } from '../../../apollo/cache';
-import { CREATE_STUDENT, CREATE_TUTOR } from '../graphql-mutation';
+import { CREATE_STUDENT, CREATE_TUTOR, REFRESH_TOKEN } from '../graphql-mutation';
 import { GET_CURRENT_TUTOR_QUERY } from '../graphql-query';
 import { Loader } from '../../../components';
 
@@ -32,6 +32,21 @@ function UserTypeSelector(props) {
     navigation.goBack();
   };
 
+  const [refreshToken, { loading: refreshTokenLoading }] = useMutation(REFRESH_TOKEN, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.refreshToken.token);
+      }
+    },
+  });
+
   const [createStudent, { loading: createStudentLoading }] = useMutation(CREATE_STUDENT, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -42,12 +57,11 @@ function UserTypeSelector(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        // set in apollo cache
-        // isLoggedIn(true);
         userDetails({ ...userInfo, type: 'STUDENT' });
         studentDetails(data);
 
         userType('STUDENT');
+        refreshToken();
       }
     },
   });
@@ -75,13 +89,14 @@ function UserTypeSelector(props) {
     onCompleted: (data) => {
       if (data) {
         getCurrentTutor();
+        refreshToken();
       }
     },
   });
 
   return (
     <>
-      <Loader isLoading={createTutorLoading || getCurrentTutorLoading} />
+      <Loader isLoading={createTutorLoading || getCurrentTutorLoading || refreshTokenLoading || createStudentLoading} />
       <View style={commonStyles.mainContainer}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.helloView}>

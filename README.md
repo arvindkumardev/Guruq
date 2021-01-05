@@ -192,3 +192,4 @@ https://github.com/razorpay/react-native-razorpay/pull/297/files/ea490ff7669c629
 rm -rf node_modules && yarn install && cd ios && rm -rf Pods Podfile.lock && pod install && cd ..
 
 
+rm -rf ./android/app/src/main/res/drawable-*; rm -rf ./android/app/src/main/res/raw-*
