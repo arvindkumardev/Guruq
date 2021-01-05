@@ -162,7 +162,7 @@ const Images = {
   radio_button_null: require('../assets/images/radio-line.png'),
   radio: require('../assets/images/radio.png'),
   rectangle: require('../assets/images/rectangle.png'),
-  refer_earn: require('../assets/images/refer-and-earn.png'),
+  refer_earn_new: require('../assets/images/referEarn.png'),
   refer_one: require('../assets/images/refer_one.png'),
   refer_two: require('../assets/images/refer_two.png'),
   refer_three: require('../assets/images/refer_three.png'),

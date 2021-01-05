@@ -7,24 +7,24 @@ import Fonts from '../../../theme/fonts';
 
 const styles = StyleSheet.create({
   topView: {
-    height: RfH(98),
+    // height: RfH(98),
     backgroundColor: Colors.lightPurple,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: RfH(44),
+    paddingTop: Platform.OS === 'ios' ? RfH(44) : RfH(22),
   },
   headerComponent: {
-    height: RfH(70),
-    marginTop: RfH(30),
+    // height: RfH(70),
+    paddingVertical: RfH(15),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: RfW(16),
   },
   stickyHeader: {
-    height: RfH(98),
-    marginTop: RfH(88),
+    // height: RfH(98),
+    // marginTop: RfH(88),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     paddingLeft: RfW(16),
     backgroundColor: Colors.white,
-    height: RfH(44),
+    // height: RfH(44),
   },
   filterContainer: {
     flexDirection: 'row',

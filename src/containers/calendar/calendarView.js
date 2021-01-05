@@ -145,8 +145,12 @@ function CalendarView(props) {
                 disabledDateNameStyle={{ color: Colors.black }}
                 disabledDateNumberStyle={{ color: Colors.black }}
                 selectedDate={new Date()}
-                dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-                dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+                dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
+                dateNumberStyle={{
+                  fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                  fontWeight: '400',
+                  color: Colors.black,
+                }}
                 style={
                   showHeader
                     ? { height: 102, paddingBottom: 10 }

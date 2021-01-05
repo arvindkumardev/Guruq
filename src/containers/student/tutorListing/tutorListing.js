@@ -87,7 +87,7 @@ function TutorListing(props) {
       if (data) {
         setTutorsData(data);
         const tutors = data?.searchTutors?.edges;
-        setLoadMoreButton(tutors.length > 0);
+        setLoadMoreButton(data.searchTutors.pageInfo.page < data.searchTutors.pageInfo.totalPages);
         const tutorData = appendData ? [...tutorList, ...tutors] : tutors;
         setTutorList(tutorData);
         setIsListEmpty(tutorData.length === 0);
@@ -265,8 +265,18 @@ function TutorListing(props) {
     setFilterValues((filterValues) => ({ ...filterValues, page: filterValues.page + 1 }));
   };
 
+  const isFilter = () => {
+    let filterFlag = false;
+    Object.entries(filterObj).map(([key, value]) => {
+      if (!isEmpty(value.displayValue)) {
+        filterFlag = true;
+      }
+    });
+    return filterFlag;
+  };
+
   const filtersView = () => (
-    <View style={[commonStyles.horizontalChildrenView, { marginTop: RfH(44) }]}>
+    <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(10) }]}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
         {Object.entries(filterObj).map(([key, value]) => (
           <>
@@ -274,9 +284,10 @@ function TutorListing(props) {
               <View style={styles.filterButton}>
                 <Text style={styles.appliedFilterText}>{value.displayValue}</Text>
                 <IconButtonWrapper
-                  iconWidth={RfW(16)}
+                  iconWidth={RfH(16)}
                   iconHeight={RfH(16)}
                   iconImage={Images.blue_cross}
+                  imageResizeMode={'contain'}
                   styling={{ marginLeft: RfW(12) }}
                   submitFunction={() => removeFilter(key)}
                 />
@@ -299,13 +310,13 @@ function TutorListing(props) {
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
       <Loader isLoading={loadingTutors || favouriteLoading || removeFavouriteLoading} />
-      <ScrollView
-        stickyHeaderIndices={[0]}
-        showsVerticalScrollIndicator={false}
-        onScroll={(event) => handleScroll(event)}
-        scrollEventThrottle={16}>
+      <View
+      // stickyHeaderIndices={[0]}
+      // showsVerticalScrollIndicator={false}
+      // onScroll={(event) => handleScroll(event)}
+      // scrollEventThrottle={16}
+      >
         <View style={styles.topView}>
-          {/* {topHeaderSticky && ( */}
           <View style={styles.headerComponent}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
               <BackArrow action={onBackPress} />
@@ -326,7 +337,6 @@ function TutorListing(props) {
               submitFunction={() => setShowAllSubjects(true)}
             />
           </View>
-          {/* )} */}
           {/* {!topHeaderSticky && ( */}
           {/*  <View style={styles.stickyHeader}> */}
           {/*    <View style={{ flexDirection: 'column', justifyContent: 'center', flex: 1 }}> */}
@@ -358,23 +368,22 @@ function TutorListing(props) {
           {/*    /!* /> *!/ */}
           {/*  </View> */}
           {/* )} */}
-
-          <View style={styles.filterParentView}>
-            <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>
-            <TouchableWithoutFeedback onPress={openCompareTutor}>
-              <Text style={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
-                Compare Tutors
-              </Text>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => setShowFilterPopup(true)}>
-              <View style={styles.filterContainer}>
-                <IconButtonWrapper iconHeight={15} iconWidth={15} iconImage={Images.filter} />
-                <Text style={styles.filterText}>Sort / Filters</Text>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
         </View>
-        {filtersView()}
+        <View style={styles.filterParentView}>
+          <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>
+          <TouchableOpacity onPress={openCompareTutor}>
+            <Text style={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+              Compare Tutors
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowFilterPopup(true)}>
+            <View style={styles.filterContainer}>
+              <IconButtonWrapper iconHeight={15} iconWidth={15} iconImage={Images.filter} />
+              <Text style={styles.filterText}>Sort / Filters</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        {isFilter() && filtersView()}
         {!isListEmpty ? (
           <FlatList
             data={tutorList}
@@ -392,13 +401,13 @@ function TutorListing(props) {
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={styles.tutorListContainer}
             ListFooterComponent={
-              <>
-                {loadMoreButton && !isEmpty(tutorList) && tutorList >= 49 && (
+              <View style={{ paddingBottom: RfH(200) }}>
+                {loadMoreButton && !isEmpty(tutorList) && (
                   <TouchableOpacity style={styles.footerLoadMore} onPress={loadMore}>
                     <Text> Load More</Text>
                   </TouchableOpacity>
                 )}
-              </>
+              </View>
             }
           />
         ) : (
@@ -439,7 +448,7 @@ function TutorListing(props) {
             </Button>
           </View>
         )}
-      </ScrollView>
+      </View>
 
       <FilterComponent
         showFilterPopup={showFilterPopup}

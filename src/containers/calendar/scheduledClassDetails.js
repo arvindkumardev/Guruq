@@ -22,6 +22,7 @@ import styles from '../student/tutorListing/styles';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
 import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
+import ActionSheet from '../../components/ActionSheet';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -39,6 +40,7 @@ function ScheduledClassDetails(props) {
   const [openMenu, setOpenMenu] = useState(false);
   const [classData, setClassData] = useState({});
   const [showReviewPopup, setShowReviewPopup] = useState(false);
+  const [menuItem, setMenuItem] = useState([]);
 
   const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -113,13 +115,24 @@ function ScheduledClassDetails(props) {
     navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData?.classEntity });
   };
 
-  const onBackPress = () => {
-    navigation.goBack();
-  };
-
   const openRescheduleModal = () => {
     setOpenMenu(false);
     setShowReschedulePopup(true);
+  };
+
+  useEffect(() => {
+    if (!isEmpty(classData)) {
+      const menuItemData = [
+        { label: 'Reschedule Class', handler: openRescheduleModal, isEnabled: classData?.isRescheduleAllowed },
+        { label: 'Cancel Class', handler: goToCancelReason, isEnabled: classData?.isCancelAllowed },
+        { label: 'Help', handler: goToHelp, isEnabled: true },
+      ];
+      setMenuItem(menuItemData);
+    }
+  }, [classData]);
+
+  const onBackPress = () => {
+    navigation.goBack();
   };
 
   const handleScroll = (event) => {
@@ -175,26 +188,20 @@ function ScheduledClassDetails(props) {
       onPress={() => setOpenMenu(false)}>
       <Loader isLoading={classDetailsLoading || scheduleLoading} />
       <ScrollView
-        // stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
-        scrollEventThrottle={16}
-        scrollEnabled={classData?.students?.length > 2}>
-        <View style={[styles.topView, {}]}>
-          {/* {showBackButton && ( */}
+        scrollEventThrottle={16}>
+        <View style={[styles.topView]}>
           <View
             style={{
-              // height: RfH(88),
-              // marginTop: RfH(44),
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
               paddingHorizontal: RfW(16),
               flex: 1,
             }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: RfH(15) }}>
               <BackArrow action={onBackPress} />
-
               <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 0.9 }]}>
                 <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]} numberOfLines={1}>
                   {`${classData?.classEntity?.offering?.displayName} by ${getFullName(
@@ -217,130 +224,50 @@ function ScheduledClassDetails(props) {
                   styling={{ alignSelf: 'center' }}
                 />
               )}
-              {openMenu && (
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: RfH(24),
-                    right: RfW(0),
-                    backgroundColor: Colors.white,
-                    width: 180,
-                    paddingVertical: RfH(8),
+              {/* {openMenu && ( */}
+              {/*  <View */}
+              {/*    style={{ */}
+              {/*      position: 'absolute', */}
+              {/*      top: RfH(24), */}
+              {/*      right: RfW(0), */}
+              {/*      backgroundColor: Colors.white, */}
+              {/*      width: 180, */}
+              {/*      paddingVertical: RfH(8), */}
 
-                    borderWidth: 0.5,
-                    borderColor: Colors.darkGrey,
-                    zIndex: 99,
-                  }}>
-                  {classData?.isRescheduleAllowed && (
-                    <TouchableOpacity
-                      onPress={openRescheduleModal}
-                      style={{
-                        paddingHorizontal: RfH(16),
-                        paddingBottom: RfH(10),
-                        borderBottomWidth: 0.5,
-                        borderColor: Colors.lightGrey,
-                      }}>
-                      <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Reschedule Class</Text>
-                    </TouchableOpacity>
-                  )}
-                  {classData?.isCancelAllowed && (
-                    <TouchableOpacity
-                      onPress={goToCancelReason}
-                      style={{ paddingHorizontal: RfH(16), paddingTop: RfH(10) }}>
-                      <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text>
-                    </TouchableOpacity>
-                  )}
-                  <TouchableOpacity
-                    onPress={goToHelp}
-                    style={{ paddingHorizontal: RfH(16), paddingTop: RfH(16), paddingBottom: RfH(10) }}>
-                    <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Help</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+              {/*      borderWidth: 0.5, */}
+              {/*      borderColor: Colors.darkGrey, */}
+              {/*      zIndex: 99, */}
+              {/*    }}> */}
+              {/*    {classData?.isRescheduleAllowed && ( */}
+              {/*      <TouchableOpacity */}
+              {/*        onPress={openRescheduleModal} */}
+              {/*        style={{ */}
+              {/*          paddingHorizontal: RfH(16), */}
+              {/*          paddingBottom: RfH(10), */}
+              {/*          borderBottomWidth: 0.5, */}
+              {/*          borderColor: Colors.lightGrey, */}
+              {/*        }}> */}
+              {/*        <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Reschedule Class</Text> */}
+              {/*      </TouchableOpacity> */}
+              {/*    )} */}
+              {/*    {classData?.isCancelAllowed && ( */}
+              {/*      <TouchableOpacity */}
+              {/*        onPress={goToCancelReason} */}
+              {/*        style={{ paddingHorizontal: RfH(16), paddingTop: RfH(10) }}> */}
+              {/*        <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text> */}
+              {/*      </TouchableOpacity> */}
+              {/*    )} */}
+              {/*    <TouchableOpacity */}
+              {/*      onPress={goToHelp} */}
+              {/*      style={{ paddingHorizontal: RfH(16), paddingTop: RfH(16), paddingBottom: RfH(10) }}> */}
+              {/*      <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Help</Text> */}
+              {/*    </TouchableOpacity> */}
+              {/*  </View> */}
+              {/* )} */}
             </View>
           </View>
-          {/* // )} */}
-
-          {/* {!showBackButton && ( */}
-          {/*  <View */}
-          {/*    style={{ */}
-          {/*      height: RfH(98), */}
-          {/*      marginTop: RfH(68), */}
-          {/*      flexDirection: 'row', */}
-          {/*      justifyContent: 'space-between', */}
-          {/*      alignItems: 'center', */}
-          {/*      paddingHorizontal: RfW(16), */}
-          {/*      backgroundColor: Colors.lightPurple, */}
-          {/*    }}> */}
-          {/*    <View */}
-          {/*      style={{ */}
-          {/*        flex: 1, */}
-          {/*        flexDirection: 'column', */}
-          {/*        justifyContent: 'center', */}
-          {/*        alignItems: 'stretch', */}
-          {/*      }}> */}
-          {/*      <BackArrow action={onBackPress} /> */}
-          {/*      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
-          {/*        <View */}
-          {/*          style={{ */}
-          {/*            height: RfH(54), */}
-          {/*            justifyContent: 'center', */}
-          {/*            paddingHorizontal: RfW(0), */}
-          {/*            marginRight: RfH(16), */}
-          {/*          }}> */}
-          {/*          <Text style={commonStyles.headingPrimaryText} numberOfLines={1}> */}
-          {/*            {isStudent */}
-          {/*              ? `${classData?.classEntity?.offering?.displayName} by ${classData?.classEntity?.tutor?.contactDetail?.firstName} ${classData?.classEntity?.tutor?.contactDetail?.lastName}` */}
-          {/*              : `${classData?.classEntity?.offering?.displayName} for ${classData?.classEntity?.students[0]?.contactDetail?.firstName} ${classData?.classEntity?.students[0]?.contactDetail?.lastName}`} */}
-          {/*          </Text> */}
-          {/*          <Text style={[commonStyles.mediumMutedText, { marginTop: RfH(4) }]}> */}
-          {/*            {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`} */}
-          {/*          </Text> */}
-          {/*        </View> */}
-
-          {/*        {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && ( */}
-          {/*          <IconButtonWrapper */}
-          {/*            iconImage={Images.vertical_dots} */}
-          {/*            iconHeight={RfH(20)} */}
-          {/*            iconWidth={RfW(20)} */}
-          {/*            submitFunction={() => setOpenMenu(!openMenu)} */}
-          {/*            styling={{ alignSelf: 'center' }} */}
-          {/*          /> */}
-          {/*        )} */}
-          {/*        {openMenu && ( */}
-          {/*          <View */}
-          {/*            style={{ */}
-          {/*              position: 'absolute', */}
-          {/*              top: RfH(23), */}
-          {/*              right: RfW(10), */}
-          {/*              backgroundColor: Colors.white, */}
-          {/*              width: '45%', */}
-          {/*              padding: RfH(16), */}
-          {/*              borderWidth: 0.3, */}
-          {/*              borderColor: Colors.darkGrey, */}
-          {/*            }}> */}
-          {/*            {classData?.isRescheduleAllowed && ( */}
-          {/*              <TouchableOpacity */}
-          {/*                onPress={openRescheduleModal} */}
-          {/*                style={{ paddingVertical: RfH(10), borderBottomWidth: 0.5, borderColor: Colors.black }}> */}
-          {/*                <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}> */}
-          {/*                  Reschedule Class */}
-          {/*                </Text> */}
-          {/*              </TouchableOpacity> */}
-          {/*            )} */}
-          {/*            {classData?.isCancelAllowed && ( */}
-          {/*              <TouchableOpacity onPress={goToCancelReason} style={{ paddingVertical: RfH(10) }}> */}
-          {/*                <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text> */}
-          {/*              </TouchableOpacity> */}
-          {/*            )} */}
-          {/*          </View> */}
-          {/*        )} */}
-          {/*      </View> */}
-          {/*    </View> */}
-          {/*  </View> */}
-          {/* )} */}
         </View>
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(36) }]}>
+        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(25) }]}>
           <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.tutor_icon} />
           <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
         </View>
@@ -420,7 +347,11 @@ function ScheduledClassDetails(props) {
         />
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-        <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfH(16), height: 44 }]}>
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            { paddingHorizontal: RfH(16), paddingTop: RfH(10), alignItems: 'center' },
+          ]}>
           <View style={{ flexDirection: 'row' }}>
             <IconButtonWrapper iconImage={Images.attachment} iconWidth={RfW(16)} iconHeight={RfH(16)} />
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
@@ -428,7 +359,7 @@ function ScheduledClassDetails(props) {
             </View>
           </View>
           <View>
-            <IconButtonWrapper iconImage={Images.add} iconWidth={24} iconHeight={24} />
+            <IconButtonWrapper iconImage={Images.add} iconWidth={20} iconHeight={20} imageResizeMode="contain" />
           </View>
         </View>
 
@@ -476,7 +407,7 @@ function ScheduledClassDetails(props) {
           </>
         )}
 
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
+        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16) }]}>
           <IconButtonWrapper
             iconImage={Images.personal}
             iconWidth={RfW(16)}
@@ -551,6 +482,14 @@ function ScheduledClassDetails(props) {
           classDetails={classData?.classEntity}
         />
       )}
+
+      <ActionSheet
+        actions={menuItem}
+        cancelText="Dismiss"
+        handleCancel={() => setOpenMenu(false)}
+        isVisible={openMenu}
+        topLabel="Action"
+      />
     </TouchableOpacity>
   );
 }

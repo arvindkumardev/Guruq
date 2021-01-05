@@ -15,17 +15,20 @@ function ActionSheet(props) {
             <View style={styles.modalInnerContainer}>
               {isTopLabelVisible && <Text style={styles.modalTopLabel}>{topLabel}</Text>}
               {actions &&
-                map(actions, (action, index) => (
-                  <View key={index}>
-                    <View style={styles.modalSeparator} />
-                    <TouchableOpacity activeOpacity={0.4} onPress={() => action.handler(index)}>
-                      <Text style={[styles.modalActionLabel, action.labelColor && { color: action.labelColor }]}>
-                        {selectedIndex !== null && selectedIndex === index ? <Text> ✓ </Text> : null}
-                        {action.label}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ))}
+                map(
+                  actions.filter((item) => item.isEnabled),
+                  (action, index) => (
+                    <View key={index}>
+                      <View style={styles.modalSeparator} />
+                      <TouchableOpacity activeOpacity={0.4} onPress={() => action.handler(index)}>
+                        <Text style={[styles.modalActionLabel, action.labelColor && { color: action.labelColor }]}>
+                          {selectedIndex !== null && selectedIndex === index ? <Text> ✓ </Text> : null}
+                          {action.label}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )
+                )}
             </View>
             <View style={styles.modalDismissContainer}>
               <Text style={styles.modalLabelDismiss} onPress={handleCancel}>

@@ -32,7 +32,7 @@ function customRangeSelector(props) {
     return (
       <TouchableWithoutFeedback onPress={() => submitFunction(item, index)}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-          <View style={{ alignSelf: 'flex-start', marginRight: RfW(16), width: 100 }}>
+          <View style={{ alignSelf: 'flex-start', marginRight: RfW(16), width: RfW(100) }}>
             <Text
               style={
                 index === selectedIndex
@@ -46,9 +46,10 @@ function customRangeSelector(props) {
             {index < selectedIndex ? (
               <View style={{ alignItems: 'center' }}>
                 <IconButtonWrapper
-                  iconWidth={RfW(13)}
+                  iconWidth={RfH(13)}
                   iconHeight={RfH(13)}
                   iconImage={Images.small_active_blue}
+                  imageResizeMode="contain"
                   styling={{ alignSelf: 'center' }}
                 />
                 <View
@@ -59,8 +60,9 @@ function customRangeSelector(props) {
               <View style={{ alignItems: 'center' }}>
                 {index === dataValue.length - 1 ? (
                   <IconButtonWrapper
-                    iconWidth={RfW(25)}
+                    iconWidth={RfH(25)}
                     iconHeight={RfH(25)}
+                    imageResizeMode="contain"
                     iconImage={Images.active_blue_circle}
                     styling={{ alignSelf: 'center' }}
                   />

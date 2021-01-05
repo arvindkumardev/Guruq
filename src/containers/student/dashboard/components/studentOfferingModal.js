@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from 'native-base';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { Colors, Images } from '../../../../theme';
 import { RfH, RfW } from '../../../../utils/helpers';
@@ -28,8 +27,11 @@ const StudentOfferingModal = (props) => {
   }, [offerings]);
 
   const renderItem = (item, index, showSeparator) => (
-    <TouchableWithoutFeedback onPress={() => setSelectedOffering(item.offering)}>
-      <View style={{ height: 44, flexDirection: 'row', alignItems: 'center' }}>
+    <>
+      <TouchableOpacity
+        onPress={() => setSelectedOffering(item.offering)}
+        style={{ height: 44, flexDirection: 'row', alignItems: 'center' }}
+        activeOpacity={0.8}>
         <CustomRadioButton
           enabled={item?.offering?.id === selectedOffering?.id}
           submitFunction={() => setSelectedOffering(item.offering)}
@@ -37,9 +39,9 @@ const StudentOfferingModal = (props) => {
         <Text style={{ color: Colors.primaryText, marginLeft: RfW(8) }}>
           {item?.offering?.parentOffering?.displayName} - {item?.offering?.displayName}
         </Text>
-      </View>
+      </TouchableOpacity>
       {showSeparator && <View style={commonStyles.lineSeparator} />}
-    </TouchableWithoutFeedback>
+    </>
   );
 
   const addStudyArea = () => {

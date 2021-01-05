@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   modalActionLabel: {
     fontSize: RfW(20),
     textAlign: 'center',
-    color: Colors.darkGrey,
+    color: Colors.brandBlue,
     fontWeight: 'normal',
     fontStyle: 'normal',
     paddingVertical: RfH(16),
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   modalLabelDismiss: {
     fontSize: RfW(20),
     textAlign: 'center',
-    color: Colors.darkGrey,
+    color: Colors.orangeRed,
     fontStyle: 'normal',
     paddingVertical: RfH(16),
     fontWeight: '600',
