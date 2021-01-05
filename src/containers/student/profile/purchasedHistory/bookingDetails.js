@@ -207,9 +207,9 @@ function BookingDetails(props) {
         label="View booking details"
         homeIcon
         horizontalPadding={RfW(16)}
-        showRightIcon
-        rightIcon={Images.vertical_dots_b}
-        onRightIconClick={() => setOpenMenu(true)}
+        // showRightIcon
+        // rightIcon={Images.vertical_dots_b}
+        // onRightIconClick={() => setOpenMenu(true)}
       />
       <ScrollView>
         <View style={{ height: RfH(20) }} />
@@ -318,7 +318,7 @@ function BookingDetails(props) {
           </View>
         </View>
       </ScrollView>
-      <Modal animationType="fade" transparent visible={openMenu} onRequestClose={() => setOpenMenu(false)}>
+      <Modal animationType="fade" transparent visible={false} onRequestClose={() => setOpenMenu(false)}>
         <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
           <TouchableWithoutFeedback onPress={() => setOpenMenu(false)}>
             <View
