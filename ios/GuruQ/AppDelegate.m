@@ -1,9 +1,10 @@
 #import "AppDelegate.h"
-
+#import <Firebase.h>
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "SplashScreen.h"
+#import "RCTLinkingManager.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -28,6 +29,10 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
+  if ([FIRApp defaultApp] == nil) {
+      [FIRApp configure];
+    }
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
@@ -44,10 +49,26 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
+  [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
   
   [SplashScreen show];
   
+ 
+  
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+
+  NSString *urlString = url.absoluteString;
+  NSDictionary *userInfo =
+  [NSDictionary dictionaryWithObject:urlString forKey:@"appInvokeNotificationKey"];
+  [[NSNotificationCenter defaultCenter] postNotificationName:
+   @"appInvokeNotification" object:nil userInfo:userInfo];
+  return [RCTLinkingManager application:app openURL:url options:options];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

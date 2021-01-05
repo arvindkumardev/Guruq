@@ -6,6 +6,7 @@
 # Node artifact files
 node_modules/
 dist/
+tmp/
 
 # Compiled Java class files
 *.class
@@ -18,6 +19,7 @@ dist/
 
 # Package files
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 
 # Maven
 target/
@@ -79,6 +81,9 @@ local.properties
 #
 npm-debug.log
 yarn-error.log
+yarn.lock
+
+ios/Podfile.lock
 
 # BUCK
 buck-out/
