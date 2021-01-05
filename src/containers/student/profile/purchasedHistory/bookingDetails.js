@@ -27,6 +27,7 @@ import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import { tutorDetails } from '../../../../apollo/cache';
 import routeNames from '../../../../routes/screenNames';
 import { CANCEL_BOOKINGS } from '../../booking.mutation';
+import ActionSheet from '../../../../components/ActionSheet';
 
 function BookingDetails(props) {
   const { route } = props;
@@ -200,6 +201,12 @@ function BookingDetails(props) {
     });
   };
 
+  const [menuItem, setMenuItem] = useState([
+    { label: 'Cancel order', handler: openCancelConfirm, isEnabled: true },
+    { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
+    { label: 'Help', handler: goToCustomerCare, isEnabled: true },
+  ]);
+
   return (
     <View style={(commonStyles.mainContainer, { flex: 1, backgroundColor: Colors.white })}>
       <Loader isLoading={cancelLoading} />
@@ -207,9 +214,9 @@ function BookingDetails(props) {
         label="View booking details"
         homeIcon
         horizontalPadding={RfW(16)}
-        // showRightIcon
-        // rightIcon={Images.vertical_dots_b}
-        // onRightIconClick={() => setOpenMenu(true)}
+        showRightIcon
+        rightIcon={Images.vertical_dots_b}
+        onRightIconClick={() => setOpenMenu(true)}
       />
       <ScrollView>
         <View style={{ height: RfH(20) }} />
@@ -318,6 +325,13 @@ function BookingDetails(props) {
           </View>
         </View>
       </ScrollView>
+      <ActionSheet
+        actions={menuItem}
+        cancelText="Dismiss"
+        handleCancel={() => setOpenMenu(false)}
+        isVisible={openMenu}
+        topLabel="Action"
+      />
       <Modal animationType="fade" transparent visible={false} onRequestClose={() => setOpenMenu(false)}>
         <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column' }}>
           <TouchableWithoutFeedback onPress={() => setOpenMenu(false)}>
