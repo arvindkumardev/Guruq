@@ -12,7 +12,7 @@ import { GET_TUTOR_AVAILABILITY } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import {endOfDay, RfH, RfW, startOfDay} from '../../utils/helpers';
+import { endOfDay, RfH, RfW, startOfDay } from '../../utils/helpers';
 
 const DateSlotSelectorModal = (props) => {
   const [selectedSlot, setSelectedSlot] = useState({});
@@ -101,8 +101,8 @@ const DateSlotSelectorModal = (props) => {
               highlightDateNameStyle={{ color: Colors.brandBlue2 }}
               disabledDateNameStyle={{ color: Colors.darkGrey }}
               disabledDateNumberStyle={{ color: Colors.darkGrey }}
-              dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
-              dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400' }}
+              dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
+              dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
               style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
               calendarAnimation={{ type: 'parallel', duration: 300 }}
               daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
