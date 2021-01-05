@@ -19,7 +19,7 @@ import BusinessDetails from '../containers/common/profileScreens/businessDetails
 import AddEditBusinessDetails from '../containers/common/profileScreens/businessDetails/addEditBusinessDetails';
 import PriceAndSchedule from '../containers/certficationProcess/priceAndSchedule';
 import DocumentListing from '../containers/common/profileScreens/businessDetails/documentListing';
-import TutorOnBoard from '../containers/tutor/tutorOnboard';
+import TutorOnBoard from '../containers/tutor/tutorOnBoard/index';
 
 const Stack = createStackNavigator();
 
