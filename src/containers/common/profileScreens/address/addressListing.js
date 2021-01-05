@@ -35,6 +35,7 @@ function AddressListing() {
     onCompleted: (data) => {
       if (data) {
         setAddresses(data?.getStudentDetails?.addresses);
+        setIsListEmpty(data?.getStudentDetails?.addresses.length === 0);
       }
     },
   });

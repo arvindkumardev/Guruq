@@ -1,4 +1,4 @@
-import { FlatList, Modal, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { FlatList, Modal, Text, TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'native-base';
 import { Colors, Images } from '../../../../../theme';
@@ -93,13 +93,16 @@ function FilterComponent(props) {
 
   const renderOptionsItem = (filterId, item) => (
     <View style={{ paddingLeft: RfW(16), marginTop: RfH(16) }}>
-      <View style={{ flexDirection: 'row' }}>
+      <TouchableOpacity
+        style={{ flexDirection: 'row' }}
+        activeOpacity={0.8}
+        onPress={() => setSelectedRadioButton(filterId, item)}>
         <CustomRadioButton
           enabled={item.id === tempFilterList[filterId].id}
           submitFunction={() => setSelectedRadioButton(filterId, item)}
         />
         <Text style={{ color: Colors.inputLabel, marginLeft: RfW(8) }}>{item.name}</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 
