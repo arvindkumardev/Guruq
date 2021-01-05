@@ -3,7 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import "SplashScreen.h"
+#import "RNSplashScreen.h"
 #import "RCTLinkingManager.h"
 
 #ifdef FB_SONARKIT_ENABLED
@@ -52,7 +52,7 @@ static void InitializeFlipper(UIApplication *application) {
 
   [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
   
-  [SplashScreen show];
+  [RNSplashScreen show];
   
  
   
