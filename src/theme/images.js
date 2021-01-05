@@ -264,8 +264,6 @@ const Images = {
   plusWhite: require('../assets/images/plus_white.png'),
   deleteWhite: require('../assets/images/delete_white.png'),
 
-
-
   ...SubjectIcons,
 };
 

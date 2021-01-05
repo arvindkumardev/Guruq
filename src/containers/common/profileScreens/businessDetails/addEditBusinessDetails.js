@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Text, View, ScrollView, Platform } from 'react-native';
+import { KeyboardAvoidingView, Text, View, ScrollView, Platform, TouchableWithoutFeedback } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Item, Label } from 'native-base';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -8,8 +8,8 @@ import { CustomCheckBox, IconButtonWrapper, Loader, ScreenHeader } from '../../.
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../../theme';
 import { alertBox, RfH, RfW } from '../../../../utils/helpers';
-import CustomDatePicker from '../../../../components/CustomDatePicker';
 import { ADD_UPDATE_BUSINESS_DETAILS } from './business.mutation';
+import routeNames from '../../../../routes/screenNames';
 
 function AddEditBusinessDetails(props) {
   const businessDetail = props?.route?.params?.businessDetails;
@@ -102,6 +102,10 @@ function AddEditBusinessDetails(props) {
               <Input value={legalName} onChangeText={(text) => setLegalName(text)} />
             </Item>
           </View>
+          <View style={{ height: RfH(24) }} />
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.DOCUMENT_LISTING)}>
+            <Text>Documents List</Text>
+          </TouchableWithoutFeedback>
           <View style={{ height: RfH(24) }} />
           <View>
             <Button
