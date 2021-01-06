@@ -190,7 +190,7 @@ function UploadDocuments() {
       <Loader isLoading={isFileUploading || deleteDocumentLoading || addDocumentLoading || tutorLeadDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <StatusBar barStyle="dark-content" />
-        <ScreenHeader label="Documents" horizontalPadding={RfW(8)} homeIcon />
+        <ScreenHeader label="Documents" homeIcon />
         <ScrollView showsVerticalScrollIndicator={false} style={{ paddingBottom: RfH(32) }}>
           <View style={{ padding: RfW(16), paddingBottom: RfH(16) }}>
             <View>
