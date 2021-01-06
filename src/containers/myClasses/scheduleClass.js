@@ -12,7 +12,7 @@ import {
   IconButtonWrapper,
   Loader,
   ScreenHeader,
-  TutorImageComponent
+  TutorImageComponent,
 } from '../../components';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
@@ -133,11 +133,18 @@ function ScheduleClass(props) {
   const renderTutorDetails = () => (
     <View>
       <View style={{ height: RfH(30) }} />
-      <Text style={commonStyles.headingPrimaryText}>{classData?.offering?.displayName} Class</Text>
+      <Text style={commonStyles.headingPrimaryText}>
+        {classData?.offering?.displayName ? classData?.offering?.displayName : classData?.offering?.name} Class
+      </Text>
       <View style={commonStyles.horizontalChildrenSpaceView}>
         <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-          {classData?.offering?.parentOffering?.parentOffering?.displayName} |{' '}
-          {classData?.offering?.parentOffering?.displayName}
+          {classData?.offering?.parentOffering?.parentOffering?.displayName
+            ? classData?.offering?.parentOffering?.parentOffering?.displayName
+            : classData?.offering?.parentOffering?.parentOffering?.name}{' '}
+          |{' '}
+          {classData?.offering?.parentOffering?.displayName
+            ? classData?.offering?.parentOffering?.displayName
+            : classData?.offering?.parentOffering?.name}
         </Text>
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
@@ -240,14 +247,13 @@ function ScheduleClass(props) {
     <>
       <Loader isLoading={scheduleLoading || loadingScheduledClasses} />
       <ScreenHeader label="Schedule Class" homeIcon horizontalPadding={RfW(16)} />
-      <View style={[commonStyles.mainContainer, {  backgroundColor: Colors.white }]}>
-
-        {/*<View style={commonStyles.horizontalChildrenSpaceView}>*/}
-        {/*  <View style={commonStyles.horizontalChildrenView}>*/}
-        {/*    <BackArrow action={onBackPress} />*/}
-        {/*    <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text>*/}
-        {/*  </View>*/}
-        {/*</View>*/}
+      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
+        {/* <View style={commonStyles.horizontalChildrenSpaceView}> */}
+        {/*  <View style={commonStyles.horizontalChildrenView}> */}
+        {/*    <BackArrow action={onBackPress} /> */}
+        {/*    <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text> */}
+        {/*  </View> */}
+        {/* </View> */}
         {renderTutorDetails()}
         <View style={{ height: RfH(20) }} />
         <FlatList

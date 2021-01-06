@@ -33,6 +33,7 @@ import BookingDetails from '../containers/student/profile/purchasedHistory/booki
 import Refund from '../containers/student/profile/purchasedHistory/refund';
 import AboutUs from '../containers/common/about/about';
 import MyStudyAreas from '../containers/student/studyArea/myStudyAreas';
+import OrderDetails from '../containers/student/profile/purchasedHistory/orderDetails';
 
 const Stack = createStackNavigator();
 
@@ -81,11 +82,11 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.MY_CART} component={myCart} options={{ headerShown: false }} />
-      {/*<Stack.Screen*/}
-      {/*  name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}*/}
-      {/*  component={PaymentMethodNotInUse}*/}
-      {/*  options={{ headerShown: false }}*/}
-      {/*/>*/}
+      {/* <Stack.Screen */}
+      {/*  name={NavigationRouteNames.STUDENT.PAYMENT_METHOD} */}
+      {/*  component={PaymentMethodNotInUse} */}
+      {/*  options={{ headerShown: false }} */}
+      {/* /> */}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
         component={BookingConfirmed}
@@ -133,26 +134,14 @@ export const getStudentRoutes = () => {
         component={PytnSubjectSelection}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.PYTN_DETAILS}
-        component={PytnSubmit}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.PYTN_DETAILS} component={PytnSubmit} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.WEB_VIEW_PAGES}
         component={WebViewPages}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.PYTN_LISTING}
-        component={PytnListing}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.PYTN_HISTORY}
-        component={PytnDetail}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.PYTN_LISTING} component={PytnListing} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.PYTN_HISTORY} component={PytnDetail} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.NOTIFICATIONS}
         component={Notifications}
@@ -180,6 +169,11 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.REFUND} component={Refund} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.ORDER_DETAILS}
+        component={OrderDetails}
+        options={{ headerShown: false }}
+      />
     </>
   );
 };
