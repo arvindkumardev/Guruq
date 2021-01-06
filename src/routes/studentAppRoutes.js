@@ -11,7 +11,7 @@ import TutorDetails from '../containers/student/tutorDetails/tutorDetails';
 import myCart from '../containers/student/myCart/myCart';
 import BookingConfirmed from '../containers/student/payment/bookingConfirmed';
 import paymentReceived from '../containers/student/payment/paymentReceived';
-import PaymentMethod from '../containers/student/payment/paymentMethod';
+import PaymentMethodNotInUse from '../containers/student/payment/paymentMethod(not in use)';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
@@ -81,11 +81,11 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.MY_CART} component={myCart} options={{ headerShown: false }} />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}
-        component={PaymentMethod}
-        options={{ headerShown: false }}
-      />
+      {/*<Stack.Screen*/}
+      {/*  name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}*/}
+      {/*  component={PaymentMethodNotInUse}*/}
+      {/*  options={{ headerShown: false }}*/}
+      {/*/>*/}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
         component={BookingConfirmed}

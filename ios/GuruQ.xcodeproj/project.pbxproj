@@ -42,10 +42,6 @@
 		F45D12F42544969100ECE3D8 /* SegoeUI-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45D12F22544969000ECE3D8 /* SegoeUI-Semibold.ttf */; };
 		F45D12F52544969100ECE3D8 /* SegoeUI-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45D12F32544969100ECE3D8 /* SegoeUI-Regular.ttf */; };
 		F45D12FF25449C2700ECE3D8 /* SegoeUI-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45D12FE25449C2700ECE3D8 /* SegoeUI-Bold.ttf */; };
-		F49A4C3125558B4A000736E4 /* AllInOneSDKSwiftWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F49A4C3025558B4A000736E4 /* AllInOneSDKSwiftWrapper.m */; };
-		F49A4C3325558B70000736E4 /* AllInOneSDKSwiftWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A4C3225558B70000736E4 /* AllInOneSDKSwiftWrapper.swift */; };
-		F49A4C3625558E6F000736E4 /* AppInvokeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F49A4C3425558E68000736E4 /* AppInvokeSDK.framework */; };
-		F49A4C3725558E6F000736E4 /* AppInvokeSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F49A4C3425558E68000736E4 /* AppInvokeSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F552A5CFA47C47B9A09E5E0C /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA85652DEF4C47CCBECDDC87 /* Roboto_medium.ttf */; };
 /* End PBXBuildFile section */
 
@@ -73,7 +69,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F49A4C3725558E6F000736E4 /* AppInvokeSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,9 +126,6 @@
 		F45D12F22544969000ECE3D8 /* SegoeUI-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SegoeUI-Semibold.ttf"; sourceTree = "<group>"; };
 		F45D12F32544969100ECE3D8 /* SegoeUI-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SegoeUI-Regular.ttf"; sourceTree = "<group>"; };
 		F45D12FE25449C2700ECE3D8 /* SegoeUI-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SegoeUI-Bold.ttf"; sourceTree = "<group>"; };
-		F49A4C3025558B4A000736E4 /* AllInOneSDKSwiftWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AllInOneSDKSwiftWrapper.m; sourceTree = "<group>"; };
-		F49A4C3225558B70000736E4 /* AllInOneSDKSwiftWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInOneSDKSwiftWrapper.swift; sourceTree = "<group>"; };
-		F49A4C3425558E68000736E4 /* AppInvokeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppInvokeSDK.framework; sourceTree = "<group>"; };
 		F7A6AA1E179D41FC8A42B341 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		FA85652DEF4C47CCBECDDC87 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,7 +144,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				59D685F9E6F9A770785BC572 /* libPods-GuruQ.a in Frameworks */,
-				F49A4C3625558E6F000736E4 /* AppInvokeSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,9 +263,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				F49A4C3425558E68000736E4 /* AppInvokeSDK.framework */,
-				F49A4C3225558B70000736E4 /* AllInOneSDKSwiftWrapper.swift */,
-				F49A4C3025558B4A000736E4 /* AllInOneSDKSwiftWrapper.m */,
 				F439C56F2555826E003DE95A /* GuruQ-Bridging-Header.h */,
 				E530D7E7253995BD00DF182E /* fonts */,
 				13B07FAE1A68108700A75B9A /* GuruQ */,
@@ -413,6 +401,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 8H5RF66K48;
 						LastSwiftMigration = 1170;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -780,8 +769,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				F49A4C3125558B4A000736E4 /* AllInOneSDKSwiftWrapper.m in Sources */,
-				F49A4C3325558B70000736E4 /* AllInOneSDKSwiftWrapper.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -823,7 +810,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D129630A71510FDB595A91DA /* Pods-GuruQ-GuruQTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -847,7 +833,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 545FC21A8805A9088CF9380F /* Pods-GuruQ-GuruQTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = GuruQTests/Info.plist;
@@ -871,6 +856,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GuruQ/GuruQ.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = 8H5RF66K48;
 				ENABLE_BITCODE = NO;
@@ -924,6 +911,7 @@
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = GuruQ/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.36;
 				OTHER_LDFLAGS = (
@@ -933,9 +921,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tuition.GuruQ;
 				PRODUCT_NAME = GuruQ;
+				PROVISIONING_PROFILE_SPECIFIER = "guruq-new-release";
 				SWIFT_OBJC_BRIDGING_HEADER = "GuruQ-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -947,6 +937,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GuruQ/GuruQ.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = 8H5RF66K48;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -999,6 +991,7 @@
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n",
 				);
 				INFOPLIST_FILE = GuruQ/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.36;
 				OTHER_LDFLAGS = (
@@ -1008,8 +1001,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tuition.GuruQ;
 				PRODUCT_NAME = GuruQ;
+				PROVISIONING_PROFILE_SPECIFIER = "guruq-new-release";
 				SWIFT_OBJC_BRIDGING_HEADER = "GuruQ-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
