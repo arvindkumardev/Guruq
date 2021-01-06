@@ -77,6 +77,7 @@ const SelectSubjectModal = (props) => {
             // paddingHorizontal: RfW(16),
             // paddingVertical: RfH(20),
             maxHeight: '90%',
+            minHeight: '50%',
           }}>
           <View
             style={[
@@ -98,7 +99,9 @@ const SelectSubjectModal = (props) => {
             data={subjects}
             renderItem={({ item }) => renderSubjects(item)}
             keyExtractor={(item, index) => index.toString()}
+            scrollEnabled={subjects.length > 16}
             contentContainerStyle={{ paddingBottom: RfH(34) }}
+            ListFooterComponent={<View style={{ height: RfH(40) }} />}
           />
         </View>
       </View>

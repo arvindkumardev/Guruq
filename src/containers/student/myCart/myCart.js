@@ -15,7 +15,7 @@ import { IconButtonWrapper, Loader, PaymentMethodModal, ScreenHeader, TutorImage
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
-import {alertBox, getFullName, getToken, printCurrency, RfH, RfW} from '../../../utils/helpers';
+import { alertBox, getFullName, getToken, printCurrency, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
@@ -458,7 +458,7 @@ const MyCart = () => {
               </View>
               <TextInput
                 onChangeText={onSetQPoints}
-                style={{ width: RfW(70), paddingVertical: RfH(8) }}
+                style={{ width: RfW(70), paddingVertical: RfH(8), height: RfH(40) }}
                 value={qPointsRedeemed}
                 keyboardType="numeric"
                 editable={qPoints !== 0}

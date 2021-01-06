@@ -1,16 +1,16 @@
 import { KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { Button, Input, Item } from 'native-base';
+import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
-import { CustomMobileNumber, CustomRadioButton, Loader, ScreenHeader } from '../../../../components';
-import { studentDetails } from '../../../../apollo/cache';
-import commonStyles from '../../../../theme/styles';
-import { Colors } from '../../../../theme';
-import { alertBox, getCountryObj, isValidEmail, isValidMobile, RfH, RfW } from '../../../../utils/helpers';
-import { IND_COUNTRY_OBJ } from '../../../../utils/constants';
-import { ParentInfoType } from '../../enums';
+import { CustomMobileNumber, CustomRadioButton, Loader, ScreenHeader } from '../../components';
+import { studentDetails } from '../../apollo/cache';
+import commonStyles from '../../theme/styles';
+import { Colors } from '../../theme';
+import { alertBox, getCountryObj, isValidEmail, isValidMobile, RfH, RfW } from '../../utils/helpers';
+import { IND_COUNTRY_OBJ } from '../../utils/constants';
+import { ParentInfoType } from '../common/enums';
 import { ADD_UPDATE_GUARDIAN_DETAILS } from './parentDetail.mutation';
 
 function AddEditParents(props) {
@@ -127,27 +127,24 @@ function AddEditParents(props) {
             </View>
           </View>
           <View style={{ height: RfH(24) }} />
-          <View>
-            <Text style={commonStyles.smallMutedText}>First Name</Text>
-            <Item>
-              <Input
-                value={firstName}
-                onChangeText={(text) => setFirstName(text)}
-                style={commonStyles.regularPrimaryText}
-              />
-            </Item>
-          </View>
+          <Item floatingLabel>
+            <Label>First Name</Label>
+            <Input
+              value={firstName}
+              onChangeText={(text) => setFirstName(text)}
+              style={commonStyles.regularPrimaryText}
+            />
+          </Item>
           <View style={{ height: RfH(24) }} />
-          <View>
-            <Text style={commonStyles.smallMutedText}>Last Name</Text>
-            <Item>
-              <Input
-                value={lastName}
-                onChangeText={(text) => setLastName(text)}
-                style={commonStyles.regularPrimaryText}
-              />
-            </Item>
-          </View>
+
+          <Item floatingLabel>
+            <Label>Last Name</Label>
+            <Input
+              value={lastName}
+              onChangeText={(text) => setLastName(text)}
+              style={commonStyles.regularPrimaryText}
+            />
+          </Item>
           <View style={{ height: RfH(24) }} />
           <Text style={commonStyles.smallMutedText}>Phone Number</Text>
           <View style={{ height: RfH(44) }}>
@@ -161,13 +158,17 @@ function AddEditParents(props) {
               label={' '}
             />
           </View>
-          <View style={{ height: RfH(24) }} />
-          <View>
-            <Text style={commonStyles.smallMutedText}>Email Id</Text>
-            <Item>
-              <Input value={email} onChangeText={(text) => setEmail(text)} style={commonStyles.regularPrimaryText} />
-            </Item>
-          </View>
+          <View style={{ height: RfH(44) }} />
+
+          <Item floatingLabel>
+            <Label>Email Id</Label>
+            <Input
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              style={commonStyles.regularPrimaryText}
+              keyboardType="email-address"
+            />
+          </Item>
           <View style={{ height: RfH(24) }} />
           <View>
             <Button onPress={onSavingParents} block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>

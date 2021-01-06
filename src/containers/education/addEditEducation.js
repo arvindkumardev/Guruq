@@ -4,16 +4,16 @@ import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
-import { CustomCheckBox, CustomRadioButton, CustomSelect, Loader, ScreenHeader } from '../../../../components';
-import { offeringsMasterData, studentDetails, tutorDetails, userType } from '../../../../apollo/cache';
-import commonStyles from '../../../../theme/styles';
-import { Colors } from '../../../../theme';
-import { alertBox, RfH, RfW, startOfDay } from '../../../../utils/helpers';
-import CustomDatePicker from '../../../../components/CustomDatePicker';
+import { CustomCheckBox, CustomRadioButton, CustomSelect, Loader, ScreenHeader } from '../../components';
+import { offeringsMasterData, studentDetails, tutorDetails, userType } from '../../apollo/cache';
+import commonStyles from '../../theme/styles';
+import { Colors } from '../../theme';
+import { alertBox, RfH, RfW, startOfDay } from '../../utils/helpers';
+import CustomDatePicker from '../../components/CustomDatePicker';
 import { ADD_UPDATE_EDUCATION_DETAILS } from './education.mutation';
-import { SCHOOL_EDUCATION } from '../../../../utils/constants';
-import { HighSchoolStreamEnum } from '../../enums';
-import { UserTypeEnum } from '../../../../common/userType.enum';
+import { SCHOOL_EDUCATION } from '../../utils/constants';
+import { HighSchoolStreamEnum } from '../common/enums';
+import { UserTypeEnum } from '../../common/userType.enum';
 import { GET_DEGREE_LIST } from './education.query';
 
 function AddEditEducation() {
@@ -76,8 +76,6 @@ function AddEditEducation() {
     },
   });
 
-  console.log('degree', degree);
-
   const checkValues = () => {
     if (isEmpty(schoolName)) {
       alertBox('Please provide the school/institute name');
@@ -135,7 +133,6 @@ function AddEditEducation() {
         dto.degree = { degreeLevel: selectedDegree.degreeLevel, name: selectedDegree.name, id: selectedDegree.id };
         dto.fieldOfStudy = fieldOfStudy;
       }
-      console.log('dto', dto);
       saveEducation({
         variables: {
           educationDto: dto,

@@ -78,9 +78,8 @@ const HELP_OPTIONS = [
 function Profile(props) {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
-  const studentInfo = useReactiveVar(studentDetails);
-  const { changeTab } = props;
 
+  const { changeTab } = props;
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);

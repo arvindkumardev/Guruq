@@ -608,113 +608,114 @@ function TutorDetails(props) {
   );
 
   return (
-    <SafeAreaView
-      style={[
-        commonStyles.mainContainer,
-        { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
-      ]}>
+    <>
       <Loader
         isLoading={
           favouriteLoading || removeFavouriteLoading || loadingTutors || loadingTutorsOffering || isEmpty(tutorData)
         }
       />
-      {!isEmpty(tutorData) && (
-        <>
-          {topHeaderComponent()}
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            scrollEventThrottle={16}
-            onScroll={(event) => handleScroll(event)}>
-            {topProfileView()}
-            <View style={commonStyles.lineSeparator} />
-            {selectedSubject && classView()}
-            <View style={commonStyles.lineSeparator} />
-            <View style={{ marginBottom: RfH(16) }}>
-              <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
-              <ScrollView
-                containerStyle={{ paddingHorizontal: RfW(16) }}
-                horizontal
-                showsHorizontalScrollIndicator={false}>
-                {subjects.map((item, index) => renderSubjects(item, index))}
-              </ScrollView>
-            </View>
+      <SafeAreaView
+        style={[
+          commonStyles.mainContainer,
+          { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0, paddingBottom: RfH(34) },
+        ]}>
+        {!isEmpty(tutorData) && (
+          <>
+            {topHeaderComponent()}
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              scrollEventThrottle={16}
+              onScroll={(event) => handleScroll(event)}>
+              {topProfileView()}
+              <View style={commonStyles.lineSeparator} />
+              {selectedSubject && classView()}
+              <View style={commonStyles.lineSeparator} />
+              <View style={{ marginBottom: RfH(16) }}>
+                <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
+                <ScrollView
+                  containerStyle={{ paddingHorizontal: RfW(16) }}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}>
+                  {subjects.map((item, index) => renderSubjects(item, index))}
+                </ScrollView>
+              </View>
 
-            <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-            <View style={{ paddingHorizontal: RfW(16) }}>
-              {selectedSubject && selectedSubject.budgetDetails && (
-                <PriceMatrixComponent
-                  budgets={selectedSubject.budgetDetails}
-                  showOnline={selectedSubject.onlineClass}
-                  showOffline={selectedSubject.offlineClass}
-                />
-              )}
-            </View>
+              <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+              <View style={{ paddingHorizontal: RfW(16) }}>
+                {selectedSubject && selectedSubject.budgetDetails && (
+                  <PriceMatrixComponent
+                    budgets={selectedSubject.budgetDetails}
+                    showOnline={selectedSubject.onlineClass}
+                    showOffline={selectedSubject.offlineClass}
+                  />
+                )}
+              </View>
 
-            <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-            <TouchableOpacity onPress={() => setShowDateSlotModal(true)} activeOpacity={1}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  marginHorizontal: RfW(16),
-                  marginVertical: RfH(16),
-                  color: Colors.brandBlue2,
-                }}>
-                View Availability of Classes
-              </Text>
-            </TouchableOpacity>
-
-            <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-            {renderRatingsReviews()}
-          </ScrollView>
-
-          <View style={commonStyles.lineSeparator} />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              // marginTop: RfH(8),
-              // paddingHorizontal: RfW(30),
-              // paddingVertical: RfH(20),
-              paddingVertical: RfH(8),
-            }}>
-            {selectedSubject.demoClass && (
-              <Button
-                onPress={() => openClassModeModal(true)}
-                style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
-                <Text style={commonStyles.textButtonOutlinePrimary}>
-                  Book {selectedSubject.freeDemo ? 'Free' : ''} Demo
+              <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+              <TouchableOpacity onPress={() => setShowDateSlotModal(true)} activeOpacity={1}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    marginHorizontal: RfW(16),
+                    marginVertical: RfH(16),
+                    color: Colors.brandBlue2,
+                  }}>
+                  View Availability of Classes
                 </Text>
-              </Button>
-            )}
-            <Button onPress={() => openClassModeModal(false)} style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
-              <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
-            </Button>
-          </View>
+              </TouchableOpacity>
 
-          <TutorAvailabilitySlots
-            visible={showDateSlotModal}
-            onClose={() => setShowDateSlotModal(false)}
-            tutorId={tutorData?.id}
-          />
-          {showClassModePopup && (
-            <AddToCartModal
-              visible={showClassModePopup}
-              onClose={() => setShowClassModePopup(false)}
-              selectedSubject={selectedSubject}
-              isDemoClass={isDemo}
+              <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+              {renderRatingsReviews()}
+            </ScrollView>
+
+            <View style={commonStyles.lineSeparator} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                paddingVertical: RfH(8),
+              }}>
+              {selectedSubject.demoClass && (
+                <Button
+                  onPress={() => openClassModeModal(true)}
+                  style={[commonStyles.buttonOutlinePrimary, { width: RfW(144) }]}>
+                  <Text style={commonStyles.textButtonOutlinePrimary}>
+                    Book {selectedSubject.freeDemo ? 'Free' : ''} Demo
+                  </Text>
+                </Button>
+              )}
+              <Button
+                onPress={() => openClassModeModal(false)}
+                style={[commonStyles.buttonPrimary, { width: RfW(144) }]}>
+                <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
+              </Button>
+            </View>
+
+            <TutorAvailabilitySlots
+              visible={showDateSlotModal}
+              onClose={() => setShowDateSlotModal(false)}
+              tutorId={tutorData?.id}
             />
-          )}
-          {showCompareModal && (
-            <CompareModal
-              visible={showCompareModal}
-              onClose={() => setShowCompareModal(false)}
-              removeFromCompare={(index) => removeFromCompare(index)}
-            />
-          )}
-        </>
-      )}
-    </SafeAreaView>
+            {showClassModePopup && (
+              <AddToCartModal
+                visible={showClassModePopup}
+                onClose={() => setShowClassModePopup(false)}
+                selectedSubject={selectedSubject}
+                isDemoClass={isDemo}
+              />
+            )}
+            {showCompareModal && (
+              <CompareModal
+                visible={showCompareModal}
+                onClose={() => setShowCompareModal(false)}
+                removeFromCompare={(index) => removeFromCompare(index)}
+              />
+            )}
+          </>
+        )}
+      </SafeAreaView>
+    </>
   );
 }
 

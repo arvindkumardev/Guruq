@@ -139,7 +139,7 @@ function AddressListing() {
               </Text>
             </View>
 
-            <Text style={commonStyles.mediumPrimaryText}>
+            <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
               {item.city}, {item.state}, {item.country}
             </Text>
             {/* <Text style={commonStyles.mediumMutedText}>{`${item.street}, ${item.subArea}`}</Text> */}
