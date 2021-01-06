@@ -77,6 +77,9 @@ export const GET_CLASS_DETAILS = gql`
             gender
           }
         }
+        documents {
+          name
+        }
         startDate
         endDate
         status

@@ -15,7 +15,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import ProgressCircle from 'react-native-progress-circle';
 import { Button } from 'native-base';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { Rating } from 'react-native-ratings';
 import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
@@ -38,7 +37,15 @@ import {
   storeData,
   titleCaseIfExists,
 } from '../../../utils/helpers';
-import { BackArrow, CompareModal, IconButtonWrapper, Loader, TutorImageComponent } from '../../../components';
+import {
+  BackArrow,
+  CompareModal,
+  IconButtonWrapper,
+  Loader,
+  TutorImageComponent,
+  UserRatings,
+  UserReviews,
+} from '../../../components';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import AddToCartModal from './components/addToCartModal';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
@@ -66,16 +73,16 @@ function TutorDetails(props) {
   const [isFavourite, setIsFavourite] = useState(false);
   const [isDemo, setIsDemo] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
-  const [overallRating, setOverallRating] = useState(0);
-  const [reviewProgress, setReviewProgress] = useState([
-    { typeName: 'Course Understanding', image: Images.methodology, percentage: 0, key: 'courseUnderstanding' },
-    { typeName: 'Helpfulness', image: Images.chat, percentage: 0, key: 'helpfulness' },
-    { typeName: 'Professional Attitude', image: Images.professional, percentage: 0, key: 'professionalAttitude' },
-    { typeName: 'Teaching Methodology', image: Images.methodology, percentage: 0, key: 'teachingMethodology' },
-    { typeName: 'Accessibility', image: Images.thumb_range, percentage: 0, key: 'accessibility' },
-    { typeName: 'Improvement in Results', image: Images.stats, percentage: 0, key: 'resultImprovement' },
-  ]);
-  const [userReviews, setUserReviews] = useState([]);
+  // const [overallRating, setOverallRating] = useState(0);
+  // const [reviewProgress, setReviewProgress] = useState([
+  //   { typeName: 'Course Understanding', image: Images.methodology, percentage: 0, key: 'courseUnderstanding' },
+  //   { typeName: 'Helpfulness', image: Images.chat, percentage: 0, key: 'helpfulness' },
+  //   { typeName: 'Professional Attitude', image: Images.professional, percentage: 0, key: 'professionalAttitude' },
+  //   { typeName: 'Teaching Methodology', image: Images.methodology, percentage: 0, key: 'teachingMethodology' },
+  //   { typeName: 'Accessibility', image: Images.thumb_range, percentage: 0, key: 'accessibility' },
+  //   { typeName: 'Improvement in Results', image: Images.stats, percentage: 0, key: 'resultImprovement' },
+  // ]);
+  // const [userReviews, setUserReviews] = useState([]);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
@@ -181,54 +188,54 @@ function TutorDetails(props) {
     },
   });
 
-  const getPercentage = (value) => value * 20;
+  // const getPercentage = (value) => value * 20;
 
-  const [getAverageRating, { loading: ratingLoading }] = useLazyQuery(GET_AVERAGE_RATINGS, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        let ratingArray = reviewProgress;
-        Object.keys(data.getAverageRating).forEach((key) => {
-          ratingArray = ratingArray.map((item) => ({
-            ...item,
-            percentage: item.key === key ? getPercentage(data.getAverageRating[key]) : item.percentage,
-          }));
-        });
-        setReviewProgress(ratingArray);
-        setOverallRating(data.getAverageRating.overallRating);
-      }
-    },
-  });
+  // const [getAverageRating, { loading: ratingLoading }] = useLazyQuery(GET_AVERAGE_RATINGS, {
+  //   fetchPolicy: 'no-cache',
+  //   onError: (e) => {
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       let ratingArray = reviewProgress;
+  //       Object.keys(data.getAverageRating).forEach((key) => {
+  //         ratingArray = ratingArray.map((item) => ({
+  //           ...item,
+  //           percentage: item.key === key ? getPercentage(data.getAverageRating[key]) : item.percentage,
+  //         }));
+  //       });
+  //       setReviewProgress(ratingArray);
+  //       setOverallRating(data.getAverageRating.overallRating);
+  //     }
+  //   },
+  // });
 
-  const [searchReview, { loading: reviewLoading }] = useLazyQuery(SEARCH_REVIEW, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        const review = [];
-        for (const obj of data.searchReview.edges) {
-          const item = {
-            name: getFullName(obj.createdBy),
-            icon: obj.createdBy,
-            rating: obj.overallRating,
-            date: new Date(obj.createdDate).toDateString(),
-            description: obj.text,
-          };
-          review.push(item);
-        }
-        setUserReviews(review);
-      }
-    },
-  });
+  // const [searchReview, { loading: reviewLoading }] = useLazyQuery(SEARCH_REVIEW, {
+  //   fetchPolicy: 'no-cache',
+  //   onError: (e) => {
+  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+  //       const error = e.graphQLErrors[0].extensions.exception.response;
+  //     }
+  //   },
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       const review = [];
+  //       for (const obj of data.searchReview.edges) {
+  //         const item = {
+  //           name: getFullName(obj.createdBy),
+  //           icon: obj.createdBy,
+  //           rating: obj.overallRating,
+  //           date: new Date(obj.createdDate).toDateString(),
+  //           description: obj.text,
+  //         };
+  //         review.push(item);
+  //       }
+  //       setUserReviews(review);
+  //     }
+  //   },
+  // });
 
   const onBackPress = () => {
     navigation.goBack();
@@ -244,8 +251,8 @@ function TutorDetails(props) {
 
   useEffect(() => {
     if (!isEmpty(tutorData)) {
-      searchReview({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
-      getAverageRating({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
+      // searchReview({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
+      // getAverageRating({ variables: { reviewSearchDto: { tutorId: tutorData?.id } } });
       getTutorOffering();
       checkCompare();
     }
@@ -327,72 +334,72 @@ function TutorDetails(props) {
     </TouchableWithoutFeedback>
   );
 
-  const renderProgress = (item) => (
-    <View style={{ flex: 0.33, alignItems: 'center', marginTop: RfH(16) }}>
-      <ProgressCircle
-        percent={item.percentage}
-        radius={32}
-        borderWidth={6}
-        color={Colors.brandBlue2}
-        shadowColor={Colors.lightGrey}
-        bgColor={Colors.white}>
-        <IconButtonWrapper iconWidth={RfW(22)} iconHeight={RfH(22)} imageResizeMode="contain" iconImage={item.image} />
-      </ProgressCircle>
-      <Text
-        style={{
-          fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
-          textAlign: 'center',
-          marginTop: RfH(8),
-          color: Colors.darkGrey,
-        }}>
-        {item.typeName}
-      </Text>
-    </View>
-  );
+  // const renderProgress = (item) => (
+  //   <View style={{ flex: 0.33, alignItems: 'center', marginTop: RfH(16) }}>
+  //     <ProgressCircle
+  //       percent={item.percentage}
+  //       radius={32}
+  //       borderWidth={6}
+  //       color={Colors.brandBlue2}
+  //       shadowColor={Colors.lightGrey}
+  //       bgColor={Colors.white}>
+  //       <IconButtonWrapper iconWidth={RfW(22)} iconHeight={RfH(22)} imageResizeMode="contain" iconImage={item.image} />
+  //     </ProgressCircle>
+  //     <Text
+  //       style={{
+  //         fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
+  //         textAlign: 'center',
+  //         marginTop: RfH(8),
+  //         color: Colors.darkGrey,
+  //       }}>
+  //       {item.typeName}
+  //     </Text>
+  //   </View>
+  // );
 
-  const renderReviews = (item) => {
-    return (
-      <View
-        style={{
-          paddingHorizontal: RfW(16),
-        }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-          <IconButtonWrapper
-            iconHeight={RfH(40)}
-            iconWidth={RfH(40)}
-            iconImage={getUserImageUrl(
-              item?.createdBy?.profileImage?.filename,
-              item?.createdBy?.gender,
-              item?.createdBy?.id
-            )}
-            styling={{ borderRadius: RfH(20) }}
-          />
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              marginLeft: RfW(8),
-            }}>
-            <Text style={{ fontFamily: 'SegoeUI-Semibold' }}>{item.name}</Text>
-            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              {item.date} |{' '}
-              <IconButtonWrapper
-                iconWidth={RfW(10)}
-                iconHeight={RfH(10)}
-                iconImage={Images.golden_star}
-                styling={{ alignSelf: 'center' }}
-              />{' '}
-              {parseFloat(item.rating).toFixed(1)}
-            </Text>
-          </View>
-        </View>
-        <Text style={{ marginTop: RfH(8), color: Colors.darkGrey }}>{item.description}</Text>
+  // const renderReviews = (item) => {
+  //   return (
+  //     <View
+  //       style={{
+  //         paddingHorizontal: RfW(16),
+  //       }}>
+  //       <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+  //         <IconButtonWrapper
+  //           iconHeight={RfH(40)}
+  //           iconWidth={RfH(40)}
+  //           iconImage={getUserImageUrl(
+  //             item?.createdBy?.profileImage?.filename,
+  //             item?.createdBy?.gender,
+  //             item?.createdBy?.id
+  //           )}
+  //           styling={{ borderRadius: RfH(20) }}
+  //         />
+  //         <View
+  //           style={{
+  //             flexDirection: 'column',
+  //             justifyContent: 'center',
+  //             alignItems: 'flex-start',
+  //             marginLeft: RfW(8),
+  //           }}>
+  //           <Text style={{ fontFamily: 'SegoeUI-Semibold' }}>{item.name}</Text>
+  //           <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+  //             {item.date} |{' '}
+  //             <IconButtonWrapper
+  //               iconWidth={RfW(10)}
+  //               iconHeight={RfH(10)}
+  //               iconImage={Images.golden_star}
+  //               styling={{ alignSelf: 'center' }}
+  //             />{' '}
+  //             {parseFloat(item.rating).toFixed(1)}
+  //           </Text>
+  //         </View>
+  //       </View>
+  //       <Text style={{ marginTop: RfH(8), color: Colors.darkGrey }}>{item.description}</Text>
 
-        <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
-      </View>
-    );
-  };
+  //       <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
+  //     </View>
+  //   );
+  // };
 
   const classView = () => (
     <View
@@ -460,32 +467,10 @@ function TutorDetails(props) {
       <View>
         <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Rating and Reviews</Text>
       </View>
-      <View>
-        <Rating
-          style={{ paddingVertical: RfH(16), alignSelf: 'flex-start', marginHorizontal: RfW(16) }}
-          imageSize={30}
-          ratingCount={5}
-          readonly
-          startingValue={overallRating}
-        />
-      </View>
-      <View style={{ paddingHorizontal: RfW(16) }}>
-        <FlatList
-          numColumns={3}
-          data={reviewProgress}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => renderProgress(item)}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+      <UserRatings tutorId={tutorData?.id} />
       <View style={commonStyles.lineSeparatorWithMargin} />
       <View style={{ marginBottom: RfH(34) }}>
-        <FlatList
-          data={userReviews}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => renderReviews(item)}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <UserReviews tutorId={tutorData?.id} />
       </View>
     </View>
   );
