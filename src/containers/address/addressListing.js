@@ -5,17 +5,17 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import Badge from '@react-navigation/bottom-tabs/src/views/Badge';
-import { IconButtonWrapper, Loader, ScreenHeader } from '../../../../components';
-import { userType } from '../../../../apollo/cache';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Fonts, Images } from '../../../../theme';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
-import routeNames from '../../../../routes/screenNames';
-import { GET_STUDENT_DETAILS } from '../../graphql-query';
-import { GET_TUTOR_DETAILS } from '../../../tutor/tutor.query';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { UserTypeEnum } from '../../../../common/userType.enum';
-import { DELETE_STUDENT_ADDRESS, DELETE_TUTOR_ADDRESS } from '../../graphql-mutation';
+import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
+import { userType } from '../../apollo/cache';
+import commonStyles from '../../theme/styles';
+import { Colors, Fonts, Images } from '../../theme';
+import { alertBox, RfH, RfW } from '../../utils/helpers';
+import routeNames from '../../routes/screenNames';
+import { GET_STUDENT_DETAILS } from '../common/graphql-query';
+import { GET_TUTOR_DETAILS } from '../tutor/tutor.query';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { UserTypeEnum } from '../../common/userType.enum';
+import { DELETE_STUDENT_ADDRESS, DELETE_TUTOR_ADDRESS } from '../common/graphql-mutation';
 
 function AddressListing() {
   const navigation = useNavigation();

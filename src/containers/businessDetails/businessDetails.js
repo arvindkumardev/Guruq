@@ -1,25 +1,21 @@
-import { KeyboardAvoidingView, Text, View, ScrollView, Platform, Image } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Item, Label } from 'native-base';
+import { Button } from 'native-base';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { CustomCheckBox, Loader, ScreenHeader } from '../../../../components';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Fonts, Images } from '../../../../theme';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
-import CustomDatePicker from '../../../../components/CustomDatePicker';
+import { CustomCheckBox, Loader, ScreenHeader } from '../../components';
+import commonStyles from '../../theme/styles';
+import { Colors, Fonts, Images } from '../../theme';
+import { RfH, RfW } from '../../utils/helpers';
 import { GET_BUSINESS_DETAILS_DATA } from './business.query';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import routeNames from '../../../../routes/screenNames';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import routeNames from '../../routes/screenNames';
 
 function BusinessDetails() {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
-  const [panNumber, setPanNumber] = useState('');
-  const [gstNumber, setGstNumber] = useState('');
-  const [legalName, setLegalName] = useState('');
   const [businessData, setBusinessData] = useState({});
   const [isDataEmpty, setIsDataEmpty] = useState(false);
 
@@ -31,9 +27,9 @@ function BusinessDetails() {
       }
     },
     onCompleted: (data) => {
-      if (data.getTutorBusinessDetails.businessDetails) {
+      if (data) {
         setBusinessData(data.getTutorBusinessDetails.businessDetails);
-        setIsDataEmpty(isEmpty(data?.getTutorBusinessDetails?.businessDetails));
+        setIsDataEmpty(!data?.getTutorBusinessDetails?.businessDetails);
       }
     },
   });
@@ -45,37 +41,33 @@ function BusinessDetails() {
   }, [isFocussed]);
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.select({ android: '', ios: 'padding' })}
-      // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
-      enabled>
-      {/* <Loader isLoading={saveBankDetailLoading} /> */}
+    <>
+      <Loader isLoading={businessLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-        <Loader isLoading={businessLoading} />
         <ScreenHeader
           homeIcon
           label="Business Details"
           horizontalPadding={RfW(16)}
-          lineVisible={false}
           rightText="EDIT"
           showRightText={!isEmpty(businessData)}
           onRightTextClick={() =>
             navigation.navigate(routeNames.TUTOR.ADD_EDIT_BUSINESS_DETAILS, { businessDetails: businessData })
           }
         />
-        <ScrollView contentContainerStyle={{ paddingHorizontal: RfW(16) }}>
-          <View style={{ height: RfH(44) }} />
+        <View style={{ paddingHorizontal: RfW(16) }}>
+          <View style={{ height: RfH(24) }} />
           {!isDataEmpty ? (
             <>
               {!isEmpty(businessData) && (
                 <View>
                   <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
                     <Text style={commonStyles.mediumMutedText}>PAN Number</Text>
-                    <Text>{businessData?.panNumber}</Text>
+                    <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(5) }]}>
+                      {businessData?.panNumber}
+                    </Text>
                   </View>
                   <View style={{ height: RfH(24) }} />
-                  <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
+                  <View style={{ paddingVertical: RfH(8) }}>
                     <View style={commonStyles.horizontalChildrenSpaceView}>
                       <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
                         Are you eligible for GST
@@ -86,18 +78,22 @@ function BusinessDetails() {
                   <View style={{ height: RfH(24) }} />
                   <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
                     <Text style={commonStyles.mediumMutedText}>GSTIN</Text>
-                    <Text>{businessData?.gstNumber}</Text>
+                    <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(5) }]}>
+                      {businessData?.gstNumber}
+                    </Text>
                   </View>
                   <View style={{ height: RfH(24) }} />
                   <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
                     <Text style={commonStyles.mediumMutedText}>Legal Name</Text>
-                    <Text>{businessData?.businessName}</Text>
+                    <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(5) }]}>
+                      {businessData?.businessName}
+                    </Text>
                   </View>
                 </View>
               )}
             </>
           ) : (
-            <View style={{ flex: 1, paddingTop: RfH(70), alignItems: 'center' }}>
+            <View style={{ flex: 1, paddingTop: RfH(30), alignItems: 'center' }}>
               <Image
                 source={Images.empty_cart}
                 style={{
@@ -130,9 +126,9 @@ function BusinessDetails() {
               </Button>
             </View>
           )}
-        </ScrollView>
+        </View>
       </View>
-    </KeyboardAvoidingView>
+    </>
   );
 }
 

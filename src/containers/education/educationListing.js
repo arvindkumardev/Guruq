@@ -143,7 +143,7 @@ function EducationListing() {
           rightIcon={Images.add}
           onRightIconClick={handleAddEditEducation}
         />
-        <View style={{ height: RfH(24) }} />
+        <View style={{ height: RfH(10) }} />
         {!isListEmpty ? (
           <View style={{ paddingHorizontal: RfW(16) }}>
             <FlatList
@@ -151,6 +151,7 @@ function EducationListing() {
               data={educationDetails}
               renderItem={({ item, index }) => renderEducation(item, index)}
               keyExtractor={(item, index) => index.toString()}
+              scrollEnabled={educationDetails.length > 6}
             />
           </View>
         ) : (

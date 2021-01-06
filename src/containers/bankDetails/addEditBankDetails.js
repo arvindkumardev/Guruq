@@ -4,10 +4,10 @@ import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
 import { useMutation } from '@apollo/client';
-import { Loader, ScreenHeader } from '../../../../components';
-import commonStyles from '../../../../theme/styles';
-import { Colors } from '../../../../theme';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
+import { Loader, ScreenHeader } from '../../components';
+import commonStyles from '../../theme/styles';
+import { Colors } from '../../theme';
+import { alertBox, RfH, RfW } from '../../utils/helpers';
 import { ADD_UPDATE_BANK_DETAILS } from './bank.mutation';
 
 function AddEditBankDetails(props) {
@@ -81,29 +81,29 @@ function AddEditBankDetails(props) {
       enabled>
       <Loader isLoading={saveBankDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-        <ScreenHeader homeIcon label="Bank Details" horizontalPadding={RfW(16)} lineVisible={false} />
+        <ScreenHeader homeIcon label="Bank Details" horizontalPadding={RfW(16)} lineVisible={true} />
         <ScrollView contentContainerStyle={{ paddingHorizontal: RfW(16) }}>
-          <View style={{ height: RfH(44) }} />
+          <View style={{ height: RfH(24) }} />
           <Item floatingLabel>
-            <Label>A/C holder Name</Label>
+            <Label style={commonStyles.regularMutedText}>A/C holder Name</Label>
             <Input value={accountHolder} onChangeText={(text) => setAccountHolder(text)} />
           </Item>
           <View style={{ height: RfH(24) }} />
           <View>
             <Item floatingLabel>
-              <Label>Account number</Label>
+              <Label style={commonStyles.regularMutedText}>Account number</Label>
               <Input value={accountNumber} onChangeText={(text) => setAccountNumber(text)} keyboardType="numeric" />
             </Item>
           </View>
           <View style={{ height: RfH(24) }} />
           <Item floatingLabel>
-            <Label>IFSC Code</Label>
+            <Label style={commonStyles.regularMutedText}>IFSC Code</Label>
             <Input value={ifscCode} onChangeText={(text) => setIfscCode(text)} />
           </Item>
           <View style={{ height: RfH(24) }} />
           <View>
             <Item floatingLabel>
-              <Label>Bank Name</Label>
+              <Label style={commonStyles.regularMutedText}>Bank Name</Label>
               <Input value={bankName} onChangeText={(text) => setBankName(text)} />
             </Item>
           </View>

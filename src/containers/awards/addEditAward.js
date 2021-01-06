@@ -4,13 +4,13 @@ import { Button, Input, Item, Label } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
-import { Loader, ScreenHeader } from '../../../../components';
-import commonStyles from '../../../../theme/styles';
-import { Colors } from '../../../../theme';
-import { alertBox, RfH, RfW } from '../../../../utils/helpers';
-import CustomDatePicker from '../../../../components/CustomDatePicker';
+import { Loader, ScreenHeader } from '../../components';
+import commonStyles from '../../theme/styles';
+import { Colors } from '../../theme';
+import { alertBox, RfH, RfW } from '../../utils/helpers';
+import CustomDatePicker from '../../components/CustomDatePicker';
 import { ADD_UPDATE_AWARD_DETAILS } from './award.mutation';
-import { tutorDetails } from '../../../../apollo/cache';
+import { tutorDetails } from '../../apollo/cache';
 
 function AddEditAward(props) {
   const navigation = useNavigation();
@@ -80,24 +80,24 @@ function AddEditAward(props) {
     <>
       <Loader isLoading={awardDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-        <ScreenHeader homeIcon label="Experience" horizontalPadding={RfW(16)} lineVisible={false} />
+        <ScreenHeader homeIcon label="Experience" horizontalPadding={RfW(16)} lineVisible={true} />
         <View style={{ paddingHorizontal: RfW(16) }}>
-          <View style={{ height: RfH(44) }} />
+          <View style={{ height: RfH(24) }} />
           <Item floatingLabel>
-            <Label>Title</Label>
+            <Label style={commonStyles.regularMutedText}>Title</Label>
             <Input value={title} onChangeText={(text) => setTitle(text)} />
           </Item>
           <View style={{ height: RfH(24) }} />
           <View>
             <Item floatingLabel>
-              <Label>Issuer</Label>
+              <Label style={commonStyles.regularMutedText}>Issuer</Label>
               <Input value={issuer} onChangeText={(text) => setIssuer(text)} />
             </Item>
           </View>
           <View style={{ height: RfH(24) }} />
           <View>
             <Item floatingLabel>
-              <Label>Description</Label>
+              <Label style={commonStyles.regularMutedText}>Description</Label>
               <Input value={description} onChangeText={(text) => setDescription(text)} />
             </Item>
           </View>

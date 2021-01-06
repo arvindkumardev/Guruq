@@ -4,14 +4,14 @@ import { Button, Input, Item, Label } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
-import { CustomCheckBox, CustomSelect, Loader, ScreenHeader } from '../../../../components';
-import commonStyles from '../../../../theme/styles';
-import { Colors } from '../../../../theme';
-import { alertBox, printDateTime, RfH, RfW, startOfDay } from '../../../../utils/helpers';
-import CustomDatePicker from '../../../../components/CustomDatePicker';
+import { CustomCheckBox, CustomSelect, Loader, ScreenHeader } from '../../components';
+import commonStyles from '../../theme/styles';
+import { Colors } from '../../theme';
+import { alertBox, printDateTime, RfH, RfW, startOfDay } from '../../utils/helpers';
+import CustomDatePicker from '../../components/CustomDatePicker';
 import { ADD_UPDATE_TUTOR_EXPERIENCE_DETAILS } from './experience.mutation';
-import { EmploymentTypeEnum } from '../../enums';
-import { tutorDetails } from '../../../../apollo/cache';
+import { EmploymentTypeEnum } from '../common/enums';
+import { tutorDetails } from '../../apollo/cache';
 
 const EMPLOYMENT_TYPE = [
   { value: 'FULL_TIME', label: 'FULL TIME' },

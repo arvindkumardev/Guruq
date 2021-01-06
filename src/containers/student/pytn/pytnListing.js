@@ -55,7 +55,6 @@ function PytnListing(props) {
           onPositiveClick: () => {
             getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
           },
-          negativeText: 'No',
         });
       }
     },

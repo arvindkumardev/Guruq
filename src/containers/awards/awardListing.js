@@ -5,12 +5,12 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { startCase } from 'lodash';
-import { IconButtonWrapper, Loader, ScreenHeader } from '../../../../components';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Images } from '../../../../theme';
-import { alertBox, formatDate, RfH, RfW } from '../../../../utils/helpers';
-import NavigationRouteNames from '../../../../routes/screenNames';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
+import commonStyles from '../../theme/styles';
+import { Colors, Images } from '../../theme';
+import { alertBox, formatDate, RfH, RfW } from '../../utils/helpers';
+import NavigationRouteNames from '../../routes/screenNames';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { GET_AWARD_LIST } from './award.query';
 import { DELETE_AWARD_DETAIL } from './award.mutation';
 
@@ -114,7 +114,7 @@ function AwardListing() {
           rightIcon={Images.add}
           onRightIconClick={handleAddEditAward}
         />
-        <View style={{ height: RfH(24) }} />
+        <View style={{ height: RfH(10) }} />
         {!isListEmpty ? (
           <View style={{ paddingHorizontal: RfW(16) }}>
             <FlatList
