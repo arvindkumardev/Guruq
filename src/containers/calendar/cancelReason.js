@@ -15,7 +15,6 @@ import { CANCEL_CLASS } from '../student/class.mutation';
 import NavigationRouteNames from '../../routes/screenNames';
 import { ClassCancelReasonEnum } from '../common/enums';
 import { userDetails } from '../../apollo/cache';
-import { UserTypeEnum } from '../../common/userType.enum';
 
 function CancelReason(props) {
   const { route } = props;
