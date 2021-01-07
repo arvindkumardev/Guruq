@@ -4,9 +4,15 @@ import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
+
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { notificationPayload, tutorDetails, userDetails } from '../apollo/cache';
-import { getFcmToken, initializeNotification, requestUserPermission } from '../common/firebase';
+import { notificationPayload, notificationsList, tutorDetails, userDetails } from '../apollo/cache';
+import {
+  getFcmToken,
+  initializeNotification,
+  requestUserPermission,
+  saveNotificationPayload,
+} from '../common/firebase';
 import { UserTypeEnum } from '../common/userType.enum';
 import EnterPassword from '../containers/common/login/enterPassword';
 import Login from '../containers/common/login/login';
@@ -26,6 +32,7 @@ import UploadDocuments from '../containers/certficationProcess/uploadDocuments';
 import AddressListing from '../containers/address/addressListing';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
 import { createPayload } from '../utils/helpers';
+
 import scheduledClassDetails from '../containers/calendar/scheduledClassDetails';
 import cancelReason from '../containers/calendar/cancelReason';
 import MyClasses from '../containers/myClasses/classes';
@@ -54,6 +61,7 @@ import AboutUs from '../containers/common/about/about';
 import BackgroundCheck from '../containers/certficationProcess/backgroundCheck';
 import TutorVerificationScreen from '../containers/certficationProcess/tutorVerificationScreen';
 import { BackgroundCheckStatusEnum } from '../containers/common/enums';
+import RatingReviews from '../containers/common/ratingReviews';
 
 const Stack = createStackNavigator();
 
@@ -62,6 +70,7 @@ const AppStack = (props) => {
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
   const userDetailsObj = useReactiveVar(userDetails);
+  const notifyList = useReactiveVar(notificationsList);
 
   useEffect(() => {
     // clearAllLocalStorage();
@@ -82,9 +91,10 @@ const AppStack = (props) => {
 
   useEffect(() => {
     if (!isEmpty(userDetailsObj)) {
-      console.log('userDetailsObj', userDetailsObj);
       getFcmToken().then((token) => {
         if (token) {
+          console.log('fcm token', token);
+
           createPayload(userDetailsObj.me, token).then((payload) => {
             registerDevice({ variables: { deviceDto: payload } });
           });
@@ -94,15 +104,18 @@ const AppStack = (props) => {
   }, [userDetailsObj]);
 
   useEffect(() => {
+    requestUserPermission();
+    initializeNotification();
     getFcmToken().then((token) => {
       if (token) {
+        console.log('FCM Token from', token);
+
         createPayload(userDetailsObj.me, token).then((payload) => {
           registerDevice({ variables: { deviceDto: payload } });
         });
       }
     });
-    requestUserPermission();
-    initializeNotification();
+
     // notificationPayload({
     //   screen: 'tutor_detail',
     //   tutor_id: 38480,
@@ -112,12 +125,22 @@ const AppStack = (props) => {
       if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
         notificationPayload(remoteMessage.data);
       }
+      if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.notification)) {
+        console.log('COming notification from', remoteMessage.notification);
+        notificationsList([...notifyList, remoteMessage.messageId]);
+        saveNotificationPayload(remoteMessage);
+      }
     });
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
-        if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
-          notificationPayload(remoteMessage.data);
+        if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.notification)) {
+          console.log('COming notification from', remoteMessage.notification);
+          if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
+            notificationPayload(remoteMessage.data);
+          }
+          notificationsList([...notifyList, remoteMessage.messageId]);
+          saveNotificationPayload(remoteMessage);
         }
       });
   }, []);
@@ -231,6 +254,11 @@ const AppStack = (props) => {
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
         component={UploadDocuments}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.RATINGS_REVIEWS}
+        component={RatingReviews}
         options={{ headerShown: false }}
       />
     </>

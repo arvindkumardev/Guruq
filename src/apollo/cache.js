@@ -23,3 +23,4 @@ export const offeringsMasterData = makeVar([]);
 export const interestingOfferingData = makeVar([]);
 
 export const notificationPayload = makeVar({});
+export const notificationsList = makeVar([]);

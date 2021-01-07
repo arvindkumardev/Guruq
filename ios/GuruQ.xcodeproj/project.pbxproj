@@ -23,6 +23,7 @@
 		462D489B4F3AAF0C260822C1 /* libPods-GuruQ-GuruQTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6F79D522872A737D099540B /* libPods-GuruQ-GuruQTests.a */; };
 		4B22E8FC6561464FA6FCBE78 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3BE76C50EB4E402193C07063 /* Zocial.ttf */; };
 		5022148751F140DE9847A3ED /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08474DB0BD1D48CA9296516F /* Fontisto.ttf */; };
+		55827C0025A6DCA1003A720D /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55827BFF25A6DCA1003A720D /* test.swift */; };
 		59D685F9E6F9A770785BC572 /* libPods-GuruQ.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4128759C910DB762599F371 /* libPods-GuruQ.a */; };
 		5B850A92D6A945A1A64AF6E1 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 513883F588914E6684E6849B /* FontAwesome.ttf */; };
 		625DF3E593164695A793FFD7 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7929E887C6284D4286F10610 /* FontAwesome5_Regular.ttf */; };
@@ -97,6 +98,7 @@
 		503C020384E54A2A9FB38618 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		513883F588914E6684E6849B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		545FC21A8805A9088CF9380F /* Pods-GuruQ-GuruQTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuruQ-GuruQTests.release.xcconfig"; path = "Target Support Files/Pods-GuruQ-GuruQTests/Pods-GuruQ-GuruQTests.release.xcconfig"; sourceTree = "<group>"; };
+		55827BFF25A6DCA1003A720D /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		62ABD74B1A9C23D49F7A4457 /* Pods-GuruQ-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuruQ-tvOS.release.xcconfig"; path = "Target Support Files/Pods-GuruQ-tvOS/Pods-GuruQ-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		6866965CA80336E8C8557CE9 /* Pods-GuruQ-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuruQ-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-GuruQ-tvOSTests/Pods-GuruQ-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		69116DD09F734418B0B82635 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				55827BFF25A6DCA1003A720D /* test.swift */,
 				F439C56F2555826E003DE95A /* GuruQ-Bridging-Header.h */,
 				E530D7E7253995BD00DF182E /* fonts */,
 				13B07FAE1A68108700A75B9A /* GuruQ */,
@@ -769,6 +772,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				55827C0025A6DCA1003A720D /* test.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -810,6 +814,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D129630A71510FDB595A91DA /* Pods-GuruQ-GuruQTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -833,6 +838,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 545FC21A8805A9088CF9380F /* Pods-GuruQ-GuruQTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = GuruQTests/Info.plist;
@@ -997,6 +1003,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1076,6 +1083,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "GuruQ-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

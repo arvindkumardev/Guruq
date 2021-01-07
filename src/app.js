@@ -2,11 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { ApolloProvider, useReactiveVar } from '@apollo/client';
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-import { getToken } from './utils/helpers';
+import {clearAllLocalStorage, getToken, removeToken} from './utils/helpers';
 import { isLoggedIn, isSplashScreenVisible, isTokenLoading, userType } from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
@@ -62,8 +63,8 @@ function App() {
       userToken = await getToken();
       console.log('userToken', userToken);
       if (userToken) {
-        console.log('I am here...');
         isLoggedIn(true);
+        console.log(true);
       }
     } catch (e) {
       // Restoring token failed

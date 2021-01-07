@@ -130,17 +130,17 @@ export default class Bubble extends React.Component {
     const isSameThread =
       isSameUser(this.props.currentMessage, this.props.previousMessage) &&
       isSameDay(this.props.currentMessage, this.props.previousMessage);
-
     const messageHeader = isSameThread ? null : (
       <View style={styles.headerView}>
         {this.renderUsername()}
-        {this.renderTime()}
         {this.renderTicks()}
+
       </View>
     );
 
     return (
-      <View style={[styles.container, this.props.containerStyle]}>
+      <View style={[styles.container, this.props.containerStyle,{
+      }]}>
         <TouchableOpacity onLongPress={this.onLongPress} accessibilityTraits="text" {...this.props.touchableProps}>
           <View style={[styles.wrapper, this.props.wrapperStyle]}>
             <View>
@@ -148,6 +148,7 @@ export default class Bubble extends React.Component {
               {messageHeader}
               {this.renderMessageImage()}
               {this.renderMessageText()}
+              {this.renderTime()}
             </View>
           </View>
         </TouchableOpacity>
@@ -168,10 +169,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: 'flex-start',
+    alignItems:'flex-start'
   },
   wrapper: {
-    marginRight: 60,
     minHeight: 20,
     justifyContent: 'flex-end',
   },

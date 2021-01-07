@@ -4,6 +4,7 @@ import SubjectIcons from './subjectIcons';
 
 const Images = {
   aboutGuru: require('../assets/images/about-guru.png'),
+  aboutUs: require('../assets/images/aboutus.png'),
   abroad: require('../assets/images/abroad.png'),
   active_blue_circle: require('../assets/images/active_blue_circle.png'),
   moreInformation: require('../assets/images/add.png'),
@@ -183,6 +184,7 @@ const Images = {
   speaker_enabled: require('../assets/images/speaker-enabled.png'),
   speaker: require('../assets/images/speaker.png'),
   splashScreen: require('../assets/images/splash_image.png'),
+  sort: require('../assets/images/sort.png'),
   star_box: require('../assets/images/star-box.png'),
   star_box_o: require('../assets/images/star-box-o.png'),
   star_half_o: require('../assets/images/star-half-o.png'),
