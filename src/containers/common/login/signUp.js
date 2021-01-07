@@ -42,6 +42,7 @@ function SignUp(props) {
             userDetails(data.signUp);
             userType(data.signUp.type);
             isLoggedIn(true);
+            console.log(true);
           });
         });
       }

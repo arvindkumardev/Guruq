@@ -63,8 +63,8 @@ function App() {
       userToken = await getToken();
       console.log('userToken', userToken);
       if (userToken) {
-        console.log('I am here...');
         isLoggedIn(true);
+        console.log(true);
       }
     } catch (e) {
       // Restoring token failed

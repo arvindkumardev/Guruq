@@ -38,6 +38,7 @@ function LoginCheck() {
         userType(userDetailsData.type);
         isLoggedIn(true);
         isSplashScreenVisible(false);
+        console.log(true);
       }
     },
   });
@@ -52,6 +53,7 @@ function LoginCheck() {
         userType(userDetailsData.type);
         isLoggedIn(true);
         isSplashScreenVisible(false);
+        console.log(true);
       }
     },
   });
