@@ -1,10 +1,10 @@
 import { Text, View } from 'react-native';
 import React from 'react';
 import { Button } from 'native-base';
-import { Loader, ScreenHeader } from '../../../../components';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Fonts } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { Loader, ScreenHeader } from '../../../components';
+import commonStyles from '../../../theme/styles';
+import { Colors, Fonts } from '../../../theme';
+import { RfH, RfW } from '../../../utils/helpers';
 
 function Refund(props) {
   const { route } = props;

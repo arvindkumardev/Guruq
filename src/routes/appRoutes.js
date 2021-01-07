@@ -6,17 +6,12 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { Alert } from 'react-native';
-import {
-  notificationPayload,
-  notificationsList,
-  tutorDetails,
-  userDetails,
-} from '../apollo/cache';
+import { notificationPayload, notificationsList, tutorDetails, userDetails } from '../apollo/cache';
 import {
   getFcmToken,
   initializeNotification,
   requestUserPermission,
+  saveNotificationPayload,
 } from '../common/firebase';
 import { UserTypeEnum } from '../common/userType.enum';
 import EnterPassword from '../containers/common/login/enterPassword';
@@ -32,21 +27,11 @@ import NavigationRouteNames from './screenNames';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
 import { TutorCertificationStageEnum } from '../containers/tutor/enums';
-import CertificationCompletedView from '../containers/certficationProcess/certificationCompletedView';
 import WebViewPage from '../components/WebViewPage';
 import UploadDocuments from '../containers/certficationProcess/uploadDocuments';
 import AddressListing from '../containers/address/addressListing';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
-import { DUPLICATE_FOUND } from '../common/errorCodes';
-import {
-  alertBox,
-  clearAllLocalStorage,
-  storeData,
-  getSaveData,
-  removeData,
-  createPayload,
-} from '../utils/helpers';
-import {saveNotificationPayload} from '../common/firebase'
+import { createPayload } from '../utils/helpers';
 
 import scheduledClassDetails from '../containers/calendar/scheduledClassDetails';
 import cancelReason from '../containers/calendar/cancelReason';
@@ -89,27 +74,20 @@ const AppStack = (props) => {
 
   useEffect(() => {
     // clearAllLocalStorage();
-    AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then(
-      (val) => {
-        setIsGettingStartedVisible(isEmpty(val));
-      },
-    );
+    AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then((val) => {
+      setIsGettingStartedVisible(isEmpty(val));
+    });
   }, []);
 
-  const [registerDevice, { loading: scheduleLoading }] = useMutation(
-    REGISTER_DEVICE,
-    {
-      fetchPolicy: 'no-cache',
-      onError: (e) => {},
-      onCompleted: (data) => {
-        if (data) {
-          console.log(data);
-        }
-      },
+  const [registerDevice, { loading: scheduleLoading }] = useMutation(REGISTER_DEVICE, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        console.log(data);
+      }
     },
-  );
-
-
+  });
 
   useEffect(() => {
     if (!isEmpty(userDetailsObj)) {
@@ -130,14 +108,14 @@ const AppStack = (props) => {
     initializeNotification();
     getFcmToken().then((token) => {
       if (token) {
-        console.log('FCM Token from',token)
+        console.log('FCM Token from', token);
 
         createPayload(userDetailsObj.me, token).then((payload) => {
           registerDevice({ variables: { deviceDto: payload } });
         });
       }
     });
-  
+
     // notificationPayload({
     //   screen: 'tutor_detail',
     //   tutor_id: 38480,
@@ -148,26 +126,24 @@ const AppStack = (props) => {
         notificationPayload(remoteMessage.data);
       }
       if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.notification)) {
-        console.log('COming notification from',remoteMessage.notification)
-        notificationsList([...notifyList,remoteMessage.messageId])
-        saveNotificationPayload(remoteMessage)
+        console.log('COming notification from', remoteMessage.notification);
+        notificationsList([...notifyList, remoteMessage.messageId]);
+        saveNotificationPayload(remoteMessage);
       }
     });
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
         if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.notification)) {
-          console.log('COming notification from',remoteMessage.notification)
+          console.log('COming notification from', remoteMessage.notification);
           if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
             notificationPayload(remoteMessage.data);
           }
-          notificationsList([...notifyList,remoteMessage.messageId])
-          saveNotificationPayload(remoteMessage)
+          notificationsList([...notifyList, remoteMessage.messageId]);
+          saveNotificationPayload(remoteMessage);
         }
       });
   }, []);
-
-
 
   const getCommonRoutes = () => (
     <>
@@ -196,11 +172,7 @@ const AppStack = (props) => {
         component={scheduleClass}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.ADDRESS}
-        component={AddressListing}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.ADDRESS} component={AddressListing} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_ADDRESS}
         component={AddEditAddress}
@@ -271,22 +243,14 @@ const AppStack = (props) => {
         component={CustomerCare}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.WEB_VIEW}
-        component={WebViewPage}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.WEB_VIEW} component={WebViewPage} options={{ headerShown: false }} />
 
       <Stack.Screen
         name={NavigationRouteNames.SEND_FEEDBACK}
         component={SendFeedback}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.ABOUT_US}
-        component={AboutUs}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
         component={UploadDocuments}
@@ -318,11 +282,7 @@ const AppStack = (props) => {
         return getTutorRoutes(tutorInfo);
       }
 
-      if (
-        tutorInfo &&
-        tutorInfo?.lead?.certificationStage ===
-          TutorCertificationStageEnum.REGISTERED.label
-      ) {
+      if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.REGISTERED.label) {
         return (
           <>
             <Stack.Screen
@@ -336,12 +296,9 @@ const AppStack = (props) => {
       if (
         tutorInfo &&
         !tutorInfo?.certified &&
-        (tutorInfo?.lead?.certificationStage ===
-          TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label ||
-          (tutorInfo?.lead?.certificationStage ===
-            TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&
-            tutorInfo?.lead?.backgroundCheck?.status !==
-              BackgroundCheckStatusEnum.NOT_STARTED.label))
+        (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label ||
+          (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&
+            tutorInfo?.lead?.backgroundCheck?.status !== BackgroundCheckStatusEnum.NOT_STARTED.label))
       ) {
         return (
           <Stack.Screen
@@ -354,8 +311,7 @@ const AppStack = (props) => {
 
       if (
         tutorInfo &&
-        tutorInfo?.lead?.certificationStage !==
-          TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label
+        tutorInfo?.lead?.certificationStage !== TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label
       ) {
         return (
           <>
@@ -405,11 +361,7 @@ const AppStack = (props) => {
               options={{ headerShown: false }}
             />
           )}
-          <Stack.Screen
-            name={NavigationRouteNames.LOGIN}
-            component={Login}
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name={NavigationRouteNames.LOGIN} component={Login} options={{ headerShown: false }} />
           <Stack.Screen
             name={NavigationRouteNames.ENTER_PASSWORD}
             component={EnterPassword}
@@ -425,11 +377,7 @@ const AppStack = (props) => {
             component={SetPassword}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name={NavigationRouteNames.REGISTER}
-            component={SignUp}
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name={NavigationRouteNames.REGISTER} component={SignUp} options={{ headerShown: false }} />
           <Stack.Screen
             name={NavigationRouteNames.USER_TYPE_SELECTOR}
             component={UserTypeSelector}

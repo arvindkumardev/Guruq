@@ -54,7 +54,7 @@ function BusinessDetails() {
             navigation.navigate(routeNames.TUTOR.ADD_EDIT_BUSINESS_DETAILS, { businessDetails: businessData })
           }
         />
-        <View style={{ paddingHorizontal: RfW(16) }}>
+        <View style={{ paddingHorizontal: RfW(16), flex: 1 }}>
           <View style={{ height: RfH(24) }} />
           {!isDataEmpty ? (
             <>
@@ -76,19 +76,25 @@ function BusinessDetails() {
                     </View>
                   </View>
                   <View style={{ height: RfH(24) }} />
-                  <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
-                    <Text style={commonStyles.mediumMutedText}>GSTIN</Text>
-                    <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(5) }]}>
-                      {businessData?.gstNumber}
-                    </Text>
-                  </View>
-                  <View style={{ height: RfH(24) }} />
-                  <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
-                    <Text style={commonStyles.mediumMutedText}>Legal Name</Text>
-                    <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(5) }]}>
-                      {businessData?.businessName}
-                    </Text>
-                  </View>
+                  {businessData?.gstEligible && (
+                    <>
+                      <View
+                        style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
+                        <Text style={commonStyles.mediumMutedText}>GSTIN</Text>
+                        <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(5) }]}>
+                          {businessData?.gstNumber}
+                        </Text>
+                      </View>
+                      <View style={{ height: RfH(24) }} />
+                      <View
+                        style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, paddingVertical: RfH(8) }}>
+                        <Text style={commonStyles.mediumMutedText}>Legal Name</Text>
+                        <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(5) }]}>
+                          {businessData?.businessName}
+                        </Text>
+                      </View>
+                    </>
+                  )}
                 </View>
               )}
             </>
@@ -106,7 +112,7 @@ function BusinessDetails() {
               <Text
                 style={[
                   commonStyles.pageTitleThirdRow,
-                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center', color: Colors.black },
                 ]}>
                 No data found
               </Text>

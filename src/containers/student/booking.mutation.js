@@ -174,6 +174,14 @@ export const CANCEL_BOOKINGS = gql`
   }
 `;
 
+export const CANCEL_ORDER_ITEMS = gql`
+  mutation CancelOrderItem($orderItemId: Int!) {
+    cancelOrderItem(orderItemId: $orderItemId) {
+      id
+    }
+  }
+`;
+
 export const ADD_DOCUMENT_TO_CLASS = gql`
   mutation AddDocumentToClass($documentDto: CreateUpdateDocumentDto!, $classId: Int!) {
     addDocumentToClass(documentDto: $documentDto, classId: $classId) {

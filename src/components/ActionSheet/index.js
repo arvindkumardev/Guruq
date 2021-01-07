@@ -2,18 +2,18 @@ import { Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'r
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import { map } from 'lodash';
+import { map, isEmpty } from 'lodash';
 import styles from './styles';
 
 function ActionSheet(props) {
   const { isVisible, handleCancel, cancelText, topLabel, actions, isTopLabelVisible, selectedIndex } = props;
   return (
-    <Modal animationType="slide" transparent visible={isVisible} onRequestClose={handleCancel}>
-      <TouchableWithoutFeedback onPress={handleCancel}>
+    <Modal animationType="fade" transparent visible={isVisible} onRequestClose={handleCancel}>
+      <TouchableWithoutFeedback onPressIn={handleCancel} activeOpacity={0.8}>
         <View style={styles.mainModalContainer}>
           <View style={styles.modalContainer}>
             <View style={styles.modalInnerContainer}>
-              {isTopLabelVisible && <Text style={styles.modalTopLabel}>{topLabel}</Text>}
+              {isTopLabelVisible && !isEmpty(topLabel) && <Text style={styles.modalTopLabel}>{topLabel}</Text>}
               {actions &&
                 map(
                   actions.filter((item) => item.isEnabled),
@@ -30,11 +30,11 @@ function ActionSheet(props) {
                   )
                 )}
             </View>
-            <View style={styles.modalDismissContainer}>
+            <TouchableOpacity style={styles.modalDismissContainer} onPress={handleCancel} activeOpacity={0.8}>
               <Text style={styles.modalLabelDismiss} onPress={handleCancel}>
                 {cancelText}
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableWithoutFeedback>

@@ -21,7 +21,7 @@ function PriceMatrixView(props) {
   const [priceMatrix, setPriceMatrix] = useState(PM);
   const [demoClassPm, setDemoClassPM] = useState({ online: 0, offline: 0 });
   const [isDemoClass, setIsDemoClass] = useState(offering.demoClass);
-  const [modeDemoClass, setModeDemoClass] = useState(offering.onlineClass);
+  const [modeDemoClass, setModeDemoClass] = useState(0);
 
   useEffect(() => {
     if (!isEmpty(offering.budgets)) {
@@ -33,9 +33,14 @@ function PriceMatrixView(props) {
         online: 0,
         offline: 0,
       };
+      const eligibleDemo = {
+        online: false,
+        offline: false,
+      };
       offering.budgets.forEach((budget) => {
         if (budget.demo) {
           demoPrice[budget.onlineClass ? 'online' : 'offline'] = budget.price;
+          eligibleDemo[budget.onlineClass ? 'online' : 'offline'] = true;
         } else {
           pm[budget.onlineClass ? 'online' : 'offline'][`${budget.count}`] = budget.price;
         }
@@ -59,9 +64,9 @@ function PriceMatrixView(props) {
         }
       });
 
-      console.log(pm);
       setPriceMatrix(pm);
       setDemoClassPM(demoPrice);
+      setModeDemoClass(eligibleDemo.online ? (eligibleDemo.offline ? 2 : 1) : 0);
     }
   }, [offering]);
 
@@ -304,7 +309,9 @@ function PriceMatrixView(props) {
               activeOpacity={0.8}>
               <CheckBox
                 checked={modeDemoClass === 2}
-                onPress={() => setModeDemoClass(2)}
+                onPress={() => {
+                  setModeDemoClass(2);
+                }}
                 style={{ marginRight: RfW(20) }}
                 color={Colors.brandBlue}
               />

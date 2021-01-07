@@ -63,58 +63,76 @@ export const SEARCH_BOOKINGS = gql`
     searchBookings(searchDto: $searchDto) {
       edges {
         id
-        uuid
-        orderStatus
-        owner {
-          id
-        }
         subTotal
         createdDate
         convenienceCharges
         pointsRedeemed
         payableAmount
-        discount
-        promotion {
-          code
-        }
         orderItems {
           id
-          count
-          availableClasses
-          onlineClass
-          demo
-          count
-          groupSize
+        }
+        orderStatus
+      }
+    }
+  }
+`;
 
-          offering {
+export const GET_BOOKING_DETAIL = gql`
+  query GetBookingDetails($id: Int!) {
+    getBookingDetails(id: $id) {
+      id
+      orderStatus
+      subTotal
+      createdDate
+      convenienceCharges
+      pointsRedeemed
+      payableAmount
+      discount
+      promotion {
+        code
+      }
+      orderItems {
+        id
+        count
+        availableClasses
+        onlineClass
+        demo
+        count
+        groupSize
+
+        offering {
+          id
+          name
+          parentOffering {
             id
             name
             parentOffering {
               id
               name
-              parentOffering {
-                id
-                name
-              }
-            }
-          }
-          tutor {
-            id
-            profileImage {
-              id
-              filename
-            }
-            contactDetail {
-              firstName
-              lastName
             }
           }
         }
-        orderStatus
-        orderPayment {
+        tutor {
           id
-          paymentStatus
+          profileImage {
+            id
+            filename
+          }
+          contactDetail {
+            firstName
+            lastName
+          }
         }
+        refund {
+          id
+          amount
+        }
+      }
+      orderStatus
+      orderPayment {
+        id
+        paymentStatus
+        paymentMethod
       }
     }
   }

@@ -24,6 +24,7 @@ import { SCHOOL_EDUCATION } from '../../utils/constants';
 import { HighSchoolStreamEnum } from '../common/enums';
 import { UserTypeEnum } from '../../common/userType.enum';
 import { GET_DEGREE_LIST } from './education.query';
+import DegreeModal from './degreeSelectionModal';
 
 function AddEditEducation() {
   const navigation = useNavigation();
@@ -53,7 +54,6 @@ function AddEditEducation() {
   const [endDate, setEndDate] = useState();
   const [degree, setDegree] = useState([]);
   const [showDegrees, setShowDegrees] = useState(false);
-  const [searchText, setSearchText] = useState('');
 
   const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -161,39 +161,6 @@ function AddEditEducation() {
     setShowDegrees(false);
   };
 
-  const ListItem = (item) => {
-    return (
-      <>
-        <TouchableOpacity onPress={() => onSelectingDegree(item)}>
-          <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(8) }}>
-            <Text>{item.value}</Text>
-          </View>
-        </TouchableOpacity>
-      </>
-    );
-  };
-
-  const SectionHeader = (section) => (
-    <View
-      style={{
-        paddingLeft: 10,
-        backgroundColor: '#f1f2f3',
-        paddingVertical: 5,
-      }}>
-      <Text>{section.title}</Text>
-    </View>
-  );
-
-  const updateSearch = (text) => {
-    const newData = degree.filter((item) => {
-      const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    setDegree(newData);
-    setSearchText(text);
-  };
-
   return (
     <>
       <Loader isLoading={educationLoading || degreeDataLoading} />
@@ -232,7 +199,7 @@ function AddEditEducation() {
               <View>
                 <Item style={commonStyles.horizontalChildrenSpaceView}>
                   <CustomSelect
-                    data={boards.map((item) => ({ ...item, label: item.displayName, value: item }))}
+                    data={boards.map((item) => ({label: item.displayName, value: item }))}
                     value={selectedBoard}
                     onChangeHandler={(value) => setSelectedBoard(value)}
                     placeholder="Select Board"
@@ -366,57 +333,15 @@ function AddEditEducation() {
             </Button>
           </View>
         </View>
-        <Modal
-          animationType="fade"
-          transparent
-          visible={showDegrees}
-          onRequestClose={() => {
-            setShowDegrees(false);
-          }}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-              backgroundColor: Colors.white,
-              opacity: 1,
-              paddingBottom: RfH(34),
-              paddingTop: RfH(16),
-            }}>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
-              <View style={{ height: RfH(54) }} />
-              <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-                Please select a degree
-              </Text>
-              <IconButtonWrapper
-                styling={{ alignSelf: 'flex-end' }}
-                iconHeight={RfH(20)}
-                iconWidth={RfW(20)}
-                iconImage={Images.cross}
-                submitFunction={() => setShowDegrees(false)}
-                imageResizeMode="contain"
-              />
-            </View>
-
-            <CustomSearchBar
-              placeholder="Search..."
-              value={searchText}
-              onChangeText={(search) => updateSearch(search)}
-            />
-            <AlphabetListView
-              style={{ flex: 1 }}
-              data={degree.map((item) => ({ key: item.id, value: item.name, data: item }))}
-              renderItem={ListItem}
-              renderSectionHeader={SectionHeader}
-              getItemHeight={() => RfH(44)}
-              sectionHeaderHeight={RfH(28)}
-              indexLetterColor="#007aff"
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
-        </Modal>
       </View>
+      {showDegrees && (
+        <DegreeModal
+          degree={degree}
+          isVisible={showDegrees}
+          handlClose={() => setSelectedDegree(false)}
+          onSelectingDegree={onSelectingDegree}
+        />
+      )}
     </>
   );
 }

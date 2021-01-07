@@ -31,12 +31,12 @@ import SendFeedback from '../containers/common/sendFeedback';
 import CustomerCare from '../containers/common/customerCare/customerCare';
 import ParentListing from '../containers/parentsDetail/parentListing';
 import AddEditParents from '../containers/parentsDetail/addEditParents';
-import BookingList from '../containers/student/profile/purchasedHistory/bookingList';
-import BookingDetails from '../containers/student/profile/purchasedHistory/bookingDetails';
-import Refund from '../containers/student/profile/purchasedHistory/refund';
+import BookingList from '../containers/student/purchasedHistory/bookingList';
+import BookingDetails from '../containers/student/purchasedHistory/bookingDetails';
+import Refund from '../containers/student/purchasedHistory/refund';
 import AboutUs from '../containers/common/about/about';
 import MyStudyAreas from '../containers/student/studyArea/myStudyAreas';
-import OrderDetails from '../containers/student/profile/purchasedHistory/orderDetails';
+import OrderDetails from '../containers/student/purchasedHistory/orderDetails';
 
 const Stack = createStackNavigator();
 

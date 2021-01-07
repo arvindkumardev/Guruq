@@ -1,17 +1,16 @@
-import { View, Text, ScrollView, Linking, TouchableOpacity } from 'react-native';
+import {Linking, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
-import { IconButtonWrapper, ScreenHeader } from '../../../components';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {IconButtonWrapper, ScreenHeader} from '../../../components';
 import commonStyles from '../../../theme/styles';
-import { Colors, Fonts, Images } from '../../../theme';
-import { RfH, RfW } from '../../../utils/helpers';
-import styles from '../../student/profile/styles';
+import {Colors, Fonts, Images} from '../../../theme';
+import {alertBox, RfH, RfW} from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/screenNames';
 import IconWrapper from '../../../components/IconWrapper';
-import { WEBSITE_URL } from '../../../utils/constants';
+import {BOOKING_FAQ_URL, GENERAL_FAQ_URL, LEGAL_FAQ_URL, QPOINTS_FAQ_URL,} from '../../../utils/constants';
 
-function CustomerCare(props) {
+function CustomerCare() {
   const navigation = useNavigation();
 
   const openWhatsApp = () => {
@@ -21,14 +20,13 @@ function CustomerCare(props) {
         console.log(`WhatsApp Opened successfully ${data}`); // <---Success
       })
       .catch(() => {
-        alert('Make sure WhatsApp installed on your device'); // <---Error
+        alertBox('Make sure WhatsApp installed on your device'); // <---Error
       });
   };
 
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
       <ScreenHeader label="Help & Support" homeIcon horizontalPadding={RfW(16)} lineVisible={false} />
-      {/* <View style={commonStyles.blankGreyViewSmall} /> */}
       <View style={commonStyles.blankViewSmall} />
       <Text style={[commonStyles.regularPrimaryText, { padding: RfW(16), fontFamily: Fonts.semiBold }]}>
         Customer Care
@@ -54,14 +52,7 @@ function CustomerCare(props) {
             <IconButtonWrapper iconWidth={RfH(20)} iconHeight={RfH(20)} iconImage={Images.whatsapp} />
           </View>
         </TouchableOpacity>
-
-        {/* <View style={[commonStyles.lineSeparator, { marginTop: RfH(16) }]} /> */}
-        {/* <View style={{ height: RfH(32) }} /> */}
-        {/* <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}> */}
-        {/*  Need help with recent Bookings? */}
-        {/* </Text> */}
       </View>
-      {/* <View style={commonStyles.blankGreyViewSmall} /> */}
 
       <View style={commonStyles.blankViewSmall} />
 
@@ -71,16 +62,13 @@ function CustomerCare(props) {
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-              url: `${WEBSITE_URL}/student-faq`,
+              url: GENERAL_FAQ_URL,
               label: 'General Issues',
             })
           }
           style={commonStyles.horizontalChildrenSpaceView}>
-          <View style={{}}>
+          <View>
             <Text style={commonStyles.regularPrimaryText}>General Issues</Text>
-            {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
-            {/*  Personal, Addresses, Parents & Education Detail */}
-            {/* </Text> */}
           </View>
           <IconWrapper
             iconWidth={RfW(24)}
@@ -95,16 +83,13 @@ function CustomerCare(props) {
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-              url: `${WEBSITE_URL}/student-faq`,
-              label: 'General Issues',
+              url: QPOINTS_FAQ_URL,
+              label: 'Q Points FAQ',
             })
           }
           style={commonStyles.horizontalChildrenSpaceView}>
-          <View style={{}}>
+          <View>
             <Text style={commonStyles.regularPrimaryText}>Q Points FAQs</Text>
-            {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
-            {/*  Personal, Addresses, Parents & Education Detail */}
-            {/* </Text> */}
           </View>
           <IconWrapper
             iconWidth={RfW(24)}
@@ -119,16 +104,13 @@ function CustomerCare(props) {
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-              url: `${WEBSITE_URL}/student-faq`,
-              label: 'General Issues',
+              url: BOOKING_FAQ_URL,
+              label: 'Booking FAQs',
             })
           }
           style={commonStyles.horizontalChildrenSpaceView}>
-          <View style={{}}>
+          <View>
             <Text style={commonStyles.regularPrimaryText}>Booking FAQs</Text>
-            {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
-            {/*  Personal, Addresses, Parents & Education Detail */}
-            {/* </Text> */}
           </View>
           <IconWrapper
             iconWidth={RfW(24)}
@@ -140,20 +122,16 @@ function CustomerCare(props) {
 
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-        {/* FIXME: change url */}
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-              url: `${WEBSITE_URL}/student-faq`,
-              label: 'General Issues',
+              url: LEGAL_FAQ_URL,
+              label: 'Legal Terms & Conditions',
             })
           }
           style={commonStyles.horizontalChildrenSpaceView}>
-          <View style={{}}>
+          <View>
             <Text style={commonStyles.regularPrimaryText}>Legal Terms & Conditions</Text>
-            {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
-            {/*  Personal, Addresses, Parents & Education Detail */}
-            {/* </Text> */}
           </View>
           <IconWrapper
             iconWidth={RfW(24)}
