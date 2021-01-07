@@ -1,16 +1,7 @@
 import { useMutation } from '@apollo/react-hooks';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import {
-  Alert,
-  FlatList,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  Modal,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { FlatList, Modal, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
@@ -22,23 +13,22 @@ import {
   Loader,
   ScreenHeader,
   TutorImageComponent,
-} from '../../../../components';
-import { Colors, Fonts, Images } from '../../../../theme';
-import commonStyles from '../../../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { alertBox, getFullName, RfH, RfW } from '../../../../utils/helpers';
-import { GET_SCHEDULED_CLASSES } from '../../booking.query';
-import { userType } from '../../../../apollo/cache';
-import NavigationRouteNames from '../../../../routes/screenNames';
-import { UserTypeEnum } from '../../../../common/userType.enum';
-import { CANCEL_BOOKINGS } from '../../booking.mutation';
+} from '../../../components';
+import { Colors, Fonts, Images } from '../../../theme';
+import commonStyles from '../../../theme/styles';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { alertBox, getFullName, RfH, RfW } from '../../../utils/helpers';
+import { GET_SCHEDULED_CLASSES } from '../booking.query';
+import { userType } from '../../../apollo/cache';
+import NavigationRouteNames from '../../../routes/screenNames';
+import { UserTypeEnum } from '../../../common/userType.enum';
+import { CANCEL_ORDER_ITEMS } from '../booking.mutation';
 
 function OrderDetails(props) {
   const navigation = useNavigation();
   const { route } = props;
   const orderData = route?.params?.orderData;
   const [openMenu, setOpenMenu] = useState(false);
-
   const [tutorClasses, setTutorClasses] = useState([]);
   const [showCancelReason, setShowCancelReason] = useState(false);
   const [cancelReasons, setCancelReasons] = useState([
@@ -96,22 +86,16 @@ function OrderDetails(props) {
   };
 
   const openCancelConfirm = () => {
-    Alert.alert(
-      'Do you want to cancel your class?',
-      '',
-      [
-        {
-          text: 'NO',
-          style: 'cancel',
-          onPress: () => setOpenMenu(false),
-        },
-        {
-          text: 'YES',
-          onPress: () => openCancelReasonModal(),
-        },
-      ],
-      { cancelable: false }
-    );
+    alertBox('Do you really want to cancel the order?', '', {
+      positiveText: 'YES',
+      onPositiveClick: () => {
+        openCancelReasonModal();
+      },
+      negativeText: 'No',
+      onNegativeClick: () => {
+        setOpenMenu(false);
+      },
+    });
   };
 
   const goToCustomerCare = () => {
@@ -144,7 +128,7 @@ function OrderDetails(props) {
     }
   };
 
-  const [cancelBooking, { loading: cancelLoading }] = useMutation(CANCEL_BOOKINGS, {
+  const [cancelOrderItem, { loading: cancelLoading }] = useMutation(CANCEL_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -165,9 +149,9 @@ function OrderDetails(props) {
   });
 
   const onCancelBooking = () => {
-    cancelBooking({
+    cancelOrderItem({
       variables: {
-        orderId: orderData?.id,
+        orderItemId: orderData?.id,
       },
     });
   };
@@ -245,14 +229,16 @@ function OrderDetails(props) {
         style={{
           marginRight: RfW(8),
           marginLeft: RfW(8),
-          height: RfH(96),
           backgroundColor: !item.isScheduled ? Colors.lightBlue : Colors.lightGrey,
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
+          paddingVertical: RfH(10),
           borderRadius: 8,
+          paddingHorizontal: RfW(8),
+          flexDirection: 'row',
         }}>
         <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class {index + 1}</Text>
-        {!item.isScheduled && isStudent && (
+        {!item.isScheduled && (
           <IconButtonWrapper
             iconHeight={RfH(20)}
             iconWidth={RfH(24)}
@@ -260,18 +246,8 @@ function OrderDetails(props) {
             styling={{ marginTop: RfH(8) }}
           />
         )}
-        {!item.isScheduled && !isStudent && (
-          <Text
-            style={{
-              fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-              color: Colors.darkGrey,
-              marginTop: RfH(8),
-            }}>
-            Not Scheduled
-          </Text>
-        )}
         {item.isScheduled && (
-          <>
+          <View>
             <Text
               style={{
                 fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
@@ -280,15 +256,7 @@ function OrderDetails(props) {
               }}>
               {moment(item.startDate).format('DD-MMM-YYYY')}
             </Text>
-            <Text
-              style={{
-                fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-                color: Colors.darkGrey,
-                marginTop: RfH(8),
-              }}>
-              {moment(item.startDate).format('HH:MM A')}
-            </Text>
-          </>
+          </View>
         )}
       </View>
     </View>
@@ -296,7 +264,7 @@ function OrderDetails(props) {
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.white }}>
-      <Loader isLoading={loadingScheduledClasses} />
+      <Loader isLoading={loadingScheduledClasses || cancelLoading} />
       <ScreenHeader
         label="Order Details"
         homeIcon
@@ -313,15 +281,15 @@ function OrderDetails(props) {
         <View style={{ height: RfH(56), backgroundColor: Colors.lightGrey, padding: RfH(16) }}>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Summary</Text>
         </View>
-        <View style={{ paddingHorizontal: RfH(16), paddingTop: RfH(16), backgroundColor: Colors.white }}>
+        <View style={{ paddingHorizontal: RfH(20), paddingTop: RfH(16), backgroundColor: Colors.white }}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={commonStyles.mediumMutedText}>No. of Classes</Text>
             <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>{orderData.count}</Text>
           </View>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.mediumMutedText}>Classes Conducted</Text>
-            <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>{orderData.count}</Text>
-          </View>
+          {/* <View style={commonStyles.horizontalChildrenSpaceView}> */}
+          {/*  <Text style={commonStyles.mediumMutedText}>Classes Conducted</Text> */}
+          {/*  <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>{orderData.count}</Text> */}
+          {/* </View> */}
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={commonStyles.mediumMutedText}>Classes Scheduled</Text>
             <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
@@ -351,19 +319,17 @@ function OrderDetails(props) {
         </View>
       </ScrollView>
 
-      <View style={{ bottom: RfH(34), left: 0, right: 0, position: 'absolute' }}>
-        <Button
-          onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: orderData })}
-          style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-          <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
-        </Button>
-      </View>
+      <Button
+        onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: orderData })}
+        style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginVertical: RfH(30) }]}>
+        <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
+      </Button>
       <ActionSheet
         actions={menuItem}
         cancelText="Dismiss"
         handleCancel={() => setOpenMenu(false)}
         isVisible={openMenu}
-        topLabel="Action"
+        topLabel=""
       />
       <Modal
         animationType="fade"
@@ -401,6 +367,7 @@ function OrderDetails(props) {
             data={reasons}
             renderItem={({ item, index }) => renderReasons(item, index)}
             keyExtractor={(item, index) => index.toString()}
+            scrollEnabled={false}
           />
           {cancelReason === 'Others' && (
             <View
@@ -420,7 +387,7 @@ function OrderDetails(props) {
             </View>
           )}
           <View style={{ height: RfH(24) }} />
-          <Button onPress={() => onCancelBooking()} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+          <Button onPress={onCancelBooking} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
             <Text style={commonStyles.textButtonPrimary}>Submit</Text>
           </Button>
         </View>

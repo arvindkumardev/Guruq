@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, ScrollView } from 'react-native';
 import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { getSubjectIcons, RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import Images from '../../theme/images';
@@ -14,7 +15,6 @@ import { GET_TUTOR_OFFERING_DETAIL } from './certification-query';
 import { offeringsMasterData } from '../../apollo/cache';
 import { PtStatus } from '../tutor/enums';
 import { MARK_CERTIFIED } from './certification-mutation';
-import { RFValue } from 'react-native-responsive-fontsize';
 import ActionModal from './components/helpSection';
 
 const PtStartScreen = (props) => {
@@ -28,10 +28,7 @@ const PtStartScreen = (props) => {
   const [attemptExhausted, setAttemptExhausted] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
 
-  const [
-    getTutorOfferingDetails,
-    { loading: tutorLeadDetailLoading },
-  ] = useLazyQuery(GET_TUTOR_OFFERING_DETAIL, {
+  const [getTutorOfferingDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_OFFERING_DETAIL, {
     fetchPolicy: 'no-cache',
     variables: { tutorOfferingId: offeringId },
     onError: (e) => {
@@ -43,40 +40,29 @@ const PtStartScreen = (props) => {
       if (data) {
         setOffering(
           offeringMasterData.find(
-            (item) =>
-              item.id ===
-              data.getTutorOfferingDetails.offerings.find(
-                (item) => item.level === 3,
-              ).id,
-          ),
+            (item) => item.id === data.getTutorOfferingDetails.offerings.find((item) => item.level === 3).id
+          )
         );
-        const ptTest = data.getTutorOfferingDetails.tutorProficiencyTests.sort(
-          (a, b) => (a.id < b.id ? 1 : -1),
-        );
+        const ptTest = data.getTutorOfferingDetails.tutorProficiencyTests.sort((a, b) => (a.id < b.id ? 1 : -1));
         setPtDetail(ptTest[0]);
-        setAttemptExhausted(
-          data.getTutorOfferingDetails.allowedPTAttempts === 0,
-        );
+        setAttemptExhausted(data.getTutorOfferingDetails.allowedPTAttempts === 0);
       }
     },
   });
 
-  const [markCertified, { loading: markTutorCertifiedLoading }] = useMutation(
-    MARK_CERTIFIED,
-    {
-      fetchPolicy: 'no-cache',
-      onError: (e) => {
-        console.log(e);
-      },
-      onCompleted: (data) => {
-        if (data) {
-          navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
-            isOnBoarding,
-          });
-        }
-      },
+  const [markCertified, { loading: markTutorCertifiedLoading }] = useMutation(MARK_CERTIFIED, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
     },
-  );
+    onCompleted: (data) => {
+      if (data) {
+        navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
+          isOnBoarding,
+        });
+      }
+    },
+  });
 
   useEffect(() => {
     if (isFocussed) {
@@ -85,19 +71,13 @@ const PtStartScreen = (props) => {
   }, [isFocussed]);
 
   const handleClick = () => {
-    if (
-      ptDetail?.status === PtStatus.PENDING.label ||
-      ptDetail?.status === PtStatus.FAILED.label
-    ) {
+    if (ptDetail?.status === PtStatus.PENDING.label || ptDetail?.status === PtStatus.FAILED.label) {
       navigation.navigate(NavigationRouteNames.TUTOR.PROFICIENCY_TEST, {
         offeringId,
       });
     }
 
-    if (
-      ptDetail?.status === PtStatus.PASSED.label ||
-      ptDetail?.status === PtStatus.EXEMPTED.label
-    ) {
+    if (ptDetail?.status === PtStatus.PASSED.label || ptDetail?.status === PtStatus.EXEMPTED.label) {
       if (isOnBoarding) {
         markCertified();
       } else {
@@ -114,34 +94,22 @@ const PtStartScreen = (props) => {
     if (ptDetail?.status === PtStatus.FAILED.label) {
       text = 'Retake Test';
     }
-    if (
-      ptDetail?.status === PtStatus.PASSED.label ||
-      ptDetail?.status === PtStatus.EXEMPTED.label
-    ) {
+    if (ptDetail?.status === PtStatus.PASSED.label || ptDetail?.status === PtStatus.EXEMPTED.label) {
       text = 'Continue';
     }
     return text;
   };
 
   const renderOffering = () => (
-    <View
-      style={[
-        commonStyles.horizontalChildrenView,
-        { paddingVertical: RfH(16), width: '70%' },
-      ]}>
+    <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(16), width: '70%' }]}>
       {!isEmpty(offering) && (
         <>
-          <IconButtonWrapper
-            iconImage={getSubjectIcons(offering?.displayName)}
-            iconWidth={64}
-            iconHeight={64}
-          />
+          <IconButtonWrapper iconImage={getSubjectIcons(offering?.displayName)} iconWidth={64} iconHeight={64} />
           <View style={{ marginLeft: RfW(16) }}>
             <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
               {`${offering?.rootOffering?.displayName} | ${offering?.parentOffering?.parentOffering?.displayName}`}
             </Text>
-            <Text
-              style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
+            <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
               {`${offering?.parentOffering?.displayName} | ${offering?.displayName}`}
             </Text>
           </View>
@@ -173,9 +141,7 @@ const PtStartScreen = (props) => {
               width: '28%',
               alignItems: 'center',
             }}>
-            <Text style={commonStyles.regularPrimaryText}>
-              {ptDetail?.score}
-            </Text>
+            <Text style={commonStyles.regularPrimaryText}>{ptDetail?.score}</Text>
           </View>
         </View>
 
@@ -219,9 +185,7 @@ const PtStartScreen = (props) => {
               width: '28%',
               alignItems: 'center',
             }}>
-            <Text style={commonStyles.regularPrimaryText}>
-              {ptDetail?.notAttempted}
-            </Text>
+            <Text style={commonStyles.regularPrimaryText}>{ptDetail?.notAttempted}</Text>
           </View>
         </View>
 
@@ -242,9 +206,7 @@ const PtStartScreen = (props) => {
               width: '28%',
               alignItems: 'center',
             }}>
-            <Text style={commonStyles.regularPrimaryText}>
-              {ptDetail?.maxMarks}
-            </Text>
+            <Text style={commonStyles.regularPrimaryText}>{ptDetail?.maxMarks}</Text>
           </View>
         </View>
 
@@ -264,16 +226,9 @@ const PtStartScreen = (props) => {
               borderRadius: RfH(8),
               width: '28%',
               alignItems: 'center',
-              backgroundColor:
-                ptDetail?.status === PtStatus.PASSED.label
-                  ? Colors.green
-                  : Colors.orangeRed,
+              backgroundColor: ptDetail?.status === PtStatus.PASSED.label ? Colors.green : Colors.orangeRed,
             }}>
-            <Text
-              style={[
-                commonStyles.regularPrimaryText,
-                { color: Colors.white },
-              ]}>
+            <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
               {ptDetail?.status === PtStatus.PASSED.label ? 'PASS' : 'FAIL'}
             </Text>
           </View>
@@ -285,149 +240,82 @@ const PtStartScreen = (props) => {
   return (
     <>
       <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading} />
-      <ScreenHeader
-        label="Proficiency Test"
-        showRightIcon
-        rightIcon={Images.vertical_dots_b}
-        onRightIconClick={() => setOpenMenu(true)}
-        homeIcon
-        horizontalPadding={RfW(16)}
-      />
-      {openMenu && (
-        <ActionModal
-          isVisible={openMenu}
-          closeMenu={() => setOpenMenu(false)}
-        />
-      )}
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: Colors.white,
-          paddingHorizontal: RfH(16),
-        }}>
-        {(ptDetail?.status === PtStatus.FAILED.label ||
-          ptDetail?.status === PtStatus.PASSED.label) && (
-          <View style={{ marginTop: RfH(15) }}>
-            {renderOffering()}
-            {renderScore()}
-          </View>
-        )}
-
-        {ptDetail?.status === PtStatus.PENDING.label && (
-          <>
-            <View style={{ marginVertical: RfH(15) }}>
-              <View>{renderOffering()}</View>
-              <View style={{ alignItems: 'center', marginVertical: RfH(40) }}>
-                <Image
-                  source={Images.ptTest}
-                  style={{ height: RfH(210), width: RfW(260) }}
-                />
-              </View>
-              <Text
-                style={[
-                  commonStyles.headingPrimaryText,
-                  {
-                    marginTop: RfH(40),
-                    marginBottom: RfH(20),
-                    textAlign: 'center',
-                  },
-                ]}>
-                Test Instructions
-              </Text>
-              <View style={{ marginHorizontal: RfW(16) }}>
-                <View
-                  style={[
-                    commonStyles.horizontalChildrenStartView,
-                    { alignItems: 'center' },
-                  ]}>
-                  <IconButtonWrapper
-                    iconImage={Images.active_blue_circle}
-                    iconWidth={8}
-                    iconHeight={8}
-                  />
-                  <Text style={{ marginLeft: RfW(16) }}>
-                    There will be 30 questions.
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    commonStyles.horizontalChildrenStartView,
-                    { alignItems: 'center', marginTop: RfH(8) },
-                  ]}>
-                  <IconButtonWrapper
-                    iconImage={Images.active_blue_circle}
-                    iconWidth={8}
-                    iconHeight={8}
-                  />
-                  <Text style={{ marginLeft: RfW(16) }}>
-                    You will have 30 minutes to complete the test.
-                  </Text>
-                </View>
-              </View>
-              <Text
-                style={[
-                  commonStyles.regularPrimaryText,
-                  { marginTop: RfH(40), textAlign: 'center' },
-                ]}>
-                GOOD LUCK!
-              </Text>
+      <ScreenHeader label="Proficiency Test" homeIcon horizontalPadding={RfW(16)} />
+      <ScrollView
+        style={{ backgroundColor: Colors.white, paddingBottom: RfH(40) }}
+        showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: Colors.white,
+            paddingHorizontal: RfH(16),
+          }}>
+          {(ptDetail?.status === PtStatus.FAILED.label || ptDetail?.status === PtStatus.PASSED.label) && (
+            <View style={{ marginTop: RfH(15) }}>
+              {renderOffering()}
+              {renderScore()}
             </View>
-          </>
-        )}
+          )}
 
-        {ptDetail?.status === PtStatus.EXEMPTED.label && (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: RfH(100),
-            }}>
-            <Text style={commonStyles.headingPrimaryText}>
-              {' '}
-              You are exempted from the test
-            </Text>
-          </View>
-        )}
+          {ptDetail?.status === PtStatus.PENDING.label && (
+            <>
+              <View style={{ marginVertical: RfH(15) }}>
+                <View>{renderOffering()}</View>
+                <View style={{ alignItems: 'center', marginVertical: RfH(40) }}>
+                  <Image source={Images.ptTest} style={{ height: RfH(150), width: RfW(150) }} resizeMode="contain" />
+                </View>
+                <Text
+                  style={[
+                    commonStyles.headingPrimaryText,
+                    { marginTop: RfH(20), marginBottom: RfH(20), textAlign: 'center' },
+                  ]}>
+                  Test Instructions
+                </Text>
+                <View style={{ marginHorizontal: RfW(16) }}>
+                  <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center' }]}>
+                    <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
+                    <Text style={{ marginLeft: RfW(16) }}>There will be 30 questions.</Text>
+                  </View>
+                  <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center', marginTop: RfH(8) }]}>
+                    <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
+                    <Text style={{ marginLeft: RfW(16) }}>You will have 30 minutes to complete the test.</Text>
+                  </View>
+                </View>
+                <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(20), textAlign: 'center' }]}>
+                  GOOD LUCK!
+                </Text>
+              </View>
+            </>
+          )}
 
-        {!attemptExhausted && (
-          <Button
-            onPress={handleClick}
-            style={[
-              commonStyles.buttonPrimary,
-              { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) },
-            ]}>
-            <Text style={commonStyles.textButtonPrimary}>
-              {getButtonText()}
-            </Text>
-          </Button>
-        )}
-        {attemptExhausted && (
-          <View
-            style={{
-              marginTop: RfH(30),
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={[
-                commonStyles.headingPrimaryText,
-                { textAlign: 'center' },
-              ]}>
-              All PT attempts Exhausted. Contact the customer care.
-            </Text>
+          {ptDetail?.status === PtStatus.EXEMPTED.label && (
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
+              <Text style={commonStyles.headingPrimaryText}> You are exempted from the test</Text>
+            </View>
+          )}
+
+          {!attemptExhausted && !isEmpty(ptDetail) && (
             <Button
-              onPress={() =>
-                navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)
-              }
-              style={[
-                commonStyles.buttonPrimary,
-                { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) },
-              ]}>
-              <Text style={commonStyles.textButtonPrimary}>Customer care</Text>
+              onPress={handleClick}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
+              <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
             </Button>
-          </View>
-        )}
-      </View>
+          )}
+          {attemptExhausted && (
+            <View style={{ marginTop: RfH(20), justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
+                {'All PT attempts Exhausted.\n Contact the customer care.'}
+              </Text>
+              <Button
+                onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
+                <Text style={commonStyles.textButtonPrimary}>Customer care</Text>
+              </Button>
+            </View>
+          )}
+        </View>
+      </ScrollView>
+      {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
     </>
   );
 };

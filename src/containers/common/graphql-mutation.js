@@ -314,3 +314,20 @@ export const REFRESH_TOKEN = gql`
     }
   }
 `;
+
+export const UPDATE_STUDENT_IMAGE = gql`
+  mutation updateStudentImage($profileImageDto: CreateUpdateAttachmentDto!) {
+    updateStudentImage(profileImageDto: $profileImageDto) {
+      id
+      name
+    }
+  }
+`;
+
+export const UPDATE_TUTOR_IMAGE = gql`
+  mutation updateTutorImage($profileImageDto: CreateUpdateAttachmentDto!) {
+    updateTutorImage(profileImageDto: $profileImageDto) {
+      id
+    }
+  }
+`;

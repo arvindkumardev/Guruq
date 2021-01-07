@@ -111,16 +111,12 @@ function ScheduledClassDetails(props) {
     formdata.append('file', file);
     setIsFileUploading(true);
 
-    console.log('file', file);
-
     try {
       const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
         headers,
         method: 'POST',
         body: formdata,
       }).then((response) => response.json());
-
-      console.log('res...res...', res);
 
       const documentDto = {
         attachment: {
@@ -143,7 +139,6 @@ function ScheduledClassDetails(props) {
       setIsFileUploading(false);
     } catch (error) {
       setIsFileUploading(false);
-      console.log('error', error);
     }
   };
 

@@ -116,7 +116,7 @@ function EducationListing() {
           )}
           <Text style={commonStyles.mediumMutedText}>{item?.school?.name}</Text>
           <Text style={commonStyles.mediumMutedText}>
-            {printYear(item.startDate)} - {!item.current ? printYear(item.endDate) : 'Present'}
+            {printYear(item.startDate)} - {!item.isCurrent ? printYear(item.endDate) : 'Present'}
           </Text>
         </View>
       </View>

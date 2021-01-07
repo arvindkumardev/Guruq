@@ -10,9 +10,21 @@ export const GET_BUSINESS_DETAILS_DATA = gql`
         gstEligible
         panNumber
         panCard {
+          id
           name
           attachment {
             name
+            filename
+            type
+          }
+        }
+        gstCertificate {
+          id
+          name
+          attachment {
+            name
+            filename
+            type
           }
         }
         createdDate

@@ -29,7 +29,7 @@ const TutorVerificationScreen = () => {
     <>
       <Loader isLoading={getCurrentTutorLoading} />
       <View style={{ flex: 1, alignItems: 'center', paddingTop: RfH(140), backgroundColor: Colors.white }}>
-        <Image source={Images.pendingStatus} style={{ width: RfW(300), height: RfH(300) }} />
+        <Image source={Images.pendingStatus} style={{ width: RfW(300), height: RfH(300) }} resizeMode="cover" />
         <View style={{ marginTop: RfH(52), alignItems: 'center' }}>
           <Text style={commonStyles.headingPrimaryText}> Verification pending</Text>
           <Text

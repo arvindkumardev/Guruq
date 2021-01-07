@@ -4,9 +4,9 @@ import { Button } from 'native-base';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
+import { isEmpty } from 'lodash';
 import { Images } from '../../theme';
 
-import { isEmpty } from 'lodash';
 import Colors from '../../theme/colors';
 import { RfH, RfW } from '../../utils/helpers';
 import { CustomCheckBox, Loader, ScreenHeader } from '../../components';
@@ -80,17 +80,15 @@ function BackgroundCheck() {
     <>
       <Loader isLoading={updateBackgroundCheckLoading || tutorLeadDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, flex: 1 }]}>
-        <ScreenHeader 
-         showRightIcon
-         rightIcon={Images.vertical_dots_b}
-         onRightIconClick={() => setOpenMenu(true)}
-        label="Background Verification" horizontalPadding={RfW(8)} homeIcon />
-          {openMenu && (
-        <ActionModal
-          isVisible={openMenu}
-          closeMenu={() => setOpenMenu(false)}
+        <ScreenHeader
+          showRightIcon
+          rightIcon={Images.vertical_dots_b}
+          onRightIconClick={() => setOpenMenu(true)}
+          label="Background Verification"
+          horizontalPadding={RfW(8)}
+          homeIcon
         />
-      )}
+
         {backgroundStatus === BackgroundCheckStatusEnum.NOT_STARTED.label && (
           <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(20) }}>
             <View
@@ -161,6 +159,7 @@ function BackgroundCheck() {
           </View>
         )}
       </View>
+      {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
     </>
   );
 }
