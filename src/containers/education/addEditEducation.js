@@ -8,6 +8,7 @@ import AlphabetListView from 'react-native-section-alphabet-list';
 import {
   CustomCheckBox,
   CustomRadioButton,
+  CustomSearchBar,
   CustomSelect,
   IconButtonWrapper,
   Loader,
@@ -52,6 +53,7 @@ function AddEditEducation() {
   const [endDate, setEndDate] = useState();
   const [degree, setDegree] = useState([]);
   const [showDegrees, setShowDegrees] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -181,6 +183,16 @@ function AddEditEducation() {
       <Text>{section.title}</Text>
     </View>
   );
+
+  const updateSearch = (text) => {
+    const newData = degree.filter((item) => {
+      const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setDegree(newData);
+    setSearchText(text);
+  };
 
   return (
     <>
@@ -361,10 +373,9 @@ function AddEditEducation() {
           onRequestClose={() => {
             setShowDegrees(false);
           }}>
-          <View style={{ flex: 0.1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
           <View
             style={{
-              flex: 0.9,
+              flex: 1,
               flexDirection: 'column',
               justifyContent: 'flex-start',
               alignItems: 'stretch',
@@ -374,6 +385,7 @@ function AddEditEducation() {
               paddingTop: RfH(16),
             }}>
             <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
+              <View style={{ height: RfH(54) }} />
               <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
                 Please select a degree
               </Text>
@@ -386,7 +398,12 @@ function AddEditEducation() {
                 imageResizeMode="contain"
               />
             </View>
-            <View style={{ height: RfH(24) }} />
+
+            <CustomSearchBar
+              placeholder="Search..."
+              value={searchText}
+              onChangeText={(search) => updateSearch(search)}
+            />
             <AlphabetListView
               style={{ flex: 1 }}
               data={degree.map((item) => ({ key: item.id, value: item.name, data: item }))}
