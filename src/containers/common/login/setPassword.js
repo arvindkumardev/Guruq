@@ -14,7 +14,7 @@ import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import LoginCheck from './loginCheck';
 
-function SetPassword() {
+function SetPassword({route}) {
   const navigation = useNavigation();
   const [hidePassword, setHidePassword] = useState(true);
   const [password, setPassword] = useState('');
@@ -28,29 +28,25 @@ function SetPassword() {
   ] = useMutation(SET_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
     variables: { password },
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const { fromChangePassword } = route.params;
+        if(fromChangePassword){
+          navigation.popToTop()
+          Alert.alert('Password Changed successfully');
+          //navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: false });
+        }
+      }
+    },
   });
   //
-  //   onError: (e) => {
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //       console.log(error);
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     if (data) {
-  //       storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token).then(() => {
-  //         isLoggedIn(true);
-  //         userDetails(data.setPassword);
-  //       });
-  //
-  //       // if (data.type === UserTypeEnum.OTHER.label) {
-  //       //   navigation.navigate(NavigationRouteNames.USER_TYPE_SELECTOR, { user: data.SetPassword });
-  //       // } else {
-  //       // set in apollo cache
-  //       // }
-  //     }
-  //   },
-  // });
+  
 
   useEffect(() => {
     if (setPasswordError && setPasswordError.graphQLErrors && setPasswordError.graphQLErrors.length > 0) {

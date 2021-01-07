@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { ApolloProvider, useReactiveVar } from '@apollo/client';
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';

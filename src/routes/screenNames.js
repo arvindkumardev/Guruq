@@ -38,6 +38,8 @@ const NavigationRouteNames = {
   BUSINESS_DETAILS: 'add_edit_bank_details',
 
   STUDENT: {
+    OTP_VERIFICATION: 'otp_verification',
+    SET_PASSWORD:'set_password',
     ON_BOARDING: 'student_on_boarding',
     MY_STUDY_AREAS: 'my_study_areas',
     STUDY_AREA: 'student_study_area',

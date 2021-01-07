@@ -16,6 +16,7 @@ export const LOCAL_STORAGE_DATA_KEY = {
   USER_TOKEN: 'userToken',
   ONBOARDING_SHOWN: 'onboarding_shown',
   COMPARE_TUTOR_ID: 'compare_tutors',
+  NOTIFICATION_LIST:'notification_list'
 };
 
 export const inputs = {};
