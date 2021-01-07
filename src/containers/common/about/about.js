@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   FlatList,
+  SafeAreaView
 } from 'react-native';
 import React, { useState } from 'react';
 import { BackArrow, TutorImageComponent } from '../../../components';
@@ -164,16 +165,17 @@ function AboutUs({navigation}) {
       style={[
         { backgroundColor: Colors.white, flex: 1, paddingHorizontal: 0 },
       ]}>
+        <SafeAreaView />
       <View
         style={{
           height: RfH(44),
           marginHorizontal: RfW(10),
           alignItems: 'flex-start',
           flexDirection: 'row',
-          marginTop: RfH(32),
+          marginTop: RfH(8),
         }}>
         <BackArrow action={() => navigation.goBack()} />
-        <View style={{ paddingHorizontal: RfW(16) }}>
+        <View style={{ paddingHorizontal: RfW(16),justifyContent:'center' }}>
           <Text
             style={{
               color: Colors.primaryText,

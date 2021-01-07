@@ -3,6 +3,7 @@ import { ApolloProvider, useReactiveVar } from '@apollo/client';
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
 import crashlytics from '@react-native-firebase/crashlytics';
+import analytics from '@react-native-firebase/analytics';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
@@ -108,6 +109,12 @@ function App() {
 
   const onStateChangeHandle = async (state) => {
     routeNameRef.current = getActiveRouteName(state);
+    const previousRouteName = routeNameRef.current;
+    const currentRouteName = getActiveRouteName(state)
+      await analytics().logScreenView({
+        screen_name: currentRouteName,
+        screen_class: currentRouteName,
+      });
     console.log('getActiveRouteName(state)', getActiveRouteName(state));
   };
 
