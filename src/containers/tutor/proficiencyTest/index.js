@@ -4,11 +4,15 @@ import { Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ScreenHeader from '../../../components/ScreenHeader';
 import { getToken, RfW } from '../../../utils/helpers';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { Colors,Fonts,Images } from '../../../theme';
+import ActionModal from '../../certficationProcess/components/helpSection';
 
 const ProficiencyTest = (props) => {
   const { route } = props;
   const navigation = useNavigation();
   const offeringId = route?.params?.offeringId;
+  const [openMenu, setOpenMenu] = useState(false);
 
   const [token, setToken] = useState();
   const [url, setUrl] = useState('');
@@ -37,7 +41,11 @@ const ProficiencyTest = (props) => {
 
   return (
     <>
-      <ScreenHeader label="Proficiency Test" homeIcon horizontalPadding={RfW(16)} />
+      <ScreenHeader label="Proficiency Test" 
+       showRightIcon
+       rightIcon={Images.vertical_dots_b}
+       onRightIconClick={() => setOpenMenu(true)}
+      homeIcon horizontalPadding={RfW(16)} />
       {token && url ? (
         <WebView
           source={{
@@ -52,7 +60,15 @@ const ProficiencyTest = (props) => {
       ) : (
         <Text>Something Went Wrong</Text>
       )}
+        {
+        openMenu && <ActionModal
+          isVisible={openMenu}
+          closeMenu={() => setOpenMenu(false)}
+          navigation={navigation}
+        />
+      }
     </>
+    
   );
 };
 

@@ -160,6 +160,9 @@ android {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
+              firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
 //             minifyEnabled enableProguardInReleaseBuilds
 //             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -218,4 +221,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply plugin: "com.google.gms.google-services"
+apply plugin: 'com.google.firebase.crashlytics'
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef,useS } from 'react';
 import { ApolloProvider, useReactiveVar } from '@apollo/client';
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
@@ -57,6 +58,7 @@ function App() {
     GlobalFont.applyGlobal('SegoeUI');
   }, []);
 
+ 
   const bootstrapAsync = async () => {
     let userToken;
     try {
@@ -71,6 +73,8 @@ function App() {
       isLoggedIn(false);
     } finally {
       SplashScreen.hide();
+      crashlytics().log('App mounted.');
+
     }
   };
 
@@ -110,7 +114,8 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <ApolloHooksProvider client={client}>
-        <NavigationContainer ref={navigationRef} onStateChange={onStateChangeHandle}>
+        <NavigationContainer ref={navigationRef} 
+        onStateChange={onStateChangeHandle}>
           <StatusBar barStyle="dark-content" />
           <Root>
             <AppStack

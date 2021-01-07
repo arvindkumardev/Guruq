@@ -14,11 +14,13 @@ import { GET_TUTOR_ALL_DETAILS } from './certification-query';
 import NavigationRouteNames from '../../routes/screenNames';
 import { MARK_CERTIFIED } from './certification-mutation';
 import { InterviewStatus } from '../tutor/enums';
+import ActionModal from './components/helpSection';
 
 const InterviewAndDocument = () => {
   const isFocussed = useIsFocused();
   const navigation = useNavigation();
   const [tutorDetail, setTutorDetail] = useState({});
+  const [openMenu, setOpenMenu] = useState(false);
 
   const [getTutorDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_ALL_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -85,9 +87,18 @@ const InterviewAndDocument = () => {
       <ScreenHeader
         label="Interview & Documents"
         horizontalPadding={RfW(16)}
+        showRightIcon
+        rightIcon={Images.vertical_dots_b}
+        onRightIconClick={() => setOpenMenu(true)}
         homeIcon
         handleBack={() => navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATE_STEPS)}
       />
+        {openMenu && (
+        <ActionModal
+          isVisible={openMenu}
+          closeMenu={() => setOpenMenu(false)}
+        />
+      )}
       <TouchableOpacity
         style={[styles.interviewCard,{ borderLeftColor: Colors.orange }]}
         activeOpacity={0.8}

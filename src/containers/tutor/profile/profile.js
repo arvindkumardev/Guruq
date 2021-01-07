@@ -1,9 +1,11 @@
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar,useMutation } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
+
 import initializeApollo from '../../../apollo/apollo';
 import {
   interestingOfferingData,
@@ -19,10 +21,15 @@ import {
   userLocation,
   userType,
 } from '../../../apollo/cache';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { getSaveData} from '../../../utils/helpers';
+
 import { TutorImageComponent } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
+import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
+
 import {
   alertBox,
   clearAllLocalStorage,
@@ -36,7 +43,9 @@ import styles from './styles';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { WEBVIEW_URLS } from '../../../utils/webviewUrls';
 import UploadDocument from '../../../components/UploadDocument';
-
+import {
+  notificationsList,
+} from '../../../apollo/cache';
 const ACCOUNT_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
   { name: 'Address', icon: Images.home },
@@ -82,6 +91,8 @@ function Profile(props) {
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [notificationCount,setNotificationCount] = useState(0)
+  const notifyList = useReactiveVar(notificationsList);
 
   const client = initializeApollo();
 
@@ -105,6 +116,10 @@ function Profile(props) {
     client.resetStore(); // .then(() => {});
     // });
   };
+  useEffect(()=>{
+    getNotificationCount()
+  
+  },[notifyList])
 
   const logoutConfirmation = () => {
     alertBox('Do you really want to logout?', '', {
@@ -113,7 +128,17 @@ function Profile(props) {
       negativeText: 'No',
     });
   };
-
+ 
+  
+  const getNotificationCount = async () => {
+    notifications = JSON.parse(
+      await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST),
+    );
+    if (notifications && notifications.length > 0) {
+      let updatedArray = notifications.filter(x =>!x.isRead)
+      setNotificationCount(updatedArray.length);
+    }
+  }
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
       navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS);
@@ -167,6 +192,39 @@ function Profile(props) {
     }
     return null;
   };
+
+  const onChangePasswordClick = () => {
+    if (!isEmpty(userInfo.phoneNumber)) {
+      let {number,countryCode} = userInfo.phoneNumber
+      forgotPassword({
+        variables: { countryCode, number },
+      });
+    } else {
+      Alert.alert('Please enter mobile number.');
+    }
+  };
+  const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+        let {number,countryCode} = userInfo.phoneNumber
+        let mobileObj ={
+          mobile : number,
+          country :{dialCode:countryCode}
+        }
+        navigation.navigate(NavigationRouteNames.TUTOR.OTP_VERIFICATION,{ mobileObj, 
+          fromChangePassword:true,
+          newUser: false });
+      }
+    },
+  });
   const renderItem = (item) => (
     <TouchableWithoutFeedback
       onPress={() => personalDetails(item)}
@@ -205,6 +263,18 @@ function Profile(props) {
         {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} /> */}
         {/*  </TouchableOpacity> */}
         {/* </View> */}
+      
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}> 
+        {notificationCount > 0 && <View style={{position:'absolute',
+          left:6,top:6,zIndex:10}}>
+            <Image
+              source={Images.small_active_blue}
+              resizeMode={'contain'}
+              style={{ height: RfH(12), width: RfW(12) }}
+            />
+          </View>}
+          <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} /> 
+        </TouchableOpacity> 
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
@@ -377,7 +447,7 @@ function Profile(props) {
         <View style={[styles.userMenuParentView]}>
           <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
           <View style={styles.menuItemParentView}>
-            <TouchableWithoutFeedback onPress={() => alertBox('coming soon!')}>
+            <TouchableWithoutFeedback onPress={() => onChangePasswordClick()}>
               <Text style={styles.menuItemPrimaryText}>Change Password</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                 Reset your password

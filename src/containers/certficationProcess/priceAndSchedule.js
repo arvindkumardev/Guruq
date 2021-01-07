@@ -10,9 +10,12 @@ import styles from './styles';
 import NavigationRouteNames from '../../routes/screenNames';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 import { tutorDetails } from '../../apollo/cache';
+import ActionModal from './components/helpSection';
 
 const PriceAndSchedule = () => {
   const navigation = useNavigation();
+  const [openMenu, setOpenMenu] = useState(false);
+
   const isFocussed = useIsFocused();
   const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
@@ -32,7 +35,18 @@ const PriceAndSchedule = () => {
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={getCurrentTutorLoading} />
-      <ScreenHeader label="Availability & Price" horizontalPadding={RfW(16)} homeIcon={false} />
+      <ScreenHeader 
+      
+      showRightIcon
+      rightIcon={Images.vertical_dots_b}
+      onRightIconClick={() => setOpenMenu(true)}
+      label="Availability & Price" horizontalPadding={RfW(16)} homeIcon={false} />
+        {openMenu && (
+          <ActionModal
+            isVisible={openMenu}
+            closeMenu={() => setOpenMenu(false)}
+          />
+        )}
       <View style={{ paddingHorizontal: RfW(20), paddingVertical: RfH(15) }}>
         <Text style={commonStyles.headingPrimaryText}>
           Mark your availability and Update price metrics to make your course visible to students.

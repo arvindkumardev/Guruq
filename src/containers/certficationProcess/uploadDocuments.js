@@ -11,6 +11,7 @@ import UploadDocument from '../../components/UploadDocument';
 import { GET_TUTOR_ALL_DETAILS } from './certification-query';
 import { DocumentTypeEnum } from '../common/enums';
 import Loader from '../../components/Loader';
+import ActionModal from './components/helpSection';
 
 const DOCUMENT_NAME_ID_PROOF = 'id proof';
 const DOCUMENT_NAME_ADDRESS_PROOF = 'address proof';
@@ -29,6 +30,7 @@ function UploadDocuments() {
   const [panCardDetails, setPanCardDetails] = useState('');
   const [qualificationDetails, setQualificationDetails] = useState('');
   const [tutorDetail, setTutorDetail] = useState({});
+  const [openMenu, setOpenMenu] = useState(false);
 
   const [token, setToken] = useState();
   useEffect(() => {
@@ -188,7 +190,17 @@ function UploadDocuments() {
       <Loader isLoading={isFileUploading || deleteDocumentLoading || addDocumentLoading || tutorLeadDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <StatusBar barStyle="dark-content" />
-        <ScreenHeader label="Documents" homeIcon />
+        <ScreenHeader label="Documents" homeIcon
+         showRightIcon
+          rightIcon={Images.vertical_dots_b}
+          onRightIconClick={() => setOpenMenu(true)}
+        />
+           {openMenu && (
+          <ActionModal
+            isVisible={openMenu}
+            closeMenu={() => setOpenMenu(false)}
+          />
+        )}
         <ScrollView showsVerticalScrollIndicator={false} style={{ paddingBottom: RfH(32) }}>
           <View style={{ padding: RfW(16), paddingBottom: RfH(16) }}>
             <View>
