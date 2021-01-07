@@ -1,6 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './screenNames';
+import OtpVerification from '../containers/common/login/otpVerification';
+import SetPassword from '../containers/common/login/setPassword';
+
 import TutorDashboardContainer from '../containers/tutor/dashboard/tutorDashboardContainer';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import SubjectList from '../containers/tutor/mySubjects/subjectList';
@@ -66,6 +69,16 @@ export const getTutorRoutes = (tutorInfo) => {
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.VIEW_SCHEDULE}
         component={ViewSchedule}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.OTP_VERIFICATION}
+        component={OtpVerification}
+        options={{ headerShown: false }}
+      />
+   <Stack.Screen
+        name={NavigationRouteNames.TUTOR.SET_PASSWORD}
+        component={SetPassword}
         options={{ headerShown: false }}
       />
       <Stack.Screen

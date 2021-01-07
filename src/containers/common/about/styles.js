@@ -6,7 +6,7 @@ import { RfH } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
   aboutText: {
-    color: Colors.warmGrey,
+    color: Colors.darkGrey,
     fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.regular,
     lineHeight:19

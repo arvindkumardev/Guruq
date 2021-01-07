@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
+import { Images } from '../../theme';
+
 import { useNavigation } from '@react-navigation/native';
 import { GET_INTERVIEW_SCHEDULE_AVAILABILITY } from '../tutor/tutor.query';
 import { tutorDetails } from '../../apollo/cache';
@@ -10,19 +12,57 @@ import { ADD_INTERVIEW_DETAILS } from '../tutor/tutor.mutation';
 import { InterviewMode, InterviewStatus } from '../tutor/enums';
 import Colors from '../../theme/colors';
 import { alertBox, printTime, RfH, RfW } from '../../utils/helpers';
-import { CustomDatePicker, CustomSelect, Loader, ScreenHeader } from '../../components';
+import {
+  CustomDatePicker,
+  CustomSelect,
+  Loader,
+  ScreenHeader,
+} from '../../components';
 import commonStyles from '../../theme/styles';
+import ActionModal from './components/helpSection';
 
 function InterviewScheduling() {
   const navigation = useNavigation();
   const tutorInfo = useReactiveVar(tutorDetails);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const [interviewDate, setInterviewDate] = useState();
   const [selectedTime, setSelectedTime] = useState({});
   const [availableTimes, setAvailableTimes] = useState([]);
 
-  const [getInterviewAvailability, { loading: loadingAvailability }] = useLazyQuery(
-    GET_INTERVIEW_SCHEDULE_AVAILABILITY,
+  const [
+    getInterviewAvailability,
+    { loading: loadingAvailability },
+  ] = useLazyQuery(GET_INTERVIEW_SCHEDULE_AVAILABILITY, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const availableSlots = data.getAvailabilityForInterview.filter(
+          (item) => item.active,
+        );
+        if (availableSlots.length === 0) {
+          alertBox(' No slots are  available for the selected date');
+        } else {
+          setAvailableTimes(
+            availableSlots.map((item) => ({
+              label: `${printTime(item.startDate)} - ${printTime(
+                item.endDate,
+              )}`,
+              value: item,
+            })),
+          );
+        }
+      }
+    },
+  });
+
+  const [addInterviewDetails, { loading: addInterviewLoading }] = useMutation(
+    ADD_INTERVIEW_DETAILS,
     {
       fetchPolicy: 'no-cache',
       onError: (e) => {
@@ -32,38 +72,14 @@ function InterviewScheduling() {
       },
       onCompleted: (data) => {
         if (data) {
-          const availableSlots = data.getAvailabilityForInterview.filter((item) => item.active);
-          if (availableSlots.length === 0) {
-            alertBox(' No slots are  available for the selected date');
-          } else {
-            setAvailableTimes(
-              availableSlots.map((item) => ({
-                label: `${printTime(item.startDate)} - ${printTime(item.endDate)}`,
-                value: item,
-              }))
-            );
-          }
+          alertBox('Interview scheduled successfully!', '', {
+            positiveText: 'Ok',
+            onPositiveClick: () => navigation.goBack(),
+          });
         }
       },
-    }
+    },
   );
-
-  const [addInterviewDetails, { loading: addInterviewLoading }] = useMutation(ADD_INTERVIEW_DETAILS, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        alertBox('Interview scheduled successfully!', '', {
-          positiveText: 'Ok',
-          onPositiveClick: () => navigation.goBack(),
-        });
-      }
-    },
-  });
 
   const getAvailability = (value) => {
     setInterviewDate(value);
@@ -71,7 +87,10 @@ function InterviewScheduling() {
       variables: {
         availabilityDto: {
           startDate: moment.utc(new Date(value)).format('YYYY-MM-DD'),
-          endDate: moment.utc(new Date(value)).add(1, 'day').format('YYYY-MM-DD'),
+          endDate: moment
+            .utc(new Date(value))
+            .add(1, 'day')
+            .format('YYYY-MM-DD'),
         },
       },
     });
@@ -101,8 +120,25 @@ function InterviewScheduling() {
   return (
     <>
       <Loader isLoading={loadingAvailability || addInterviewLoading} />
-      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, flex: 1 }]}>
-        <ScreenHeader label="Schedule Your Interview" horizontalPadding={RfW(8)} homeIcon />
+      <View
+        style={[
+          commonStyles.mainContainer,
+          { backgroundColor: Colors.white, paddingHorizontal: 0, flex: 1 },
+        ]}>
+        <ScreenHeader
+          label="Schedule Your Interview"
+          showRightIcon
+          rightIcon={Images.vertical_dots_b}
+          onRightIconClick={() => setOpenMenu(true)}
+          horizontalPadding={RfW(8)}
+          homeIcon
+        />
+        {openMenu && (
+          <ActionModal
+            isVisible={openMenu}
+            closeMenu={() => setOpenMenu(false)}
+          />
+        )}
         <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(20) }}>
           <View style={{ height: RfH(24) }} />
           <View style={[commonStyles.horizontalChildrenStartView]}>
@@ -153,8 +189,12 @@ function InterviewScheduling() {
             </View>
           </View>
           <View style={{ marginTop: RfH(40) }}>
-            <Button onPress={onAddingDetails} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-              <Text style={commonStyles.textButtonPrimary}>Schedule Interview</Text>
+            <Button
+              onPress={onAddingDetails}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+              <Text style={commonStyles.textButtonPrimary}>
+                Schedule Interview
+              </Text>
             </Button>
           </View>
         </View>
