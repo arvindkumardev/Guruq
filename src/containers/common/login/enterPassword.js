@@ -47,7 +47,7 @@ function EnterPassword(props) {
           userDetails(data.me);
           userType(data.me.type);
           // setLoggedIn(true);
-          console.log(isUserLoggedIn);
+          // console.log(isUserLoggedIn);
         });
       }
     },
