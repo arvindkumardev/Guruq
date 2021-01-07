@@ -1,21 +1,31 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-undef */
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, View, Text, TouchableWithoutFeedback } from 'react-native';
 import { useLazyQuery } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SEARCH_REVIEW } from '../../containers/student/tutor-query';
 import { IconButtonWrapper } from '..';
-import { getUserImageUrl, RfH, RfW } from '../../utils/helpers';
+import { getFullName, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { Colors, Images } from '../../theme';
+import { Colors, Images, Fonts } from '../../theme';
 import commonStyles from '../../theme/styles';
+import ActionSheet from '../ActionSheet';
 
 function UserReviews(props) {
   const { submitFunction, tutorId } = props;
   const [userReviews, setUserReviews] = useState([]);
+  const [openMenu, setOpenMenu] = useState(false);
+
+  const sortReviews = () => {};
+  const [menuItem, setMenuItem] = useState([
+    { label: 'Recent', handler: sortReviews, isEnabled: true },
+    { label: 'Relevant', handler: sortReviews, isEnabled: true },
+    { label: 'Highest Rating', handler: sortReviews, isEnabled: true },
+    { label: 'Lowest Rating', handler: sortReviews, isEnabled: true },
+  ]);
 
   const renderReviews = (item) => {
     return (
@@ -92,11 +102,40 @@ function UserReviews(props) {
 
   return (
     <View style={{}}>
+      <View
+        style={[
+          commonStyles.horizontalChildrenSpaceView,
+          {
+            padding: RfH(16),
+            borderBottomColor: Colors.darkGrey,
+            borderBottomWidth: 0.5,
+            marginBottom: RfH(16),
+          },
+        ]}>
+        <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Reviews</Text>
+        <TouchableWithoutFeedback onPress={() => setOpenMenu(true)}>
+          <View
+            style={[
+              commonStyles.horizontalChildrenView,
+              { borderWidth: 1, borderColor: Colors.darkGrey, borderRadius: 16, padding: RfH(8) },
+            ]}>
+            <IconButtonWrapper iconHeight={RfH(12)} iconWidth={RfW(16)} iconImage={Images.sort} />
+            <Text style={[commonStyles.smallMutedText, { marginLeft: RfW(12) }]}>Sort</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
       <FlatList
         data={userReviews}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => renderReviews(item)}
         keyExtractor={(item, index) => index.toString()}
+      />
+      <ActionSheet
+        actions={menuItem}
+        cancelText="Dismiss"
+        handleCancel={() => setOpenMenu(false)}
+        isVisible={openMenu}
+        topLabel="Sort by"
       />
     </View>
   );

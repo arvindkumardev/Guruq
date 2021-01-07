@@ -12,7 +12,7 @@ import { GET_AVERAGE_RATINGS, SEARCH_REVIEW } from '../../containers/student/tut
 import { IconButtonWrapper } from '..';
 import { getUserImageUrl, RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { Colors, Images } from '../../theme';
+import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 
 function UserRatings(props) {
@@ -38,6 +38,7 @@ function UserRatings(props) {
     },
     onCompleted: (data) => {
       if (data) {
+        console.log(data);
         let ratingArray = reviewProgress;
         Object.keys(data.getAverageRating).forEach((key) => {
           ratingArray = ratingArray.map((item) => ({
@@ -80,10 +81,13 @@ function UserRatings(props) {
 
   return (
     <View style={{}}>
-      <View>
+      <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16) }]}>
+        <Text style={{ fontFamily: Fonts.semiBold, fontSize: RFValue(20, STANDARD_SCREEN_SIZE) }}>
+          {overallRating}/5
+        </Text>
         <Rating
           style={{ paddingVertical: RfH(16), alignSelf: 'flex-start', marginHorizontal: RfW(16) }}
-          imageSize={30}
+          imageSize={20}
           ratingCount={5}
           readonly
           startingValue={overallRating}

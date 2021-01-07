@@ -36,6 +36,7 @@ const NavigationRouteNames = {
   AWARD_LISTING: 'awards_listing',
   ADD_EDIT_AWARD_DETAILS: 'add_edit_award_details',
   BUSINESS_DETAILS: 'add_edit_bank_details',
+  RATINGS_REVIEWS: 'ratings_reviews',
 
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',

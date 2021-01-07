@@ -57,6 +57,7 @@ import AboutUs from '../containers/common/about/about';
 import BackgroundCheck from '../containers/certficationProcess/backgroundCheck';
 import TutorVerificationScreen from '../containers/certficationProcess/tutorVerificationScreen';
 import { BackgroundCheckStatusEnum } from '../containers/common/enums';
+import RatingReviews from '../containers/common/ratingReviews';
 
 const Stack = createStackNavigator();
 
@@ -234,6 +235,11 @@ const AppStack = (props) => {
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
         component={UploadDocuments}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.RATINGS_REVIEWS}
+        component={RatingReviews}
         options={{ headerShown: false }}
       />
     </>
