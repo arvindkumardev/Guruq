@@ -1,13 +1,22 @@
-import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
-import { CustomCheckBox, CustomRadioButton, CustomSelect, Loader, ScreenHeader } from '../../components';
+import AlphabetListView from 'react-native-section-alphabet-list';
+import {
+  CustomCheckBox,
+  CustomRadioButton,
+  CustomSearchBar,
+  CustomSelect,
+  IconButtonWrapper,
+  Loader,
+  ScreenHeader,
+} from '../../components';
 import { offeringsMasterData, studentDetails, tutorDetails, userType } from '../../apollo/cache';
 import commonStyles from '../../theme/styles';
-import { Colors } from '../../theme';
+import { Colors, Fonts, Images } from '../../theme';
 import { alertBox, RfH, RfW, startOfDay } from '../../utils/helpers';
 import CustomDatePicker from '../../components/CustomDatePicker';
 import { ADD_UPDATE_EDUCATION_DETAILS } from './education.mutation';
@@ -43,6 +52,8 @@ function AddEditEducation() {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [degree, setDegree] = useState([]);
+  const [showDegrees, setShowDegrees] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -145,6 +156,44 @@ function AddEditEducation() {
     getDegreeData();
   }, []);
 
+  const onSelectingDegree = (value) => {
+    setSelectedDegree(value.data);
+    setShowDegrees(false);
+  };
+
+  const ListItem = (item) => {
+    return (
+      <>
+        <TouchableOpacity onPress={() => onSelectingDegree(item)}>
+          <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(8) }}>
+            <Text>{item.value}</Text>
+          </View>
+        </TouchableOpacity>
+      </>
+    );
+  };
+
+  const SectionHeader = (section) => (
+    <View
+      style={{
+        paddingLeft: 10,
+        backgroundColor: '#f1f2f3',
+        paddingVertical: 5,
+      }}>
+      <Text>{section.title}</Text>
+    </View>
+  );
+
+  const updateSearch = (text) => {
+    const newData = degree.filter((item) => {
+      const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setDegree(newData);
+    setSearchText(text);
+  };
+
   return (
     <>
       <Loader isLoading={educationLoading || degreeDataLoading} />
@@ -242,9 +291,10 @@ function AddEditEducation() {
             <View>
               <View style={{ height: RfH(24) }} />
               <Text style={commonStyles.smallMutedText}>Degree</Text>
-              <View>
-                <Item style={commonStyles.horizontalChildrenSpaceView}>
-                  <CustomSelect
+              <TouchableWithoutFeedback onPress={() => setShowDegrees(true)}>
+                <View style={[commonStyles.lineSeparator, { flex: 0, paddingBottom: RfH(8) }]}>
+                  <View style={[commonStyles.horizontalChildrenSpaceView, { paddingTop: RfH(12) }]}>
+                    {/* <CustomSelect
                     data={degree.map((item) => ({ label: item.name, value: item }))}
                     value={selectedDegree}
                     onChangeHandler={(value) => setSelectedDegree(value)}
@@ -254,9 +304,12 @@ function AddEditEducation() {
                       height: RfH(44),
                       justifyContent: 'center',
                     }}
-                  />
-                </Item>
-              </View>
+                  /> */}
+                    <Text>{!isEmpty(selectedDegree) ? selectedDegree.name : 'Please select degree'}</Text>
+                    <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.expand} />
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
               <View style={{ height: RfH(24) }} />
               <Item floatingLabel>
                 <Label style={commonStyles.smallMutedText}>Field of Study</Label>
@@ -313,6 +366,56 @@ function AddEditEducation() {
             </Button>
           </View>
         </View>
+        <Modal
+          animationType="fade"
+          transparent
+          visible={showDegrees}
+          onRequestClose={() => {
+            setShowDegrees(false);
+          }}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              alignItems: 'stretch',
+              backgroundColor: Colors.white,
+              opacity: 1,
+              paddingBottom: RfH(34),
+              paddingTop: RfH(16),
+            }}>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16) }]}>
+              <View style={{ height: RfH(54) }} />
+              <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+                Please select a degree
+              </Text>
+              <IconButtonWrapper
+                styling={{ alignSelf: 'flex-end' }}
+                iconHeight={RfH(20)}
+                iconWidth={RfW(20)}
+                iconImage={Images.cross}
+                submitFunction={() => setShowDegrees(false)}
+                imageResizeMode="contain"
+              />
+            </View>
+
+            <CustomSearchBar
+              placeholder="Search..."
+              value={searchText}
+              onChangeText={(search) => updateSearch(search)}
+            />
+            <AlphabetListView
+              style={{ flex: 1 }}
+              data={degree.map((item) => ({ key: item.id, value: item.name, data: item }))}
+              renderItem={ListItem}
+              renderSectionHeader={SectionHeader}
+              getItemHeight={() => RfH(44)}
+              sectionHeaderHeight={RfH(28)}
+              indexLetterColor="#007aff"
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
+        </Modal>
       </View>
     </>
   );

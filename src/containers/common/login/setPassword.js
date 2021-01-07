@@ -9,12 +9,12 @@ import styles from './styles';
 import { RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { isLoggedIn } from '../../../apollo/cache';
+import { isLoggedIn, userDetails, userType } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import LoginCheck from './loginCheck';
 
-function SetPassword({route}) {
+function SetPassword({ route }) {
   const navigation = useNavigation();
   const [hidePassword, setHidePassword] = useState(true);
   const [password, setPassword] = useState('');
@@ -22,48 +22,37 @@ function SetPassword({route}) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
 
-  const [
-    setUserPassword,
-    { data: setPasswordData, error: setPasswordError, loading: setPasswordLoading },
-  ] = useMutation(SET_PASSWORD_MUTATION, {
+  const [setUserPassword, { loading: setPasswordLoading }] = useMutation(SET_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
-    variables: { password },
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+      if (e && e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
-        console.log(error);
+        if (error.errorCode === INVALID_INPUT) {
+          Alert.alert('Incorrect password');
+        }
       }
     },
     onCompleted: (data) => {
       if (data) {
         const { fromChangePassword } = route.params;
-        if(fromChangePassword){
-          navigation.popToTop()
+
+        console.log(fromChangePassword);
+
+        if (fromChangePassword) {
+          navigation.popToTop();
           Alert.alert('Password Changed successfully');
-          //navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: false });
+          // navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: false });
+        } else if (data.setPassword) {
+          storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token).then(() => {
+            userDetails(data.setPassword);
+            userType(data.setPassword.type);
+            isLoggedIn(true);
+            console.log(true);
+          });
         }
       }
     },
   });
-  //
-  
-
-  useEffect(() => {
-    if (setPasswordError && setPasswordError.graphQLErrors && setPasswordError.graphQLErrors.length > 0) {
-      const error = setPasswordError.graphQLErrors[0].extensions.exception.response;
-      if (error.errorCode === INVALID_INPUT) {
-        Alert.alert('Incorrect password');
-      }
-    }
-  }, [setPasswordError]);
-
-  useEffect(() => {
-    if (setPasswordData && setPasswordData.setPassword) {
-      storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, setPasswordData.setPassword.token).then(() => {
-        isLoggedIn(true);
-      });
-    }
-  }, [setPasswordData]);
 
   const onBackPress = () => {
     navigation.goBack();
@@ -75,7 +64,7 @@ function SetPassword({route}) {
     } else if (isEmpty(confirmPassword)) {
       Alert.alert('Please enter the confirm password!');
     } else if (password === confirmPassword) {
-      setUserPassword();
+      setUserPassword({ variables: { password } });
     } else {
       Alert.alert('Password mismatch!');
     }
