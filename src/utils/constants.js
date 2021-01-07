@@ -16,7 +16,7 @@ export const LOCAL_STORAGE_DATA_KEY = {
   USER_TOKEN: 'userToken',
   ONBOARDING_SHOWN: 'onboarding_shown',
   COMPARE_TUTOR_ID: 'compare_tutors',
-  NOTIFICATION_LIST:'notification_list'
+  NOTIFICATION_LIST: 'notification_list',
 };
 
 export const inputs = {};
@@ -36,6 +36,17 @@ export const LOTTIE_JSON_FILES = {
 export const WEBSITE_URL = 'http://dashboardv2.guruq.in';
 export const API_URL = 'https://guruq.in/api';
 export const IMAGES_BASE_URL = 'https://guruq.in/guruq-new';
+
+export const GENERAL_FAQ_URL = `${WEBSITE_URL}/faqs/general-issues`;
+export const QPOINTS_FAQ_URL = `${WEBSITE_URL}/faqs/qpoints-faqs`;
+export const BOOKING_FAQ_URL = `${WEBSITE_URL}/faqs/booking-faqs`;
+export const LEGAL_FAQ_URL = `${WEBSITE_URL}/faqs/legal-terms-conditions`;
+
+export const ABOUT_US_URL = `https://guruq.in/about-us`;
+export const CEO_MESSAGE_URL = `https://guruq.in/ceo-message`;
+export const CSR_URL = `https://guruq.in/guruq-csr`;
+export const IN_NEWS_URL = 'https://guruq.in/guruq-in-news';
+export const ACADEMIC_BOARD_URL = 'https://guruq.in/academic-board';
 
 export const SCHOOL_EDUCATION = 'School Education';
 export const COMPETITIVE_EXAM = 'Competitive Exam';

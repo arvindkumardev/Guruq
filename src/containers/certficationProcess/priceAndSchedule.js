@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
@@ -35,25 +35,22 @@ const PriceAndSchedule = () => {
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={getCurrentTutorLoading} />
-      <ScreenHeader 
-      
-      showRightIcon
-      rightIcon={Images.vertical_dots_b}
-      onRightIconClick={() => setOpenMenu(true)}
-      label="Availability & Price" horizontalPadding={RfW(16)} homeIcon={false} />
-        {openMenu && (
-          <ActionModal
-            isVisible={openMenu}
-            closeMenu={() => setOpenMenu(false)}
-          />
-        )}
+      <ScreenHeader
+        showRightIcon
+        rightIcon={Images.vertical_dots_b}
+        onRightIconClick={() => setOpenMenu(true)}
+        label="Availability & Price"
+        horizontalPadding={RfW(16)}
+        homeIcon={false}
+      />
+      {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
       <View style={{ paddingHorizontal: RfW(20), paddingVertical: RfH(15) }}>
         <Text style={commonStyles.headingPrimaryText}>
           Mark your availability and Update price metrics to make your course visible to students.
         </Text>
       </View>
       <TouchableOpacity
-        style={[styles.interviewCard,{ borderLeftColor: Colors.orange }]}
+        style={[styles.interviewCard, { borderLeftColor: Colors.orange }]}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.VIEW_SCHEDULE)}>
         <View style={{ flexDirection: 'row' }}>

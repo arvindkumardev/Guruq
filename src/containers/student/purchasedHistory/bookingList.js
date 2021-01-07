@@ -2,12 +2,13 @@ import { Text, View, FlatList, TouchableWithoutFeedback } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
-import { Loader, ScreenHeader } from '../../../../components';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Fonts } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
-import routeNames from '../../../../routes/screenNames';
-import { SEARCH_BOOKINGS } from '../../booking.query';
+import { Loader, ScreenHeader } from '../../../components';
+import commonStyles from '../../../theme/styles';
+import { Colors, Fonts } from '../../../theme';
+import { enumLabelToText, RfH, RfW } from '../../../utils/helpers';
+import routeNames from '../../../routes/screenNames';
+import { SEARCH_BOOKINGS } from '../booking.query';
+import { OrderStatusEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 
 function BookingList() {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ function BookingList() {
     },
     onCompleted: (data) => {
       if (data) {
-        setBookingData(data?.searchBookings.edges);
+        setBookingData(data?.searchBookings.edges.filter((item) => item.orderStatus !== OrderStatusEnum.PENDING.label));
       }
     },
   });
@@ -41,21 +42,31 @@ function BookingList() {
   const renderDetails = (item) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate(routeNames.STUDENT.VIEW_BOOKING_DETAILS, { bookingData: item })}>
+        onPress={() => navigation.navigate(routeNames.STUDENT.VIEW_BOOKING_DETAILS, { bookingId: item.id })}>
         <View
           style={{
             marginHorizontal: RfW(16),
             marginVertical: RfH(8),
-            borderWidth: 1,
-            borderRadius: 8,
-            borderColor: Colors.darkGrey,
+            borderWidth: RfW(2),
+            borderRadius: RfH(8),
+            borderColor: Colors.lightGrey,
             paddingHorizontal: RfW(8),
             paddingVertical: RfH(16),
           }}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Booking Id {item.id}</Text>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { alignItems: 'center' }]}>
+            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Booking Id {item.id}</Text>
+            <Text
+              style={[
+                commonStyles.smallPrimaryText,
+                { color: item.orderStatus === OrderStatusEnum.COMPLETE.label ? Colors.green : Colors.orangeRed },
+              ]}>
+              {enumLabelToText(item.orderStatus)}
+            </Text>
+          </View>
+
           <Text style={commonStyles.mediumMutedText}>{new Date(item.createdDate).toDateString()}</Text>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.smallMutedText}>{item?.orderItems && item?.orderItems[0]?.count} ITEMS</Text>
+            <Text style={commonStyles.smallMutedText}>{item?.orderItems && item?.orderItems.length} ORDER ITEM</Text>
             <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2, fontFamily: Fonts.bold }]}>
               ₹ {parseFloat(item.payableAmount).toFixed(2)}
             </Text>
@@ -70,10 +81,13 @@ function BookingList() {
       <Loader isLoading={loadingBookings} />
       <ScreenHeader label="Booking Details" homeIcon horizontalPadding={RfW(16)} />
       <FlatList
+        ListHeaderComponent={<View style={{ height: RfH(20) }} />}
         showsVerticalScrollIndicator={false}
         data={bookingData}
         renderItem={({ item, index }) => renderDetails(item, index)}
         keyExtractor={(item, index) => index.toString()}
+        scrollEnabled={bookingData.length > 5}
+        ListFooterComponent={<View style={{ height: RfH(20) }} />}
       />
     </View>
   );

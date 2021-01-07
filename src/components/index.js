@@ -24,6 +24,7 @@ import CustomDatePicker from './CustomDatePicker';
 import ActionSheet from './ActionSheet';
 import UserReviews from './UserReviews';
 import UserRatings from './UserRatings';
+import StudentImageComponent from './StudentImageComponent';
 
 export {
   IconButtonWrapper,
@@ -51,4 +52,5 @@ export {
   ActionSheet,
   UserReviews,
   UserRatings,
+  StudentImageComponent,
 };

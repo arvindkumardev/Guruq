@@ -36,8 +36,11 @@ function AddEditBusinessDetails(props) {
     });
   }, []);
 
+
   useEffect(() => {
     if (!isEmpty(businessDetail)) {
+      setPanCardDoc(businessDetail.panCard);
+      setGstinDoc(businessDetail.gstCertificate);
       setPanNumber(businessDetail.panNumber);
       setGstNumber(businessDetail.gstNumber);
       setLegalName(businessDetail.businessName);
@@ -65,6 +68,8 @@ function AddEditBusinessDetails(props) {
   const onSubmitBusinessDetail = () => {
     if (isEmpty(panNumber)) {
       alertBox('Please provide the PAN number');
+    } else if (isEmpty(panCardDoc)) {
+      alertBox('Please upload the pan card');
     } else if (isEmpty(gstNumber) && gstEligible) {
       alertBox('Please provide the GST number');
     } else if (isEmpty(legalName) && gstEligible) {
@@ -73,10 +78,16 @@ function AddEditBusinessDetails(props) {
       saveBusinessDetail({
         variables: {
           businessDetailsDto: {
-            businessName: gstEligible ? legalName : '',
-            gstNumber: gstEligible ? gstNumber : '',
-            panNumber,
             panCard: { name: panCardDoc.name, attachment: omit(panCardDoc.attachment, ['__typename']) },
+            panNumber,
+            gstEligible,
+            ...(gstEligible && {
+              businessName: gstEligible ? legalName : '',
+              gstNumber: gstEligible ? gstNumber : '',
+              gstCertificate: gstEligible
+                ? { name: gstinDoc.name, attachment: omit(gstinDoc.attachment, ['__typename']) }
+                : {},
+            }),
           },
         },
       });
@@ -223,10 +234,10 @@ function AddEditBusinessDetails(props) {
                 </TouchableOpacity>
               )}
               {!isEmpty(panCardDoc) && (
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: RfH(10) }}>
                   <IconButtonWrapper
-                    iconWidth={RfW(72)}
-                    iconHeight={RfH(72)}
+                    iconWidth={RfW(80)}
+                    iconHeight={RfH(80)}
                     styling={{ borderRadius: RfH(8), marginRight: RfW(20) }}
                     imageResizeMode="cover"
                     iconImage={
@@ -271,10 +282,10 @@ function AddEditBusinessDetails(props) {
                 )}
 
                 {!isEmpty(gstinDoc) && (
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: RfH(10) }}>
                     <IconButtonWrapper
-                      iconWidth={RfW(72)}
-                      iconHeight={RfH(72)}
+                      iconWidth={RfW(80)}
+                      iconHeight={RfH(80)}
                       styling={{ borderRadius: RfH(8), marginRight: RfW(20) }}
                       imageResizeMode="cover"
                       iconImage={

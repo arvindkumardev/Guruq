@@ -162,17 +162,17 @@ function CalendarView(props) {
                 }
                 calendarAnimation={{ type: 'parallel', duration: 300 }}
                 daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-                markedDates={[
-                  {
-                    date: new Date(),
-                    dots: [
-                      {
-                        color: Colors.brandBlue,
-                        selectedColor: Colors.brandBlue,
-                      },
-                    ],
-                  },
-                ]}
+                // markedDates={[
+                //   {
+                //     date: new Date(),
+                //     dots: [
+                //       {
+                //         color: Colors.brandBlue,
+                //         selectedColor: Colors.brandBlue,
+                //       },
+                //     ],
+                //   },
+                // ]}
                 onHeaderSelected={(a) => console.log(a)}
                 onDateSelected={(d) => getScheduledClassesByDate(d)}
               />
