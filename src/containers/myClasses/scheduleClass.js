@@ -54,6 +54,7 @@ function ScheduleClass(props) {
         for (let i = 0; i < scheduledClasses.length; i++) {
           classes[i] = { ...scheduledClasses[i], isScheduled: true };
         }
+        console.log("classes",classes)
         setTutorClasses(classes);
         setRefresh(!refresh);
       }
@@ -95,10 +96,6 @@ function ScheduleClass(props) {
       getScheduleClassCall();
     }
   }, [classData]);
-
-  const onBackPress = () => {
-    navigation.goBack();
-  };
 
   const showSlotPopup = () => {
     setShowSlotSelector(true);
@@ -248,12 +245,6 @@ function ScheduleClass(props) {
       <Loader isLoading={scheduleLoading || loadingScheduledClasses} />
       <ScreenHeader label="Schedule Class" homeIcon horizontalPadding={RfW(16)} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-        {/* <View style={commonStyles.horizontalChildrenSpaceView}> */}
-        {/*  <View style={commonStyles.horizontalChildrenView}> */}
-        {/*    <BackArrow action={onBackPress} /> */}
-        {/*    <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Schedule Class</Text> */}
-        {/*  </View> */}
-        {/* </View> */}
         {renderTutorDetails()}
         <View style={{ height: RfH(20) }} />
         <FlatList

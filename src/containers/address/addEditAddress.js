@@ -1,11 +1,12 @@
 /* eslint-disable radix */
-import { Alert, KeyboardAvoidingView, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useState } from 'react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Label } from 'native-base';
 import Geolocation from '@react-native-community/geolocation';
 import { useNavigation } from '@react-navigation/native';
-import { IconButtonWrapper, ScreenHeader } from '../../components';
+import { isEmpty, omit } from 'lodash';
+import { IconButtonWrapper, ScreenHeader, Loader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors, Images } from '../../theme';
 import { alertBox, RfH, RfW } from '../../utils/helpers';
@@ -13,12 +14,11 @@ import { ADD_UPDATE_STUDENT_ADDRESS, ADD_UPDATE_TUTOR_ADDRESS } from '../common/
 import { AddressTypeEnum } from '../common/enums';
 import GoogleAutoCompleteModal from '../../components/GoogleAutoCompleteModal';
 import { UserTypeEnum } from '../../common/userType.enum';
-import { studentDetails, tutorDetails, userType } from '../../apollo/cache';
+import { userType } from '../../apollo/cache';
 
 function AddEditAddress(props) {
   const { route } = props;
   const { address: editAddress } = route.params;
-  console.log(editAddress);
 
   const navigation = useNavigation();
 
@@ -40,8 +40,6 @@ function AddEditAddress(props) {
 
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
-  const studentInfo = useReactiveVar(studentDetails);
-  const tutorInfo = useReactiveVar(tutorDetails);
 
   const [saveStudentAddress, { loading: loadingSaveStudentAddress }] = useMutation(ADD_UPDATE_STUDENT_ADDRESS, {
     fetchPolicy: 'no-cache',
@@ -52,7 +50,10 @@ function AddEditAddress(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        Alert.alert('Details updated!');
+        alertBox('Address saved successfully!', '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => navigation.goBack(),
+        });
       }
     },
   });
@@ -75,12 +76,13 @@ function AddEditAddress(props) {
   });
 
   const onSavingAddress = () => {
-    const addressValue = { ...address };
-    delete addressValue.__typename;
-
+    if (isEmpty(address.street)) {
+      alertBox('Please provide the House no/Building Name');
+      return
+    }
     const variables = {
       variables: {
-        addressDto: { ...addressValue, postalCode: parseInt(addressValue.postalCode, 10) },
+        addressDto: { ...omit(address, ['__typename']), postalCode: parseInt(address.postalCode, 10) },
       },
     };
     if (isStudent) {
@@ -93,11 +95,8 @@ function AddEditAddress(props) {
   const [showGoogleSearchModal, setShowGoogleSearchModal] = useState(false);
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.select({ android: '', ios: 'padding' })}
-      // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
-      enabled>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'padding' })} enabled>
+      <Loader isLoading={loadingSaveTutorAddress || loadingSaveStudentAddress} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader homeIcon label="Address" horizontalPadding={RfW(16)} lineVisible={false} />
         <ScrollView contentContainerStyle={{ paddingHorizontal: RfW(16) }}>
@@ -108,13 +107,12 @@ function AddEditAddress(props) {
               <View
                 style={[
                   commonStyles.horizontalChildrenView,
-                  { borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, height: RfH(56) },
+                  { borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, height: RfH(44) },
                 ]}>
                 <View style={{ flex: 0.9 }}>
                   <TouchableWithoutFeedback onPress={() => setShowGoogleSearchModal(true)}>
                     <Text>{address.fullAddress || 'Type here to search...'}</Text>
                   </TouchableWithoutFeedback>
-                  {/* <GooglePlacesInput onSelect={(address) => console.log(address)} /> */}
                 </View>
                 <View style={{ flex: 0.1 }}>
                   <IconButtonWrapper
@@ -129,7 +127,7 @@ function AddEditAddress(props) {
             <View style={commonStyles.blankViewSmall} />
             <View>
               <Item floatingLabel>
-                <Label>House no/Building Name</Label>
+                <Label style={commonStyles.mediumMutedText}>House no/Building Name</Label>
                 <Input
                   value={address.street}
                   onChangeText={(text) => setAddress({ ...address, street: text })}
@@ -140,7 +138,7 @@ function AddEditAddress(props) {
             <View style={commonStyles.blankViewSmall} />
             <View>
               <Item floatingLabel>
-                <Label>Area , Locality</Label>
+                <Label style={commonStyles.mediumMutedText}>Area , Locality</Label>
                 <Input
                   value={address.subArea}
                   onChangeText={(text) => setAddress({ ...address, subArea: text })}
@@ -153,13 +151,13 @@ function AddEditAddress(props) {
               <View style={commonStyles.horizontalChildrenSpaceView}>
                 <View style={{ flex: 0.5, marginRight: RfW(16) }}>
                   <Item floatingLabel>
-                    <Label>City</Label>
+                    <Label style={commonStyles.mediumMutedText}>City</Label>
                     <Input value={address.city} onChangeText={(text) => setAddress({ ...address, city: text })} />
                   </Item>
                 </View>
                 <View style={{ flex: 0.5, marginLeft: RfW(0) }}>
                   <Item floatingLabel>
-                    <Label>State</Label>
+                    <Label style={commonStyles.mediumMutedText}>State</Label>
                     <Input value={address.state} onChangeText={(text) => setAddress({ ...address, state: text })} />
                   </Item>
                 </View>
@@ -169,7 +167,7 @@ function AddEditAddress(props) {
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <View style={{ flex: 0.5, marginRight: RfW(16) }}>
                 <Item floatingLabel>
-                  <Label>Postal Code</Label>
+                  <Label style={commonStyles.mediumMutedText}>Postal Code</Label>
                   <Input
                     value={String(address.postalCode)}
                     onChangeText={(text) => setAddress({ ...address, postalCode: text })}
@@ -178,7 +176,7 @@ function AddEditAddress(props) {
               </View>
               <View style={{ flex: 0.5, marginLeft: RfW(0) }}>
                 <Item floatingLabel>
-                  <Label>Country</Label>
+                  <Label style={commonStyles.mediumMutedText}>Country</Label>
                   <Input value={address.country} onChangeText={(text) => setAddress({ ...address, country: text })} />
                 </Item>
               </View>
@@ -186,7 +184,7 @@ function AddEditAddress(props) {
             <View style={commonStyles.blankViewSmall} />
             <View>
               <Item floatingLabel>
-                <Label>Landmark</Label>
+                <Label style={commonStyles.mediumMutedText}>Landmark</Label>
                 <Input
                   value={address.landmark}
                   onChangeText={(text) => setAddress({ ...address, landmark: text })}
@@ -195,7 +193,7 @@ function AddEditAddress(props) {
               </Item>
             </View>
 
-            <View style={commonStyles.blankViewMedium} />
+            <View style={{ height: RfH(24) }} />
 
             <Text style={commonStyles.regularMutedText}>Save as</Text>
             <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(10) }]}>
@@ -229,66 +227,11 @@ function AddEditAddress(props) {
                   </TouchableWithoutFeedback>
                 );
               })}
-
-              {/* <TouchableWithoutFeedback onPress={() => setAddress({ ...address, type: AddressTypeEnum.WORK.label })}> */}
-              {/*  <View */}
-              {/*    style={[ */}
-              {/*      commonStyles.horizontalChildrenView, */}
-              {/*      { */}
-              {/*        marginLeft: RfW(16), */}
-              {/*        // borderBottomWidth: 1, */}
-              {/*        borderBottomColor: address.type === AddressTypeEnum.WORK.label ? Colors.brandBlue2 : Colors.darkGrey, */}
-              {/*        paddingVertical: RfH(8), */}
-              {/*      }, */}
-              {/*    ]}> */}
-              {/*    <IconButtonWrapper */}
-              {/*      iconImage={Images.radio_button_null} */}
-              {/*      iconWidth={RfW(16)} */}
-              {/*      iconHeight={RfH(16)} */}
-              {/*      imageResizeMode="contain" */}
-              {/*    /> */}
-              {/*    <Text */}
-              {/*      style={{ */}
-              {/*        marginLeft: RfW(12), */}
-              {/*        color: address.type === AddressTypeEnum.WORK.label ? Colors.brandBlue2 : Colors.darkGrey, */}
-              {/*      }}> */}
-              {/*      Work */}
-              {/*    </Text> */}
-              {/*  </View> */}
-              {/* </TouchableWithoutFeedback> */}
-              {/* <TouchableWithoutFeedback onPress={() => setAddressType(AddressTypeEnum.OTHER.label)}> */}
-              {/*  <View */}
-              {/*    style={[ */}
-              {/*      commonStyles.horizontalChildrenView, */}
-              {/*      { */}
-              {/*        borderBottomWidth: 1, */}
-              {/*        borderBottomColor: addressType === AddressTypeEnum.OTHER.label ? Colors.brandBlue2 : Colors.darkGrey, */}
-              {/*        paddingVertical: RfH(8), */}
-              {/*      }, */}
-              {/*    ]}> */}
-              {/*    <IconButtonWrapper */}
-              {/*      iconImage={Images.pin} */}
-              {/*      iconWidth={RfW(16)} */}
-              {/*      iconHeight={RfH(16)} */}
-              {/*      imageResizeMode="contain" */}
-              {/*    /> */}
-              {/*    <Text */}
-              {/*      style={{ */}
-              {/*        marginLeft: RfW(12), */}
-              {/*        color: addressType === AddressTypeEnum.OTHER.label ? Colors.brandBlue2 : Colors.darkGrey, */}
-              {/*      }}> */}
-              {/*      Other */}
-              {/*    </Text> */}
-              {/*  </View> */}
-              {/* </TouchableWithoutFeedback> */}
             </View>
 
             <View style={commonStyles.blankViewMedium} />
             <View>
-              <Button
-                onPress={() => onSavingAddress()}
-                block
-                style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+              <Button onPress={onSavingAddress} block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
                 <Text style={commonStyles.textButtonPrimary}>Save</Text>
               </Button>
             </View>
@@ -298,11 +241,9 @@ function AddEditAddress(props) {
         <GoogleAutoCompleteModal
           visible={showGoogleSearchModal}
           onClose={() => setShowGoogleSearchModal(false)}
-          onSelect={(address) => {
+          onSelect={(data) => {
             setShowGoogleSearchModal(false);
-
-            setAddress(address);
-            console.log(address);
+            setAddress({ ...address, ...data });
           }}
         />
       </View>

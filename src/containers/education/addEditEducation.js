@@ -1,14 +1,12 @@
-import { Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
-import AlphabetListView from 'react-native-section-alphabet-list';
 import {
   CustomCheckBox,
   CustomRadioButton,
-  CustomSearchBar,
   CustomSelect,
   IconButtonWrapper,
   Loader,
@@ -16,7 +14,7 @@ import {
 } from '../../components';
 import { offeringsMasterData, studentDetails, tutorDetails, userType } from '../../apollo/cache';
 import commonStyles from '../../theme/styles';
-import { Colors, Fonts, Images } from '../../theme';
+import { Colors, Images } from '../../theme';
 import { alertBox, RfH, RfW, startOfDay } from '../../utils/helpers';
 import CustomDatePicker from '../../components/CustomDatePicker';
 import { ADD_UPDATE_EDUCATION_DETAILS } from './education.mutation';
@@ -26,13 +24,17 @@ import { UserTypeEnum } from '../../common/userType.enum';
 import { GET_DEGREE_LIST } from './education.query';
 import DegreeModal from './degreeSelectionModal';
 
-function AddEditEducation() {
+function AddEditEducation(props) {
   const navigation = useNavigation();
+  const educationDetail = props.route.params.detail;
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
   const studentInfo = useReactiveVar(studentDetails);
   const tutorInfo = useReactiveVar(tutorDetails);
+  const [eduId, setEduId] = useState('');
   const offeringMasterData = useReactiveVar(offeringsMasterData);
+
+  console.log('educationDetail', educationDetail);
 
   const schoolEducation = offeringMasterData.find((s) => s.level === 0 && s.name === SCHOOL_EDUCATION);
   const boards = offeringMasterData.filter((s) => s?.parentOffering?.id === schoolEducation?.id);
@@ -54,6 +56,28 @@ function AddEditEducation() {
   const [endDate, setEndDate] = useState();
   const [degree, setDegree] = useState([]);
   const [showDegrees, setShowDegrees] = useState(false);
+
+  useEffect(() => {
+    if (!isEmpty(educationDetail) && !isEmpty(degree)) {
+      setSchoolName(educationDetail.school.name);
+      setStartDate(educationDetail.startDate);
+      setEndDate(educationDetail.endDate);
+      setIsCurrent(educationDetail.isCurrent);
+      setEducationType(educationDetail.degree ? 1 : 0);
+      setFieldOfStudy(educationDetail.fieldOfStudy);
+      setEduId(educationDetail?.id);
+      setSelectedDegree(degree.find((item) => item.id === educationDetail?.degree?.id));
+      setSelectedBoard(boards.find((item) => item.displayName === educationDetail?.board));
+      setSelectedStream(highSchoolStreams.find((item) => item.label === educationDetail?.higherSecondaryStream));
+      // setSelectedClass(
+      //   offeringMasterData.find(
+      //     (item) => item?.parentOffering?.id === selectedBoard?.id && item.displayName === educationDetail?.grade
+      //   )
+      // );
+    }
+  }, [educationDetail, degree]);
+
+  console.log('sele', selectedBoard);
 
   const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -133,6 +157,7 @@ function AddEditEducation() {
             id: tutorInfo.id,
           },
         }),
+        ...(eduId && { id: eduId }),
       };
       if (educationType === 0) {
         dto.board = selectedBoard.name;
@@ -199,7 +224,7 @@ function AddEditEducation() {
               <View>
                 <Item style={commonStyles.horizontalChildrenSpaceView}>
                   <CustomSelect
-                    data={boards.map((item) => ({label: item.displayName, value: item }))}
+                    data={boards.map((item) => ({ label: item.displayName, value: item }))}
                     value={selectedBoard}
                     onChangeHandler={(value) => setSelectedBoard(value)}
                     placeholder="Select Board"

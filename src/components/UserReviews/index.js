@@ -43,17 +43,22 @@ function UserReviews(props) {
               alignItems: 'flex-start',
               marginLeft: RfW(8),
             }}>
-            <Text style={{ fontFamily: 'SegoeUI-Semibold' }}>{item.name}</Text>
-            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              {item.date} |{' '}
+            <Text style={{ fontWeight: '600' }}>{item.name}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                {item.date} |{' '}
+              </Text>
               <IconButtonWrapper
                 iconWidth={RfW(10)}
                 iconHeight={RfH(10)}
                 iconImage={Images.golden_star}
-                styling={{ alignSelf: 'center' }}
-              />{' '}
-              {parseFloat(item.rating).toFixed(1)}
-            </Text>
+                imageResizeMode="contain"
+              />
+              <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                {' '}
+                {parseFloat(item.rating).toFixed(1)}
+              </Text>
+            </View>
           </View>
         </View>
         <Text style={{ marginTop: RfH(8), color: Colors.darkGrey }}>{item.description}</Text>

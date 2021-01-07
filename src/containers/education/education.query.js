@@ -11,6 +11,7 @@ export const GET_TUTOR_EDUCATION_DETAILS = gql`
         degree {
           name
           degreeLevel
+          id
         }
         startDate
         endDate
@@ -35,6 +36,8 @@ export const GET_STUDENT_EDUCATION_DETAILS = gql`
         }
         degree {
           name
+          degreeLevel
+          id
         }
         startDate
         endDate

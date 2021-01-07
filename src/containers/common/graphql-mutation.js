@@ -319,7 +319,6 @@ export const UPDATE_STUDENT_IMAGE = gql`
   mutation updateStudentImage($profileImageDto: CreateUpdateAttachmentDto!) {
     updateStudentImage(profileImageDto: $profileImageDto) {
       id
-      name
     }
   }
 `;

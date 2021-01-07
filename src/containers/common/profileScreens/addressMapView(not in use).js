@@ -11,7 +11,7 @@ import { Colors, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
-function AddressMapView() {
+function AddressMapViewNotInUse() {
   const userInfo = useReactiveVar(userDetails);
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
@@ -59,4 +59,4 @@ function AddressMapView() {
   );
 }
 
-export default AddressMapView;
+export default AddressMapViewNotInUse;

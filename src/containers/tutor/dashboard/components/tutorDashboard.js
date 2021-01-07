@@ -35,6 +35,7 @@ import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
 import { TutorOfferingStageEnum } from '../../enums';
 import CustomImage from '../../../../components/CustomImage';
+import UserImageComponent from '../../../../components/UserImageComponent';
 
 const carouselItems = [Images.dash_img1, Images.dash_img2, Images.dash_img3];
 function TutorDashboard(props) {
@@ -227,13 +228,7 @@ function TutorDashboard(props) {
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
               <TouchableWithoutFeedback onPress={() => changeTab(5)}>
-                <TutorImageComponent
-                  tutor={{ profileImage: userInfo.profileImage, contactDetail: userInfo }}
-                  height={32}
-                  width={32}
-                  fontSize={16}
-                  styling={{ borderRadius: RfH(32) }}
-                />
+                <UserImageComponent height={40} width={40} fontSize={16} styling={{ borderRadius: RfH(40) }} />
               </TouchableWithoutFeedback>
             </View>
           </View>

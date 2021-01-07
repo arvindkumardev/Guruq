@@ -33,6 +33,7 @@ const PaymentMethod = (props) => {
 
   const navigation = useNavigation();
   const [paymentMethod, setPaymentMethod] = useState(PaymentMethodEnum.ONLINE.value);
+  const [bookingDataObj, setBookingDataObj] = useState({});
 
   const userInfo = useReactiveVar(userDetails);
 
@@ -45,12 +46,13 @@ const PaymentMethod = (props) => {
     },
     onCompleted: (data) => {
       if (data) {
+        setBookingDataObj(data.createBooking);
         switch (paymentMethod) {
           case PaymentMethodEnum.ONLINE.value:
             initiateRazorPayPayment(data.createBooking.id);
             break;
           case PaymentMethodEnum.PAYTM.value:
-            handlePaytmPayment(data.createBooking.uuid);
+            handlePaytmPayment(data.createBooking);
             break;
           case PaymentMethodEnum.PAYPAL.value:
             initiatePaypalPayment(data.createBooking.id);
@@ -80,7 +82,7 @@ const PaymentMethod = (props) => {
       if (data) {
         onClose(false);
         if (PaymentStatusEnum.COMPLETE.value) {
-          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { uuid: data?.makePayment?.uuid, paymentMethod });
+          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { uuid: bookingDataObj.id, paymentMethod });
         }
       }
     },

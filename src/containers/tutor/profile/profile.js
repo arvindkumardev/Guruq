@@ -1,6 +1,6 @@
-import { useReactiveVar,useMutation } from '@apollo/client';
+import { useReactiveVar, useMutation } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
@@ -20,17 +20,11 @@ import {
   userDetails,
   userLocation,
   userType,
+  notificationsList,
 } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { getSaveData} from '../../../utils/helpers';
-
-import { TutorImageComponent } from '../../../components';
-import IconWrapper from '../../../components/IconWrapper';
-import { Colors, Images } from '../../../theme';
-import commonStyles from '../../../theme/styles';
-import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
-
 import {
+  getSaveData,
   alertBox,
   clearAllLocalStorage,
   comingSoonAlert,
@@ -39,13 +33,19 @@ import {
   RfH,
   RfW,
 } from '../../../utils/helpers';
+
+import { TutorImageComponent } from '../../../components';
+import IconWrapper from '../../../components/IconWrapper';
+import { Colors, Images } from '../../../theme';
+import commonStyles from '../../../theme/styles';
+import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
+
 import styles from './styles';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { WEBVIEW_URLS } from '../../../utils/webviewUrls';
 import UploadDocument from '../../../components/UploadDocument';
-import {
-  notificationsList,
-} from '../../../apollo/cache';
+import UserImageComponent from '../../../components/UserImageComponent';
+
 const ACCOUNT_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
   { name: 'Address', icon: Images.home },
@@ -89,7 +89,7 @@ function Profile(props) {
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [notificationCount,setNotificationCount] = useState(0)
+  const [notificationCount, setNotificationCount] = useState(0);
   const notifyList = useReactiveVar(notificationsList);
 
   const client = initializeApollo();
@@ -114,10 +114,9 @@ function Profile(props) {
     client.resetStore(); // .then(() => {});
     // });
   };
-  useEffect(()=>{
-    getNotificationCount()
-  
-  },[notifyList])
+  useEffect(() => {
+    getNotificationCount();
+  }, [notifyList]);
 
   const logoutConfirmation = () => {
     alertBox('Do you really want to logout?', '', {
@@ -126,17 +125,14 @@ function Profile(props) {
       negativeText: 'No',
     });
   };
- 
-  
+
   const getNotificationCount = async () => {
-    notifications = JSON.parse(
-      await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST),
-    );
+    const notifications = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST));
     if (notifications && notifications.length > 0) {
-      let updatedArray = notifications.filter(x =>!x.isRead)
+      const updatedArray = notifications.filter((x) => !x.isRead);
       setNotificationCount(updatedArray.length);
     }
-  }
+  };
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
       navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS);
@@ -150,10 +146,6 @@ function Profile(props) {
     } else if (item.name === 'Business Details') {
       navigation.navigate(NavigationRouteNames.TUTOR.BUSINESS_DETAILS);
     } else if (item.name === 'Documents') {
-      // navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-      //   url: `http://dashboardv2.guruq.in/tutor/embed/documents`,
-      //   label: 'Documents',
-      // });
       setIsUploadModalOpen(true);
     } else if (item.name === 'Bank Details') {
       navigation.navigate(NavigationRouteNames.BANK_DETAILS);
@@ -168,13 +160,6 @@ function Profile(props) {
       });
     } else if (item.name === 'Send Feedback') {
       navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
-    } else if (item.name === 'About') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: WEBVIEW_URLS.ABOUT_US,
-        label: 'About',
-      });
-    } else if (item.name === 'Team') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {url: WEBVIEW_URLS.TEAM, label: 'Team'});
     } else if (item.name === 'Calendar') {
       changeTab(2);
     } else if (item.name === 'My Classes') {
@@ -191,7 +176,7 @@ function Profile(props) {
 
   const onChangePasswordClick = () => {
     if (!isEmpty(userInfo.phoneNumber)) {
-      let {number,countryCode} = userInfo.phoneNumber
+      const { number, countryCode } = userInfo.phoneNumber;
       forgotPassword({
         variables: { countryCode, number },
       });
@@ -209,15 +194,16 @@ function Profile(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        console.log('data', data);
-        let {number,countryCode} = userInfo.phoneNumber
-        let mobileObj ={
-          mobile : number,
-          country :{dialCode:countryCode}
-        }
-        navigation.navigate(NavigationRouteNames.TUTOR.OTP_VERIFICATION,{ mobileObj, 
-          fromChangePassword:true,
-          newUser: false });
+        const { number, countryCode } = userInfo.phoneNumber;
+        const mobileObj = {
+          mobile: number,
+          country: { dialCode: countryCode },
+        };
+        navigation.navigate(NavigationRouteNames.TUTOR.OTP_VERIFICATION, {
+          mobileObj,
+          fromChangePassword: true,
+          newUser: false,
+        });
       }
     },
   });
@@ -254,23 +240,19 @@ function Profile(props) {
           alignItems: 'center',
         }}>
         <View style={{ flexDirection: 'row' }} />
-        {/* <View> */}
-        {/*  <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}> */}
-        {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} /> */}
-        {/*  </TouchableOpacity> */}
-        {/* </View> */}
-      
-          <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}> 
-        {notificationCount > 0 && <View style={{position:'absolute',
-          left:6,top:6,zIndex:10}}>
-            <Image
-              source={Images.small_active_blue}
-              resizeMode={'contain'}
-              style={{ height: RfH(12), width: RfW(12) }}
-            />
-          </View>}
-          <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} /> 
-        </TouchableOpacity> 
+
+        <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
+          {notificationCount > 0 && (
+            <View style={{ position: 'absolute', left: 6, top: 6, zIndex: 10 }}>
+              <Image
+                source={Images.small_active_blue}
+                resizeMode="contain"
+                style={{ height: RfH(12), width: RfW(12) }}
+              />
+            </View>
+          )}
+          <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
@@ -285,12 +267,7 @@ function Profile(props) {
             justifyContent: 'center',
           }}>
           <View style={styles.userDetailsView}>
-            <TutorImageComponent
-              tutor={{ profileImage: userInfo.profile, contactDetail: userInfo }}
-              width={64}
-              height={64}
-              styling={{ borderRadius: 64 }}
-            />
+            <UserImageComponent width={64} height={64} styling={{ borderRadius: RfH(64) }} />
 
             <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16) }}>
               <Text style={styles.userName}>{getFullName(userInfo)}</Text>

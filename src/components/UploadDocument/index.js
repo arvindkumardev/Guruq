@@ -353,7 +353,7 @@ function UploadDocument(props) {
 
   return (
     <View>
-      <Modal animationType="slide" transparent visible={isVisible} onRequestClose={handleClose}>
+      <Modal animationType="fade" transparent visible={isVisible} onRequestClose={handleClose}>
         {isPickerVisible && filePicker()}
 
         {isPreviewVisible && preview()}

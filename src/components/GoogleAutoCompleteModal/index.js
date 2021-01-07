@@ -4,8 +4,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, View } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { isUndefined } from 'lodash';
 import { Colors, Images } from '../../theme';
-import { deviceHeight, RfW } from '../../utils/helpers';
+import { deviceHeight, RfH, RfW } from '../../utils/helpers';
 import { GOOGLE_API_KEY } from '../../utils/constants';
 import ScreenHeader from '../ScreenHeader';
 
@@ -52,7 +53,7 @@ const GoogleAutoCompleteModal = (props) => {
         state,
         city,
         subArea: subArea.join(', '),
-        postalCode,
+        postalCode: isUndefined(postalCode) ? '' : postalCode,
         latitude,
         longitude,
       });
@@ -72,18 +73,13 @@ const GoogleAutoCompleteModal = (props) => {
           alignItems: 'stretch',
           backgroundColor: Colors.white,
           opacity: 1,
-          // marginBottom: RfH(34),
-          // paddingTop: RfH(44),
         }}>
         <ScreenHeader
           homeIcon={false}
           label="Search Place"
           horizontalPadding={RfW(16)}
           showRightIcon
-          onRightIconClick={() => {
-            console.log('closing google popup');
-            onClose();
-          }}
+          onRightIconClick={onClose}
           rightIcon={Images.cross}
           lineVisible
         />
@@ -93,8 +89,6 @@ const GoogleAutoCompleteModal = (props) => {
             borderBottomWidth: 1,
             borderColor: Colors.darkGrey,
             height: deviceHeight(),
-            // paddingVertical: RfH(44),
-            // marginBottom: 10,
             backgroundColor: '#dddddd',
           }}>
           <GooglePlacesAutocomplete
@@ -105,10 +99,9 @@ const GoogleAutoCompleteModal = (props) => {
             minLength={2}
             debounce={300}
             onPress={(data, details = null) => {
-              console.log('GooglePlacesAutocomplete', data, details);
               handleSelectSuggest(details);
             }}
-            styles={{ height: 54, fontSize: 14, borderBottomWidth: 1, borderColor: Colors.darkGrey }}
+            styles={{ height: RfH(54), fontSize: 14, borderBottomWidth: 1, borderColor: Colors.darkGrey }}
             query={{
               key: GOOGLE_API_KEY,
               language: 'en',

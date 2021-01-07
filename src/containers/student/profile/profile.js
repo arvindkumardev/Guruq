@@ -1,4 +1,4 @@
-import { useReactiveVar,useMutation } from '@apollo/client';
+import { useReactiveVar, useMutation } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
@@ -22,6 +22,7 @@ import {
   userDetails,
   userLocation,
   userType,
+  notificationsList,
 } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 
@@ -38,13 +39,12 @@ import {
   removeToken,
   RfH,
   RfW,
+  getSaveData,
 } from '../../../utils/helpers';
 import styles from './styles';
 import { UserTypeEnum } from '../../../common/userType.enum';
-import { getSaveData} from '../../../utils/helpers';
-import {
-  notificationsList,
-} from '../../../apollo/cache';
+import UserImageComponent from '../../../components/UserImageComponent';
+
 const PERSONAL_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
   { name: 'Address', icon: Images.home },
@@ -87,7 +87,7 @@ const HELP_OPTIONS = [
 function Profile(props) {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
-  const [notificationCount,setNotificationCount] = useState(0)
+  const [notificationCount, setNotificationCount] = useState(0);
   const studentInfo = useReactiveVar(studentDetails);
   const notifyList = useReactiveVar(notificationsList);
 
@@ -119,20 +119,19 @@ function Profile(props) {
     client.resetStore(); // .then(() => {});
     // });
   };
-useEffect(()=>{
-  getNotificationCount()
 
-},[notifyList])
+  const getNotificationCount = async () => {
+    const notifications = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST));
+    if (notifications && notifications.length > 0) {
+      const updatedArray = notifications.filter((x) => !x.isRead);
+      setNotificationCount(updatedArray.length);
+    }
+  };
 
-const getNotificationCount = async () => {
-  notifications = JSON.parse(
-    await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST),
-  );
-  if (notifications && notifications.length > 0) {
-    let updatedArray = notifications.filter(x =>!x.isRead)
-    setNotificationCount(updatedArray.length);
-  }
-}
+  useEffect(() => {
+    getNotificationCount();
+  }, [notifyList]);
+
   const logoutConfirmation = () => {
     alertBox('Do you really want to logout?', '', {
       positiveText: 'Yes',
@@ -141,7 +140,6 @@ const getNotificationCount = async () => {
     });
   };
 
-  
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
       navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS);
@@ -155,29 +153,10 @@ const getNotificationCount = async () => {
       navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_DETAILS);
     } else if (item.name === 'Experience') {
       navigation.navigate(NavigationRouteNames.EXPERIENCE);
-      // , {
-      //   url: `http://dashboardv2.guruq.in/student/embed/experience`,
-      //   label: 'Experience Details',
-      // });
     } else if (item.name === 'Customer Care') {
       navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
-    } else if (item.name === "FAQ's") {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: `http://dashboardv2.guruq.in/student/embed/experience`,
-        label: "FAQ's",
-      });
     } else if (item.name === 'Send Feedback') {
       navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
-      // } else if (item.name === 'About') {
-      //   navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-      //     url: `http://dashboardv2.guruq.in/student/embed/experience`,
-      //     label: 'About',
-      //   });
-      // } else if (item.name === 'Team') {
-      //   navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-      //     url: WEB`http://dashboardv2.guruq.in/student/embed/experience`,
-      //     label: 'Team',
-      //   });
     } else if (item.name === 'My Cart') {
       navigation.navigate(NavigationRouteNames.STUDENT.MY_CART);
     } else if (item.name === 'Calendar') {
@@ -197,32 +176,32 @@ const getNotificationCount = async () => {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
-        console.log(error);
       }
     },
     onCompleted: (data) => {
       if (data) {
-        console.log('data', data);
-        let {number,countryCode} = userInfo.phoneNumber
-        let mobileObj ={
-          mobile : number,
-          country :{dialCode:countryCode}
-        }
-        navigation.navigate(NavigationRouteNames.STUDENT.OTP_VERIFICATION,{ mobileObj, 
-          fromChangePassword:true,
-          newUser: false });
+        const { number, countryCode } = userInfo.phoneNumber;
+        const mobileObj = {
+          mobile: number,
+          country: { dialCode: countryCode },
+        };
+        navigation.navigate(NavigationRouteNames.STUDENT.OTP_VERIFICATION, {
+          mobileObj,
+          fromChangePassword: true,
+          newUser: false,
+        });
       }
     },
   });
 
   const onChangePasswordClick = () => {
     if (!isEmpty(userInfo.phoneNumber)) {
-      let {number,countryCode} = userInfo.phoneNumber
+      const { number, countryCode } = userInfo.phoneNumber;
       forgotPassword({
         variables: { countryCode, number },
       });
     } else {
-      Alert.alert('Please enter mobile number.');
+      alertBox('Please enter mobile number.');
     }
   };
 
@@ -254,34 +233,35 @@ const getNotificationCount = async () => {
       <StatusBar barStyle="dark-content" />
 
       <View
-      style={{ 
-        height: 44, 
-        paddingHorizontal: RfW(16), 
-          flexDirection: 'row', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-        }}> 
-       <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}> 
-        <TouchableOpacity 
-          onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)} 
-          style={{ padding: 10 }}> 
-          <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} /> 
-        </TouchableOpacity> 
-        <TouchableOpacity 
-          style={{ padding: 10 }} 
-          onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}> 
-          {notificationCount > 0 && <View style={{position:'absolute',
-          left:6,top:6,zIndex:10}}>
-            <Image
-              source={Images.small_active_blue}
-              resizeMode={'contain'}
-              style={{ height: RfH(12), width: RfW(12) }}
-            />
-          </View>}
-          <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} /> 
-        </TouchableOpacity> 
-       </View> 
-       </View> 
+        style={{
+          height: RfH(24),
+          paddingHorizontal: RfW(16),
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
+          {/* <TouchableOpacity */}
+          {/*  onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)} */}
+          {/*  style={{ padding: 10 }}> */}
+          {/*  <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} /> */}
+          {/* </TouchableOpacity> */}
+          <TouchableOpacity
+            style={{ padding: 10 }}
+            onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
+            {notificationCount > 0 && (
+              <View style={{ position: 'absolute', left: 6, top: 6, zIndex: 10 }}>
+                <Image
+                  source={Images.small_active_blue}
+                  resizeMode="contain"
+                  style={{ height: RfH(12), width: RfW(12) }}
+                />
+              </View>
+            )}
+            <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
         <ScrollView
@@ -289,7 +269,7 @@ const getNotificationCount = async () => {
           showsVerticalScrollIndicator={false}
           // onScroll={(event) => handleScroll(event)}
           scrollEventThrottle={16}>
-          <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(25) }}>
+          <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(20) }}>
             <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
           </View>
           <View
@@ -301,12 +281,8 @@ const getNotificationCount = async () => {
             }}>
             <View style={styles.userDetailsView}>
               {/* <Image style={styles.userIcon} source={Images.user} /> */}
-              <TutorImageComponent
-                tutor={{ profileImage: userInfo.profile, contactDetail: userInfo }}
-                width={64}
-                height={64}
-                styling={{ borderRadius: 64 }}
-              />
+
+              <UserImageComponent width={64} height={64} styling={{ borderRadius: RfH(64) }} />
               <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16), flex: 1 }}>
                 <Text style={styles.userName} numberOfLines={2}>
                   {getFullName(userInfo)}

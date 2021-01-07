@@ -239,20 +239,14 @@ function OrderDetails(props) {
         }}>
         <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class {index + 1}</Text>
         {!item.isScheduled && (
-          <IconButtonWrapper
-            iconHeight={RfH(20)}
-            iconWidth={RfH(24)}
-            iconImage={Images.calendar}
-            styling={{ marginTop: RfH(8) }}
-          />
+          <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfH(24)} iconImage={Images.calendar} />
         )}
         {item.isScheduled && (
-          <View>
+          <View style={{ alignSelf: 'center' }}>
             <Text
               style={{
                 fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
                 color: Colors.darkGrey,
-                marginTop: RfH(8),
               }}>
               {moment(item.startDate).format('DD-MMM-YYYY')}
             </Text>

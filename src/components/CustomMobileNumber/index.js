@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
@@ -33,6 +33,13 @@ function CustomMobileNumber(props) {
 
   const [country, setCountry] = useState(value.country);
   const [mobile, setMobile] = useState(value.mobile);
+
+  useEffect(() => {
+    if (!isEmpty(value)) {
+      setCountry(value.country);
+      setMobile(value.mobile);
+    }
+  }, [value]);
 
   const onChangeMobile = (mobileText) => {
     setMobile(mobileText);

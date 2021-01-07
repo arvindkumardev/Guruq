@@ -9,7 +9,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { sum } from 'lodash';
+import { sum, isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 import { IconButtonWrapper, Loader, PaymentMethodModal, ScreenHeader, TutorImageComponent } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
@@ -20,17 +20,17 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
 import { GET_MY_QPOINTS_BALANCE } from '../../common/graphql-query';
-import routeNames from '../../../routes/screenNames';
 import CustomModalWebView from '../../../components/CustomModalWebView';
 import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 import { userDetails } from '../../../apollo/cache';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   // const [showCouponModal, setShowCouponModal] = useState(false);
   const navigation = useNavigation();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
+  const [cartEmpty, setCartEmpty] = useState(false);
   const [amount, setAmount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [qPoints, setQPoints] = useState(0);
@@ -39,7 +39,7 @@ const MyCart = () => {
   const [token, setToken] = useState();
 
   const [paymentModal, setPaymentModal] = useState(false);
-  const [bookingId, setBookingId] = useState('');
+  const [bookingData, setBookingData] = useState({});
   const userInfo = useReactiveVar(userDetails);
   const [paymentStatus, setPaymentStatus] = useState('success');
 
@@ -62,9 +62,9 @@ const MyCart = () => {
         if (data?.getCartItems.length > 0) {
           setCartItems(data.getCartItems);
           setAmount(sum(data.getCartItems.map((item) => item.price)));
-          setIsEmpty(false);
+          setCartEmpty(false);
         } else {
-          setIsEmpty(true);
+          setCartEmpty(true);
         }
       }
     },
@@ -82,8 +82,8 @@ const MyCart = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, {
-          uuid: data?.createBooking?.uuid,
+        navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_CONFIRMED, {
+          uuid: data?.createBooking?.id,
         });
       }
     },
@@ -222,10 +222,10 @@ const MyCart = () => {
     setQPointsRedeemed(0);
   };
 
-  const handlePaytmPayment = (bookingId) => {
+  const handlePaytmPayment = (bookingData) => {
     setShowPaymentModal(false);
     setPaymentModal(true);
-    setBookingId(bookingId);
+    setBookingData(bookingData);
     // console.log('bookingId', bookingId);
     // setPaymentUrl(`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}`);
   };
@@ -245,11 +245,11 @@ const MyCart = () => {
 
   const handlePaymentAuthorization = async (event) => {
     if (event.url.indexOf('http://dashboardv2.guruq.in/booking/confirmation') > -1) {
-      setBookingId('');
+      setBookingData({});
       setPaymentStatus('success');
       setPaymentModal(false);
-      navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, {
-        uuid: bookingId,
+      navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_CONFIRMED, {
+        uuid: bookingData.id,
         paymentMethod: PaymentMethodEnum.PAYTM.value,
       });
     } else if (event.url.indexOf('http://dashboardv2.guruq.in/booking/failure') > -1) {
@@ -265,7 +265,7 @@ const MyCart = () => {
       positiveText: 'Yes',
       onPositiveClick: () => {
         setPaymentStatus('');
-        setBookingId('');
+        setBookingData('');
         setPaymentModal(false);
       },
       negativeText: 'No',
@@ -518,9 +518,9 @@ const MyCart = () => {
 
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
-      <Loader isLoading={cartLoading || removeLoading || addTocartLoading} />
+      <Loader isLoading={cartLoading || removeLoading || addTocartLoading || bookingLoading} />
       <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
-      {!isEmpty ? (
+      {!cartEmpty ? (
         <View style={{ flex: 1 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.white }}>
@@ -649,9 +649,9 @@ const MyCart = () => {
         // discount={appliedCouponValue}
         hidePaymentPopup={() => setShowPaymentModal(false)}
       />
-      {paymentModal && bookingId !== '' && (
+      {paymentModal && !isEmpty(bookingData) && (
         <CustomModalWebView
-          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}?token=${token}`}
+          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingData.uuid}?token=${token}`}
           headerText="Payment"
           modalVisible={paymentModal}
           onNavigationStateChange={handlePaymentAuthorization}

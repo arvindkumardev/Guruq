@@ -32,6 +32,7 @@ export const ME_QUERY = gql`
         filename
       }
       qPoints
+      dob
     }
   }
 `;
@@ -86,6 +87,7 @@ export const GET_STUDENT_DETAILS = gql`
         country
         postalCode
         fullAddress
+        landmark
       }
       educationDetails {
         id

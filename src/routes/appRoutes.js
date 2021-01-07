@@ -39,7 +39,7 @@ import MyClasses from '../containers/myClasses/classes';
 import scheduleClass from '../containers/myClasses/scheduleClass';
 import CalendarView from '../containers/calendar/calendarView';
 import AddEditAddress from '../containers/address/addEditAddress';
-import AddressMapView from '../containers/common/profileScreens/addressMapView';
+// import AddressMapView from '../containers/common/profileScreens/addressMapView';
 import EducationListing from '../containers/education/educationListing';
 import AddEditEducation from '../containers/education/addEditEducation';
 import AwardListing from '../containers/awards/awardListing';
@@ -49,7 +49,7 @@ import CertificationProcessSteps from '../containers/certficationProcess/certifi
 import SubjectSelection from '../containers/tutor/mySubjects/subjectSelection';
 import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
 import ProficiencyTest from '../containers/tutor/proficiencyTest';
-import PersonalDetails from '../containers/common/profileScreens/personalInformation/personalDetails';
+import PersonalDetails from '../containers/personalInformation/personalDetails';
 import CompleteYourProfile from '../containers/certficationProcess/completeYourProfile';
 import ExperienceListing from '../containers/experience/experienceListing';
 import AddEditExperience from '../containers/experience/addEditExperience';
@@ -178,11 +178,11 @@ const AppStack = (props) => {
         component={AddEditAddress}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.ADDRESS_MAP_VIEW}
-        component={AddressMapView}
-        options={{ headerShown: false }}
-      />
+      {/*<Stack.Screen*/}
+      {/*  name={NavigationRouteNames.ADDRESS_MAP_VIEW}*/}
+      {/*  component={AddressMapView}*/}
+      {/*  options={{ headerShown: false }}*/}
+      {/*/>*/}
       <Stack.Screen
         name={NavigationRouteNames.EDUCATION}
         component={EducationListing}
