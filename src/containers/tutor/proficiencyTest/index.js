@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { isEmpty } from 'lodash';
 import ScreenHeader from '../../../components/ScreenHeader';
 import { getToken, RfW } from '../../../utils/helpers';
+import { Images } from '../../../theme';
+import ActionModal from '../../certficationProcess/components/helpSection';
 import InPlaceLoader from '../../../components/InPlaceLoader';
-import Loader from '../../../components/Loader';
 
 const ProficiencyTest = (props) => {
   const { route } = props;
   const navigation = useNavigation();
   const offeringId = route?.params?.offeringId;
+  const [openMenu, setOpenMenu] = useState(false);
 
   const [token, setToken] = useState();
   const [url, setUrl] = useState('');
@@ -41,7 +42,14 @@ const ProficiencyTest = (props) => {
 
   return (
     <>
-      <ScreenHeader label="Proficiency Test" homeIcon horizontalPadding={RfW(16)} />
+      <ScreenHeader
+        label="Proficiency Test"
+        homeIcon
+        horizontalPadding={RfW(16)}
+        showRightIcon
+        rightIcon={Images.vertical_dots_b}
+        onRightIconClick={() => setOpenMenu(true)}
+      />
       <WebView
         source={{
           uri: url,
@@ -60,6 +68,7 @@ const ProficiencyTest = (props) => {
           <Text>Something went wrong</Text>
         </View>
       )}
+      {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} navigation={navigation} />}
     </>
   );
 };

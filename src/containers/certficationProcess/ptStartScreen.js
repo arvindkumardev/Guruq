@@ -4,16 +4,18 @@ import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { getSubjectIcons, RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import Images from '../../theme/images';
-import { Colors } from '../../theme';
+import { Colors, Fonts } from '../../theme';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
 import NavigationRouteNames from '../../routes/screenNames';
 import { GET_TUTOR_OFFERING_DETAIL } from './certification-query';
 import { offeringsMasterData } from '../../apollo/cache';
 import { PtStatus } from '../tutor/enums';
 import { MARK_CERTIFIED } from './certification-mutation';
+import ActionModal from './components/helpSection';
 
 const PtStartScreen = (props) => {
   const navigation = useNavigation();
@@ -24,6 +26,7 @@ const PtStartScreen = (props) => {
   const [ptDetail, setPtDetail] = useState({});
   const [offering, setOffering] = useState({});
   const [attemptExhausted, setAttemptExhausted] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const [getTutorOfferingDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_OFFERING_DETAIL, {
     fetchPolicy: 'no-cache',
@@ -54,7 +57,9 @@ const PtStartScreen = (props) => {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, { isOnBoarding });
+        navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
+          isOnBoarding,
+        });
       }
     },
   });
@@ -120,7 +125,12 @@ const PtStartScreen = (props) => {
       </Text>
       <View style={{ marginTop: RfH(30) }}>
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: RfH(10) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: RfH(10),
+          }}>
           <Text style={commonStyles.regularPrimaryText}>Correct</Text>
           <View
             style={{
@@ -136,7 +146,12 @@ const PtStartScreen = (props) => {
         </View>
 
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: RfH(10) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: RfH(10),
+          }}>
           <Text style={commonStyles.regularPrimaryText}>In Correct</Text>
           <View
             style={{
@@ -154,7 +169,12 @@ const PtStartScreen = (props) => {
         </View>
 
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: RfH(10) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: RfH(10),
+          }}>
           <Text style={commonStyles.regularPrimaryText}>Not Attempted</Text>
           <View
             style={{
@@ -170,7 +190,12 @@ const PtStartScreen = (props) => {
         </View>
 
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: RfH(10) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: RfH(10),
+          }}>
           <Text style={commonStyles.regularPrimaryText}>Total</Text>
           <View
             style={{
@@ -186,7 +211,12 @@ const PtStartScreen = (props) => {
         </View>
 
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: RfH(10) }}>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: RfH(10),
+          }}>
           <Text style={commonStyles.regularPrimaryText}>Result</Text>
           <View
             style={{
@@ -285,6 +315,7 @@ const PtStartScreen = (props) => {
           )}
         </View>
       </ScrollView>
+      {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
     </>
   );
 };

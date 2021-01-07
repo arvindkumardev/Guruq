@@ -7,41 +7,73 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   FlatList,
+  Linking,
 } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { BackArrow, ScreenHeader, TutorImageComponent } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { RfH, RfW } from '../../../utils/helpers';
+import {
+  ABOUT_US_URL,
+  ACADEMIC_BOARD_URL,
+  CEO_MESSAGE_URL,
+  CSR_URL,
+  IN_NEWS_URL,
+  STANDARD_SCREEN_SIZE,
+} from '../../../utils/constants';
+import { getFileUrl, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
+import CustomImage from '../../../components/CustomImage';
 
-function AboutUs({ navigation }) {
-  const [aboutUsData, setAboutUsData] = useState([
+function AboutUs() {
+  const aboutUsData = [
     {
       name: 'Founders',
       color: 'rgb(231,229,242)',
+      url: CEO_MESSAGE_URL,
     },
-    { name: 'Top Stories', color: 'rgb(230,252,231)' },
-    { name: 'Academic Team', color: 'rgb(255,247,240)' },
-    { name: 'GuruQ CSR', color: 'rgb(203,231,255)' },
-  ]);
+    { name: 'Top Stories', color: 'rgb(230,252,231)', url: IN_NEWS_URL },
+    { name: 'Academic Team', color: 'rgb(255,247,240)', url: ACADEMIC_BOARD_URL },
+    { name: 'GuruQ CSR', color: 'rgb(203,231,255)', url: CSR_URL },
+  ];
 
-  const [founderMessages, setFounderMessages] = useState([1, 1]);
+  const founderMessages = [
+    {
+      name: 'Minal Anand',
+      // eslint-disable-next-line global-require
+      image: require('../../../assets/images/minal.png'),
+      designation: 'Founder & CEO',
+      desc:
+        'Minal is the Founder and Chief Executive Officer at GuruQ, a unique and ' +
+        'integrated digital platform that promises to bring high quality standards and new age methodologies ' +
+        'to the way education is imparted in India. A graduate in Business Administration from the School ' +
+        'of Management at Boston University...',
+    },
+    {
+      name: 'Jai Karan Anand',
+      // eslint-disable-next-line global-require
+      image: require('../../../assets/images/jai.png'),
+      designation: 'Co-Founder',
+      desc:
+        'Jai Karan Anand is the co-founder of GuruQ and perfectly complements ' +
+        "Minal Anand's Business and Strategy acumen with his creative expertise and out-of-the-box tactical planning abilities...",
+    },
+  ];
 
   const renderAboutDetail = (item, index) => (
     <TouchableOpacity
-      onPress={() => alert('coming')}
+      onPress={() => Linking.openURL(item.url)}
       style={{
         flexDirection: 'column',
         marginTop: RfH(20),
-        marginRight: index % 2 == 0 ? RfH(16) : 0,
+        marginRight: index % 2 === 0 ? RfH(16) : 0,
         paddingVertical: RfW(24),
         borderRadius: RfH(8),
         flex: 0.5,
         backgroundColor: item.color,
-      }}>
+      }}
+      activeOpactity={0.8}>
       <View
         style={{
           flexDirection: 'column',
@@ -57,8 +89,7 @@ function AboutUs({ navigation }) {
 
   const renderFounderMessage = (item, index) => (
     <View style={{ marginTop: RfH(16), flex: 1 }}>
-      <TouchableWithoutFeedback
-        onPress={() => alert('coming')}
+      <View
         style={{
           flexDirection: 'column',
           justifyContent: 'flex-end',
@@ -79,7 +110,13 @@ function AboutUs({ navigation }) {
                 alignItems: 'flex-start',
                 justifyContent: 'center',
               }}>
-              <TutorImageComponent tutor={item?.tutor} height={64} width={64} styling={{ borderRadius: RfH(64) }} />
+              <CustomImage
+                imageWidth={RfH(64)}
+                imageHeight={RfH(64)}
+                image={item.image}
+                imageResizeMode="cover"
+                styling={{ borderRadius: RfH(64) }}
+              />
             </View>
             <View
               style={{
@@ -94,7 +131,7 @@ function AboutUs({ navigation }) {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Minal Anand</Text>
+                <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.name}</Text>
               </View>
               <Text
                 style={{
@@ -102,7 +139,7 @@ function AboutUs({ navigation }) {
                   fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
                   marginTop: RfH(2),
                 }}>
-                Founder & CEO
+                {item.designation}
               </Text>
               <View
                 style={{
@@ -117,15 +154,17 @@ function AboutUs({ navigation }) {
                     fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
                     marginTop: RfH(2),
                   }}>
-                  Minal is the found and CEO of Guruq, a unique and integrated digital platform that promises the ...
+                  {item.desc}
                 </Text>
               </View>
-              <View
+              <TouchableOpacity
                 style={{
                   justifyContent: 'center',
                   alignItems: 'flex-end',
                   marginTop: RfH(8),
-                }}>
+                }}
+                activeOpacity={0.8}
+                onPress={() => Linking.openURL(CEO_MESSAGE_URL)}>
                 <Text
                   style={{
                     color: Colors.brandBlue2,
@@ -134,12 +173,12 @@ function AboutUs({ navigation }) {
                   }}>
                   Know More
                 </Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
-          {index != founderMessages.length - 1 && <View style={[commonStyles.lineSeparator]} />}
+          {index !== founderMessages.length - 1 && <View style={[commonStyles.lineSeparator]} />}
         </View>
-      </TouchableWithoutFeedback>
+      </View>
     </View>
   );
 
@@ -158,7 +197,10 @@ function AboutUs({ navigation }) {
           </View>
           <View style={{ height: RfH(8) }} />
 
-          <TouchableOpacity onPress={() => alert('coming')} style={{ marginTop: RfH(20) }} activeOpacity={0.8}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL(ABOUT_US_URL)}
+            style={{ marginTop: RfH(20) }}
+            activeOpacity={0.8}>
             <Image
               style={{
                 width: Dimensions.get('window').width - 32,

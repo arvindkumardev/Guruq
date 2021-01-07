@@ -5,6 +5,8 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import { isEmpty } from 'lodash';
+import { Images } from '../../theme';
+
 import Colors from '../../theme/colors';
 import { RfH, RfW } from '../../utils/helpers';
 import { CustomCheckBox, Loader, ScreenHeader } from '../../components';
@@ -15,6 +17,7 @@ import { BackgroundCheckStatusEnum } from '../common/enums';
 import { WEBSITE_URL } from '../../utils/constants';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 import { tutorDetails } from '../../apollo/cache';
+import ActionModal from './components/helpSection';
 
 function BackgroundCheck() {
   const isFocussed = useIsFocused();
@@ -22,6 +25,7 @@ function BackgroundCheck() {
   const [consentCheckBox, setConsentCheckBox] = useState(false);
   const [tncCheckBox, setTncCheckBox] = useState(false);
   const [backgroundStatus, setBackgroundStatus] = useState('');
+  const [openMenu, setOpenMenu] = useState(false);
 
   const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
@@ -76,7 +80,15 @@ function BackgroundCheck() {
     <>
       <Loader isLoading={updateBackgroundCheckLoading || tutorLeadDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, flex: 1 }]}>
-        <ScreenHeader label="Background Verification" horizontalPadding={RfW(8)} homeIcon />
+        <ScreenHeader
+          showRightIcon
+          rightIcon={Images.vertical_dots_b}
+          onRightIconClick={() => setOpenMenu(true)}
+          label="Background Verification"
+          horizontalPadding={RfW(8)}
+          homeIcon
+        />
+
         {backgroundStatus === BackgroundCheckStatusEnum.NOT_STARTED.label && (
           <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(20) }}>
             <View
@@ -147,6 +159,7 @@ function BackgroundCheck() {
           </View>
         )}
       </View>
+      {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
     </>
   );
 }

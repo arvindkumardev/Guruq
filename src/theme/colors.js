@@ -4,7 +4,6 @@ const Colors = {
   lightBlack: '#222222',
   darkGrey: '#818181',
   lightGrey: '#f6f6f6',
-  warmGrey:'rgb(129,129,129)',
   brandBlue: '#1E5AA0',
   brandBlue2: '#07A6EE',
 

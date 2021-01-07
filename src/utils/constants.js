@@ -42,6 +42,12 @@ export const QPOINTS_FAQ_URL = `${WEBSITE_URL}/faqs/qpoints-faqs`;
 export const BOOKING_FAQ_URL = `${WEBSITE_URL}/faqs/booking-faqs`;
 export const LEGAL_FAQ_URL = `${WEBSITE_URL}/faqs/legal-terms-conditions`;
 
+export const ABOUT_US_URL = `https://guruq.in/about-us`;
+export const CEO_MESSAGE_URL = `https://guruq.in/ceo-message`;
+export const CSR_URL = `https://guruq.in/guruq-csr`;
+export const IN_NEWS_URL = 'https://guruq.in/guruq-in-news';
+export const ACADEMIC_BOARD_URL = 'https://guruq.in/academic-board';
+
 export const SCHOOL_EDUCATION = 'School Education';
 export const COMPETITIVE_EXAM = 'Competitive Exam';
 export const STUDY_ABROAD = 'Study Abroad';

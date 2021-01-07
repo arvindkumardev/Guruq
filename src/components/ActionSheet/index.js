@@ -8,7 +8,7 @@ import styles from './styles';
 function ActionSheet(props) {
   const { isVisible, handleCancel, cancelText, topLabel, actions, isTopLabelVisible, selectedIndex } = props;
   return (
-    <Modal animationType="slide" transparent visible={isVisible} onRequestClose={handleCancel}>
+    <Modal animationType="fade" transparent visible={isVisible} onRequestClose={handleCancel}>
       <TouchableWithoutFeedback onPressIn={handleCancel} activeOpacity={0.8}>
         <View style={styles.mainModalContainer}>
           <View style={styles.modalContainer}>
