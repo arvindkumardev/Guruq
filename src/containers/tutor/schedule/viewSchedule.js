@@ -82,7 +82,7 @@ function ViewSchedule() {
       <View style={[commonStyles.mainContainer, { paddingHorizontal: RfW(0), backgroundColor: Colors.white }]}>
         <ScreenHeader
           homeIcon
-          label="Schedule"
+          label="My Availability"
           horizontalPadding={RfW(16)}
           showRightIcon
           rightIcon={Images.add}
@@ -148,14 +148,15 @@ function ViewSchedule() {
                 commonStyles.pageTitleThirdRow,
                 { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
               ]}>
-              No schedule available
+              Availability Not Marked/Available
             </Text>
             <Text
               style={[
                 commonStyles.regularMutedText,
                 { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
               ]}>
-              Looks like you have not provide the schedule for the day.
+              {/* Let me know your availabilityYou haven't provided your availability for the day. Mark your availability now!. */}
+              Let students know your availability. Mark your availability now!
             </Text>
             <View style={{ height: RfH(40) }} />
             {!moment(selectedDate).isBefore(new Date()) && (
