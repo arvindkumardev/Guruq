@@ -142,7 +142,7 @@ function PersonalInformation(props) {
     },
     onCompleted(data) {
       if (data) {
-        console.log(data);
+        alertBox('Image updated successfully!');
       }
     },
   });
@@ -154,7 +154,7 @@ function PersonalInformation(props) {
     },
     onCompleted(data) {
       if (data) {
-        console.log(data);
+        alertBox('Image updated successfully!');
       }
     },
   });
