@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, ScrollView } from 'react-native';
 import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -211,76 +211,80 @@ const PtStartScreen = (props) => {
     <>
       <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading} />
       <ScreenHeader label="Proficiency Test" homeIcon horizontalPadding={RfW(16)} />
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: Colors.white,
-          paddingHorizontal: RfH(16),
-        }}>
-        {(ptDetail?.status === PtStatus.FAILED.label || ptDetail?.status === PtStatus.PASSED.label) && (
-          <View style={{ marginTop: RfH(15) }}>
-            {renderOffering()}
-            {renderScore()}
-          </View>
-        )}
-
-        {ptDetail?.status === PtStatus.PENDING.label && (
-          <>
-            <View style={{ marginVertical: RfH(15) }}>
-              <View>{renderOffering()}</View>
-              <View style={{ alignItems: 'center', marginVertical: RfH(40) }}>
-                <Image source={Images.ptTest} style={{ height: RfH(210), width: RfW(260) }} />
-              </View>
-              <Text
-                style={[
-                  commonStyles.headingPrimaryText,
-                  { marginTop: RfH(40), marginBottom: RfH(20), textAlign: 'center' },
-                ]}>
-                Test Instructions
-              </Text>
-              <View style={{ marginHorizontal: RfW(16) }}>
-                <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center' }]}>
-                  <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
-                  <Text style={{ marginLeft: RfW(16) }}>There will be 30 questions.</Text>
-                </View>
-                <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center', marginTop: RfH(8) }]}>
-                  <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
-                  <Text style={{ marginLeft: RfW(16) }}>You will have 30 minutes to complete the test.</Text>
-                </View>
-              </View>
-              <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(40), textAlign: 'center' }]}>
-                GOOD LUCK!
-              </Text>
+      <ScrollView
+        style={{ backgroundColor: Colors.white, paddingBottom: RfH(40) }}
+        showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: Colors.white,
+            paddingHorizontal: RfH(16),
+          }}>
+          {(ptDetail?.status === PtStatus.FAILED.label || ptDetail?.status === PtStatus.PASSED.label) && (
+            <View style={{ marginTop: RfH(15) }}>
+              {renderOffering()}
+              {renderScore()}
             </View>
-          </>
-        )}
+          )}
 
-        {ptDetail?.status === PtStatus.EXEMPTED.label && (
-          <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
-            <Text style={commonStyles.headingPrimaryText}> You are exempted from the test</Text>
-          </View>
-        )}
+          {ptDetail?.status === PtStatus.PENDING.label && (
+            <>
+              <View style={{ marginVertical: RfH(15) }}>
+                <View>{renderOffering()}</View>
+                <View style={{ alignItems: 'center', marginVertical: RfH(40) }}>
+                  <Image source={Images.ptTest} style={{ height: RfH(150), width: RfW(150) }} resizeMode="contain" />
+                </View>
+                <Text
+                  style={[
+                    commonStyles.headingPrimaryText,
+                    { marginTop: RfH(20), marginBottom: RfH(20), textAlign: 'center' },
+                  ]}>
+                  Test Instructions
+                </Text>
+                <View style={{ marginHorizontal: RfW(16) }}>
+                  <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center' }]}>
+                    <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
+                    <Text style={{ marginLeft: RfW(16) }}>There will be 30 questions.</Text>
+                  </View>
+                  <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center', marginTop: RfH(8) }]}>
+                    <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
+                    <Text style={{ marginLeft: RfW(16) }}>You will have 30 minutes to complete the test.</Text>
+                  </View>
+                </View>
+                <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(20), textAlign: 'center' }]}>
+                  GOOD LUCK!
+                </Text>
+              </View>
+            </>
+          )}
 
-        {!attemptExhausted && (
-          <Button
-            onPress={handleClick}
-            style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
-            <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
-          </Button>
-        )}
-        {attemptExhausted && (
-          <View style={{ marginTop: RfH(30), justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
-              All PT attempts Exhausted. Contact the customer care.
-            </Text>
+          {ptDetail?.status === PtStatus.EXEMPTED.label && (
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
+              <Text style={commonStyles.headingPrimaryText}> You are exempted from the test</Text>
+            </View>
+          )}
+
+          {!attemptExhausted && !isEmpty(ptDetail) && (
             <Button
-              onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}
-              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
-              <Text style={commonStyles.textButtonPrimary}>Customer care</Text>
+              onPress={handleClick}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
+              <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
             </Button>
-          </View>
-        )}
-      </View>
+          )}
+          {attemptExhausted && (
+            <View style={{ marginTop: RfH(20), justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
+                {'All PT attempts Exhausted.\n Contact the customer care.'}
+              </Text>
+              <Button
+                onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
+                <Text style={commonStyles.textButtonPrimary}>Customer care</Text>
+              </Button>
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </>
   );
 };

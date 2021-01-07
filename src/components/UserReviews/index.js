@@ -13,6 +13,7 @@ import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { Colors, Images, Fonts } from '../../theme';
 import commonStyles from '../../theme/styles';
 import ActionSheet from '../ActionSheet';
+import StudentImageComponent from '../StudentImageComponent';
 
 function UserReviews(props) {
   const { submitFunction, tutorId } = props;
@@ -34,16 +35,7 @@ function UserReviews(props) {
           paddingHorizontal: RfW(16),
         }}>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-          <IconButtonWrapper
-            iconHeight={RfH(40)}
-            iconWidth={RfH(40)}
-            iconImage={getUserImageUrl(
-              item?.createdBy?.profileImage?.filename,
-              item?.createdBy?.gender,
-              item?.createdBy?.id
-            )}
-            styling={{ borderRadius: RfH(20) }}
-          />
+          <StudentImageComponent student={item.createdBy} height={40} width={40} styling={{ borderRadius: RfH(20) }} />
           <View
             style={{
               flexDirection: 'column',

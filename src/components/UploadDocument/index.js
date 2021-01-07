@@ -101,7 +101,7 @@ function UploadDocument(props) {
       .then((image) => {
         console.log('image-', image);
         handleUpload({
-          name: image.filename?image.filename:`${uuid()}.jpg`,
+          name: image.filename ? image.filename : `${uuid()}.jpg`,
           type: image.mime,
           uri: image.path,
         });
@@ -130,9 +130,8 @@ function UploadDocument(props) {
       mediaType: 'photo',
     })
       .then((images) => {
-        console.log('gallery image-', images);
         handleUpload({
-          name: images.filename,
+          name: images.filename ? images.filename : `${uuid()}.jpg`,
           type: images.mime,
           uri: images.path,
         });

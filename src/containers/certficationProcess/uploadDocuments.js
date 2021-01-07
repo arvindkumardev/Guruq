@@ -127,6 +127,7 @@ function UploadDocuments() {
     formdata.append('file', file);
     setIsFileUploading(true);
 
+
     try {
       const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
         headers,
