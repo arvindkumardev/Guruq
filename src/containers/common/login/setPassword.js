@@ -47,6 +47,7 @@ function SetPassword({ route }) {
             userDetails(data.setPassword);
             userType(data.setPassword.type);
             isLoggedIn(true);
+            console.log(true);
           });
         }
       }
