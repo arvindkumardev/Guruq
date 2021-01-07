@@ -4,6 +4,7 @@ import SubjectIcons from './subjectIcons';
 
 const Images = {
   aboutGuru: require('../assets/images/about-guru.png'),
+  aboutUs: require('../assets/images/aboutus.png'),
   abroad: require('../assets/images/abroad.png'),
   active_blue_circle: require('../assets/images/active_blue_circle.png'),
   moreInformation: require('../assets/images/add.png'),

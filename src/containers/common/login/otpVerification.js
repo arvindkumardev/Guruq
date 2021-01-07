@@ -71,7 +71,10 @@ function OtpVerification(props) {
               number: mobileObj.mobile,
             });
           } else {
-            navigation.navigate(NavigationRouteNames.SET_PASSWORD);
+            let {fromChangePassword} = route.params
+            navigation.navigate(NavigationRouteNames.SET_PASSWORD,{
+              fromChangePassword : fromChangePassword ? fromChangePassword :false
+            });
           }
         });
       }

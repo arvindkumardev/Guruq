@@ -1,19 +1,19 @@
 import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { Button, Input, Item } from 'native-base';
+import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
-import { CustomCheckBox, CustomRadioButton, CustomSelect, Loader, ScreenHeader } from '../../../../components';
-import { offeringsMasterData, studentDetails, tutorDetails, userType } from '../../../../apollo/cache';
-import commonStyles from '../../../../theme/styles';
-import { Colors } from '../../../../theme';
-import { alertBox, RfH, RfW, startOfDay } from '../../../../utils/helpers';
-import CustomDatePicker from '../../../../components/CustomDatePicker';
+import { CustomCheckBox, CustomRadioButton, CustomSelect, Loader, ScreenHeader } from '../../components';
+import { offeringsMasterData, studentDetails, tutorDetails, userType } from '../../apollo/cache';
+import commonStyles from '../../theme/styles';
+import { Colors } from '../../theme';
+import { alertBox, RfH, RfW, startOfDay } from '../../utils/helpers';
+import CustomDatePicker from '../../components/CustomDatePicker';
 import { ADD_UPDATE_EDUCATION_DETAILS } from './education.mutation';
-import { SCHOOL_EDUCATION } from '../../../../utils/constants';
-import { HighSchoolStreamEnum } from '../../enums';
-import { UserTypeEnum } from '../../../../common/userType.enum';
+import { SCHOOL_EDUCATION } from '../../utils/constants';
+import { HighSchoolStreamEnum } from '../common/enums';
+import { UserTypeEnum } from '../../common/userType.enum';
 import { GET_DEGREE_LIST } from './education.query';
 
 function AddEditEducation() {
@@ -76,8 +76,6 @@ function AddEditEducation() {
     },
   });
 
-  console.log('degree', degree);
-
   const checkValues = () => {
     if (isEmpty(schoolName)) {
       alertBox('Please provide the school/institute name');
@@ -135,7 +133,6 @@ function AddEditEducation() {
         dto.degree = { degreeLevel: selectedDegree.degreeLevel, name: selectedDegree.name, id: selectedDegree.id };
         dto.fieldOfStudy = fieldOfStudy;
       }
-      console.log('dto', dto);
       saveEducation({
         variables: {
           educationDto: dto,
@@ -155,16 +152,14 @@ function AddEditEducation() {
         <ScreenHeader homeIcon label="Education" horizontalPadding={RfW(16)} />
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(44) }} />
-          <View>
-            <Text style={commonStyles.smallMutedText}>Name of School/Institute</Text>
-            <Item>
-              <Input
-                value={schoolName}
-                onChangeText={(text) => setSchoolName(text)}
-                style={commonStyles.regularPrimaryText}
-              />
-            </Item>
-          </View>
+          <Item floatingLabel>
+            <Label style={commonStyles.smallMutedText}>Name of School/Institute</Label>
+            <Input
+              value={schoolName}
+              onChangeText={(text) => setSchoolName(text)}
+              style={commonStyles.regularPrimaryText}
+            />
+          </Item>
           <View style={{ height: RfH(30) }} />
           <View style={{ flexDirection: 'row', paddingHorizontal: RfW(10) }}>
             <TouchableWithoutFeedback onPress={() => setEducationType(0)}>
@@ -263,12 +258,10 @@ function AddEditEducation() {
                 </Item>
               </View>
               <View style={{ height: RfH(24) }} />
-              <View>
-                <Text style={commonStyles.smallMutedText}>Field of Study</Text>
-                <Item>
-                  <Input value={fieldOfStudy} onChangeText={(text) => setFieldOfStudy(text)} />
-                </Item>
-              </View>
+              <Item floatingLabel>
+                <Label style={commonStyles.smallMutedText}>Field of Study</Label>
+                <Input value={fieldOfStudy} onChangeText={(text) => setFieldOfStudy(text)} />
+              </Item>
             </View>
           )}
           <View style={{ height: RfH(24) }} />

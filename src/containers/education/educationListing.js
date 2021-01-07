@@ -5,14 +5,14 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { startCase } from 'lodash';
-import { IconButtonWrapper, Loader, ScreenHeader } from '../../../../components';
-import { userType } from '../../../../apollo/cache';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Images } from '../../../../theme';
-import {alertBox, printDate, printYear, RfH, RfW} from '../../../../utils/helpers';
-import NavigationRouteNames from '../../../../routes/screenNames';
-import { UserTypeEnum } from '../../../../common/userType.enum';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
+import { userType } from '../../apollo/cache';
+import commonStyles from '../../theme/styles';
+import { Colors, Images } from '../../theme';
+import {alertBox, printDate, printYear, RfH, RfW} from '../../utils/helpers';
+import NavigationRouteNames from '../../routes/screenNames';
+import { UserTypeEnum } from '../../common/userType.enum';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { DELETE_TUTOR_EDUCATION_DETAILS } from './education.mutation';
 import { GET_STUDENT_EDUCATION_DETAILS, GET_TUTOR_EDUCATION_DETAILS } from './education.query';
 
@@ -143,7 +143,7 @@ function EducationListing() {
           rightIcon={Images.add}
           onRightIconClick={handleAddEditEducation}
         />
-        <View style={{ height: RfH(24) }} />
+        <View style={{ height: RfH(10) }} />
         {!isListEmpty ? (
           <View style={{ paddingHorizontal: RfW(16) }}>
             <FlatList
@@ -151,6 +151,7 @@ function EducationListing() {
               data={educationDetails}
               renderItem={({ item, index }) => renderEducation(item, index)}
               keyExtractor={(item, index) => index.toString()}
+              scrollEnabled={educationDetails.length > 6}
             />
           </View>
         ) : (

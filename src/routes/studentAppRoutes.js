@@ -1,6 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './screenNames';
+import OtpVerification from '../containers/common/login/otpVerification';
+import SetPassword from '../containers/common/login/setPassword';
+
 import StudentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
 import StudyAreaSelector from '../containers/student/studyArea/studyAreaSelector';
 import BoardSelector from '../containers/student/studyArea/boardSelector';
@@ -26,8 +29,8 @@ import WebViewPage from '../components/WebViewPage';
 import Notifications from '../containers/student/dashboard/notifications';
 import SendFeedback from '../containers/common/sendFeedback';
 import CustomerCare from '../containers/common/customerCare/customerCare';
-import ParentListing from '../containers/common/profileScreens/parentsDetail/parentListing';
-import AddEditParents from '../containers/common/profileScreens/parentsDetail/addEditParents';
+import ParentListing from '../containers/parentsDetail/parentListing';
+import AddEditParents from '../containers/parentsDetail/addEditParents';
 import BookingList from '../containers/student/profile/purchasedHistory/bookingList';
 import BookingDetails from '../containers/student/profile/purchasedHistory/bookingDetails';
 import Refund from '../containers/student/profile/purchasedHistory/refund';
@@ -147,7 +150,16 @@ export const getStudentRoutes = () => {
         component={Notifications}
         options={{ headerShown: false }}
       />
-
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.OTP_VERIFICATION}
+        component={OtpVerification}
+        options={{ headerShown: false }}
+      />
+   <Stack.Screen
+        name={NavigationRouteNames.STUDENT.SET_PASSWORD}
+        component={SetPassword}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.PARENTS_LIST}
         component={ParentListing}

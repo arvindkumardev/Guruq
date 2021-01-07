@@ -202,7 +202,7 @@ function CalendarView(props) {
                 <Text
                   style={[
                     commonStyles.regularMutedText,
-                    { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
+                    { marginHorizontal: RfW(40), textAlign: 'center', marginTop: RfH(16) },
                   ]}>
                   {isStudent
                     ? 'Looks like you have not scheduled any class yet.'

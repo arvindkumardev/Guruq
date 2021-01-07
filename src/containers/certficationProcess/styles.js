@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     // paddingVertical: RfH(31),
     borderWidth: RfW(0.3),
     // borderColor: Colors.darkGrey,
-    // borderLeftWidth: RfW(8),
+    borderLeftWidth: RfW(8),
     marginTop: RfH(20),
     // borderTopRightRadius: RfH(8),
     // borderBottomRightRadius: RfH(8),

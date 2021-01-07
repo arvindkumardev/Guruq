@@ -1,19 +1,19 @@
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import { Icon } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Swiper from 'react-native-swiper';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { isEmpty } from 'lodash';
-import { offeringsMasterData, studentDetails, userDetails, interestingOfferingData } from '../../../../apollo/cache';
+import { interestingOfferingData, offeringsMasterData, studentDetails, userDetails } from '../../../../apollo/cache';
 import {
   IconButtonWrapper,
-  SelectSubjectModal,
   Loader,
+  SelectSubjectModal,
   TutorImageComponent,
   UpcomingClassComponent,
 } from '../../../../components';
@@ -22,23 +22,16 @@ import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import {
-  alertBox,
-  getFullName,
-  getSubjectIcons,
-  getUserImageUrl,
-  printDate,
-  printTime,
-  RfH,
-  RfW,
-} from '../../../../utils/helpers';
+import { alertBox, getFullName, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
 import { GET_CART_ITEMS, GET_SCHEDULED_CLASSES } from '../../booking.query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
 import { GET_FAVOURITE_TUTORS } from '../../tutor-query';
 import StudentOfferingModal from './studentOfferingModal';
 import NotificationRedirection from '../../../notification/notificationRedirection';
+import CustomImage from '../../../../components/CustomImage';
 
+const carouselItems = [Images.dash_img1, Images.dash_img2, Images.dash_img3];
 function StudentDashboard(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
@@ -57,6 +50,11 @@ function StudentDashboard(props) {
   const [sponsoredTutors, setSponsoredTutors] = useState([]);
   const [selectedOfferingSubjects, setSelectedOfferingSubjects] = useState([]);
   const [cartCount, setCartCount] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const SLIDER_WIDTH = Dimensions.get('window').width;
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.85);
+  const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 3) / 4);
 
   const [
     getOfferingMasterData,
@@ -115,7 +113,6 @@ function StudentDashboard(props) {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        // const error = e.graphQLErrors[0].extensions.exception.response;
         navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
       }
     },
@@ -282,13 +279,7 @@ function StudentDashboard(props) {
           justifyContent: 'flex-end',
           alignItems: 'stretch',
         }}>
-        <View
-          style={
-            {
-              // backgroundColor: 'rgb(230,252,231)',
-              // borderRadius: 8,
-            }
-          }>
+        <View>
           <View
             style={{
               flexDirection: 'row',
@@ -326,16 +317,6 @@ function StudentDashboard(props) {
               <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
                 {item?.tutor?.teachingExperience ? `${item?.tutor?.teachingExperience} years of Experience` : ''}
               </Text>
-              {/* <View */}
-              {/*  style={{ */}
-              {/*    flexDirection: 'row', */}
-              {/*    justifyContent: 'space-between', */}
-              {/*    alignItems: 'center', */}
-              {/*  }}> */}
-              {/*  <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}> */}
-              {/*    {getSubjects(item)} */}
-              {/*  </Text> */}
-              {/* </View> */}
 
               <View style={{ flexDirection: 'row', marginTop: RfH(8) }}>
                 <IconButtonWrapper
@@ -416,6 +397,57 @@ function StudentDashboard(props) {
     }
   };
 
+  const renderCardItem = (item) => (
+    <View style={{ width: ITEM_WIDTH, alignItems: 'center', justifyContent: 'center' }}>
+      <CustomImage
+        image={item}
+        imageWidth={ITEM_WIDTH}
+        imageHeight={ITEM_HEIGHT}
+        imageResizeMode="contain"
+        styling={{ borderRadius: RfW(3) }}
+      />
+    </View>
+  );
+
+  const pagination = () => (
+    <Pagination
+      dotsLength={carouselItems.length}
+      activeDotIndex={activeSlide}
+      containerStyle={{ paddingVertical: RfH(4) }}
+      dotStyle={{
+        width: RfH(10),
+        height: RfH(10),
+        borderRadius: RfH(5),
+        marginHorizontal: RfW(1),
+        backgroundColor: Colors.brandBlue2,
+      }}
+      inactiveDotStyle={
+        {
+          // Define styles for inactive dots here
+        }
+      }
+      inactiveDotOpacity={0.4}
+      inactiveDotScale={0.6}
+    />
+  );
+
+  const topCarousel = () => (
+    <>
+      <Carousel
+        layout="default"
+        data={carouselItems}
+        renderItem={({ item, index }) => renderCardItem(item, index)}
+        sliderWidth={Dimensions.get('window').width}
+        itemWidth={ITEM_WIDTH}
+        onSnapToItem={(index) => setActiveSlide(index)}
+        // autoplay
+        // autoplayDelay={100}
+        // autoplayInterval={5000}
+        // loop
+      />
+      {pagination()}
+    </>
+  );
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -423,8 +455,18 @@ function StudentDashboard(props) {
       <Loader isLoading={interestedOfferingsLoading} />
       <NotificationRedirection />
 
-      <View style={[commonStyles.mainContainer]}>
-        <View style={{ height: 44, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      <View style={{flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',}}>
+        <View
+          style={{
+            height: RfH(44),
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: RfW(16),
+          }}>
           <View style={{ flex: 0.7 }}>
             <TouchableOpacity onPress={() => setStudentOfferingModalVisible(true)}>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
@@ -450,8 +492,6 @@ function StudentDashboard(props) {
               {cartCount > 0 && (
                 <View
                   style={{
-                    // backgroundColor: Colors.brandBlue2,
-                    // borderRadius: RfH(20),
                     position: 'absolute',
                     top: RfH(0),
                     left: RfW(16),
@@ -497,6 +537,7 @@ function StudentDashboard(props) {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
+              paddingHorizontal: RfW(16),
             }}>
             <View style={{ flex: 0.7 }}>
               <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
@@ -515,170 +556,146 @@ function StudentDashboard(props) {
               </TouchableWithoutFeedback>
             </View>
           </View>
-          <View style={{ height: RfH(220), marginTop: RfH(29) }}>
-            <Swiper horizontal style={{ overflow: 'visible' }} paginationStyle={{ position: 'absolute', bottom: 10 }}>
-              <View
-                style={{
-                  backgroundColor: '#ceecfe',
-                  borderRadius: 20,
-                  marginRight: 8,
-                }}>
-                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img1} />
-              </View>
-              <View
-                style={{
-                  backgroundColor: '#ceecfe',
-                  borderRadius: 20,
-                  marginRight: 8,
-                }}>
-                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img2} />
-              </View>
-              <View
-                style={{
-                  backgroundColor: '#ceecfe',
-                  borderRadius: 20,
-                  marginRight: 8,
-                }}>
-                <IconButtonWrapper iconHeight={RfH(185)} iconWidth={RfW(300)} iconImage={Images.dash_img3} />
-              </View>
-            </Swiper>
-          </View>
-          {upcomingClasses.length > 0 && (
-            <View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
-                  Upcoming Classes
-                </Text>
-                <TouchableWithoutFeedback onPress={() => changeTab(2)}>
-                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
-                    View All
-                  </Text>
-                </TouchableWithoutFeedback>
-              </View>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={upcomingClasses}
-                  renderItem={({ item, index }) => <UpcomingClassComponent classDetails={item} index={index} />}
-                  keyExtractor={(item, index) => index.toString()}
-                />
-              </View>
-            </View>
-          )}
 
-          {!interestedOfferingsLoading && (
-            <>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: RfH(25),
-                }}>
-                <Text
-                  style={{
-                    color: Colors.primaryText,
-                    fontFamily: Fonts.bold,
-                    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-                  }}>
-                  Tutors By Subjects
-                </Text>
-                <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
-                  <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
-                    View All
+          {topCarousel()}
+          <View style={{ paddingHorizontal: RfW(16) }}>
+            {upcomingClasses.length > 0 && (
+              <View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                  <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                    Upcoming Classes
                   </Text>
-                </TouchableWithoutFeedback>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                <FlatList
-                  showsHorizontalScrollIndicator={false}
-                  numColumns={4}
-                  data={selectedOfferingSubjects.slice(0, 8)}
-                  renderItem={({ item }) => renderSubjects(item)}
-                  keyExtractor={(item, index) => index.toString()}
-                />
-              </View>
-            </>
-          )}
-          {favouriteTutors.length > 0 && (
-            <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-end',
-                  marginTop: RfH(25),
-                }}>
-                <Text
-                  style={{
-                    color: Colors.primaryText,
-                    fontFamily: Fonts.bold,
-                    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-                  }}>
-                  Favourite Tutors
-                </Text>
-                {favouriteTutors.length > 3 && (
-                  <TouchableWithoutFeedback
-                    onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}>
+                  <TouchableWithoutFeedback onPress={() => changeTab(2)}>
                     <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                       View All
                     </Text>
                   </TouchableWithoutFeedback>
-                )}
+                </View>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={upcomingClasses}
+                    renderItem={({ item, index }) => <UpcomingClassComponent classDetails={item} index={index} />}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </View>
               </View>
-              <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={favouriteTutors}
-                renderItem={({ item }) => renderTutors(item)}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </View>
-          )}
-          {sponsoredTutors.length > 0 && (
-            <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                  marginTop: RfH(25),
-                }}>
-                <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
-                  Recommended Tutors
-                </Text>
-              </View>
+            )}
+
+            {!interestedOfferingsLoading && (
+              <>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: RfH(25),
+                  }}>
+                  <Text
+                    style={{
+                      color: Colors.primaryText,
+                      fontFamily: Fonts.bold,
+                      fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                    }}>
+                    Tutors By Subjects
+                  </Text>
+                  <TouchableWithoutFeedback onPress={() => setShowAllSubjects(true)}>
+                    <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                      View All
+                    </Text>
+                  </TouchableWithoutFeedback>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                  <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    numColumns={4}
+                    data={selectedOfferingSubjects.slice(0, 8)}
+                    renderItem={({ item }) => renderSubjects(item)}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </View>
+              </>
+            )}
+            {favouriteTutors.length > 0 && (
               <View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                    marginTop: RfH(25),
+                  }}>
+                  <Text
+                    style={{
+                      color: Colors.primaryText,
+                      fontFamily: Fonts.bold,
+                      fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                    }}>
+                    Favourite Tutors
+                  </Text>
+                  {favouriteTutors.length > 3 && (
+                    <TouchableWithoutFeedback
+                      onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}>
+                      <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                        View All
+                      </Text>
+                    </TouchableWithoutFeedback>
+                  )}
+                </View>
                 <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={sponsoredTutors}
-                  renderItem={({ item, index }) => renderSponsoredTutor(item, index)}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={favouriteTutors}
+                  renderItem={({ item }) => renderTutors(item)}
                   keyExtractor={(item, index) => index.toString()}
                 />
               </View>
-            </View>
-          )}
-          <TouchableOpacity
-            onPress={() => navigation.navigate(NavigationRouteNames.PYTN_LISTING, { selectedOffering })}
-            style={{ marginTop: RfH(20) }}
-            activeOpacity={0.8}>
-            <Image
-              style={{ width: Dimensions.get('window').width, height: RfH(170) }}
-              source={Images.post_needs}
-              resizeMode="stretch"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
-            style={{ marginBottom: RfH(15) }}
-            activeOpacity={0.8}>
-            <Image
-              style={{ width: Dimensions.get('window').width, height: RfH(200) }}
-              source={Images.refer_earn_new}
-              resizeMode="stretch"
-            />
-          </TouchableOpacity>
+            )}
+            {sponsoredTutors.length > 0 && (
+              <View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-end',
+                    marginTop: RfH(25),
+                  }}>
+                  <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                    Recommended Tutors
+                  </Text>
+                </View>
+                <View>
+                  <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={sponsoredTutors}
+                    renderItem={({ item, index }) => renderSponsoredTutor(item, index)}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </View>
+              </View>
+            )}
+            <TouchableOpacity
+              onPress={() => navigation.navigate(NavigationRouteNames.PYTN_LISTING, { selectedOffering })}
+              style={{ marginTop: RfH(20) }}
+              activeOpacity={0.8}>
+              <Image
+                style={{ width: Dimensions.get('window').width, height: RfH(170) }}
+                source={Images.post_needs}
+                resizeMode="stretch"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
+              style={{ marginBottom: RfH(15) }}
+              activeOpacity={0.8}>
+              <Image
+                style={{ width: Dimensions.get('window').width, height: RfH(200) }}
+                source={Images.refer_earn_new}
+                resizeMode="stretch"
+              />
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </View>
 

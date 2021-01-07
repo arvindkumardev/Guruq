@@ -10,7 +10,7 @@ import { alertBox, isValidEmail, removeToken, RfH, RfW, storeData } from '../../
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import {isLoggedIn, isSplashScreenVisible, tutorDetails} from '../../../apollo/cache';
+import {isLoggedIn, isSplashScreenVisible, tutorDetails, userDetails, userType} from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import LoginCheck from './loginCheck';
 import {GET_CURRENT_TUTOR_QUERY} from "../graphql-query";
@@ -39,6 +39,8 @@ function SignUp(props) {
       if (data) {
         removeToken().then(() => {
           storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
+            userDetails(data.signUp);
+            userType(data.signUp.type);
             isLoggedIn(true);
           });
         });

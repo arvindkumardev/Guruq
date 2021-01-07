@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation, useSubscription } from '@apollo/client';
+import { useLazyQuery, useReactiveVar,useMutation, useSubscription } from '@apollo/client';
 import emojiUtils from 'emoji-utils';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -9,22 +9,26 @@ import IconButtonWrapper from '../../../components/IconWrapper';
 import Colors from '../../../theme/colors';
 import Fonts from '../../../theme/fonts';
 import Images from '../../../theme/images';
+import {userDetails} from  '../../../apollo/cache';
 import { getFullName, RfH, RfW } from '../../../utils/helpers';
 import { GET_CHAT_MESSAGES, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
 import { dimensions } from './style';
+import { isSameUser } from 'react-native-gifted-chat/lib/utils';
 
 const VideoMessagingModal = (props) => {
   const { visible, onClose, channelName } = props;
-
+  const userInfo = useReactiveVar(userDetails);
   const [chatMessageIds, setChatMessageIds] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
-
+  console.log(userInfo,"userInfouserInfouserInfo")
   const getMessageToRender = (message) => {
+    console.log(message,"messagemessagemessagerender===")
     return {
       ...message,
       _id: message?.id,
       createdAt: message?.createdDate,
-      user: { _id: message?.createdBy.id, name: getFullName(message?.createdBy) },
+      user: { _id: message?.createdBy.id,
+         name: getFullName(message?.createdBy) },
     };
   };
 
@@ -36,6 +40,11 @@ const VideoMessagingModal = (props) => {
     onCompleted: (data) => {
       console.log(data);
       if (data && data?.sendChatMessage) {
+        let obj = data.sendChatMessage
+        obj['createdBy'] = {
+          ...obj.createdBy,
+          id:userInfo.id
+        }
         const message = data.sendChatMessage;
         if (!chatMessageIds.includes(message.id)) {
           setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
@@ -64,8 +73,10 @@ const VideoMessagingModal = (props) => {
                 setChatMessageIds([...chatMessageIds, message.id]);
               }
             }
+            if(ms.length > 0){
+              setChatMessages(ms.reverse());
 
-            setChatMessages(ms);
+            }
           }
         }
         console.log('getChatMessages - setChatMessageIds', chatMessageIds);
@@ -80,7 +91,12 @@ const VideoMessagingModal = (props) => {
     onSubscriptionData: ({ subscriptionData: { data } }) => {
       console.log('onSubscriptionData: ', data);
       if (data && data?.chatMessageSent) {
-        const message = data.chatMessageSent;
+        let obj = data.chatMessageSent
+        obj['createdBy'] = {
+          ...obj.createdBy,
+          id:userInfo.id
+        }
+        const message = obj;
         if (!chatMessageIds.includes(message.id)) {
           setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
           setChatMessageIds([...chatMessageIds, message.id]);
@@ -104,10 +120,11 @@ const VideoMessagingModal = (props) => {
 
   const renderMessage = (props) => {
     const {
+      user,
+      position,
       currentMessage: { text: currText },
     } = props;
 
-    console.log('props', props);
 
     let messageTextStyle;
 
@@ -120,7 +137,18 @@ const VideoMessagingModal = (props) => {
       };
     }
 
-    return <SlackMessage {...props} messageTextStyle={messageTextStyle} />;
+    return <SlackMessage {...props} 
+   
+    wrapperStyle={{
+      backgroundColor:position == 'right' ? '#07a6ee':'#E8E8E8',
+      paddingHorizontal:8,paddingVertical:8,
+      borderRadius:8,
+      marginRight: isSameUser ? 16 :60,
+    }}
+    usernameStyle={{
+      color:position=='right' ?'white':'black'
+    }}
+    messageTextStyle={messageTextStyle} />;
   };
 
   return (
@@ -185,7 +213,7 @@ const VideoMessagingModal = (props) => {
               messages={chatMessages}
               onSend={(messages) => onSend(messages)}
               user={{
-                _id: 10,
+                _id: userInfo.id,
               }}
               renderMessage={renderMessage}
             />

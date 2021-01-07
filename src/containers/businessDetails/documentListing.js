@@ -1,9 +1,9 @@
 import { FlatList, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import commonStyles from '../../../../theme/styles';
-import { IconButtonWrapper, ScreenHeader } from '../../../../components';
-import { Colors, Fonts, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import commonStyles from '../../theme/styles';
+import { IconButtonWrapper, ScreenHeader } from '../../components';
+import { Colors, Fonts, Images } from '../../theme';
+import { RfH, RfW } from '../../utils/helpers';
 
 function DocumentListing() {
   const [list, setList] = useState([

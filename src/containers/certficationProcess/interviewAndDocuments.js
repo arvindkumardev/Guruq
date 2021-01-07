@@ -89,7 +89,7 @@ const InterviewAndDocument = () => {
         handleBack={() => navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATE_STEPS)}
       />
       <TouchableOpacity
-        style={styles.interviewCard}
+        style={[styles.interviewCard,{ borderLeftColor: Colors.orange }]}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW)}
         disabled={!isInterviewNotScheduled()}>
@@ -122,7 +122,7 @@ const InterviewAndDocument = () => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.interviewCard}
+        style={[styles.interviewCard, { borderLeftColor: Colors.green }]}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS)}
         disabled={!isEmpty(tutorDetail?.documents) && tutorDetail?.documents.length === 4}>

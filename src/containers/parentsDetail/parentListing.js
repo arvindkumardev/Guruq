@@ -4,12 +4,12 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
-import { IconButtonWrapper, Loader, ScreenHeader } from '../../../../components';
-import commonStyles from '../../../../theme/styles';
-import { Colors, Images } from '../../../../theme';
-import {alertBox, getFullName, RfH, RfW} from '../../../../utils/helpers';
-import NavigationRouteNames from '../../../../routes/screenNames';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
+import commonStyles from '../../theme/styles';
+import { Colors, Images } from '../../theme';
+import {alertBox, getFullName, RfH, RfW} from '../../utils/helpers';
+import NavigationRouteNames from '../../routes/screenNames';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { GET_PARENT_DETAILS } from './parentDetail.query';
 import { DELETE_PARENT_INFO } from './parentDetail.mutation';
 
@@ -119,7 +119,7 @@ function ParentListing() {
           rightIcon={Images.add}
           onRightIconClick={handleAddEditParents}
         />
-        <View style={{ height: RfH(24) }} />
+        <View style={{ height: RfH(10) }} />
         {!isListEmpty ? (
           <View style={{ paddingHorizontal: RfW(16) }}>
             <FlatList

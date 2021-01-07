@@ -6,7 +6,7 @@ import { Modal, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { Colors, Images } from '../../theme';
-import {getFullName, getSaveData, getUserImageUrl, RfH, RfW} from '../../utils/helpers';
+import { getFullName, getSaveData, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
 import routeNames from '../../routes/screenNames';
 import commonStyles from '../../theme/styles';
@@ -46,6 +46,7 @@ const compareModal = (props) => {
             iconHeight={RfH(20)}
             iconImage={Images.cross}
             styling={styles.crossIcon}
+            imageResizeMode="contain"
             submitFunction={() => removeFromCompare(index)}
           />
         )}
@@ -54,7 +55,7 @@ const compareModal = (props) => {
             iconWidth={RfH(64)}
             iconHeight={RfH(64)}
             iconImage={getTutorImage(item)}
-            imageResizeMode="contain"
+            imageResizeMode="cover"
             styling={{ alignSelf: 'center', borderRadius: RfH(64) }}
           />
         ) : (
@@ -66,20 +67,13 @@ const compareModal = (props) => {
             styling={{ alignSelf: 'center', borderRadius: RfH(12), marginTop: RfH(48) }}
           />
         )}
-        <Text style={styles.compareTutorName}>
-            {getFullName(item?.contactDetail)}
-        </Text>
+        <Text style={styles.compareTutorName}>{getFullName(item?.contactDetail)}</Text>
       </View>
     );
   };
 
   return (
-    <Modal
-      animationType="fade"
-      transparent
-      backdropOpacity={1}
-      visible={visible}
-      onRequestClose={onClose}>
+    <Modal animationType="fade" transparent backdropOpacity={1} visible={visible} onRequestClose={onClose}>
       <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'column' }} />
       <View
         style={{

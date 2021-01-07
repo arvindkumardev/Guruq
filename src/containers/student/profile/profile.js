@@ -1,9 +1,13 @@
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar,useMutation } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
+
+import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
+
 import initializeApollo from '../../../apollo/apollo';
 import {
   interestingOfferingData,
@@ -19,6 +23,8 @@ import {
   userLocation,
   userType,
 } from '../../../apollo/cache';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+
 import { IconButtonWrapper, TutorImageComponent } from '../../../components';
 import IconWrapper from '../../../components/IconWrapper';
 import NavigationRouteNames from '../../../routes/screenNames';
@@ -35,7 +41,10 @@ import {
 } from '../../../utils/helpers';
 import styles from './styles';
 import { UserTypeEnum } from '../../../common/userType.enum';
-
+import { getSaveData} from '../../../utils/helpers';
+import {
+  notificationsList,
+} from '../../../apollo/cache';
 const PERSONAL_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
   { name: 'Address', icon: Images.home },
@@ -78,9 +87,11 @@ const HELP_OPTIONS = [
 function Profile(props) {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
+  const [notificationCount,setNotificationCount] = useState(0)
   const studentInfo = useReactiveVar(studentDetails);
-  const { changeTab } = props;
+  const notifyList = useReactiveVar(notificationsList);
 
+  const { changeTab } = props;
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
@@ -108,7 +119,20 @@ function Profile(props) {
     client.resetStore(); // .then(() => {});
     // });
   };
+useEffect(()=>{
+  getNotificationCount()
 
+},[notifyList])
+
+const getNotificationCount = async () => {
+  notifications = JSON.parse(
+    await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST),
+  );
+  if (notifications && notifications.length > 0) {
+    let updatedArray = notifications.filter(x =>!x.isRead)
+    setNotificationCount(updatedArray.length);
+  }
+}
   const logoutConfirmation = () => {
     alertBox('Do you really want to logout?', '', {
       positiveText: 'Yes',
@@ -117,6 +141,7 @@ function Profile(props) {
     });
   };
 
+  
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
       navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS);
@@ -167,6 +192,40 @@ function Profile(props) {
     return null;
   };
 
+  const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        console.log(error);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        console.log('data', data);
+        let {number,countryCode} = userInfo.phoneNumber
+        let mobileObj ={
+          mobile : number,
+          country :{dialCode:countryCode}
+        }
+        navigation.navigate(NavigationRouteNames.STUDENT.OTP_VERIFICATION,{ mobileObj, 
+          fromChangePassword:true,
+          newUser: false });
+      }
+    },
+  });
+
+  const onChangePasswordClick = () => {
+    if (!isEmpty(userInfo.phoneNumber)) {
+      let {number,countryCode} = userInfo.phoneNumber
+      forgotPassword({
+        variables: { countryCode, number },
+      });
+    } else {
+      Alert.alert('Please enter mobile number.');
+    }
+  };
+
   const renderItem = (item) => {
     return (
       <TouchableOpacity
@@ -194,27 +253,35 @@ function Profile(props) {
     <>
       <StatusBar barStyle="dark-content" />
 
-      {/* <View */}
-      {/*  style={{ */}
-      {/*    height: 44, */}
-      {/*    paddingHorizontal: RfW(16), */}
-      {/*    flexDirection: 'row', */}
-      {/*    justifyContent: 'space-between', */}
-      {/*    alignItems: 'center', */}
-      {/*  }}> */}
-      {/* <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}> */}
-      {/*  <TouchableOpacity */}
-      {/*    onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)} */}
-      {/*    style={{ padding: 10 }}> */}
-      {/*    <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} /> */}
-      {/*  </TouchableOpacity> */}
-      {/*  <TouchableOpacity */}
-      {/*    style={{ padding: 10 }} */}
-      {/*    onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}> */}
-      {/*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} /> */}
-      {/*  </TouchableOpacity> */}
-      {/* </View> */}
-      {/* </View> */}
+      <View
+      style={{ 
+        height: 44, 
+        paddingHorizontal: RfW(16), 
+          flexDirection: 'row', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+        }}> 
+       <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}> 
+        <TouchableOpacity 
+          onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)} 
+          style={{ padding: 10 }}> 
+          <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} /> 
+        </TouchableOpacity> 
+        <TouchableOpacity 
+          style={{ padding: 10 }} 
+          onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}> 
+          {notificationCount > 0 && <View style={{position:'absolute',
+          left:6,top:6,zIndex:10}}>
+            <Image
+              source={Images.small_active_blue}
+              resizeMode={'contain'}
+              style={{ height: RfH(12), width: RfW(12) }}
+            />
+          </View>}
+          <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} /> 
+        </TouchableOpacity> 
+       </View> 
+       </View> 
 
       <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
         <ScrollView
@@ -446,7 +513,7 @@ function Profile(props) {
           <View style={[styles.userMenuParentView]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
             <View style={styles.menuItemParentView}>
-              <TouchableWithoutFeedback onPress={() => alertBox('coming soon!')}>
+              <TouchableWithoutFeedback onPress={() => onChangePasswordClick()}>
                 <Text style={styles.menuItemPrimaryText}>Change Password</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                   Reset your password

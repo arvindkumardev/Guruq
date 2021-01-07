@@ -11,6 +11,9 @@ export const GET_BUSINESS_DETAILS_DATA = gql`
         panNumber
         panCard {
           name
+          attachment {
+            name
+          }
         }
         createdDate
       }

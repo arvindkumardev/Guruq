@@ -7,7 +7,7 @@ import { RfH, RfW } from '../../../../../utils/helpers';
 const styles = StyleSheet.create({
   bottomText: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
-    color: Colors.darkgrey,
+    color: Colors.black,
   },
   bottomTabActive: {
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
