@@ -404,7 +404,7 @@ function TutorListing(props) {
               <View style={{ paddingBottom: RfH(200) }}>
                 {loadMoreButton && !isEmpty(tutorList) && (
                   <TouchableOpacity style={styles.footerLoadMore} onPress={loadMore}>
-                    <Text> Load More</Text>
+                    <Text>Load More</Text>
                   </TouchableOpacity>
                 )}
               </View>

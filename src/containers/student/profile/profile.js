@@ -89,9 +89,9 @@ function Profile(props) {
   const userInfo = useReactiveVar(userDetails);
   const [notificationCount,setNotificationCount] = useState(0)
   const studentInfo = useReactiveVar(studentDetails);
-  const { changeTab } = props;
   const notifyList = useReactiveVar(notificationsList);
 
+  const { changeTab } = props;
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);

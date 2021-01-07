@@ -15,14 +15,16 @@ import NavigationRouteNames from '../../routes/screenNames';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { alertBox, getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
-import { RE_SCHEDULE_CLASS } from '../student/booking.mutation';
+import { alertBox, getFullName, getToken, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { RE_SCHEDULE_CLASS, ADD_DOCUMENT_TO_CLASS } from '../student/booking.mutation';
 import { GET_CLASS_DETAILS } from '../student/class.query';
 import styles from '../student/tutorListing/styles';
-import { userType } from '../../apollo/cache';
+import { studentDetails, userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
 import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
 import ActionSheet from '../../components/ActionSheet';
+import UploadDocument from '../../components/UploadDocument';
+import { DocumentTypeEnum } from '../common/enums';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -32,6 +34,7 @@ function ScheduledClassDetails(props) {
 
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
+  const studentInfo = useReactiveVar(studentDetails);
 
   const [showMessageModal, setShowMessageModal] = useState(false);
 
@@ -39,8 +42,16 @@ function ScheduledClassDetails(props) {
   const [showBackButton, setShowBackButton] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [classData, setClassData] = useState({});
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isFileUploading, setIsFileUploading] = useState(false);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
   const [menuItem, setMenuItem] = useState([]);
+  const [token, setToken] = useState();
+  useEffect(() => {
+    getToken().then((tk) => {
+      setToken(tk);
+    });
+  }, []);
 
   const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -78,6 +89,63 @@ function ScheduledClassDetails(props) {
       }
     },
   });
+
+  const [addDocumentRequest, { loading: addDocumentLoading }] = useMutation(ADD_DOCUMENT_TO_CLASS, {
+    fetchPolicy: 'no-cache',
+    onError(e) {
+      console.log(e);
+    },
+    onCompleted(data) {
+      if (data) {
+        console.log(data);
+      }
+    },
+  });
+
+  const handleAcceptedFiles = async (file) => {
+    setIsUploadModalOpen(false);
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Content-Type', `multipart/form-data`);
+    const formdata = new FormData();
+    formdata.append('file', file);
+    setIsFileUploading(true);
+
+    console.log('file', file);
+
+    try {
+      const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
+        headers,
+        method: 'POST',
+        body: formdata,
+      }).then((response) => response.json());
+
+      console.log('res...res...', res);
+
+      const documentDto = {
+        attachment: {
+          name: res.filename,
+          type: res.type,
+          filename: res.filename,
+          size: res.size,
+        },
+        student: {
+          id: studentInfo.id,
+        },
+      };
+
+      documentDto.name = 'Class Document';
+      documentDto.type = DocumentTypeEnum.OTHER.label;
+
+      if (documentDto.type) {
+        addDocumentRequest({ variables: { documentDto, classId: classData?.classEntity?.id } });
+      }
+      setIsFileUploading(false);
+    } catch (error) {
+      setIsFileUploading(false);
+      console.log('error', error);
+    }
+  };
 
   useEffect(() => {
     if (classId && isFocussed) {
@@ -186,7 +254,7 @@ function ScheduledClassDetails(props) {
       style={{ backgroundColor: Colors.white, flex: 1 }}
       activeOpacity={1}
       onPress={() => setOpenMenu(false)}>
-      <Loader isLoading={classDetailsLoading || scheduleLoading} />
+      <Loader isLoading={isFileUploading || classDetailsLoading || scheduleLoading} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         onScroll={(event) => handleScroll(event)}
@@ -359,7 +427,13 @@ function ScheduledClassDetails(props) {
             </View>
           </View>
           <View>
-            <IconButtonWrapper iconImage={Images.add} iconWidth={20} iconHeight={20} imageResizeMode="contain" />
+            <IconButtonWrapper
+              iconImage={Images.add}
+              iconWidth={20}
+              iconHeight={20}
+              imageResizeMode="contain"
+              submitFunction={() => setIsUploadModalOpen(true)}
+            />
           </View>
         </View>
 
@@ -490,6 +564,16 @@ function ScheduledClassDetails(props) {
         isVisible={openMenu}
         topLabel="Action"
       />
+
+      {isUploadModalOpen && (
+        <UploadDocument
+          isVisible={isUploadModalOpen}
+          handleClose={() => setIsUploadModalOpen(!isUploadModalOpen)}
+          isFilePickerVisible
+          handleUpload={handleAcceptedFiles}
+          snapCount={1}
+        />
+      )}
     </TouchableOpacity>
   );
 }

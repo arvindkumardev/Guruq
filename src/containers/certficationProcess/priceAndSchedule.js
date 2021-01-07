@@ -39,7 +39,7 @@ const PriceAndSchedule = () => {
         </Text>
       </View>
       <TouchableOpacity
-        style={styles.interviewCard}
+        style={[styles.interviewCard,{ borderLeftColor: Colors.orange }]}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.VIEW_SCHEDULE)}>
         <View style={{ flexDirection: 'row' }}>

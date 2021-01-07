@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     color: Colors.brandBlue2,
-    textAlign: 'right',
     marginTop: RfH(6),
   },
   backIcon: {

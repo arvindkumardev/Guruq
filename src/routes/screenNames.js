@@ -69,6 +69,7 @@ const NavigationRouteNames = {
     BOOKING_DETAILS: 'booking_details',
     VIEW_BOOKING_DETAILS: 'view_booking_details',
     REFUND: 'refund',
+    ORDER_DETAILS: 'order_details',
   },
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',

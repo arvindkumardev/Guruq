@@ -1,4 +1,4 @@
-import { FlatList, KeyboardAvoidingView, Text, View, ScrollView } from 'react-native';
+import { FlatList, KeyboardAvoidingView, Text, View, ScrollView, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -7,7 +7,7 @@ import { Button } from 'native-base';
 import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
-import { Colors, Fonts } from '../../../theme';
+import { Colors, Fonts, Images } from '../../../theme';
 import { alertBox, getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_TUTOR_PYTN_REQUESTS } from '../../student/pytn/pytn.query';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -20,6 +20,7 @@ function PytnRequests() {
   const [selectedPytn, setSelectedPytn] = useState({});
   const [priceVal, setPriceVal] = useState(0);
   const [showPriceModal, setShowPriceModal] = useState(false);
+  const [isListEmpty, setIsListEmpty] = useState(false);
   const isFocussed = useIsFocused();
   const offeringMasterData = useReactiveVar(offeringsMasterData);
 
@@ -33,6 +34,7 @@ function PytnRequests() {
     onCompleted: (data) => {
       if (data) {
         setRequests(data.searchTutorPYTN.edges);
+        setIsListEmpty(data?.searchTutorPYTN?.edges.length === 0);
       }
     },
   });
@@ -191,25 +193,54 @@ function PytnRequests() {
         // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
         enabled>
         <ScreenHeader label="PYTN Student Requests" homeIcon horizontalPadding={RfW(16)} />
-        <ScrollView>
-          <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
+        <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
+          {!isListEmpty && (
             <FlatList
               data={requests}
               renderItem={({ item, index }) => renderClassItem(item, index)}
               keyExtractor={(item, index) => index.toString()}
               contentContainerStyle={{ paddingBottom: RfH(120) }}
               showsVerticalScrollIndicator={false}
+              scrollEnabled={requests.length > 3}
             />
-          </View>
-          <PriceInputModal
-            visible={showPriceModal}
-            onClose={() => setShowPriceModal(false)}
-            onSubmit={onSubmit}
-            onPriceChange={(val) => setPriceVal(val)}
-            price={priceVal}
-            selectedPytn={selectedPytn}
-          />
-        </ScrollView>
+          )}
+
+          {isListEmpty && (
+            <View style={{ flex: 1, paddingTop: RfH(100), alignItems: 'center' }}>
+              <Image
+                source={Images.nopytn}
+                style={{
+                  height: RfH(264),
+                  width: RfW(248),
+                  marginBottom: RfH(32),
+                }}
+                resizeMode="contain"
+              />
+              <Text
+                style={[
+                  commonStyles.pageTitleThirdRow,
+                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center', marginHorizontal: RfW(20) },
+                ]}>
+                 No data found
+              </Text>
+              <Text
+                style={[
+                  commonStyles.regularMutedText,
+                  { marginHorizontal: RfW(40), textAlign: 'center', marginTop: RfH(16) },
+                ]}>
+                Once student raised the request for tuition it will appear here.
+              </Text>
+            </View>
+          )}
+        </View>
+        <PriceInputModal
+          visible={showPriceModal}
+          onClose={() => setShowPriceModal(false)}
+          onSubmit={onSubmit}
+          onPriceChange={(val) => setPriceVal(val)}
+          price={priceVal}
+          selectedPytn={selectedPytn}
+        />
       </KeyboardAvoidingView>
     </>
   );

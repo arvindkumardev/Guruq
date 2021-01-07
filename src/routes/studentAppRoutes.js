@@ -14,7 +14,7 @@ import TutorDetails from '../containers/student/tutorDetails/tutorDetails';
 import myCart from '../containers/student/myCart/myCart';
 import BookingConfirmed from '../containers/student/payment/bookingConfirmed';
 import paymentReceived from '../containers/student/payment/paymentReceived';
-import PaymentMethod from '../containers/student/payment/paymentMethod';
+import PaymentMethodNotInUse from '../containers/student/payment/paymentMethod(not in use)';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
@@ -29,13 +29,14 @@ import WebViewPage from '../components/WebViewPage';
 import Notifications from '../containers/student/dashboard/notifications';
 import SendFeedback from '../containers/common/sendFeedback';
 import CustomerCare from '../containers/common/customerCare/customerCare';
-import ParentListing from '../containers/common/profileScreens/parentsDetail/parentListing';
-import AddEditParents from '../containers/common/profileScreens/parentsDetail/addEditParents';
+import ParentListing from '../containers/parentsDetail/parentListing';
+import AddEditParents from '../containers/parentsDetail/addEditParents';
 import BookingList from '../containers/student/profile/purchasedHistory/bookingList';
 import BookingDetails from '../containers/student/profile/purchasedHistory/bookingDetails';
 import Refund from '../containers/student/profile/purchasedHistory/refund';
 import AboutUs from '../containers/common/about/about';
 import MyStudyAreas from '../containers/student/studyArea/myStudyAreas';
+import OrderDetails from '../containers/student/profile/purchasedHistory/orderDetails';
 
 const Stack = createStackNavigator();
 
@@ -84,11 +85,11 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.MY_CART} component={myCart} options={{ headerShown: false }} />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.PAYMENT_METHOD}
-        component={PaymentMethod}
-        options={{ headerShown: false }}
-      />
+      {/* <Stack.Screen */}
+      {/*  name={NavigationRouteNames.STUDENT.PAYMENT_METHOD} */}
+      {/*  component={PaymentMethodNotInUse} */}
+      {/*  options={{ headerShown: false }} */}
+      {/* /> */}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
         component={BookingConfirmed}
@@ -136,26 +137,14 @@ export const getStudentRoutes = () => {
         component={PytnSubjectSelection}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.PYTN_DETAILS}
-        component={PytnSubmit}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.PYTN_DETAILS} component={PytnSubmit} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.WEB_VIEW_PAGES}
         component={WebViewPages}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.PYTN_LISTING}
-        component={PytnListing}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.PYTN_HISTORY}
-        component={PytnDetail}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name={NavigationRouteNames.PYTN_LISTING} component={PytnListing} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.PYTN_HISTORY} component={PytnDetail} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.NOTIFICATIONS}
         component={Notifications}
@@ -192,6 +181,11 @@ export const getStudentRoutes = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.REFUND} component={Refund} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.ORDER_DETAILS}
+        component={OrderDetails}
+        options={{ headerShown: false }}
+      />
     </>
   );
 };

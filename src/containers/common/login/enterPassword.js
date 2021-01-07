@@ -109,7 +109,7 @@ function EnterPassword(props) {
               />
             )}
           </Item>
-          <TouchableOpacity onPress={onForgotPasswordClick}>
+          <TouchableOpacity onPress={onForgotPasswordClick} style={{ alignSelf: 'flex-end' }}>
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
         </View>

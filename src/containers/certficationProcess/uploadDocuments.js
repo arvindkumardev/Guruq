@@ -127,8 +127,6 @@ function UploadDocuments() {
     formdata.append('file', file);
     setIsFileUploading(true);
 
-    console.log('file', file);
-
     try {
       const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
         headers,
@@ -190,7 +188,7 @@ function UploadDocuments() {
       <Loader isLoading={isFileUploading || deleteDocumentLoading || addDocumentLoading || tutorLeadDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <StatusBar barStyle="dark-content" />
-        <ScreenHeader label="Documents" horizontalPadding={RfW(8)} homeIcon />
+        <ScreenHeader label="Documents" homeIcon />
         <ScrollView showsVerticalScrollIndicator={false} style={{ paddingBottom: RfH(32) }}>
           <View style={{ padding: RfW(16), paddingBottom: RfH(16) }}>
             <View>
@@ -247,7 +245,11 @@ function UploadDocuments() {
                     iconHeight={RfH(72)}
                     styling={{ borderRadius: RfH(8), marginRight: RfW(20) }}
                     imageResizeMode="cover"
-                    iconImage={`http://apiv2.guruq.in/api/upload/${idProofDetails.attachment.filename}`}
+                    iconImage={
+                      idProofDetails.attachment.type !== 'application/pdf'
+                        ? `http://apiv2.guruq.in/api/upload/${idProofDetails.attachment.filename}`
+                        : Images.pdf
+                    }
                   />
                   <IconButtonWrapper
                     iconWidth={RfW(25)}
@@ -318,7 +320,11 @@ function UploadDocuments() {
                     iconHeight={RfH(72)}
                     styling={{ borderRadius: RfH(8), marginRight: RfW(20) }}
                     imageResizeMode="cover"
-                    iconImage={`http://apiv2.guruq.in/api/upload/${addressProofDetails.attachment.filename}`}
+                    iconImage={
+                      addressProofDetails.attachment.type !== 'application/pdf'
+                        ? `http://apiv2.guruq.in/api/upload/${addressProofDetails.attachment.filename}`
+                        : Images.pdf
+                    }
                   />
                   <IconButtonWrapper
                     iconWidth={RfW(25)}
@@ -363,7 +369,11 @@ function UploadDocuments() {
                     iconHeight={RfH(72)}
                     styling={{ borderRadius: RfH(8), marginRight: RfW(20) }}
                     imageResizeMode="cover"
-                    iconImage={`http://apiv2.guruq.in/api/upload/${panCardDetails.attachment.filename}`}
+                    iconImage={
+                      panCardDetails.attachment.type !== 'application/pdf'
+                        ? `http://apiv2.guruq.in/api/upload/${panCardDetails.attachment.filename}`
+                        : Images.pdf
+                    }
                   />
                   <IconButtonWrapper
                     iconWidth={RfW(25)}
@@ -407,7 +417,11 @@ function UploadDocuments() {
                     iconHeight={RfH(72)}
                     styling={{ borderRadius: RfH(8), marginRight: RfW(20) }}
                     imageResizeMode="cover"
-                    iconImage={`http://apiv2.guruq.in/api/upload/${qualificationDetails.attachment.filename}`}
+                    iconImage={
+                      qualificationDetails.attachment.type !== 'application/pdf'
+                        ? `http://apiv2.guruq.in/api/upload/${qualificationDetails.attachment.filename}`
+                        : Images.pdf
+                    }
                   />
                   <IconButtonWrapper
                     iconWidth={RfW(25)}

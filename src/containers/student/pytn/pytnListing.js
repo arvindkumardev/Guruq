@@ -55,7 +55,6 @@ function PytnListing(props) {
           onPositiveClick: () => {
             getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
           },
-          negativeText: 'No',
         });
       }
     },
@@ -204,7 +203,7 @@ function PytnListing(props) {
             <Text
               style={[
                 commonStyles.pageTitleThirdRow,
-                { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center', marginHorizontal: RfW(20) },
               ]}>
               {/* No data found */}
               Looks like you haven't posted your tuition need.
@@ -212,7 +211,7 @@ function PytnListing(props) {
             <Text
               style={[
                 commonStyles.regularMutedText,
-                { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
+                { marginHorizontal: RfW(40), textAlign: 'center', marginTop: RfH(16) },
               ]}>
               {/* Looks like you haven't posted your tuition need. */}
               Post your tuition need to broadcast your tuition requirements to all relevant tutors.
