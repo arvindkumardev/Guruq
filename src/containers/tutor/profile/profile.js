@@ -50,8 +50,6 @@ const ACCOUNT_OPTIONS = [
 
 const MY_CLASS_OPTIONS = [
   { name: 'Calendar', icon: Images.calendar },
-  // { name: 'My Classes', icon: Images.laptop },
-  // { name: 'My Students', icon: Images.home },
   { name: 'Student Request', icon: Images.classes },
 ];
 
@@ -150,10 +148,7 @@ function Profile(props) {
         label: 'About',
       });
     } else if (item.name === 'Team') {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: WEBVIEW_URLS.TEAM,
-        label: 'Team',
-      });
+      navigation.navigate(NavigationRouteNames.WEB_VIEW, {url: WEBVIEW_URLS.TEAM, label: 'Team'});
     } else if (item.name === 'Calendar') {
       changeTab(2);
     } else if (item.name === 'My Classes') {

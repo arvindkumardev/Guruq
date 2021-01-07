@@ -500,7 +500,7 @@ function StudentDashboard(props) {
                     height: RfH(13),
                     width: RfH(13),
                   }}>
-                  <Text style={{ font: Fonts.bold, fontSize: 13, color: Colors.brandBlue }}>{cartCount}</Text>
+                  <Text style={{ font: Fonts.bold, fontSize: 11, color: Colors.brandBlue }}>{cartCount}</Text>
                 </View>
               )}
             </TouchableOpacity>
