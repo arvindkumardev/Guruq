@@ -12,24 +12,41 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useReactiveVar, useMutation } from '@apollo/client';
+import analytics from '@react-native-firebase/analytics';
+
 import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
 import { Button } from 'native-base';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import { deviceWidth, getSaveData, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import {
+  deviceWidth,
+  getSaveData,
+  removeData,
+  RfH,
+  RfW,
+  storeData,
+} from '../../../utils/helpers';
 import styles from './styles';
-import { CompareModal, IconButtonWrapper, SelectSubjectModal } from '../../../components';
+import {
+  CompareModal,
+  IconButtonWrapper,
+  SelectSubjectModal,
+} from '../../../components';
 import { GET_FAVOURITE_TUTORS, SEARCH_TUTORS } from '../tutor-query';
 import Loader from '../../../components/Loader';
-import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import {
+  LOCAL_STORAGE_DATA_KEY,
+  STANDARD_SCREEN_SIZE,
+} from '../../../utils/constants';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import BackArrow from '../../../components/BackArrow';
 import FilterComponent from './components/filterComponent';
 import { TEMP_FILTER_DATA } from './components/filterComponent/constant';
 import TutorListCard from './components/TutorListCard';
 import { GET_SPONSORED_TUTORS } from '../dashboard-query';
+import { studentDetails } from '../../../apollo/cache';
 
 function TutorListing(props) {
   const navigation = useNavigation();
@@ -46,6 +63,7 @@ function TutorListing(props) {
   const [isListEmpty, setIsListEmpty] = useState(false);
   const [loadMoreButton, setLoadMoreButton] = useState(true);
   const [isFilterApplied, setFilterApplied] = useState(true);
+  const studentInfo = useReactiveVar(studentDetails);
 
   const [filterValues, setFilterValues] = useState({
     certified: true,
@@ -70,7 +88,10 @@ function TutorListing(props) {
   const [sponsoredTutors, setSponsoredTutors] = useState([]);
 
   const openCompareTutor = async () => {
-    if (JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID)) == null) {
+    if (
+      JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID)) ==
+      null
+    ) {
       Alert.alert('Add Tutors To Compare');
     } else {
       setShowCompareModal(true);
@@ -87,7 +108,10 @@ function TutorListing(props) {
       if (data) {
         setTutorsData(data);
         const tutors = data?.searchTutors?.edges;
-        setLoadMoreButton(data.searchTutors.pageInfo.page < data.searchTutors.pageInfo.totalPages);
+        setLoadMoreButton(
+          data.searchTutors.pageInfo.page <
+            data.searchTutors.pageInfo.totalPages,
+        );
         const tutorData = appendData ? [...tutorList, ...tutors] : tutors;
         setTutorList(tutorData);
         setIsListEmpty(tutorData.length === 0);
@@ -96,7 +120,10 @@ function TutorListing(props) {
     },
   });
 
-  const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
+  const [
+    getFavouriteTutors,
+    { loading: loadingFavouriteTutors },
+  ] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -105,12 +132,19 @@ function TutorListing(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        setFavourites(!isEmpty(data?.getFavouriteTutors) ? data.getFavouriteTutors.map((item) => item?.tutor?.id) : []);
+        setFavourites(
+          !isEmpty(data?.getFavouriteTutors)
+            ? data.getFavouriteTutors.map((item) => item?.tutor?.id)
+            : [],
+        );
       }
     },
   });
 
-  const [getSponsoredTutors, { loading: loadingSponsoredTutors }] = useLazyQuery(GET_SPONSORED_TUTORS, {
+  const [
+    getSponsoredTutors,
+    { loading: loadingSponsoredTutors },
+  ] = useLazyQuery(GET_SPONSORED_TUTORS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -120,49 +154,72 @@ function TutorListing(props) {
     onCompleted: (data) => {
       if (data) {
         setSponsoredTutors(
-          !isEmpty(data?.getSponsoredTutors) ? data.getSponsoredTutors.map((item) => item?.tutor?.id) : []
+          !isEmpty(data?.getSponsoredTutors)
+            ? data.getSponsoredTutors.map((item) => item?.tutor?.id)
+            : [],
         );
       }
     },
   });
 
-  const [markFavourite, { loading: favouriteLoading }] = useMutation(MARK_FAVOURITE, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        setFavourites((favourites) => [...favourites, data.markFavourite.tutor.id]);
-        setRefreshTutorList(!refreshTutorList);
-      }
-    },
-  });
-
-  const [removeFavourite, { loading: removeFavouriteLoading }] = useMutation(REMOVE_FAVOURITE, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        let fTutors = [];
-        let index = 0;
-        fTutors = favourites;
-        index = fTutors.indexOf(data.removeFromFavourite[0].tutor.id);
-        if (index !== -1) {
-          fTutors.splice(index, 1);
-          setFavourites(fTutors);
+  const [markFavourite, { loading: favouriteLoading }] = useMutation(
+    MARK_FAVOURITE,
+    {
+      fetchPolicy: 'no-cache',
+      onError: (e) => {
+        if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+          const error = e.graphQLErrors[0].extensions.exception.response;
+        }
+      },
+      onCompleted: (data) => {
+        if (data) {
+          setFavourites((favourites) => [
+            ...favourites,
+            data.markFavourite.tutor.id,
+          ]);
           setRefreshTutorList(!refreshTutorList);
         }
-      }
+      },
     },
-  });
+  );
 
+  const [removeFavourite, { loading: removeFavouriteLoading }] = useMutation(
+    REMOVE_FAVOURITE,
+    {
+      fetchPolicy: 'no-cache',
+      onError: (e) => {
+        if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+          const error = e.graphQLErrors[0].extensions.exception.response;
+        }
+      },
+      onCompleted: (data) => {
+        if (data) {
+          let fTutors = [];
+          let index = 0;
+          fTutors = favourites;
+          index = fTutors.indexOf(data.removeFromFavourite[0].tutor.id);
+          if (index !== -1) {
+            fTutors.splice(index, 1);
+            setFavourites(fTutors);
+            setRefreshTutorList(!refreshTutorList);
+          }
+        }
+      },
+    },
+  );
+  useEffect(() => {
+    fireTutorListingEvent();
+  }, []);
+
+  const fireTutorListingEvent = async () => {
+    let { offeringId } = filterValues;
+    let payload = {
+      offeringId: offeringId,
+      studentId: studentInfo.id,
+    };
+    console.log(payload,"payloadpayload")
+    await analytics().logEvent('tutor_listing', payload);
+  };
   useEffect(() => {
     getTutors({ variables: { searchDto: filterValues } });
   }, []);
@@ -226,7 +283,11 @@ function TutorListing(props) {
     Object.entries(data).forEach(([key, value]) => {
       actualFilterData = { ...actualFilterData, ...value.filterData };
     });
-    setFilterValues((filterValues) => ({ ...filterValues, ...actualFilterData, page: 1 }));
+    setFilterValues((filterValues) => ({
+      ...filterValues,
+      ...actualFilterData,
+      page: 1,
+    }));
   };
 
   const applyFilters = (filterObjData) => {
@@ -251,18 +312,26 @@ function TutorListing(props) {
 
   const removeFromCompare = async (index) => {
     let compareArray = [];
-    compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
+    compareArray = JSON.parse(
+      await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID),
+    );
     compareArray.splice(index, 1);
     await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
     if (compareArray.length > 0) {
-      storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(compareArray)).then(() => {});
+      storeData(
+        LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID,
+        JSON.stringify(compareArray),
+      ).then(() => {});
     }
     setShowCompareModal(false);
   };
 
   const loadMore = () => {
     setAppendData(true);
-    setFilterValues((filterValues) => ({ ...filterValues, page: filterValues.page + 1 }));
+    setFilterValues((filterValues) => ({
+      ...filterValues,
+      page: filterValues.page + 1,
+    }));
   };
 
   const isFilter = () => {
@@ -276,13 +345,22 @@ function TutorListing(props) {
   };
 
   const filtersView = () => (
-    <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(10) }]}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: RfW(16) }}>
+    <View
+      style={[
+        commonStyles.horizontalChildrenView,
+        { paddingVertical: RfH(10) },
+      ]}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ marginHorizontal: RfW(16) }}>
         {Object.entries(filterObj).map(([key, value]) => (
           <>
             {!isEmpty(value.displayValue) && (
               <View style={styles.filterButton}>
-                <Text style={styles.appliedFilterText}>{value.displayValue}</Text>
+                <Text style={styles.appliedFilterText}>
+                  {value.displayValue}
+                </Text>
                 <IconButtonWrapper
                   iconWidth={RfH(16)}
                   iconHeight={RfH(16)}
@@ -307,9 +385,15 @@ function TutorListing(props) {
   };
 
   return (
-    <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 }]}>
+    <View
+      style={[
+        commonStyles.mainContainer,
+        { backgroundColor: Colors.white, paddingHorizontal: 0, padding: 0 },
+      ]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
-      <Loader isLoading={loadingTutors || favouriteLoading || removeFavouriteLoading} />
+      <Loader
+        isLoading={loadingTutors || favouriteLoading || removeFavouriteLoading}
+      />
       <View
       // stickyHeaderIndices={[0]}
       // showsVerticalScrollIndicator={false}
@@ -318,10 +402,22 @@ function TutorListing(props) {
       >
         <View style={styles.topView}>
           <View style={styles.headerComponent}>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
               <BackArrow action={onBackPress} />
-              <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginLeft: RfW(8), flex: 0.9 }}>
-                <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]} numberOfLines={1}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  marginLeft: RfW(8),
+                  flex: 0.9,
+                }}>
+                <Text
+                  style={[
+                    styles.subjectTitle,
+                    { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) },
+                  ]}
+                  numberOfLines={1}>
                   {offering?.displayName} Tutors
                 </Text>
                 <Text style={[styles.classText, {}]} numberOfLines={1}>
@@ -370,15 +466,25 @@ function TutorListing(props) {
           {/* )} */}
         </View>
         <View style={styles.filterParentView}>
-          <Text style={styles.tutorCountText}>{tutorsData?.searchTutors?.pageInfo?.count} TUTORS</Text>
+          <Text style={styles.tutorCountText}>
+            {tutorsData?.searchTutors?.pageInfo?.count} TUTORS
+          </Text>
           <TouchableOpacity onPress={openCompareTutor}>
-            <Text style={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+            <Text
+              style={{
+                fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                color: Colors.brandBlue2,
+              }}>
               Compare Tutors
             </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setShowFilterPopup(true)}>
             <View style={styles.filterContainer}>
-              <IconButtonWrapper iconHeight={15} iconWidth={15} iconImage={Images.filter} />
+              <IconButtonWrapper
+                iconHeight={15}
+                iconWidth={15}
+                iconImage={Images.filter}
+              />
               <Text style={styles.filterText}>Sort / Filters</Text>
             </View>
           </TouchableOpacity>
@@ -403,7 +509,9 @@ function TutorListing(props) {
             ListFooterComponent={
               <View style={{ paddingBottom: RfH(200) }}>
                 {loadMoreButton && !isEmpty(tutorList) && (
-                  <TouchableOpacity style={styles.footerLoadMore} onPress={loadMore}>
+                  <TouchableOpacity
+                    style={styles.footerLoadMore}
+                    onPress={loadMore}>
                     <Text>Load More</Text>
                   </TouchableOpacity>
                 )}
@@ -424,14 +532,21 @@ function TutorListing(props) {
             <Text
               style={[
                 commonStyles.pageTitleThirdRow,
-                { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                {
+                  fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                  textAlign: 'center',
+                },
               ]}>
               No tutor found
             </Text>
             <Text
               style={[
                 commonStyles.regularMutedText,
-                { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
+                {
+                  marginHorizontal: RfW(80),
+                  textAlign: 'center',
+                  marginTop: RfH(16),
+                },
               ]}>
               {isFilterApplied
                 ? "Oops we don't have anyone for the applied filters."
@@ -441,7 +556,11 @@ function TutorListing(props) {
             <Button
               block
               style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-              onPress={() => (isFilterApplied ? setShowFilterPopup(true) : setShowAllSubjects(true))}>
+              onPress={() =>
+                isFilterApplied
+                  ? setShowFilterPopup(true)
+                  : setShowAllSubjects(true)
+              }>
               <Text style={commonStyles.textButtonPrimary}>
                 {isFilterApplied ? 'Change Filters' : 'Change Subject'}
               </Text>
