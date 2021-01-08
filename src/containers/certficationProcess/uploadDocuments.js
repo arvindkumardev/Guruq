@@ -12,6 +12,7 @@ import { GET_TUTOR_ALL_DETAILS } from './certification-query';
 import { DocumentTypeEnum } from '../common/enums';
 import Loader from '../../components/Loader';
 import ActionModal from './components/helpSection';
+import {API_URL, ATTACHMENT_PREVIEW_URL} from '../../utils/constants';
 
 const DOCUMENT_NAME_ID_PROOF = 'id proof';
 const DOCUMENT_NAME_ADDRESS_PROOF = 'address proof';
@@ -129,9 +130,8 @@ function UploadDocuments() {
     formdata.append('file', file);
     setIsFileUploading(true);
 
-
     try {
-      const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
+      const res = await fetch(`${API_URL}/upload/file`, {
         headers,
         method: 'POST',
         body: formdata,
@@ -191,17 +191,14 @@ function UploadDocuments() {
       <Loader isLoading={isFileUploading || deleteDocumentLoading || addDocumentLoading || tutorLeadDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <StatusBar barStyle="dark-content" />
-        <ScreenHeader label="Documents" homeIcon
-         showRightIcon
+        <ScreenHeader
+          label="Documents"
+          homeIcon
+          showRightIcon
           rightIcon={Images.vertical_dots_b}
           onRightIconClick={() => setOpenMenu(true)}
         />
-           {openMenu && (
-          <ActionModal
-            isVisible={openMenu}
-            closeMenu={() => setOpenMenu(false)}
-          />
-        )}
+        {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
         <ScrollView showsVerticalScrollIndicator={false} style={{ paddingBottom: RfH(32) }}>
           <View style={{ padding: RfW(16), paddingBottom: RfH(16) }}>
             <View>
@@ -260,7 +257,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       idProofDetails.attachment.type !== 'application/pdf'
-                        ? `http://apiv2.guruq.in/api/upload/${idProofDetails.attachment.filename}`
+                        ? `${ATTACHMENT_PREVIEW_URL}${idProofDetails.attachment.original}`
                         : Images.pdf
                     }
                   />
@@ -335,7 +332,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       addressProofDetails.attachment.type !== 'application/pdf'
-                        ? `http://apiv2.guruq.in/api/upload/${addressProofDetails.attachment.filename}`
+                        ? `${ATTACHMENT_PREVIEW_URL}${addressProofDetails.attachment.original}`
                         : Images.pdf
                     }
                   />
@@ -384,7 +381,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       panCardDetails.attachment.type !== 'application/pdf'
-                        ? `http://apiv2.guruq.in/api/upload/${panCardDetails.attachment.filename}`
+                        ? `${ATTACHMENT_PREVIEW_URL}${panCardDetails.attachment.original}`
                         : Images.pdf
                     }
                   />
@@ -432,7 +429,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       qualificationDetails.attachment.type !== 'application/pdf'
-                        ? `http://apiv2.guruq.in/api/upload/${qualificationDetails.attachment.filename}`
+                        ? `${ATTACHMENT_PREVIEW_URL}${qualificationDetails.attachment.original}`
                         : Images.pdf
                     }
                   />

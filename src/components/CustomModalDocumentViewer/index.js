@@ -7,12 +7,13 @@ import { Images } from '../../theme';
 import style from './style';
 import InPlaceLoader from '../InPlaceLoader';
 import { ScreenHeader } from '../index';
+import {API_URL, ATTACHMENT_PREVIEW_URL} from '../../utils/constants';
 
 function CustomModalDocumentViewer(props) {
   const { document, backButtonHandler, modalVisible } = props;
 
   const [isError, setIsError] = useState(false);
-  const source = { uri: `http://apiv2.guruq.in/api/upload/${document.attachment.filename}`, cache: true };
+  const source = { uri: `${ATTACHMENT_PREVIEW_URL}${document.attachment.original}`, cache: true };
 
   const handleShare = async () => {
     await Share.share({
@@ -33,7 +34,7 @@ function CustomModalDocumentViewer(props) {
         horizontalPadding={16}
         handleBack={backButtonHandler}
         homeIcon
-        showRightIcon={true}
+        showRightIcon
         rightIcon={Images.share}
         onRightIconClick={handleShare}
       />

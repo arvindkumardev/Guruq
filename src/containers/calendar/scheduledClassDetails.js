@@ -14,7 +14,7 @@ import Loader from '../../components/Loader';
 import NavigationRouteNames from '../../routes/screenNames';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { API_URL, STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { alertBox, getFullName, getToken, printDate, printDateTime, printTime, RfH, RfW } from '../../utils/helpers';
 import { RE_SCHEDULE_CLASS, ADD_DOCUMENT_TO_CLASS } from '../student/booking.mutation';
 import { GET_CLASS_DETAILS } from '../student/class.query';
@@ -112,7 +112,7 @@ function ScheduledClassDetails(props) {
     setIsFileUploading(true);
 
     try {
-      const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
+      const res = await fetch(`${API_URL}/upload/file`, {
         headers,
         method: 'POST',
         body: formdata,
@@ -507,9 +507,7 @@ function ScheduledClassDetails(props) {
             />
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
               <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
-              <Text style={commonStyles.mediumMutedText}>
-                C-{classData?.classEntity?.id}
-              </Text>
+              <Text style={commonStyles.mediumMutedText}>C-{classData?.classEntity?.id}</Text>
               {/* <Text style={commonStyles.mediumMutedText}>classData?. */}
               {/* </Text> */}
             </View>

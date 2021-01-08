@@ -17,7 +17,7 @@ import {
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { getFullName, RfH, RfW } from '../../utils/helpers';
+import { getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import { SCHEDULE_CLASS } from '../student/class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
 import { studentDetails, userType } from '../../apollo/cache';
@@ -54,7 +54,7 @@ function ScheduleClass(props) {
         for (let i = 0; i < scheduledClasses.length; i++) {
           classes[i] = { ...scheduledClasses[i], isScheduled: true };
         }
-        console.log("classes",classes)
+        console.log('classes', classes);
         setTutorClasses(classes);
         setRefresh(!refresh);
       }
@@ -222,7 +222,7 @@ function ScheduleClass(props) {
                     color: Colors.darkGrey,
                     marginTop: RfH(8),
                   }}>
-                  {moment(item.startDate).format('DD-MMM-YYYY')}
+                  {printDate(item.startDate)}
                 </Text>
                 <Text
                   style={{
@@ -230,7 +230,7 @@ function ScheduleClass(props) {
                     color: Colors.darkGrey,
                     marginTop: RfH(8),
                   }}>
-                  {moment(item.startDate).format('HH:MM A')}
+                  {printTime(item.startDate)}
                 </Text>
               </>
             )}

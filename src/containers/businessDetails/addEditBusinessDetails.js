@@ -13,6 +13,7 @@ import UploadDocument from '../../components/UploadDocument';
 import { ADD_TUTOR_DOCUMENT_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS } from '../tutor/tutor.mutation';
 import { DocumentTypeEnum } from '../common/enums';
 import { tutorDetails } from '../../apollo/cache';
+import {API_URL, ATTACHMENT_PREVIEW_URL} from '../../utils/constants';
 
 function AddEditBusinessDetails(props) {
   const businessDetail = props?.route?.params?.businessDetails;
@@ -35,7 +36,6 @@ function AddEditBusinessDetails(props) {
       setToken(tk);
     });
   }, []);
-
 
   useEffect(() => {
     if (!isEmpty(businessDetail)) {
@@ -242,7 +242,7 @@ function AddEditBusinessDetails(props) {
                     imageResizeMode="cover"
                     iconImage={
                       panCardDoc.attachment.type !== 'application/pdf'
-                        ? `http://apiv2.guruq.in/api/upload/${panCardDoc.attachment.filename}`
+                        ? `${ATTACHMENT_PREVIEW_URL}${panCardDoc.attachment.original}`
                         : Images.pdf
                     }
                   />
@@ -290,7 +290,7 @@ function AddEditBusinessDetails(props) {
                       imageResizeMode="cover"
                       iconImage={
                         gstinDoc.attachment.type !== 'application/pdf'
-                          ? `http://apiv2.guruq.in/api/upload/${gstinDoc.attachment.filename}`
+                          ? `${ATTACHMENT_PREVIEW_URL}${gstinDoc.attachment.original}`
                           : Images.pdf
                       }
                     />

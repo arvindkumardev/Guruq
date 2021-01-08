@@ -15,6 +15,7 @@ import { AddressTypeEnum } from '../common/enums';
 import GoogleAutoCompleteModal from '../../components/GoogleAutoCompleteModal';
 import { UserTypeEnum } from '../../common/userType.enum';
 import { userType } from '../../apollo/cache';
+import { API_URL, GOOGLE_API_KEY } from '../../utils/constants';
 
 function AddEditAddress(props) {
   const { route } = props;
@@ -78,7 +79,7 @@ function AddEditAddress(props) {
   const onSavingAddress = () => {
     if (isEmpty(address.street)) {
       alertBox('Please provide the House no/Building Name');
-      return
+      return;
     }
     const variables = {
       variables: {
@@ -93,6 +94,22 @@ function AddEditAddress(props) {
   };
 
   const [showGoogleSearchModal, setShowGoogleSearchModal] = useState(false);
+
+  const getCurrentLocationData = async () => {
+    await Geolocation.getCurrentPosition((info) => {
+      console.log('info', info);
+
+      if (info && info.coords) {
+        fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${info.coords.latitude},${info.coords.longitude}&key=${GOOGLE_API_KEY}`
+        ).then((response) => {
+          const data = response.json();
+
+          console.log('data', data);
+        });
+      }
+    });
+  };
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'padding' })} enabled>
@@ -111,12 +128,12 @@ function AddEditAddress(props) {
                 ]}>
                 <View style={{ flex: 0.9 }}>
                   <TouchableWithoutFeedback onPress={() => setShowGoogleSearchModal(true)}>
-                    <Text>{address.fullAddress || 'Type here to search...'}</Text>
+                    <Text>Type here to search...</Text>
                   </TouchableWithoutFeedback>
                 </View>
                 <View style={{ flex: 0.1 }}>
                   <IconButtonWrapper
-                    submitFunction={() => Geolocation.getCurrentPosition((info) => console.log(info))}
+                    submitFunction={getCurrentLocationData}
                     iconImage={Images.gprs}
                     iconHeight={RfH(24)}
                     iconWidth={RfW(24)}

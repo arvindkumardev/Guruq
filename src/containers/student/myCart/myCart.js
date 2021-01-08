@@ -16,7 +16,7 @@ import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
 import { alertBox, getFullName, getToken, printCurrency, RfH, RfW } from '../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { API_URL, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
 import { GET_MY_QPOINTS_BALANCE } from '../../common/graphql-query';
@@ -652,7 +652,7 @@ const MyCart = () => {
       />
       {paymentModal && !isEmpty(bookingData) && (
         <CustomModalWebView
-          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingData.uuid}?token=${token}`}
+          url={`${API_URL}/payment/paytm/startTransaction/${bookingData.uuid}?token=${token}`}
           headerText="Payment"
           modalVisible={paymentModal}
           onNavigationStateChange={handlePaymentAuthorization}

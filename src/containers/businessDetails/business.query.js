@@ -16,6 +16,8 @@ export const GET_BUSINESS_DETAILS_DATA = gql`
             name
             filename
             type
+            size
+            original
           }
         }
         gstCertificate {
@@ -25,6 +27,8 @@ export const GET_BUSINESS_DETAILS_DATA = gql`
             name
             filename
             type
+            size
+            original
           }
         }
         createdDate

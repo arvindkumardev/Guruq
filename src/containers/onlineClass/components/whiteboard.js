@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview';
 import { View } from 'native-base';
 import { RfH } from '../../../utils/helpers';
 import { Colors } from '../../../theme';
+import { DASHBOARD_URL } from '../../../utils/constants';
 
 const Whiteboard = (props) => {
   const { uuid } = props;
@@ -12,7 +13,7 @@ const Whiteboard = (props) => {
       <View style={{ paddingTop: RfH(44), backgroundColor: Colors.white }} />
       <WebView
         source={{
-          uri: `https://staging.guruq.in/boards/bid/${uuid}`,
+          uri: `${DASHBOARD_URL}/boards/bid/${uuid}`,
         }}
         style={{ width: '100%', height: '100%' }}
       />

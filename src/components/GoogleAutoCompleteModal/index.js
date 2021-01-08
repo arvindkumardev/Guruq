@@ -94,8 +94,8 @@ const GoogleAutoCompleteModal = (props) => {
           <GooglePlacesAutocomplete
             placeholder="Search"
             fetchDetails
-            currentLocation
-            currentLocationLabel="Current location"
+            // currentLocation
+            // currentLocationLabel="Current location"
             minLength={2}
             debounce={300}
             onPress={(data, details = null) => {

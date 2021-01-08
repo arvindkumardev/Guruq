@@ -195,6 +195,7 @@ export const ADD_DOCUMENT_TO_CLASS = gql`
         type
         filename
         size
+        original
       }
     }
   }

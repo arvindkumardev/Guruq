@@ -200,6 +200,7 @@ export const GET_TUTOR_ALL_DETAILS = gql`
             type
             filename
             size
+            original
           }
         }
       }
@@ -213,6 +214,7 @@ export const GET_TUTOR_ALL_DETAILS = gql`
           type
           filename
           size
+          original
         }
       }
       bankDetails {

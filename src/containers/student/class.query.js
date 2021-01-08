@@ -85,6 +85,7 @@ export const GET_CLASS_DETAILS = gql`
             name
             size
             type
+            original
           }
           createdDate
         }

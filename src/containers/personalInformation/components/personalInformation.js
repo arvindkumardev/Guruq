@@ -6,7 +6,7 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, Loader } from '../../../components';
 import { alertBox, getToken, isValidMobile, printDate, RfH, RfW } from '../../../utils/helpers';
-import { IND_COUNTRY_OBJ } from '../../../utils/constants';
+import {API_URL, IND_COUNTRY_OBJ} from '../../../utils/constants';
 import { Colors, Images } from '../../../theme';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import {
@@ -169,7 +169,7 @@ function PersonalInformation(props) {
     setIsFileUploading(true);
 
     try {
-      const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
+      const res = await fetch(`${API_URL}/upload/file`, {
         headers,
         method: 'POST',
         body: formdata,

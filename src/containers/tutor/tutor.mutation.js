@@ -41,6 +41,7 @@ export const ADD_TUTOR_DOCUMENT_DETAILS = gql`
         type
         filename
         size
+        original
       }
     }
   }
