@@ -144,7 +144,7 @@ const SORT_DATA = [
     name: 'Experience',
     checked: true,
     id: 1,
-    filterData: { sortBy: 'teachingExperience', sortOrder: 'desc' },
+    filterData: { sortBy: 'tutor.teachingExperience', sortOrder: 'desc' },
     displayValue: '',
   },
   {
