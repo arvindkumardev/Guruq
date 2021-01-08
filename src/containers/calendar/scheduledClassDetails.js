@@ -450,7 +450,7 @@ function ScheduledClassDetails(props) {
           </View>
         ) : (
           <View style={[commonStyles.horizontalChildrenView, { paddingLeft: RfW(50), padding: RfW(16) }]}>
-            <Text>No documents are upload by the tutor.</Text>
+            <Text>No documents uploaded by the tutor.</Text>
           </View>
         )}
 
@@ -499,11 +499,7 @@ function ScheduledClassDetails(props) {
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
             <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
-            <Text style={commonStyles.mediumMutedText}>
-              C-{new Date().getFullYear().toString().substring(2, 4)}
-              {new Date().getMonth()}
-              {classData?.classEntity?.id}
-            </Text>
+            <Text style={commonStyles.mediumMutedText}>C-{classData?.classEntity?.id}</Text>
             {/* <Text style={commonStyles.mediumMutedText}>classData?. */}
             {/* </Text> */}
           </View>
