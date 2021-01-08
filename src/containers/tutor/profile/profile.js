@@ -247,7 +247,7 @@ function Profile(props) {
               <Image
                 source={Images.small_active_blue}
                 resizeMode="contain"
-                style={{ height: RfH(12), width: RfW(12) }}
+                style={{ height: RfH(10), width: RfW(10) }}
               />
             </View>
           )}

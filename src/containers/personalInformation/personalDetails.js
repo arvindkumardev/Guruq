@@ -1,14 +1,14 @@
-import {View} from 'react-native';
-import React, {useState} from 'react';
-import {useReactiveVar} from '@apollo/client';
-import {useNavigation} from '@react-navigation/native';
+import { View } from 'react-native';
+import React, { useState } from 'react';
+import { useReactiveVar } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
 import PersonalInformation from './components/personalInformation';
-import {ScreenHeader} from '../../components';
-import {studentDetails, tutorDetails, userDetails} from '../../apollo/cache';
+import { ScreenHeader } from '../../components';
+import { studentDetails, tutorDetails, userDetails } from '../../apollo/cache';
 import commonStyles from '../../theme/styles';
-import {Colors, Fonts} from '../../theme';
-import {RfW} from '../../utils/helpers';
-import {UserTypeEnum} from '../../common/userType.enum';
+import { Colors, Fonts } from '../../theme';
+import { RfW } from '../../utils/helpers';
+import { UserTypeEnum } from '../../common/userType.enum';
 
 function PersonalDetails() {
   const navigation = useNavigation();

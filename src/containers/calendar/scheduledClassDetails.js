@@ -25,6 +25,7 @@ import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
 import ActionSheet from '../../components/ActionSheet';
 import UploadDocument from '../../components/UploadDocument';
 import { DocumentTypeEnum } from '../common/enums';
+import CustomModalDocumentViewer from '../../components/CustomModalDocumentViewer';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -34,13 +35,12 @@ function ScheduledClassDetails(props) {
 
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
-  const studentInfo = useReactiveVar(studentDetails);
 
   const [showMessageModal, setShowMessageModal] = useState(false);
-
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
-  const [showBackButton, setShowBackButton] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [viewDocument, setViewDocument] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState({});
   const [classData, setClassData] = useState({});
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isFileUploading, setIsFileUploading] = useState(false);
@@ -203,7 +203,7 @@ function ScheduledClassDetails(props) {
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
-    setShowBackButton(scrollPosition > 30);
+    // setShowBackButton(scrollPosition > 30);
   };
 
   const onScheduleClass = (slot) => {
@@ -235,7 +235,15 @@ function ScheduledClassDetails(props) {
     return (
       <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(16) }]}>
         <View style={commonStyles.horizontalChildrenView}>
-          <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
+          <IconButtonWrapper
+            iconImage={item.attachment.type === 'application/pdf' ? Images.pdf : Images.jpg}
+            iconHeight={RfH(45)}
+            iconWidth={RfH(45)}
+            submitFunction={() => {
+              setViewDocument(true);
+              setSelectedDoc(item);
+            }}
+          />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.headingPrimaryText}>{item?.name}</Text>
             <Text style={commonStyles.mediumMutedText}>
@@ -249,341 +257,349 @@ function ScheduledClassDetails(props) {
   };
 
   return (
-    <TouchableOpacity
-      style={{ backgroundColor: Colors.white, flex: 1 }}
-      activeOpacity={1}
-      onPress={() => setOpenMenu(false)}>
-      <Loader isLoading={isFileUploading || classDetailsLoading || scheduleLoading} />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        onScroll={(event) => handleScroll(event)}
-        scrollEventThrottle={16}>
-        <View style={[styles.topView]}>
+    <>
+      <View style={{ backgroundColor: Colors.white, flex: 1 }} activeOpacity={1}>
+        <Loader isLoading={isFileUploading || classDetailsLoading || scheduleLoading} />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          onScroll={(event) => handleScroll(event)}
+          scrollEventThrottle={16}>
+          <View style={[styles.topView]}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: RfW(16),
+                flex: 1,
+              }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: RfH(15) }}>
+                <BackArrow action={onBackPress} />
+                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 0.9 }]}>
+                  <Text
+                    style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}
+                    numberOfLines={1}>
+                    {`${classData?.classEntity?.offering?.displayName} by ${getFullName(
+                      classData?.classEntity?.tutor?.contactDetail
+                    )}`}
+                  </Text>
+                  <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]} numberOfLines={1}>
+                    {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
+                  </Text>
+                </View>
+              </View>
+
+              <View>
+                {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
+                  <IconButtonWrapper
+                    iconImage={Images.vertical_dots_b}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfW(20)}
+                    submitFunction={() => setOpenMenu(!openMenu)}
+                    styling={{ alignSelf: 'center' }}
+                  />
+                )}
+                {/* {openMenu && ( */}
+                {/*  <View */}
+                {/*    style={{ */}
+                {/*      position: 'absolute', */}
+                {/*      top: RfH(24), */}
+                {/*      right: RfW(0), */}
+                {/*      backgroundColor: Colors.white, */}
+                {/*      width: 180, */}
+                {/*      paddingVertical: RfH(8), */}
+
+                {/*      borderWidth: 0.5, */}
+                {/*      borderColor: Colors.darkGrey, */}
+                {/*      zIndex: 99, */}
+                {/*    }}> */}
+                {/*    {classData?.isRescheduleAllowed && ( */}
+                {/*      <TouchableOpacity */}
+                {/*        onPress={openRescheduleModal} */}
+                {/*        style={{ */}
+                {/*          paddingHorizontal: RfH(16), */}
+                {/*          paddingBottom: RfH(10), */}
+                {/*          borderBottomWidth: 0.5, */}
+                {/*          borderColor: Colors.lightGrey, */}
+                {/*        }}> */}
+                {/*        <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Reschedule Class</Text> */}
+                {/*      </TouchableOpacity> */}
+                {/*    )} */}
+                {/*    {classData?.isCancelAllowed && ( */}
+                {/*      <TouchableOpacity */}
+                {/*        onPress={goToCancelReason} */}
+                {/*        style={{ paddingHorizontal: RfH(16), paddingTop: RfH(10) }}> */}
+                {/*        <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text> */}
+                {/*      </TouchableOpacity> */}
+                {/*    )} */}
+                {/*    <TouchableOpacity */}
+                {/*      onPress={goToHelp} */}
+                {/*      style={{ paddingHorizontal: RfH(16), paddingTop: RfH(16), paddingBottom: RfH(10) }}> */}
+                {/*      <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Help</Text> */}
+                {/*    </TouchableOpacity> */}
+                {/*  </View> */}
+                {/* )} */}
+              </View>
+            </View>
+          </View>
+          <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(25) }]}>
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.tutor_icon} />
+            <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
+          </View>
+          {!isEmpty(classData) && (
+            <TouchableOpacity
+              style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}
+              activeOpacity={0.8}
+              onPress={handleTutorDetail}
+              disabled={!isStudent}>
+              <TutorImageComponent
+                tutor={classData?.classEntity?.tutor}
+                height={36}
+                width={36}
+                fontSize={16}
+                styling={{ borderRadius: RfH(36) }}
+              />
+              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+                <Text style={commonStyles.headingPrimaryText}>
+                  {getFullName(classData?.classEntity?.tutor?.contactDetail)}
+                </Text>
+                <Text style={commonStyles.mediumMutedText}>T-{classData?.classEntity?.tutor?.id}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+          <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
+            <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+              <Text style={commonStyles.headingPrimaryText}>{printDate(classData?.classEntity?.startDate)}</Text>
+              <Text style={commonStyles.mediumMutedText}>
+                {printTime(classData?.classEntity?.startDate)} - {printTime(classData?.classEntity?.endDate)}
+              </Text>
+            </View>
+          </View>
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+          <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
+            <IconButtonWrapper
+              iconImage={Images.bell}
+              iconWidth={RfW(16)}
+              iconHeight={RfH(16)}
+              imageResizeMode="contain"
+            />
+            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+              <Text style={commonStyles.headingPrimaryText}>Notification alert</Text>
+              <Text style={commonStyles.mediumMutedText}>20 minutes before</Text>
+            </View>
+          </View>
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+          <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
+            <IconButtonWrapper
+              iconImage={Images.attendees}
+              iconWidth={RfW(16)}
+              iconHeight={RfH(16)}
+              imageResizeMode="contain"
+            />
+            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 1 }]}>
+              <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
+              <Text style={commonStyles.mediumMutedText}>
+                {classData?.classEntity?.students?.length} participants to join the Class
+              </Text>
+            </View>
+            <View>
+              <IconButtonWrapper
+                iconImage={Images.messaging}
+                iconHeight={24}
+                iconWidth={24}
+                submitFunction={() => setShowMessageModal(true)}
+              />
+            </View>
+          </View>
+          <FlatList
+            style={{ marginBottom: RfH(16), marginLeft: 40 }}
+            showsHorizontalScrollIndicator={false}
+            data={classData?.classEntity?.students}
+            renderItem={({ item, index }) => renderAttendees(item, index)}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+          <View
+            style={[
+              commonStyles.horizontalChildrenSpaceView,
+              { paddingHorizontal: RfH(16), paddingTop: RfH(10), alignItems: 'center' },
+            ]}>
+            <View style={{ flexDirection: 'row' }}>
+              <IconButtonWrapper iconImage={Images.attachment} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+                <Text style={commonStyles.headingPrimaryText}>Attachments</Text>
+              </View>
+            </View>
+            <View>
+              {userTypeVal === UserTypeEnum.TUTOR.label && (
+                <IconButtonWrapper
+                  iconImage={Images.add}
+                  iconWidth={20}
+                  iconHeight={20}
+                  imageResizeMode="contain"
+                  submitFunction={() => setIsUploadModalOpen(true)}
+                />
+              )}
+            </View>
+          </View>
+
+          {!isEmpty(classData?.classEntity?.documents) ? (
+            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16) }]}>
+              <FlatList
+                style={{ marginBottom: RfH(16), marginLeft: 40 }}
+                showsHorizontalScrollIndicator={false}
+                data={classData?.classEntity?.documents.sort((a, b) => (a.id < b.id ? 1 : -1))}
+                renderItem={({ item, index }) => renderAttachments(item, index)}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
+          ) : (
+            <View style={[commonStyles.horizontalChildrenView, { paddingLeft: RfW(50), padding: RfW(16) }]}>
+              <Text>No documents are upload by the tutor.</Text>
+            </View>
+          )}
+
+          <View style={commonStyles.lineSeparatorWithMargin} />
+
+          {classData?.classEntity?.address && (
+            <>
+              <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
+                <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(16)} />
+                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+                  <Text style={commonStyles.headingPrimaryText}>Class Location </Text>
+                </View>
+              </View>
+              <View style={{ paddingHorizontal: RfW(16) }}>
+                <Text style={commonStyles.headingPrimaryText}>Block 27</Text>
+                <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                  Block 72, , Ashok Nagar, New Delhi, Delhi 110018, India
+                </Text>
+                <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                  Landmark : Monga Sweets
+                </Text>
+              </View>
+
+              <View style={{ marginTop: RfH(16) }}>
+                <MapView
+                  style={{ flex: 1, height: 300 }}
+                  liteMode
+                  initialRegion={{
+                    latitude: 28.561929,
+                    longitude: 77.06681,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  }}>
+                  <Marker coordinate={{ latitude: 28.561929, longitude: 77.06681 }} />
+                </MapView>
+              </View>
+            </>
+          )}
+
+          <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16) }]}>
+            <IconButtonWrapper
+              iconImage={Images.personal}
+              iconWidth={RfW(16)}
+              iconHeight={RfH(16)}
+              imageResizeMode="contain"
+            />
+            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+              <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
+              <Text style={commonStyles.mediumMutedText}>
+                C-{new Date().getFullYear().toString().substring(2, 4)}
+                {new Date().getMonth()}
+                {classData?.classEntity?.id}
+              </Text>
+              {/* <Text style={commonStyles.mediumMutedText}>classData?. */}
+              {/* </Text> */}
+            </View>
+          </View>
+          <View style={commonStyles.lineSeparatorWithVerticalMargin} />
+          {/* {classData?.isClassJoinAllowed && ( */}
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'center',
               alignItems: 'center',
-              paddingHorizontal: RfW(16),
-              flex: 1,
+              marginTop: RfH(16),
+              marginBottom: RfH(34),
             }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: RfH(15) }}>
-              <BackArrow action={onBackPress} />
-              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 0.9 }]}>
-                <Text style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]} numberOfLines={1}>
-                  {`${classData?.classEntity?.offering?.displayName} by ${getFullName(
-                    classData?.classEntity?.tutor?.contactDetail
-                  )}`}
-                </Text>
-                <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]} numberOfLines={1}>
-                  {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
-                </Text>
-              </View>
-            </View>
-
-            <View>
-              {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
-                <IconButtonWrapper
-                  iconImage={Images.vertical_dots_b}
-                  iconHeight={RfH(20)}
-                  iconWidth={RfW(20)}
-                  submitFunction={() => setOpenMenu(!openMenu)}
-                  styling={{ alignSelf: 'center' }}
-                />
-              )}
-              {/* {openMenu && ( */}
-              {/*  <View */}
-              {/*    style={{ */}
-              {/*      position: 'absolute', */}
-              {/*      top: RfH(24), */}
-              {/*      right: RfW(0), */}
-              {/*      backgroundColor: Colors.white, */}
-              {/*      width: 180, */}
-              {/*      paddingVertical: RfH(8), */}
-
-              {/*      borderWidth: 0.5, */}
-              {/*      borderColor: Colors.darkGrey, */}
-              {/*      zIndex: 99, */}
-              {/*    }}> */}
-              {/*    {classData?.isRescheduleAllowed && ( */}
-              {/*      <TouchableOpacity */}
-              {/*        onPress={openRescheduleModal} */}
-              {/*        style={{ */}
-              {/*          paddingHorizontal: RfH(16), */}
-              {/*          paddingBottom: RfH(10), */}
-              {/*          borderBottomWidth: 0.5, */}
-              {/*          borderColor: Colors.lightGrey, */}
-              {/*        }}> */}
-              {/*        <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Reschedule Class</Text> */}
-              {/*      </TouchableOpacity> */}
-              {/*    )} */}
-              {/*    {classData?.isCancelAllowed && ( */}
-              {/*      <TouchableOpacity */}
-              {/*        onPress={goToCancelReason} */}
-              {/*        style={{ paddingHorizontal: RfH(16), paddingTop: RfH(10) }}> */}
-              {/*        <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Cancel Class</Text> */}
-              {/*      </TouchableOpacity> */}
-              {/*    )} */}
-              {/*    <TouchableOpacity */}
-              {/*      onPress={goToHelp} */}
-              {/*      style={{ paddingHorizontal: RfH(16), paddingTop: RfH(16), paddingBottom: RfH(10) }}> */}
-              {/*      <Text style={[commonStyles.regularPrimaryText, { color: Colors.black }]}>Help</Text> */}
-              {/*    </TouchableOpacity> */}
-              {/*  </View> */}
-              {/* )} */}
-            </View>
-          </View>
-        </View>
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(25) }]}>
-          <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.tutor_icon} />
-          <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
-        </View>
-        {!isEmpty(classData) && (
-          <TouchableOpacity
-            style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}
-            activeOpacity={0.8}
-            onPress={handleTutorDetail}
-            disabled={!isStudent}>
-            <TutorImageComponent
-              tutor={classData?.classEntity?.tutor}
-              height={36}
-              width={36}
-              fontSize={16}
-              styling={{ borderRadius: RfH(36) }}
-            />
-            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-              <Text style={commonStyles.headingPrimaryText}>
-                {getFullName(classData?.classEntity?.tutor?.contactDetail)}
-              </Text>
-              <Text style={commonStyles.mediumMutedText}>T-{classData?.classEntity?.tutor?.id}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-          <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>{printDate(classData?.classEntity?.startDate)}</Text>
-            <Text style={commonStyles.mediumMutedText}>
-              {printTime(classData?.classEntity?.startDate)} - {printTime(classData?.classEntity?.endDate)}
-            </Text>
-          </View>
-        </View>
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-          <IconButtonWrapper
-            iconImage={Images.bell}
-            iconWidth={RfW(16)}
-            iconHeight={RfH(16)}
-            imageResizeMode="contain"
-          />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>Notification alert</Text>
-            <Text style={commonStyles.mediumMutedText}>20 minutes before</Text>
-          </View>
-        </View>
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-          <IconButtonWrapper
-            iconImage={Images.attendees}
-            iconWidth={RfW(16)}
-            iconHeight={RfH(16)}
-            imageResizeMode="contain"
-          />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 1 }]}>
-            <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
-            <Text style={commonStyles.mediumMutedText}>
-              {classData?.classEntity?.students?.length} participants to join the Class
-            </Text>
-          </View>
-          <View>
-            <IconButtonWrapper
-              iconImage={Images.messaging}
-              iconHeight={24}
-              iconWidth={24}
-              submitFunction={() => setShowMessageModal(true)}
-            />
-          </View>
-        </View>
-        <FlatList
-          style={{ marginBottom: RfH(16), marginLeft: 40 }}
-          showsHorizontalScrollIndicator={false}
-          data={classData?.classEntity?.students}
-          renderItem={({ item, index }) => renderAttendees(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
-        <View
-          style={[
-            commonStyles.horizontalChildrenSpaceView,
-            { paddingHorizontal: RfH(16), paddingTop: RfH(10), alignItems: 'center' },
-          ]}>
-          <View style={{ flexDirection: 'row' }}>
-            <IconButtonWrapper iconImage={Images.attachment} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-              <Text style={commonStyles.headingPrimaryText}>Attachments</Text>
-            </View>
-          </View>
-          <View>
-            {userTypeVal === UserTypeEnum.TUTOR.label && (
+            <Button
+              block
+              onPress={goToOnlineClass}
+              style={[
+                commonStyles.buttonPrimary,
+                {
+                  borderRadius: 4,
+                  marginHorizontal: 0,
+                },
+              ]}>
               <IconButtonWrapper
-                iconImage={Images.add}
-                iconWidth={20}
-                iconHeight={20}
-                imageResizeMode="contain"
-                submitFunction={() => setIsUploadModalOpen(true)}
+                iconImage={Images.video}
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                styling={{ alignSelf: 'center' }}
               />
-            )}
+              <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
+            </Button>
           </View>
-        </View>
+          {/* )} */}
+        </ScrollView>
 
-        {!isEmpty(classData?.classEntity?.documents) ? (
-          <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16) }]}>
-            <FlatList
-              style={{ marginBottom: RfH(16), marginLeft: 40 }}
-              showsHorizontalScrollIndicator={false}
-              data={classData?.classEntity?.documents}
-              renderItem={({ item, index }) => renderAttachments(item, index)}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
-        ) : (
-          <View style={[commonStyles.horizontalChildrenView, { paddingLeft: RfW(50), padding: RfW(16) }]}>
-            <Text>No documents are upload by the tutor.</Text>
-          </View>
-        )}
-
-        <View style={commonStyles.lineSeparatorWithMargin} />
-
-        {classData?.classEntity?.address && (
-          <>
-            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-              <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-                <Text style={commonStyles.headingPrimaryText}>Class Location </Text>
-              </View>
-            </View>
-            <View style={{ paddingHorizontal: RfW(16) }}>
-              <Text style={commonStyles.headingPrimaryText}>Block 27</Text>
-              <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                Block 72, , Ashok Nagar, New Delhi, Delhi 110018, India
-              </Text>
-              <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                Landmark : Monga Sweets
-              </Text>
-            </View>
-
-            <View style={{ marginTop: RfH(16) }}>
-              <MapView
-                style={{ flex: 1, height: 300 }}
-                liteMode
-                initialRegion={{
-                  latitude: 28.561929,
-                  longitude: 77.06681,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
-                }}>
-                <Marker coordinate={{ latitude: 28.561929, longitude: 77.06681 }} />
-              </MapView>
-            </View>
-          </>
-        )}
-
-        <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16) }]}>
-          <IconButtonWrapper
-            iconImage={Images.personal}
-            iconWidth={RfW(16)}
-            iconHeight={RfH(16)}
-            imageResizeMode="contain"
+        {classData && (
+          <VideoMessagingModal
+            onClose={() => setShowMessageModal(false)}
+            visible={showMessageModal}
+            channelName={classData?.classEntity?.uuid}
           />
-          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
-            <Text style={commonStyles.mediumMutedText}>
-              C-{new Date().getFullYear().toString().substring(2, 4)}
-              {new Date().getMonth()}
-              {classData?.classEntity?.id}
-            </Text>
-            {/* <Text style={commonStyles.mediumMutedText}>classData?. */}
-            {/* </Text> */}
-          </View>
-        </View>
-        <View style={commonStyles.lineSeparatorWithVerticalMargin} />
-        {/* {classData?.isClassJoinAllowed && ( */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: RfH(16),
-            marginBottom: RfH(34),
-          }}>
-          <Button
-            block
-            onPress={goToOnlineClass}
-            style={[
-              commonStyles.buttonPrimary,
-              {
-                borderRadius: 4,
-                marginHorizontal: 0,
-              },
-            ]}>
-            <IconButtonWrapper
-              iconImage={Images.video}
-              iconHeight={RfH(16)}
-              iconWidth={RfW(16)}
-              styling={{ alignSelf: 'center' }}
-            />
-            <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
-          </Button>
-        </View>
-        {/* )} */}
-      </ScrollView>
+        )}
 
-      {classData && (
-        <VideoMessagingModal
-          onClose={() => setShowMessageModal(false)}
-          visible={showMessageModal}
-          channelName={classData?.classEntity?.uuid}
+        {showReschedulePopup && (
+          <DateSlotSelectorModal
+            visible={showReschedulePopup}
+            onClose={() => setShowReschedulePopup(false)}
+            tutorId={classData?.classEntity?.tutor?.id}
+            onSubmit={onScheduleClass}
+            isReschedule
+          />
+        )}
+
+        {showReviewPopup && (
+          <RateReview
+            visible={showReviewPopup}
+            onClose={() => setShowReviewPopup(false)}
+            classDetails={classData?.classEntity}
+          />
+        )}
+
+        <ActionSheet
+          actions={menuItem}
+          cancelText="Dismiss"
+          handleCancel={() => setOpenMenu(false)}
+          isVisible={openMenu}
+          topLabel="Action"
+        />
+
+        {isUploadModalOpen && (
+          <UploadDocument
+            isVisible={isUploadModalOpen}
+            handleClose={() => setIsUploadModalOpen(!isUploadModalOpen)}
+            isFilePickerVisible
+            handleUpload={handleAcceptedFiles}
+            snapCount={1}
+          />
+        )}
+      </View>
+      {viewDocument && !isEmpty(selectedDoc) && (
+        <CustomModalDocumentViewer
+          document={selectedDoc}
+          modalVisible={viewDocument}
+          backButtonHandler={() => setViewDocument(false)}
         />
       )}
-
-      {showReschedulePopup && (
-        <DateSlotSelectorModal
-          visible={showReschedulePopup}
-          onClose={() => setShowReschedulePopup(false)}
-          tutorId={classData?.classEntity?.tutor?.id}
-          onSubmit={onScheduleClass}
-          isReschedule
-        />
-      )}
-
-      {showReviewPopup && (
-        <RateReview
-          visible={showReviewPopup}
-          onClose={() => setShowReviewPopup(false)}
-          classDetails={classData?.classEntity}
-        />
-      )}
-
-      <ActionSheet
-        actions={menuItem}
-        cancelText="Dismiss"
-        handleCancel={() => setOpenMenu(false)}
-        isVisible={openMenu}
-        topLabel="Action"
-      />
-
-      {isUploadModalOpen && (
-        <UploadDocument
-          isVisible={isUploadModalOpen}
-          handleClose={() => setIsUploadModalOpen(!isUploadModalOpen)}
-          isFilePickerVisible
-          handleUpload={handleAcceptedFiles}
-          snapCount={1}
-        />
-      )}
-    </TouchableOpacity>
+    </>
   );
 }
 

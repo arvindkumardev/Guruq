@@ -79,12 +79,14 @@ export const GET_CLASS_DETAILS = gql`
         }
         documents {
           name
+          id
           attachment {
             filename
             name
             size
             type
           }
+          createdDate
         }
         startDate
         endDate

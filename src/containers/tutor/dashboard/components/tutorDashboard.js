@@ -214,8 +214,8 @@ function TutorDashboard(props) {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
-              marginTop: RfH(15),
-              height: RfH(54),
+              marginTop: RfH(20),
+              height: RfH(60),
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',

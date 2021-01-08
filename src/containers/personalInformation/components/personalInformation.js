@@ -215,8 +215,10 @@ function PersonalInformation(props) {
               iconImage={Images.editPicture}
               iconWidth={RfW(25)}
               iconHeight={RfH(25)}
-              styling={{ position: 'absolute', left: -RfW(25), top: RfH(5) }}
-              submitFunction={() => setIsUploadModalOpen(true)}
+              containerStyling={{ position: 'absolute', left: -RfW(25), top: RfH(5) }}
+              submitFunction={() => {
+                setIsUploadModalOpen(true);
+              }}
             />
           </View>
           <View style={{ height: RfH(24) }} />

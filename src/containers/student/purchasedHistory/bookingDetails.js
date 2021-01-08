@@ -21,10 +21,7 @@ function BookingDetails(props) {
   const [openMenu, setOpenMenu] = useState(false);
   const [token, setToken] = useState('');
   const [bookingData, setBookingData] = useState({});
-  const [menuItem, setMenuItem] = useState([
-    { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
-    { label: 'Help', handler: goToCustomerCare, isEnabled: true },
-  ]);
+
 
   const [getBooking, { loading: getBookingLoader }] = useLazyQuery(GET_BOOKING_DETAIL, {
     fetchPolicy: 'no-cache',
@@ -111,9 +108,9 @@ function BookingDetails(props) {
     navigation.navigate(routeNames.CUSTOMER_CARE);
   };
 
-  const goToRefund = () => {
-    navigation.navigate(routeNames.STUDENT.REFUND, { bookingData });
-  };
+  // const goToRefund = () => {
+  //   navigation.navigate(routeNames.STUDENT.REFUND, { bookingData });
+  // };
 
   const goToInvoice = () => {
     setOpenMenu(false);
@@ -122,6 +119,11 @@ function BookingDetails(props) {
       label: 'Invoice',
     });
   };
+
+  const [menuItem, setMenuItem] = useState([
+    { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
+    { label: 'Help', handler: goToCustomerCare, isEnabled: true },
+  ]);
 
   return (
     <>
