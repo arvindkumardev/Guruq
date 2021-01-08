@@ -94,8 +94,6 @@ function AddEditAddress(props) {
     }
   };
 
-  const [showGoogleSearchModal, setShowGoogleSearchModal] = useState(false);
-
   const getCurrentLocationData = async () => {
     await Geolocation.getCurrentPosition((info) => {
       console.log('info', info);
