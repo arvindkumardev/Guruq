@@ -10,39 +10,47 @@ import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { userDetails } from '../../../apollo/cache';
 
-function UpdateVersion() {
+function UnderMainTainance() {
   const navigation = useNavigation();
   const userInfo = useReactiveVar(userDetails);
 
   return (
     <View
       style={[
-        { 
-          flex:1,
-          backgroundColor:Colors.brandBlue2
-          },
+        {
+          flex: 1,
+          backgroundColor: Colors.white,
+        },
       ]}>
-        <StatusBar 
-        hidden
-        barStyle="light-content" />
-      <View style={{ flex:1, backgroundColor: Colors.brandBlue2 }}>
-        <ImageBackground
-          source={Images.update_version}
-          resizeMode={'stretch'}
-          style={[
-            {
-              height: '100%',
-              width: '100%',
-            },
-          ]}
-        />
-      </View>
+      <StatusBar barStyle="light-content" />
+      <View style={{ height: RfH(44) }} />
       <View
         style={{
-          flex: 0.7,
+          flex: 1,
+          marginTop: RfH(32),
           backgroundColor: Colors.white,
-          paddingHorizontal: 16,
-          paddingVertical:RfH(16)
+          paddingHorizontal: RfH(16),
+          justifyContent: 'center',
+        }}>
+        <View style={{ flex: 0.8 }}>
+          <ImageBackground
+            source={Images.under_maintainance}
+            resizeMode={'contain'}
+            style={[
+              {
+                height: '100%',
+                width: '100%',
+              },
+            ]}
+          />
+        </View>
+      </View>
+      <View style={{ height: RfH(32) }} />
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: Colors.white,
+          paddingHorizontal: RfH(16),
         }}>
         <View>
           <Text
@@ -53,7 +61,7 @@ function UpdateVersion() {
                 textAlign: 'center',
               },
             ]}>
-            Time to Update!
+            {`We'll be back soon`}
           </Text>
           <View style={{ height: RfH(8) }} />
           <Text
@@ -64,8 +72,7 @@ function UpdateVersion() {
                 textAlign: 'center',
               },
             ]}>
-            There is newer version available for download. Please update the app
-            now{' '}
+            {`Currently the app is under maintenance, We apologize for the inconvenience `}
           </Text>
         </View>
 
@@ -89,7 +96,7 @@ function UpdateVersion() {
                 fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
                 fontFamily: Fonts.semiBold,
               }}>
-              Update New Version
+              Go Home
             </Text>
           </Button>
         </View>
@@ -98,4 +105,4 @@ function UpdateVersion() {
   );
 }
 
-export default UpdateVersion;
+export default UnderMainTainance;

@@ -63,6 +63,7 @@ import TutorVerificationScreen from '../containers/certficationProcess/tutorVeri
 import { BackgroundCheckStatusEnum } from '../containers/common/enums';
 import RatingReviews from '../containers/common/ratingReviews';
 import UpdateVersion from '../containers/common/updateVersion/updateVersion';
+import UnderMainTainance from '../containers/common/underMaintainance/underMaintainance';
 
 const Stack = createStackNavigator();
 
@@ -265,6 +266,11 @@ const AppStack = (props) => {
       <Stack.Screen
         name={NavigationRouteNames.UPDATE_VERSION}
         component={UpdateVersion}
+        options={{ headerShown: false }}
+      />
+       <Stack.Screen
+        name={NavigationRouteNames.UNDER_MAINTAINANCE}
+        component={UnderMainTainance}
         options={{ headerShown: false }}
       />
     </>
