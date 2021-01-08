@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { isEmpty } from 'lodash';
@@ -13,13 +13,29 @@ import styles from './style';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { GET_TUTOR_ALL_DETAILS } from '../../certficationProcess/certification-query';
 import { GET_CURRENT_TUTOR_QUERY } from '../../common/graphql-query';
-import { tutorDetails } from '../../../apollo/cache';
+import { offeringsMasterData, tutorDetails } from '../../../apollo/cache';
 import { MARK_ON_BOARDED } from '../../common/graphql-mutation';
+import { GET_OFFERINGS_MASTER_DATA } from '../../student/dashboard-query';
 
 const TutorOnBoard = () => {
   const isFocussed = useIsFocused();
   const navigation = useNavigation();
   const [tutorDetail, setTutorDetail] = useState({});
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
+
+  const [getOfferingMasterData, { loading: loadingOfferingMasterData }] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        console.log('e', e);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        offeringsMasterData(data.offerings.edges);
+      }
+    },
+  });
 
   const [getTutorDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_ALL_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -56,6 +72,12 @@ const TutorOnBoard = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (isEmpty(offeringMasterData)) {
+      getOfferingMasterData();
+    }
+  }, [offeringMasterData]);
 
   useEffect(() => {
     if (isFocussed) {

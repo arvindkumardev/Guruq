@@ -1,12 +1,12 @@
-import { useReactiveVar, useMutation } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {useMutation, useReactiveVar} from '@apollo/client';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import { isEmpty } from 'lodash';
+import {isEmpty} from 'lodash';
 
-import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
+import {FORGOT_PASSWORD_MUTATION} from '../../common/graphql-mutation';
 
 import initializeApollo from '../../../apollo/apollo';
 import {
@@ -16,33 +16,21 @@ import {
   isTokenLoading,
   networkConnectivityError,
   notificationPayload,
+  notificationsList,
   offeringsMasterData,
   studentDetails,
   tutorDetails,
   userDetails,
   userLocation,
   userType,
-  notificationsList,
 } from '../../../apollo/cache';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-
-import { IconButtonWrapper, TutorImageComponent } from '../../../components';
+import {LOCAL_STORAGE_DATA_KEY} from '../../../utils/constants';
 import IconWrapper from '../../../components/IconWrapper';
 import NavigationRouteNames from '../../../routes/screenNames';
-import { Colors, Images } from '../../../theme';
+import {Colors, Images} from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import {
-  alertBox,
-  clearAllLocalStorage,
-  getFullName,
-  getUserImageUrl,
-  removeToken,
-  RfH,
-  RfW,
-  getSaveData,
-} from '../../../utils/helpers';
+import {alertBox, clearAllLocalStorage, getFullName, getSaveData, removeToken, RfH, RfW,} from '../../../utils/helpers';
 import styles from './styles';
-import { UserTypeEnum } from '../../../common/userType.enum';
 import UserImageComponent from '../../../components/UserImageComponent';
 
 const PERSONAL_OPTIONS = [
@@ -290,7 +278,7 @@ function Profile(props) {
                 <Text style={styles.userMobDetails}>
                   +{userInfo?.phoneNumber?.countryCode}-{userInfo?.phoneNumber?.number}
                 </Text>
-                <Text style={styles.userMobDetails}>S-{userInfo?.id}</Text>
+                <Text style={styles.userMobDetails}>S-{studentInfo?.id}</Text>
               </View>
             </View>
           </View>

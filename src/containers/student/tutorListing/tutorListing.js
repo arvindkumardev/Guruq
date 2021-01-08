@@ -39,7 +39,7 @@ function TutorListing(props) {
   const [offering, setOffering] = useState(selectedOffering);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
   const [showCompareModal, setShowCompareModal] = useState(false);
-  const [topHeaderSticky, setTopHeaderSticky] = useState(false);
+  // const [topHeaderSticky, setTopHeaderSticky] = useState(false);
   const [showFilterPopup, setShowFilterPopup] = useState(false);
   const [appendData, setAppendData] = useState(false);
   const [tutorList, setTutorList] = useState([]);
@@ -78,6 +78,7 @@ function TutorListing(props) {
   };
 
   const [getTutors, { loading: loadingTutors }] = useLazyQuery(SEARCH_TUTORS, {
+    fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
@@ -209,10 +210,10 @@ function TutorListing(props) {
     navigation.goBack();
   };
 
-  const handleScroll = (event) => {
-    const scrollPosition = event.nativeEvent.contentOffset.y;
-    setTopHeaderSticky(scrollPosition > 30);
-  };
+  // const handleScroll = (event) => {
+  //   const scrollPosition = event.nativeEvent.contentOffset.y;
+  //   setTopHeaderSticky(scrollPosition > 30);
+  // };
 
   useEffect(() => {
     if (filterValues) {
@@ -287,7 +288,7 @@ function TutorListing(props) {
                   iconWidth={RfH(16)}
                   iconHeight={RfH(16)}
                   iconImage={Images.blue_cross}
-                  imageResizeMode={'contain'}
+                  imageResizeMode="contain"
                   styling={{ marginLeft: RfW(12) }}
                   submitFunction={() => removeFilter(key)}
                 />
@@ -401,7 +402,7 @@ function TutorListing(props) {
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={styles.tutorListContainer}
             ListFooterComponent={
-              <View style={{ paddingBottom: RfH(200) }}>
+              <View style={{ paddingBottom: RfH(250) }}>
                 {loadMoreButton && !isEmpty(tutorList) && (
                   <TouchableOpacity style={styles.footerLoadMore} onPress={loadMore}>
                     <Text>Load More</Text>
@@ -411,7 +412,7 @@ function TutorListing(props) {
             }
           />
         ) : (
-          <View style={{ flex: 1, paddingTop: RfH(40), alignItems: 'center' }}>
+          <View style={{ paddingTop: RfH(40), alignItems: 'center' }}>
             <Image
               source={Images.emptyTutorList}
               style={{

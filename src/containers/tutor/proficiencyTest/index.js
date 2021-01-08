@@ -33,6 +33,7 @@ const ProficiencyTest = (props) => {
   }, [token]);
 
   const onNavigationStateChange = (event) => {
+    console.log('event.url', event.url);
     if (event.url.includes(`http://dashboardv2.guruq.in/tutor/start-proficiency-test/${offeringId}/complete`)) {
       navigation.goBack();
     } else {
@@ -51,17 +52,14 @@ const ProficiencyTest = (props) => {
         onRightIconClick={() => setOpenMenu(true)}
       />
       <WebView
-        source={{
-          uri: url,
-        }}
+        source={{ uri: url }}
         javaScriptEnabled
         domStorageEnabled
-        startInLoadingState
         renderError={() => setError(true)}
         renderLoading={() => <InPlaceLoader isLoading />}
         showsVerticalScrollIndicator={false}
         injectedJavaScript={INJECTEDJAVASCRIPT}
-        onNavigationStateChange={onNavigationStateChange}
+        onNavigationStateChange={(event) => onNavigationStateChange(event)}
       />
       {isError && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

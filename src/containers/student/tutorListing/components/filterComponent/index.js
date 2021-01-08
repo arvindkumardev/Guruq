@@ -137,6 +137,7 @@ function FilterComponent(props) {
                   data={selectedFilterItem.data}
                   extraData={refreshFilterItemData}
                   showsVerticalScrollIndicator={false}
+                  scrollEnabled={selectedFilterItem.data.length>9}
                   renderItem={({ item }) => renderOptionsItem(selectedFilterItem.id, item)}
                   keyExtractor={(item, index) => index.toString()}
                 />

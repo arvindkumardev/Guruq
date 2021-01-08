@@ -12,10 +12,11 @@ import { Colors, Fonts } from '../../theme';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
 import NavigationRouteNames from '../../routes/screenNames';
 import { GET_TUTOR_OFFERING_DETAIL } from './certification-query';
-import { offeringsMasterData } from '../../apollo/cache';
+import { offeringsMasterData, tutorDetails } from '../../apollo/cache';
 import { PtStatus } from '../tutor/enums';
 import { MARK_CERTIFIED } from './certification-mutation';
 import ActionModal from './components/helpSection';
+import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 
 const PtStartScreen = (props) => {
   const navigation = useNavigation();
@@ -50,6 +51,19 @@ const PtStartScreen = (props) => {
     },
   });
 
+  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        tutorDetails(data?.getCurrentTutor);
+          navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
+              isOnBoarding,
+          });
+      }
+    },
+  });
+
   const [markCertified, { loading: markTutorCertifiedLoading }] = useMutation(MARK_CERTIFIED, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -57,9 +71,7 @@ const PtStartScreen = (props) => {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
-          isOnBoarding,
-        });
+        getCurrentTutor();
       }
     },
   });
@@ -239,7 +251,7 @@ const PtStartScreen = (props) => {
 
   return (
     <>
-      <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading} />
+      <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading || getCurrentTutorLoading} />
       <ScreenHeader label="Proficiency Test" homeIcon horizontalPadding={RfW(16)} />
       <ScrollView
         style={{ backgroundColor: Colors.white, paddingBottom: RfH(40) }}
@@ -288,32 +300,40 @@ const PtStartScreen = (props) => {
             </>
           )}
 
-          {ptDetail?.status === PtStatus.EXEMPTED.label && (
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
-              <Text style={commonStyles.headingPrimaryText}> You are exempted from the test</Text>
-            </View>
+          {!isEmpty(ptDetail) && ptDetail?.status === PtStatus.EXEMPTED.label && (
+            <>
+              <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
+                <Text style={commonStyles.headingPrimaryText}> You are exempted from the test</Text>
+              </View>
+              <Button
+                onPress={handleClick}
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
+                <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
+              </Button>
+            </>
           )}
 
-          {!attemptExhausted &&
-          !isEmpty(ptDetail) &&
-          (ptDetail?.status !== PtStatus.PASSED.label || ptDetail?.status !== PtStatus.EXEMPTED.label) ? (
-            <Button
-              onPress={handleClick}
-              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
-              <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
-            </Button>
-          ) : (
-            <View style={{ marginTop: RfH(20), justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
-                {'All PT attempts Exhausted.\n Contact the customer care.'}
-              </Text>
+          {!isEmpty(ptDetail) &&
+            ptDetail?.status !== PtStatus.PASSED.label &&
+            ptDetail?.status !== PtStatus.EXEMPTED.label &&
+            (!attemptExhausted ? (
               <Button
-                onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}
-                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
-                <Text style={commonStyles.textButtonPrimary}>Customer care</Text>
+                onPress={handleClick}
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
+                <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
               </Button>
-            </View>
-          )}
+            ) : (
+              <View style={{ marginTop: RfH(20), justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
+                  {'All PT attempts Exhausted.\n Contact the customer care.'}
+                </Text>
+                <Button
+                  onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}
+                  style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
+                  <Text style={commonStyles.textButtonPrimary}>Customer care</Text>
+                </Button>
+              </View>
+            ))}
         </View>
       </ScrollView>
       {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}

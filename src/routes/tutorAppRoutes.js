@@ -23,6 +23,9 @@ import AddEditBusinessDetails from '../containers/businessDetails/addEditBusines
 import PriceAndSchedule from '../containers/certficationProcess/priceAndSchedule';
 import DocumentListing from '../containers/businessDetails/documentListing';
 import TutorOnBoard from '../containers/tutor/tutorOnBoard/index';
+import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
+import ProficiencyTest from '../containers/tutor/proficiencyTest';
+import CompleteYourProfile from "../containers/certficationProcess/completeYourProfile";
 
 const Stack = createStackNavigator();
 
@@ -76,7 +79,7 @@ export const getTutorRoutes = (tutorInfo) => {
         component={OtpVerification}
         options={{ headerShown: false }}
       />
-   <Stack.Screen
+      <Stack.Screen
         name={NavigationRouteNames.TUTOR.SET_PASSWORD}
         component={SetPassword}
         options={{ headerShown: false }}
@@ -127,6 +130,16 @@ export const getTutorRoutes = (tutorInfo) => {
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.DOCUMENT_LISTING}
         component={DocumentListing}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PT_START_SCREEN}
+        component={PtStartScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PROFICIENCY_TEST}
+        component={ProficiencyTest}
         options={{ headerShown: false }}
       />
     </>

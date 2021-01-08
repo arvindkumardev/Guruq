@@ -1,4 +1,4 @@
-import { SafeAreaView, StatusBar, View, BackHandler } from 'react-native';
+import { BackHandler, SafeAreaView, StatusBar, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'native-base';
 import GetLocation from 'react-native-get-location';
@@ -13,7 +13,6 @@ import { userLocation } from '../../../apollo/cache';
 import BottomTab from './components/bottomTab';
 import { alertBox } from '../../../utils/helpers';
 import Wallet from '../../common/wallet/wallet';
-import CustomModalWebView from '../../../components/CustomModalWebView';
 
 function StudentDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);

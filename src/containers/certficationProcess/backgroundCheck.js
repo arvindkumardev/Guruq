@@ -116,7 +116,7 @@ function BackgroundCheck() {
               style={[commonStyles.horizontalChildrenView, { alignItems: 'center' }]}
               activeOpacity={0.8}>
               <CustomCheckBox enabled={tncCheckBox} submitFunction={() => setTncCheckBox(!tncCheckBox)} />
-              <Text style={[commonStyles.mediumPrimaryText, { marginLeft: RfW(16) }]}>
+              <Text style={[commonStyles.mediumPrimaryText, { marginHorizontal: RfW(16) }]}>
                 I have read the GuruQ Terms & Conditions, Privacy Policy and Cookie Policy
               </Text>
             </TouchableOpacity>
@@ -125,7 +125,7 @@ function BackgroundCheck() {
               style={[commonStyles.horizontalChildrenView, { alignItems: 'center', marginTop: RfH(16) }]}
               activeOpacity={0.8}>
               <CustomCheckBox enabled={consentCheckBox} submitFunction={() => setConsentCheckBox(!consentCheckBox)} />
-              <Text style={[commonStyles.mediumPrimaryText, { marginLeft: RfW(16) }]}>
+              <Text style={[commonStyles.mediumPrimaryText, { marginHorizontal: RfW(16) }]}>
                 I agree to a background check by GuruQ team to verify my credentials.
               </Text>
             </TouchableOpacity>

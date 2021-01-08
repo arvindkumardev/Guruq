@@ -40,7 +40,7 @@ const NavigationRouteNames = {
 
   STUDENT: {
     OTP_VERIFICATION: 'otp_verification',
-    SET_PASSWORD:'set_password',
+    SET_PASSWORD: 'set_password',
     ON_BOARDING: 'student_on_boarding',
     MY_STUDY_AREAS: 'my_study_areas',
     STUDY_AREA: 'student_study_area',
@@ -74,7 +74,7 @@ const NavigationRouteNames = {
   },
   TUTOR: {
     OTP_VERIFICATION: 'otp_verification',
-    SET_PASSWORD:'set_password',
+    SET_PASSWORD: 'set_password',
     ON_BOARDING: 'tutor_on_boarding',
     DASHBOARD: 'tutor_dashboard',
     CANCEL_REASON: 'cancel_reason',

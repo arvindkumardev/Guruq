@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import NavigationRouteNames from './screenNames';
 import OtpVerification from '../containers/common/login/otpVerification';
 import SetPassword from '../containers/common/login/setPassword';
@@ -14,7 +14,6 @@ import TutorDetails from '../containers/student/tutorDetails/tutorDetails';
 import myCart from '../containers/student/myCart/myCart';
 import BookingConfirmed from '../containers/student/payment/bookingConfirmed';
 import paymentReceived from '../containers/student/payment/paymentReceived';
-import PaymentMethodNotInUse from '../containers/student/payment/paymentMethod(not in use)';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
 import OnlineClass from '../containers/onlineClass/onlineClass';
@@ -25,24 +24,28 @@ import PytnSubmit from '../containers/student/pytn/pytnSubmit';
 import WebViewPages from '../containers/student/profile/webViewPages';
 import PytnListing from '../containers/student/pytn/pytnListing';
 import PytnDetail from '../containers/student/pytn/pytnDetail';
-import WebViewPage from '../components/WebViewPage';
 import Notifications from '../containers/student/dashboard/notifications';
-import SendFeedback from '../containers/common/sendFeedback';
-import CustomerCare from '../containers/common/customerCare/customerCare';
 import ParentListing from '../containers/parentsDetail/parentListing';
 import AddEditParents from '../containers/parentsDetail/addEditParents';
 import BookingList from '../containers/student/purchasedHistory/bookingList';
 import BookingDetails from '../containers/student/purchasedHistory/bookingDetails';
 import Refund from '../containers/student/purchasedHistory/refund';
-import AboutUs from '../containers/common/about/about';
 import MyStudyAreas from '../containers/student/studyArea/myStudyAreas';
 import OrderDetails from '../containers/student/purchasedHistory/orderDetails';
+import StudentOnBoard from '../containers/student/studentOnBoard';
 
 const Stack = createStackNavigator();
 
-export const getStudentRoutes = () => {
+export const getStudentRoutes = (studentInfo) => {
   return (
     <>
+      {!studentInfo.user.onBoarded && (
+        <Stack.Screen
+          name={NavigationRouteNames.STUDENT.ON_BOARDING}
+          component={StudentOnBoard}
+          options={{ headerShown: false }}
+        />
+      )}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.DASHBOARD}
         component={StudentDashboardContainer}
@@ -155,7 +158,7 @@ export const getStudentRoutes = () => {
         component={OtpVerification}
         options={{ headerShown: false }}
       />
-   <Stack.Screen
+      <Stack.Screen
         name={NavigationRouteNames.STUDENT.SET_PASSWORD}
         component={SetPassword}
         options={{ headerShown: false }}

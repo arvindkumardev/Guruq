@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { GET_CURRENT_STUDENT_QUERY, GET_CURRENT_TUTOR_QUERY, ME_QUERY } from '../graphql-query';
+import { GET_CURRENT_TUTOR_QUERY, GET_STUDENT_DETAILS, ME_QUERY} from '../graphql-query';
 import {
   isLoggedIn,
   isSplashScreenVisible,
@@ -28,12 +28,12 @@ function LoginCheck() {
     },
   });
 
-  const [getCurrentStudent, { loading: getCurrentLoading }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
+  const [getCurrentStudent, { loading: getCurrentLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {},
     onCompleted: (data) => {
       if (data) {
-        studentDetails(data?.getCurrentStudent);
+        studentDetails(data?.getStudentDetails);
         userDetails(userDetailsData);
         userType(userDetailsData.type);
         isLoggedIn(true);

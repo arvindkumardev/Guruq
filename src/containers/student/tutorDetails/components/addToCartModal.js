@@ -82,7 +82,7 @@ const AddToCartModal = (props) => {
   const changeClassMode = (isOnline) => {
     if (isOnlineClassMode !== isOnline) {
       setIsOnlineClassMode(isOnline);
-      setAmount(calculateAmount(1, isOnline));
+      setAmount(calculateAmount(numberOfClass, isOnline));
     }
   };
 
@@ -155,9 +155,6 @@ const AddToCartModal = (props) => {
         </View>
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
           <View>
-            {/* <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(16), alignSelf: 'flex-start' }]}> */}
-            {/*  {isDemoClass ? 'Select mode of demo class' : 'Select mode of class and number of Classes'} */}
-            {/* </Text> */}
             <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'center' }]}>
               <Text style={commonStyles.mediumPrimaryText}>{`Mode of ${isDemoClass ? 'Demo ' : ''}Class`}</Text>
               <View style={commonStyles.horizontalChildrenCenterView}>

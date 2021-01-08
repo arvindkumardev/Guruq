@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { notificationPayload, notificationsList, tutorDetails, userDetails } from '../apollo/cache';
+import { notificationPayload, notificationsList, studentDetails, tutorDetails, userDetails } from '../apollo/cache';
 import {
   getFcmToken,
   initializeNotification,
@@ -69,6 +69,7 @@ const AppStack = (props) => {
   const { isUserLoggedIn, userType, showSplashScreen } = props;
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
+  const studentInfo = useReactiveVar(studentDetails);
   const userDetailsObj = useReactiveVar(userDetails);
   const notifyList = useReactiveVar(notificationsList);
 
@@ -108,8 +109,6 @@ const AppStack = (props) => {
     initializeNotification();
     getFcmToken().then((token) => {
       if (token) {
-        console.log('FCM Token from', token);
-
         createPayload(userDetailsObj.me, token).then((payload) => {
           registerDevice({ variables: { deviceDto: payload } });
         });
@@ -178,11 +177,11 @@ const AppStack = (props) => {
         component={AddEditAddress}
         options={{ headerShown: false }}
       />
-      {/*<Stack.Screen*/}
-      {/*  name={NavigationRouteNames.ADDRESS_MAP_VIEW}*/}
-      {/*  component={AddressMapView}*/}
-      {/*  options={{ headerShown: false }}*/}
-      {/*/>*/}
+      {/* <Stack.Screen */}
+      {/*  name={NavigationRouteNames.ADDRESS_MAP_VIEW} */}
+      {/*  component={AddressMapView} */}
+      {/*  options={{ headerShown: false }} */}
+      {/* /> */}
       <Stack.Screen
         name={NavigationRouteNames.EDUCATION}
         component={EducationListing}
@@ -213,21 +212,7 @@ const AppStack = (props) => {
         component={SubjectSelection}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.TUTOR.PT_START_SCREEN}
-        component={PtStartScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.TUTOR.PROFICIENCY_TEST}
-        component={ProficiencyTest}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.TUTOR.COMPLETE_PROFILE}
-        component={CompleteYourProfile}
-        options={{ headerShown: false }}
-      />
+
       <Stack.Screen
         name={NavigationRouteNames.EXPERIENCE}
         component={ExperienceListing}
@@ -252,11 +237,6 @@ const AppStack = (props) => {
       />
       <Stack.Screen name={NavigationRouteNames.ABOUT_US} component={AboutUs} options={{ headerShown: false }} />
       <Stack.Screen
-        name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
-        component={UploadDocuments}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name={NavigationRouteNames.RATINGS_REVIEWS}
         component={RatingReviews}
         options={{ headerShown: false }}
@@ -275,7 +255,9 @@ const AppStack = (props) => {
       );
     }
     if (userType === UserTypeEnum.STUDENT.label) {
-      return getStudentRoutes();
+      if (studentInfo) {
+        return getStudentRoutes(studentInfo);
+      }
     }
     if (userType === UserTypeEnum.TUTOR.label) {
       if (tutorInfo && tutorInfo?.certified) {
@@ -320,21 +302,56 @@ const AppStack = (props) => {
               component={CertificationProcessSteps}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name={NavigationRouteNames.TUTOR.BACKGROUND_CHECK}
-              component={BackgroundCheck}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name={NavigationRouteNames.TUTOR.INTERVIEW_AND_DOCUMENTS}
-              component={InterviewAndDocument}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
-              component={InterviewScheduling}
-              options={{ headerShown: false }}
-            />
+            {tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.PROFICIENCY_TEST_PENDING.label && (
+              <>
+                <Stack.Screen
+                  name={NavigationRouteNames.TUTOR.PT_START_SCREEN}
+                  component={PtStartScreen}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name={NavigationRouteNames.TUTOR.PROFICIENCY_TEST}
+                  component={ProficiencyTest}
+                  options={{ headerShown: false }}
+                />
+              </>
+            )}
+            {tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.PROFILE_COMPLETION_PENDING.label && (
+              <Stack.Screen
+                name={NavigationRouteNames.TUTOR.COMPLETE_PROFILE}
+                component={CompleteYourProfile}
+                options={{ headerShown: false }}
+              />
+            )}
+            {tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.INTERVIEW_PENDING.label && (
+              <>
+                <Stack.Screen
+                  name={NavigationRouteNames.TUTOR.INTERVIEW_AND_DOCUMENTS}
+                  component={InterviewAndDocument}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name={NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW}
+                  component={InterviewScheduling}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
+                  component={UploadDocuments}
+                  options={{ headerShown: false }}
+                />
+              </>
+            )}
+            {tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&
+              tutorInfo?.lead?.backgroundCheck?.status === BackgroundCheckStatusEnum.NOT_STARTED.label && (
+                <>
+                  <Stack.Screen
+                    name={NavigationRouteNames.TUTOR.BACKGROUND_CHECK}
+                    component={BackgroundCheck}
+                    options={{ headerShown: false }}
+                  />
+                </>
+              )}
           </>
         );
       }

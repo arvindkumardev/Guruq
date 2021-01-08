@@ -58,28 +58,19 @@ function PytnRequests() {
     },
   });
 
-  const handleAccept = (request) => {
-    setSelectedPytn(request);
-    if (isEmpty(request.acceptedPytns)) {
-      setPriceVal(0);
-    } else {
-      setPriceVal(request.acceptedPytns[0].price);
-    }
-    setShowPriceModal(true);
-  };
-
   const onSubmit = () => {
-    if (priceVal === 0) {
-      alertBox('Please enter the amount');
-    } else if (priceVal < selectedPytn.minPrice || priceVal > selectedPytn.maxPrice) {
-      alertBox('Please enter the correct amount');
-    } else if (isEmpty(selectedPytn.acceptedPytns)) {
+    // if (priceVal === 0) {
+    //   alertBox('Please enter the amount');
+    // } else if (priceVal < selectedPytn.minPrice || priceVal > selectedPytn.maxPrice) {
+    //   alertBox('Please enter the correct amount');
+    // } else
+    if (isEmpty(selectedPytn.acceptedPytns)) {
       setShowPriceModal(false);
       acceptStudentPytn({
         variables: {
           studentPYTNAcceptDto: {
             studentPytnId: selectedPytn.id,
-            price: parseFloat(priceVal),
+            price: parseFloat(selectedPytn.maxPrice),
           },
         },
       });
@@ -89,12 +80,28 @@ function PytnRequests() {
         variables: {
           studentPYTNAcceptDto: {
             studentPytnId: selectedPytn.id,
-            price: parseFloat(priceVal),
+            price: parseFloat(selectedPytn.maxPrice),
             id: selectedPytn.acceptedPytns[0].id,
           },
         },
       });
     }
+  };
+
+  const handleAccept = (request) => {
+    setSelectedPytn(request);
+    setPriceVal(request.maxPrice);
+    // if (isEmpty(request.acceptedPytns)) {
+    //   setPriceVal(0);
+    // } else {
+    //   setPriceVal(request.acceptedPytns[0].price);
+    // }
+    // setShowPriceModal(true);
+    alertBox(`Do you want to accept the request?`, '', {
+      positiveText: 'Yes',
+      onPositiveClick: () => onSubmit(),
+      negativeText: 'No',
+    });
   };
 
   useEffect(() => {
@@ -172,13 +179,18 @@ function PytnRequests() {
           alignItems: 'center',
         }}>
         {!isEmpty(item.acceptedPytns) && (
-          <Text style={commonStyles.mediumPrimaryText}>Accepted at ₹{item.acceptedPytns[0].price}</Text>
-        )}
-        <Button block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]} onPress={() => handleAccept(item)}>
-          <Text style={commonStyles.textButtonPrimary}>
-            {!isEmpty(item.acceptedPytns) ? 'Edit Request' : 'Accept Request'}
+          <Text style={[commonStyles.mediumPrimaryText, { paddingVertical: RfH(10) }]}>
+            Accepted at ₹{item.acceptedPytns[0].price}
           </Text>
-        </Button>
+        )}
+        {isEmpty(item.acceptedPytns) && (
+          <Button
+            block
+            style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+            onPress={() => handleAccept(item)}>
+            <Text style={commonStyles.textButtonPrimary}>Accept Request</Text>
+          </Button>
+        )}
       </View>
       <View style={commonStyles.lineSeparator} />
     </>
@@ -221,7 +233,7 @@ function PytnRequests() {
                   commonStyles.pageTitleThirdRow,
                   { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center', marginHorizontal: RfW(20) },
                 ]}>
-                 No data found
+                No data found
               </Text>
               <Text
                 style={[

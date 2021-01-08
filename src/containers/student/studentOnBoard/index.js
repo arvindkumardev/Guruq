@@ -1,44 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { isEmpty } from 'lodash';
-import GetLocation from 'react-native-get-location';
-import { IconButtonWrapper, ScreenHeader } from '../../components';
-import { RfH, RfW } from '../../utils/helpers';
-import Loader from '../../components/Loader';
-import { Colors, Images } from '../../theme';
-import commonStyles from '../../theme/styles';
-import styles from './styles';
-import { GET_TUTOR_ALL_DETAILS } from './certification-query';
-import NavigationRouteNames from '../../routes/screenNames';
-import { MARK_CERTIFIED } from './certification-mutation';
-import ActionModal from './components/helpSection';
-import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
-import { tutorDetails, userLocation } from '../../apollo/cache';
+import { IconButtonWrapper, ScreenHeader } from '../../../components';
+import { RfH, RfW } from '../../../utils/helpers';
+import Loader from '../../../components/Loader';
+import { Colors, Images } from '../../../theme';
+import commonStyles from '../../../theme/styles';
+import styles from './style';
+import NavigationRouteNames from '../../../routes/screenNames';
+import { GET_STUDENT_DETAILS } from '../../common/graphql-query';
+import { offeringsMasterData, studentDetails } from '../../../apollo/cache';
+import { MARK_ON_BOARDED } from '../../common/graphql-mutation';
+import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
 
-const CompleteYourProfile = () => {
+const StudentOnBoard = () => {
   const isFocussed = useIsFocused();
   const navigation = useNavigation();
-  const [tutorDetail, setTutorDetail] = useState({});
-  const [openMenu, setOpenMenu] = useState(false);
+  const studentDetail = useReactiveVar(studentDetails);
+  const offeringMasterData = useReactiveVar(offeringsMasterData);
 
-  useEffect(() => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-    })
-      .then((location) => {
-        userLocation(location);
-      })
-      .catch((error) => {
-        const { code, message } = error;
-        console.warn(code, message);
-      });
+  const [getOfferingMasterData, { loading: loadingOfferingMasterData }] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        console.log('e', e);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        offeringsMasterData(data.offerings.edges);
+      }
+    },
   });
 
-  const [getTutorDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_ALL_DETAILS, {
+  const [getStudentDetails, { loading: getStudentDetailsLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -47,42 +45,48 @@ const CompleteYourProfile = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        setTutorDetail(data.getTutorDetails);
+        studentDetails(data.getStudentDetails);
       }
     },
   });
 
-  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {},
-    onCompleted: (data) => {
-      if (data) {
-        tutorDetails(data?.getCurrentTutor);
-      }
-    },
-  });
+  // const [getCurrentStudent, { loading: getCurrentStudentLoading }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
+  //   fetchPolicy: 'no-cache',
+  //   onError: (e) => {},
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       tutorDetails(data?.getCurrentStudent);
+  //     }
+  //   },
+  // });
 
-  const [markCertified, { loading: markTutorCertifiedLoading }] = useMutation(MARK_CERTIFIED, {
+  const [markOnboarded, { loading: markOnboardedLoading }] = useMutation(MARK_ON_BOARDED, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
-        getCurrentTutor();
+        getStudentDetails();
       }
     },
   });
 
   useEffect(() => {
+    if (isEmpty(offeringMasterData)) {
+      getOfferingMasterData();
+    }
+  }, [offeringMasterData]);
+
+  useEffect(() => {
     if (isFocussed) {
-      getTutorDetails();
+      getStudentDetails();
     }
   }, [isFocussed]);
 
   const checkForPersonalDetails = () => {
-    if (!isEmpty(tutorDetail)) {
-      const { firstName, lastName, gender, email } = tutorDetail.contactDetail;
+    if (!isEmpty(studentDetail)) {
+      const { firstName, lastName, gender, email } = studentDetail.contactDetail;
       return !(isEmpty(firstName) || isEmpty(lastName) || isEmpty(gender) || isEmpty(email));
     }
     return false;
@@ -91,36 +95,22 @@ const CompleteYourProfile = () => {
   const isButtonVisible = () => {
     return !(
       !checkForPersonalDetails() ||
-      isEmpty(tutorDetail.educationDetails) ||
-      // isEmpty(tutorDetail.experienceDetails) ||
-      isEmpty(tutorDetail.addresses)
+      isEmpty(studentDetail.educationDetails) ||
+      // isEmpty(studentDetail.experienceDetails) ||
+      isEmpty(studentDetail.addresses)
     );
   };
 
   const handleNext = () => {
-    markCertified();
+    markOnboarded();
   };
 
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
-      <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading || getCurrentTutorLoading} />
-      <ScreenHeader
-        label="Complete Profile"
-        showRightIcon
-        rightIcon={Images.vertical_dots_b}
-        onRightIconClick={() => setOpenMenu(true)}
-        horizontalPadding={RfW(16)}
-        homeIcon
-      />
-      {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
+      <Loader isLoading={getStudentDetailsLoading || markOnboardedLoading} />
+      <ScreenHeader label="Complete Profile" horizontalPadding={RfW(16)} homeIcon />
       <TouchableOpacity
-        style={[
-          styles.stepCard,
-          {
-            borderLeftColor: Colors.lightGreen,
-            justifyContent: 'space-between',
-          },
-        ]}
+        style={[styles.stepCard, { borderLeftColor: Colors.lightGreen, justifyContent: 'space-between' }]}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS)}>
         <View style={{ flexDirection: 'row' }}>
@@ -136,9 +126,7 @@ const CompleteYourProfile = () => {
           <Text
             style={[
               commonStyles.regularPrimaryText,
-              {
-                color: !checkForPersonalDetails() ? Colors.orangeRed : Colors.green,
-              },
+              { color: !checkForPersonalDetails() ? Colors.orangeRed : Colors.green },
             ]}>
             {!checkForPersonalDetails() ? 'Pending' : 'Updated'}
           </Text>
@@ -146,13 +134,7 @@ const CompleteYourProfile = () => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[
-          styles.stepCard,
-          {
-            borderLeftColor: Colors.lightPurple,
-            justifyContent: 'space-between',
-          },
-        ]}
+        style={[styles.stepCard, { borderLeftColor: Colors.lightPurple, justifyContent: 'space-between' }]}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.ADDRESS)}>
         <View style={{ flexDirection: 'row' }}>
@@ -168,11 +150,9 @@ const CompleteYourProfile = () => {
           <Text
             style={[
               commonStyles.regularPrimaryText,
-              {
-                color: isEmpty(tutorDetail?.addresses) ? Colors.orangeRed : Colors.green,
-              },
+              { color: isEmpty(studentDetail?.addresses) ? Colors.orangeRed : Colors.green },
             ]}>
-            {isEmpty(tutorDetail?.addresses) ? 'Pending' : 'Updated'}
+            {isEmpty(studentDetail?.addresses) ? 'Pending' : 'Updated'}
           </Text>
         </View>
       </TouchableOpacity>
@@ -194,48 +174,38 @@ const CompleteYourProfile = () => {
           <Text
             style={[
               commonStyles.regularPrimaryText,
-              {
-                color: isEmpty(tutorDetail?.educationDetails) ? Colors.orangeRed : Colors.green,
-              },
+              { color: isEmpty(studentDetail?.educationDetails) ? Colors.orangeRed : Colors.green },
             ]}>
-            {isEmpty(tutorDetail?.educationDetails) ? 'Pending' : 'Updated'}
+            {isEmpty(studentDetail?.educationDetails) ? 'Pending' : 'Updated'}
           </Text>
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[
-          styles.stepCard,
-          {
-            borderLeftColor: Colors.lightOrange,
-            justifyContent: 'space-between',
-          },
-        ]}
+        style={[styles.stepCard, { borderLeftColor: Colors.lightOrange, justifyContent: 'space-between' }]}
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(NavigationRouteNames.EXPERIENCE)}>
+        onPress={() => navigation.navigate(NavigationRouteNames.PARENTS_LIST)}>
         <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper
-            iconImage={Images.experienceOrange}
+            iconImage={Images.parent_details}
             iconWidth={RfH(24)}
             iconHeight={RfW(24)}
             imageResizeMode="contain"
           />
-          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Experience</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Parents Details</Text>
         </View>
         <View>
           <Text
             style={[
               commonStyles.regularPrimaryText,
-              {
-                color: isEmpty(tutorDetail?.experienceDetails) ? Colors.orangeRed : Colors.green,
-              },
+              { color: isEmpty(studentDetail?.guardians) ? Colors.orangeRed : Colors.green },
             ]}>
-            {isEmpty(tutorDetail?.experienceDetails) ? 'Pending' : 'Updated'}
+            {isEmpty(studentDetail?.guardians) ? 'Pending' : 'Updated'}
           </Text>
         </View>
       </TouchableOpacity>
 
-      {!isEmpty(tutorDetail) && isButtonVisible() && (
+      {!isEmpty(studentDetail) && isButtonVisible() && (
         <Button
           onPress={handleNext}
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(70), width: RfW(230) }]}>
@@ -247,4 +217,4 @@ const CompleteYourProfile = () => {
   );
 };
 
-export default CompleteYourProfile;
+export default StudentOnBoard;
