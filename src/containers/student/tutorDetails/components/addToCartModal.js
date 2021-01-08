@@ -169,7 +169,11 @@ const AddToCartModal = (props) => {
                         alignItems: 'center',
                         paddingVertical: 8,
                       }}>
-                      <CustomRadioButton enabled={isOnlineClassMode} />
+                      <IconButtonWrapper
+                        iconImage={isOnlineClassMode ? Images.radio : Images.radio_button_null}
+                        iconWidth={20}
+                        iconHeight={20}
+                      />
                       <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
                     </View>
                   </TouchableWithoutFeedback>
@@ -183,7 +187,11 @@ const AddToCartModal = (props) => {
                         alignItems: 'center',
                         paddingVertical: 8,
                       }}>
-                      <CustomRadioButton enabled={!isOnlineClassMode} />
+                      <IconButtonWrapper
+                        iconImage={!isOnlineClassMode ? Images.radio : Images.radio_button_null}
+                        iconWidth={20}
+                        iconHeight={20}
+                      />
                       <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Offline</Text>
                     </View>
                   </TouchableWithoutFeedback>

@@ -188,6 +188,13 @@ export const ADD_DOCUMENT_TO_CLASS = gql`
       id
       name
       type
+      attachment {
+        id
+        name
+        type
+        filename
+        size
+      }
     }
   }
 `;

@@ -15,11 +15,11 @@ import NavigationRouteNames from '../../routes/screenNames';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { alertBox, getFullName, getToken, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getFullName, getToken, printDate, printDateTime, printTime, RfH, RfW } from '../../utils/helpers';
 import { RE_SCHEDULE_CLASS, ADD_DOCUMENT_TO_CLASS } from '../student/booking.mutation';
 import { GET_CLASS_DETAILS } from '../student/class.query';
 import styles from '../student/tutorListing/styles';
-import { studentDetails, userType } from '../../apollo/cache';
+import { studentDetails, tutorDetails, userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
 import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
 import ActionSheet from '../../components/ActionSheet';
@@ -125,12 +125,15 @@ function ScheduledClassDetails(props) {
           filename: res.filename,
           size: res.size,
         },
-        student: {
-          id: studentInfo.id,
-        },
       };
 
-      documentDto.name = 'Class Document';
+      if (userTypeVal === UserTypeEnum.TUTOR.label) {
+        documentDto.tutor = {
+          id: classData?.classEntity?.tutor?.id,
+        };
+      }
+
+      documentDto.name = file?.name || 'Class Document';
       documentDto.type = DocumentTypeEnum.OTHER.label;
 
       if (documentDto.type) {
@@ -157,7 +160,7 @@ function ScheduledClassDetails(props) {
   const handleTutorDetail = () => {
     const selectedOffering = classData?.classEntity?.offering;
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
-      tutorData: classData.classEntity.tutor,
+      tutorData: classData?.classEntity.tutor,
       parentOffering: selectedOffering?.parentOffering?.id,
       parentParentOffering: selectedOffering?.parentOffering?.parentOffering?.id,
       parentOfferingName: selectedOffering?.displayName,
@@ -234,9 +237,10 @@ function ScheduledClassDetails(props) {
         <View style={commonStyles.horizontalChildrenView}>
           <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(45)} iconWidth={RfH(45)} />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-            <Text style={commonStyles.headingPrimaryText}>{item?.attachment?.filename}</Text>
+            <Text style={commonStyles.headingPrimaryText}>{item?.name}</Text>
             <Text style={commonStyles.mediumMutedText}>
-              {item?.attachment?.size} | {item?.attachment?.createdDate}
+              {item?.attachment?.type.split('/')[1]} | {Math.round(item?.attachment?.size / 1000)}KB |{' '}
+              {printDate(item?.createdDate)}
             </Text>
           </View>
         </View>
@@ -422,23 +426,33 @@ function ScheduledClassDetails(props) {
             </View>
           </View>
           <View>
-            <IconButtonWrapper
-              iconImage={Images.add}
-              iconWidth={20}
-              iconHeight={20}
-              imageResizeMode="contain"
-              submitFunction={() => setIsUploadModalOpen(true)}
-            />
+            {userTypeVal === UserTypeEnum.TUTOR.label && (
+              <IconButtonWrapper
+                iconImage={Images.add}
+                iconWidth={20}
+                iconHeight={20}
+                imageResizeMode="contain"
+                submitFunction={() => setIsUploadModalOpen(true)}
+              />
+            )}
           </View>
         </View>
 
-        <FlatList
-          style={{ marginBottom: RfH(16), marginLeft: 40 }}
-          showsHorizontalScrollIndicator={false}
-          data={classData.documents}
-          renderItem={({ item, index }) => renderAttachments(item, index)}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        {!isEmpty(classData?.classEntity?.documents) ? (
+          <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16) }]}>
+            <FlatList
+              style={{ marginBottom: RfH(16), marginLeft: 40 }}
+              showsHorizontalScrollIndicator={false}
+              data={classData?.classEntity?.documents}
+              renderItem={({ item, index }) => renderAttachments(item, index)}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
+        ) : (
+          <View style={[commonStyles.horizontalChildrenView, { paddingLeft: RfW(50), padding: RfW(16) }]}>
+            <Text>No documents are upload by the tutor.</Text>
+          </View>
+        )}
 
         <View style={commonStyles.lineSeparatorWithMargin} />
 

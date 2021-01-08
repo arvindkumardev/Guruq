@@ -1,15 +1,14 @@
-import { ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, CheckBox, Input, Item, Label } from 'native-base';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import commonStyles from '../../../theme/styles';
-import { IconButtonWrapper, Loader, TutorImageComponent } from '../../../components';
+import { IconButtonWrapper, Loader } from '../../../components';
 import { alertBox, getToken, isValidMobile, printDate, RfH, RfW } from '../../../utils/helpers';
 import { IND_COUNTRY_OBJ } from '../../../utils/constants';
 import { Colors, Images } from '../../../theme';
 import CustomDatePicker from '../../../components/CustomDatePicker';
-import GenderModal from './genderModal';
 import {
   UPDATE_STUDENT_CONTACT_DETAILS,
   UPDATE_STUDENT_IMAGE,
