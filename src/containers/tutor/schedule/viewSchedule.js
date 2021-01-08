@@ -27,15 +27,10 @@ function ViewSchedule() {
   const [getAvailability, { loading: getAvailabilityLoader }] = useLazyQuery(GET_AVAILABILITY_DATA, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       setTimeSlots(data.getAvailabilityData);
-
-      console.log(data.getAvailabilityData);
-
       setIsListEmpty(data.getAvailabilityData.length === 0);
     },
   });
