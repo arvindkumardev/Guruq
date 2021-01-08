@@ -37,7 +37,7 @@ const NavigationRouteNames = {
   ADD_EDIT_AWARD_DETAILS: 'add_edit_award_details',
   BUSINESS_DETAILS: 'add_edit_bank_details',
   RATINGS_REVIEWS: 'ratings_reviews',
-
+  UPDATE_VERSION : 'update_version',
   STUDENT: {
     OTP_VERIFICATION: 'otp_verification',
     SET_PASSWORD:'set_password',
