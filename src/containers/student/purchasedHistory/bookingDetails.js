@@ -22,7 +22,6 @@ function BookingDetails(props) {
   const [token, setToken] = useState('');
   const [bookingData, setBookingData] = useState({});
 
-
   const [getBooking, { loading: getBookingLoader }] = useLazyQuery(GET_BOOKING_DETAIL, {
     fetchPolicy: 'no-cache',
     variables: { id: bookingId },
@@ -54,13 +53,23 @@ function BookingDetails(props) {
           {' | '}
           {item.offering?.parentOffering?.name}
         </Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(routeNames.STUDENT.ORDER_DETAILS, { orderData: item })}
-          activeOpacity={0.8}>
-          <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2, fontFamily: Fonts.semiBold }]}>
-            View Details
-          </Text>
-        </TouchableOpacity>
+        {isEmpty(item.refund) && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate(routeNames.STUDENT.ORDER_DETAILS, { orderData: item })}
+            activeOpacity={0.8}>
+            <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2, fontFamily: Fonts.semiBold }]}>
+              View Details
+            </Text>
+          </TouchableOpacity>
+        )}
+        {!isEmpty(item.refund) && (
+          <TouchableOpacity
+            activeOpacity={0.8}>
+            <Text style={[commonStyles.smallPrimaryText, { color: Colors.orangeRed, fontFamily: Fonts.semiBold }]}>
+              Refund Detail
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginVertical: RfH(8) }]}>

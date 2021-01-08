@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -11,16 +11,15 @@ import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from './style';
 import NavigationRouteNames from '../../../routes/screenNames';
-import { GET_TUTOR_ALL_DETAILS } from '../../certficationProcess/certification-query';
-import { GET_CURRENT_TUTOR_QUERY } from '../../common/graphql-query';
-import { offeringsMasterData, tutorDetails } from '../../../apollo/cache';
+import { GET_STUDENT_DETAILS } from '../../common/graphql-query';
+import { offeringsMasterData, studentDetails } from '../../../apollo/cache';
 import { MARK_ON_BOARDED } from '../../common/graphql-mutation';
-import { GET_OFFERINGS_MASTER_DATA } from '../../student/dashboard-query';
+import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
 
-const TutorOnBoard = () => {
+const StudentOnBoard = () => {
   const isFocussed = useIsFocused();
   const navigation = useNavigation();
-  const [tutorDetail, setTutorDetail] = useState({});
+  const studentDetail = useReactiveVar(studentDetails);
   const offeringMasterData = useReactiveVar(offeringsMasterData);
 
   const [getOfferingMasterData, { loading: loadingOfferingMasterData }] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
@@ -37,7 +36,7 @@ const TutorOnBoard = () => {
     },
   });
 
-  const [getTutorDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_ALL_DETAILS, {
+  const [getStudentDetails, { loading: getStudentDetailsLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -46,20 +45,20 @@ const TutorOnBoard = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        setTutorDetail(data.getTutorDetails);
+        studentDetails(data.getStudentDetails);
       }
     },
   });
 
-  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {},
-    onCompleted: (data) => {
-      if (data) {
-        tutorDetails(data?.getCurrentTutor);
-      }
-    },
-  });
+  // const [getCurrentStudent, { loading: getCurrentStudentLoading }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
+  //   fetchPolicy: 'no-cache',
+  //   onError: (e) => {},
+  //   onCompleted: (data) => {
+  //     if (data) {
+  //       tutorDetails(data?.getCurrentStudent);
+  //     }
+  //   },
+  // });
 
   const [markOnboarded, { loading: markOnboardedLoading }] = useMutation(MARK_ON_BOARDED, {
     fetchPolicy: 'no-cache',
@@ -68,7 +67,7 @@ const TutorOnBoard = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        getCurrentTutor();
+        getStudentDetails();
       }
     },
   });
@@ -81,13 +80,13 @@ const TutorOnBoard = () => {
 
   useEffect(() => {
     if (isFocussed) {
-      getTutorDetails();
+      getStudentDetails();
     }
   }, [isFocussed]);
 
   const checkForPersonalDetails = () => {
-    if (!isEmpty(tutorDetail)) {
-      const { firstName, lastName, gender, email } = tutorDetail.contactDetail;
+    if (!isEmpty(studentDetail)) {
+      const { firstName, lastName, gender, email } = studentDetail.contactDetail;
       return !(isEmpty(firstName) || isEmpty(lastName) || isEmpty(gender) || isEmpty(email));
     }
     return false;
@@ -96,9 +95,9 @@ const TutorOnBoard = () => {
   const isButtonVisible = () => {
     return !(
       !checkForPersonalDetails() ||
-      isEmpty(tutorDetail.educationDetails) ||
-      // isEmpty(tutorDetail.experienceDetails) ||
-      isEmpty(tutorDetail.addresses)
+      isEmpty(studentDetail.educationDetails) ||
+      // isEmpty(studentDetail.experienceDetails) ||
+      isEmpty(studentDetail.addresses)
     );
   };
 
@@ -108,7 +107,7 @@ const TutorOnBoard = () => {
 
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
-      <Loader isLoading={tutorLeadDetailLoading || getCurrentTutorLoading || markOnboardedLoading} />
+      <Loader isLoading={getStudentDetailsLoading || markOnboardedLoading} />
       <ScreenHeader label="Complete Profile" horizontalPadding={RfW(16)} homeIcon />
       <TouchableOpacity
         style={[styles.stepCard, { borderLeftColor: Colors.lightGreen, justifyContent: 'space-between' }]}
@@ -151,9 +150,9 @@ const TutorOnBoard = () => {
           <Text
             style={[
               commonStyles.regularPrimaryText,
-              { color: isEmpty(tutorDetail?.addresses) ? Colors.orangeRed : Colors.green },
+              { color: isEmpty(studentDetail?.addresses) ? Colors.orangeRed : Colors.green },
             ]}>
-            {isEmpty(tutorDetail?.addresses) ? 'Pending' : 'Updated'}
+            {isEmpty(studentDetail?.addresses) ? 'Pending' : 'Updated'}
           </Text>
         </View>
       </TouchableOpacity>
@@ -175,9 +174,9 @@ const TutorOnBoard = () => {
           <Text
             style={[
               commonStyles.regularPrimaryText,
-              { color: isEmpty(tutorDetail?.educationDetails) ? Colors.orangeRed : Colors.green },
+              { color: isEmpty(studentDetail?.educationDetails) ? Colors.orangeRed : Colors.green },
             ]}>
-            {isEmpty(tutorDetail?.educationDetails) ? 'Pending' : 'Updated'}
+            {isEmpty(studentDetail?.educationDetails) ? 'Pending' : 'Updated'}
           </Text>
         </View>
       </TouchableOpacity>
@@ -185,28 +184,28 @@ const TutorOnBoard = () => {
       <TouchableOpacity
         style={[styles.stepCard, { borderLeftColor: Colors.lightOrange, justifyContent: 'space-between' }]}
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(NavigationRouteNames.EXPERIENCE)}>
+        onPress={() => navigation.navigate(NavigationRouteNames.PARENTS_LIST)}>
         <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper
-            iconImage={Images.experienceOrange}
+            iconImage={Images.parent_details}
             iconWidth={RfH(24)}
             iconHeight={RfW(24)}
             imageResizeMode="contain"
           />
-          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Experience</Text>
+          <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Parents Details</Text>
         </View>
         <View>
           <Text
             style={[
               commonStyles.regularPrimaryText,
-              { color: isEmpty(tutorDetail?.experienceDetails) ? Colors.orangeRed : Colors.green },
+              { color: isEmpty(studentDetail?.guardians) ? Colors.orangeRed : Colors.green },
             ]}>
-            {isEmpty(tutorDetail?.experienceDetails) ? 'Pending' : 'Updated'}
+            {isEmpty(studentDetail?.guardians) ? 'Pending' : 'Updated'}
           </Text>
         </View>
       </TouchableOpacity>
 
-      {!isEmpty(tutorDetail) && isButtonVisible() && (
+      {!isEmpty(studentDetail) && isButtonVisible() && (
         <Button
           onPress={handleNext}
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(70), width: RfW(230) }]}>
@@ -218,4 +217,4 @@ const TutorOnBoard = () => {
   );
 };
 
-export default TutorOnBoard;
+export default StudentOnBoard;

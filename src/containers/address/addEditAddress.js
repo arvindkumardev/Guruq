@@ -19,8 +19,10 @@ import { userType } from '../../apollo/cache';
 function AddEditAddress(props) {
   const { route } = props;
   const { address: editAddress } = route.params;
-
   const navigation = useNavigation();
+  const userTypeVal = useReactiveVar(userType);
+  const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
+  const [showGoogleSearchModal, setShowGoogleSearchModal] = useState(false);
 
   const [address, setAddress] = useState(
     editAddress || {
@@ -38,8 +40,7 @@ function AddEditAddress(props) {
     }
   );
 
-  const userTypeVal = useReactiveVar(userType);
-  const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
+  console.log('address', editAddress);
 
   const [saveStudentAddress, { loading: loadingSaveStudentAddress }] = useMutation(ADD_UPDATE_STUDENT_ADDRESS, {
     fetchPolicy: 'no-cache',
@@ -78,7 +79,7 @@ function AddEditAddress(props) {
   const onSavingAddress = () => {
     if (isEmpty(address.street)) {
       alertBox('Please provide the House no/Building Name');
-      return
+      return;
     }
     const variables = {
       variables: {
@@ -91,8 +92,6 @@ function AddEditAddress(props) {
       saveTutorAddress(variables);
     }
   };
-
-  const [showGoogleSearchModal, setShowGoogleSearchModal] = useState(false);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'padding' })} enabled>
@@ -169,7 +168,7 @@ function AddEditAddress(props) {
                 <Item floatingLabel>
                   <Label style={commonStyles.mediumMutedText}>Postal Code</Label>
                   <Input
-                    value={String(address.postalCode)}
+                    value={address.postalCode ? address.postalCode.toString() : ''}
                     onChangeText={(text) => setAddress({ ...address, postalCode: text })}
                   />
                 </Item>
@@ -231,7 +230,10 @@ function AddEditAddress(props) {
 
             <View style={commonStyles.blankViewMedium} />
             <View>
-              <Button onPress={onSavingAddress} block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+              <Button
+                onPress={() => onSavingAddress()}
+                block
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
                 <Text style={commonStyles.textButtonPrimary}>Save</Text>
               </Button>
             </View>

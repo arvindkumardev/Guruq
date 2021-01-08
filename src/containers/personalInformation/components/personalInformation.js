@@ -53,7 +53,7 @@ function PersonalInformation(props) {
     setEmail(userInfo?.email);
     setMobileObj({ mobile: userInfo?.phoneNumber?.number, country: IND_COUNTRY_OBJ });
     setGender(userInfo?.gender);
-    setDOB(userInfo?.dob);
+    // setDOB(userInfo?.dob);
   }, [userInfo]);
 
   const [getMe, { loading: getMeLoading }] = useLazyQuery(ME_QUERY, {
@@ -259,7 +259,12 @@ function PersonalInformation(props) {
           <Text style={commonStyles.regularMutedText}>Date of birth</Text>
           {isUpdateAllowed ? (
             <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-              <CustomDatePicker value={dob} onChangeHandler={(value) => setDOB(value)} />
+              <CustomDatePicker
+                placeholder="Please provide DOB"
+                value={dob}
+                onChangeHandler={(value) => setDOB(value)}
+                maximumDate={new Date()}
+              />
             </View>
           ) : (
             <>

@@ -14,6 +14,7 @@ import { userDetails } from '../../apollo/cache';
 const UserImageComponent = (props) => {
   const { styling, width, height, fontSize } = props;
   const userInfo = useReactiveVar(userDetails);
+  console.log("userInfo",userInfo)
   return (
     <>
       {userInfo?.profileImage?.filename ? (
@@ -35,7 +36,7 @@ const UserImageComponent = (props) => {
             alignItems: 'center',
           }}>
           <Text style={[commonStyles.headingPrimaryText, { fontSize: RFValue(fontSize, STANDARD_SCREEN_SIZE) }]}>
-            {getNameInitials(userInfo.contactDetail)}
+            {getNameInitials(userInfo)}
           </Text>
         </View>
       )}

@@ -176,6 +176,7 @@ function customRangeSelector(props) {
         showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => renderItem(item, index)}
         keyExtractor={(item, index) => index.toString()}
+        scrollEnabled={false}
       />
     </View>
   );

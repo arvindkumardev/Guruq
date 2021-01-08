@@ -15,6 +15,8 @@ import NavigationRouteNames from '../../routes/screenNames';
 import { MARK_CERTIFIED } from './certification-mutation';
 import { InterviewStatus } from '../tutor/enums';
 import ActionModal from './components/helpSection';
+import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
+import { tutorDetails } from '../../apollo/cache';
 
 const InterviewAndDocument = () => {
   const isFocussed = useIsFocused();
@@ -36,6 +38,16 @@ const InterviewAndDocument = () => {
     },
   });
 
+  const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {},
+    onCompleted: (data) => {
+      if (data) {
+        tutorDetails(data?.getCurrentTutor);
+      }
+    },
+  });
+
   const [markCertified, { loading: markTutorCertifiedLoading }] = useMutation(MARK_CERTIFIED, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -43,7 +55,7 @@ const InterviewAndDocument = () => {
     },
     onCompleted: (data) => {
       if (data) {
-        navigation.navigate(NavigationRouteNames.TUTOR.BACKGROUND_CHECK);
+        getCurrentTutor();
       }
     },
   });
@@ -83,7 +95,7 @@ const InterviewAndDocument = () => {
 
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
-      <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading} />
+      <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading || getCurrentTutorLoading} />
       <ScreenHeader
         label="Interview & Documents"
         horizontalPadding={RfW(16)}
@@ -93,14 +105,9 @@ const InterviewAndDocument = () => {
         homeIcon
         handleBack={() => navigation.navigate(NavigationRouteNames.TUTOR.CERTIFICATE_STEPS)}
       />
-        {openMenu && (
-        <ActionModal
-          isVisible={openMenu}
-          closeMenu={() => setOpenMenu(false)}
-        />
-      )}
+      {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
       <TouchableOpacity
-        style={[styles.interviewCard,{ borderLeftColor: Colors.orange }]}
+        style={[styles.interviewCard, { borderLeftColor: Colors.orange }]}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW)}
         disabled={!isInterviewNotScheduled()}>

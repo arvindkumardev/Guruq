@@ -56,14 +56,11 @@ function SignUp(props) {
   const onClickContinue = () => {
     if (!firstName) {
       alertBox('Please enter first name.');
-    }
-    if (!lastName) {
+    } else if (!lastName) {
       alertBox('Please enter last name.');
-    }
-    if (!isValidEmail(email)) {
+    } else if (!isValidEmail(email)) {
       alertBox('Please enter a valid email Id');
-    }
-    if (!password) {
+    } else if (!password) {
       alertBox('Please enter password.');
     } else {
       addUser({
