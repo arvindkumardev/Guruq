@@ -32,3 +32,21 @@ export const GET_BUSINESS_DETAILS_DATA = gql`
     }
   }
 `;
+
+export const GET_TUTOR_DOCUMENT_DETAILS = gql`
+  query getTutorDocumentDetails {
+    getTutorDocumentDetails {
+      documents {
+        id
+        name
+        createdDate
+        attachment {
+          filename
+          name
+          size
+          type
+        }
+      }
+    }
+  }
+`;

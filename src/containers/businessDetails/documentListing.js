@@ -1,36 +1,61 @@
 import { FlatList, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { useIsFocused } from '@react-navigation/native';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../theme/styles';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
 import { Colors, Fonts, Images } from '../../theme';
-import { RfH, RfW } from '../../utils/helpers';
+import { printDate, RfH, RfW } from '../../utils/helpers';
+import { tutorDetails } from '../../apollo/cache';
+import { GET_TUTOR_DOCUMENT_DETAILS } from './business.query';
+import CustomModalDocumentViewer from '../../components/CustomModalDocumentViewer';
 
 function DocumentListing() {
-  const [list, setList] = useState([
-    { icon: Images.jpg, docName: 'Pan card', size: '0.2 KB', date: '9/9/19' },
-    { icon: Images.png, docName: 'ITR- rez', size: '0.3 KB', date: '3/9/19' },
-    { icon: Images.pdf, docName: 'Aadhar Card', size: '0.9 KB', date: '5/9/19' },
-    { icon: Images.jpg, docName: 'Pan card', size: '0.2 KB', date: '9/9/19' },
-    { icon: Images.png, docName: 'ITR- rez', size: '0.3 KB', date: '3/9/19' },
-    { icon: Images.pdf, docName: 'Aadhar Card', size: '0.9 KB', date: '5/9/19' },
-    { icon: Images.jpg, docName: 'Pan card', size: '0.2 KB', date: '9/9/19' },
-    { icon: Images.png, docName: 'ITR- rez', size: '0.3 KB', date: '3/9/19' },
-    { icon: Images.pdf, docName: 'Aadhar Card', size: '0.9 KB', date: '5/9/19' },
-    { icon: Images.jpg, docName: 'Pan card', size: '0.2 KB', date: '9/9/19' },
-    { icon: Images.png, docName: 'ITR- rez', size: '0.3 KB', date: '3/9/19' },
-    { icon: Images.pdf, docName: 'Aadhar Card', size: '0.9 KB', date: '5/9/19' },
-  ]);
+  const tutorInfo = useReactiveVar(tutorDetails);
+  const isFocussed = useIsFocused();
+  const [list, setList] = useState([]);
+  const [viewDocument, setViewDocument] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState({});
+
+  const [getDocumentDetails, { loading: documentLoading }] = useLazyQuery(GET_TUTOR_DOCUMENT_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setList(data.getTutorDocumentDetails.documents);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (isFocussed) {
+      getDocumentDetails();
+    }
+  }, [isFocussed]);
 
   const renderItem = (item) => {
     return (
       <View>
         <View style={[commonStyles.horizontalChildrenView, { padding: RfH(16) }]}>
-          <IconButtonWrapper iconHeight={RfH(32)} iconWidth={RfW(32)} iconImage={item.icon} />
+          <IconButtonWrapper
+            iconImage={item.attachment.type === 'application/pdf' ? Images.pdf : Images.jpg}
+            iconHeight={RfH(45)}
+            iconWidth={RfH(45)}
+            submitFunction={() => {
+              setViewDocument(true);
+              setSelectedDoc(item);
+            }}
+          />
           <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(8) }]}>
-            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.docName}</Text>
-            <Text style={commonStyles.mediumMutedText}>{item.size}</Text>
+            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item?.name}</Text>
+            <Text style={commonStyles.mediumMutedText}>{Math.round(item?.attachment?.size / 1000)}KB</Text>
           </View>
-          <Text style={commonStyles.mediumMutedText}>{item.date}</Text>
+          <Text style={commonStyles.mediumMutedText}>{printDate(item?.createdDate)}</Text>
         </View>
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
       </View>
@@ -52,6 +77,13 @@ function DocumentListing() {
         renderItem={({ item, index }) => renderItem(item, index)}
         keyExtractor={(item, index) => index.toString()}
       />
+      {viewDocument && !isEmpty(selectedDoc) && (
+        <CustomModalDocumentViewer
+          document={selectedDoc}
+          modalVisible={viewDocument}
+          backButtonHandler={() => setViewDocument(false)}
+        />
+      )}
     </View>
   );
 }

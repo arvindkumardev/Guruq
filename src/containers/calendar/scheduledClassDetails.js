@@ -507,9 +507,7 @@ function ScheduledClassDetails(props) {
             />
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
               <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
-              <Text style={commonStyles.mediumMutedText}>
-                C-{classData?.classEntity?.id}
-              </Text>
+              <Text style={commonStyles.mediumMutedText}>C-{classData?.classEntity?.id}</Text>
               {/* <Text style={commonStyles.mediumMutedText}>classData?. */}
               {/* </Text> */}
             </View>
