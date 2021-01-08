@@ -68,6 +68,7 @@ export const SEARCH_BOOKINGS = gql`
         convenienceCharges
         pointsRedeemed
         payableAmount
+        orderId
         orderItems {
           id
         }
@@ -88,6 +89,7 @@ export const GET_BOOKING_DETAIL = gql`
       pointsRedeemed
       payableAmount
       discount
+      orderId
       promotion {
         code
       }

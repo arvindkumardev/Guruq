@@ -54,7 +54,7 @@ function BookingList() {
             paddingVertical: RfH(16),
           }}>
           <View style={[commonStyles.horizontalChildrenSpaceView, { alignItems: 'center' }]}>
-            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Booking Id {item.id}</Text>
+            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Booking Id {item.orderId}</Text>
             <Text
               style={[
                 commonStyles.smallPrimaryText,

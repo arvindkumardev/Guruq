@@ -83,7 +83,7 @@ const MyCart = () => {
     onCompleted: (data) => {
       if (data) {
         navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_CONFIRMED, {
-          uuid: data?.createBooking?.id,
+          orderId: data?.createBooking?.orderId,
         });
       }
     },
@@ -230,6 +230,7 @@ const MyCart = () => {
     // setPaymentUrl(`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}`);
   };
 
+  console.log('bookingData', bookingData);
   useEffect(() => {
     if (!paymentModal && paymentStatus === 'failure') {
       alertBox('Transaction Failed', 'Please try again', {
@@ -245,13 +246,13 @@ const MyCart = () => {
 
   const handlePaymentAuthorization = async (event) => {
     if (event.url.indexOf('http://dashboardv2.guruq.in/booking/confirmation') > -1) {
-      setBookingData({});
       setPaymentStatus('success');
       setPaymentModal(false);
       navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_CONFIRMED, {
-        uuid: bookingData.id,
+        orderId: bookingData.orderId,
         paymentMethod: PaymentMethodEnum.PAYTM.value,
       });
+      setBookingData({});
     } else if (event.url.indexOf('http://dashboardv2.guruq.in/booking/failure') > -1) {
       setPaymentModal(false);
       setPaymentStatus('failure');

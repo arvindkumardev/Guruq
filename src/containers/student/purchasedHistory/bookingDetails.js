@@ -152,7 +152,7 @@ function BookingDetails(props) {
                   Booking Id
                 </Text>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  {bookingData.id}
+                  {bookingData.orderId}
                 </Text>
               </View>
               <View style={commonStyles.horizontalChildrenSpaceView}>

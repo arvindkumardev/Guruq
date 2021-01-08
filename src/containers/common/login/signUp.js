@@ -61,7 +61,7 @@ function SignUp(props) {
       alertBox('Please enter last name.');
     }
     if (!isValidEmail(email)) {
-      alertBox('Please enter email.');
+      alertBox('Please enter a valid email Id');
     }
     if (!password) {
       alertBox('Please enter password.');

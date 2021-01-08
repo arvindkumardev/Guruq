@@ -61,6 +61,7 @@ function LoginCheck() {
   const [getMe, { loading: getMeLoading }] = useLazyQuery(ME_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
+      console.log("e",e)
       isLoggedIn(false);
       isTokenLoading(false);
       userDetails({});
@@ -90,6 +91,7 @@ function LoginCheck() {
   });
 
   useEffect(() => {
+    console.log('dataa aaa me');
     getMe();
   }, []);
 

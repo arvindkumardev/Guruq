@@ -26,6 +26,7 @@ export const CREATE_BOOKING = gql`
         paymentStatus
         amount
       }
+      orderId
       orderItems {
         id
       }
