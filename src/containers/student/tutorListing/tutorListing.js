@@ -58,7 +58,7 @@ function TutorListing(props) {
     teachingMode: 0,
     page: 1,
     size: 50,
-    sortBy: 'teachingExperience',
+    sortBy: 'tutor.teachingExperience',
     sortOrder: 'desc',
     active: true,
   });

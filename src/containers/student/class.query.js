@@ -82,6 +82,7 @@ export const GET_CLASS_DETAILS = gql`
           attachment {
             filename
             name
+            size
             type
           }
         }

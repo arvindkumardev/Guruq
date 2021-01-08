@@ -298,7 +298,7 @@ const MyCart = () => {
       tutorOfferingId: item.tutorOffering.id,
       count: 1,
       groupSize: 1,
-      demo: false,
+      demo: item.demo,
       onlineClass: item.onlineClass,
       price: item.mrp / item.count,
     };
@@ -312,7 +312,7 @@ const MyCart = () => {
       tutorOfferingId: item.tutorOffering.id,
       count: -1,
       groupSize: 1,
-      demo: false,
+      demo: item.demo,
       onlineClass: item.onlineClass,
       price: item.price / item.count,
     };

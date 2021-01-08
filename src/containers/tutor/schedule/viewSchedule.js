@@ -148,7 +148,7 @@ function ViewSchedule() {
                 commonStyles.pageTitleThirdRow,
                 { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
               ]}>
-              Availability Not Marked/Available
+              Availability Not Marked
             </Text>
             <Text
               style={[

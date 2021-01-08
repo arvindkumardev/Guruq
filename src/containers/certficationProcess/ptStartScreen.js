@@ -294,14 +294,15 @@ const PtStartScreen = (props) => {
             </View>
           )}
 
-          {!attemptExhausted && !isEmpty(ptDetail) && (
+          {!attemptExhausted &&
+          !isEmpty(ptDetail) &&
+          (ptDetail?.status !== PtStatus.PASSED.label || ptDetail?.status !== PtStatus.EXEMPTED.label) ? (
             <Button
               onPress={handleClick}
               style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
               <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
             </Button>
-          )}
-          {attemptExhausted && (
+          ) : (
             <View style={{ marginTop: RfH(20), justifyContent: 'center', alignItems: 'center' }}>
               <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
                 {'All PT attempts Exhausted.\n Contact the customer care.'}

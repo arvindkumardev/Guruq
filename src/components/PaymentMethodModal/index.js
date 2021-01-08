@@ -82,7 +82,7 @@ const PaymentMethod = (props) => {
       if (data) {
         onClose(false);
         if (PaymentStatusEnum.COMPLETE.value) {
-          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { uuid: bookingDataObj.id, paymentMethod });
+          navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { orderId: bookingDataObj.orderId, paymentMethod });
         }
       }
     },
