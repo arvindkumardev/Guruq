@@ -30,6 +30,7 @@ export const ME_QUERY = gql`
       }
       profileImage {
         filename
+        original
       }
       qPoints
       dob
@@ -57,6 +58,7 @@ export const ME_QUERY = gql`
 //       }
 //       profileImage {
 //         filename
+//         original
 //       }
 //     }
 //   }
@@ -82,6 +84,7 @@ export const GET_STUDENT_DETAILS = gql`
       }
       profileImage {
         filename
+        original
       }
       addresses {
         id
@@ -140,6 +143,7 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
       }
       profileImage {
         filename
+        original
       }
       user {
         onBoarded

@@ -357,3 +357,45 @@ export const printCurrency = (number) => {
 export const enumLabelToText = (label) => {
   return startCase(label.replace('_', ' ').toLowerCase());
 };
+
+export const processGeoData = (geoData) => {
+  const latitude = geoData.geometry && geoData.geometry.location ? geoData.geometry.location.lat : 0;
+  const longitude = geoData.geometry && geoData.geometry.location ? geoData.geometry.location.lng : 0;
+
+  const { long_name: country } = geoData.address_components.find((comp) => comp.types.includes('country')) || '';
+
+  const { long_name: state } =
+    geoData.address_components.find((comp) => comp.types.includes('administrative_area_level_1')) || '';
+
+  const { long_name: city } =
+    geoData.address_components.find((comp) => comp.types.includes('locality')) ||
+    geoData.address_components.find((comp) => comp.types.includes('administrative_area_level_2')) ||
+    '';
+
+  const { long_name: region } =
+    geoData.address_components.find((comp) => comp.types.includes('sublocality_level_1')) || '';
+
+  const { long_name: areaT } =
+    geoData.address_components.find((comp) => comp.types.includes('sublocality_level_2')) || '';
+
+  const subArea = [];
+  if (region) {
+    subArea.push(region);
+  }
+  if (areaT) {
+    subArea.push(areaT);
+  }
+
+  const { long_name: postalCode } = geoData.address_components.find((comp) => comp.types.includes('postal_code')) || '';
+
+  return {
+    fullAddress: geoData.formatted_address,
+    country,
+    state,
+    city,
+    subArea: subArea.join(', '),
+    postalCode: isUndefined(postalCode) ? '' : postalCode,
+    latitude,
+    longitude,
+  };
+};

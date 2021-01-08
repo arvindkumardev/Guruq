@@ -79,7 +79,8 @@ const InterviewAndDocument = () => {
   const handleNext = () => {
     markCertified();
   };
-  const isInterviewNotScheduled = () => tutorDetail?.lead?.interview.status === InterviewStatus.NOT_SCHEDULED.label;
+  const isInterviewSchedulingAllowed = () =>
+    tutorDetail?.lead?.interview.status === InterviewStatus.NOT_SCHEDULED.label;
 
   const getInterviewText = () => {
     if (
@@ -89,6 +90,10 @@ const InterviewAndDocument = () => {
       return `Your interview is scheduled on ${printDate(tutorDetail?.lead?.interview.startDate)} at ${printTime(
         tutorDetail?.lead?.interview.startDate
       )}`;
+    }
+
+    if (tutorDetail?.lead?.interview.status === InterviewStatus.NOT_SCHEDULED.label) {
+      return 'Schedule your interview';
     }
     return `Your interview status is ${tutorDetail?.lead?.interview.status.replace('_', ' ').toLowerCase()}`;
   };
@@ -110,7 +115,7 @@ const InterviewAndDocument = () => {
         style={[styles.interviewCard, { borderLeftColor: Colors.orange }]}
         activeOpacity={0.8}
         onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SCHEDULE_YOUR_INTERVIEW)}
-        disabled={!isInterviewNotScheduled()}>
+        disabled={!isInterviewSchedulingAllowed()}>
         <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper
             iconImage={Images.schedule_interview}
@@ -120,13 +125,13 @@ const InterviewAndDocument = () => {
           />
           <View>
             <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Schedule Interview</Text>
-            {!isInterviewNotScheduled() && (
+            {!isInterviewSchedulingAllowed() && (
               <View style={{ paddingHorizontal: RfW(10), marginTop: RfH(5) }}>
                 <Text style={[commonStyles.mediumPrimaryText, { color: Colors.orange }]}>{getInterviewText()}</Text>
               </View>
             )}
           </View>
-          {isInterviewNotScheduled() && (
+          {isInterviewSchedulingAllowed() && (
             <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
               <IconButtonWrapper
                 iconImage={Images.right_arrow_grey}

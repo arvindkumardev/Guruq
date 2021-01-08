@@ -78,6 +78,7 @@ export const GET_SPONSORED_TUTORS = gql`
         }
         profileImage {
           filename
+          original
         }
         tutorOfferings {
           id

@@ -12,6 +12,7 @@ export const SEARCH_TUTORS = gql`
           id
           name
           filename
+          original
         }
         profileCompletion
         contactDetail {
@@ -182,6 +183,7 @@ export const GET_FAVOURITE_TUTORS = gql`
         profileImage {
           id
           filename
+          original
         }
         tutorOfferings {
           id
@@ -249,6 +251,7 @@ export const SEARCH_REVIEW = gql`
           gender
           profileImage {
             filename
+            original
           }
         }
       }

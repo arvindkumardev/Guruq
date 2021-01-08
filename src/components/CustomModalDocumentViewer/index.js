@@ -7,7 +7,7 @@ import { Images } from '../../theme';
 import style from './style';
 import InPlaceLoader from '../InPlaceLoader';
 import { ScreenHeader } from '../index';
-import {API_URL, ATTACHMENT_PREVIEW_URL} from '../../utils/constants';
+import { ATTACHMENT_PREVIEW_URL } from '../../utils/constants';
 
 function CustomModalDocumentViewer(props) {
   const { document, backButtonHandler, modalVisible } = props;

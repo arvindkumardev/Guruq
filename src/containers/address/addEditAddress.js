@@ -9,7 +9,7 @@ import { isEmpty, omit } from 'lodash';
 import { IconButtonWrapper, ScreenHeader, Loader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors, Images } from '../../theme';
-import { alertBox, RfH, RfW } from '../../utils/helpers';
+import { alertBox, processGeoData, RfH, RfW } from '../../utils/helpers';
 import { ADD_UPDATE_STUDENT_ADDRESS, ADD_UPDATE_TUTOR_ADDRESS } from '../common/graphql-mutation';
 import { AddressTypeEnum } from '../common/enums';
 import GoogleAutoCompleteModal from '../../components/GoogleAutoCompleteModal';
@@ -94,20 +94,19 @@ function AddEditAddress(props) {
     }
   };
 
-  const getCurrentLocationData = async () => {
-    await Geolocation.getCurrentPosition((info) => {
-      console.log('info', info);
-
-      if (info && info.coords) {
-        fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${info.coords.latitude},${info.coords.longitude}&key=${GOOGLE_API_KEY}`
-        ).then((response) => {
-          const data = response.json();
-
-          console.log('data', data);
+  const getCurrentLocationData = (info) => {
+    if (info && info.coords) {
+      fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${info.coords.latitude},${info.coords.longitude}&key=${GOOGLE_API_KEY}`
+      )
+        .then((response) => response.json())
+        .then((geoData) => {
+          if (geoData && geoData.results && geoData.results.length > 0) {
+            const addressData = processGeoData(geoData.results[0]);
+            setAddress({ ...address, ...addressData });
+          }
         });
-      }
-    });
+    }
   };
 
   return (
@@ -132,7 +131,7 @@ function AddEditAddress(props) {
                 </View>
                 <View style={{ flex: 0.1 }}>
                   <IconButtonWrapper
-                    submitFunction={getCurrentLocationData}
+                    submitFunction={() => Geolocation.getCurrentPosition((info) => getCurrentLocationData(info))}
                     iconImage={Images.gprs}
                     iconHeight={RfH(24)}
                     iconWidth={RfW(24)}

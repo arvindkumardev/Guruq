@@ -35,6 +35,7 @@ export const GET_TUTION_NEED_LISTING = gql`
           }
           profileImage {
             filename
+            original
           }
         }
       }
@@ -58,6 +59,7 @@ export const GET_ACCEPTED_TUTOR_NEED = gql`
             id
             name
             filename
+            original
           }
           contactDetail {
             firstName

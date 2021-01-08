@@ -9,7 +9,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
-import { endOfDay, printTime, RfH, RfW, startOfDay } from '../../../utils/helpers';
+import { endOfDay, printDate, printTime, RfH, RfW, startOfDay } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_AVAILABILITY_DATA } from '../../student/class.query';
@@ -33,6 +33,9 @@ function ViewSchedule() {
     },
     onCompleted: (data) => {
       setTimeSlots(data.getAvailabilityData);
+
+      console.log(data.getAvailabilityData);
+
       setIsListEmpty(data.getAvailabilityData.length === 0);
     },
   });
@@ -43,8 +46,8 @@ function ViewSchedule() {
       variables: {
         tutorAvailability: {
           tutorId: tutorInfo?.id,
-          startDate: startOfDay(date),
-          endDate: endOfDay(date),
+          startDate: printDate(date),
+          endDate: printDate(date),
         },
       },
     });

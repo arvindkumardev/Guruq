@@ -12,7 +12,7 @@ import { GET_TUTOR_ALL_DETAILS } from './certification-query';
 import { DocumentTypeEnum } from '../common/enums';
 import Loader from '../../components/Loader';
 import ActionModal from './components/helpSection';
-import {API_URL, ATTACHMENT_PREVIEW_URL} from '../../utils/constants';
+import { API_URL, ATTACHMENT_PREVIEW_URL } from '../../utils/constants';
 
 const DOCUMENT_NAME_ID_PROOF = 'id proof';
 const DOCUMENT_NAME_ADDRESS_PROOF = 'address proof';

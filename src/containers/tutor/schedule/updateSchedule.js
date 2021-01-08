@@ -7,7 +7,7 @@ import moment from 'moment';
 import { isEmpty, range } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 import { CustomSelect, IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
-import { alertBox, endOfDay, RfH, RfW, startOfDay } from '../../../utils/helpers';
+import { alertBox, endOfDay, printDate, RfH, RfW, startOfDay } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { UPDATE_AVAILABILITY } from '../tutor.mutation';
@@ -137,6 +137,7 @@ function UpdateSchedule(props) {
     } else {
       const availableArray = [];
       const startDateStr = moment(startDate).format('YYYY-MM-DD');
+      const endDateStr = moment(endDate).format('YYYY-MM-DD');
       slots.forEach((obj) => {
         availableArray.push({
           startTime: `${moment(startDateStr + obj.startTime, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
@@ -147,8 +148,8 @@ function UpdateSchedule(props) {
       updateAvailability({
         variables: {
           tutorAvailability: {
-            startDate: startOfDay(startDate),
-            endDate: endOfDay(endDate),
+            startDate: startDateStr,
+            endDate: endDateStr,
             availableTimes: availableArray,
           },
         },

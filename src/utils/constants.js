@@ -37,7 +37,7 @@ export const FRONTEND_URL = 'http://stagingv2.guruq.in';
 export const DASHBOARD_URL = 'http://dashboardv2.guruq.in';
 // export const API_URL = 'http://apiv2.guruq.in/api';
 export const API_URL = 'http://10.0.0.6:5000';
-export const ATTACHMENT_PREVIEW_URL = 'http://10.0.0.6:5000/upload';
+export const ATTACHMENT_PREVIEW_URL = 'http://10.0.0.6:5000/upload/preview?filePath=';
 export const IMAGES_BASE_URL = 'https://guruq.in/guruq-new';
 
 export const GENERAL_FAQ_URL = `${DASHBOARD_URL}/faqs/general-issues`;

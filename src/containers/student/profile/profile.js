@@ -1,12 +1,12 @@
-import {useMutation, useReactiveVar} from '@apollo/client';
-import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View} from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import { useMutation, useReactiveVar } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 
-import {FORGOT_PASSWORD_MUTATION} from '../../common/graphql-mutation';
+import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
 
 import initializeApollo from '../../../apollo/apollo';
 import {
@@ -24,12 +24,20 @@ import {
   userLocation,
   userType,
 } from '../../../apollo/cache';
-import {LOCAL_STORAGE_DATA_KEY} from '../../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import IconWrapper from '../../../components/IconWrapper';
 import NavigationRouteNames from '../../../routes/screenNames';
-import {Colors, Images} from '../../../theme';
+import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import {alertBox, clearAllLocalStorage, getFullName, getSaveData, removeToken, RfH, RfW,} from '../../../utils/helpers';
+import {
+  alertBox,
+  clearAllLocalStorage,
+  getFullName,
+  getSaveData,
+  removeToken,
+  RfH,
+  RfW,
+} from '../../../utils/helpers';
 import styles from './styles';
 import UserImageComponent from '../../../components/UserImageComponent';
 
