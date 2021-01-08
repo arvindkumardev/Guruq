@@ -254,6 +254,7 @@ function PersonalInformation(props) {
           <View style={{ height: RfH(24) }} />
           <Text style={commonStyles.regularMutedText}>Phone Number</Text>
           <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.phoneNumber?.number}</Text>
+
           <View style={{ height: RfH(24) }} />
           <Text style={commonStyles.regularMutedText}>Date of birth</Text>
           {isUpdateAllowed ? (
@@ -261,7 +262,11 @@ function PersonalInformation(props) {
               <CustomDatePicker value={dob} onChangeHandler={(value) => setDOB(value)} />
             </View>
           ) : (
-            <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{printDate(userInfo?.dob)}</Text>
+            <>
+              <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>
+                {userInfo?.dob ? printDate(userInfo?.dob) : '-'}
+              </Text>
+            </>
           )}
           <View style={{ height: RfH(24) }} />
           <Text style={commonStyles.regularMutedText}>Gender</Text>

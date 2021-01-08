@@ -12,7 +12,7 @@ function CustomSelect(props) {
 
   useEffect(() => {
     setVal(value);
-  }, []);
+  }, [value]);
 
   const handleChange = (value) => {
     onChangeHandler(value);

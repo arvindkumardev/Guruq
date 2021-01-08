@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { isEmpty } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import {
   CustomCheckBox,
   CustomRadioButton,
@@ -34,8 +34,6 @@ function AddEditEducation(props) {
   const [eduId, setEduId] = useState('');
   const offeringMasterData = useReactiveVar(offeringsMasterData);
 
-  console.log('educationDetail', educationDetail);
-
   const schoolEducation = offeringMasterData.find((s) => s.level === 0 && s.name === SCHOOL_EDUCATION);
   const boards = offeringMasterData.filter((s) => s?.parentOffering?.id === schoolEducation?.id);
 
@@ -57,6 +55,7 @@ function AddEditEducation(props) {
   const [degree, setDegree] = useState([]);
   const [showDegrees, setShowDegrees] = useState(false);
 
+  console.log(educationDetail);
   useEffect(() => {
     if (!isEmpty(educationDetail) && !isEmpty(degree)) {
       setSchoolName(educationDetail.school.name);
@@ -67,17 +66,19 @@ function AddEditEducation(props) {
       setFieldOfStudy(educationDetail.fieldOfStudy);
       setEduId(educationDetail?.id);
       setSelectedDegree(degree.find((item) => item.id === educationDetail?.degree?.id));
-      setSelectedBoard(boards.find((item) => item.displayName === educationDetail?.board));
-      setSelectedStream(highSchoolStreams.find((item) => item.label === educationDetail?.higherSecondaryStream));
-      // setSelectedClass(
-      //   offeringMasterData.find(
-      //     (item) => item?.parentOffering?.id === selectedBoard?.id && item.displayName === educationDetail?.grade
-      //   )
-      // );
+      setSelectedBoard(boards.find((item) => item.displayName === educationDetail?.board.toUpperCase()));
+      const board = boards.find((item) => item.displayName === educationDetail?.board.toUpperCase());
+      if (board) {
+        const classes = offeringMasterData.filter((item) => item?.parentOffering?.id === board?.id);
+        setSelectedClass(classes.find((item) => item.name === educationDetail?.grade));
+      }
+      if (educationDetail.higherSecondaryStream) {
+        setSelectedStream(
+          highSchoolStreams.find((item) => item.label === educationDetail?.higherSecondaryStream.toUpperCase())
+        );
+      }
     }
   }, [educationDetail, degree]);
-
-  console.log('sele', selectedBoard);
 
   const [saveEducation, { loading: educationLoading }] = useMutation(ADD_UPDATE_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -223,17 +224,19 @@ function AddEditEducation(props) {
               <Text style={commonStyles.smallMutedText}>Board</Text>
               <View>
                 <Item style={commonStyles.horizontalChildrenSpaceView}>
-                  <CustomSelect
-                    data={boards.map((item) => ({ label: item.displayName, value: item }))}
-                    value={selectedBoard}
-                    onChangeHandler={(value) => setSelectedBoard(value)}
-                    placeholder="Select Board"
-                    containerStyle={{
-                      flex: 1,
-                      height: RfH(44),
-                      justifyContent: 'center',
-                    }}
-                  />
+                  {selectedBoard && (
+                    <CustomSelect
+                      data={boards.map((item) => ({ label: item.displayName, value: item }))}
+                      value={selectedBoard}
+                      onChangeHandler={(value) => setSelectedBoard(value)}
+                      placeholder="Select Board"
+                      containerStyle={{
+                        flex: 1,
+                        height: RfH(44),
+                        justifyContent: 'center',
+                      }}
+                    />
+                  )}
                 </Item>
               </View>
               <View style={{ height: RfH(24) }} />
@@ -286,17 +289,6 @@ function AddEditEducation(props) {
               <TouchableWithoutFeedback onPress={() => setShowDegrees(true)}>
                 <View style={[commonStyles.lineSeparator, { flex: 0, paddingBottom: RfH(8) }]}>
                   <View style={[commonStyles.horizontalChildrenSpaceView, { paddingTop: RfH(12) }]}>
-                    {/* <CustomSelect
-                    data={degree.map((item) => ({ label: item.name, value: item }))}
-                    value={selectedDegree}
-                    onChangeHandler={(value) => setSelectedDegree(value)}
-                    placeholder="Please select degree"
-                    containerStyle={{
-                      flex: 1,
-                      height: RfH(44),
-                      justifyContent: 'center',
-                    }}
-                  /> */}
                     <Text>{!isEmpty(selectedDegree) ? selectedDegree.name : 'Please select degree'}</Text>
                     <IconButtonWrapper iconWidth={RfW(16)} iconHeight={RfH(16)} iconImage={Images.expand} />
                   </View>
