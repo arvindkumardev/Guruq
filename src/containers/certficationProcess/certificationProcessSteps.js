@@ -99,7 +99,7 @@ const CertificationProcessSteps = (props) => {
   }, [isFocussed]);
 
   const [step, setStep] = useState(0);
-  const [buttonText, setButtonText] = useState(0);
+  const [buttonText, setButtonText] = useState('Loading...');
 
   useEffect(() => {
     if (leadDetail.certificationStage === TutorCertificationStageEnum.OFFERING_PENDING.label) {

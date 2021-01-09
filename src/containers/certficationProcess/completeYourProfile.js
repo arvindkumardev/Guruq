@@ -4,12 +4,11 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { isEmpty } from 'lodash';
-import { RFValue } from 'react-native-responsive-fontsize';
 import GetLocation from 'react-native-get-location';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
 import { RfH, RfW } from '../../utils/helpers';
 import Loader from '../../components/Loader';
-import { Colors, Images, Fonts } from '../../theme';
+import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import styles from './styles';
 import { GET_TUTOR_ALL_DETAILS } from './certification-query';
@@ -104,7 +103,7 @@ const CompleteYourProfile = () => {
 
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
-      <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading||getCurrentTutorLoading} />
+      <Loader isLoading={tutorLeadDetailLoading || markTutorCertifiedLoading || getCurrentTutorLoading} />
       <ScreenHeader
         label="Complete Profile"
         showRightIcon

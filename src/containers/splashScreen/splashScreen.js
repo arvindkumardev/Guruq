@@ -9,7 +9,7 @@ import { GET_OFFERINGS_MASTER_DATA } from '../student/dashboard-query';
 import { offeringsMasterData } from '../../apollo/cache';
 
 function SplashScreen() {
-  const [getOfferingMasterData, {}] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
+  const [getOfferingMasterData] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import { Button } from 'native-base';
 import { useLazyQuery } from '@apollo/client';
@@ -6,11 +6,13 @@ import { RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import Images from '../../theme/images';
 import { Colors } from '../../theme';
-import { Loader } from '../../components';
+import { Loader, ScreenHeader } from '../../components';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 import { tutorDetails } from '../../apollo/cache';
+import ActionModal from './components/helpSection';
 
 const TutorVerificationScreen = () => {
+  const [openMenu, setOpenMenu] = useState(false);
   const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {},
@@ -28,7 +30,15 @@ const TutorVerificationScreen = () => {
   return (
     <>
       <Loader isLoading={getCurrentTutorLoading} />
-      <View style={{ flex: 1, alignItems: 'center', paddingTop: RfH(140), backgroundColor: Colors.white }}>
+      <ScreenHeader
+        label=""
+        horizontalPadding={RfW(16)}
+        showRightIcon
+        rightIcon={Images.vertical_dots_b}
+        lineVisible={false}
+        onRightIconClick={() => setOpenMenu(true)}
+      />
+      <View style={{ flex: 1, alignItems: 'center', paddingTop: RfH(100), backgroundColor: Colors.white }}>
         <Image source={Images.pendingStatus} style={{ width: RfW(300), height: RfH(300) }} resizeMode="contain" />
         <View style={{ marginTop: RfH(52), alignItems: 'center' }}>
           <Text style={commonStyles.headingPrimaryText}> Verification pending</Text>
@@ -45,6 +55,7 @@ const TutorVerificationScreen = () => {
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(70), width: RfW(230) }]}>
           <Text style={commonStyles.textButtonPrimary}>Check Status</Text>
         </Button>
+        {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
       </View>
     </>
   );

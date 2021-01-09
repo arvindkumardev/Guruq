@@ -55,6 +55,7 @@ export const GET_CLASS_DETAILS = gql`
           profileImage {
             id
             filename
+            original
           }
           contactDetail {
             firstName
@@ -70,6 +71,7 @@ export const GET_CLASS_DETAILS = gql`
           profileImage {
             id
             filename
+            original
           }
           contactDetail {
             firstName
@@ -85,6 +87,7 @@ export const GET_CLASS_DETAILS = gql`
             name
             size
             type
+            original
           }
           createdDate
         }

@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { GET_CURRENT_TUTOR_QUERY, GET_STUDENT_DETAILS, ME_QUERY} from '../graphql-query';
+import { GET_CURRENT_TUTOR_QUERY, GET_STUDENT_DETAILS, ME_QUERY } from '../graphql-query';
 import {
   isLoggedIn,
   isSplashScreenVisible,
@@ -38,7 +38,6 @@ function LoginCheck() {
         userType(userDetailsData.type);
         isLoggedIn(true);
         isSplashScreenVisible(false);
-        console.log(true);
       }
     },
   });
@@ -53,7 +52,6 @@ function LoginCheck() {
         userType(userDetailsData.type);
         isLoggedIn(true);
         isSplashScreenVisible(false);
-        console.log(true);
       }
     },
   });
@@ -61,7 +59,6 @@ function LoginCheck() {
   const [getMe, { loading: getMeLoading }] = useLazyQuery(ME_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      console.log("e",e)
       isLoggedIn(false);
       isTokenLoading(false);
       userDetails({});
@@ -77,7 +74,6 @@ function LoginCheck() {
           }
         });
         setUserDetailsData(data.me);
-        console.log('dataa aaa me', data);
         if (data.me.type === UserTypeEnum.STUDENT.label) {
           getCurrentStudent();
         } else if (data.me.type === UserTypeEnum.TUTOR.label) {
@@ -91,7 +87,6 @@ function LoginCheck() {
   });
 
   useEffect(() => {
-    console.log('dataa aaa me');
     getMe();
   }, []);
 

@@ -15,17 +15,14 @@ const DegreeModal = (props) => {
   useEffect(() => {
     setDegreeData(degree);
   }, []);
-  const ListItem = (item) => {
-    return (
-      <>
-        <TouchableOpacity onPress={() => onSelectingDegree(item)}>
-          <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(8) }}>
-            <Text>{item.value}</Text>
-          </View>
-        </TouchableOpacity>
-      </>
-    );
-  };
+
+  const ListItem = (item) => (
+    <TouchableOpacity onPress={() => onSelectingDegree(item)}>
+      <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(8) }}>
+        <Text>{item.value}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   const SectionHeader = (section) => (
     <View
@@ -85,7 +82,8 @@ const DegreeModal = (props) => {
               renderSectionHeader={SectionHeader}
               getItemHeight={() => RfH(44)}
               sectionHeaderHeight={RfH(28)}
-              indexLetterColor="#007aff"
+              indexLetterColor={Colors.white}
+              index={[]}
               keyExtractor={(item, index) => index.toString()}
             />
           )}

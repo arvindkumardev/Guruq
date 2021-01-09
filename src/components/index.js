@@ -25,6 +25,9 @@ import ActionSheet from './ActionSheet';
 import UserReviews from './UserReviews';
 import UserRatings from './UserRatings';
 import StudentImageComponent from './StudentImageComponent';
+import UserImageComponent from './UserImageComponent';
+import CustomModalDocumentViewer from './CustomModalDocumentViewer';
+import UploadDocument from './UploadDocument';
 
 export {
   IconButtonWrapper,
@@ -53,4 +56,7 @@ export {
   UserReviews,
   UserRatings,
   StudentImageComponent,
+  UserImageComponent,
+  CustomModalDocumentViewer,
+  UploadDocument,
 };

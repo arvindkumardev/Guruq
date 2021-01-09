@@ -9,7 +9,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
-import { endOfDay, printTime, RfH, RfW, startOfDay } from '../../../utils/helpers';
+import { endOfDay, printDate, printTime, RfH, RfW, startOfDay } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_AVAILABILITY_DATA } from '../../student/class.query';
@@ -27,9 +27,7 @@ function ViewSchedule() {
   const [getAvailability, { loading: getAvailabilityLoader }] = useLazyQuery(GET_AVAILABILITY_DATA, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       setTimeSlots(data.getAvailabilityData);
@@ -43,8 +41,8 @@ function ViewSchedule() {
       variables: {
         tutorAvailability: {
           tutorId: tutorInfo?.id,
-          startDate: startOfDay(date),
-          endDate: endOfDay(date),
+          startDate: printDate(date),
+          endDate: printDate(date),
         },
       },
     });

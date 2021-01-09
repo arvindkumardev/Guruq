@@ -1,19 +1,25 @@
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty, omit } from 'lodash';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { CustomCheckBox, IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
+import {
+  CustomCheckBox,
+  IconButtonWrapper,
+  Loader,
+  ScreenHeader,
+  CustomModalDocumentViewer,
+  UploadDocument,
+} from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
 import { alertBox, getToken, RfH, RfW } from '../../../utils/helpers';
 import { ADD_UPDATE_BUSINESS_DETAILS } from './business.mutation';
-import UploadDocument from '../../../components/UploadDocument';
+import { tutorDetails } from '../../../apollo/cache';
 import { ADD_TUTOR_DOCUMENT_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS } from '../tutor.mutation';
 import { DocumentTypeEnum } from '../../common/enums';
-import { tutorDetails } from '../../../apollo/cache';
-import CustomModalDocumentViewer from '../../../components/CustomModalDocumentViewer';
+import { ATTACHMENT_PREVIEW_URL } from '../../../utils/constants';
 
 function AddEditBusinessDetails(props) {
   const businessDetail = props?.route?.params?.businessDetails;
@@ -80,14 +86,14 @@ function AddEditBusinessDetails(props) {
       saveBusinessDetail({
         variables: {
           businessDetailsDto: {
-            panCard: { name: panCardDoc.name, attachment: omit(panCardDoc.attachment, ['__typename']) },
+            panCard: { name: panCardDoc.name, attachment: omit(panCardDoc.attachment, ['__typename', 'original']) },
             panNumber,
             gstEligible,
             ...(gstEligible && {
               businessName: gstEligible ? legalName : '',
               gstNumber: gstEligible ? gstNumber : '',
               gstCertificate: gstEligible
-                ? { name: gstinDoc.name, attachment: omit(gstinDoc.attachment, ['__typename']) }
+                ? { name: gstinDoc.name, attachment: omit(gstinDoc.attachment, ['__typename', 'original']) }
                 : {},
             }),
           },
@@ -244,7 +250,7 @@ function AddEditBusinessDetails(props) {
                     imageResizeMode="cover"
                     iconImage={
                       panCardDoc.attachment.type !== 'application/pdf'
-                        ? `http://apiv2.guruq.in/api/upload/${panCardDoc.attachment.filename}`
+                        ? `${ATTACHMENT_PREVIEW_URL}${panCardDoc.attachment.original}`
                         : Images.pdf
                     }
                     submitFunction={() => {
@@ -296,7 +302,7 @@ function AddEditBusinessDetails(props) {
                       imageResizeMode="cover"
                       iconImage={
                         gstinDoc.attachment.type !== 'application/pdf'
-                          ? `http://apiv2.guruq.in/api/upload/${gstinDoc.attachment.filename}`
+                          ? `${ATTACHMENT_PREVIEW_URL}${gstinDoc.attachment.original}`
                           : Images.pdf
                       }
                       submitFunction={() => {

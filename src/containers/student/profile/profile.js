@@ -8,13 +8,12 @@ import { isEmpty } from 'lodash';
 import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
 import { notificationsList, studentDetails, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import IconWrapper from '../../../components/IconWrapper';
+import { IconButtonWrapper, UserImageComponent, Loader } from '../../../components';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { alertBox, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
-import UserImageComponent from '../../../components/UserImageComponent';
 
 const PERSONAL_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
@@ -100,9 +99,9 @@ function Profile(props) {
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+      //   const error = e.graphQLErrors[0].extensions.exception.response;
+      // }
     },
     onCompleted: (data) => {
       if (data) {
@@ -146,10 +145,10 @@ function Profile(props) {
         ]}
         activeOpacity={0.8}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
+          <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
           <Text style={{ fontSize: 15, color: Colors.primaryText, marginLeft: RfW(16) }}>{item.name}</Text>
         </View>
-        <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
+        <IconButtonWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
       </TouchableOpacity>
     );
   };
@@ -157,7 +156,7 @@ function Profile(props) {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-
+      <Loader isLoading={forgotPasswordLoading} />
       <View
         style={{
           height: RfH(24),
@@ -214,7 +213,7 @@ function Profile(props) {
             <TouchableWithoutFeedback
               onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
               style={[styles.userMenuParentView, { height: 60 }]}>
-              <IconWrapper
+              <IconButtonWrapper
                 iconHeight={RfH(16)}
                 iconWidth={RfW(16)}
                 iconImage={Images.profile}
@@ -227,7 +226,7 @@ function Profile(props) {
                   Personal, Addresses, Parents & Education Detail
                 </Text>
               </View>
-              <IconWrapper
+              <IconButtonWrapper
                 iconWidth={RfW(24)}
                 iconHeight={RfH(24)}
                 imageResizeMode="contain"
@@ -250,7 +249,12 @@ function Profile(props) {
 
           <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.MY_STUDY_AREAS)}>
             <View style={styles.userMenuParentView}>
-              <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.book} imageResizeMode="contain" />
+              <IconButtonWrapper
+                iconHeight={RfH(18)}
+                iconWidth={RfW(18)}
+                iconImage={Images.book}
+                imageResizeMode="contain"
+              />
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>Study Areas</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -265,7 +269,7 @@ function Profile(props) {
             onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.FAVOURITE_TUTOR)}
             style={styles.userMenuParentView}
             activeOpacity={0.8}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.heart} />
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Favourites</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -278,7 +282,7 @@ function Profile(props) {
 
           <TouchableWithoutFeedback onPress={() => setIsMyClassesMenuOpen(!isMyClassesMenuOpen)}>
             <View style={styles.userMenuParentView}>
-              <IconWrapper
+              <IconButtonWrapper
                 iconHeight={RfH(16)}
                 iconWidth={RfW(16)}
                 iconImage={Images.classes}
@@ -290,7 +294,7 @@ function Profile(props) {
                   Calendar & Upcoming Class, Schedule Class & Renew Class
                 </Text>
               </View>
-              <IconWrapper
+              <IconButtonWrapper
                 iconWidth={RfW(24)}
                 iconHeight={RfH(24)}
                 iconImage={isMyClassesMenuOpen ? Images.collapse_grey : Images.expand_gray}
@@ -312,7 +316,12 @@ function Profile(props) {
 
           <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.PYTN_LISTING)}>
             <View style={styles.userMenuParentView}>
-              <IconWrapper iconHeight={RfH(18)} iconWidth={RfW(18)} iconImage={Images.book} imageResizeMode="contain" />
+              <IconButtonWrapper
+                iconHeight={RfH(18)}
+                iconWidth={RfW(18)}
+                iconImage={Images.book}
+                imageResizeMode="contain"
+              />
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>Post Your Tuition Needs</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -326,14 +335,14 @@ function Profile(props) {
 
           <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
             <View style={styles.userMenuParentView}>
-              <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
+              <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
               <View style={styles.menuItemParentView}>
                 <Text style={styles.menuItemPrimaryText}>Booking Details</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                   Purchased History & Cart
                 </Text>
               </View>
-              <IconWrapper
+              <IconButtonWrapper
                 iconWidth={RfW(24)}
                 iconHeight={RfH(24)}
                 iconImage={isBookingMenuOpen ? Images.collapse_grey : Images.expand_gray}
@@ -357,7 +366,7 @@ function Profile(props) {
             onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
             style={[styles.userMenuParentView]}
             activeOpacity={0.8}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -369,7 +378,7 @@ function Profile(props) {
           <View style={commonStyles.blankGreyViewSmall} />
 
           <View style={[styles.userMenuParentView]}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.personal} />
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.personal} />
             <View style={styles.menuItemParentView}>
               <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}>
                 <Text style={styles.menuItemPrimaryText}>Help</Text>
@@ -384,7 +393,7 @@ function Profile(props) {
 
           <TouchableWithoutFeedback onPress={() => setIsAboutGuruMenuOpen(!isAboutGuruMenuOpen)}>
             <View style={styles.userMenuParentView}>
-              <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
+              <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
               <View style={styles.menuItemParentView}>
                 <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.ABOUT_US)}>
                   <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
@@ -399,7 +408,7 @@ function Profile(props) {
           <View style={commonStyles.blankGreyViewSmall} />
 
           <View style={[styles.userMenuParentView]}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
             <View style={styles.menuItemParentView}>
               <TouchableWithoutFeedback onPress={onChangePasswordClick}>
                 <Text style={styles.menuItemPrimaryText}>Change Password</Text>
@@ -412,7 +421,12 @@ function Profile(props) {
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
           <View style={[styles.userMenuParentView]}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" iconImage={Images.logOut} />
+            <IconButtonWrapper
+              iconHeight={RfH(16)}
+              iconWidth={RfW(16)}
+              imageResizeMode="contain"
+              iconImage={Images.logOut}
+            />
             <View style={styles.menuItemParentView}>
               <TouchableOpacity onPress={logoutConfirmation}>
                 <Text style={styles.menuItemPrimaryText}>Logout</Text>
@@ -440,7 +454,7 @@ function Profile(props) {
             </View>
 
             <View>
-              <IconWrapper
+              <IconButtonWrapper
                 iconHeight={RfH(65)}
                 iconWidth={RfW(65)}
                 iconImage={Images.profile_footer_logo}

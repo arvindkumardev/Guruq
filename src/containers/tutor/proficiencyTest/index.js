@@ -7,6 +7,7 @@ import { getToken, RfW } from '../../../utils/helpers';
 import { Images } from '../../../theme';
 import ActionModal from '../../certficationProcess/components/helpSection';
 import InPlaceLoader from '../../../components/InPlaceLoader';
+import { DASHBOARD_URL } from '../../../utils/constants';
 
 const ProficiencyTest = (props) => {
   const { route } = props;
@@ -28,13 +29,12 @@ const ProficiencyTest = (props) => {
 
   useEffect(() => {
     if (token) {
-      setUrl(`http://dashboardv2.guruq.in/tutor/embed/tutor-proficiency-test/${offeringId}/start/${token}`);
+      setUrl(`${DASHBOARD_URL}/tutor/embed/tutor-proficiency-test/${offeringId}/start/${token}`);
     }
   }, [token]);
 
   const onNavigationStateChange = (event) => {
-    console.log('event.url', event.url);
-    if (event.url.includes(`http://dashboardv2.guruq.in/tutor/start-proficiency-test/${offeringId}/complete`)) {
+    if (event.url.includes(`${DASHBOARD_URL}/tutor/start-proficiency-test/${offeringId}/complete`)) {
       navigation.goBack();
     } else {
       console.log('url', event.url);

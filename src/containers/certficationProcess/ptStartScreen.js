@@ -57,9 +57,6 @@ const PtStartScreen = (props) => {
     onCompleted: (data) => {
       if (data) {
         tutorDetails(data?.getCurrentTutor);
-          navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
-              isOnBoarding,
-          });
       }
     },
   });

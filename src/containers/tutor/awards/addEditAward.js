@@ -80,7 +80,7 @@ function AddEditAward(props) {
     <>
       <Loader isLoading={awardDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-        <ScreenHeader homeIcon label="Experience" horizontalPadding={RfW(16)} lineVisible={true} />
+        <ScreenHeader homeIcon label="Experience" horizontalPadding={RfW(16)} lineVisible />
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(24) }} />
           <Item floatingLabel>
@@ -107,7 +107,12 @@ function AddEditAward(props) {
               <View style={{ flex: 1 }}>
                 <Text style={commonStyles.regularMutedText}>Issue Date</Text>
                 <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
-                  <CustomDatePicker value={date} onChangeHandler={(d) => setDate(d)} maximumDate={new Date()} />
+                  <CustomDatePicker
+                    placeholder="Select the award date"
+                    value={date}
+                    onChangeHandler={(d) => setDate(d)}
+                    maximumDate={new Date()}
+                  />
                 </View>
               </View>
             </View>

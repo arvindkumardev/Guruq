@@ -31,7 +31,7 @@ import WebViewPage from '../components/WebViewPage';
 import UploadDocuments from '../containers/certficationProcess/uploadDocuments';
 import AddressListing from '../containers/address/addressListing';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
-import { createPayload } from '../utils/helpers';
+import {clearAllLocalStorage, createPayload} from '../utils/helpers';
 
 import scheduledClassDetails from '../containers/calendar/scheduledClassDetails';
 import cancelReason from '../containers/calendar/cancelReason';
@@ -63,7 +63,6 @@ import TutorVerificationScreen from '../containers/certficationProcess/tutorVeri
 import { BackgroundCheckStatusEnum } from '../containers/common/enums';
 import RatingReviews from '../containers/common/ratingReviews';
 import UpdateVersion from '../containers/common/updateVersion/updateVersion';
-import UnderMainTainance from '../containers/common/underMaintainance/underMaintainance';
 import ReferEarn from '../containers/referAndEarn/referEarn';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import Notifications from '../containers/student/dashboard/notifications';
@@ -246,11 +245,11 @@ const AppStack = (props) => {
         component={UpdateVersion}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={NavigationRouteNames.UNDER_MAINTAINANCE}
-        component={UnderMainTainance}
-        options={{ headerShown: false }}
-      />
+      {/* <Stack.Screen */}
+      {/*  name={NavigationRouteNames.UNDER_MAINTAINANCE} */}
+      {/*  component={UnderMainTainance} */}
+      {/*  options={{ headerShown: false }} */}
+      {/* /> */}
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ONLINE_CLASS}
@@ -272,15 +271,6 @@ const AppStack = (props) => {
   );
 
   const getLoggedInRoutes = () => {
-    if (userType === UserTypeEnum.OTHER.label) {
-      return (
-        <Stack.Screen
-          name={NavigationRouteNames.USER_TYPE_SELECTOR}
-          component={UserTypeSelector}
-          options={{ headerShown: false }}
-        />
-      );
-    }
     if (userType === UserTypeEnum.STUDENT.label) {
       if (studentInfo) {
         return getStudentRoutes(studentInfo);
@@ -293,13 +283,11 @@ const AppStack = (props) => {
 
       if (tutorInfo && tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.REGISTERED.label) {
         return (
-          <>
-            <Stack.Screen
-              name={NavigationRouteNames.TUTOR.WELCOME_SCREEN}
-              component={TutorWelcomeScreen}
-              options={{ headerShown: false }}
-            />
-          </>
+          <Stack.Screen
+            name={NavigationRouteNames.TUTOR.WELCOME_SCREEN}
+            component={TutorWelcomeScreen}
+            options={{ headerShown: false }}
+          />
         );
       }
       if (
@@ -422,14 +410,16 @@ const AppStack = (props) => {
             options={{ headerShown: false }}
           />
           <Stack.Screen name={NavigationRouteNames.REGISTER} component={SignUp} options={{ headerShown: false }} />
-          <Stack.Screen
-            name={NavigationRouteNames.USER_TYPE_SELECTOR}
-            component={UserTypeSelector}
-            options={{ headerShown: false }}
-          />
         </>
       )}
-      {isUserLoggedIn && !isEmpty(userType) && getCommonRoutes()}
+      {isUserLoggedIn && userType === UserTypeEnum.OTHER.label && (
+        <Stack.Screen
+          name={NavigationRouteNames.USER_TYPE_SELECTOR}
+          component={UserTypeSelector}
+          options={{ headerShown: false }}
+        />
+      )}
+      {isUserLoggedIn && !isEmpty(userType) && userType !== UserTypeEnum.OTHER.label && getCommonRoutes()}
     </Stack.Navigator>
   );
 };

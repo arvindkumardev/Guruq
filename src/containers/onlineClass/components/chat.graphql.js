@@ -12,6 +12,7 @@ export const NEW_CHAT_MESSAGE = gql`
         lastName
         profileImage {
           filename
+          original
         }
       }
       createdDate
@@ -32,6 +33,7 @@ export const GET_CHAT_MESSAGES = gql`
         lastName
         profileImage {
           filename
+          original
         }
       }
       createdDate
@@ -51,6 +53,7 @@ export const SEND_CHAT_MESSAGE = gql`
         lastName
         profileImage {
           filename
+          original
         }
       }
       createdDate

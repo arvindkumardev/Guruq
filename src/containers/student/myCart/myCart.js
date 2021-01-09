@@ -13,12 +13,19 @@ import analytics from '@react-native-firebase/analytics';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { sum, isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
-import { IconButtonWrapper, Loader, PaymentMethodModal, ScreenHeader, TutorImageComponent } from '../../../components';
+import {
+  IconButtonWrapper,
+  Loader,
+  PaymentMethodModal,
+  ScreenHeader,
+  SelectSubjectModal,
+  TutorImageComponent,
+} from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
 import { alertBox, getFullName, getToken, printCurrency, RfH, RfW } from '../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { API_URL, DASHBOARD_URL, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
 import { GET_MY_QPOINTS_BALANCE } from '../../common/graphql-query';
@@ -45,6 +52,7 @@ const MyCart = () => {
   const [bookingData, setBookingData] = useState({});
   const userInfo = useReactiveVar(userDetails);
   const [paymentStatus, setPaymentStatus] = useState('success');
+  const [showAllSubjects, setShowAllSubjects] = useState(false);
 
   // const [applyCoupons, setApplyCoupons] = useState(false);
   // const [appliedCouponCode, setAppliedCouponCode] = useState('');
@@ -210,6 +218,11 @@ const MyCart = () => {
   //   }
   // };
 
+  const gotoTutors = (subject) => {
+    setShowAllSubjects(false);
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR, { offering: subject });
+  };
+
   const [removeItem, { loading: removeLoading }] = useMutation(REMOVE_CART_ITEM, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -259,7 +272,6 @@ const MyCart = () => {
     // setPaymentUrl(`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}`);
   };
 
-  console.log('bookingData', bookingData);
   useEffect(() => {
     if (!paymentModal && paymentStatus === 'failure') {
       alertBox('Transaction Failed', 'Please try again', {
@@ -274,7 +286,7 @@ const MyCart = () => {
   }, [paymentModal]);
 
   const handlePaymentAuthorization = async (event) => {
-    if (event.url.indexOf('http://dashboardv2.guruq.in/booking/confirmation') > -1) {
+    if (event.url.indexOf(`${DASHBOARD_URL}/booking/confirmation`) > -1) {
       setPaymentStatus('success');
       setPaymentModal(false);
       navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_CONFIRMED, {
@@ -282,7 +294,7 @@ const MyCart = () => {
         paymentMethod: PaymentMethodEnum.PAYTM.value,
       });
       setBookingData({});
-    } else if (event.url.indexOf('http://dashboardv2.guruq.in/booking/failure') > -1) {
+    } else if (event.url.indexOf(`${DASHBOARD_URL}/booking/failure`) > -1) {
       setPaymentModal(false);
       setPaymentStatus('failure');
     } else {
@@ -653,6 +665,11 @@ const MyCart = () => {
             ]}>
             Looks like you haven't made your choice yet.....
           </Text>
+          <Button
+            onPress={() => setShowAllSubjects(true)}
+            style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
+            <Text style={commonStyles.textButtonPrimary}>Start Booking</Text>
+          </Button>
         </View>
       )}
 
@@ -683,13 +700,18 @@ const MyCart = () => {
       />
       {paymentModal && !isEmpty(bookingData) && (
         <CustomModalWebView
-          url={`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingData.uuid}?token=${token}`}
+          url={`${API_URL}/payment/paytm/startTransaction/${bookingData.uuid}?token=${token}`}
           headerText="Payment"
           modalVisible={paymentModal}
           onNavigationStateChange={handlePaymentAuthorization}
           backButtonHandler={paymentBackButtonHandler}
         />
       )}
+      <SelectSubjectModal
+        onClose={() => setShowAllSubjects(false)}
+        onSelectSubject={gotoTutors}
+        visible={showAllSubjects}
+      />
     </View>
   );
 };

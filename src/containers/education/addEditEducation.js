@@ -24,6 +24,11 @@ import { UserTypeEnum } from '../../common/userType.enum';
 import { GET_DEGREE_LIST } from './education.query';
 import DegreeModal from './degreeSelectionModal';
 
+const highSchoolStreams = [];
+Object.keys(HighSchoolStreamEnum).forEach(function (key) {
+  highSchoolStreams.push({ value: HighSchoolStreamEnum[key], label: key });
+});
+
 function AddEditEducation(props) {
   const navigation = useNavigation();
   const educationDetail = props.route.params.detail;
@@ -36,11 +41,6 @@ function AddEditEducation(props) {
 
   const schoolEducation = offeringMasterData.find((s) => s.level === 0 && s.name === SCHOOL_EDUCATION);
   const boards = offeringMasterData.filter((s) => s?.parentOffering?.id === schoolEducation?.id);
-
-  const highSchoolStreams = [];
-  Object.keys(HighSchoolStreamEnum).forEach(function (key) {
-    highSchoolStreams.push({ value: HighSchoolStreamEnum[key], label: key });
-  });
 
   const [schoolName, setSchoolName] = useState('');
   const [selectedBoard, setSelectedBoard] = useState({});
@@ -55,7 +55,6 @@ function AddEditEducation(props) {
   const [degree, setDegree] = useState([]);
   const [showDegrees, setShowDegrees] = useState(false);
 
-  console.log(educationDetail);
   useEffect(() => {
     if (!isEmpty(educationDetail) && !isEmpty(degree)) {
       setSchoolName(educationDetail.school.name);
@@ -66,16 +65,18 @@ function AddEditEducation(props) {
       setFieldOfStudy(educationDetail.fieldOfStudy);
       setEduId(educationDetail?.id);
       setSelectedDegree(degree.find((item) => item.id === educationDetail?.degree?.id));
-      setSelectedBoard(boards.find((item) => item.displayName === educationDetail?.board.toUpperCase()));
-      const board = boards.find((item) => item.displayName === educationDetail?.board.toUpperCase());
-      if (board) {
-        const classes = offeringMasterData.filter((item) => item?.parentOffering?.id === board?.id);
-        setSelectedClass(classes.find((item) => item.name === educationDetail?.grade));
-      }
-      if (educationDetail.higherSecondaryStream) {
-        setSelectedStream(
-          highSchoolStreams.find((item) => item.label === educationDetail?.higherSecondaryStream.toUpperCase())
-        );
+      if (educationDetail?.board) {
+        setSelectedBoard(boards.find((item) => item.displayName === educationDetail?.board.toUpperCase()));
+        const board = boards.find((item) => item.displayName === educationDetail?.board.toUpperCase());
+        if (board) {
+          const classes = offeringMasterData.filter((item) => item?.parentOffering?.id === board?.id);
+          setSelectedClass(classes.find((item) => item.name === educationDetail?.grade));
+        }
+        if (educationDetail.higherSecondaryStream) {
+          setSelectedStream(
+            highSchoolStreams.find((item) => item.label === educationDetail?.higherSecondaryStream.toUpperCase())
+          );
+        }
       }
     }
   }, [educationDetail, degree]);

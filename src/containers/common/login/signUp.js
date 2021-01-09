@@ -38,6 +38,7 @@ function SignUp(props) {
       if (data) {
         removeToken().then(() => {
           storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
+            console.log("data.signUp",data.signUp)
             userDetails(data.signUp);
             userType(data.signUp.type);
             isLoggedIn(true);

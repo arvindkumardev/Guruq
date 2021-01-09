@@ -23,6 +23,7 @@ export const GET_CART_ITEMS = gql`
         profileImage {
           id
           filename
+          original
         }
         contactDetail {
           firstName
@@ -119,6 +120,7 @@ export const GET_BOOKING_DETAIL = gql`
           profileImage {
             id
             filename
+            original
           }
           contactDetail {
             firstName
@@ -171,6 +173,7 @@ export const SEARCH_ORDER_ITEMS = gql`
           profileImage {
             id
             filename
+            original
           }
           contactDetail {
             firstName
@@ -182,6 +185,7 @@ export const SEARCH_ORDER_ITEMS = gql`
           profileImage {
             id
             filename
+            original
           }
           firstName
           lastName
@@ -214,6 +218,7 @@ export const GET_SCHEDULED_CLASSES = gql`
         profileImage {
           id
           filename
+          original
         }
         contactDetail {
           firstName
@@ -226,6 +231,7 @@ export const GET_SCHEDULED_CLASSES = gql`
         profileImage {
           id
           filename
+          original
         }
         contactDetail {
           firstName
@@ -293,6 +299,7 @@ export const GET_BOOKINGS = gql`
           profileImage {
             id
             filename
+            original
           }
           contactDetail {
             firstName
