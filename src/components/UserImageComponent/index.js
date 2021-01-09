@@ -3,18 +3,17 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useReactiveVar } from '@apollo/client';
-import { getFileUrl, getNameInitials, RfH } from '../../utils/helpers';
+import { getNameInitials, RfH } from '../../utils/helpers';
 import styles from '../../containers/student/pytn/styles';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
-import { API_URL, ATTACHMENT_PREVIEW_URL, STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { ATTACHMENT_PREVIEW_URL, STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import CustomImage from '../CustomImage';
 import { userDetails } from '../../apollo/cache';
 
 const UserImageComponent = (props) => {
   const { styling, width, height, fontSize } = props;
   const userInfo = useReactiveVar(userDetails);
-  console.log('userInfo', userInfo);
   return (
     <>
       {userInfo?.profileImage?.filename ? (

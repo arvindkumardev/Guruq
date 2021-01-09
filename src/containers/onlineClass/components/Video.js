@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { BackHandler, Platform, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import RtcEngine, {
   AudioProfile,
   AudioScenario,
@@ -12,13 +12,14 @@ import IconButtonWrapper from '../../../components/IconWrapper';
 import { Colors } from '../../../theme';
 import Images from '../../../theme/images';
 import commonStyles from '../../../theme/styles';
-import {deviceWidth, RfH, RfW, printDate, printTime, getFullName} from '../../../utils/helpers';
+import { deviceWidth, RfH, RfW, printDate, printTime, getFullName, alertBox } from '../../../utils/helpers';
 import ClassDetailsModal from './classDetailsModal';
 import requestCameraAndAudioPermission from './permission';
 import styles from './style';
 import VideoMessagingModal from './videoMessagingModal';
 import VideoMoreAction from './videoMoreAction';
 import Whiteboard from './whiteboard';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 interface Props {}
 
@@ -87,16 +88,25 @@ export default class Video extends Component<Props, State> {
   componentDidMount() {
     this.init();
     console.log('starting video');
+    BackHandler.addEventListener('hardwareBackPress', this.backAction);
   }
 
   componentWillUnmount() {
     console.log('stopping video');
-
+    BackHandler.removeEventListener('hardwareBackPress', this.backAction);
     this._engine?.leaveChannel().then(() => {
       this.setState({ peerIds: [], joinSucceed: false });
       // this.startCall();
     });
   }
+
+  backAction = () => {
+    if (this.state.joinSucceed) {
+      this.endCall();
+      return true;
+    }
+    return false;
+  };
 
   /**
    * @name init
@@ -202,15 +212,24 @@ export default class Video extends Component<Props, State> {
     // console.log(await this._engine.getCallId());
   };
 
+  callEndedHandle = () => {
+    alertBox('Do you really want to end the class?', '', {
+      positiveText: 'Yes',
+      onPositiveClick: async () => {
+        await this._engine?.leaveChannel();
+        this.setState({ peerIds: [], joinSucceed: false });
+        this.props.onCallEnd();
+      },
+      negativeText: 'No',
+    });
+  };
+
   /**
    * @name endCall
    * @description Function to end the call
    */
   endCall = async () => {
-    await this._engine?.leaveChannel();
-    this.setState({ peerIds: [], joinSucceed: false });
-
-    this.props.onCallEnd();
+    this.callEndedHandle();
   };
 
   switchCamera = async () => {
@@ -295,8 +314,8 @@ export default class Video extends Component<Props, State> {
             style={[
               commonStyles.regularPrimaryText,
               {
-                height: 88,
-                paddingTop: 44,
+                height: RfH(88),
+                paddingTop: Platform.OS === 'ios' ? RfH(44) : RfH(10),
                 // marginTop: 16,
                 color: Colors.white,
                 flexDirection: 'row',
@@ -902,7 +921,13 @@ export default class Video extends Component<Props, State> {
   _renderWaitingScreen = () => {
     return (
       <>
-        <View style={{ height: 44, marginTop: 44, paddingHorizontal: 16, justifyContent: 'center' }}>
+        <View
+          style={{
+            // height: RfH(44),
+            paddingVertical: Platform.OS === 'ios' ? RfH(44) : RfH(15),
+            paddingHorizontal: RfW(16),
+            justifyContent: 'center',
+          }}>
           <BackArrow action={this.onBackPress} whiteArrow />
         </View>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -1008,7 +1033,9 @@ export default class Video extends Component<Props, State> {
               </View>
               <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
                 <Text style={commonStyles.headingPrimaryText}>
-                  {`${this.props.classDetails?.offering?.displayName} by ${getFullName(this.props.classDetails?.tutor?.contactDetail)}`}
+                  {`${this.props.classDetails?.offering?.displayName} by ${getFullName(
+                    this.props.classDetails?.tutor?.contactDetail
+                  )}`}
                 </Text>
                 <Text style={commonStyles.mediumMutedText}>
                   {`${this.props.classDetails?.offering?.parentOffering?.displayName} | ${this.props.classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
@@ -1020,9 +1047,6 @@ export default class Video extends Component<Props, State> {
                   {printTime(this.props.classDetails?.endDate)}
                 </Text>
               </View>
-              <View>
-                <IconButtonWrapper />
-              </View>
             </View>
 
             <View style={styles.buttonHolder}>
@@ -1033,11 +1057,11 @@ export default class Video extends Component<Props, State> {
               </TouchableWithoutFeedback>
 
               {/* FIXME: REMOVE ME */}
-              {/*<TouchableWithoutFeedback onPress={this.endCall}>*/}
-              {/*  <View style={styles.button}>*/}
-              {/*    <Text style={styles.buttonText}> End Call </Text>*/}
-              {/*  </View>*/}
-              {/*</TouchableWithoutFeedback>*/}
+              {/* <TouchableWithoutFeedback onPress={this.endCall}> */}
+              {/*  <View style={styles.button}> */}
+              {/*    <Text style={styles.buttonText}> End Call </Text> */}
+              {/*  </View> */}
+              {/* </TouchableWithoutFeedback> */}
             </View>
           </View>
         </View>

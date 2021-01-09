@@ -31,7 +31,7 @@ import WebViewPage from '../components/WebViewPage';
 import UploadDocuments from '../containers/certficationProcess/uploadDocuments';
 import AddressListing from '../containers/address/addressListing';
 import { REGISTER_DEVICE } from '../containers/common/graphql-mutation';
-import {clearAllLocalStorage, createPayload} from '../utils/helpers';
+import { clearAllLocalStorage, createPayload } from '../utils/helpers';
 
 import scheduledClassDetails from '../containers/calendar/scheduledClassDetails';
 import cancelReason from '../containers/calendar/cancelReason';
@@ -70,7 +70,7 @@ import Notifications from '../containers/student/dashboard/notifications';
 const Stack = createStackNavigator();
 
 const AppStack = (props) => {
-  const { isUserLoggedIn, userType, showSplashScreen } = props;
+  const { isUserLoggedIn, userType, showSplashScreen, appMetaData, isForceUpdate } = props;
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
   const studentInfo = useReactiveVar(studentDetails);
@@ -375,51 +375,62 @@ const AppStack = (props) => {
 
   return (
     <Stack.Navigator>
-      {isUserLoggedIn && !isEmpty(userType) ? (
-        getLoggedInRoutes()
-      ) : (
+      {!isForceUpdate ? (
         <>
-          {showSplashScreen && (
+          {isUserLoggedIn && !isEmpty(userType) ? (
+            getLoggedInRoutes()
+          ) : (
+            <>
+              {showSplashScreen && (
+                <Stack.Screen
+                  name={NavigationRouteNames.SPLASH_SCREEN}
+                  component={SplashScreen}
+                  options={{ headerShown: false }}
+                />
+              )}
+              {isGettingStartedVisible && (
+                <Stack.Screen
+                  name={NavigationRouteNames.GETTING_STARTED}
+                  component={GettingStarted}
+                  options={{ headerShown: false }}
+                />
+              )}
+              <Stack.Screen name={NavigationRouteNames.LOGIN} component={Login} options={{ headerShown: false }} />
+              <Stack.Screen
+                name={NavigationRouteNames.ENTER_PASSWORD}
+                component={EnterPassword}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={NavigationRouteNames.OTP_VERIFICATION}
+                component={OtpVerification}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={NavigationRouteNames.SET_PASSWORD}
+                component={SetPassword}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name={NavigationRouteNames.REGISTER} component={SignUp} options={{ headerShown: false }} />
+            </>
+          )}
+          {isUserLoggedIn && userType === UserTypeEnum.OTHER.label && (
             <Stack.Screen
-              name={NavigationRouteNames.SPLASH_SCREEN}
-              component={SplashScreen}
+              name={NavigationRouteNames.USER_TYPE_SELECTOR}
+              component={UserTypeSelector}
               options={{ headerShown: false }}
             />
           )}
-          {isGettingStartedVisible && (
-            <Stack.Screen
-              name={NavigationRouteNames.GETTING_STARTED}
-              component={GettingStarted}
-              options={{ headerShown: false }}
-            />
-          )}
-          <Stack.Screen name={NavigationRouteNames.LOGIN} component={Login} options={{ headerShown: false }} />
-          <Stack.Screen
-            name={NavigationRouteNames.ENTER_PASSWORD}
-            component={EnterPassword}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.OTP_VERIFICATION}
-            component={OtpVerification}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name={NavigationRouteNames.SET_PASSWORD}
-            component={SetPassword}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name={NavigationRouteNames.REGISTER} component={SignUp} options={{ headerShown: false }} />
+          {isUserLoggedIn && !isEmpty(userType) && userType !== UserTypeEnum.OTHER.label && getCommonRoutes()}
         </>
-      )}
-      {isUserLoggedIn && userType === UserTypeEnum.OTHER.label && (
+      ) : (
         <Stack.Screen
-          name={NavigationRouteNames.USER_TYPE_SELECTOR}
-          component={UserTypeSelector}
+          name={NavigationRouteNames.UPDATE_VERSION}
+          component={UpdateVersion}
           options={{ headerShown: false }}
+          initialParams={{ appMetaData: { isUnderMaintenance: false } }}
         />
       )}
-      {isUserLoggedIn && !isEmpty(userType) && userType !== UserTypeEnum.OTHER.label && getCommonRoutes()}
     </Stack.Navigator>
   );
 };

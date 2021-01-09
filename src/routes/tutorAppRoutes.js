@@ -13,7 +13,7 @@ import AddEditBankDetails from '../containers/tutor/bankDetails/addEditBankDetai
 import BusinessDetails from '../containers/tutor/businessDetails/businessDetails';
 import AddEditBusinessDetails from '../containers/tutor/businessDetails/addEditBusinessDetails';
 import PriceAndSchedule from '../containers/certficationProcess/priceAndSchedule';
-import DocumentListing from '../containers/tutor/businessDetails/documentListing';
+import DocumentListing from '../containers/tutor/documentListing/documentListing';
 import TutorOnBoard from '../containers/tutor/tutorOnBoard/index';
 import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
 import ProficiencyTest from '../containers/tutor/proficiencyTest';

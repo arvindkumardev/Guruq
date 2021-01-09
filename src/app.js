@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useS } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ApolloProvider, useReactiveVar } from '@apollo/client';
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import SplashScreen from 'react-native-splash-screen';
@@ -9,23 +9,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-import { clearAllLocalStorage, getToken, removeToken } from './utils/helpers';
-import {
-  interestingOfferingData,
-  isLoggedIn,
-  isSplashScreenVisible,
-  isTokenLoading,
-  networkConnectivityError,
-  notificationPayload,
-  offeringsMasterData,
-  studentDetails,
-  tutorDetails,
-  userDetails,
-  userLocation,
-  userType,
-} from './apollo/cache';
+import { getToken } from './utils/helpers';
+import { appMetaData, isLoggedIn, isSplashScreenVisible, isTokenLoading, userType } from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
+import { DASHBOARD_URL } from './utils/constants';
 
 const getActiveRouteName = (state) => {
   const route = state.routes[state.index];
@@ -45,6 +33,8 @@ function App() {
   const showSplashScreen = useReactiveVar(isSplashScreenVisible);
   // const userInfo = useReactiveVar(userDetails);
   const userTypeVal = useReactiveVar(userType);
+  const [isForceUpdate, setIsForceUpdate] = useState(false);
+  const [appMetaData, setAppMetaData] = useState(false);
   // const isNetworkConnectivityError = useReactiveVar(networkConnectivityError);
 
   // const netInfo = useNetInfo({
@@ -76,10 +66,8 @@ function App() {
     let userToken;
     try {
       userToken = await getToken();
-      console.log('userToken', userToken);
       if (userToken) {
         isLoggedIn(true);
-        console.log(true);
       }
     } catch (e) {
       // Restoring token failed
@@ -118,6 +106,23 @@ function App() {
     // });
   }, []);
 
+  const getAppMetaData = async () => {
+    const res = await fetch(`${DASHBOARD_URL}/app-version.json`, {
+      method: 'GET',
+    }).then((response) => response.json());
+    const appData = res[Platform.OS.toLowerCase()];
+    setAppMetaData(appData);
+    if (appData.isUnderMaintenance) {
+      setIsForceUpdate(true);
+    } else if (appData.buildNumber > 33 && appData.isForceUpdate) {
+      setIsForceUpdate(true);
+    }
+  };
+
+  useEffect(() => {
+    // getAppMetaData();
+  }, []);
+
   const onStateChangeHandle = async (state) => {
     routeNameRef.current = getActiveRouteName(state);
     const previousRouteName = routeNameRef.current;
@@ -140,6 +145,8 @@ function App() {
               isUserTokenLoading={isUserTokenLoading}
               userType={userTypeVal}
               showSplashScreen={showSplashScreen}
+              appMetaData={appMetaData}
+              isForceUpdate={isForceUpdate}
               // isNetworkConnectivityError={isNetworkConnectivityError}
             />
           </Root>

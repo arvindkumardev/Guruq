@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import { RfW } from '../../../utils/helpers';
+import { RfH, RfW } from '../../../utils/helpers';
 import Colors from '../../../theme/colors';
 import Fonts from '../../../theme/fonts';
 
@@ -20,10 +20,10 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    paddingHorizontal: 54,
-    paddingVertical: 16,
+    paddingHorizontal: RfW(54),
+    paddingVertical: RfH(16),
     backgroundColor: Colors.brandBlue2,
-    borderRadius: 8,
+    borderRadius: RfH(8),
     marginHorizontal: RfW(8),
   },
   buttonText: {

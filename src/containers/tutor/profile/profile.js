@@ -1,50 +1,19 @@
-import { useReactiveVar, useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
-
-import initializeApollo from '../../../apollo/apollo';
-import {
-  interestingOfferingData,
-  isLoggedIn,
-  isSplashScreenVisible,
-  isTokenLoading,
-  networkConnectivityError,
-  notificationPayload,
-  offeringsMasterData,
-  studentDetails,
-  tutorDetails,
-  userDetails,
-  userLocation,
-  userType,
-  notificationsList,
-} from '../../../apollo/cache';
+import { notificationsList, tutorDetails, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import {
-  getSaveData,
-  alertBox,
-  clearAllLocalStorage,
-  comingSoonAlert,
-  getFullName,
-  removeToken,
-  RfH,
-  RfW,
-} from '../../../utils/helpers';
-
-import { TutorImageComponent } from '../../../components';
-import IconWrapper from '../../../components/IconWrapper';
+import { alertBox, comingSoonAlert, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
+import { Loader, IconButtonWrapper, UserImageComponent } from '../../../components';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
-
 import styles from './styles';
 import NavigationRouteNames from '../../../routes/screenNames';
-import { WEBVIEW_URLS } from '../../../utils/webviewUrls';
-import UploadDocument from '../../../components/UploadDocument';
-import UserImageComponent from '../../../components/UserImageComponent';
 
 const ACCOUNT_OPTIONS = [
   { name: 'Personal Details', icon: Images.personal },
@@ -62,23 +31,6 @@ const MY_CLASS_OPTIONS = [
   { name: 'Student Request', icon: Images.classes },
 ];
 
-const SETTINGS_OPTIONS = [
-  { name: 'Change Password', icon: Images.personal },
-  { name: 'Update Mobile and Email', icon: Images.home },
-  { name: 'Notifications', icon: Images.parent_details },
-];
-
-const HELP_OPTIONS = [
-  { name: 'Customer Care', icon: Images.personal },
-  { name: "FAQ's", icon: Images.home },
-  { name: 'Send Feedback', icon: Images.parent_details },
-];
-
-const ABOUTUS_OPTIONS = [
-  { name: 'About', icon: Images.personal },
-  { name: 'Team', icon: Images.home },
-];
-
 function Profile(props) {
   const navigation = useNavigation();
   const { changeTab } = props;
@@ -88,35 +40,32 @@ function Profile(props) {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
   const notifyList = useReactiveVar(notificationsList);
 
-  const client = initializeApollo();
-
-  const logout = () => {
-    removeToken().then(() => {
-      isTokenLoading(true);
-      isLoggedIn(false);
-      isSplashScreenVisible(true);
-      userType('');
-      networkConnectivityError(false);
-      userDetails({});
-      studentDetails({});
-      tutorDetails({});
-      userLocation({});
-      offeringsMasterData([]);
-      interestingOfferingData([]);
-      notificationPayload({});
-    });
-
-    clearAllLocalStorage(); // .then(() => {
-    client.resetStore(); // .then(() => {});
-    // });
-  };
-  useEffect(() => {
-    getNotificationCount();
-  }, [notifyList]);
+  const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+      //   const error = e.graphQLErrors[0].extensions.exception.response;
+      //   console.log(error);
+      // }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const { number, countryCode } = userInfo.phoneNumber;
+        const mobileObj = {
+          mobile: number,
+          country: { dialCode: countryCode },
+        };
+        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, {
+          mobileObj,
+          fromChangePassword: true,
+          newUser: false,
+        });
+      }
+    },
+  });
 
   const logoutConfirmation = () => {
     alertBox('Do you really want to logout?', '', {
@@ -133,10 +82,14 @@ function Profile(props) {
       setNotificationCount(updatedArray.length);
     }
   };
+
+  useEffect(() => {
+    getNotificationCount();
+  }, [notifyList]);
+
   const personalDetails = (item) => {
     if (item.name === 'Personal Details') {
       navigation.navigate(NavigationRouteNames.PERSONAL_DETAILS);
-      // navigation.navigate(NavigationRouteNames.RATINGS_REVIEWS);
     } else if (item.name === 'Address') {
       navigation.navigate(NavigationRouteNames.ADDRESS);
     } else if (item.name === 'Education') {
@@ -153,11 +106,6 @@ function Profile(props) {
       navigation.navigate(NavigationRouteNames.AWARD_LISTING);
     } else if (item.name === 'Customer Care') {
       navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
-    } else if (item.name === "FAQ's") {
-      navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-        url: WEBVIEW_URLS.FAQ,
-        label: "FAQ's",
-      });
     } else if (item.name === 'Send Feedback') {
       navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
     } else if (item.name === 'Calendar') {
@@ -181,32 +129,10 @@ function Profile(props) {
         variables: { countryCode, number },
       });
     } else {
-      Alert.alert('Please enter mobile number.');
+      alertBox('Please enter mobile number.');
     }
   };
-  const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        console.log(error);
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        const { number, countryCode } = userInfo.phoneNumber;
-        const mobileObj = {
-          mobile: number,
-          country: { dialCode: countryCode },
-        };
-        navigation.navigate(NavigationRouteNames.TUTOR.OTP_VERIFICATION, {
-          mobileObj,
-          fromChangePassword: true,
-          newUser: false,
-        });
-      }
-    },
-  });
+
   const renderItem = (item) => (
     <TouchableWithoutFeedback
       onPress={() => personalDetails(item)}
@@ -220,17 +146,17 @@ function Profile(props) {
         },
       ]}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <IconWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
+        <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
         <Text style={[commonStyles.mediumMutedText, { marginLeft: RfW(16) }]}>{item.name}</Text>
       </View>
-      <IconWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
+      <IconButtonWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
     </TouchableWithoutFeedback>
   );
 
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
       <StatusBar barStyle="dark-content" />
-
+      <Loader isLoading={forgotPasswordLoading} />
       <View
         style={{
           height: 44,
@@ -283,7 +209,7 @@ function Profile(props) {
           <TouchableWithoutFeedback
             onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
             style={[styles.userMenuParentView, { height: RfH(60) }]}>
-            <IconWrapper
+            <IconButtonWrapper
               iconHeight={RfH(16)}
               iconWidth={RfW(16)}
               iconImage={Images.profile}
@@ -295,7 +221,7 @@ function Profile(props) {
                 Personal, Address, Education, Experience & Business Details
               </Text>
             </View>
-            <IconWrapper
+            <IconButtonWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
               iconImage={isAccountMenuOpen ? Images.collapse_grey : Images.expand_gray}
@@ -315,7 +241,7 @@ function Profile(props) {
 
         <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.VIEW_SCHEDULE)}>
           <View style={styles.userMenuParentView}>
-            <IconWrapper
+            <IconButtonWrapper
               iconHeight={RfH(16)}
               iconWidth={RfW(16)}
               iconImage={Images.calendar}
@@ -333,7 +259,7 @@ function Profile(props) {
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
         <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECTS_LIST)}>
           <View style={styles.userMenuParentView}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.myClass} />
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>My Subjects</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -347,14 +273,14 @@ function Profile(props) {
 
         <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
           <View style={styles.userMenuParentView}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Classes</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                 Classes, Students, Student Requests
               </Text>
             </View>
-            <IconWrapper
+            <IconButtonWrapper
               iconWidth={RfW(24)}
               iconHeight={RfH(24)}
               iconImage={isBookingMenuOpen ? Images.collapse_grey : Images.expand_gray}
@@ -376,7 +302,7 @@ function Profile(props) {
           onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
           style={[styles.userMenuParentView]}
           activeOpacity={0.8}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
+          <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.refFriend} />
           <View style={styles.menuItemParentView}>
             <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
@@ -388,7 +314,7 @@ function Profile(props) {
         <View style={commonStyles.blankGreyViewSmall} />
 
         <View style={[styles.userMenuParentView]}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.personal} />
+          <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.personal} />
           <View style={styles.menuItemParentView}>
             <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}>
               <Text style={styles.menuItemPrimaryText}>Help</Text>
@@ -403,7 +329,7 @@ function Profile(props) {
 
         <TouchableWithoutFeedback onPress={() => setIsAboutGuruMenuOpen(!isAboutGuruMenuOpen)}>
           <View style={styles.userMenuParentView}>
-            <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
             <View style={styles.menuItemParentView}>
               <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.ABOUT_US)}>
                 <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
@@ -418,7 +344,7 @@ function Profile(props) {
         <View style={commonStyles.blankGreyViewSmall} />
 
         <View style={[styles.userMenuParentView]}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
+          <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
           <View style={styles.menuItemParentView}>
             <TouchableWithoutFeedback onPress={() => onChangePasswordClick()}>
               <Text style={styles.menuItemPrimaryText}>Change Password</Text>
@@ -431,7 +357,12 @@ function Profile(props) {
         <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
         <View style={[styles.userMenuParentView]}>
-          <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" iconImage={Images.logOut} />
+          <IconButtonWrapper
+            iconHeight={RfH(16)}
+            iconWidth={RfW(16)}
+            imageResizeMode="contain"
+            iconImage={Images.logOut}
+          />
           <View style={styles.menuItemParentView}>
             <TouchableOpacity onPress={logoutConfirmation}>
               <Text style={styles.menuItemPrimaryText}>Logout</Text>
@@ -459,7 +390,7 @@ function Profile(props) {
           </View>
 
           <View>
-            <IconWrapper
+            <IconButtonWrapper
               iconHeight={RfH(65)}
               iconWidth={RfW(65)}
               iconImage={Images.profile_footer_logo}

@@ -49,6 +49,7 @@ export const GET_TUTOR_DOCUMENT_DETAILS = gql`
           name
           size
           type
+          original
         }
       }
     }

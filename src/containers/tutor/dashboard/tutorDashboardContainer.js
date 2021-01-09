@@ -1,7 +1,7 @@
-import { SafeAreaView, StatusBar, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { BackHandler, SafeAreaView, StatusBar, View } from 'react-native';
+import React, { useState } from 'react';
 import { Container } from 'native-base';
-import { useLazyQuery } from '@apollo/client';
+import { useFocusEffect } from '@react-navigation/native';
 import commonStyles from '../../../theme/styles';
 import { Colors } from '../../../theme';
 import TutorDashboard from './components/tutorDashboard';
@@ -10,9 +10,7 @@ import Profile from '../profile/profile';
 import Wallet from '../../common/wallet/wallet';
 import CalendarView from '../../calendar/calendarView';
 import MyClasses from '../../myClasses/classes';
-
-import { GET_OFFERINGS_MASTER_DATA } from '../../student/dashboard-query';
-import { offeringsMasterData } from '../../../apollo/cache';
+import { alertBox } from '../../../utils/helpers';
 
 function TutorDashboardContainer(props) {
   const [activeTab, setActiveTab] = useState(1);
@@ -21,24 +19,23 @@ function TutorDashboardContainer(props) {
     setActiveTab(tab);
   };
 
-  console.log('saass');
-
-  const [getOfferingMasterData] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
+  useFocusEffect(() => {
+    const backAction = () => {
+      if (activeTab === 1) {
+        alertBox('Alert', 'Do you really want to exit?', {
+          positiveText: 'Yes',
+          onPositiveClick: () => {
+            BackHandler.exitApp();
+          },
+          negativeText: 'No',
+        });
+      } else {
+        setActiveTab(1);
       }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        offeringsMasterData(data.offerings.edges);
-      }
-    },
-  });
-
-  useEffect(() => {
-    getOfferingMasterData();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
   }, []);
 
   return (

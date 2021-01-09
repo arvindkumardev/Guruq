@@ -15,11 +15,11 @@ import NavigationRouteNames from '../../routes/screenNames';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { API_URL, STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { alertBox, getFullName, getToken, printDate, printDateTime, printTime, RfH, RfW } from '../../utils/helpers';
-import { RE_SCHEDULE_CLASS, ADD_DOCUMENT_TO_CLASS } from '../student/booking.mutation';
+import { alertBox, getFullName, getToken, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { ADD_DOCUMENT_TO_CLASS, RE_SCHEDULE_CLASS } from '../student/booking.mutation';
 import { GET_CLASS_DETAILS } from '../student/class.query';
 import styles from '../student/tutorListing/styles';
-import { studentDetails, tutorDetails, userType } from '../../apollo/cache';
+import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
 import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
 import ActionSheet from '../../components/ActionSheet';
@@ -47,6 +47,7 @@ function ScheduledClassDetails(props) {
   const [showReviewPopup, setShowReviewPopup] = useState(false);
   const [menuItem, setMenuItem] = useState([]);
   const [token, setToken] = useState();
+
   useEffect(() => {
     getToken().then((tk) => {
       setToken(tk);
@@ -97,7 +98,7 @@ function ScheduledClassDetails(props) {
     },
     onCompleted(data) {
       if (data) {
-        console.log(data);
+        getClassDetails({ variables: { classId } });
       }
     },
   });
@@ -259,7 +260,7 @@ function ScheduledClassDetails(props) {
   return (
     <>
       <View style={{ backgroundColor: Colors.white, flex: 1 }} activeOpacity={1}>
-        <Loader isLoading={isFileUploading || classDetailsLoading || scheduleLoading} />
+        <Loader isLoading={isFileUploading || classDetailsLoading || scheduleLoading || addDocumentLoading} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           onScroll={(event) => handleScroll(event)}
