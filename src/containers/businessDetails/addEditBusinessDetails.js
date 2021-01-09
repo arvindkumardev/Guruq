@@ -13,6 +13,7 @@ import UploadDocument from '../../components/UploadDocument';
 import { ADD_TUTOR_DOCUMENT_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS } from '../tutor/tutor.mutation';
 import { DocumentTypeEnum } from '../common/enums';
 import { tutorDetails } from '../../apollo/cache';
+import CustomModalDocumentViewer from '../../components/CustomModalDocumentViewer';
 
 function AddEditBusinessDetails(props) {
   const businessDetail = props?.route?.params?.businessDetails;
@@ -28,6 +29,8 @@ function AddEditBusinessDetails(props) {
   const [isFileUploading, setIsFileUploading] = useState(false);
 
   const tutorInfo = useReactiveVar(tutorDetails);
+  const [viewDocument, setViewDocument] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState({});
 
   const [token, setToken] = useState();
   useEffect(() => {
@@ -35,7 +38,6 @@ function AddEditBusinessDetails(props) {
       setToken(tk);
     });
   }, []);
-
 
   useEffect(() => {
     if (!isEmpty(businessDetail)) {
@@ -245,6 +247,10 @@ function AddEditBusinessDetails(props) {
                         ? `http://apiv2.guruq.in/api/upload/${panCardDoc.attachment.filename}`
                         : Images.pdf
                     }
+                    submitFunction={() => {
+                      setViewDocument(true);
+                      setSelectedDoc(panCardDoc);
+                    }}
                   />
                   <IconButtonWrapper
                     iconWidth={RfW(25)}
@@ -293,6 +299,10 @@ function AddEditBusinessDetails(props) {
                           ? `http://apiv2.guruq.in/api/upload/${gstinDoc.attachment.filename}`
                           : Images.pdf
                       }
+                      submitFunction={() => {
+                        setViewDocument(true);
+                        setSelectedDoc(gstinDoc);
+                      }}
                     />
                     <IconButtonWrapper
                       iconWidth={RfW(25)}
@@ -324,6 +334,13 @@ function AddEditBusinessDetails(props) {
           isFilePickerVisible
           handleUpload={handleAcceptedFiles}
           snapCount={1}
+        />
+      )}
+      {viewDocument && !isEmpty(selectedDoc) && (
+        <CustomModalDocumentViewer
+          document={selectedDoc}
+          modalVisible={viewDocument}
+          backButtonHandler={() => setViewDocument(false)}
         />
       )}
     </KeyboardAvoidingView>

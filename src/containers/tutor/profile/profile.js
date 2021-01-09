@@ -52,7 +52,7 @@ const ACCOUNT_OPTIONS = [
   { name: 'Education', icon: Images.education },
   { name: 'Experience', icon: Images.work_office },
   { name: 'Awards & Achievement', icon: Images.award },
-  // { name: 'Documents', icon: Images.book },
+  { name: 'Documents', icon: Images.book },
   { name: 'Bank Details', icon: Images.bank },
   { name: 'Business Details', icon: Images.award },
 ];
@@ -146,7 +146,7 @@ function Profile(props) {
     } else if (item.name === 'Business Details') {
       navigation.navigate(NavigationRouteNames.TUTOR.BUSINESS_DETAILS);
     } else if (item.name === 'Documents') {
-      setIsUploadModalOpen(true);
+      navigation.navigate(NavigationRouteNames.TUTOR.DOCUMENT_LISTING);
     } else if (item.name === 'Bank Details') {
       navigation.navigate(NavigationRouteNames.BANK_DETAILS);
     } else if (item.name === 'Awards & Achievement') {
