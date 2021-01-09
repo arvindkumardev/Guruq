@@ -19,9 +19,9 @@ import Login from '../containers/common/login/login';
 import OtpVerification from '../containers/common/login/otpVerification';
 import SetPassword from '../containers/common/login/setPassword';
 import SignUp from '../containers/common/login/signUp';
-import GettingStarted from '../containers/common/onboarding/gettingStarted';
-import SplashScreen from '../containers/common/splashScreen/splashScreen';
-import UserTypeSelector from '../containers/common/userTypeSelector/userTypeSelector';
+import GettingStarted from '../containers/tutorialScreen/gettingStarted';
+import SplashScreen from '../containers/splashScreen/splashScreen';
+import UserTypeSelector from '../containers/userTypeSelector/userTypeSelector';
 import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
 import NavigationRouteNames from './screenNames';
 import { getStudentRoutes } from './studentAppRoutes';
@@ -42,8 +42,8 @@ import AddEditAddress from '../containers/address/addEditAddress';
 // import AddressMapView from '../containers/common/profileScreens/addressMapView';
 import EducationListing from '../containers/education/educationListing';
 import AddEditEducation from '../containers/education/addEditEducation';
-import AwardListing from '../containers/awards/awardListing';
-import AddEditAward from '../containers/awards/addEditAward';
+import AwardListing from '../containers/tutor/awards/awardListing';
+import AddEditAward from '../containers/tutor/awards/addEditAward';
 import TutorWelcomeScreen from '../containers/certficationProcess/tutorWelcomeScreen';
 import CertificationProcessSteps from '../containers/certficationProcess/certificationProcessSteps';
 import SubjectSelection from '../containers/tutor/mySubjects/subjectSelection';
@@ -51,17 +51,22 @@ import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
 import ProficiencyTest from '../containers/tutor/proficiencyTest';
 import PersonalDetails from '../containers/personalInformation/personalDetails';
 import CompleteYourProfile from '../containers/certficationProcess/completeYourProfile';
-import ExperienceListing from '../containers/experience/experienceListing';
-import AddEditExperience from '../containers/experience/addEditExperience';
+import ExperienceListing from '../containers/tutor/experience/experienceListing';
+import AddEditExperience from '../containers/tutor/experience/addEditExperience';
 import InterviewAndDocument from '../containers/certficationProcess/interviewAndDocuments';
 import InterviewScheduling from '../containers/certficationProcess/interviewScheduling';
-import CustomerCare from '../containers/common/customerCare/customerCare';
+import CustomerCare from '../containers/customerCare/customerCare';
 import SendFeedback from '../containers/common/sendFeedback';
-import AboutUs from '../containers/common/about/about';
+import AboutUs from '../containers/about/about';
 import BackgroundCheck from '../containers/certficationProcess/backgroundCheck';
 import TutorVerificationScreen from '../containers/certficationProcess/tutorVerificationScreen';
 import { BackgroundCheckStatusEnum } from '../containers/common/enums';
 import RatingReviews from '../containers/common/ratingReviews';
+import UpdateVersion from '../containers/common/updateVersion/updateVersion';
+import UnderMainTainance from '../containers/common/underMaintainance/underMaintainance';
+import ReferEarn from '../containers/referAndEarn/referEarn';
+import OnlineClass from '../containers/onlineClass/onlineClass';
+import Notifications from '../containers/student/dashboard/notifications';
 
 const Stack = createStackNavigator();
 
@@ -177,11 +182,6 @@ const AppStack = (props) => {
         component={AddEditAddress}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen */}
-      {/*  name={NavigationRouteNames.ADDRESS_MAP_VIEW} */}
-      {/*  component={AddressMapView} */}
-      {/*  options={{ headerShown: false }} */}
-      {/* /> */}
       <Stack.Screen
         name={NavigationRouteNames.EDUCATION}
         component={EducationListing}
@@ -241,6 +241,33 @@ const AppStack = (props) => {
         component={RatingReviews}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name={NavigationRouteNames.UPDATE_VERSION}
+        component={UpdateVersion}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.UNDER_MAINTAINANCE}
+        component={UnderMainTainance}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.ONLINE_CLASS}
+        component={OnlineClass}
+        options={{ headerShown: false, gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.NOTIFICATIONS}
+        component={Notifications}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.OTP_VERIFICATION}
+        component={OtpVerification}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.SET_PASSWORD} component={SetPassword} options={{ headerShown: false }} />
     </>
   );
 

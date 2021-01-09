@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Button } from 'native-base';
+import analytics from '@react-native-firebase/analytics';
+
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
+import { useMutation,useReactiveVar } from '@apollo/client';
 import { CustomRadioButton, IconButtonWrapper, Loader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../../theme';
@@ -13,10 +15,13 @@ import routeNames from '../../../../routes/screenNames';
 import styles from './styles';
 import { ADD_TO_CART } from '../../booking.mutation';
 import PriceMatrixComponent from './priceMatrixComponent';
-
+import {
+  studentDetails
+} from '../../../../apollo/cache';
 const AddToCartModal = (props) => {
   const { visible, onClose, selectedSubject, isDemoClass, isRenewal } = props;
   const { budgetDetails } = selectedSubject;
+  const studentInfo = useReactiveVar(studentDetails);
   const navigation = useNavigation();
   const [numberOfClass, setNumberOfClass] = useState(1);
   const [amount, setAmount] = useState(0);
@@ -32,11 +37,21 @@ const AddToCartModal = (props) => {
     onCompleted: (data) => {
       if (data) {
         onClose(false);
+        fireLogEvent(data)
         navigation.navigate(routeNames.STUDENT.MY_CART);
       }
     },
   });
-
+  const fireLogEvent = async (data) => {
+    let {tutorOffering,count,onlineClass} = data.addToCart
+    let payload={
+      tutorOfferingId: tutorOffering.id,
+      classCount: count,
+      classMode:onlineClass ? 'online' :'offline',
+      studentId:studentInfo.id
+    }
+    await analytics().logEvent('add_to_cart',payload)
+  }
   const calculateAmount = (noClasses, isOnline) => {
     const applicableBudgets = budgetDetails
       .filter((budget) => budget.onlineClass === isOnline && budget.demo === isDemoClass)
@@ -86,7 +101,7 @@ const AddToCartModal = (props) => {
     }
   };
 
-  const onAddingIntoCart = () => {
+  const onAddingIntoCart =  () => {
     if (amount === 0 && !isDemoClass) {
       alertBox('Error', 'Amount should be greater than zero for booking');
     } else {
@@ -102,6 +117,7 @@ const AddToCartModal = (props) => {
       addToCart({
         variables: { cartCreateDto: cartCreate },
       });
+     
     }
   };
 

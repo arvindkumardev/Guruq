@@ -1,9 +1,6 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import NavigationRouteNames from './screenNames';
-import OtpVerification from '../containers/common/login/otpVerification';
-import SetPassword from '../containers/common/login/setPassword';
-
 import StudentDashboardContainer from '../containers/student/dashboard/studentDashboardContainer';
 import StudyAreaSelector from '../containers/student/studyArea/studyAreaSelector';
 import BoardSelector from '../containers/student/studyArea/boardSelector';
@@ -16,17 +13,13 @@ import BookingConfirmed from '../containers/student/payment/bookingConfirmed';
 import paymentReceived from '../containers/student/payment/paymentReceived';
 import RateAndReviews from '../containers/student/reviews/rateAndReview';
 import DetailedRating from '../containers/student/reviews/detailedRating';
-import OnlineClass from '../containers/onlineClass/onlineClass';
 import FavouriteTutors from '../containers/student/dashboard/favouriteTutors';
-import ReferEarn from '../containers/referAndEarn/referEarn';
 import PytnSubjectSelection from '../containers/student/pytn/pytnSubjectSelection';
 import PytnSubmit from '../containers/student/pytn/pytnSubmit';
-import WebViewPages from '../containers/student/profile/webViewPages';
 import PytnListing from '../containers/student/pytn/pytnListing';
 import PytnDetail from '../containers/student/pytn/pytnDetail';
-import Notifications from '../containers/student/dashboard/notifications';
-import ParentListing from '../containers/parentsDetail/parentListing';
-import AddEditParents from '../containers/parentsDetail/addEditParents';
+import ParentListing from '../containers/student/parentsDetail/parentListing';
+import AddEditParents from '../containers/student/parentsDetail/addEditParents';
 import BookingList from '../containers/student/purchasedHistory/bookingList';
 import BookingDetails from '../containers/student/purchasedHistory/bookingDetails';
 import Refund from '../containers/student/purchasedHistory/refund';
@@ -88,11 +81,7 @@ export const getStudentRoutes = (studentInfo) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.MY_CART} component={myCart} options={{ headerShown: false }} />
-      {/* <Stack.Screen */}
-      {/*  name={NavigationRouteNames.STUDENT.PAYMENT_METHOD} */}
-      {/*  component={PaymentMethodNotInUse} */}
-      {/*  options={{ headerShown: false }} */}
-      {/* /> */}
+
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.BOOKING_CONFIRMED}
         component={BookingConfirmed}
@@ -104,11 +93,6 @@ export const getStudentRoutes = (studentInfo) => {
         options={{ headerShown: false }}
       />
 
-      {/* <Stack.Screen
-        name={NavigationRouteNames.STUDENT.ONLINE_CLASS}
-        component={onlineClass}
-        options={{ headerShown: false }}
-      /> */}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.RATE_AND_REVIEW}
         component={RateAndReviews}
@@ -119,57 +103,26 @@ export const getStudentRoutes = (studentInfo) => {
         component={DetailedRating}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen */}
-      {/*  name={NavigationRouteNames.STUDENT.CALENDAR} */}
-      {/*  component={CalendarView} */}
-      {/*  options={{ headerShown: false }} */}
-      {/* /> */}
-      <Stack.Screen
-        name={NavigationRouteNames.ONLINE_CLASS}
-        component={OnlineClass}
-        options={{ headerShown: false, gestureEnabled: false }}
-      />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.FAVOURITE_TUTOR}
         component={FavouriteTutors}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.PYTN_ADD}
         component={PytnSubjectSelection}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.PYTN_DETAILS} component={PytnSubmit} options={{ headerShown: false }} />
-      <Stack.Screen
-        name={NavigationRouteNames.WEB_VIEW_PAGES}
-        component={WebViewPages}
-        options={{ headerShown: false }}
-      />
       <Stack.Screen name={NavigationRouteNames.PYTN_LISTING} component={PytnListing} options={{ headerShown: false }} />
       <Stack.Screen name={NavigationRouteNames.PYTN_HISTORY} component={PytnDetail} options={{ headerShown: false }} />
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.NOTIFICATIONS}
-        component={Notifications}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.OTP_VERIFICATION}
-        component={OtpVerification}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SET_PASSWORD}
-        component={SetPassword}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.PARENTS_LIST}
+        name={NavigationRouteNames.STUDENT.PARENTS_LIST}
         component={ParentListing}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.ADD_EDIT_PARENTS}
+        name={NavigationRouteNames.STUDENT.ADD_EDIT_PARENTS}
         component={AddEditParents}
         options={{ headerShown: false }}
       />

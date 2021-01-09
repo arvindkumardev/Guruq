@@ -14,6 +14,13 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     paddingHorizontal: RfW(16),
   },
+  buttonContainerView:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    
+  },
   buttonPrimary: {
     backgroundColor: Colors.brandBlue2,
     width: RfW(144),

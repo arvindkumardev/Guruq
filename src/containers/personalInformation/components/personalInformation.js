@@ -24,11 +24,8 @@ import UserImageComponent from '../../../components/UserImageComponent';
 
 function PersonalInformation(props) {
   const { referenceType, userInfo, onUpdate, isUpdateAllowed } = props;
-
-  const [showGenderModal, setShowGenderModal] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
   const [dob, setDOB] = useState('');
   const [gender, setGender] = useState(GenderEnum.MALE.label);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -38,22 +35,18 @@ function PersonalInformation(props) {
     country: IND_COUNTRY_OBJ,
   });
   const [token, setToken] = useState();
+
   useEffect(() => {
     getToken().then((tk) => {
       setToken(tk);
     });
   }, []);
-  const showModal = () => {
-    setShowGenderModal(true);
-  };
 
   useEffect(() => {
     setFirstName(userInfo?.firstName);
     setLastName(userInfo?.lastName);
-    setEmail(userInfo?.email);
     setMobileObj({ mobile: userInfo?.phoneNumber?.number, country: IND_COUNTRY_OBJ });
     setGender(userInfo?.gender);
-    // setDOB(userInfo?.dob);
   }, [userInfo]);
 
   const [getMe, { loading: getMeLoading }] = useLazyQuery(ME_QUERY, {
@@ -109,7 +102,7 @@ function PersonalInformation(props) {
                 firstName,
                 lastName,
                 gender,
-                dob,
+                ...(dob && { dob }),
               },
             },
           },
@@ -122,7 +115,7 @@ function PersonalInformation(props) {
                 firstName,
                 lastName,
                 gender,
-                dob,
+                ...(dob && { dob }),
               },
             },
           },

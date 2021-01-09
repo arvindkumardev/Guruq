@@ -8,6 +8,8 @@ import { Alert, FlatList, Image, Text, TextInput, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
+import analytics from '@react-native-firebase/analytics';
+
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { sum, isEmpty } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
@@ -22,7 +24,7 @@ import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutati
 import { GET_MY_QPOINTS_BALANCE } from '../../common/graphql-query';
 import CustomModalWebView from '../../../components/CustomModalWebView';
 import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
-import { userDetails } from '../../../apollo/cache';
+import { userDetails, studentDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
 
 const MyCart = () => {
@@ -37,8 +39,9 @@ const MyCart = () => {
   const [qPointsRedeemed, setQPointsRedeemed] = useState(0);
   const [applyQPoints, setApplyQPoints] = useState(false);
   const [token, setToken] = useState();
-
+  const [selectedCartItem, setSelectedCartItem] = useState(null);
   const [paymentModal, setPaymentModal] = useState(false);
+  const studentInfo = useReactiveVar(studentDetails);
   const [bookingData, setBookingData] = useState({});
   const userInfo = useReactiveVar(userDetails);
   const [paymentStatus, setPaymentStatus] = useState('success');
@@ -82,6 +85,7 @@ const MyCart = () => {
     },
     onCompleted: (data) => {
       if (data) {
+        fireLogPaymentEvent('add_payment_info', data.createBooking);
         navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_CONFIRMED, {
           orderId: data?.createBooking?.orderId,
         });
@@ -129,6 +133,9 @@ const MyCart = () => {
     },
     onCompleted: (data) => {
       if (data) {
+        if (data.addToCart) {
+          fireLogCartEvent('add_to_cart', data.addToCart);
+        }
         getCartItems();
       }
     },
@@ -212,10 +219,32 @@ const MyCart = () => {
     },
     onCompleted: (data) => {
       if (data) {
+        fireLogCartEvent('remove_from_cart', selectedCartItem);
         getCartItems();
       }
     },
   });
+  const fireLogPaymentEvent = async (eventName, data) => {
+    const { id, payableAmount, orderPayment } = data;
+    const payload = {
+      orderId: id,
+      paymentMode: orderPayment.paymentMethod,
+      payableAmount,
+    };
+    await analytics().logEvent(eventName, payload);
+  };
+
+  const fireLogCartEvent = async (eventName, data) => {
+    const { tutorOffering, count, onlineClass } = data;
+    const payload = {
+      tutorOfferingId: tutorOffering.id,
+      classCount: count,
+      classMode: onlineClass ? 'online' : 'offline',
+      studentId: studentInfo.id,
+    };
+    await analytics().logEvent(eventName, payload);
+    setSelectedCartItem(null);
+  };
 
   const enableApplyQPoints = () => {
     setApplyQPoints(!applyQPoints);
@@ -284,10 +313,12 @@ const MyCart = () => {
         },
         {
           text: 'OK',
-          onPress: () =>
+          onPress: () => {
             removeItem({
               variables: { cartItemId: item.id },
-            }),
+            });
+            setSelectedCartItem(item);
+          },
         },
       ],
       { cancelable: false }

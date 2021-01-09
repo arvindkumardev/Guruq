@@ -1,8 +1,8 @@
 import { Text, Image, View, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import { Colors, Images } from '../../../theme';
+import moment from "moment"
 import {
   notificationsList,
 } from '../../../apollo/cache';
@@ -23,7 +23,6 @@ function Notifications() {
   const [notificationCount, setNotificationCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const notifyList = useReactiveVar(notificationsList);
-  console.log(notifyList,"notifyList")
   useEffect(() => {
     getNotificationList();
   }, []);
@@ -35,11 +34,9 @@ function Notifications() {
     notifications = JSON.parse(
       await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST),
     );
-    console.log(notifications, 'notificationsnotifications');
     if (notifications && notifications.length > 0) {
       let uniqueListByID = _.uniqBy(notifications,'messageId');
       setNotifications(uniqueListByID);
-
       setNotificationCount(uniqueListByID.filter((x) => !x.isRead).length);
     }
   };
@@ -84,7 +81,25 @@ function Notifications() {
             commonStyles.horizontalChildrenView,
             { alignItems: 'flex-start' },
           ]}>
-          {item && !item.isRead && (
+          
+          {/* <IconButtonWrapper
+            iconWidth={RfH(48)}
+            imageResizeMode={'contain'}
+            iconImage={Images.logo_yellow}
+            iconHeight={RfH(42)}
+          /> */}
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+            }}>
+            <Text style={commonStyles.regularPrimaryText}>{item.message?item.message:'No Message sajdsagdgasdjas'} </Text>
+            <Text style={[commonStyles.smallMutedText]}>{item.sentTime ? moment(item.sentTime).format('lll'):''} </Text>
+          </View>
+        </View>
+        <View style={{ paddingTop: RfH(8),paddingHorizontal:8 }}>
+        {item && !item.isRead && (
             <View style={{ position: 'absolute', top: -2, zIndex: 10 }}>
               <Image
                 source={Images.small_active_blue}
@@ -93,24 +108,7 @@ function Notifications() {
               />
             </View>
           )}
-          <IconButtonWrapper
-            iconWidth={RfH(48)}
-            imageResizeMode={'contain'}
-            iconImage={Images.logo_yellow}
-            iconHeight={RfH(42)}
-          />
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-            }}>
-            <Text style={commonStyles.regularPrimaryText}>{item.message} </Text>
-            <Text style={commonStyles.smallMutedText}>1:45 pm </Text>
-          </View>
-        </View>
-        <View style={{ paddingTop: RfH(8) }}>
-          <IconButtonWrapper iconHeight={RfH(4)} iconImage={Images.dots} />
+          {/* <IconButtonWrapper iconHeight={RfH(4)} iconImage={Images.dots} /> */}
         </View>
       </TouchableOpacity>
     );

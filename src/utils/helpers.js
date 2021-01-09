@@ -10,6 +10,20 @@ import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mob
 import Images from '../theme/images';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
 import 'intl';
+import {
+  interestingOfferingData,
+  isLoggedIn,
+  isSplashScreenVisible,
+  isTokenLoading,
+  networkConnectivityError,
+  notificationPayload,
+  studentDetails,
+  tutorDetails,
+  userDetails,
+  userLocation,
+  userType,
+} from '../apollo/cache';
+import initializeApollo from '../apollo/apollo';
 
 const countryData = require('../components/NationalityDropdown/country/countries.json');
 
@@ -356,4 +370,23 @@ export const printCurrency = (number) => {
 
 export const enumLabelToText = (label) => {
   return startCase(label.replace('_', ' ').toLowerCase());
+};
+
+export const logout = () => {
+  removeToken().then(() => {
+    isTokenLoading(true);
+    isLoggedIn(false);
+    isSplashScreenVisible(true);
+    userType('');
+    networkConnectivityError(false);
+    userDetails({});
+    studentDetails({});
+    tutorDetails({});
+    userLocation({});
+    interestingOfferingData([]);
+    notificationPayload({});
+  });
+
+  clearAllLocalStorage(); // .then(() => {
+  initializeApollo().resetStore(); // .then(() => {});
 };

@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define */
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
+import analytics from '@react-native-firebase/analytics';
+
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
@@ -46,6 +48,7 @@ const PaymentMethod = (props) => {
     },
     onCompleted: (data) => {
       if (data) {
+        fireLogPaymentEvent('add_payment_info',data)
         setBookingDataObj(data.createBooking);
         switch (paymentMethod) {
           case PaymentMethodEnum.ONLINE.value:
@@ -58,6 +61,7 @@ const PaymentMethod = (props) => {
             initiatePaypalPayment(data.createBooking.id);
             break;
           case PaymentMethodEnum.CASH.value:
+            fireLogPaymentConfirmEvent('booking_confirmed',data.createBooking)
             navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, {
               uuid: data?.createBooking?.uuid,
               paymentMethod,
@@ -82,6 +86,7 @@ const PaymentMethod = (props) => {
       if (data) {
         onClose(false);
         if (PaymentStatusEnum.COMPLETE.value) {
+          fireLogPaymentConfirmEvent('booking_confirmed',data.makePayment)
           navigation.navigate(routeNames.STUDENT.BOOKING_CONFIRMED, { orderId: bookingDataObj.orderId, paymentMethod });
         }
       }
@@ -125,6 +130,25 @@ const PaymentMethod = (props) => {
     // TODO: use Linking and inappbrowser for PayPal - https://blog.codecentric.de/en/2020/05/paypal-integration-with-react-native/
   };
 
+  const fireLogPaymentEvent = async (eventName,data) => {
+    let {id,payableAmount,orderItems,orderPayment} = data.createBooking
+    let payload={
+      orderId: id,
+      itemsCount: orderItems,
+      paymentMode:orderPayment.paymentMethod,
+      payableAmount:payableAmount,
+    }
+    await analytics().logEvent(eventName,payload)
+  }
+  const fireLogPaymentConfirmEvent = async (eventName,data) => {
+    let {id,payableAmount,orderPayment} = data
+    let payload={
+      orderId: id,
+      paymentMode:orderPayment.paymentMethod,
+      payableAmount:payableAmount,
+    }
+    await analytics().logEvent(eventName,payload)
+  }
   const renderOrderSummary = () => {
     return (
       <View style={{}}>

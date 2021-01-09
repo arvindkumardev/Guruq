@@ -12,29 +12,13 @@ import commonStyles from '../../../theme/styles';
 import styles from './style';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { GET_STUDENT_DETAILS } from '../../common/graphql-query';
-import { offeringsMasterData, studentDetails } from '../../../apollo/cache';
+import { studentDetails } from '../../../apollo/cache';
 import { MARK_ON_BOARDED } from '../../common/graphql-mutation';
-import { GET_OFFERINGS_MASTER_DATA } from '../dashboard-query';
 
 const StudentOnBoard = () => {
   const isFocussed = useIsFocused();
   const navigation = useNavigation();
   const studentDetail = useReactiveVar(studentDetails);
-  const offeringMasterData = useReactiveVar(offeringsMasterData);
-
-  const [getOfferingMasterData, { loading: loadingOfferingMasterData }] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        console.log('e', e);
-      }
-    },
-    onCompleted: (data) => {
-      if (data) {
-        offeringsMasterData(data.offerings.edges);
-      }
-    },
-  });
 
   const [getStudentDetails, { loading: getStudentDetailsLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -50,16 +34,6 @@ const StudentOnBoard = () => {
     },
   });
 
-  // const [getCurrentStudent, { loading: getCurrentStudentLoading }] = useLazyQuery(GET_CURRENT_STUDENT_QUERY, {
-  //   fetchPolicy: 'no-cache',
-  //   onError: (e) => {},
-  //   onCompleted: (data) => {
-  //     if (data) {
-  //       tutorDetails(data?.getCurrentStudent);
-  //     }
-  //   },
-  // });
-
   const [markOnboarded, { loading: markOnboardedLoading }] = useMutation(MARK_ON_BOARDED, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -71,12 +45,6 @@ const StudentOnBoard = () => {
       }
     },
   });
-
-  useEffect(() => {
-    if (isEmpty(offeringMasterData)) {
-      getOfferingMasterData();
-    }
-  }, [offeringMasterData]);
 
   useEffect(() => {
     if (isFocussed) {
@@ -93,12 +61,7 @@ const StudentOnBoard = () => {
   };
 
   const isButtonVisible = () => {
-    return !(
-      !checkForPersonalDetails() ||
-      isEmpty(studentDetail.educationDetails) ||
-      // isEmpty(studentDetail.experienceDetails) ||
-      isEmpty(studentDetail.addresses)
-    );
+    return !(!checkForPersonalDetails() || isEmpty(studentDetail.educationDetails) || isEmpty(studentDetail.addresses));
   };
 
   const handleNext = () => {
@@ -108,7 +71,14 @@ const StudentOnBoard = () => {
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={getStudentDetailsLoading || markOnboardedLoading} />
-      <ScreenHeader label="Complete Profile" horizontalPadding={RfW(16)} homeIcon />
+      <ScreenHeader
+        label="Complete Profile"
+        horizontalPadding={RfW(16)}
+        homeIcon={false}
+        rightText="Skip"
+        showRightText
+        onRightTextClick={handleNext}
+      />
       <TouchableOpacity
         style={[styles.stepCard, { borderLeftColor: Colors.lightGreen, justifyContent: 'space-between' }]}
         activeOpacity={0.8}
@@ -184,7 +154,7 @@ const StudentOnBoard = () => {
       <TouchableOpacity
         style={[styles.stepCard, { borderLeftColor: Colors.lightOrange, justifyContent: 'space-between' }]}
         activeOpacity={0.8}
-        onPress={() => navigation.navigate(NavigationRouteNames.PARENTS_LIST)}>
+        onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.PARENTS_LIST)}>
         <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper
             iconImage={Images.parent_details}
@@ -209,7 +179,7 @@ const StudentOnBoard = () => {
         <Button
           onPress={handleNext}
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(70), width: RfW(230) }]}>
-          <Text style={[commonStyles.textButtonPrimary, { marginRight: RfW(16) }]}>Next Step</Text>
+          <Text style={[commonStyles.textButtonPrimary, { marginRight: RfW(16) }]}>Continue</Text>
           <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.rightArrow_white} />
         </Button>
       )}

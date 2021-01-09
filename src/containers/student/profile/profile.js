@@ -1,35 +1,18 @@
-import {useMutation, useReactiveVar} from '@apollo/client';
-import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View} from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import { useMutation, useReactiveVar } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import {isEmpty} from 'lodash';
-
-import {FORGOT_PASSWORD_MUTATION} from '../../common/graphql-mutation';
-
-import initializeApollo from '../../../apollo/apollo';
-import {
-  interestingOfferingData,
-  isLoggedIn,
-  isSplashScreenVisible,
-  isTokenLoading,
-  networkConnectivityError,
-  notificationPayload,
-  notificationsList,
-  offeringsMasterData,
-  studentDetails,
-  tutorDetails,
-  userDetails,
-  userLocation,
-  userType,
-} from '../../../apollo/cache';
-import {LOCAL_STORAGE_DATA_KEY} from '../../../utils/constants';
+import { isEmpty } from 'lodash';
+import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
+import { notificationsList, studentDetails, userDetails } from '../../../apollo/cache';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import IconWrapper from '../../../components/IconWrapper';
 import NavigationRouteNames from '../../../routes/screenNames';
-import {Colors, Images} from '../../../theme';
+import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import {alertBox, clearAllLocalStorage, getFullName, getSaveData, removeToken, RfH, RfW,} from '../../../utils/helpers';
+import { alertBox, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 import UserImageComponent from '../../../components/UserImageComponent';
 
@@ -40,11 +23,6 @@ const PERSONAL_OPTIONS = [
   { name: 'Education', icon: Images.education },
 ];
 
-const MY_STUDY_DATA_OPTIONS = [
-  { name: 'Add Study Area', icon: Images.study_area },
-  { name: 'Modify Study Area', icon: Images.edit },
-];
-
 const BOOKING_DATA_OPTIONS = [
   { name: 'Purchased History', icon: Images.personal },
   { name: 'My Cart', icon: Images.cart },
@@ -53,23 +31,6 @@ const BOOKING_DATA_OPTIONS = [
 const MY_CLASSES_OPTIONS = [
   { name: 'Calendar', icon: Images.personal },
   { name: 'Schedule Classes', icon: Images.home },
-];
-
-const SETTINGS_OPTIONS = [
-  { name: 'Change Password', icon: Images.personal },
-  // { name: 'Update Mobile and Email', icon: Images.home },
-  // { name: 'Notifications', icon: Images.parent_details },
-];
-
-const ABOUT_US_OPTIONS = [
-  { name: 'About', icon: Images.aboutGuru },
-  { name: 'Team', icon: Images.multiple_user },
-];
-
-const HELP_OPTIONS = [
-  { name: 'Customer Care', icon: Images.personal },
-  { name: "FAQ's", icon: Images.home },
-  { name: 'Send Feedback', icon: Images.parent_details },
 ];
 
 function Profile(props) {
@@ -84,29 +45,6 @@ function Profile(props) {
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isMyClassesMenuOpen, setIsMyClassesMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
-
-  const client = initializeApollo();
-
-  const logout = () => {
-    removeToken().then(() => {
-      isTokenLoading(true);
-      isLoggedIn(false);
-      isSplashScreenVisible(true);
-      userType('');
-      networkConnectivityError(false);
-      userDetails({});
-      studentDetails({});
-      tutorDetails({});
-      userLocation({});
-      offeringsMasterData([]);
-      interestingOfferingData([]);
-      notificationPayload({});
-    });
-
-    clearAllLocalStorage(); // .then(() => {
-    client.resetStore(); // .then(() => {});
-    // });
-  };
 
   const getNotificationCount = async () => {
     const notifications = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST));
@@ -136,7 +74,7 @@ function Profile(props) {
     } else if (item.name === 'Education') {
       navigation.navigate(NavigationRouteNames.EDUCATION);
     } else if (item.name === 'Parents Details') {
-      navigation.navigate(NavigationRouteNames.PARENTS_LIST);
+      navigation.navigate(NavigationRouteNames.STUDENT.PARENTS_LIST);
     } else if (item.name === 'Purchased History') {
       navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_DETAILS);
     } else if (item.name === 'Experience') {
@@ -173,7 +111,7 @@ function Profile(props) {
           mobile: number,
           country: { dialCode: countryCode },
         };
-        navigation.navigate(NavigationRouteNames.STUDENT.OTP_VERIFICATION, {
+        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, {
           mobileObj,
           fromChangePassword: true,
           newUser: false,
@@ -229,11 +167,6 @@ function Profile(props) {
           alignItems: 'center',
         }}>
         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-          {/* <TouchableOpacity */}
-          {/*  onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)} */}
-          {/*  style={{ padding: 10 }}> */}
-          {/*  <Image source={Images.cart} style={{ height: RfH(16), width: RfW(16) }} /> */}
-          {/* </TouchableOpacity> */}
           <TouchableOpacity
             style={{ padding: 10 }}
             onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
@@ -252,11 +185,7 @@ function Profile(props) {
       </View>
 
       <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
-        <ScrollView
-          // stickyHeaderIndices={[0]}
-          showsVerticalScrollIndicator={false}
-          // onScroll={(event) => handleScroll(event)}
-          scrollEventThrottle={16}>
+        <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
           <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(20) }}>
             <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
           </View>
@@ -268,8 +197,6 @@ function Profile(props) {
               justifyContent: 'center',
             }}>
             <View style={styles.userDetailsView}>
-              {/* <Image style={styles.userIcon} source={Images.user} /> */}
-
               <UserImageComponent width={64} height={64} styling={{ borderRadius: RfH(64) }} />
               <View style={{ flexDirection: 'column', justifyContent: 'flex-start', marginLeft: RfW(16), flex: 1 }}>
                 <Text style={styles.userName} numberOfLines={2}>
@@ -282,9 +209,6 @@ function Profile(props) {
               </View>
             </View>
           </View>
-          {/* <View style={commonStyles.lineSeparator} /> */}
-          {/* {renderActionIcons()} */}
-
           <View style={commonStyles.blankGreyViewSmall} />
           <View>
             <TouchableWithoutFeedback
@@ -477,7 +401,7 @@ function Profile(props) {
           <View style={[styles.userMenuParentView]}>
             <IconWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
             <View style={styles.menuItemParentView}>
-              <TouchableWithoutFeedback onPress={() => onChangePasswordClick()}>
+              <TouchableWithoutFeedback onPress={onChangePasswordClick}>
                 <Text style={styles.menuItemPrimaryText}>Change Password</Text>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
                   Reset your password
