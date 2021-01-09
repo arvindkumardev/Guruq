@@ -63,12 +63,11 @@ function BookingDetails(props) {
           </TouchableOpacity>
         )}
         {!isEmpty(item.refund) && (
-          <TouchableOpacity
-            activeOpacity={0.8}>
+          <View>
             <Text style={[commonStyles.smallPrimaryText, { color: Colors.orangeRed, fontFamily: Fonts.semiBold }]}>
               Refund Detail
             </Text>
-          </TouchableOpacity>
+          </View>
         )}
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
