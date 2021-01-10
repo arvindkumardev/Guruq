@@ -7,19 +7,19 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
-import BackArrow from '../../../components/BackArrow';
-import IconButtonWrapper from '../../../components/IconWrapper';
-import { Colors } from '../../../theme';
-import Images from '../../../theme/images';
-import commonStyles from '../../../theme/styles';
-import { deviceWidth, RfH, RfW, printDate, printTime, getFullName, alertBox } from '../../../utils/helpers';
-import ClassDetailsModal from './classDetailsModal';
-import requestCameraAndAudioPermission from './permission';
-import styles from './style';
-import VideoMessagingModal from './videoMessagingModal';
-import VideoMoreAction from './videoMoreAction';
-import Whiteboard from './whiteboard';
-import NavigationRouteNames from '../../../routes/screenNames';
+import BackArrow from '../../components/BackArrow';
+import IconButtonWrapper from '../../components/IconWrapper';
+import { Colors } from '../../theme';
+import Images from '../../theme/images';
+import commonStyles from '../../theme/styles';
+import { deviceWidth, RfH, RfW, printDate, printTime, getFullName, alertBox } from '../../utils/helpers';
+import ClassDetailsModal from './components/classDetailsModal';
+import requestCameraAndAudioPermission from './components/permission';
+import styles from './components/style';
+import VideoMessagingModal from './components/videoMessagingModal';
+import VideoMoreAction from './components/videoMoreAction';
+import Whiteboard from './components/whiteboard';
+import NavigationRouteNames from '../../routes/screenNames';
 
 interface Props {}
 
@@ -85,8 +85,11 @@ export default class Video extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
+  UNSAFE_componentWillMount() {
     this.init();
+  }
+
+  componentDidMount() {
     console.log('starting video');
     BackHandler.addEventListener('hardwareBackPress', this.backAction);
   }

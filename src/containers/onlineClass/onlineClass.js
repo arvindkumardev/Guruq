@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { userDetails } from '../../apollo/cache';
-import Video from './components/Video';
+import Video from './Video';
 import Loader from '../../components/Loader';
 import { GET_AGORA_RTC_TOKEN } from './onlineClass.query';
 import NavigationRouteNames from '../../routes/screenNames';
