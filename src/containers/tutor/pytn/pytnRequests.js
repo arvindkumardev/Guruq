@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
-import { alertBox, getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getSubjectIcons, printDate, printDateTime, printTime, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_TUTOR_PYTN_REQUESTS } from '../../student/pytn/pytn.query';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { offeringsMasterData } from '../../../apollo/cache';
@@ -70,7 +70,7 @@ function PytnRequests() {
         variables: {
           studentPYTNAcceptDto: {
             studentPytnId: selectedPytn.id,
-            price: parseFloat(selectedPytn.maxPrice),
+            price: selectedPytn.maxPrice,
           },
         },
       });
@@ -80,7 +80,7 @@ function PytnRequests() {
         variables: {
           studentPYTNAcceptDto: {
             studentPytnId: selectedPytn.id,
-            price: parseFloat(selectedPytn.maxPrice),
+            price: selectedPytn.maxPrice,
             id: selectedPytn.acceptedPytns[0].id,
           },
         },
@@ -174,14 +174,18 @@ function PytnRequests() {
         style={{
           flex: 1,
           flexDirection: 'row',
-          justifyContent: !isEmpty(item.acceptedPytns) ? 'space-between' : 'flex-end',
+          justifyContent: 'space-between',
           marginVertical: RfH(5),
           alignItems: 'center',
         }}>
-        {!isEmpty(item.acceptedPytns) && (
+        {!isEmpty(item.acceptedPytns) ? (
           <Text style={[commonStyles.mediumPrimaryText, { paddingVertical: RfH(10) }]}>
             Accepted at ₹{item.acceptedPytns[0].price}
           </Text>
+        ) : (
+          <View style={commonStyles.verticallyStretchedItemsView}>
+            <Text>Created On {printDate(item.createdDate)}</Text>
+          </View>
         )}
         {isEmpty(item.acceptedPytns) && (
           <Button
