@@ -85,6 +85,7 @@ export default class Video extends Component<Props, State> {
     }
   }
 
+  // eslint-disable-next-line camelcase
   UNSAFE_componentWillMount() {
     this.init();
   }
