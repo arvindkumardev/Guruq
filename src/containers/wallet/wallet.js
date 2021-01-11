@@ -4,13 +4,13 @@ import { useIsFocused } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import ProgressCircle from 'react-native-progress-circle';
 import { RFValue } from 'react-native-responsive-fontsize';
-import commonStyles from '../../../theme/styles';
-import { printCurrency, printDateTime, RfH, RfW } from '../../../utils/helpers';
-import { Colors, Fonts } from '../../../theme';
-import { userDetails } from '../../../apollo/cache';
-import { Loader } from '../../../components';
-import { GET_MY_QPOINTS_BALANCE, SEARCH_QPOINTS_TRANSACTIONS } from '../graphql-query';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import commonStyles from '../../theme/styles';
+import { printCurrency, printDateTime, RfH, RfW } from '../../utils/helpers';
+import { Colors, Fonts } from '../../theme';
+import { userDetails } from '../../apollo/cache';
+import { Loader } from '../../components';
+import { GET_MY_QPOINTS_BALANCE, SEARCH_QPOINTS_TRANSACTIONS } from '../common/graphql-query';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 
 function Wallet() {
   const isFocussed = useIsFocused();

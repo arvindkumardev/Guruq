@@ -73,6 +73,8 @@
 	<string>$(PRODUCT_NAME) need access to photos for uploading documents.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) need access to photos for uploading documents.</string>
+	<key>UIUserInterfaceStyle</key>
+     <string>Light</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

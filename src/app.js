@@ -9,7 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-import { getToken } from './utils/helpers';
+import { APP_BUILD_VERSION, getToken } from './utils/helpers';
 import { appMetaData, isLoggedIn, isSplashScreenVisible, isTokenLoading, userType } from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
@@ -34,7 +34,6 @@ function App() {
   // const userInfo = useReactiveVar(userDetails);
   const userTypeVal = useReactiveVar(userType);
   const [isForceUpdate, setIsForceUpdate] = useState(false);
-  const [appMetaData, setAppMetaData] = useState(false);
   // const isNetworkConnectivityError = useReactiveVar(networkConnectivityError);
 
   // const netInfo = useNetInfo({
@@ -111,16 +110,17 @@ function App() {
       method: 'GET',
     }).then((response) => response.json());
     const appData = res[Platform.OS.toLowerCase()];
-    setAppMetaData(appData);
+    appMetaData(appData);
     if (appData.isUnderMaintenance) {
       setIsForceUpdate(true);
-    } else if (appData.buildNumber > 33 && appData.isForceUpdate) {
+    } else if (appData.buildNumber > APP_BUILD_VERSION && appData.isForceUpdate) {
       setIsForceUpdate(true);
     }
   };
 
   useEffect(() => {
-    // getAppMetaData();
+    console.log('APP_BUILD_VERSION', APP_BUILD_VERSION);
+    getAppMetaData();
   }, []);
 
   const onStateChangeHandle = async (state) => {
@@ -145,7 +145,6 @@ function App() {
               isUserTokenLoading={isUserTokenLoading}
               userType={userTypeVal}
               showSplashScreen={showSplashScreen}
-              appMetaData={appMetaData}
               isForceUpdate={isForceUpdate}
               // isNetworkConnectivityError={isNetworkConnectivityError}
             />

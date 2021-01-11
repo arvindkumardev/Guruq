@@ -5,9 +5,18 @@ import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } 
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
-import { notificationsList, tutorDetails, userDetails } from '../../../apollo/cache';
+import { appMetaData, notificationsList, tutorDetails, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { alertBox, comingSoonAlert, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
+import {
+  alertBox,
+  APP_VERSION,
+  comingSoonAlert,
+  getFullName,
+  getSaveData,
+  logout,
+  RfH,
+  RfW,
+} from '../../../utils/helpers';
 import { Loader, IconButtonWrapper, UserImageComponent } from '../../../components';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
@@ -36,6 +45,7 @@ function Profile(props) {
   const { changeTab } = props;
   const userInfo = useReactiveVar(userDetails);
   const tutorInfo = useReactiveVar(tutorDetails);
+  const appMetaDataObj = useReactiveVar(appMetaData);
 
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
@@ -385,7 +395,7 @@ function Profile(props) {
               Current
             </Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
-              Version 2.5
+              Version {APP_VERSION}
             </Text>
           </View>
 
@@ -403,7 +413,7 @@ function Profile(props) {
               Latest
             </Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
-              Version 3.0
+              Version {appMetaDataObj.currentVersion}
             </Text>
           </View>
         </View>

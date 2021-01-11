@@ -229,7 +229,7 @@ function AddEditEducation(props) {
                     <CustomSelect
                       data={boards.map((item) => ({ label: item.displayName, value: item }))}
                       value={selectedBoard}
-                      onChangeHandler={(value) => setSelectedBoard(value)}
+                      onChangeHandler={(value) => value && setSelectedBoard(value)}
                       placeholder="Select Board"
                       containerStyle={{
                         flex: 1,
@@ -356,7 +356,7 @@ function AddEditEducation(props) {
         <DegreeModal
           degree={degree}
           isVisible={showDegrees}
-          handlClose={() => setSelectedDegree(false)}
+          handleClose={() => setShowDegrees(false)}
           onSelectingDegree={onSelectingDegree}
         />
       )}
