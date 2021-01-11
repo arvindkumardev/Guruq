@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
@@ -30,6 +31,7 @@ function CalendarView(props) {
   const [refresh, setRefresh] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [scheduledClasses, setScheduledClasses] = useState([]);
+  const [markedDates, setMarkeddates] = useState([]);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
@@ -41,6 +43,41 @@ function CalendarView(props) {
     onCompleted: (data) => {
       setScheduledClasses(data.getScheduledClasses);
       setIsEmpty(data.getScheduledClasses.length === 0);
+      setRefresh((refresh) => !refresh);
+    },
+  });
+
+  const [getScheduledClassesCount, { loading: loadingScheduledCountClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      const dateArray = [];
+      for (const obj of data.getScheduledClasses) {
+        const dateObj = {
+          date: obj.startDate,
+          dots: [
+            {
+              color: Colors.brandBlue,
+              selectedColor: Colors.brandBlue,
+            },
+          ],
+        };
+        dateArray.push(dateObj);
+      }
+      setMarkeddates(dateArray);
+      // {
+      //   date: new Date(),
+      //   dots: [
+      //     {
+      //       color: Colors.brandBlue,
+      //       selectedColor: Colors.brandBlue,
+      //     },
+      //   ],
+      // }
       setRefresh((refresh) => !refresh);
     },
   });
@@ -113,9 +150,21 @@ function CalendarView(props) {
     });
   };
 
+  const getScheduledClassesForWeek = (startDate) => {
+    getScheduledClassesCount({
+      variables: {
+        classesSearchDto: {
+          startDate,
+          endDate: moment(startDate, 'DD-MM-YYYY').add(5, 'days'),
+        },
+      },
+    });
+  };
+
   useEffect(() => {
     if (isFocussed) {
       getScheduledClassesByDate(selectedDate);
+      getScheduledClassesForWeek(moment());
     }
   }, [isFocussed]);
 
@@ -162,17 +211,7 @@ function CalendarView(props) {
                 }
                 calendarAnimation={{ type: 'parallel', duration: 300 }}
                 daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-                // markedDates={[
-                //   {
-                //     date: new Date(),
-                //     dots: [
-                //       {
-                //         color: Colors.brandBlue,
-                //         selectedColor: Colors.brandBlue,
-                //       },
-                //     ],
-                //   },
-                // ]}
+                markedDates={markedDates}
                 onHeaderSelected={(a) => console.log(a)}
                 onDateSelected={(d) => getScheduledClassesByDate(d)}
               />
