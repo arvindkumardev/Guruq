@@ -50,6 +50,7 @@ export const SEND_CHAT_MESSAGE = gql`
       uuid
       channel
       createdBy {
+        id
         firstName
         lastName
         profileImage {

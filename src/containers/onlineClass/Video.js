@@ -712,15 +712,17 @@ export default class Video extends Component<Props, State> {
           onClose={this.toggleClassDetails}
           classDetails={this.props.classDetails}
         />
-        <VideoMessagingModal
-          visible={this.state.showMessageBox}
-          onClose={this.toggleMessageBox}
-          channelName={this.props.channelName}
-          callbacks={{
-            toggleWhiteboardCallback: this.toggleWhiteboard,
-            onToggleWhiteboard: this.state.whiteboardEnabled,
-          }}
-        />
+        {this.props.channelName && (
+          <VideoMessagingModal
+            visible={this.state.showMessageBox}
+            onClose={this.toggleMessageBox}
+            channelName={this.props.channelName}
+            callbacks={{
+              toggleWhiteboardCallback: this.toggleWhiteboard,
+              onToggleWhiteboard: this.state.whiteboardEnabled,
+            }}
+          />
+        )}
         <VideoMoreAction
           visible={this.state.showMoreActions}
           onClose={this.toggleMoreAction}
