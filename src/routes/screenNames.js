@@ -98,6 +98,7 @@ const NavigationRouteNames = {
     DOCUMENT_LISTING: 'document_listing',
     ADD_DATA: 'add_data',
     STUDENT_LISTING: 'student_listing',
+    STUDENT_DETAILS: 'student_details',
   },
 };
 

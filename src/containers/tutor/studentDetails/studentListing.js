@@ -1,11 +1,14 @@
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, View, Text, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
+import routeNames from '../../../routes/screenNames';
 
 function StudentListing() {
+  const navigation = useNavigation();
   const [students, setStudents] = useState([
     {
       board: 'CBSE',
@@ -27,14 +30,16 @@ function StudentListing() {
 
   const renderStudentItem = (item) => {
     return (
-      <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(16) }]}>
-        <IconButtonWrapper iconWidth={RfW(60)} iconImage={Images.student} iconHeight={RfH(70)} />
-        <View style={[commonStyles.verticallyStretchedItemsView, { alignItems: 'flex-start' }]}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.name}</Text>
-          <Text style={commonStyles.mediumMutedText}>{item.board}</Text>
-          <Text style={commonStyles.mediumMutedText}>{item.subject}</Text>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.STUDENT_DETAILS)}>
+        <View style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(16) }]}>
+          <IconButtonWrapper iconWidth={RfW(60)} iconImage={Images.student} iconHeight={RfH(70)} />
+          <View style={[commonStyles.verticallyStretchedItemsView, { alignItems: 'flex-start' }]}>
+            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.name}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.board}</Text>
+            <Text style={commonStyles.mediumMutedText}>{item.subject}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -66,7 +71,7 @@ function StudentListing() {
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.white }}>
-      <ScreenHeader label="Students" homeIcon />
+      <ScreenHeader label="Students" homeIcon horizontalPadding={RfW(16)} />
       <View>
         <FlatList
           showsVerticalScrollIndicator={false}
