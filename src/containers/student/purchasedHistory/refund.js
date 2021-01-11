@@ -1,6 +1,5 @@
 import { Text, View } from 'react-native';
 import React from 'react';
-import { Button } from 'native-base';
 import { Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts } from '../../../theme';
@@ -12,13 +11,13 @@ function Refund(props) {
 
   return (
     <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-      <ScreenHeader label="Refund" homeIcon horizontalPadding={RfW(16)} />
+      <ScreenHeader label="Refund Details" homeIcon horizontalPadding={RfW(16)} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={{ height: RfH(32) }} />
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Booking Id {bookingData.id}</Text>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Order Details</Text>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            {new Date(bookingData.createdDate).toDateString()}
+            ₹ {bookingData?.payableAmount ? parseFloat(bookingData?.payableAmount).toFixed(2) : '0.00'}
           </Text>
         </View>
       </View>
@@ -32,13 +31,13 @@ function Refund(props) {
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <Text style={commonStyles.mediumMutedText}>Amount</Text>
               <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
-                ₹{parseFloat(bookingData.payableAmount).toFixed(2)}
+                ₹{parseFloat(bookingData?.payableAmount).toFixed(2)}
               </Text>
             </View>
             <View style={commonStyles.horizontalChildrenSpaceView}>
               <Text style={commonStyles.mediumMutedText}>Convenience charges</Text>
               <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
-                ₹{bookingData.convenienceCharges ? parseFloat(bookingData.convenienceCharges).toFixed(2) : '0.00'}
+                ₹{bookingData?.convenienceCharges ? parseFloat(bookingData.convenienceCharges).toFixed(2) : '0.00'}
               </Text>
             </View>
           </View>
