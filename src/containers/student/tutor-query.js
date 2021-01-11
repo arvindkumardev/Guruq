@@ -89,7 +89,6 @@ export const SEARCH_TUTORS = gql`
             degreeLevel
           }
           fieldOfStudy
-          subjects
           board
           startDate
           endDate
@@ -205,7 +204,6 @@ export const GET_FAVOURITE_TUTORS = gql`
             degreeLevel
           }
           fieldOfStudy
-          subjects
           board
           startDate
           endDate

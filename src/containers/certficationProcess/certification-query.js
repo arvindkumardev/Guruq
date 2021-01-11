@@ -159,7 +159,6 @@ export const GET_TUTOR_ALL_DETAILS = gql`
         }
         board
         grade
-        subjects
         fieldOfStudy
         startDate
         endDate
