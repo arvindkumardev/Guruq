@@ -1,18 +1,17 @@
-import { useLazyQuery, useReactiveVar, useMutation, useSubscription } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar, useSubscription } from '@apollo/client';
 import emojiUtils from 'emoji-utils';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { isSameUser } from 'react-native-gifted-chat/lib/utils';
-import { useIsFocused } from '@react-navigation/native';
 import SlackMessage from '../../../components/Chat/SlackMessage';
 import IconButtonWrapper from '../../../components/IconWrapper';
 import Colors from '../../../theme/colors';
 import Fonts from '../../../theme/fonts';
 import Images from '../../../theme/images';
 import { userDetails } from '../../../apollo/cache';
-import { getFullName, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getFullName, RfH, RfW } from '../../../utils/helpers';
 import { ENTER_CHAT, GET_CHAT_MESSAGES, LEAVE_CHAT, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
 import { dimensions } from './style';
 
@@ -86,16 +85,15 @@ const VideoMessagingModal = (props) => {
 
       if (data && data?.chatMessageSent && data?.chatMessageSent.channel === channelName) {
         const message = data.chatMessageSent;
-
         if (message.isSystem) {
-          if (message.text === 'TOGGLE_WHITEBOARD' || message.text === 'TOGGLE_WHITEBOARD') {
+          if (message.text === 'TOGGLE_WHITEBOARD') {
             if (callbacks && callbacks.toggleWhiteboardCallback) {
               callbacks.toggleWhiteboardCallback();
             }
           }
         }
 
-        if (!chatMessageIds.includes(message.id) && !message.isSystem) {
+        if (!chatMessageIds.includes(message.id)) {
           setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
           setChatMessageIds([...chatMessageIds, message.id]);
 
@@ -119,7 +117,7 @@ const VideoMessagingModal = (props) => {
   };
 
   useEffect(() => {
-    if (callbacks) {
+    if (callbacks && callbacks.onToggleWhiteboard) {
       sendMessage({
         variables: {
           chatMessageDto: {
@@ -130,7 +128,7 @@ const VideoMessagingModal = (props) => {
         },
       });
     }
-  }, [callbacks && callbacks.onToggleWhiteboard]);
+  }, [callbacks?.onToggleWhiteboard]);
 
   const renderMessage = (props) => {
     const {
@@ -274,6 +272,10 @@ VideoMessagingModal.propTypes = {
   onClose: PropTypes.func,
   channelName: PropTypes.string,
   callbacks: PropTypes.object,
+};
+
+VideoMessagingModal.defaultProps = {
+  callbacks: {},
 };
 
 export default VideoMessagingModal;
