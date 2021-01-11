@@ -14,6 +14,8 @@ import routeNames from '../../../routes/screenNames';
 import ActionSheet from '../../../components/ActionSheet';
 import { GET_BOOKING_DETAIL } from '../booking.query';
 
+let bData = {};
+
 function BookingDetails(props) {
   const { route } = props;
   const bookingId = route?.params?.bookingId;
@@ -33,6 +35,7 @@ function BookingDetails(props) {
     onCompleted: (data) => {
       if (data) {
         setBookingData(data?.getBookingDetails);
+        bData = data?.getBookingDetails;
       }
     },
   });
@@ -116,10 +119,6 @@ function BookingDetails(props) {
     navigation.navigate(routeNames.CUSTOMER_CARE);
   };
 
-  // const goToRefund = () => {
-  //   navigation.navigate(routeNames.STUDENT.REFUND, { bookingData });
-  // };
-
   const goToInvoice = () => {
     setOpenMenu(false);
     navigation.navigate(routeNames.WEB_VIEW, {
@@ -128,8 +127,14 @@ function BookingDetails(props) {
     });
   };
 
+  const goToRefund = () => {
+    setOpenMenu(false);
+    navigation.navigate(routeNames.STUDENT.REFUND, { bookingData: bData });
+  };
+
   const [menuItem, setMenuItem] = useState([
     { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
+    { label: 'Refund', handler: () => goToRefund(), isEnabled: true },
     { label: 'Help', handler: goToCustomerCare, isEnabled: true },
   ]);
 
