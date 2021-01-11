@@ -276,7 +276,14 @@ function ScheduledClassDetails(props) {
               }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: RfH(15) }}>
                 <BackArrow action={onBackPress} />
-                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 0.9 }]}>
+                <View
+                  style={[
+                    commonStyles.verticallyStretchedItemsView,
+                    {
+                      marginLeft: RfW(16),
+                      flex: 0.9,
+                    },
+                  ]}>
                   <Text
                     style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}
                     numberOfLines={1}>
@@ -545,7 +552,7 @@ function ScheduledClassDetails(props) {
           {/* )} */}
         </ScrollView>
 
-        {classData && (
+        {classData && classData?.classEntity?.uuid && (
           <VideoMessagingModal
             onClose={() => setShowMessageModal(false)}
             visible={showMessageModal}

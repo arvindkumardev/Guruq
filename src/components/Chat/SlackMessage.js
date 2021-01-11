@@ -11,10 +11,10 @@ const { isSameUser, isSameDay } = utils;
 
 export default class Message extends React.Component {
   getInnerComponentProps() {
-    const { containerStyle,position, ...props } = this.props;
+    const { containerStyle, position, ...props } = this.props;
     return {
       ...props,
-      position:position,
+      position,
       isSameUser,
       isSameDay,
     };
@@ -26,32 +26,36 @@ export default class Message extends React.Component {
       if (this.props.renderDay) {
         return this.props.renderDay(dayProps);
       }
-      return <Day {...dayProps}
-      textStyle={{
-        color:'white'
-      }}
-      />;
+      return (
+        <Day
+          {...dayProps}
+          textStyle={{
+            color: 'white',
+          }}
+        />
+      );
     }
     return null;
   }
 
   renderBubble() {
     const bubbleProps = this.getInnerComponentProps();
-    console.log(bubbleProps,"bubbleProps")
-    let {previousMessage,position,currentMessage,user} = this.props  
-    let messageBelongsToCurrentUser = user._id == currentMessage.user._id;
+    const { previousMessage, position, currentMessage, user } = this.props;
+    const messageBelongsToCurrentUser = user._id == currentMessage.user._id;
     if (this.props.renderBubble) {
       return this.props.renderBubble(bubbleProps);
     }
     // let sameuserText = isSameUser(this.props.currentMessage, this.props.nextMessage)
-    
-    return <Bubble 
-  
-    containerStyle={{
-      flex:1,
-      alignItems:position == 'right' ? 'flex-end' :'flex-start'
-    }}
-    {...bubbleProps} />;
+
+    return (
+      <Bubble
+        containerStyle={{
+          flex: 1,
+          alignItems: position === 'right' ? 'flex-end' : 'flex-start',
+        }}
+        {...bubbleProps}
+      />
+    );
   }
 
   renderAvatar() {
@@ -82,7 +86,7 @@ export default class Message extends React.Component {
       <View>
         {this.renderDay()}
         <View style={[styles.container, { marginBottom }, this.props.containerStyle]}>
-          {/*{this.renderAvatar()}*/}
+          {/* {this.renderAvatar()} */}
           {this.renderBubble()}
         </View>
       </View>

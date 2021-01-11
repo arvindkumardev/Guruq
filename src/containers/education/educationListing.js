@@ -105,7 +105,7 @@ function EducationListing() {
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
           {item.board && (
             <Text style={commonStyles.regularPrimaryText}>
-              {item?.board}, {item?.grade}
+              {item?.board}, {item?.grade} {item?.fieldOfStudy}
             </Text>
           )}
           {item.degree && (

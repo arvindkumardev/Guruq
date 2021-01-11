@@ -20,6 +20,7 @@ import VideoMessagingModal from './components/videoMessagingModal';
 import VideoMoreAction from './components/videoMoreAction';
 import Whiteboard from './components/whiteboard';
 import NavigationRouteNames from '../../routes/screenNames';
+import { UserTypeEnum } from '../../common/userType.enum';
 
 interface Props {}
 
@@ -47,6 +48,7 @@ interface State {
   showMoreActions: false;
 
   whiteboardEnabled: false;
+  videoQuality: string;
 }
 
 const appId = '20be4eff902f4d9ea78c2f8c168556cd';
@@ -76,6 +78,8 @@ export default class Video extends Component<Props, State> {
       showMoreActions: false,
 
       whiteboardEnabled: false,
+
+      videoQuality: 'high',
     };
     if (Platform.OS === 'android') {
       // Request required permissions from Android
@@ -308,6 +312,15 @@ export default class Video extends Component<Props, State> {
     return participants.find((p) => p.user?.id === id);
   };
 
+  changeVideoStreamType = (type) => {
+    this.setState({ videoQuality: type });
+
+    this._engine.enableDualStreamMode(type === 'low');
+    for (const peerId of this.state.peerIds) {
+      this._engine.setRemoteVideoStreamType(peerId, type === 'high' ? 0 : 1);
+    }
+  };
+
   _renderVideos = () => {
     return (
       <View style={[styles.fullView, { backgroundColor: '#222222' }]}>
@@ -418,10 +431,12 @@ export default class Video extends Component<Props, State> {
               style={{
                 width: 100,
                 height: 150,
-                top: this.state.showDetailedActions ? 16 : 60,
-                right: -(deviceWidth() - 120),
+                position: 'absolute',
+                top: RfH(this.state.showDetailedActions ? 100 : 44),
+                // right: -(deviceWidth() - 120),
+                right: RfW(16),
                 borderRadius: 20,
-                zIndex: 2,
+                zIndex: 9,
               }}>
               {this.state.whiteboardEnabled ? (
                 <>
@@ -471,7 +486,7 @@ export default class Video extends Component<Props, State> {
                     })}
                 </>
               ) : (
-                <>
+                <View style={{ width: 100, height: 150 }}>
                   {!this.state.videoMuted ? (
                     <RtcLocalView.SurfaceView
                       style={styles.max}
@@ -481,7 +496,7 @@ export default class Video extends Component<Props, State> {
                   ) : (
                     this._renderVideoMutedView(this.props.userInfo.firstName)
                   )}
-                </>
+                </View>
               )}
 
               {this.state.audioMuted && (
@@ -586,31 +601,33 @@ export default class Video extends Component<Props, State> {
                 </View>
               </TouchableWithoutFeedback>
 
-              <TouchableWithoutFeedback onPress={this.toggleWhiteboard}>
-                <View
-                  style={{
-                    // width: 60,
-                    flex: 1,
-                    height: 54,
-                    // backgroundColor: Colors.orangeRed,
-                    // borderRadius: 60,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    // paddingBottom: 8,
-                  }}>
-                  <IconButtonWrapper iconImage={Images.share_screen} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-                  <Text
-                    style={[
-                      commonStyles.smallPrimaryText,
-                      {
-                        marginTop: RfH(8),
-                        color: Colors.white,
-                      },
-                    ]}>
-                    Share
-                  </Text>
-                </View>
-              </TouchableWithoutFeedback>
+              {this.props.userInfo.type === UserTypeEnum.TUTOR.label && (
+                <TouchableWithoutFeedback onPress={this.toggleWhiteboard}>
+                  <View
+                    style={{
+                      // width: 60,
+                      flex: 1,
+                      height: 54,
+                      // backgroundColor: Colors.orangeRed,
+                      // borderRadius: 60,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      // paddingBottom: 8,
+                    }}>
+                    <IconButtonWrapper iconImage={Images.share_screen} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                    <Text
+                      style={[
+                        commonStyles.smallPrimaryText,
+                        {
+                          marginTop: RfH(8),
+                          color: Colors.white,
+                        },
+                      ]}>
+                      Share
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
 
               <TouchableWithoutFeedback onPress={this.toggleMessageBox}>
                 <View
@@ -703,41 +720,45 @@ export default class Video extends Component<Props, State> {
           visible={this.state.showMessageBox}
           onClose={this.toggleMessageBox}
           channelName={this.props.channelName}
+          callbacks={{
+            toggleWhiteboardCallback: this.toggleWhiteboard,
+            onToggleWhiteboard: this.state.whiteboardEnabled,
+          }}
         />
-        <VideoMoreAction visible={this.state.showMoreActions} onClose={this.toggleMoreAction} />
+        <VideoMoreAction
+          visible={this.state.showMoreActions}
+          onClose={this.toggleMoreAction}
+          setVideoQuality={this.changeVideoStreamType}
+          videoQuality={this.state.videoQuality}
+        />
       </View>
     );
   };
 
   _renderVideoMutedView = (firstName, remote = false, selected = false) => {
     return (
-      <>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: selected ? '#222222' : '#444444',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <View
-          style={[
-            remote ? styles.remote : {},
-            {
-              flex: 1,
-              backgroundColor: selected ? '#222222' : '#444444',
-              justifyContent: 'center',
-              alignItems: 'center',
-            },
-          ]}>
-          <View
-            style={{
-              height: RfH(selected ? 100 : 60),
-              width: RfW(selected ? 100 : 60),
-              borderRadius: 100,
-              backgroundColor: Colors.lightBlue,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 8,
-            }}>
-            <Text style={{ color: Colors.primaryText, fontSize: selected ? 48 : 36 }}>{firstName[0]}</Text>
-          </View>
-          <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>{firstName}</Text>
+          style={{
+            height: RfH(selected ? 100 : 60),
+            width: RfW(selected ? 100 : 60),
+            borderRadius: 100,
+            backgroundColor: Colors.lightBlue,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 8,
+          }}>
+          <Text style={{ color: Colors.primaryText, fontSize: selected ? 48 : 36 }}>{firstName[0]}</Text>
         </View>
-      </>
+        <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>{firstName}</Text>
+      </View>
     );
   };
 
@@ -748,7 +769,7 @@ export default class Video extends Component<Props, State> {
         style={[styles.remoteContainer, { bottom: this.state.showDetailedActions ? 100 : 44 }]}
         contentContainerStyle={{ paddingHorizontal: 2.5 }}
         horizontal>
-        <View style={{ width: 80, height: 120, borderRadius: 20 }}>
+        <View style={{ width: 100, height: 150, borderRadius: 20 }}>
           {!this.state.videoMuted ? (
             <RtcLocalView.SurfaceView
               style={styles.max}

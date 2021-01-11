@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { userDetails } from '../../apollo/cache';
 import Video from './Video';
 import Loader from '../../components/Loader';
-import { GET_AGORA_RTC_TOKEN } from './onlineClass.query';
+import { GET_AGORA_RTC_TOKEN, GET_MEETING_DETAILS } from './onlineClass.query';
 import NavigationRouteNames from '../../routes/screenNames';
-import { alertBox } from '../../utils/helpers';
 
 const OnlineClass = (props) => {
   const navigation = useNavigation();
@@ -17,6 +16,16 @@ const OnlineClass = (props) => {
   const userInfo = useReactiveVar(userDetails);
   const [token, setToken] = useState('');
 
+  const [meetingDetails, setMeetingDetails] = useState({});
+
+  const [getMeetingDetails, { loading: loadingMeetingDetails }] = useLazyQuery(GET_MEETING_DETAILS, {
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      setMeetingDetails(data?.meetingDetails);
+    },
+  });
   const [getToken, { loading }] = useLazyQuery(GET_AGORA_RTC_TOKEN, {
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -31,6 +40,12 @@ const OnlineClass = (props) => {
   useEffect(() => {
     if (isFocussed) {
       getToken({ variables: { channelName: classDetails.uuid, userId: userInfo.id } });
+    }
+  }, [isFocussed]);
+
+  useEffect(() => {
+    if (isFocussed) {
+      getMeetingDetails({ variables: { uuid: classDetails.uuid } });
     }
   }, [isFocussed]);
 

@@ -142,9 +142,9 @@ function AddressListing() {
             <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
               {item.city}, {item.state}, {item.country}
             </Text>
-            {/* <Text style={commonStyles.mediumMutedText}>{`${item.street}, ${item.subArea}`}</Text> */}
+            <Text style={commonStyles.mediumMutedText}>{`${item.street}, ${item.subArea}`}</Text>
             <Text style={commonStyles.mediumMutedText}>{item.fullAddress}</Text>
-            {/* <Text style={commonStyles.mediumMutedText}>{`${item.State}, ${item.country}`}</Text> */}
+            <Text style={commonStyles.mediumMutedText}>{item.landmark}</Text>
           </View>
 
           <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>
