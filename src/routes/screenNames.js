@@ -97,6 +97,7 @@ const NavigationRouteNames = {
     ADD_EDIT_BUSINESS_DETAILS: 'add_edit_business_details',
     DOCUMENT_LISTING: 'document_listing',
     ADD_DATA: 'add_data',
+    STUDENT_LISTING: 'student_listing',
   },
 };
 

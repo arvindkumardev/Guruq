@@ -279,6 +279,19 @@ function Profile(props) {
           </View>
         </TouchableWithoutFeedback>
 
+        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_LISTING)}>
+          <View style={styles.userMenuParentView}>
+            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.multiple_user} />
+            <View style={styles.menuItemParentView}>
+              <Text style={styles.menuItemPrimaryText}>My Students</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                Student details
+              </Text>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+
         <View style={commonStyles.blankGreyViewSmall} />
 
         <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
