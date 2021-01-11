@@ -109,7 +109,10 @@ const TutorOnBoard = () => {
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={tutorLeadDetailLoading || getCurrentTutorLoading || markOnboardedLoading} />
-      <ScreenHeader label="Complete Profile" horizontalPadding={RfW(16)} homeIcon />
+      <ScreenHeader
+          label="Complete Profile"
+          horizontalPadding={RfW(16)}
+      />
       <TouchableOpacity
         style={[styles.stepCard, { borderLeftColor: Colors.lightGreen, justifyContent: 'space-between' }]}
         activeOpacity={0.8}

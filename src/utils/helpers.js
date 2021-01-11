@@ -2,13 +2,13 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import AsyncStorage from '@react-native-community/async-storage';
-import { Alert, Dimensions } from 'react-native';
+import {Alert, Dimensions} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import moment from 'moment';
-import { isEmpty, isNil, isNull, isNumber, isUndefined, startCase } from 'lodash';
-import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mobile';
+import {isEmpty, isNumber, isUndefined, startCase} from 'lodash';
+import {parsePhoneNumberFromString as parseMobile} from 'libphonenumber-js/mobile';
 import Images from '../theme/images';
-import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+import {LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS} from './constants';
 import 'intl';
 import {
   interestingOfferingData,
@@ -37,10 +37,7 @@ export const storeData = async (key, value) => {
   } catch (e) {}
 };
 
-export const getSaveData = async (key) => {
-  const data = await AsyncStorage.getItem(key);
-  return data;
-};
+export const getSaveData = async (key) => await AsyncStorage.getItem(key);
 
 export const removeData = async (key) => {
   try {
@@ -190,102 +187,11 @@ export const monthNames = [
 ];
 
 export const getSubjectIcons = (name, disabled = false) => {
-  // let icon = '';
-  // switch (name) {
-  //   case 'Accounts':
-  //     icon = SubjectIcons.accounts;
-  //     break;
-  //   case 'Accountancy':
-  //     icon = SubjectIcons.accountancy;
-  //     break;
-  //   case 'Chemistry':
-  //     icon = SubjectIcons.chemistry;
-  //     break;
-  //   case 'Civics':
-  //     icon = SubjectIcons.civics;
-  //     break;
-  //   case 'Computer Science':
-  //     icon = SubjectIcons.computer_science;
-  //     break;
-  //   case 'Biology':
-  //     icon = SubjectIcons.biology;
-  //     break;
-  //   case 'Business Studies':
-  //     icon = SubjectIcons.business_studies;
-  //     break;
-  //   case 'Hindi':
-  //     icon = SubjectIcons.hindi;
-  //     break;
-  //   case 'Geography':
-  //     icon = SubjectIcons.geography;
-  //     break;
-  //   case 'English':
-  //     icon = SubjectIcons.english;
-  //     break;
-  //   case 'Engineering':
-  //     icon = SubjectIcons.engineering;
-  //     break;
-  //   case 'Economics':
-  //     icon = SubjectIcons.economics;
-  //     break;
-  //   case 'History':
-  //     icon = SubjectIcons.history;
-  //     break;
-  //   case 'Law':
-  //     icon = SubjectIcons.law;
-  //     break;
-  //   case 'Mathematics':
-  //     icon = SubjectIcons.maths;
-  //     break;
-  //   case 'Medical':
-  //     icon = SubjectIcons.medical;
-  //     break;
-  //   case 'Physical Education':
-  //     icon = SubjectIcons.physical_education;
-  //     break;
-  //   case 'Sociology':
-  //     icon = SubjectIcons.sociology;
-  //     break;
-  //   case 'Sanskrit':
-  //     icon = SubjectIcons.sanskrit;
-  //     break;
-  //   case 'Spanish':
-  //     icon = SubjectIcons.spanish;
-  //     break;
-  //   case 'Russian':
-  //     icon = SubjectIcons.russian;
-  //     break;
-  //   case 'French':
-  //     icon = SubjectIcons.french;
-  //     break;
-  //   case 'German':
-  //     icon = SubjectIcons.german;
-  //     break;
-  //   case 'Chinese':
-  //     icon = SubjectIcons.chinese;
-  //     break;
-  //   case 'Psychology':
-  //     icon = SubjectIcons.psychology;
-  //     break;
-  //   case 'Political Science':
-  //     icon = SubjectIcons.political_science;
-  //     break;
-  //   case 'Physics':
-  //     icon = SubjectIcons.physics;
-  //     break;
-  //   case 'ssc-govt':
-  //     icon = SubjectIcons.ssc_govt;
-  //     break;
-  //   default:
-  //     icon = Images.book;
-  // }
-
   let iconName = name.toLowerCase().replace(' ', '_');
 
   if (disabled) {
     iconName += '_gray';
   }
-
   return Images[iconName] ? Images[iconName] : Images.english;
 };
 
@@ -398,18 +304,18 @@ export const processGeoData = (geoData) => {
   const { long_name: country } = geoData.address_components.find((comp) => comp.types.includes('country')) || '';
 
   const { long_name: state } =
-  geoData.address_components.find((comp) => comp.types.includes('administrative_area_level_1')) || '';
+    geoData.address_components.find((comp) => comp.types.includes('administrative_area_level_1')) || '';
 
   const { long_name: city } =
-  geoData.address_components.find((comp) => comp.types.includes('locality')) ||
-  geoData.address_components.find((comp) => comp.types.includes('administrative_area_level_2')) ||
-  '';
+    geoData.address_components.find((comp) => comp.types.includes('locality')) ||
+    geoData.address_components.find((comp) => comp.types.includes('administrative_area_level_2')) ||
+    '';
 
   const { long_name: region } =
-  geoData.address_components.find((comp) => comp.types.includes('sublocality_level_1')) || '';
+    geoData.address_components.find((comp) => comp.types.includes('sublocality_level_1')) || '';
 
   const { long_name: areaT } =
-  geoData.address_components.find((comp) => comp.types.includes('sublocality_level_2')) || '';
+    geoData.address_components.find((comp) => comp.types.includes('sublocality_level_2')) || '';
 
   const subArea = [];
   if (region) {
@@ -432,3 +338,5 @@ export const processGeoData = (geoData) => {
     longitude,
   };
 };
+
+

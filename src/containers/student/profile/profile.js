@@ -6,13 +6,13 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
-import { notificationsList, studentDetails, userDetails } from '../../../apollo/cache';
+import { appMetaData, notificationsList, studentDetails, userDetails } from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { IconButtonWrapper, UserImageComponent, Loader } from '../../../components';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { alertBox, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, APP_VERSION, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 
 const PERSONAL_OPTIONS = [
@@ -38,6 +38,7 @@ function Profile(props) {
   const [notificationCount, setNotificationCount] = useState(0);
   const studentInfo = useReactiveVar(studentDetails);
   const notifyList = useReactiveVar(notificationsList);
+  const appMetaDataObj = useReactiveVar(appMetaData);
 
   const { changeTab } = props;
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
@@ -449,7 +450,7 @@ function Profile(props) {
                 Current
               </Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
-                Version 2.5
+                Version {APP_VERSION}
               </Text>
             </View>
 
@@ -467,7 +468,7 @@ function Profile(props) {
                 Latest
               </Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
-                Version 3.0
+                Version {appMetaDataObj.currentVersion}
               </Text>
             </View>
           </View>

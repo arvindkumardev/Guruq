@@ -8,6 +8,8 @@ export const isSplashScreenVisible = makeVar(true);
 
 export const userType = makeVar('');
 
+export const appMetaData = makeVar({});
+
 export const networkConnectivityError = makeVar(false);
 
 export const userDetails = makeVar({});

@@ -7,7 +7,7 @@ import { Colors } from '../../../theme';
 import TutorDashboard from './components/tutorDashboard';
 import BottomTab from './components/bottomTab';
 import Profile from '../profile/profile';
-import Wallet from '../../common/wallet/wallet';
+import Wallet from '../../wallet/wallet';
 import CalendarView from '../../calendar/calendarView';
 import MyClasses from '../../myClasses/classes';
 import { alertBox } from '../../../utils/helpers';

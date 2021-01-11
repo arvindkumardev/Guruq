@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-// import { firebase } from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import { isEmpty } from 'lodash';
@@ -39,7 +38,6 @@ import MyClasses from '../containers/myClasses/classes';
 import scheduleClass from '../containers/myClasses/scheduleClass';
 import CalendarView from '../containers/calendar/calendarView';
 import AddEditAddress from '../containers/address/addEditAddress';
-// import AddressMapView from '../containers/common/profileScreens/addressMapView';
 import EducationListing from '../containers/education/educationListing';
 import AddEditEducation from '../containers/education/addEditEducation';
 import AwardListing from '../containers/tutor/awards/awardListing';
@@ -62,7 +60,7 @@ import BackgroundCheck from '../containers/certficationProcess/backgroundCheck';
 import TutorVerificationScreen from '../containers/certficationProcess/tutorVerificationScreen';
 import { BackgroundCheckStatusEnum } from '../containers/common/enums';
 import RatingReviews from '../containers/common/ratingReviews';
-import UpdateVersion from '../containers/common/updateVersion/updateVersion';
+import UpdateVersion from '../containers/updateVersion/updateVersion';
 import ReferEarn from '../containers/referAndEarn/referEarn';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import Notifications from '../containers/student/dashboard/notifications';
@@ -70,7 +68,7 @@ import Notifications from '../containers/student/dashboard/notifications';
 const Stack = createStackNavigator();
 
 const AppStack = (props) => {
-  const { isUserLoggedIn, userType, showSplashScreen, appMetaData, isForceUpdate } = props;
+  const { isUserLoggedIn, userType, showSplashScreen, isForceUpdate } = props;
   const [isGettingStartedVisible, setIsGettingStartedVisible] = useState(true);
   const tutorInfo = useReactiveVar(tutorDetails);
   const studentInfo = useReactiveVar(studentDetails);
@@ -98,8 +96,6 @@ const AppStack = (props) => {
     if (!isEmpty(userDetailsObj)) {
       getFcmToken().then((token) => {
         if (token) {
-          console.log('fcm token', token);
-
           createPayload(userDetailsObj.me, token).then((payload) => {
             registerDevice({ variables: { deviceDto: payload } });
           });
@@ -129,7 +125,6 @@ const AppStack = (props) => {
         notificationPayload(remoteMessage.data);
       }
       if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.notification)) {
-        console.log('COming notification from', remoteMessage.notification);
         notificationsList([...notifyList, remoteMessage.messageId]);
         saveNotificationPayload(remoteMessage);
       }
@@ -138,7 +133,6 @@ const AppStack = (props) => {
       .getInitialNotification()
       .then((remoteMessage) => {
         if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.notification)) {
-          console.log('COming notification from', remoteMessage.notification);
           if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
             notificationPayload(remoteMessage.data);
           }
@@ -245,11 +239,6 @@ const AppStack = (props) => {
         component={UpdateVersion}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen */}
-      {/*  name={NavigationRouteNames.UNDER_MAINTAINANCE} */}
-      {/*  component={UnderMainTainance} */}
-      {/*  options={{ headerShown: false }} */}
-      {/* /> */}
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />
       <Stack.Screen
         name={NavigationRouteNames.ONLINE_CLASS}
@@ -428,7 +417,6 @@ const AppStack = (props) => {
           name={NavigationRouteNames.UPDATE_VERSION}
           component={UpdateVersion}
           options={{ headerShown: false }}
-          initialParams={{ appMetaData: { isUnderMaintenance: false } }}
         />
       )}
     </Stack.Navigator>

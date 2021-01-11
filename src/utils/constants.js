@@ -1,9 +1,5 @@
 import * as DeviceInfo from 'react-native-device-info';
 
-export const APP_VERSION_IOS = DeviceInfo.getVersion();
-
-export const APP_VERSION_ANDROID = DeviceInfo.getVersion();
-
 export const STANDARD_SCREEN_SIZE = 812;
 
 export const STANDARD_SCREEN_DIMENSIONS = { height: 812, width: 375 };
@@ -82,3 +78,8 @@ export const STUDY_AREA_LEVELS = {
 };
 
 export const GOOGLE_API_KEY = 'AIzaSyD8MaEzNhuejY2yBx6No7-TfkAvQ2X_wyk';
+
+export const IOS_APP_URL = 'https://apps.apple.com/us/app/guruq/id1497650705';
+export const ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=com.guruq&hl=en_IN';
+export const APP_BUILD_VERSION = DeviceInfo.getBuildNumber();
+export const APP_VERSION = DeviceInfo.getVersion();
