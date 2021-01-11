@@ -80,8 +80,10 @@ const VideoMessagingModal = (props) => {
   // console.log(channelName);
   const { loading: loadingNewMessageEvent } = useSubscription(NEW_CHAT_MESSAGE, {
     // variables: { channelName },
+    fetchPolicy: 'network-only',
     onSubscriptionData: ({ subscriptionData: { data } }) => {
-      // console.log('onSubscriptionData: ', data);
+      console.log('onSubscriptionData: ', data);
+
       if (data && data?.chatMessageSent && data?.chatMessageSent.channel === channelName) {
         const message = data.chatMessageSent;
 
@@ -174,19 +176,23 @@ const VideoMessagingModal = (props) => {
     onClose(false);
   };
 
-  const isFocussed = useIsFocused();
-
   useEffect(() => {
-    if (isFocussed) {
+    console.log('focused.... called');
+
+    if (visible) {
       enterChat();
+
+      if (channelName) {
+        getChatMessages({ variables: { channelName: props.channelName } });
+      }
     }
 
     // Specify how to clean up after this effect:
     return function cleanup() {
-      console.log("cleanup.... leavechat");
+      console.log('cleanup.... leavechat');
       leaveChat();
     };
-  }, [isFocussed]);
+  }, [visible]);
 
   return (
     <Modal

@@ -10,7 +10,7 @@ import { GET_AVAILABILITY_DATA } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { endOfDay, RfH, RfW, startOfDay } from '../../utils/helpers';
+import { endOfDay, printDate, RfH, RfW, startOfDay } from '../../utils/helpers';
 
 const TutorAvailabilitySlots = (props) => {
   const [availability, setAvailability] = useState([]);
@@ -18,9 +18,7 @@ const TutorAvailabilitySlots = (props) => {
 
   const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY_DATA, {
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       setAvailability([]);
@@ -35,8 +33,8 @@ const TutorAvailabilitySlots = (props) => {
       variables: {
         tutorAvailability: {
           tutorId,
-          startDate: startOfDay(date),
-          endDate: endOfDay(date),
+          startDate: printDate(date),
+          endDate: printDate(date),
         },
       },
     });
@@ -108,8 +106,8 @@ const TutorAvailabilitySlots = (props) => {
             highlightDateNameStyle={{ color: Colors.brandBlue2 }}
             disabledDateNameStyle={{ color: Colors.black }}
             disabledDateNumberStyle={{ color: Colors.black }}
-            dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400',color: Colors.black }}
-            dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400',color: Colors.black }}
+            dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
+            dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
             style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
             calendarAnimation={{ type: 'parallel', duration: 300 }}
             daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
