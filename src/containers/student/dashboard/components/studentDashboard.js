@@ -539,7 +539,7 @@ function StudentDashboard(props) {
             }}>
             <View style={{ flex: 0.7 }}>
               <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
-                Hi {userInfo.firstName}
+                Hi {userInfo?.firstName}
               </Text>
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
