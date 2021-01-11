@@ -85,10 +85,10 @@ function ExperienceListing() {
           styling={{ marginTop: RfH(5) }}
         />
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.regularPrimaryText}>{item?.title}</Text>
-          <Text style={commonStyles.mediumMutedText}>
-            {item?.institution?.name} - {startCase(item.employmentType)}
+          <Text style={commonStyles.regularPrimaryText}>
+            {item?.title}, {item?.institution?.name}
           </Text>
+          <Text style={commonStyles.mediumMutedText}>{startCase(item.employmentType)}</Text>
           <Text style={commonStyles.mediumMutedText}>
             {formatDate(item.startDate, 'YYYY')} - {!item.current ? formatDate(item.endDate, 'YYYY') : 'Present'}
           </Text>

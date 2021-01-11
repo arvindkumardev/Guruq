@@ -26,7 +26,7 @@ import DegreeModal from './degreeSelectionModal';
 
 const highSchoolStreams = [];
 Object.keys(HighSchoolStreamEnum).forEach(function (key) {
-  highSchoolStreams.push({ value: HighSchoolStreamEnum[key], label: key });
+  highSchoolStreams.push({ value: HighSchoolStreamEnum[key].label, label: key });
 });
 
 function AddEditEducation(props) {
@@ -72,9 +72,9 @@ function AddEditEducation(props) {
           const classes = offeringMasterData.filter((item) => item?.parentOffering?.id === board?.id);
           setSelectedClass(classes.find((item) => item.name === educationDetail?.grade));
         }
-        if (educationDetail.higherSecondaryStream) {
+        if (educationDetail.fieldOfStudy) {
           setSelectedStream(
-            highSchoolStreams.find((item) => item.label === educationDetail?.higherSecondaryStream.toUpperCase())
+            highSchoolStreams.find((item) => item.value.toUpperCase() === educationDetail?.fieldOfStudy.toUpperCase())
           );
         }
       }
@@ -165,7 +165,8 @@ function AddEditEducation(props) {
         dto.board = selectedBoard.name;
         dto.grade = selectedClass.name;
         if (selectedClass.name === 'Class 11' || selectedClass.name === 'Class 12') {
-          dto.subjects = selectedStream.label;
+          // dto.subjects = selectedStream.label;
+          dto.fieldOfStudy = selectedStream.label;
         }
       } else if (educationType === 1) {
         dto.degree = { degreeLevel: selectedDegree.degreeLevel, name: selectedDegree.name, id: selectedDegree.id };
@@ -269,7 +270,7 @@ function AddEditEducation(props) {
                     <Item style={commonStyles.horizontalChildrenSpaceView}>
                       <CustomSelect
                         data={highSchoolStreams}
-                        value={selectedStream}
+                        value={selectedStream.value}
                         onChangeHandler={(stream) => setSelectedStream(stream)}
                         placeholder="Select stream"
                         containerStyle={{

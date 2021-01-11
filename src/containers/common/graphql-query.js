@@ -107,10 +107,8 @@ export const GET_STUDENT_DETAILS = gql`
           name
         }
         fieldOfStudy
-        higherSecondaryStream
         board
         grade
-        subjects
       }
       guardians {
         contactDetail {

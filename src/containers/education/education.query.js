@@ -16,10 +16,8 @@ export const GET_TUTOR_EDUCATION_DETAILS = gql`
         startDate
         endDate
         fieldOfStudy
-        higherSecondaryStream
         board
         grade
-        subjects
         isCurrent
       }
     }
@@ -42,10 +40,8 @@ export const GET_STUDENT_EDUCATION_DETAILS = gql`
         startDate
         endDate
         fieldOfStudy
-        higherSecondaryStream
         board
         grade
-        subjects
         isCurrent
       }
     }
