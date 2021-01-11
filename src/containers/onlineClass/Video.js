@@ -302,8 +302,8 @@ export default class Video extends Component<Props, State> {
     this.setState({ showMoreActions: !this.state.showMoreActions });
   };
 
-  toggleWhiteboard = () => {
-    this.setState({ whiteboardEnabled: !this.state.whiteboardEnabled });
+  toggleWhiteboard = (show) => {
+    this.setState({ whiteboardEnabled: show });
   };
 
   getParticipant = (id) => {
@@ -601,33 +601,31 @@ export default class Video extends Component<Props, State> {
                 </View>
               </TouchableWithoutFeedback>
 
-              {this.props.userInfo.type === UserTypeEnum.TUTOR.label && (
-                <TouchableWithoutFeedback onPress={this.toggleWhiteboard}>
-                  <View
-                    style={{
-                      // width: 60,
-                      flex: 1,
-                      height: 54,
-                      // backgroundColor: Colors.orangeRed,
-                      // borderRadius: 60,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      // paddingBottom: 8,
-                    }}>
-                    <IconButtonWrapper iconImage={Images.share_screen} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-                    <Text
-                      style={[
-                        commonStyles.smallPrimaryText,
-                        {
-                          marginTop: RfH(8),
-                          color: Colors.white,
-                        },
-                      ]}>
-                      Share
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              )}
+              <TouchableWithoutFeedback onPress={() => this.toggleWhiteboard(!this.state.whiteboardEnabled)}>
+                <View
+                  style={{
+                    // width: 60,
+                    flex: 1,
+                    height: 54,
+                    // backgroundColor: Colors.orangeRed,
+                    // borderRadius: 60,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    // paddingBottom: 8,
+                  }}>
+                  <IconButtonWrapper iconImage={Images.share_screen} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                  <Text
+                    style={[
+                      commonStyles.smallPrimaryText,
+                      {
+                        marginTop: RfH(8),
+                        color: Colors.white,
+                      },
+                    ]}>
+                    Share
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
 
               <TouchableWithoutFeedback onPress={this.toggleMessageBox}>
                 <View
@@ -722,8 +720,10 @@ export default class Video extends Component<Props, State> {
             onClose={this.toggleMessageBox}
             channelName={this.props.channelName}
             callbacks={{
-              toggleWhiteboardCallback: this.toggleWhiteboard,
+              showWhiteboardCallback: () => this.toggleWhiteboard(true),
+              hideWhiteboardCallback: () => this.toggleWhiteboard(false),
               onToggleWhiteboard: this.state.whiteboardEnabled,
+              isHost: this.props.userInfo.type === UserTypeEnum.TUTOR.label,
             }}
           />
         )}
