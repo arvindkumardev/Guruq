@@ -37,6 +37,7 @@ const NavigationRouteNames = {
   RATINGS_REVIEWS: 'ratings_reviews',
   UPDATE_VERSION: 'update_version',
   UNDER_MAINTAINANCE: 'under_maintainance',
+  MONTH_CALENDAR_VIEW: 'month_calendar_view',
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
     MY_STUDY_AREAS: 'my_study_areas',

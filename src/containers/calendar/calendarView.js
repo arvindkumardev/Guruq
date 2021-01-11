@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { ActionSheet, IconButtonWrapper, Loader } from '../../components';
+import { IconButtonWrapper, Loader } from '../../components';
 import routeNames from '../../routes/screenNames';
 import { Colors, Images } from '../../theme';
 import { getBoxColor } from '../../theme/colors';
@@ -157,30 +157,6 @@ function CalendarView(props) {
     });
   };
 
-  const changeToListView = () => {
-    setCurrentView(1);
-    setOpenMenu(false);
-    setRefresh((refresh) => !refresh);
-  };
-
-  const changeToWeekView = () => {
-    setCurrentView(0);
-    setOpenMenu(false);
-    setRefresh((refresh) => !refresh);
-  };
-
-  const changeToMonthView = () => {
-    setCurrentView(2);
-    setOpenMenu(false);
-    setRefresh((refresh) => !refresh);
-  };
-
-  const [menuItem, setMenuItem] = useState([
-    { label: 'Week View', handler: changeToWeekView, isEnabled: true },
-    { label: 'List View', handler: changeToListView, isEnabled: true },
-    { label: 'Month View', handler: changeToMonthView, isEnabled: true },
-  ]);
-
   useEffect(() => {
     if (isFocussed) {
       getScheduledClassesByDate(selectedDate);
@@ -192,15 +168,18 @@ function CalendarView(props) {
     <>
       <Loader isLoading={loadingScheduledClasses} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-        <View style={[commonStyles.horizontalChildrenView, { height: RfH(44), justifyContent: 'center' }]}>
-          {showHeader && <Text style={[commonStyles.headingPrimaryText, { alignSelf: 'center' }]}>Your Schedule</Text>}
-          <IconButtonWrapper
-            iconHeight={RfH(24)}
-            iconWidth={RfW(24)}
-            iconImage={Images.filter}
-            submitFunction={() => setOpenMenu(true)}
-            styling={{ alignSelf: 'flex-end' }}
-          />
+        <View style={[commonStyles.horizontalChildrenEqualSpaceView, { height: RfH(44), justifyContent: 'center' }]}>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            {showHeader && <Text style={commonStyles.headingPrimaryText}>Your Schedule</Text>}
+          </View>
+          <View style={{ alignItems: 'flex-end' }}>
+            <IconButtonWrapper
+              iconHeight={RfH(24)}
+              iconImage={Images.calendar}
+              iconWidth={RfW(16)}
+              submitFunction={() => navigation.navigate(routeNames.MONTH_CALENDAR_VIEW)}
+            />
+          </View>
         </View>
         <View>
           <ScrollView
@@ -301,15 +280,6 @@ function CalendarView(props) {
             )}
           </ScrollView>
         </View>
-        {openMenu && (
-          <ActionSheet
-            actions={menuItem}
-            cancelText="Dismiss"
-            handleCancel={() => setOpenMenu(false)}
-            isVisible={openMenu}
-            topLabel=""
-          />
-        )}
       </View>
     </>
   );
