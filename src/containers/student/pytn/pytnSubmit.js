@@ -230,7 +230,6 @@ function PytnSubmit(props) {
                 onChangeText={(text) => setMaxPrice(text)}
                 keyboardType="numeric"
                 returnKeyType="done"
-                onSubmitEditing={submitPYTN}
               />
             </Item>
           </View>

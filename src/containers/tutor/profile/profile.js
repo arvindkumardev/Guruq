@@ -37,7 +37,7 @@ const ACCOUNT_OPTIONS = [
 
 const MY_CLASS_OPTIONS = [
   { name: 'Calendar', icon: Images.calendar },
-  { name: 'Student Request', icon: Images.classes },
+  { name: 'Student PYTN Request', icon: Images.classes },
 ];
 
 function Profile(props) {
@@ -124,7 +124,7 @@ function Profile(props) {
       changeTab(3);
     } else if (item.name === 'My Students') {
       comingSoonAlert();
-    } else if (item.name === 'Student Request') {
+    } else if (item.name === 'Student PYTN Request') {
       navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS);
     } else {
       return null;
