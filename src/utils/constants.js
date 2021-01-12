@@ -30,7 +30,7 @@ export const LOTTIE_JSON_FILES = {
 };
 
 export const FRONTEND_URL = 'http://stagingv2.guruq.in';
-export const DASHBOARD_URL = 'http://dashboardv2.guruq.in';
+export const DASHBOARD_URL = 'http://guruq.in';
 
 // export const API_URL = 'http://10.0.0.6:5000';
 export const API_URL = 'http://apiv2.guruq.in/api';
