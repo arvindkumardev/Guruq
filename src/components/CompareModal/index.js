@@ -15,7 +15,7 @@ import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
 
 const compareModal = (props) => {
   const navigation = useNavigation();
-  const { visible, onClose, removeFromCompare } = props;
+  const { visible, onClose, removeFromCompare, offeringId } = props;
   const [tutorData, setTutorData] = useState([]);
 
   const checkCompare = async () => {
@@ -30,7 +30,7 @@ const compareModal = (props) => {
 
   const goToCompareView = () => {
     onClose();
-    navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS);
+    navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS, { offeringId });
   };
 
   const getTutorImage = (tutor) => {
@@ -128,12 +128,14 @@ compareModal.defaultProps = {
   visible: false,
   onClose: null,
   removeFromCompare: null,
+  offeringId: 0,
 };
 
 compareModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
   removeFromCompare: PropTypes.func,
+  offeringId: PropTypes.number,
 };
 
 export default compareModal;
