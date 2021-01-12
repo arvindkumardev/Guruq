@@ -53,7 +53,7 @@ function CustomMobileNumber(props) {
 
   const onChangeCountry = (country) => {
     setCountry(country);
-    onChangeHandler({ ...country, mobile: '' });
+    onChangeHandler({ country, mobile: '' });
     setShowModal(false);
   };
 

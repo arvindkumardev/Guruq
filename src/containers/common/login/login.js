@@ -49,7 +49,7 @@ function Login() {
         variables: { countryCode, number },
       });
     } else {
-      alertBox('Please enter mobile number.');
+      alertBox('Please enter a valid mobile number.');
     }
   };
 

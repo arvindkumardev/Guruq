@@ -35,19 +35,15 @@ function SetPassword({ route }) {
     onCompleted: (data) => {
       if (data) {
         const { fromChangePassword } = route.params;
-
-        console.log(fromChangePassword);
-
         if (fromChangePassword) {
           navigation.popToTop();
           Alert.alert('Password Changed successfully');
           // navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, { mobileObj, newUser: false });
         } else if (data.setPassword) {
           storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token).then(() => {
-            userDetails(data.setPassword);
-            userType(data.setPassword.type);
             isLoggedIn(true);
-            console.log(true);
+            // userDetails(data.setPassword);
+            // userType(data.setPassword.type);
           });
         }
       }

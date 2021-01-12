@@ -68,7 +68,7 @@ function Profile(props) {
           mobile: number,
           country: { dialCode: countryCode },
         };
-        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, {
+        navigation.navigate(NavigationRouteNames.OTP_CHANGE_PASSWORD, {
           mobileObj,
           fromChangePassword: true,
           newUser: false,
