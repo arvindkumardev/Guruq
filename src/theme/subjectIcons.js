@@ -133,6 +133,9 @@ const SubjectIcons = {
   science_disable: require('../assets/images/subject/science-d.png'),
 
   accounts_professional: require('../assets/images/subject/accounts-d.png'),
+  engineering_entrance: require('../assets/images/subject/engineering-entrance-d.png'),
+  medical_entrance: require('../assets/images/subject/medical-entrance-d.png'),
+  law_entrance: require('../assets/images/subject/law-entrance-d.png'),
 };
 
 export default SubjectIcons;

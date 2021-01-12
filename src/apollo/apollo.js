@@ -5,9 +5,9 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import apolloLogger from 'apollo-link-logger';
 import { onError } from '@apollo/client/link/error';
 import { getToken } from '../utils/helpers';
+import { API_URL } from '../utils/constants';
 
-// const GRAPHQL_ENDPOINT = 'http://10.0.0.6:5000/graphql';
-const GRAPHQL_ENDPOINT = 'http://apiv2.guruq.in/graphql';
+const GRAPHQL_ENDPOINT = `${API_URL}/graphql`;
 
 let apolloClient = null;
 

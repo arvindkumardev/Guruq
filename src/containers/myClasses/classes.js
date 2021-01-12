@@ -9,7 +9,7 @@ import Loader from '../../components/Loader';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import {getFullName, RfH, RfW} from '../../utils/helpers';
+import { getFullName, RfH, RfW } from '../../utils/helpers';
 import { SEARCH_ORDER_ITEMS } from '../student/booking.query';
 import { OrderStatus } from '../student/enums';
 import styles from './styles';
@@ -87,7 +87,8 @@ function MyClasses() {
       searchOrderItems({
         variables: {
           bookingSearchDto: {
-            orderStatus: OrderStatus.COMPLETE.label,
+            // orderStatus: OrderStatus.COMPLETE.label,
+            showActive: true,
             showHistory: isHistorySelected,
             showWithAvailableClasses: !isHistorySelected,
           },
@@ -195,9 +196,7 @@ function MyClasses() {
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
                 }}>
-                {isStudent
-                  ? `${getFullName(item.tutor.contactDetail)}`
-                  : `${getFullName(item?.createdBy)}`}
+                {isStudent ? `${getFullName(item.tutor.contactDetail)}` : `${getFullName(item?.createdBy)}`}
               </Text>
               {isStudent && (
                 <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>

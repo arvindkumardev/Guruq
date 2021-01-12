@@ -2,7 +2,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Text, View } from 'react-native';
+import { Modal, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { Colors, Images } from '../../theme';
@@ -12,6 +12,7 @@ import routeNames from '../../routes/screenNames';
 import commonStyles from '../../theme/styles';
 import styles from '../../containers/student/tutorListing/styles';
 import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
+import TutorImageComponent from '../TutorImageComponent';
 
 const compareModal = (props) => {
   const navigation = useNavigation();
@@ -39,34 +40,33 @@ const compareModal = (props) => {
 
   const renderTutorView = (item, index) => {
     return (
-      <View>
+      <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
         {item && (
-          <IconButtonWrapper
-            iconWidth={RfH(20)}
-            iconHeight={RfH(20)}
-            iconImage={Images.cross}
-            styling={styles.crossIcon}
-            imageResizeMode="contain"
-            submitFunction={() => removeFromCompare(index)}
-          />
+          <TouchableOpacity
+            style={{
+              backgroundColor: Colors.lightOrange,
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              padding: 8,
+              borderRadius: 48,
+            }}
+            onPress={() => removeFromCompare(index)}>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <IconButtonWrapper
+                iconWidth={RfH(20)}
+                iconHeight={RfH(20)}
+                iconImage={Images.delete}
+                imageResizeMode="contain"
+              />
+            </View>
+          </TouchableOpacity>
         )}
-        {item ? (
-          <IconButtonWrapper
-            iconWidth={RfH(64)}
-            iconHeight={RfH(64)}
-            iconImage={getTutorImage(item)}
-            imageResizeMode="cover"
-            styling={{ alignSelf: 'center', borderRadius: RfH(64) }}
-          />
-        ) : (
-          <IconButtonWrapper
-            iconWidth={RfH(70)}
-            iconHeight={RfH(70)}
-            iconImage={Images.profile}
-            imageResizeMode="contain"
-            styling={{ alignSelf: 'center', borderRadius: RfH(12), marginTop: RfH(48) }}
-          />
-        )}
+
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          {item && <TutorImageComponent tutor={item} width={64} height={64} />}
+        </View>
+
         <Text style={styles.compareTutorName}>{getFullName(item?.contactDetail)}</Text>
       </View>
     );

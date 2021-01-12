@@ -37,13 +37,13 @@ export default StyleSheet.create({
   },
   remoteContainer: {
     width: '100%',
-    height: 150,
+    height: 120,
     position: 'absolute',
     bottom: 100,
     zIndex: 2,
   },
   remote: {
-    width: 120,
+    width: 100,
     height: 120,
     marginHorizontal: 8,
   },

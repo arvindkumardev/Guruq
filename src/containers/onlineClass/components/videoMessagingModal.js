@@ -11,7 +11,7 @@ import Colors from '../../../theme/colors';
 import Fonts from '../../../theme/fonts';
 import Images from '../../../theme/images';
 import { userDetails } from '../../../apollo/cache';
-import { alertBox, getFullName, RfH, RfW } from '../../../utils/helpers';
+import { getFullName, RfH, RfW } from '../../../utils/helpers';
 import { ENTER_CHAT, GET_CHAT_MESSAGES, LEAVE_CHAT, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
 import { dimensions } from './style';
 
@@ -85,10 +85,16 @@ const VideoMessagingModal = (props) => {
 
       if (data && data?.chatMessageSent && data?.chatMessageSent.channel === channelName) {
         const message = data.chatMessageSent;
-        if (message.isSystem) {
-          if (message.text === 'TOGGLE_WHITEBOARD') {
-            if (callbacks && callbacks.toggleWhiteboardCallback) {
-              callbacks.toggleWhiteboardCallback();
+
+        if (message.isSystem && !callbacks.isHost) {
+          if (message.text === 'SHOW_WHITEBOARD') {
+            if (callbacks && callbacks.showWhiteboardCallback) {
+              callbacks.showWhiteboardCallback();
+            }
+          }
+          if (message.text === 'HIDE_WHITEBOARD') {
+            if (callbacks && callbacks.hideWhiteboardCallback) {
+              callbacks.hideWhiteboardCallback();
             }
           }
         }
@@ -117,12 +123,12 @@ const VideoMessagingModal = (props) => {
   };
 
   useEffect(() => {
-    if (callbacks && callbacks.onToggleWhiteboard) {
+    if (callbacks && callbacks.isHost) {
       sendMessage({
         variables: {
           chatMessageDto: {
             channel: channelName,
-            text: 'TOGGLE_WHITEBOARD',
+            text: callbacks?.onToggleWhiteboard ? 'SHOW_WHITEBOARD' : 'HIDE_WHITEBOARD',
             isSystem: true,
           },
         },

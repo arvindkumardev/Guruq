@@ -267,7 +267,7 @@ const Images = {
   close: require('../assets/images/close.png'),
   plusWhite: require('../assets/images/plus_white.png'),
   deleteWhite: require('../assets/images/delete_white.png'),
-  editPicture:require('../assets/images/editPicture.png'),
+  editPicture: require('../assets/images/editPicture.png'),
 
   ...SubjectIcons,
 };

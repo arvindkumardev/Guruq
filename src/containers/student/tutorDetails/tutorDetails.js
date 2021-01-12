@@ -303,7 +303,7 @@ function TutorDetails(props) {
 
   const renderSubjects = (item) => (
     <TouchableWithoutFeedback onPress={() => selectSubject(item)}>
-      <View style={{ marginTop: RfH(20), flex: 1, alignItems: 'center' }}>
+      <View style={{ width: RfW(120), marginTop: RfH(20), flex: 1, alignItems: 'center' }}>
         <View
           style={{
             flexDirection: 'column',
@@ -327,6 +327,7 @@ function TutorDetails(props) {
             fontSize: 12,
             color: Colors.primaryText,
             marginTop: RfH(5),
+            whiteSpace: 'wrap',
           }}>
           {item.displayName}
         </Text>
