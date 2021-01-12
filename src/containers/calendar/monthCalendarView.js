@@ -40,6 +40,7 @@ function MonthCalendarView() {
         };
       }
       setMarkeddates(dateArray);
+      console.log(dateArray);
       setAllScheduledClasses(data.getScheduledClasses);
       setRefresh((refresh) => !refresh);
     },
@@ -115,7 +116,7 @@ function MonthCalendarView() {
       <View style={commonStyles.mainContainer}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View>
-            <Calendar current={moment()} minDate={moment()} markedDates={markedDates} />
+            <Calendar markedDates={markedDates || {}} />
             <View style={{ height: RfH(24) }} />
             <View>
               <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Classes</Text>

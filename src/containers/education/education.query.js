@@ -19,7 +19,6 @@ export const GET_TUTOR_EDUCATION_DETAILS = gql`
         higherSecondaryStream
         board
         grade
-        subjects
         isCurrent
       }
     }
@@ -45,7 +44,6 @@ export const GET_STUDENT_EDUCATION_DETAILS = gql`
         higherSecondaryStream
         board
         grade
-        subjects
         isCurrent
       }
     }
