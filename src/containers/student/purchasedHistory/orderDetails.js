@@ -103,8 +103,14 @@ function OrderDetails(props) {
     navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
   };
 
+  const goToRefund = () => {
+    setOpenMenu(false);
+    navigation.navigate(NavigationRouteNames.STUDENT.REFUND, { bookingData: orderData });
+  };
+
   const [menuItem, setMenuItem] = useState([
     { label: 'Cancel Order', handler: openCancelConfirm, isEnabled: true },
+    { label: 'Refund', handler: goToRefund, isEnabled: true },
     { label: 'Help', handler: goToCustomerCare, isEnabled: true },
   ]);
 
