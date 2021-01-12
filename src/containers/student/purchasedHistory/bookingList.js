@@ -8,7 +8,7 @@ import { Button } from 'native-base';
 import { Loader, ScreenHeader, SelectSubjectModal } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import { enumLabelToText, RfH, RfW } from '../../../utils/helpers';
+import {enumLabelToText, printCurrency, printDateTime, RfH, RfW} from '../../../utils/helpers';
 import { SEARCH_BOOKINGS } from '../booking.query';
 import { OrderStatusEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -24,9 +24,7 @@ function BookingList() {
   const [searchBookings, { loading: loadingBookings }] = useLazyQuery(SEARCH_BOOKINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+     console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -80,11 +78,11 @@ function BookingList() {
           </Text>
         </View>
 
-        <Text style={commonStyles.mediumMutedText}>{new Date(item.createdDate).toDateString()}</Text>
+        <Text style={commonStyles.mediumMutedText}>{printDateTime(item?.createdDate)}</Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={commonStyles.smallMutedText}>{item?.orderItems && item?.orderItems.length} ORDER ITEM</Text>
           <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2, fontFamily: Fonts.bold }]}>
-            ₹ {parseFloat(item.payableAmount).toFixed(2)}
+            ₹ {printCurrency(item?.payableAmount)}
           </Text>
         </View>
       </View>
@@ -94,7 +92,7 @@ function BookingList() {
   return (
     <View style={(commonStyles.mainContainer, { flex: 1, backgroundColor: Colors.white })}>
       <Loader isLoading={loadingBookings} />
-      <ScreenHeader label="Purchase history" homeIcon horizontalPadding={RfW(16)} />
+      <ScreenHeader label="Purchase History" homeIcon horizontalPadding={RfW(16)} />
       {!isListEmpty ? (
         <FlatList
           ListHeaderComponent={<View style={{ height: RfH(20) }} />}

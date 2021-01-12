@@ -63,10 +63,7 @@ const MyCart = () => {
   const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        console.log(error);
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -87,9 +84,7 @@ const MyCart = () => {
   const [createNewBooking, { loading: bookingLoading }] = useMutation(CREATE_BOOKING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -118,9 +113,7 @@ const MyCart = () => {
     fetchPolicy: 'no-cache',
     variables: { searchDto: { userId: userInfo?.id } },
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -135,9 +128,7 @@ const MyCart = () => {
   const [addToCart, { loading: addTocartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -281,6 +272,9 @@ const MyCart = () => {
           setPaymentStatus('');
         },
         negativeText: 'Cancel',
+        onNegativeClick: () => {
+          cancelPendingBooking();
+        },
       });
     }
   }, [paymentModal]);

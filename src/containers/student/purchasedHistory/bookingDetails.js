@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import { Loader, ScreenHeader, TutorImageComponent } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import { enumLabelToText, getFullName, getToken, RfH, RfW } from '../../../utils/helpers';
+import {enumLabelToText, getFullName, getToken, printCurrency, printDateTime, RfH, RfW} from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { tutorDetails } from '../../../apollo/cache';
 import routeNames from '../../../routes/screenNames';
@@ -129,7 +129,7 @@ function BookingDetails(props) {
   };
 
   const [menuItem, setMenuItem] = useState([
-    { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
+    // { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
     { label: 'Help', handler: goToCustomerCare, isEnabled: true },
   ]);
 
@@ -159,7 +159,7 @@ function BookingDetails(props) {
               }}>
               <View style={commonStyles.horizontalChildrenSpaceView}>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  Booking Id
+                  Booking ID
                 </Text>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
                   {bookingData.orderId}
@@ -167,10 +167,10 @@ function BookingDetails(props) {
               </View>
               <View style={commonStyles.horizontalChildrenSpaceView}>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  Booking date
+                  Booking Date
                 </Text>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  {new Date(bookingData.createdDate).toDateString()}
+                  {printDateTime(bookingData.createdDate)}
                 </Text>
               </View>
               <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -184,7 +184,7 @@ function BookingDetails(props) {
               <View style={commonStyles.horizontalChildrenSpaceView}>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>Amount</Text>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  ₹ {parseFloat(bookingData.payableAmount).toFixed(2)}
+                  ₹ {printCurrency(bookingData.payableAmount)}
                 </Text>
               </View>
             </View>
@@ -212,8 +212,7 @@ function BookingDetails(props) {
                 <View style={commonStyles.horizontalChildrenSpaceView}>
                   <Text style={commonStyles.mediumMutedText}>Amount</Text>
                   <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
-                    {' '}
-                    ₹{parseFloat(bookingData.subTotal).toFixed(2)}
+                    ₹{printCurrency(bookingData.subTotal)}
                   </Text>
                 </View>
                 <View style={commonStyles.horizontalChildrenSpaceView}>

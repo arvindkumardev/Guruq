@@ -27,11 +27,8 @@ function Wallet() {
 
   const [getMyQpointBalance, { loading: loadingPointsBalance }] = useLazyQuery(GET_MY_QPOINTS_BALANCE, {
     fetchPolicy: 'no-cache',
-    variables: { searchDto: { userId: userInfo?.id } },
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -45,9 +42,7 @@ function Wallet() {
     fetchPolicy: 'no-cache',
     variables: { searchDto: { userId: userInfo?.id, sortBy: 'createdDate', sortOrder: 'desc' } },
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -57,9 +52,9 @@ function Wallet() {
   });
 
   useEffect(() => {
-    if (isFocussed) {
+    if (isFocussed && userInfo) {
       getQPointsTransactions();
-      getMyQpointBalance();
+      getMyQpointBalance({ variables: { searchDto: { userId: userInfo?.id } } });
     }
   }, [isFocussed]);
 
@@ -92,7 +87,7 @@ function Wallet() {
               commonStyles.headingPrimaryText,
               { fontFamily: Fonts.semiBold, fontSize: RFValue(34, STANDARD_SCREEN_SIZE) },
             ]}>
-            ₹ {printCurrency(balanceData.earn)}
+            ₹ {printCurrency(balanceData.balance)}
           </Text>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Balance</Text>
         </View>
@@ -119,7 +114,7 @@ function Wallet() {
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.pointType.title}</Text>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>
-            {item.pointType.actionType === 'EARN' ? '+' : '-'} {item.points}
+            {item.pointType.actionType === 'EARN' ? '+' : ''} {item.points}
           </Text>
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(4) }]}>
@@ -129,7 +124,7 @@ function Wallet() {
               commonStyles.mediumMutedText,
               { color: item.pointType.actionType === 'EARN' ? Colors.brandBlue2 : Colors.orangeRed },
             ]}>
-            {item.pointType.actionType === 'EARN' ? 'Earn' : 'Redeemed'}
+            {item.pointType.actionType === 'EARN' ? 'Earn' : 'Redeem'}
           </Text>
         </View>
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(24) }]} />
@@ -141,7 +136,7 @@ function Wallet() {
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={loadingPointsTransactions || loadingPointsBalance} />
       <View style={{ height: RfH(44), marginHorizontal: RfW(16), alignItems: 'center', justifyContent: 'center' }}>
-        {showHeader && <Text style={commonStyles.headingPrimaryText}>My Wallet</Text>}
+        {showHeader && <Text style={commonStyles.headingPrimaryText}>My QPoints</Text>}
       </View>
       <View>
         <ScrollView
@@ -149,7 +144,7 @@ function Wallet() {
           onScroll={(event) => handleScroll(event)}
           scrollEventThrottle={16}
           scrollEnabled={transactionData.length > 0}>
-          <Text style={[commonStyles.pageTitleThirdRow, { marginHorizontal: RfW(16) }]}>My Wallet</Text>
+          <Text style={[commonStyles.pageTitleThirdRow, { marginHorizontal: RfW(16) }]}>My QPoints</Text>
           {/* <View style={{ height: RfH(44) }} />
           <View
             style={[

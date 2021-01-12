@@ -24,6 +24,7 @@ const OnlineClass = (props) => {
     },
     onCompleted: (data) => {
       setMeetingDetails(data?.meetingDetails);
+      console.log(getMeetingDetails);
     },
   });
   const [getToken, { loading }] = useLazyQuery(GET_AGORA_RTC_TOKEN, {
@@ -71,6 +72,7 @@ const OnlineClass = (props) => {
         userInfo={userInfo}
         channelName={classDetails?.uuid}
         token={token}
+        meetingDetails={meetingDetails}
       />
     </View>
   );
