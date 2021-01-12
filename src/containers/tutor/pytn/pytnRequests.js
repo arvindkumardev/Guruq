@@ -178,22 +178,21 @@ function PytnRequests() {
           marginVertical: RfH(5),
           alignItems: 'center',
         }}>
-        {!isEmpty(item.acceptedPytns) ? (
-          <Text style={[commonStyles.mediumPrimaryText, { paddingVertical: RfH(10) }]}>
-            Accepted at ₹{item.acceptedPytns[0].price}
-          </Text>
-        ) : (
-          <View style={commonStyles.verticallyStretchedItemsView}>
-            <Text>Created On {printDate(item.createdDate)}</Text>
-          </View>
-        )}
-        {isEmpty(item.acceptedPytns) && (
+        <View style={commonStyles.verticallyStretchedItemsView}>
+          <Text>Created On {printDate(item.createdDate)}</Text>
+        </View>
+
+        {isEmpty(item.acceptedPytns) ? (
           <Button
             block
             style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
             onPress={() => handleAccept(item)}>
             <Text style={commonStyles.textButtonPrimary}>Accept Request</Text>
           </Button>
+        ) : (
+          <Text style={[commonStyles.headingPrimaryText, { color: Colors.brandBlue2, paddingVertical: RfH(10) }]}>
+            Accepted
+          </Text>
         )}
       </View>
       <View style={commonStyles.lineSeparator} />
@@ -208,7 +207,7 @@ function PytnRequests() {
         behavior={Platform.select({ android: '', ios: 'padding' })}
         // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
         enabled>
-        <ScreenHeader label="PYTN Student Requests" homeIcon horizontalPadding={RfW(16)} />
+        <ScreenHeader label="Student PYTN Requests" homeIcon horizontalPadding={RfW(16)} />
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
           {!isListEmpty && (
             <FlatList
