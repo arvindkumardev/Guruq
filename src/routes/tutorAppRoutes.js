@@ -17,6 +17,8 @@ import DocumentListing from '../containers/tutor/documentListing/documentListing
 import TutorOnBoard from '../containers/tutor/tutorOnBoard/index';
 import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
 import ProficiencyTest from '../containers/tutor/proficiencyTest';
+import StudentListing from '../containers/tutor/studentDetails/studentListing';
+import StudentDetails from '../containers/tutor/studentDetails/studentDetails';
 
 const Stack = createStackNavigator();
 
@@ -99,6 +101,16 @@ export const getTutorRoutes = (tutorInfo) => {
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.PROFICIENCY_TEST}
         component={ProficiencyTest}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.STUDENT_LISTING}
+        component={StudentListing}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.STUDENT_DETAILS}
+        component={StudentDetails}
         options={{ headerShown: false }}
       />
     </>

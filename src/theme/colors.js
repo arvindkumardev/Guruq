@@ -19,6 +19,7 @@ const Colors = {
   lightOrange: '#fff7f0',
   skyBlue: '#cbe7ff',
   lightBlue: '#e8f7fe',
+  subjectBlue: '#CBE7FF',
 };
 
 export const getBoxColor = (name) => {
@@ -37,10 +38,10 @@ export const getBoxColor = (name) => {
       icon = Colors.lightGreen;
       break;
     case 'Dna':
-      icon = Colors.lightBlue;
+      icon = Colors.subjectBlue;
       break;
     case 'Hindi':
-      icon = Colors.lightBlue;
+      icon = Colors.subjectBlue;
       break;
     case 'Geography':
       icon = Colors.lightOrange;
@@ -52,10 +53,10 @@ export const getBoxColor = (name) => {
       icon = Colors.lightPurple;
       break;
     case 'Economics':
-      icon = Colors.lightBlue;
+      icon = Colors.subjectBlue;
       break;
     case 'History':
-      icon = Colors.lightBlue;
+      icon = Colors.subjectBlue;
       break;
     case 'Law':
       icon = Colors.lightPurple;

@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
@@ -30,6 +32,10 @@ function CalendarView(props) {
   const [refresh, setRefresh] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [scheduledClasses, setScheduledClasses] = useState([]);
+  const [allScheduledClasses, setAllScheduledClasses] = useState([]);
+  const [markedDates, setMarkeddates] = useState([]);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [currentView, setCurrentView] = useState(0);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
@@ -41,6 +47,33 @@ function CalendarView(props) {
     onCompleted: (data) => {
       setScheduledClasses(data.getScheduledClasses);
       setIsEmpty(data.getScheduledClasses.length === 0);
+      setRefresh((refresh) => !refresh);
+    },
+  });
+
+  const [getScheduledClassesCount, { loading: loadingScheduledCountClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      const dateArray = [];
+      for (const obj of data.getScheduledClasses) {
+        const dateObj = {
+          date: obj.startDate,
+          dots: [
+            {
+              color: Colors.brandBlue,
+              selectedColor: Colors.brandBlue,
+            },
+          ],
+        };
+        dateArray.push(dateObj);
+      }
+      setMarkeddates(dateArray);
+      setAllScheduledClasses(data.getScheduledClasses);
       setRefresh((refresh) => !refresh);
     },
   });
@@ -60,14 +93,13 @@ function CalendarView(props) {
           style={{
             height: RfH(72),
             width: RfW(72),
-            backgroundColor: getBoxColor(classDetails?.offering?.displayName),
             borderRadius: 8,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
           <IconButtonWrapper
-            iconHeight={RfH(56)}
-            iconWidth={RfW(48)}
+            iconHeight={RfH(72)}
+            iconWidth={RfW(72)}
             styling={{ alignSelf: 'center' }}
             iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
           />
@@ -113,9 +145,21 @@ function CalendarView(props) {
     });
   };
 
+  const getScheduledClassesForWeek = (startDate) => {
+    getScheduledClassesCount({
+      variables: {
+        classesSearchDto: {
+          startDate,
+          endDate: moment(startDate, 'DD-MM-YYYY').add(6, 'days'),
+        },
+      },
+    });
+  };
+
   useEffect(() => {
     if (isFocussed) {
       getScheduledClassesByDate(selectedDate);
+      getScheduledClassesForWeek(moment());
     }
   }, [isFocussed]);
 
@@ -123,8 +167,19 @@ function CalendarView(props) {
     <>
       <Loader isLoading={loadingScheduledClasses} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-        <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
-          {showHeader && <Text style={commonStyles.headingPrimaryText}>Your Schedule</Text>}
+        <View style={[commonStyles.horizontalChildrenEqualSpaceView, { height: RfH(44), justifyContent: 'center' }]}>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            {showHeader && <Text style={commonStyles.headingPrimaryText}>Your Schedule</Text>}
+          </View>
+          {/*<View style={{ alignItems: 'flex-end' }}>*/}
+          {/*  <IconButtonWrapper*/}
+          {/*    iconHeight={RfH(24)}*/}
+          {/*    iconImage={Images.calendar}*/}
+          {/*    iconWidth={RfW(20 )}*/}
+          {/*    imageResizeMode="contain"*/}
+          {/*    submitFunction={() => navigation.navigate(routeNames.MONTH_CALENDAR_VIEW)}*/}
+          {/*  />*/}
+          {/*</View>*/}
         </View>
         <View>
           <ScrollView
@@ -145,7 +200,11 @@ function CalendarView(props) {
                 disabledDateNameStyle={{ color: Colors.black }}
                 disabledDateNumberStyle={{ color: Colors.black }}
                 selectedDate={new Date()}
-                dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
+                dateNameStyle={{
+                  fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
+                  fontWeight: '400',
+                  color: Colors.black,
+                }}
                 dateNumberStyle={{
                   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
                   fontWeight: '400',
@@ -162,24 +221,14 @@ function CalendarView(props) {
                 }
                 calendarAnimation={{ type: 'parallel', duration: 300 }}
                 daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-                // markedDates={[
-                //   {
-                //     date: new Date(),
-                //     dots: [
-                //       {
-                //         color: Colors.brandBlue,
-                //         selectedColor: Colors.brandBlue,
-                //       },
-                //     ],
-                //   },
-                // ]}
+                markedDates={markedDates}
                 onHeaderSelected={(a) => console.log(a)}
+                onWeekChanged={(start, end) => getScheduledClassesForWeek(start)}
                 onDateSelected={(d) => getScheduledClassesByDate(d)}
               />
             </View>
 
             <View style={commonStyles.lineSeparatorWithVerticalMargin} />
-
             {isEmpty ? (
               <View>
                 <Image

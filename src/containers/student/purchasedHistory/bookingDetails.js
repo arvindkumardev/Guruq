@@ -14,6 +14,8 @@ import routeNames from '../../../routes/screenNames';
 import ActionSheet from '../../../components/ActionSheet';
 import { GET_BOOKING_DETAIL } from '../booking.query';
 
+let bData = {};
+
 function BookingDetails(props) {
   const { route } = props;
   const bookingId = route?.params?.bookingId;
@@ -33,6 +35,7 @@ function BookingDetails(props) {
     onCompleted: (data) => {
       if (data) {
         setBookingData(data?.getBookingDetails);
+        bData = data?.getBookingDetails;
       }
     },
   });
@@ -115,10 +118,6 @@ function BookingDetails(props) {
     setOpenMenu(false);
     navigation.navigate(routeNames.CUSTOMER_CARE);
   };
-
-  // const goToRefund = () => {
-  //   navigation.navigate(routeNames.STUDENT.REFUND, { bookingData });
-  // };
 
   const goToInvoice = () => {
     setOpenMenu(false);

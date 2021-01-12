@@ -68,7 +68,7 @@ function Profile(props) {
           mobile: number,
           country: { dialCode: countryCode },
         };
-        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, {
+        navigation.navigate(NavigationRouteNames.OTP_CHANGE_PASSWORD, {
           mobileObj,
           fromChangePassword: true,
           newUser: false,
@@ -278,6 +278,19 @@ function Profile(props) {
             </View>
           </View>
         </TouchableWithoutFeedback>
+
+        {/*<View style={commonStyles.lineSeparatorWithHorizontalMargin} />*/}
+        {/*<TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_LISTING)}>*/}
+        {/*  <View style={styles.userMenuParentView}>*/}
+        {/*    <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.multiple_user} />*/}
+        {/*    <View style={styles.menuItemParentView}>*/}
+        {/*      <Text style={styles.menuItemPrimaryText}>My Students</Text>*/}
+        {/*      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>*/}
+        {/*        Student details*/}
+        {/*      </Text>*/}
+        {/*    </View>*/}
+        {/*  </View>*/}
+        {/*</TouchableWithoutFeedback>*/}
 
         <View style={commonStyles.blankGreyViewSmall} />
 

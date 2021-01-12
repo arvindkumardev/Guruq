@@ -102,7 +102,9 @@ export const GET_BOOKING_DETAIL = gql`
         demo
         count
         groupSize
-
+        mrp
+        price
+        pointsRedeemed
         offering {
           id
           name

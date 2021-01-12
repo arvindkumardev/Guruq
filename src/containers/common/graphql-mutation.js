@@ -83,6 +83,7 @@ export const SET_PASSWORD_MUTATION = gql`
       firstName
       lastName
       email
+      gender
       isPasswordSet
       isPhoneNumberVerified
       isEmailVerified

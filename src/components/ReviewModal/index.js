@@ -126,7 +126,6 @@ const ReviewModal = (props) => {
       onRequestClose={() => {
         onClose(false);
       }}>
-      <View style={{ backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center', justifyContent: 'center' }} />
       <View
         style={[
           commonStyles.verticallyStretchedItemsView,
@@ -251,24 +250,24 @@ const ReviewModal = (props) => {
               />
             </View>
           </ScrollView>
-          <View
-            style={[
-              commonStyles.horizontalChildrenCenterView,
-              {
-                paddingBottom: RfH(34),
-                paddingTop: RfH(8),
-                borderTopColor: Colors.borderColor,
-                borderTopWidth: 0.8,
-              },
-            ]}>
-            <Button
-              block
-              onPress={onAddReview}
-              style={[commonStyles.buttonPrimary, { marginHorizontal: 0, alignSelf: 'center' }]}>
-              <Text style={commonStyles.textButtonPrimary}>Submit</Text>
-            </Button>
-          </View>
         </KeyboardAvoidingView>
+        <View
+          style={[
+            commonStyles.horizontalChildrenCenterView,
+            {
+              paddingTop: RfH(8),
+              borderTopColor: Colors.borderColor,
+              borderTopWidth: 0.8,
+              paddingBottom: RfH(34),
+            },
+          ]}>
+          <Button
+            block
+            onPress={onAddReview}
+            style={[commonStyles.buttonPrimary, { marginHorizontal: 0, alignSelf: 'center' }]}>
+            <Text style={commonStyles.textButtonPrimary}>Submit</Text>
+          </Button>
+        </View>
       </View>
     </Modal>
   );

@@ -64,6 +64,7 @@ import UpdateVersion from '../containers/updateVersion/updateVersion';
 import ReferEarn from '../containers/referAndEarn/referEarn';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import Notifications from '../containers/student/dashboard/notifications';
+import MonthCalendarView from '../containers/calendar/monthCalendarView';
 
 const Stack = createStackNavigator();
 
@@ -251,11 +252,20 @@ const AppStack = (props) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.OTP_VERIFICATION}
+        name={NavigationRouteNames.OTP_CHANGE_PASSWORD}
         component={OtpVerification}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.SET_PASSWORD} component={SetPassword} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.CHANGE_PASSWORD}
+        component={SetPassword}
+        options={{ headerShown: false }}
+      />
+        <Stack.Screen
+            name={NavigationRouteNames.MONTH_CALENDAR_VIEW}
+            component={MonthCalendarView}
+            options={{ headerShown: false }}
+        />
     </>
   );
 
@@ -390,17 +400,18 @@ const AppStack = (props) => {
                 component={EnterPassword}
                 options={{ headerShown: false }}
               />
-              <Stack.Screen
-                name={NavigationRouteNames.OTP_VERIFICATION}
-                component={OtpVerification}
-                options={{ headerShown: false }}
-              />
+
               <Stack.Screen
                 name={NavigationRouteNames.SET_PASSWORD}
                 component={SetPassword}
                 options={{ headerShown: false }}
               />
               <Stack.Screen name={NavigationRouteNames.REGISTER} component={SignUp} options={{ headerShown: false }} />
+              <Stack.Screen
+                name={NavigationRouteNames.OTP_VERIFICATION}
+                component={OtpVerification}
+                options={{ headerShown: false }}
+              />
             </>
           )}
           {isUserLoggedIn && userType === UserTypeEnum.OTHER.label && (

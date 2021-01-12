@@ -292,11 +292,7 @@ export default class Video extends Component<Props, State> {
   };
 
   onBackPress = () => {
-    const { navigation } = this.props;
-
     this.props.onCallEnd(true);
-
-    this.props.onPressBack();
   };
 
   toggleDetailedActions = async () => {

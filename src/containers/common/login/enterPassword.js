@@ -44,8 +44,8 @@ function EnterPassword(props) {
       if (data && data.signIn) {
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token).then(() => {
           isLoggedIn(true);
-          userDetails(data.me);
-          userType(data.me.type);
+          // userDetails(data.me);
+          // userType(data.me.type);
           console.log(true);
         });
       }

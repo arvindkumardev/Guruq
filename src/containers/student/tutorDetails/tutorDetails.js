@@ -708,6 +708,7 @@ function TutorDetails(props) {
             )}
             {showCompareModal && (
               <CompareModal
+                offeringId={parentOffering}
                 visible={showCompareModal}
                 onClose={() => setShowCompareModal(false)}
                 removeFromCompare={(index) => removeFromCompare(index)}

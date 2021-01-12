@@ -37,6 +37,9 @@ const NavigationRouteNames = {
   RATINGS_REVIEWS: 'ratings_reviews',
   UPDATE_VERSION: 'update_version',
   UNDER_MAINTAINANCE: 'under_maintainance',
+  OTP_CHANGE_PASSWORD: 'otp_change_password',
+  CHANGE_PASSWORD: 'change_password',
+  MONTH_CALENDAR_VIEW: 'month_calendar_view',
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
     MY_STUDY_AREAS: 'my_study_areas',
@@ -96,6 +99,8 @@ const NavigationRouteNames = {
     ADD_EDIT_BUSINESS_DETAILS: 'add_edit_business_details',
     DOCUMENT_LISTING: 'document_listing',
     ADD_DATA: 'add_data',
+    STUDENT_LISTING: 'student_listing',
+    STUDENT_DETAILS: 'student_details',
   },
 };
 
