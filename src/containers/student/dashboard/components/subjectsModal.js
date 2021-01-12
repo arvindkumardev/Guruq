@@ -34,15 +34,14 @@ const SubjectsModal = (props) => {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: getBoxColor(item.displayName),
               height: RfH(67),
               width: RfW(70),
               borderRadius: RfW(8),
             }}>
             <IconButtonWrapper
-              iconWidth={RfW(24.5)}
+              iconWidth={RfW(70)}
               styling={{ alignSelf: 'center' }}
-              iconHeight={RfH(34.2)}
+              iconHeight={RfH(67)}
               iconImage={getSubjectIcons(item.displayName)}
             />
           </View>

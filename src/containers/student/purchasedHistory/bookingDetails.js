@@ -127,14 +127,8 @@ function BookingDetails(props) {
     });
   };
 
-  const goToRefund = () => {
-    setOpenMenu(false);
-    navigation.navigate(routeNames.STUDENT.REFUND, { bookingData: bData });
-  };
-
   const [menuItem, setMenuItem] = useState([
     { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
-    { label: 'Refund', handler: () => goToRefund(), isEnabled: true },
     { label: 'Help', handler: goToCustomerCare, isEnabled: true },
   ]);
 

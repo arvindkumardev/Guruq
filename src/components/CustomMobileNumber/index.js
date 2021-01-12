@@ -53,10 +53,9 @@ function CustomMobileNumber(props) {
 
   const onChangeCountry = (country) => {
     setCountry(country);
-    onChangeHandler({ ...country, mobile: '' });
+    // onChangeHandler({ ...country, mobile: '' });
     setShowModal(false);
   };
-
   return (
     <View>
       <View style={[{ marginTop: RfH(topMargin) }, error && { borderColor: '#818181' }]}>
@@ -72,7 +71,7 @@ function CustomMobileNumber(props) {
                   iconWidth={RfW(22)}
                   iconHeight={RfH(15)}
                 />
-                <Text style={[styles.inputStyle, { marginLeft: RfW(9) }]}>{`+${country.dialCode}`}</Text>
+                <Text style={[styles.inputStyle, { marginLeft: RfW(9) }]}>{`+${country?.dialCode}`}</Text>
                 <IconButtonWrapper
                   iconImage={Images.expand}
                   iconWidth={RfW(20)}
