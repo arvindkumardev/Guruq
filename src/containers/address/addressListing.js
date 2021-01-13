@@ -28,9 +28,7 @@ function AddressListing() {
   const [getStudentDetails, { loading: studentDetailLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -43,9 +41,7 @@ function AddressListing() {
   const [getTutorDetails, { loading: tutorDetailLoading }] = useLazyQuery(GET_TUTOR_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -58,9 +54,7 @@ function AddressListing() {
   const [deleteTutorAddress, { loading: tutorAddressDeleteLoading }] = useMutation(DELETE_TUTOR_ADDRESS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -72,9 +66,7 @@ function AddressListing() {
   const [deleteStudentAddress, { loading: studentAddressDeleteLoading }] = useMutation(DELETE_STUDENT_ADDRESS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {

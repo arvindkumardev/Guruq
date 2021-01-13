@@ -5,9 +5,9 @@ import {
   ScrollView,
   StatusBar,
   Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  TouchableOpacity,
 } from 'react-native';
 import RtcEngine, {
   AudioProfile,
@@ -21,14 +21,13 @@ import IconButtonWrapper from '../../components/IconWrapper';
 import { Colors } from '../../theme';
 import Images from '../../theme/images';
 import commonStyles from '../../theme/styles';
-import { deviceWidth, RfH, RfW, printDate, printTime, getFullName, alertBox } from '../../utils/helpers';
+import { alertBox, getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import ClassDetailsModal from './components/classDetailsModal';
 import requestCameraAndAudioPermission from './components/permission';
 import styles from './components/style';
 import VideoMessagingModal from './components/videoMessagingModal';
 import VideoMoreAction from './components/videoMoreAction';
 import Whiteboard from './components/whiteboard';
-import NavigationRouteNames from '../../routes/screenNames';
 import { UserTypeEnum } from '../../common/userType.enum';
 
 interface Props {}

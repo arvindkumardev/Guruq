@@ -7,7 +7,7 @@ import moment from 'moment';
 import { isEmpty, range } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 import { CustomSelect, IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
-import { alertBox, endOfDay, printDate, RfH, RfW, startOfDay } from '../../../utils/helpers';
+import { alertBox, RfH, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { UPDATE_AVAILABILITY } from '../tutor.mutation';
@@ -33,9 +33,7 @@ function UpdateSchedule(props) {
   const [updateAvailability, { loading: availabilityLoading }] = useMutation(UPDATE_AVAILABILITY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -280,9 +278,9 @@ function UpdateSchedule(props) {
           </Button>
         </View>
         <View style={{ marginTop: RfH(20), paddingHorizontal: RfW(10) }}>
-          {/*<Text style={[commonStyles.smallMutedText, { marginTop: RfH(20) }]}>*/}
-          {/*  *Slots creation is only allowed in between 06:00 A.M to 10 P.M.*/}
-          {/*</Text>*/}
+          {/* <Text style={[commonStyles.smallMutedText, { marginTop: RfH(20) }]}> */}
+          {/*  *Slots creation is only allowed in between 06:00 A.M to 10 P.M. */}
+          {/* </Text> */}
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(5) }]}>
             **Please mark slots as in active if you are not available.
           </Text>

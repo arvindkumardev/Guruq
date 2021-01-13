@@ -22,9 +22,7 @@ function ParentListing() {
   const [getParentList, { loading: parentListLoading }] = useLazyQuery(GET_PARENT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -37,9 +35,7 @@ function ParentListing() {
   const [deleteParentsDetail, { loading: parentDetailDeleteLoading }] = useMutation(DELETE_PARENT_INFO, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {

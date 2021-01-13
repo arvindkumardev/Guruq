@@ -28,9 +28,7 @@ function BookingDetails(props) {
     fetchPolicy: 'no-cache',
     variables: { id: bookingId },
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {

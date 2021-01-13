@@ -29,9 +29,7 @@ const OnlineClass = (props) => {
   });
   const [getToken, { loading }] = useLazyQuery(GET_AGORA_RTC_TOKEN, {
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       setToken(data?.generateAgoraRTCToken);

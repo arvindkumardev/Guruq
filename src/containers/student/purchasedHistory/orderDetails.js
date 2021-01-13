@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/react-hooks';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Modal, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { FlatList, Keyboard, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';
@@ -23,6 +23,7 @@ import { userType } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { UserTypeEnum } from '../../../common/userType.enum';
 import { CANCEL_ORDER_ITEMS } from '../booking.mutation';
+import { ClassCancelReasonEnum } from '../../common/enums';
 
 function OrderDetails(props) {
   const navigation = useNavigation();
@@ -31,16 +32,13 @@ function OrderDetails(props) {
   const [openMenu, setOpenMenu] = useState(false);
   const [tutorClasses, setTutorClasses] = useState([]);
   const [showCancelReason, setShowCancelReason] = useState(false);
-  const [cancelReasons, setCancelReasons] = useState([
-    { reason: 'I am unavailable to take classes at this moment.', selected: true },
-    { reason: 'I want to replace the tutor with other.', selected: false },
-    { reason: 'I did not find tutor reliable.', selected: false },
-    { reason: 'I am unsatisfied with the quality of tutor.', selected: false },
-    { reason: 'Others', selected: false },
-  ]);
 
   const [cancelReason, setCancelReason] = useState('');
-  const [reasons, setReasons] = useState([...cancelReasons]);
+  const [reasons, setReasons] = useState(
+    Object.values(ClassCancelReasonEnum).map((c) => {
+      return { ...c, selected: false, isCustom: c.label === ClassCancelReasonEnum.OTHER.label };
+    })
+  );
   const [comment, setComment] = useState('');
   const [refresh, setRefresh] = useState(false);
 
@@ -50,9 +48,7 @@ function OrderDetails(props) {
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data && data.getScheduledClasses) {
@@ -125,21 +121,28 @@ function OrderDetails(props) {
     }
   }, [orderData]);
 
+  // const onReasonChange = (index) => {
+  //   if (!reasons[index].selected) {
+  //     setReasons((reasons) =>
+  //       reasons.map((reasonItem, reasonIndex) => ({ ...reasonItem, selected: reasonIndex === index }))
+  //     );
+  //     setCancelReason(reasons[index].selected ? '' : reasons[index].reason);
+  //   }
+  // };
+
   const onReasonChange = (index) => {
     if (!reasons[index].selected) {
       setReasons((reasons) =>
         reasons.map((reasonItem, reasonIndex) => ({ ...reasonItem, selected: reasonIndex === index }))
       );
-      setCancelReason(reasons[index].selected ? '' : reasons[index].reason);
+      setCancelReason(reasons[index].isCustom ? '' : reasons[index].label);
     }
   };
 
   const [cancelOrderItem, { loading: cancelLoading }] = useMutation(CANCEL_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        // const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -158,6 +161,8 @@ function OrderDetails(props) {
     cancelOrderItem({
       variables: {
         orderItemId: orderData?.id,
+        cancelReason,
+        comments: String(cancelReason),
       },
     });
   };
@@ -172,16 +177,28 @@ function OrderDetails(props) {
     });
   };
 
+  // const renderReasons = (item, index) => {
+  //   return (
+  //     <TouchableWithoutFeedback onPress={() => onReasonChange(index)}>
+  //       <View style={{ padding: RfH(16) }}>
+  //         <View style={commonStyles.horizontalChildrenView}>
+  //           <CustomRadioButton enabled={item.selected} submitFunction={() => onReasonChange(index)} />
+  //           <Text style={{ marginLeft: RfW(8) }}>{item.reason}</Text>
+  //         </View>
+  //       </View>
+  //     </TouchableWithoutFeedback>
+  //   );
+  // };
+
   const renderReasons = (item, index) => {
     return (
-      <TouchableWithoutFeedback onPress={() => onReasonChange(index)}>
-        <View style={{ padding: RfH(16) }}>
-          <View style={commonStyles.horizontalChildrenView}>
-            <CustomRadioButton enabled={item.selected} submitFunction={() => onReasonChange(index)} />
-            <Text style={{ marginLeft: RfW(8) }}>{item.reason}</Text>
-          </View>
+      <TouchableOpacity onPress={() => onReasonChange(index)} activeOpacity={0.8}>
+        <View style={commonStyles.horizontalChildrenView}>
+          <CustomRadioButton enabled={item.selected} />
+          <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>{item.displayName}</Text>
         </View>
-      </TouchableWithoutFeedback>
+        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginVertical: RfH(16) }} />
+      </TouchableOpacity>
     );
   };
 
@@ -331,6 +348,7 @@ function OrderDetails(props) {
         isVisible={openMenu}
         topLabel=""
       />
+
       <Modal
         animationType="fade"
         transparent
@@ -351,45 +369,65 @@ function OrderDetails(props) {
             backgroundColor: Colors.white,
             opacity: 1,
             paddingBottom: RfH(34),
-            paddingTop: RfH(16),
+            // paddingTop: RfH(16),
           }}>
-          <IconButtonWrapper
-            styling={{ alignSelf: 'flex-end' }}
-            containerStyling={{ paddingHorizontal: RfW(16) }}
-            iconHeight={RfH(20)}
-            iconWidth={RfW(20)}
-            iconImage={Images.cross}
-            submitFunction={() => setShowCancelReason(false)}
-            imageResizeMode="contain"
-          />
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={reasons}
-            renderItem={({ item, index }) => renderReasons(item, index)}
-            keyExtractor={(item, index) => index.toString()}
-            scrollEnabled={false}
-          />
-          {cancelReason === 'Others' && (
-            <View
-              style={{
-                marginHorizontal: RfW(16),
-                borderRadius: RfH(8),
-                borderColor: Colors.darkGrey,
-                borderWidth: 1,
-              }}>
-              <Textarea
-                value={comment}
-                onChangeText={(text) => setComment(text)}
-                placeholder="Please specify reason"
-                numberOfLines={6}
-                style={{ height: RfH(120) }}
-              />
-            </View>
-          )}
-          <View style={{ height: RfH(24) }} />
-          <Button onPress={onCancelBooking} style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-            <Text style={commonStyles.textButtonPrimary}>Submit</Text>
-          </Button>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: RfW(16),
+              paddingVertical: RfH(10),
+              backgroundColor: Colors.lightBlue,
+            }}>
+            <Text style={commonStyles.headingPrimaryText}>Please provide the reason for cancellation</Text>
+            <IconButtonWrapper
+              iconHeight={RfH(20)}
+              iconWidth={RfW(20)}
+              iconImage={Images.cross}
+              submitFunction={() => setShowCancelReason(false)}
+              imageResizeMode="contain"
+            />
+          </View>
+          <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16) }}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={reasons}
+              renderItem={({ item, index }) => renderReasons(item, index)}
+              keyExtractor={(item, index) => index.toString()}
+              keyboardShouldPersistTaps="handled"
+              ListFooterComponent={
+                <>
+                  {reasons.some((item) => item.isCustom && item.selected) && (
+                    <TextInput
+                      placeholder="Provide a reason"
+                      style={{
+                        borderRadius: RfH(8),
+                        borderColor: Colors.darkGrey,
+                        borderWidth: 0.7,
+                        marginBottom: RfH(5),
+                        padding: 8,
+                        height: RfH(80),
+                      }}
+                      multiline
+                      blurOnSubmit
+                      onSubmitEditing={() => {
+                        Keyboard.dismiss();
+                      }}
+                      onChangeText={(val) => setCancelReason(val)}
+                      returnKeyType="done"
+                    />
+                  )}
+                </>
+              }
+            />
+          </View>
+          <View style={{ marginTop: RfH(32) }}>
+            <Button
+              onPress={onCancelBooking}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center', backgroundColor: Colors.orangeRed }]}>
+              <Text style={commonStyles.textButtonPrimary}>Cancel Class</Text>
+            </Button>
+          </View>
         </View>
       </Modal>
     </View>

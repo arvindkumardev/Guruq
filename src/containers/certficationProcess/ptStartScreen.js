@@ -33,9 +33,7 @@ const PtStartScreen = (props) => {
     fetchPolicy: 'no-cache',
     variables: { tutorOfferingId: offeringId },
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -53,7 +51,9 @@ const PtStartScreen = (props) => {
 
   const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
-    onError: (e) => {},
+    onError: (e) => {
+      console.log(e);
+    },
     onCompleted: (data) => {
       if (data) {
         tutorDetails(data?.getCurrentTutor);

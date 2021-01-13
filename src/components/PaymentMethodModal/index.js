@@ -42,9 +42,7 @@ const PaymentMethod = (props) => {
   const [createNewBooking, { loading: bookingLoading }] = useMutation(CREATE_BOOKING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -78,9 +76,6 @@ const PaymentMethod = (props) => {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
     },
     onCompleted: (data) => {
       if (data) {

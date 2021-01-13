@@ -1,9 +1,8 @@
-import { FlatList, Keyboard, Text, TextInput, View } from 'react-native';
+import { FlatList, Keyboard, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
 import { CustomRadioButton, ScreenHeader, Loader } from '../../components';
@@ -59,13 +58,13 @@ function CancelReason(props) {
   };
 
   const renderReasons = (item, index) => (
-    <TouchableWithoutFeedback onPress={() => onReasonChange(index)}>
+    <TouchableOpacity onPress={() => onReasonChange(index)} activeOpacity={0.8}>
       <View style={commonStyles.horizontalChildrenView}>
         <CustomRadioButton enabled={item.selected} />
         <Text style={{ fontSize: RFValue(16, STANDARD_SCREEN_SIZE), marginLeft: RfW(8) }}>{item.displayName}</Text>
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginVertical: RfH(16) }} />
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 
   const onCancelClass = () => {
