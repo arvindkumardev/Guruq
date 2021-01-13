@@ -144,11 +144,11 @@ function PytnListing(props) {
         }}>
         <Text style={commonStyles.mediumPrimaryText}>
           {!isEmpty(item.acceptedPytns)
-            ? `Your request has been accepted by ${item.acceptedPytns.length} tutors`
+            ? `Request accepted by ${item.acceptedPytns.length} tutors`
             : 'Not accepted yet'}
         </Text>
         <TouchableOpacity onPress={() => removePytn(item)}>
-          <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
+          <Text style={[commonStyles.mediumPrimaryText, { color: Colors.orangeRed, textAlign: 'right' }]}>Remove</Text>
         </TouchableOpacity>
       </View>
       <View style={commonStyles.lineSeparator} />
