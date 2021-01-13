@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Keyboard, Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
-import { Picker } from '@react-native-community/picker';
+import { Picker } from '@react-native-picker/picker';
 import { defaultStyles } from './styles';
 import { IconButtonWrapper } from '..';
 import { Colors, Images } from '../../theme';
