@@ -666,7 +666,7 @@ function StudentDashboard(props) {
               <Image
                 style={{ width: Dimensions.get('window').width, height: RfH(170) }}
                 source={Images.post_needs}
-                resizeMode="stretch"
+                resizeMode="contain"
               />
             </TouchableOpacity>
             <TouchableOpacity

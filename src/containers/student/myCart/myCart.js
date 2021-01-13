@@ -687,7 +687,6 @@ const MyCart = () => {
         amount={amount}
         qPointsRedeemed={qPointsRedeemed}
         handlePaytmPayment={handlePaytmPayment}
-        // discount={appliedCouponValue}
         hidePaymentPopup={() => setShowPaymentModal(false)}
       />
       {paymentModal && !isEmpty(bookingData) && (
