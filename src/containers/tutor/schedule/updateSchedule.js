@@ -48,17 +48,21 @@ function UpdateSchedule(props) {
   useEffect(() => {
     if (!isEmpty(timeSlots)) {
       const slotArr = [];
-      timeSlots.forEach((slot) => {
-        const startTime = moment(slot.startDate).format('HH:mm');
-        const endTime = moment(slot.endDate).format('HH:mm');
-        slotArr.push({
-          startTime,
-          startInt: parseInt(startTime.replace(':00', '')),
-          endTime,
-          endInt: parseInt(endTime.replace(':00', '')),
-          active: slot.active,
+      console.log('timeSlots', timeSlots);
+      timeSlots
+        .sort((a, b) => (a.endDate - b.endDate ? 1 : -1))
+        .forEach((slot) => {
+          const startTime = moment(slot.startDate).format('HH:mm');
+          const endTime = moment(slot.endDate).format('HH:mm');
+          slotArr.push({
+            startTime,
+            startInt: parseInt(startTime.replace(':00', '')),
+            endTime,
+            endInt: parseInt(endTime.replace(':00', '')),
+            active: slot.active,
+          });
         });
-      });
+      console.log('slotArr', slotArr);
       setSlots(slotArr);
     } else {
       setSlots([DEFAULT_SLOT]);

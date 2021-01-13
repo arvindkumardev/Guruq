@@ -8,7 +8,7 @@ import { Button } from 'native-base';
 import { Loader, ScreenHeader, SelectSubjectModal } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import {enumLabelToText, printCurrency, printDateTime, RfH, RfW} from '../../../utils/helpers';
+import { enumLabelToText, printCurrency, printDateTime, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_BOOKINGS } from '../booking.query';
 import { OrderStatusEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -24,7 +24,7 @@ function BookingList() {
   const [searchBookings, { loading: loadingBookings }] = useLazyQuery(SEARCH_BOOKINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-     console.log(e);
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {

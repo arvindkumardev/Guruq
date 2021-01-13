@@ -79,6 +79,19 @@ export const SEARCH_BOOKINGS = gql`
   }
 `;
 
+export const GET_CANCELLATION_SUMMARY = gql`
+  query CancelOrderItemSummary($orderItemId: Int!) {
+    cancelOrderItemSummary(orderItemId: $orderItemId) {
+      total
+      taken
+      scheduled
+      unscheduled
+      amount
+      refund
+    }
+  }
+`;
+
 export const GET_BOOKING_DETAIL = gql`
   query GetBookingDetails($id: Int!) {
     getBookingDetails(id: $id) {

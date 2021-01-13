@@ -6,23 +6,28 @@
     <!--            android:height="800dp"-->
     <!--            android:drawable="@drawable/splashscreen"-->
     <!--            android:gravity="center"/>-->
-
-    <!--    <item>-->
-    <!--        <bitmap-->
-    <!--                android:gravity="center"-->
-    <!--                android:src="@drawable/splashscreen"/>-->
-    <!--    </item>-->
+    <item android:drawable="@color/primary_light"/>
+        <item
+                android:width="300dp"
+                android:height="800dp"
+                android:drawable="@drawable/splash"
+                android:gravity="center"/>
+<!--        <item>-->
+<!--            <bitmap-->
+<!--                    android:gravity="center"-->
+<!--                    android:src="@drawable/splash"/>-->
+<!--        </item>-->
 
     <!-- The background color, preferably the same as your normal theme -->
-    <item android:drawable="@color/primary_light"/>
+<!--    <item android:drawable="@color/primary_light"/>-->
 
     <!-- Your product logo - 144dp color version of your app icon -->
-    <item>
+<!--    <item>-->
 
-        <bitmap
-                android:src="@drawable/icon_foreground"
-                android:gravity="center"/>
+<!--        <bitmap-->
+<!--                android:src="@drawable/icon_foreground"-->
+<!--                android:gravity="center"/>-->
 
-    </item>
+<!--    </item>-->
 
 </layer-list>

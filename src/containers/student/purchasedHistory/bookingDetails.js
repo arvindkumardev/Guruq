@@ -7,21 +7,20 @@ import { isEmpty } from 'lodash';
 import { Loader, ScreenHeader, TutorImageComponent } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import {enumLabelToText, getFullName, getToken, printCurrency, printDateTime, RfH, RfW} from '../../../utils/helpers';
+import { enumLabelToText, getFullName, printCurrency, printDate, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { tutorDetails } from '../../../apollo/cache';
 import routeNames from '../../../routes/screenNames';
 import ActionSheet from '../../../components/ActionSheet';
 import { GET_BOOKING_DETAIL } from '../booking.query';
-
-let bData = {};
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function BookingDetails(props) {
   const { route } = props;
   const bookingId = route?.params?.bookingId;
   const navigation = useNavigation();
   const [openMenu, setOpenMenu] = useState(false);
-  const [token, setToken] = useState('');
+  // const [token, setToken] = useState('');
   const [bookingData, setBookingData] = useState({});
 
   const [getBooking, { loading: getBookingLoader }] = useLazyQuery(GET_BOOKING_DETAIL, {
@@ -33,17 +32,34 @@ function BookingDetails(props) {
     onCompleted: (data) => {
       if (data) {
         setBookingData(data?.getBookingDetails);
-        bData = data?.getBookingDetails;
       }
     },
   });
 
   useEffect(() => {
-    getToken().then((tk) => {
-      setToken(tk);
-    });
+    // getToken().then((tk) => {
+    //   setToken(tk);
+    // });
     getBooking();
   }, []);
+
+  const goToCustomerCare = () => {
+    setOpenMenu(false);
+    navigation.navigate(routeNames.CUSTOMER_CARE);
+  };
+  //
+  // const goToInvoice = () => {
+  //   setOpenMenu(false);
+  //   navigation.navigate(routeNames.WEB_VIEW, {
+  //     url: `http://dashboardv2.guruq.in/invoice/${bookingData?.id}?token=${token}`,
+  //     label: 'Invoice',
+  //   });
+  // };
+
+  const [menuItem, setMenuItem] = useState([
+    // { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
+    { label: 'Help', handler: goToCustomerCare, isEnabled: true },
+  ]);
 
   const renderClassItem = (item) => (
     <View style={{ marginTop: RfH(30), paddingHorizontal: RfW(16) }}>
@@ -64,11 +80,13 @@ function BookingDetails(props) {
           </TouchableOpacity>
         )}
         {!isEmpty(item.refund) && (
-          <View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.REFUND, { orderData: item })}
+            activeOpacity={0.8}>
             <Text style={[commonStyles.smallPrimaryText, { color: Colors.orangeRed, fontFamily: Fonts.semiBold }]}>
               Refund Detail
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
@@ -112,24 +130,6 @@ function BookingDetails(props) {
     </View>
   );
 
-  const goToCustomerCare = () => {
-    setOpenMenu(false);
-    navigation.navigate(routeNames.CUSTOMER_CARE);
-  };
-
-  const goToInvoice = () => {
-    setOpenMenu(false);
-    navigation.navigate(routeNames.WEB_VIEW, {
-      url: `http://dashboardv2.guruq.in/invoice/${bookingData?.id}?token=${token}`,
-      label: 'Invoice',
-    });
-  };
-
-  const [menuItem, setMenuItem] = useState([
-    // { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
-    { label: 'Help', handler: goToCustomerCare, isEnabled: true },
-  ]);
-
   return (
     <>
       <Loader isLoading={getBookingLoader} />
@@ -167,7 +167,7 @@ function BookingDetails(props) {
                   Booking Date
                 </Text>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  {printDateTime(bookingData.createdDate)}
+                  {printDate(bookingData.createdDate)}
                 </Text>
               </View>
               <View style={commonStyles.horizontalChildrenSpaceView}>

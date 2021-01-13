@@ -154,40 +154,40 @@ function PytnSubmit(props) {
                 <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Individual Class</Text>
               </View>
             </TouchableWithoutFeedback>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-              <TouchableWithoutFeedback onPress={() => setIsIndividual(false)}>
-                <View style={commonStyles.horizontalChildrenView}>
-                  <CustomRadioButton
-                    iconWidth={RfW(20)}
-                    iconHeight={RfH(20)}
-                    enabled={!isIndividual}
-                    submitFunction={() => setIsIndividual(false)}
-                  />
-                  <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Group Class</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              {!isIndividual && (
-                <View>
-                  <View style={styles.bookingSelectorParent}>
-                    <View style={styles.bookingSelectorParent}>
-                      <TouchableWithoutFeedback onPress={() => removeNoOfGroupClass()}>
-                        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
-                          <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
-                        </View>
-                      </TouchableWithoutFeedback>
+            {/*<View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>*/}
+            {/*  <TouchableWithoutFeedback onPress={() => setIsIndividual(false)}>*/}
+            {/*    <View style={commonStyles.horizontalChildrenView}>*/}
+            {/*      <CustomRadioButton*/}
+            {/*        iconWidth={RfW(20)}*/}
+            {/*        iconHeight={RfH(20)}*/}
+            {/*        enabled={!isIndividual}*/}
+            {/*        submitFunction={() => setIsIndividual(false)}*/}
+            {/*      />*/}
+            {/*      <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Group Class</Text>*/}
+            {/*    </View>*/}
+            {/*  </TouchableWithoutFeedback>*/}
+            {/*  {!isIndividual && (*/}
+            {/*    <View>*/}
+            {/*      <View style={styles.bookingSelectorParent}>*/}
+            {/*        <View style={styles.bookingSelectorParent}>*/}
+            {/*          <TouchableWithoutFeedback onPress={() => removeNoOfGroupClass()}>*/}
+            {/*            <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>*/}
+            {/*              <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />*/}
+            {/*            </View>*/}
+            {/*          </TouchableWithoutFeedback>*/}
 
-                      <Text>{noOfGroupClasses}</Text>
+            {/*          <Text>{noOfGroupClasses}</Text>*/}
 
-                      <TouchableWithoutFeedback onPress={() => addNoOfGroupClass()}>
-                        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
-                          <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
-                        </View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </View>
-                </View>
-              )}
-            </View>
+            {/*          <TouchableWithoutFeedback onPress={() => addNoOfGroupClass()}>*/}
+            {/*            <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>*/}
+            {/*              <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />*/}
+            {/*            </View>*/}
+            {/*          </TouchableWithoutFeedback>*/}
+            {/*        </View>*/}
+            {/*      </View>*/}
+            {/*    </View>*/}
+            {/*  )}*/}
+            {/*</View>*/}
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
           </View>
           <Text style={commonStyles.headingPrimaryText}>No of Classes Required</Text>

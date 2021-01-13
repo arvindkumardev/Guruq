@@ -54,7 +54,7 @@ function ViewSchedule() {
     }
   }, [isFocussed]);
 
-  const handleCreateSchedule = (selectedDate) => {
+  const handleCreateSchedule = (selectedDate,timeSlots) => {
     navigation.navigate(NavigationRouteNames.TUTOR.UPDATE_SCHEDULE, { selectedDate, timeSlots });
   };
 
@@ -84,7 +84,7 @@ function ViewSchedule() {
           horizontalPadding={RfW(16)}
           showRightIcon
           rightIcon={Images.add}
-          onRightIconClick={() => handleCreateSchedule(new Date())}
+          onRightIconClick={() => handleCreateSchedule(new Date(),{})}
         />
         <View style={{ height: RfH(44) }} />
         <View style={{ paddingHorizontal: RfW(16) }}>
@@ -123,7 +123,7 @@ function ViewSchedule() {
         </View>
         {!isListEmpty ? (
           <FlatList
-            data={timeSlots}
+            data={timeSlots.sort((a, b) => (a.endDate - b.endDate ? 1 : -1))}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => renderItem(item, index)}
             keyExtractor={(item, index) => index.toString()}
@@ -161,7 +161,7 @@ function ViewSchedule() {
               <Button
                 block
                 style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-                onPress={() => handleCreateSchedule(selectedDate)}>
+                onPress={() => handleCreateSchedule(selectedDate,{})}>
                 <Text style={commonStyles.textButtonPrimary}>Create Schedule</Text>
               </Button>
             )}
@@ -181,7 +181,7 @@ function ViewSchedule() {
             <View style={{ paddingBottom: RfH(32), paddingTop: RfH(8) }}>
               <Button
                 style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]}
-                onPress={() => handleCreateSchedule(selectedDate)}>
+                onPress={() => handleCreateSchedule(selectedDate,timeSlots)}>
                 <Text style={commonStyles.textButtonPrimary}>Edit Availability</Text>
               </Button>
             </View>
