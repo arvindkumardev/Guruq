@@ -175,6 +175,14 @@ export const CANCEL_BOOKINGS = gql`
   }
 `;
 
+export const CANCEL_PENDING_BOOKINGS = gql`
+  mutation CancelPendingBooking($orderId: Int!) {
+    cancelPendingBooking(orderId: $orderId) {
+      id
+    }
+  }
+`;
+
 export const CANCEL_ORDER_ITEMS = gql`
   mutation CancelOrderItem($orderItemId: Int!, $cancelReason: ClassCancelReasonEnum!, $comments: String!) {
     cancelOrderItem(orderItemId: $orderItemId, cancelReason: $cancelReason, comments: $comments) {
