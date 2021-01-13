@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
-import Swiper from 'react-native-swiper';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { isEmpty } from 'lodash';
 import { interestingOfferingData, offeringsMasterData, studentDetails, userDetails } from '../../../../apollo/cache';
@@ -33,6 +32,7 @@ import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 
 const carouselItems = [Images.dash_img1, Images.dash_img2, Images.dash_img3];
+
 function StudentDashboard(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
