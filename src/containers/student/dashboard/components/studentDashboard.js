@@ -22,7 +22,7 @@ import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { alertBox, getFullName, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, deviceWidth, getFullName, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
 import { GET_CART_ITEMS, GET_SCHEDULED_CLASSES } from '../../booking.query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
@@ -664,17 +664,18 @@ function StudentDashboard(props) {
               style={{ marginTop: RfH(20) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: Dimensions.get('window').width, height: RfH(170) }}
+                style={{ width: deviceWidth() - RfW(32), height: 200 }}
                 source={Images.post_needs}
                 resizeMode="contain"
               />
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
-              style={{ marginBottom: RfH(15) }}
+              style={{ marginBottom: RfH(16) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: Dimensions.get('window').width, height: RfH(200) }}
+                style={{ width: deviceWidth() - RfW(32), height: 200 }}
                 source={Images.refer_earn_new}
                 resizeMode="stretch"
               />
