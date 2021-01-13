@@ -270,9 +270,6 @@ const MyCart = () => {
           setPaymentStatus('');
         },
         negativeText: 'Cancel',
-        onNegativeClick: () => {
-          cancelPendingBooking();
-        },
       });
     }
   }, [paymentModal]);

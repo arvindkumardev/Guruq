@@ -7,13 +7,13 @@ import { isEmpty } from 'lodash';
 import { Loader, ScreenHeader, TutorImageComponent } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import { enumLabelToText, getFullName, printCurrency, printDate, RfH, RfW } from '../../../utils/helpers';
+import { enumLabelToText, getFullName, printCurrency, printDateTime, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { tutorDetails } from '../../../apollo/cache';
 import routeNames from '../../../routes/screenNames';
+import NavigationRouteNames from '../../../routes/screenNames';
 import ActionSheet from '../../../components/ActionSheet';
 import { GET_BOOKING_DETAIL } from '../booking.query';
-import NavigationRouteNames from '../../../routes/screenNames';
 
 function BookingDetails(props) {
   const { route } = props;
@@ -63,18 +63,25 @@ function BookingDetails(props) {
 
   const renderClassItem = (item) => (
     <View style={{ marginTop: RfH(30), paddingHorizontal: RfW(16) }}>
-      <Text style={commonStyles.headingPrimaryText}>{item.offering.name} Class</Text>
+      <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName} Class</Text>
       <View style={commonStyles.horizontalChildrenSpaceView}>
         <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-          {item.offering?.parentOffering?.parentOffering?.name}
+          {item.offering?.parentOffering?.parentOffering?.displayName}
           {' | '}
-          {item.offering?.parentOffering?.name}
+          {item.offering?.parentOffering?.displayName}
         </Text>
         {isEmpty(item.refund) && (
           <TouchableOpacity
             onPress={() => navigation.navigate(routeNames.STUDENT.ORDER_DETAILS, { orderData: item })}
             activeOpacity={0.8}>
-            <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2, fontFamily: Fonts.semiBold }]}>
+            <Text
+              style={[
+                commonStyles.smallPrimaryText,
+                {
+                  color: Colors.brandBlue2,
+                  fontFamily: Fonts.semiBold,
+                },
+              ]}>
               View Details
             </Text>
           </TouchableOpacity>
@@ -83,7 +90,14 @@ function BookingDetails(props) {
           <TouchableOpacity
             onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.REFUND, { orderData: item })}
             activeOpacity={0.8}>
-            <Text style={[commonStyles.smallPrimaryText, { color: Colors.orangeRed, fontFamily: Fonts.semiBold }]}>
+            <Text
+              style={[
+                commonStyles.smallPrimaryText,
+                {
+                  color: Colors.orangeRed,
+                  fontFamily: Fonts.semiBold,
+                },
+              ]}>
               Refund Detail
             </Text>
           </TouchableOpacity>
@@ -155,32 +169,26 @@ function BookingDetails(props) {
                 paddingHorizontal: RfW(16),
               }}>
               <View style={commonStyles.horizontalChildrenSpaceView}>
-                <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  Booking ID
-                </Text>
-                <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.4 }]}>Booking ID</Text>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.6, fontFamily: Fonts.semiBold }]}>
                   {bookingData.orderId}
                 </Text>
               </View>
               <View style={commonStyles.horizontalChildrenSpaceView}>
-                <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  Booking Date
-                </Text>
-                <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  {printDate(bookingData.createdDate)}
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.4 }]}>Booking Date</Text>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.6, fontFamily: Fonts.semiBold }]}>
+                  {printDateTime(bookingData.createdDate)}
                 </Text>
               </View>
               <View style={commonStyles.horizontalChildrenSpaceView}>
-                <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
-                  Payment Mode
-                </Text>
-                <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.4 }]}>Payment Mode</Text>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.6, fontFamily: Fonts.semiBold }]}>
                   {enumLabelToText(bookingData.orderPayment.paymentMethod)}
                 </Text>
               </View>
               <View style={commonStyles.horizontalChildrenSpaceView}>
-                <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>Amount</Text>
-                <Text style={[commonStyles.regularPrimaryText, { flex: 0.5, fontFamily: Fonts.semiBold }]}>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.4 }]}>Amount</Text>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.6, fontFamily: Fonts.semiBold }]}>
                   ₹ {printCurrency(bookingData.payableAmount)}
                 </Text>
               </View>
@@ -197,12 +205,21 @@ function BookingDetails(props) {
             <View
               style={{
                 marginHorizontal: RfW(16),
-                borderWidth: 1,
+                // borderWidth: 1,
                 borderRadius: 8,
                 borderColor: Colors.lightGrey,
                 marginBottom: RfH(40),
               }}>
-              <Text style={{ paddingHorizontal: RfW(8), paddingVertical: RfH(12) }}>Payment details</Text>
+              <Text
+                style={[
+                  commonStyles.regularPrimaryText,
+                  {
+                    paddingHorizontal: RfW(8),
+                    paddingVertical: RfH(12),
+                  },
+                ]}>
+                Payment Details
+              </Text>
               <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
               <View style={{ height: RfH(16) }} />
               <View style={{ paddingHorizontal: RfW(8) }}>
@@ -215,7 +232,7 @@ function BookingDetails(props) {
                 <View style={commonStyles.horizontalChildrenSpaceView}>
                   <Text style={commonStyles.mediumMutedText}>Convenience charges</Text>
                   <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
-                    ₹{bookingData.convenienceCharges ? parseFloat(bookingData.convenienceCharges).toFixed(2) : '0.00'}
+                    ₹{bookingData.convenienceCharges ? printCurrency(bookingData.convenienceCharges) : '0'}
                   </Text>
                 </View>
               </View>
@@ -226,7 +243,7 @@ function BookingDetails(props) {
                 <View style={commonStyles.horizontalChildrenSpaceView}>
                   <Text style={commonStyles.mediumMutedText}>Paid by Q points</Text>
                   <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
-                    ₹{bookingData.pointsRedeemed ? parseFloat(bookingData.pointsRedeemed).toFixed(2) : '0.00'}
+                    ₹{bookingData.pointsRedeemed ? printCurrency(bookingData.pointsRedeemed) : '0'}
                   </Text>
                 </View>
                 {/* {bookingData?.promotion?.code && ( */}
@@ -240,10 +257,16 @@ function BookingDetails(props) {
               <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
               <View style={{ height: RfH(16) }} />
               <View
-                style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(8), marginBottom: RfH(8) }]}>
-                <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>Total amount paid</Text>
+                style={[
+                  commonStyles.horizontalChildrenSpaceView,
+                  {
+                    paddingHorizontal: RfW(8),
+                    marginBottom: RfH(8),
+                  },
+                ]}>
+                <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>Total Amount Paid</Text>
                 <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>
-                  ₹{bookingData?.payableAmount ? parseFloat(bookingData?.payableAmount).toFixed(2) : '0.00'}
+                  ₹{bookingData?.payableAmount ? printCurrency(bookingData?.payableAmount) : '0'}
                 </Text>
               </View>
             </View>
