@@ -30,7 +30,7 @@ function paymentReceived() {
         styling={{ alignSelf: 'center' }}
         iconWidth={RfW(280)}
         iconHeight={RfH(280)}
-        iconImage={Images.thank_you}
+        iconImage={Images.confirmed_booking}
       />
       <View style={{ height: RfH(24) }} />
       <Text
