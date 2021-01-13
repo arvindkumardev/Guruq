@@ -279,18 +279,18 @@ function Profile(props) {
           </View>
         </TouchableWithoutFeedback>
 
-        {/*<View style={commonStyles.lineSeparatorWithHorizontalMargin} />*/}
-        {/*<TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_LISTING)}>*/}
-        {/*  <View style={styles.userMenuParentView}>*/}
-        {/*    <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.multiple_user} />*/}
-        {/*    <View style={styles.menuItemParentView}>*/}
-        {/*      <Text style={styles.menuItemPrimaryText}>My Students</Text>*/}
-        {/*      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>*/}
-        {/*        Student details*/}
-        {/*      </Text>*/}
-        {/*    </View>*/}
-        {/*  </View>*/}
-        {/*</TouchableWithoutFeedback>*/}
+        {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
+        {/* <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_LISTING)}> */}
+        {/*  <View style={styles.userMenuParentView}> */}
+        {/*    <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.multiple_user} /> */}
+        {/*    <View style={styles.menuItemParentView}> */}
+        {/*      <Text style={styles.menuItemPrimaryText}>My Students</Text> */}
+        {/*      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
+        {/*        Student details */}
+        {/*      </Text> */}
+        {/*    </View> */}
+        {/*  </View> */}
+        {/* </TouchableWithoutFeedback> */}
 
         <View style={commonStyles.blankGreyViewSmall} />
 
@@ -431,9 +431,7 @@ function Profile(props) {
           </View>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', marginTop: 24, marginBottom: 16 }}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.versionText, { textAlign: 'center' }]}>
-            Powered by RHA Technologies
-          </Text>
+          <Text style={commonStyles.rhaText}>Powered by RHA Technologies</Text>
         </View>
       </ScrollView>
     </View>

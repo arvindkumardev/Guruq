@@ -473,9 +473,7 @@ function Profile(props) {
             </View>
           </View>
           <View style={{ flex: 1, justifyContent: 'center', marginTop: 24, marginBottom: 16 }}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.versionText, { textAlign: 'center' }]}>
-              Powered by RHA Technologies
-            </Text>
+            <Text style={commonStyles.rhaText}>Powered by RHA Technologies</Text>
           </View>
         </ScrollView>
       </View>
