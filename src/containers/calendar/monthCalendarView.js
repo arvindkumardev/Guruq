@@ -40,55 +40,77 @@ function MonthCalendarView() {
         };
       }
       setMarkeddates(dateArray);
-      console.log(dateArray);
-      setAllScheduledClasses(data.getScheduledClasses);
+      let startDate = 0;
+      const itemArray = [];
+      for (const obj of data.getScheduledClasses) {
+        const sDate = moment(obj.startDate, 'YYYY/MM/DD').format('D');
+        if (startDate !== sDate) {
+          obj.titleDate = `${moment(obj.startDate, 'YYYY/MM/DD').format('MMMM')} ${moment(
+            obj.startDate,
+            'YYYY/MM/DD'
+          ).format('D')}`;
+        }
+        itemArray.push(obj);
+        startDate = moment(obj.startDate, 'YYYY/MM/DD').format('D');
+      }
+      setAllScheduledClasses(itemArray);
       setRefresh((refresh) => !refresh);
     },
   });
 
   const renderClassItem = (classDetails) => (
-    <TouchableWithoutFeedback onPress={() => classDetailNavigation(classDetails.id)}>
-      <View
-        style={[
-          commonStyles.horizontalChildrenStartView,
-          { marginBottom: RfH(24), opacity: moment(classDetails.endDate).isBefore(new Date()) ? 0.5 : 1 },
-        ]}>
+    <View>
+      {classDetails.titleDate && (
+        <View style={{ paddingVertical: RfH(16) }}>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+            {classDetails.titleDate}
+          </Text>
+        </View>
+      )}
+      <TouchableWithoutFeedback onPress={() => classDetailNavigation(classDetails.id)}>
         <View
-          style={{
-            height: RfH(72),
-            width: RfW(72),
-            borderRadius: 8,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <IconButtonWrapper
-            iconHeight={RfH(72)}
-            iconWidth={RfW(72)}
-            styling={{ alignSelf: 'center' }}
-            iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
-          />
+          style={[
+            commonStyles.horizontalChildrenStartView,
+            { marginBottom: RfH(24), opacity: moment(classDetails.endDate).isBefore(new Date()) ? 0.5 : 1 },
+          ]}>
+          <View
+            style={{
+              height: RfH(72),
+              width: RfW(72),
+              borderRadius: 8,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <IconButtonWrapper
+              iconHeight={RfH(72)}
+              iconWidth={RfW(72)}
+              styling={{ alignSelf: 'center', borderRadius: RfH(8) }}
+              iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
+            />
+          </View>
+          <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8), flex: 1 }]}>
+            <Text style={commonStyles.headingPrimaryText} numberOfLines={2}>
+              {isStudent
+                ? `${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)}`
+                : `${classDetails?.offering?.displayName} Class for ${getFullName(
+                    classDetails?.students[0].contactDetail
+                  )}`}
+            </Text>
+            <Text style={commonStyles.mediumMutedText} numberOfLines={1}>
+              {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
+            </Text>
+            <Text style={commonStyles.mediumMutedText}>
+              {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
+            </Text>
+            <Text style={commonStyles.mediumMutedText}>
+              {classDetails?.onlineClass ? 'Online' : 'Offline'} {classDetails?.groupClass ? 'Group' : 'Individual'}{' '}
+              Class
+            </Text>
+          </View>
+          <View />
         </View>
-        <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8), flex: 1 }]}>
-          <Text style={commonStyles.headingPrimaryText} numberOfLines={2}>
-            {isStudent
-              ? `${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)}`
-              : `${classDetails?.offering?.displayName} Class for ${getFullName(
-                  classDetails?.students[0].contactDetail
-                )}`}
-          </Text>
-          <Text style={commonStyles.mediumMutedText} numberOfLines={1}>
-            {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
-          </Text>
-          <Text style={commonStyles.mediumMutedText}>
-            {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
-          </Text>
-          <Text style={commonStyles.mediumMutedText}>
-            {classDetails?.onlineClass ? 'Online' : 'Offline'} {classDetails?.groupClass ? 'Group' : 'Individual'} Class
-          </Text>
-        </View>
-        <View />
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </View>
   );
 
   const getScheduledClassesForMonth = (startDate) => {
@@ -116,10 +138,6 @@ function MonthCalendarView() {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             <Calendar markedDates={markedDates || {}} />
-            <View style={{ height: RfH(24) }} />
-            <View>
-              <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Classes</Text>
-            </View>
             <View style={{ height: RfH(24) }} />
             <FlatList
               showsVerticalScrollIndicator={false}

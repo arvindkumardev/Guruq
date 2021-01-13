@@ -100,7 +100,7 @@ function CalendarView(props) {
           <IconButtonWrapper
             iconHeight={RfH(72)}
             iconWidth={RfW(72)}
-            styling={{ alignSelf: 'center' }}
+            styling={{ alignSelf: 'center', borderRadius: RfH(8) }}
             iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
           />
         </View>
