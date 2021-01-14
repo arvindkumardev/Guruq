@@ -113,6 +113,7 @@ function AboutUs() {
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
                 alignItems: 'stretch',
+                marginLeft: RfW(8),
               }}>
               <View
                 style={{
@@ -120,31 +121,17 @@ function AboutUs() {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.name}</Text>
+                <Text style={[commonStyles.headingPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.name}</Text>
               </View>
-              <Text
-                style={{
-                  color: Colors.secondaryText,
-                  fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-                  marginTop: RfH(2),
-                }}>
-                {item.designation}
-              </Text>
+              <Text style={commonStyles.regularPrimaryText}>{item.designation}</Text>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginTop: RfH(2),
+                  marginTop: RfH(8),
                 }}>
-                <Text
-                  style={{
-                    color: Colors.secondaryText,
-                    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
-                    marginTop: RfH(2),
-                  }}>
-                  {item.desc}
-                </Text>
+                <Text style={commonStyles.smallPrimaryText}>{item.desc}</Text>
               </View>
               <TouchableOpacity
                 style={{
