@@ -220,6 +220,10 @@ export const printTime = (date) => {
   return formatDate(date, 'hh:mm a');
 };
 
+export const print24Time = (date) => {
+  return formatDate(date, 'HH:mm');
+};
+
 export const startOfDay = (date) => {
   return `${moment(date).format('YYYY-MM-DDT00:00:00')}Z`;
 };
