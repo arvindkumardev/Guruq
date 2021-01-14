@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   crossIcon: {
     alignSelf: 'flex-end',
     borderColor: Colors.darkGrey,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderRadius: 9,
   },
   topViewAfterScroll: {
