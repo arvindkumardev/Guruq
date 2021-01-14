@@ -36,8 +36,8 @@ function MyTabBar({ state, descriptors, navigation }) {
           if (name === 'Home') {
             return (
               <IconButtonWrapper
-                iconHeight={RfH(20)}
-                iconWidth={RfW(16)}
+                iconHeight={RfH(17)}
+                iconWidth={RfW(17.5)}
                 iconImage={isFocused ? Images.home_active : Images.home}
                 imageResizeMode="contain"
               />
@@ -46,28 +46,28 @@ function MyTabBar({ state, descriptors, navigation }) {
           if (name === 'Calendar') {
             return (
               <IconButtonWrapper
-                iconHeight={RfH(20)}
-                iconWidth={RfW(16)}
+                iconHeight={RfH(17)}
+                iconWidth={RfW(17.5)}
                 iconImage={isFocused ? Images.calendar_active : Images.calendar}
                 imageResizeMode="contain"
               />
             );
           }
-          if (name === 'My Classes') {
+          if (name === 'Classes') {
             return (
               <IconButtonWrapper
-                iconHeight={RfH(20)}
-                iconWidth={RfW(16)}
+                iconHeight={RfH(17)}
+                iconWidth={RfW(17.5)}
                 iconImage={isFocused ? Images.classes_active : Images.classes}
                 imageResizeMode="contain"
               />
             );
           }
-          if (name === 'Wallet') {
+          if (name === 'QPoints') {
             return (
               <IconButtonWrapper
-                iconHeight={RfH(20)}
-                iconWidth={RfW(16)}
+                iconHeight={RfH(17)}
+                iconWidth={RfW(17.5)}
                 iconImage={isFocused ? Images.wallet_active : Images.wallet}
                 imageResizeMode="contain"
               />
@@ -76,8 +76,8 @@ function MyTabBar({ state, descriptors, navigation }) {
           if (name === 'Profile') {
             return (
               <IconButtonWrapper
-                iconHeight={RfH(20)}
-                iconWidth={RfW(16)}
+                iconHeight={RfH(17)}
+                iconWidth={RfW(17.5)}
                 iconImage={isFocused ? Images.profile_active : Images.profile}
                 imageResizeMode="contain"
               />
@@ -111,6 +111,7 @@ function MyTabBar({ state, descriptors, navigation }) {
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
+            activeOpacity={0.4}
             style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             {renderIcon(label)}
             <Text
@@ -149,14 +150,14 @@ export function StudentBottomTabs() {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'My Classes',
+          tabBarLabel: 'Classes',
         }}
         name={NavigationRouteNames.STUDENT.MY_CLASSES}
         component={MyClasses}
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'Wallet',
+          tabBarLabel: 'QPoints',
         }}
         name={NavigationRouteNames.WALLET}
         component={Wallet}
@@ -191,7 +192,7 @@ export function TutorBottomTabs() {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'Wallet',
+          tabBarLabel: 'QPoints',
         }}
         name={NavigationRouteNames.WALLET}
         component={Wallet}

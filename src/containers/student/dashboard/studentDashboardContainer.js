@@ -55,7 +55,7 @@ function StudentDashboardContainer(props) {
   return (
     <>
       <SafeAreaView style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <StudentBottomTabs />
       </SafeAreaView>
       <SafeAreaView style={{ flex: 0, backgroundColor: Colors.white }} />

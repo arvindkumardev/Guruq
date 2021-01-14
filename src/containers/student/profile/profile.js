@@ -167,35 +167,34 @@ function Profile(props) {
     <>
       <StatusBar barStyle="dark-content" />
       <Loader isLoading={forgotPasswordLoading} />
-      <View
-        style={{
-          height: RfH(24),
-          paddingHorizontal: RfW(16),
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: Colors.white,
-        }}>
-        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-          <TouchableOpacity
-            style={{ padding: 10 }}
-            onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
-            {notificationCount > 0 && (
-              <View style={{ position: 'absolute', left: 6, top: 6, zIndex: 10 }}>
-                <Image
-                  source={Images.small_active_blue}
-                  resizeMode="contain"
-                  style={{ height: RfH(12), width: RfW(12) }}
-                />
-              </View>
-            )}
-            <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} />
-          </TouchableOpacity>
-        </View>
-      </View>
 
       <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
         <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
+          <View
+            style={{
+              paddingHorizontal: RfW(16),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: Colors.white,
+            }}>
+            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
+              <TouchableOpacity
+                style={{ padding: 10 }}
+                onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
+                {notificationCount > 0 && (
+                  <View style={{ position: 'absolute', left: 6, top: 6, zIndex: 10 }}>
+                    <Image
+                      source={Images.small_active_blue}
+                      resizeMode="contain"
+                      style={{ height: RfH(12), width: RfW(12) }}
+                    />
+                  </View>
+                )}
+                <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} resizeMode="contain" />
+              </TouchableOpacity>
+            </View>
+          </View>
           <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(20) }}>
             <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
           </View>
@@ -324,25 +323,6 @@ function Profile(props) {
 
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
 
-          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.PYTN_LISTING)}>
-            <View style={styles.userMenuParentView}>
-              <IconButtonWrapper
-                iconHeight={RfH(18)}
-                iconWidth={RfW(18)}
-                iconImage={Images.book}
-                imageResizeMode="contain"
-              />
-              <View style={styles.menuItemParentView}>
-                <Text style={styles.menuItemPrimaryText}>Post Your Tuition Needs</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Manage Your PYTN Requests
-                </Text>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-
-          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-
           <TouchableWithoutFeedback onPress={() => setIsBookingMenuOpen(!isBookingMenuOpen)}>
             <View style={styles.userMenuParentView}>
               <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.bookingDetails} />
@@ -369,6 +349,25 @@ function Profile(props) {
               />
             </SafeAreaView>
           )}
+
+          <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
+
+          <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.PYTN_LISTING)}>
+            <View style={styles.userMenuParentView}>
+              <IconButtonWrapper
+                iconHeight={RfH(18)}
+                iconWidth={RfW(18)}
+                iconImage={Images.book}
+                imageResizeMode="contain"
+              />
+              <View style={styles.menuItemParentView}>
+                <Text style={styles.menuItemPrimaryText}>Post Your Tuition Needs</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                  Manage Your PYTN Requests
+                </Text>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
 
           <View style={commonStyles.blankGreyViewSmall} />
 
