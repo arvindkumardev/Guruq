@@ -115,10 +115,11 @@ function OrderDetails(props) {
   const renderTutorDetails = () => (
     <View>
       <View style={{ height: RfH(30) }} />
-      <Text style={commonStyles.headingPrimaryText}>{orderData?.offering?.name} Class</Text>
+      <Text style={commonStyles.headingPrimaryText}>{orderData?.offering?.displayName} Class</Text>
       <View style={commonStyles.horizontalChildrenSpaceView}>
         <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-          {orderData?.offering?.parentOffering?.parentOffering?.name} | {orderData?.offering?.parentOffering?.name}
+          {orderData?.offering?.parentOffering?.parentOffering?.displayName} |{' '}
+          {orderData?.offering?.parentOffering?.displayName}
         </Text>
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
@@ -166,9 +167,9 @@ function OrderDetails(props) {
           flexDirection: 'row',
         }}>
         <Text style={[commonStyles.headingPrimaryText, { color: Colors.darkGrey }]}>Class {index + 1}</Text>
-        {!item.isScheduled && (
-          <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfH(24)} iconImage={Images.calendar} />
-        )}
+        {/* {!item.isScheduled && ( */}
+        {/*  <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfH(24)} iconImage={Images.calendar} /> */}
+        {/* )} */}
         {item.isScheduled && (
           <View style={{ alignSelf: 'center' }}>
             <Text
@@ -204,21 +205,21 @@ function OrderDetails(props) {
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Summary</Text>
         </View>
         <View style={{ paddingHorizontal: RfH(20), paddingTop: RfH(16), backgroundColor: Colors.white }}>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(4) }]}>
             <Text style={commonStyles.mediumMutedText}>No. of Classes</Text>
             <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>{cancelSummary.total}</Text>
           </View>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(4) }]}>
             <Text style={commonStyles.mediumMutedText}>Classes Taken</Text>
             <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>{cancelSummary.taken}</Text>
           </View>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(4) }]}>
             <Text style={commonStyles.mediumMutedText}>Classes Scheduled</Text>
             <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
               {cancelSummary.scheduled}
             </Text>
           </View>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginBottom: RfH(4) }]}>
             <Text style={commonStyles.mediumMutedText}>Classes UnScheduled</Text>
             <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
               {cancelSummary.unscheduled}

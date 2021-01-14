@@ -115,7 +115,8 @@ function MyClasses() {
     searchOrderItems({
       variables: {
         bookingSearchDto: {
-          orderStatus: OrderStatus.COMPLETE.label,
+          // orderStatus: OrderStatus.COMPLETE.label,
+          showActive: true,
           showHistory: isHistory,
           showWithAvailableClasses: !isHistory,
         },

@@ -97,7 +97,8 @@ function Refund(props) {
             </Text>
           </View>
           <Text style={commonStyles.mediumMutedText}>
-            {orderData?.offering?.parentOffering?.parentOffering?.name} | {orderData?.offering?.parentOffering?.name}
+            {orderData?.offering?.parentOffering?.parentOffering?.displayName} |{' '}
+            {orderData?.offering?.parentOffering?.displayName}
           </Text>
           <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
           <View
@@ -106,12 +107,12 @@ function Refund(props) {
               <IconButtonWrapper
                 iconHeight={RfH(52)}
                 iconWidth={RfH(52)}
-                iconImage={getSubjectIcons(orderData?.offering?.name)}
+                iconImage={getSubjectIcons(orderData?.offering?.displayName)}
                 styling={{ borderRadius: RfH(8) }}
               />
               <View style={{ marginLeft: RfH(8) }}>
                 <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-                  {orderData?.offering?.name}
+                  {orderData?.offering?.displayName}
                 </Text>
                 <Text style={commonStyles.mediumMutedText}>₹{orderData?.mrp}/per class</Text>
               </View>
@@ -150,9 +151,7 @@ function Refund(props) {
           {cancelSummary.scheduled > 0 && isEmpty(orderData.refund) && (
             <View style={{ marginBottom: RfH(15) }}>
               <Text style={[commonStyles.smallPrimaryText, { color: Colors.orangeRed }]}>
-                {`By cancelling order your ${cancelSummary.scheduled} scheduled ${
-                  cancelSummary.scheduled > 1 ? 'classes' : 'class'
-                } also get cancelled.`}
+                All unscheduled classes will be cancelled.
               </Text>
             </View>
           )}

@@ -2,13 +2,13 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import AsyncStorage from '@react-native-community/async-storage';
-import {Alert, Dimensions} from 'react-native';
+import { Alert, Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import moment from 'moment';
-import {isEmpty, isNumber, isUndefined, startCase} from 'lodash';
-import {parsePhoneNumberFromString as parseMobile} from 'libphonenumber-js/mobile';
+import { isEmpty, isNumber, isUndefined, startCase } from 'lodash';
+import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mobile';
 import Images from '../theme/images';
-import {LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS} from './constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
 import 'intl';
 import {
   interestingOfferingData,
@@ -271,6 +271,7 @@ export const getNameInitials = (contactDetails) => {
 };
 export const printCurrency = (number) => {
   return number;
+  // return parseFloat(String(number)).toFixed(2);
   // return new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(number);
 };
 
@@ -338,5 +339,3 @@ export const processGeoData = (geoData) => {
     longitude,
   };
 };
-
-

@@ -136,6 +136,14 @@ const SubjectIcons = {
   engineering_entrance: require('../assets/images/subject/engineering-entrance-d.png'),
   medical_entrance: require('../assets/images/subject/medical-entrance-d.png'),
   law_entrance: require('../assets/images/subject/law-entrance-d.png'),
+
+  marathi: require('../assets/images/subject/marathi-c.png'),
+  marathi_gray: require('../assets/images/subject/marathi.png'),
+  marathi_disable: require('../assets/images/subject/marathi-d.png'),
+
+  urdu: require('../assets/images/subject/urdu-c.png'),
+  urdu_gray: require('../assets/images/subject/urdu.png'),
+  urdu_disable: require('../assets/images/subject/urdu-d.png'),
 };
 
 export default SubjectIcons;

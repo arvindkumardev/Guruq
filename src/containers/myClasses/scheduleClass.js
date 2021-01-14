@@ -5,19 +5,11 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import moment from 'moment';
-import {
-  BackArrow,
-  DateSlotSelectorModal,
-  IconButtonWrapper,
-  Loader,
-  ScreenHeader,
-  TutorImageComponent,
-} from '../../components';
+import { DateSlotSelectorModal, IconButtonWrapper, Loader, ScreenHeader, TutorImageComponent } from '../../components';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import { SCHEDULE_CLASS } from '../student/class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
 import { studentDetails, userType } from '../../apollo/cache';
@@ -73,6 +65,7 @@ function ScheduleClass(props) {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
+      alertBox('There is a conflict at this time, please choose another time slot.');
     },
     onCompleted: (data) => {
       if (data) {

@@ -121,12 +121,15 @@ export const GET_BOOKING_DETAIL = gql`
         offering {
           id
           name
+          displayName
           parentOffering {
             id
             name
+            displayName
             parentOffering {
               id
               name
+              displayName
             }
           }
         }
