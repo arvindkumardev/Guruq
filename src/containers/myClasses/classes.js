@@ -171,11 +171,12 @@ function MyClasses() {
             {' | '}
             {item.offering?.parentOffering?.displayName}
           </Text>
-          {!isHistorySelected && isStudent && (
+          {!isHistorySelected && isStudent && item.availableClasses < 3 && !item.demo && (
             <TouchableOpacity activeOpacity={0.6} onPress={() => renewClass(item)}>
-              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>Renew Class</Text>
+              <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2 }]}>Renew Class</Text>
             </TouchableOpacity>
           )}
+          {item.demo && <Text style={commonStyles.mediumPrimaryText}>Demo Class</Text>}
         </View>
         <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>

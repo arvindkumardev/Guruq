@@ -9,15 +9,18 @@ export const GET_AGORA_RTC_TOKEN = gql`
 export const GET_MEETING_DETAILS_FOR_CLASS = gql`
   query GetMeetingDetailsForClass($uuid: String!) {
     meetingDetails: getMeetingDetailsForClass(uuid: $uuid) {
+      appId
       channel
       title
       description
       startDate
       endDate
+      allowedStartDate
+      allowedEndDate
       startTimeThreshold
       endTimeThreshold
       token
-      shareChannel
+      shareId
       shareToken
       host {
         id
@@ -40,15 +43,18 @@ export const GET_MEETING_DETAILS_FOR_CLASS = gql`
 export const GET_MEETING_DETAILS_FOR_INTERVIEW = gql`
   query GetMeetingDetailsForInterview($uuid: String!) {
     meetingDetails: getMeetingDetailsForInterview(uuid: $uuid) {
+      appId
       channel
       title
       description
       startDate
       endDate
+      allowedStartDate
+      allowedEndDate
       startTimeThreshold
       endTimeThreshold
       token
-      shareChannel
+      shareId
       shareToken
       host {
         id

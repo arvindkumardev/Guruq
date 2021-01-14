@@ -392,11 +392,26 @@ function ScheduledClassDetails(props) {
               iconHeight={RfH(16)}
               imageResizeMode="contain"
             />
-            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-              <Text style={commonStyles.headingPrimaryText}>Class Mode</Text>
-              <Text style={commonStyles.mediumMutedText}>
-                {classData?.classEntity?.onlineClass ? 'Online ' : 'Offline '}Class
-              </Text>
+            <View style={commonStyles.horizontalChildrenSpaceView}>
+              <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(16) }]}>
+                <Text style={commonStyles.headingPrimaryText}>Class Mode</Text>
+                <Text style={commonStyles.mediumMutedText}>
+                  {classData?.classEntity?.onlineClass ? 'Online ' : 'Offline '}Class
+                </Text>
+              </View>
+
+              {classData?.classEntity?.demoClass && (
+                <View
+                  style={{
+                    backgroundColor: Colors.orange,
+                    marginRight: RfW(16),
+                    paddingHorizontal: RfW(8),
+                    paddingVertical: RfH(4),
+                    borderRadius: RfH(8),
+                  }}>
+                  <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>Demo</Text>
+                </View>
+              )}
             </View>
           </View>
 
@@ -537,35 +552,35 @@ function ScheduledClassDetails(props) {
             </View>
           </View>
           <View style={commonStyles.lineSeparatorWithVerticalMargin} />
-          {classData?.isClassJoinAllowed && (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: RfH(16),
-                marginBottom: RfH(34),
-              }}>
-              <Button
-                block
-                onPress={goToOnlineClass}
-                style={[
-                  commonStyles.buttonPrimary,
-                  {
-                    borderRadius: 4,
-                    marginHorizontal: 0,
-                  },
-                ]}>
-                <IconButtonWrapper
-                  iconImage={Images.video}
-                  iconHeight={RfH(16)}
-                  iconWidth={RfW(16)}
-                  styling={{ alignSelf: 'center' }}
-                />
-                <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
-              </Button>
-            </View>
-          )}
+          {/* {classData?.isClassJoinAllowed && ( */}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: RfH(16),
+              marginBottom: RfH(34),
+            }}>
+            <Button
+              block
+              onPress={goToOnlineClass}
+              style={[
+                commonStyles.buttonPrimary,
+                {
+                  borderRadius: 4,
+                  marginHorizontal: 0,
+                },
+              ]}>
+              <IconButtonWrapper
+                iconImage={Images.video}
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                styling={{ alignSelf: 'center' }}
+              />
+              <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
+            </Button>
+          </View>
+          {/* )} */}
         </ScrollView>
 
         {classData && classData?.classEntity?.uuid && (

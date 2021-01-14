@@ -5,11 +5,7 @@ import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { userDetails } from '../../apollo/cache';
 import Video from './Video';
 import Loader from '../../components/Loader';
-import {
-  GET_AGORA_RTC_TOKEN,
-  GET_MEETING_DETAILS_FOR_CLASS,
-  GET_MEETING_DETAILS_FOR_INTERVIEW,
-} from './onlineClass.query';
+import { GET_MEETING_DETAILS_FOR_CLASS, GET_MEETING_DETAILS_FOR_INTERVIEW } from './onlineClass.query';
 import NavigationRouteNames from '../../routes/screenNames';
 
 const OnlineClass = (props) => {
@@ -27,12 +23,13 @@ const OnlineClass = (props) => {
   const [getMeetingDetailsForInterview, { loading: loadingMeetingDetailsForInterview }] = useLazyQuery(
     GET_MEETING_DETAILS_FOR_INTERVIEW,
     {
+      fetchPolicy: 'no-cache',
       onError: (e) => {
         console.log(e);
       },
       onCompleted: (data) => {
         setMeetingDetails(data?.meetingDetails);
-        console.log(getMeetingDetailsForInterview);
+        console.log(data);
       },
     }
   );
@@ -40,12 +37,13 @@ const OnlineClass = (props) => {
   const [getMeetingDetailsForClass, { loading: loadingMeetingDetailsForClass }] = useLazyQuery(
     GET_MEETING_DETAILS_FOR_CLASS,
     {
+      fetchPolicy: 'no-cache',
       onError: (e) => {
         console.log(e);
       },
       onCompleted: (data) => {
         setMeetingDetails(data?.meetingDetails);
-        console.log(getMeetingDetailsForClass);
+        console.log(data);
       },
     }
   );
@@ -93,6 +91,7 @@ const OnlineClass = (props) => {
   return (
     <View style={{ flex: 1 }}>
       <Loader isLoading={loadingMeetingDetailsForInterview || loadingMeetingDetailsForClass} />
+
       <Video
         userInfo={userInfo}
         channelName={uuid}

@@ -115,7 +115,9 @@ function CalendarView(props) {
             {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>
-            {classDetails?.onlineClass ? 'Online' : 'Offline'} {classDetails?.groupClass ? 'Group' : 'Individual'} Class
+            {`${classDetails?.onlineClass ? 'Online' : 'Offline'} ${
+              classDetails?.groupClass ? 'Group' : 'Individual'
+            } ${classDetails?.demo ? 'Demo' : ''} Class`}
           </Text>
         </View>
         <View />
@@ -167,15 +169,15 @@ function CalendarView(props) {
           <View style={{ flex: 1, alignItems: 'center' }}>
             {showHeader && <Text style={commonStyles.headingPrimaryText}>Your Schedule</Text>}
           </View>
-          {/*<View style={{ alignItems: 'flex-end' }}>*/}
-          {/*  <IconButtonWrapper*/}
-          {/*    iconHeight={RfH(24)}*/}
-          {/*    iconImage={Images.calendar}*/}
-          {/*    iconWidth={RfW(20 )}*/}
-          {/*    imageResizeMode="contain"*/}
-          {/*    submitFunction={() => navigation.navigate(routeNames.MONTH_CALENDAR_VIEW)}*/}
-          {/*  />*/}
-          {/*</View>*/}
+          {/* <View style={{ alignItems: 'flex-end' }}> */}
+          {/*  <IconButtonWrapper */}
+          {/*    iconHeight={RfH(24)} */}
+          {/*    iconImage={Images.calendar} */}
+          {/*    iconWidth={RfW(20 )} */}
+          {/*    imageResizeMode="contain" */}
+          {/*    submitFunction={() => navigation.navigate(routeNames.MONTH_CALENDAR_VIEW)} */}
+          {/*  /> */}
+          {/* </View> */}
         </View>
         <View>
           <ScrollView
