@@ -22,8 +22,91 @@ export const GET_TUTOR_AVAILABILITY = gql`
 `;
 
 export const GET_CLASS_DETAILS = gql`
-  query GetClassDetails($classId: Int!) {
-    getClassDetails(classId: $classId) {
+  query GetClassDetails($classId: Int!, $uuid: String!) {
+    getClassDetails(classId: $classId, uuid: $uuid) {
+      isRescheduleAllowed
+      isCancelAllowed
+      isClassJoinAllowed
+
+      classEntity {
+        id
+        createdDate
+        uuid
+        offering {
+          id
+          displayName
+          parentOffering {
+            id
+            displayName
+            parentOffering {
+              id
+              displayName
+            }
+          }
+        }
+        orderItem {
+          id
+        }
+        students {
+          id
+          user {
+            id
+          }
+          profileImage {
+            id
+            filename
+            original
+          }
+          contactDetail {
+            firstName
+            lastName
+            gender
+          }
+        }
+        tutor {
+          id
+          user {
+            id
+          }
+          profileImage {
+            id
+            filename
+            original
+          }
+          contactDetail {
+            firstName
+            lastName
+            gender
+          }
+        }
+        documents {
+          name
+          id
+          attachment {
+            filename
+            name
+            size
+            type
+            original
+          }
+          createdDate
+        }
+        startDate
+        endDate
+        status
+        onlineClass
+        groupClass
+        demo
+        presenterLink
+        attendeeLink
+      }
+    }
+  }
+`;
+
+export const GET_CLASS_DETAILS_BY_UUID = gql`
+  query GetClassDetailsByUuid($uuid: String!) {
+    classDetails: getClassDetailsByUuid(uuid: $uuid) {
       isRescheduleAllowed
       isCancelAllowed
       isClassJoinAllowed

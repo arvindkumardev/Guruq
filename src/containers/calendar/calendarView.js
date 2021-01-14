@@ -74,12 +74,12 @@ function CalendarView(props) {
     },
   });
 
-  const classDetailNavigation = (classId) => {
-    navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+  const classDetailNavigation = (uuid) => {
+    navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { uuid });
   };
 
   const renderClassItem = (classDetails) => (
-    <TouchableWithoutFeedback onPress={() => classDetailNavigation(classDetails.id)}>
+    <TouchableWithoutFeedback onPress={() => classDetailNavigation(classDetails.uuid)}>
       <View
         style={[
           commonStyles.horizontalChildrenStartView,

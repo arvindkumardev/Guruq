@@ -19,12 +19,12 @@ const UpcomingClassComponent = (props) => {
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
 
-  const classDetailNavigation = (classId) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+  const classDetailNavigation = (uuid) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { uuid });
   };
 
   return (
-    <TouchableOpacity onPress={() => classDetailNavigation(classDetails.id)} style={{ flex: 1 }}>
+    <TouchableOpacity onPress={() => classDetailNavigation(classDetails.uuid)} style={{ flex: 1 }}>
       <View
         style={{
           backgroundColor: Colors.lightBlue,

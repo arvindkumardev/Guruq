@@ -102,8 +102,8 @@ function ScheduleClass(props) {
     });
   };
 
-  const classDetailNavigation = (classId) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+  const classDetailNavigation = (uuid) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { uuid });
   };
 
   const tutorDetail = (item) => {
@@ -171,7 +171,7 @@ function ScheduleClass(props) {
   const renderClassView = (item, index) => (
     <View style={{ flex: 0.5, marginTop: RfH(16) }}>
       <TouchableWithoutFeedback
-        onPress={() => (item.isScheduled ? classDetailNavigation(item.classId) : isStudent ? showSlotPopup() : null)}
+        onPress={() => (item.isScheduled ? classDetailNavigation(item.uuid) : isStudent ? showSlotPopup() : null)}
         activeOpacity={0.8}>
         <View>
           <View

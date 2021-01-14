@@ -6,9 +6,40 @@ export const GET_AGORA_RTC_TOKEN = gql`
   }
 `;
 
-export const GET_MEETING_DETAILS = gql`
+export const GET_MEETING_DETAILS_FOR_CLASS = gql`
   query GetMeetingDetailsForClass($uuid: String!) {
     meetingDetails: getMeetingDetailsForClass(uuid: $uuid) {
+      channel
+      title
+      description
+      startDate
+      endDate
+      startTimeThreshold
+      endTimeThreshold
+      token
+      shareChannel
+      shareToken
+      host {
+        id
+        firstName
+        lastName
+        image
+        current
+      }
+      guests {
+        id
+        firstName
+        lastName
+        image
+        current
+      }
+    }
+  }
+`;
+
+export const GET_MEETING_DETAILS_FOR_INTERVIEW = gql`
+  query GetMeetingDetailsForInterview($uuid: String!) {
+    meetingDetails: getMeetingDetailsForInterview(uuid: $uuid) {
       channel
       title
       description

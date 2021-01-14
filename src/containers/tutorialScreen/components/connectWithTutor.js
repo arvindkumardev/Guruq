@@ -7,10 +7,8 @@ function ConnectWithTutors() {
   return (
     <View style={styles.swipeChild}>
       <Image resizeMode="stretch" style={styles.centerImage} source={Images.onBoardingThird} />
-      <Text style={styles.title}>Connect with Tutors</Text>
-      <Text style={styles.subtitle}>
-        Students can connect with the best tutors and can take classes online and offline.
-      </Text>
+      <Text style={styles.title}>Connect with Your Tutors</Text>
+      <Text style={styles.subtitle}>Connect with your favourite tutors to take classes online or offline</Text>
     </View>
   );
 }

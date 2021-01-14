@@ -164,18 +164,9 @@ function AboutUs() {
       <View style={{ height: RfH(16) }} />
       <View style={[commonStyles.mainContainer]}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View>
-            <Text style={[styles.aboutText]}>
-              GuruQ is India’s best tutoring platform that connects students with the right tutors. With the GuruQ
-              platform, students can personalize their tuitions classes with respect to the mode of class (Home or
-              online), type of class (individual or group) and budget.
-            </Text>
-          </View>
-          <View style={{ height: RfH(8) }} />
-
           <TouchableOpacity
             onPress={() => Linking.openURL(ABOUT_US_URL)}
-            style={{ marginTop: RfH(20) }}
+            style={{ marginTop: RfH(0) }}
             activeOpacity={0.8}>
             <Image
               style={{
@@ -186,6 +177,17 @@ function AboutUs() {
               resizeMode="stretch"
             />
           </TouchableOpacity>
+
+          <View style={commonStyles.blankViewSmall} />
+
+          <View>
+            <Text style={styles.aboutText}>
+              GuruQ is India’s best tutoring platform that connects students with the right tutors. GuruQ provides
+              qualified and certified tutors for School Education, competitive exams, language learning, and study
+              abroad needs. We have 15000 + tutors pan India for all boards, subjects and classes in all budgets that
+              teach online and offline on our platform.
+            </Text>
+          </View>
 
           <View style={{ height: RfH(24) }} />
           <View
