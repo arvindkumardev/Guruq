@@ -141,7 +141,7 @@ const Images = {
   pin: require('../assets/images/pin.png'),
   plus_blue: require('../assets/images/plus_blue.png'),
   png: require('../assets/images/png.png'),
-  post_needs: require('../assets/images/post_needs.png'),
+  post_needs: require('../assets/images/pytn.png'),
   price_metrics: require('../assets/images/price-metrics.png'),
   professional: require('../assets/images/professional.png'),
   proficiency_test_b: require('../assets/images/proficiency-test-b.png'),

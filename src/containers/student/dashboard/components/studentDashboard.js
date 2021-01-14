@@ -664,9 +664,9 @@ function StudentDashboard(props) {
               style={{ marginTop: RfH(20) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: deviceWidth() - RfW(32), height: 200 }}
+                style={{ width: deviceWidth() - RfW(32), height: 170 }}
                 source={Images.post_needs}
-                resizeMode="contain"
+                resizeMode="stretch"
               />
             </TouchableOpacity>
 
