@@ -73,13 +73,13 @@ const OnlineClass = (props) => {
     }
   }, [isFocussed]);
 
-  const callEnded = () => {
+  const callEnded = (showReviewModal) => {
     if (forInterview) {
       navigation.goBack();
     } else {
       navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, {
         uuid,
-        showReviewModal: true,
+        showReviewModal,
       });
     }
   };

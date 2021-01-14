@@ -242,7 +242,7 @@ export default class Video extends Component<Props, State> {
       onPositiveClick: async () => {
         await this._engine?.leaveChannel();
         this.setState({ peerIds: [], joinSucceed: false });
-        this.props.onCallEnd();
+        this.props.onCallEnd(true);
       },
       negativeText: 'No',
     });
@@ -295,7 +295,7 @@ export default class Video extends Component<Props, State> {
   };
 
   onBackPress = () => {
-    this.props.onCallEnd(true);
+    this.props.onCallEnd(false);
   };
 
   toggleDetailedActions = async () => {
