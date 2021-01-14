@@ -17,11 +17,10 @@ import {
   View,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import Swiper from 'react-native-swiper';
 import { isEmpty } from 'lodash';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { tutorDetails, userDetails } from '../../../../apollo/cache';
-import { IconButtonWrapper, UpcomingClassComponent, TutorImageComponent } from '../../../../components';
+import { IconButtonWrapper, UpcomingClassComponent } from '../../../../components';
 import Loader from '../../../../components/Loader';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import { Colors, Images } from '../../../../theme';
@@ -29,11 +28,10 @@ import { getBoxColor } from '../../../../theme/colors';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
+import { getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
-import { TutorOfferingStageEnum } from '../../enums';
 import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 

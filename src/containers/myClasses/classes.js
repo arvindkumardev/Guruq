@@ -186,7 +186,11 @@ function MyClasses() {
             disabled={!isStudent}>
             <View style={commonStyles.verticallyStretchedItemsView}>
               <TutorImageComponent
-                tutor={isStudent ? item?.tutor : { contactDetail: item?.createdBy }}
+                tutor={
+                  isStudent
+                    ? item?.tutor
+                    : { contactDetail: item?.createdBy, profileImage: item?.createdBy?.profileImage }
+                }
                 styling={{ borderRadius: RfH(32), width: RfH(64), height: RfH(64) }}
               />
             </View>

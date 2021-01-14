@@ -10,7 +10,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import { Colors, Images } from '../../../theme';
-import { getFullName, getSaveData, getTutorImage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { getFileUrl, getFullName, getSaveData, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
@@ -131,7 +131,7 @@ function compareTutors(props) {
         <IconButtonWrapper
           iconWidth={RfH(70)}
           iconHeight={RfH(70)}
-          iconImage={getTutorImage(item)}
+          iconImage={getFileUrl(item?.profileImage?.original)}
           imageResizeMode="contain"
           styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
         />

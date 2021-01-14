@@ -8,7 +8,13 @@ import moment from 'moment';
 import { isEmpty, isNumber, isUndefined, startCase } from 'lodash';
 import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mobile';
 import Images from '../theme/images';
-import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+import {
+  API_URL,
+  ATTACHMENT_PREVIEW_URL,
+  FRONTEND_URL,
+  LOCAL_STORAGE_DATA_KEY,
+  STANDARD_SCREEN_DIMENSIONS,
+} from './constants';
 import 'intl';
 import {
   interestingOfferingData,
@@ -24,6 +30,7 @@ import {
   userType,
 } from '../apollo/cache';
 import initializeApollo from '../apollo/apollo';
+import Dash from '../components/Dash';
 
 const countryData = require('../components/NationalityDropdown/country/countries.json');
 
@@ -123,15 +130,11 @@ export const titleCaseIfExists = (inputString) => {
   return str.join(' ').trim();
 };
 
-export const getFileUrl = (filename) => `https://guruq.in/api/${filename}`;
-export const getUserImageUrl = (filename, gender, id) => {
-  return filename
-    ? `https://guruq.in/api/${filename}`
-    : `https://guruq.in/guruq-new/images/avatars/${gender === 'MALE' ? 'm' : 'f'}${id % 4}.png`;
+export const getFileUrl = (filename) => {
+  return filename && filename.startsWith('images/tutordoc')
+    ? `${FRONTEND_URL}/api/${filename}`
+    : `${ATTACHMENT_PREVIEW_URL}${filename}`;
 };
-
-export const getTutorImage = (tutorObj) =>
-  getUserImageUrl(tutorObj?.profileImage?.filename, tutorObj?.contactDetail?.gender, tutorObj.id);
 
 export const alertBox = (
   alertTitle = '',

@@ -1,16 +1,15 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-undef */
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, View, Text, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { useLazyQuery } from '@apollo/client';
-import { isEmpty } from 'lodash';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SEARCH_REVIEW } from '../../containers/student/tutor-query';
 import { IconButtonWrapper } from '..';
-import { getFullName, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
+import { getFullName, RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { Colors, Images, Fonts } from '../../theme';
+import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import ActionSheet from '../ActionSheet';
 import StudentImageComponent from '../StudentImageComponent';

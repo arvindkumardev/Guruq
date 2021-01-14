@@ -4,25 +4,13 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Modal, ScrollView, Text, View } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
-import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
-import { IconButtonWrapper, Loader } from '..';
+import { Loader } from '..';
 import { ADD_REVIEW } from '../../containers/student/tutor-mutation';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import {
-  alertBox,
-  getFullName,
-  getUserImageUrl,
-  printCurrency,
-  printDate,
-  printTime,
-  RfH,
-  RfW,
-} from '../../utils/helpers';
+import { alertBox, getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import Fonts from '../../theme/fonts';
-import UserImageComponent from '../UserImageComponent';
 import TutorImageComponent from '../TutorImageComponent';
 
 const ReviewModal = (props) => {
@@ -111,9 +99,6 @@ const ReviewModal = (props) => {
       });
     }
   };
-
-  const getTutorImage = (tutor) =>
-    getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor?.id);
 
   return (
     <Modal
