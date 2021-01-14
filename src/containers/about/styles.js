@@ -6,27 +6,27 @@ import { RfH } from '../../utils/helpers';
 
 const styles = StyleSheet.create({
   aboutText: {
-    color: Colors.darkGrey,
-    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+    color: Colors.primaryText,
+    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.regular,
-    lineHeight:19
+    // lineHeight:19
   },
-  labelHeader:{
+  labelHeader: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
     marginTop: RfH(25),
   },
-  aboutDetailLabel:{
+  aboutDetailLabel: {
     textAlign: 'center',
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
     color: Colors.primaryText,
   },
-  labelText:{
+  labelText: {
     color: Colors.primaryText,
     fontFamily: Fonts.bold,
     fontSize: 20,
-  }
+  },
 });
 export default styles;

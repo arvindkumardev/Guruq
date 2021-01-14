@@ -30,18 +30,21 @@ export const LOTTIE_JSON_FILES = {
 };
 
 export const FRONTEND_URL = 'http://stagingv2.guruq.in';
-export const DASHBOARD_URL = 'http://dashboardv2.guruq.in';
+export const DASHBOARD_URL = 'http://10.0.0.99:3000';
 
-// export const API_URL = 'http://10.0.0.6:5000';
+// export const API_URL = 'http://10.0.0.99:5000';
 export const API_URL = 'http://apiv2.guruq.in/api';
 
 export const ATTACHMENT_PREVIEW_URL = `${API_URL}/upload/preview?filePath=`;
 export const IMAGES_BASE_URL = 'https://guruq.in/guruq-new';
 
-export const GENERAL_FAQ_URL = `${DASHBOARD_URL}/faqs/general-issues`;
-export const QPOINTS_FAQ_URL = `${DASHBOARD_URL}/faqs/qpoints-faqs`;
-export const BOOKING_FAQ_URL = `${DASHBOARD_URL}/faqs/booking-faqs`;
-export const LEGAL_FAQ_URL = `${DASHBOARD_URL}/faqs/legal-terms-conditions`;
+// export const GENERAL_FAQ_URL = `${DASHBOARD_URL}/faqs/general-issues`;
+// export const QPOINTS_FAQ_URL = `${DASHBOARD_URL}/faqs/qpoints-faqs`;
+// export const BOOKING_FAQ_URL = `${DASHBOARD_URL}/faqs/booking-faqs`;
+// export const LEGAL_FAQ_URL = `${DASHBOARD_URL}/faqs/legal-terms-conditions`;
+
+export const STUDENT_FAQ_URL = `${FRONTEND_URL}/student-faq`;
+export const TUTOR_FAQ_URL = `${FRONTEND_URL}/tutor-faq`;
 
 export const ABOUT_US_URL = `${FRONTEND_URL}/about-us`;
 export const CEO_MESSAGE_URL = `${FRONTEND_URL}/ceo-message`;

@@ -2,11 +2,11 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Text, View, TouchableOpacity } from 'react-native';
+import { Modal, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { Colors, Images } from '../../theme';
-import { getFullName, getSaveData, getUserImageUrl, RfH, RfW } from '../../utils/helpers';
+import { getFullName, getSaveData, RfH, RfW } from '../../utils/helpers';
 import { IconButtonWrapper } from '..';
 import routeNames from '../../routes/screenNames';
 import commonStyles from '../../theme/styles';
@@ -32,10 +32,6 @@ const compareModal = (props) => {
   const goToCompareView = () => {
     onClose();
     navigation.navigate(routeNames.STUDENT.COMPARE_TUTORS, { offeringId });
-  };
-
-  const getTutorImage = (tutor) => {
-    return getUserImageUrl(tutor?.profileImage?.filename, tutor?.contactDetail?.gender, tutor.id);
   };
 
   const renderTutorView = (item, index) => {

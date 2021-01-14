@@ -5,72 +5,99 @@ import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { userDetails } from '../../apollo/cache';
 import Video from './Video';
 import Loader from '../../components/Loader';
-import { GET_AGORA_RTC_TOKEN, GET_MEETING_DETAILS } from './onlineClass.query';
+import { GET_MEETING_DETAILS_FOR_CLASS, GET_MEETING_DETAILS_FOR_INTERVIEW } from './onlineClass.query';
 import NavigationRouteNames from '../../routes/screenNames';
 
 const OnlineClass = (props) => {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
+
   const { route } = props;
-  const { classDetails } = route.params;
+  const { uuid, forInterview } = route.params;
+
   const userInfo = useReactiveVar(userDetails);
   const [token, setToken] = useState('');
 
   const [meetingDetails, setMeetingDetails] = useState({});
 
-  const [getMeetingDetails, { loading: loadingMeetingDetails }] = useLazyQuery(GET_MEETING_DETAILS, {
-    onError: (e) => {
-      console.log(e);
-    },
-    onCompleted: (data) => {
-      setMeetingDetails(data?.meetingDetails);
-      console.log(getMeetingDetails);
-    },
-  });
-  const [getToken, { loading }] = useLazyQuery(GET_AGORA_RTC_TOKEN, {
-    onError: (e) => {
-      console.log(e);
-    },
-    onCompleted: (data) => {
-      setToken(data?.generateAgoraRTCToken);
-    },
-  });
-
-  useEffect(() => {
-    if (isFocussed) {
-      getToken({ variables: { channelName: classDetails.uuid, userId: userInfo.id } });
+  const [getMeetingDetailsForInterview, { loading: loadingMeetingDetailsForInterview }] = useLazyQuery(
+    GET_MEETING_DETAILS_FOR_INTERVIEW,
+    {
+      fetchPolicy: 'no-cache',
+      onError: (e) => {
+        console.log(e);
+      },
+      onCompleted: (data) => {
+        setMeetingDetails(data?.meetingDetails);
+        console.log(data);
+      },
     }
-  }, [isFocussed]);
+  );
+
+  const [getMeetingDetailsForClass, { loading: loadingMeetingDetailsForClass }] = useLazyQuery(
+    GET_MEETING_DETAILS_FOR_CLASS,
+    {
+      fetchPolicy: 'no-cache',
+      onError: (e) => {
+        console.log(e);
+      },
+      onCompleted: (data) => {
+        setMeetingDetails(data?.meetingDetails);
+        console.log(data);
+      },
+    }
+  );
+
+  // const [getToken, { loading }] = useLazyQuery(GET_AGORA_RTC_TOKEN, {
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  //   onCompleted: (data) => {
+  //     setToken(data?.generateAgoraRTCToken);
+  //   },
+  // });
+
+  // useEffect(() => {
+  //   if (isFocussed) {
+  //     getToken({ variables: { channelName: uuid, userId: userInfo.id } });
+  //   }
+  // }, [isFocussed]);
 
   useEffect(() => {
     if (isFocussed) {
-      getMeetingDetails({ variables: { uuid: classDetails.uuid } });
+      if (forInterview) {
+        getMeetingDetailsForInterview({ variables: { uuid } });
+      } else {
+        getMeetingDetailsForClass({ variables: { uuid } });
+      }
     }
   }, [isFocussed]);
 
   const callEnded = () => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, {
-      classId: classDetails.id,
-      showReviewModal: true,
-    });
+    if (forInterview) {
+      navigation.goBack();
+    } else {
+      navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, {
+        uuid,
+        showReviewModal: true,
+      });
+    }
   };
 
   const onPressBack = () => {
     navigation.goBack();
   };
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <View style={{ flex: 1 }}>
+      <Loader isLoading={loadingMeetingDetailsForInterview || loadingMeetingDetailsForClass} />
+
       <Video
+        userInfo={userInfo}
+        channelName={uuid}
+        meetingDetails={meetingDetails}
         onCallEnd={callEnded}
         onPressBack={onPressBack}
-        classDetails={classDetails}
-        userInfo={userInfo}
-        channelName={classDetails?.uuid}
-        token={token}
-        meetingDetails={meetingDetails}
       />
     </View>
   );

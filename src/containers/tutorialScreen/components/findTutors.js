@@ -7,8 +7,8 @@ function FindTutors() {
   return (
     <View style={styles.swipeChild}>
       <Image resizeMode="stretch" style={styles.centerImage} source={Images.onBoardingSecond} />
-      <Text style={styles.title}>Find Best Tutors</Text>
-      <Text style={styles.subtitle}>Find the list of best tutors.</Text>
+      <Text style={styles.title}> Find the Best Tutors</Text>
+      <Text style={styles.subtitle}>Choose from top tutors across India</Text>
     </View>
   );
 }

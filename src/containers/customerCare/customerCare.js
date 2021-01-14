@@ -1,16 +1,28 @@
 import { Linking, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useReactiveVar } from '@apollo/client';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors, Fonts, Images } from '../../theme';
 import { alertBox, RfH, RfW } from '../../utils/helpers';
 import NavigationRouteNames from '../../routes/screenNames';
 import IconWrapper from '../../components/IconWrapper';
-import { BOOKING_FAQ_URL, GENERAL_FAQ_URL, LEGAL_FAQ_URL, QPOINTS_FAQ_URL } from '../../utils/constants';
+import {
+  BOOKING_FAQ_URL,
+  GENERAL_FAQ_URL,
+  LEGAL_FAQ_URL,
+  QPOINTS_FAQ_URL,
+  STUDENT_FAQ_URL,
+  TUTOR_FAQ_URL,
+} from '../../utils/constants';
+import { userDetails } from '../../apollo/cache';
+import { UserTypeEnum } from '../../common/userType.enum';
 
 function CustomerCare() {
   const navigation = useNavigation();
+
+  const userInfo = useReactiveVar(userDetails);
 
   const openWhatsApp = () => {
     const url = `whatsapp://send?text=Hi&phone=919891587300`;
@@ -61,7 +73,7 @@ function CustomerCare() {
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-              url: GENERAL_FAQ_URL,
+              url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
               label: 'General Issues',
             })
           }
@@ -82,7 +94,7 @@ function CustomerCare() {
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-              url: QPOINTS_FAQ_URL,
+              url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
               label: 'Q Points FAQ',
             })
           }
@@ -103,7 +115,7 @@ function CustomerCare() {
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-              url: BOOKING_FAQ_URL,
+              url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
               label: 'Booking FAQs',
             })
           }
@@ -124,7 +136,7 @@ function CustomerCare() {
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
-              url: LEGAL_FAQ_URL,
+              url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
               label: 'Legal Terms & Conditions',
             })
           }

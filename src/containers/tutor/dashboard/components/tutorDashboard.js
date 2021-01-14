@@ -18,11 +18,10 @@ import {
   View,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import Swiper from 'react-native-swiper';
 import { isEmpty } from 'lodash';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { tutorDetails, userDetails } from '../../../../apollo/cache';
-import { IconButtonWrapper, UpcomingClassComponent, TutorImageComponent } from '../../../../components';
+import { IconButtonWrapper, UpcomingClassComponent } from '../../../../components';
 import Loader from '../../../../components/Loader';
 import NavigationRouteNames from '../../../../routes/screenNames';
 import { Colors, Images } from '../../../../theme';
@@ -30,11 +29,10 @@ import { getBoxColor } from '../../../../theme/colors';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { alertBox, getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, deviceWidth, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
-import { TutorOfferingStageEnum } from '../../enums';
 import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 
@@ -304,14 +302,16 @@ function TutorDashboard(props) {
               </View>
             )}
 
+            <View style={commonStyles.blankViewMedium} />
+
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS)}
               style={{ marginTop: RfH(20) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: Dimensions.get('window').width, height: RfH(170) }}
-                source={Images.requests}
-                resizeMode="stretch"
+                style={{ width: deviceWidth() - RfW(32), height: (441 / 1031) * (deviceWidth() - RfW(32)) }}
+                source={Images.pytn_tutor}
+                resizeMode="contain"
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -319,9 +319,9 @@ function TutorDashboard(props) {
               style={{ marginBottom: RfH(15) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: Dimensions.get('window').width, height: RfH(200) }}
-                source={Images.refer_earn_new}
-                resizeMode="stretch"
+                style={{ width: deviceWidth() - RfW(32), height: (560 / 1031) * (deviceWidth() - RfW(32)) }}
+                source={Images.refer_earn_tutor}
+                resizeMode="contain"
               />
             </TouchableOpacity>
 

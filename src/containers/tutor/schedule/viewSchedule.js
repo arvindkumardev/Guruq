@@ -9,7 +9,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
-import { endOfDay, printDate, printTime, RfH, RfW, startOfDay } from '../../../utils/helpers';
+import {endOfDay, print24Time, printDate, printTime, RfH, RfW, startOfDay} from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_AVAILABILITY_DATA } from '../../student/class.query';
@@ -63,7 +63,7 @@ function ViewSchedule() {
       <View style={{ marginTop: RfH(16) }}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(10) }]}>
           <Text style={commonStyles.regularPrimaryText}>
-            {printTime(item.startDate)} - {printTime(item.endDate)}
+            {print24Time(item.startDate)} - {print24Time(item.endDate)}
           </Text>
           <Text style={[commonStyles.regularPrimaryText, { color: item.active ? Colors.green : Colors.orangeRed }]}>
             {item.active ? (item.classScheduled ? 'Class Scheduled' : 'Active') : 'Inactive'}

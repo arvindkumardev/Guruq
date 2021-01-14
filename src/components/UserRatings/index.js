@@ -2,15 +2,14 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import { useLazyQuery } from '@apollo/client';
-import { isEmpty } from 'lodash';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Rating } from 'react-native-ratings';
 import ProgressCircle from 'react-native-progress-circle';
-import { GET_AVERAGE_RATINGS, SEARCH_REVIEW } from '../../containers/student/tutor-query';
+import { GET_AVERAGE_RATINGS } from '../../containers/student/tutor-query';
 import { IconButtonWrapper } from '..';
-import { getUserImageUrl, RfH, RfW } from '../../utils/helpers';
+import { RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';

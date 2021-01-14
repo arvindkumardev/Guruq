@@ -16,13 +16,15 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
+import moment from 'moment';
+import { isEmpty } from 'lodash';
 import BackArrow from '../../components/BackArrow';
 import IconButtonWrapper from '../../components/IconWrapper';
 import { Colors } from '../../theme';
 import Images from '../../theme/images';
 import commonStyles from '../../theme/styles';
-import { alertBox, getFullName, getSubjectIcons, printDate, printTime, RfH, RfW } from '../../utils/helpers';
-import ClassDetailsModal from './components/classDetailsModal';
+import { alertBox, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import MeetingDetailsModal from './components/meetingDetailsModal';
 import requestCameraAndAudioPermission from './components/permission';
 import styles from './components/style';
 import VideoMessagingModal from './components/videoMessagingModal';
@@ -39,7 +41,6 @@ interface Props {}
  * @property joinSucceed State variable for storing success
  */
 interface State {
-  appId: string;
   joinSucceed: boolean;
   peerIds: number[];
   currentUserId: '';
@@ -59,7 +60,7 @@ interface State {
   videoQuality: string;
 }
 
-const appId = '20be4eff902f4d9ea78c2f8c168556cd';
+// const appId = '20be4eff902f4d9ea78c2f8c168556cd';
 
 export default class Video extends Component<Props, State> {
   _engine: RtcEngine;
@@ -67,7 +68,6 @@ export default class Video extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      appId,
       joinSucceed: false,
       peerIds: [],
       currentUserId: '',
@@ -129,8 +129,7 @@ export default class Video extends Component<Props, State> {
    * @description Function to initialize the Rtc Engine, attach event listeners and actions
    */
   init = async () => {
-    const { appId } = this.state;
-    this._engine = await RtcEngine.create(appId);
+    this._engine = await RtcEngine.create(this.props.meetingDetails.appId);
     await this._engine.enableVideo();
     await this._engine.setAudioProfile(AudioProfile.Default, AudioScenario.Education);
 
@@ -225,7 +224,12 @@ export default class Video extends Component<Props, State> {
     console.log('state', this.state);
     console.log('this.props', this.props);
     // Join Channel using null token and channel name
-    await this._engine?.joinChannel(this.props.token, this.props.channelName, null, this.props.userInfo.id);
+    await this._engine?.joinChannel(
+      this.props.meetingDetails.token,
+      this.props.meetingDetails.channel,
+      null,
+      this.props.userInfo.id
+    );
 
     // console.log(await this._engine.getUserInfoByUid(10));
     // console.log(await this._engine.getUserInfoByUid(11));
@@ -324,17 +328,12 @@ export default class Video extends Component<Props, State> {
 
   getParticipant = (id) => {
     const participants = [
-      ...this.props.classDetails.students,
-      this.props.classDetails.tutor,
-
+      ...this.props.meetingDetails.students,
+      this.props.meetingDetails.host,
       {
-        contactDetail: {
-          firstName: 'Screen',
-          lastName: 'Share',
-        },
-        user: {
-          id,
-        },
+        firstName: 'Screen',
+        lastName: 'Share',
+        id: this.props.meetingDetails,
       },
     ];
 
@@ -383,9 +382,7 @@ export default class Video extends Component<Props, State> {
                 <Text
                   style={[commonStyles.regularPrimaryText, { marginLeft: RfW(8), color: Colors.white }]}
                   numberOfLines={1}>
-                  {this.props.classDetails?.offering?.parentOffering?.displayName}{' '}
-                  {this.props.classDetails?.offering?.displayName} by{' '}
-                  {getFullName(this.props.classDetails?.tutor?.contactDetail)}
+                  {this.props.meetingDetails?.title} | {this.props.meetingDetails?.description}
                 </Text>
               </View>
             </TouchableWithoutFeedback>
@@ -496,7 +493,7 @@ export default class Video extends Component<Props, State> {
                               // style={styles.remyesote}
                               style={[styles.remote, { borderRadius: 20 }]}
                               uid={value}
-                              channelId={this.props.channelName}
+                              channelId={this.props.meetingDetails.channel}
                               renderMode={VideoRenderMode.Hidden}
                               zOrderMediaOverlay
                             />
@@ -530,7 +527,7 @@ export default class Video extends Component<Props, State> {
                 {!this.state.videoMuted ? (
                   <RtcLocalView.SurfaceView
                     style={styles.max}
-                    channelId={this.props.channelName}
+                    channelId={this.props.meetingDetails.channel}
                     renderMode={VideoRenderMode.Hidden}
                   />
                 ) : (
@@ -748,16 +745,16 @@ export default class Video extends Component<Props, State> {
           </View>
         )}
 
-        <ClassDetailsModal
+        <MeetingDetailsModal
           visible={this.state.showClassDetails}
           onClose={this.toggleClassDetails}
-          classDetails={this.props.classDetails}
+          meetingDetails={this.props.meetingDetails}
         />
         {this.props.channelName && (
           <VideoMessagingModal
             visible={this.state.showMessageBox}
             onClose={this.toggleMessageBox}
-            channelName={this.props.channelName}
+            channelName={this.props.meetingDetails.channel}
             callbacks={{
               showWhiteboardCallback: () => this.toggleWhiteboard(true),
               hideWhiteboardCallback: () => this.toggleWhiteboard(false),
@@ -816,7 +813,7 @@ export default class Video extends Component<Props, State> {
           {!this.state.videoMuted ? (
             <RtcLocalView.SurfaceView
               style={styles.max}
-              channelId={this.props.channelName}
+              channelId={this.props.meetingDetails.channel}
               renderMode={VideoRenderMode.Hidden}
             />
           ) : (
@@ -883,7 +880,7 @@ export default class Video extends Component<Props, State> {
                         // style={styles.remyesote}
                         style={[styles.remote, { borderRadius: 20 }]}
                         uid={value}
-                        channelId={this.props.channelName}
+                        channelId={this.props.meetingDetails.channel}
                         renderMode={VideoRenderMode.Hidden}
                         zOrderMediaOverlay
                       />
@@ -931,7 +928,7 @@ export default class Video extends Component<Props, State> {
         {selectedUid && (
           <View style={[styles.fullView, { position: 'absolute', top: 0 }]}>
             {this.state.whiteboardEnabled ? (
-              <Whiteboard uuid={this.props.classDetails.uuid} />
+              <Whiteboard uuid={this.props.meetingDetails.channel} />
             ) : (
               <TouchableWithoutFeedback onPress={this.toggleDetailedActions}>
                 {videoItem && videoItem.status ? (
@@ -939,7 +936,7 @@ export default class Video extends Component<Props, State> {
                     // style={styles.remyesote}
                     style={[styles.max, { borderRadius: 20 }]}
                     uid={selectedUid}
-                    channelId={this.props.channelName}
+                    channelId={this.props.meetingDetails.channel}
                     renderMode={VideoRenderMode.Hidden}
                     zOrderMediaOverlay
                   />
@@ -1087,45 +1084,49 @@ export default class Video extends Component<Props, State> {
               justifyContent: 'flex-start',
               alignSelf: 'stretch',
             }}>
-            <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
-              <IconButtonWrapper
-                iconHeight={RfH(60)}
-                iconWidth={RfW(60)}
-                iconImage={getSubjectIcons(this.props.classDetails?.offering?.displayName)}
-                imageResizeMode="contain"
-                styling={{ marginLeft: RfW(20) }}
-              />
-              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-                <Text style={commonStyles.headingPrimaryText}>
-                  {`${this.props.classDetails?.offering?.displayName} by ${getFullName(
-                    this.props.classDetails?.tutor?.contactDetail
-                  )}`}
-                </Text>
-                <Text style={commonStyles.mediumMutedText}>
-                  {`${this.props.classDetails?.offering?.parentOffering?.displayName} | ${this.props.classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
-                </Text>
-                <Text style={commonStyles.mediumMutedText}>
-                  {printDate(this.props.classDetails?.startDate)}
-                  {' at '}
-                  {printTime(this.props.classDetails?.startDate)} {' - '}
-                  {printTime(this.props.classDetails?.endDate)}
-                </Text>
+            {!isEmpty(this.props.meetingDetails) && (
+              <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
+                <View
+                  style={{
+                    height: RfH(72),
+                    width: RfW(72),
+                    backgroundColor: Colors.lightPurple,
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
+                </View>
+                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+                  <Text style={commonStyles.headingPrimaryText}>{this.props.meetingDetails.title}</Text>
+                  <Text style={commonStyles.mediumMutedText}>{this.props.meetingDetails.description}</Text>
+                  <Text style={commonStyles.mediumMutedText}>
+                    {printDate(this.props.meetingDetails?.startDate)}
+                    {' at '}
+                    {printTime(this.props.meetingDetails?.startDate)} {' - '}
+                    {printTime(this.props.meetingDetails?.endDate)}
+                  </Text>
+                </View>
               </View>
-            </View>
+            )}
 
             <View style={styles.buttonHolder}>
-              <TouchableWithoutFeedback onPress={this.startCall}>
-                <View style={styles.button}>
-                  <Text style={styles.buttonText}> Join Class </Text>
-                </View>
-              </TouchableWithoutFeedback>
+              {moment(this.props.meetingDetails.allowedStartDate).isBefore(moment()) &&
+                moment(this.props.meetingDetails.allowedEndDate).isAfter(moment()) && (
+                  <TouchableWithoutFeedback onPress={this.startCall}>
+                    <View style={styles.button}>
+                      <Text style={styles.buttonText}> Join Class </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                )}
+              {moment(this.props.meetingDetails.allowedStartDate).isAfter(moment()) && (
+                <Text>
+                  Class starting in {moment(this.props.meetingDetails.allowedStartDate).diff(moment(), 'minutes')}
+                </Text>
+              )}
 
-              {/* FIXME: REMOVE ME */}
-              {/* <TouchableWithoutFeedback onPress={this.endCall}> */}
-              {/*  <View style={styles.button}> */}
-              {/*    <Text style={styles.buttonText}> End Call </Text> */}
-              {/*  </View> */}
-              {/* </TouchableWithoutFeedback> */}
+              {isEmpty(this.props.meetingDetails) ||
+                (moment(this.props.meetingDetails.allowedEndDate).isBefore(moment()) && <Text>Class Has Ended</Text>)}
             </View>
           </View>
         </View>

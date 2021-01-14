@@ -7,8 +7,8 @@ function ScheduleClass() {
   return (
     <View style={styles.swipeChild}>
       <Image style={styles.centerImage} source={Images.onBoardingFirst} />
-      <Text style={styles.title}>Schedule The Class</Text>
-      <Text style={styles.subtitle}>Schedule your class according to your preference</Text>
+      <Text style={styles.title}>Schedule Your Class</Text>
+      <Text style={styles.subtitle}>Schedule your class based on your convenience</Text>
     </View>
   );
 }

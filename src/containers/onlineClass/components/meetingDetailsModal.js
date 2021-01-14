@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../../../theme/colors';
-import { getFullName, getSubjectIcons, printDate, printTime, RfH, RfW } from '../../../utils/helpers';
+import { printDate, printTime, RfH, RfW, getSubjectIcons } from '../../../utils/helpers';
 import Images from '../../../theme/images';
 import IconButtonWrapper from '../../../components/IconWrapper';
 import Fonts from '../../../theme/fonts';
 import commonStyles from '../../../theme/styles';
 
-const ClassDetailsModal = (props) => {
-  const { visible, onClose, classDetails } = props;
+const MeetingDetailsModal = (props) => {
+  const { visible, onClose, meetingDetails } = props;
 
   return (
     <Modal
@@ -59,26 +59,16 @@ const ClassDetailsModal = (props) => {
                 borderRadius: 8,
                 alignItems: 'center',
                 justifyContent: 'center',
-              }}>
-              <IconButtonWrapper
-                iconHeight={RfH(48)}
-                iconWidth={RfW(32)}
-                iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
-                imageResizeMode="contain"
-              />
-            </View>
+              }}
+            />
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-              <Text style={commonStyles.headingPrimaryText}>
-                {`${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)}`}
-              </Text>
+              <Text style={commonStyles.headingPrimaryText}>{`${meetingDetails.title}`}</Text>
+              <Text style={commonStyles.mediumMutedText}>{`${meetingDetails.description}`}</Text>
               <Text style={commonStyles.mediumMutedText}>
-                {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName}`}
-              </Text>
-              <Text style={commonStyles.mediumMutedText}>
-                {printDate(classDetails?.startDate)}
+                {printDate(meetingDetails?.startDate)}
                 {' at '}
-                {printTime(classDetails?.startDate)} {' - '}
-                {printTime(classDetails?.endDate)}
+                {printTime(meetingDetails?.startDate)} {' - '}
+                {printTime(meetingDetails?.endDate)}
               </Text>
             </View>
             <View>
@@ -93,9 +83,9 @@ const ClassDetailsModal = (props) => {
   );
 };
 
-ClassDetailsModal.propTypes = {
+MeetingDetailsModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
 };
 
-export default ClassDetailsModal;
+export default MeetingDetailsModal;

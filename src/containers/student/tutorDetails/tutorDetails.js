@@ -1,36 +1,20 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-nested-ternary */
-import {
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import ProgressCircle from 'react-native-progress-circle';
 import { Button } from 'native-base';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
-import {
-  GET_AVERAGE_RATINGS,
-  GET_FAVOURITE_TUTORS,
-  GET_TUTOR_OFFERINGS,
-  SEARCH_REVIEW,
-  SEARCH_TUTORS,
-} from '../tutor-query';
+import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS, SEARCH_TUTORS } from '../tutor-query';
 import styles from './styles';
 import {
   getFullName,
   getSaveData,
   getSubjectIcons,
-  getUserImageUrl,
   removeData,
   RfH,
   RfW,

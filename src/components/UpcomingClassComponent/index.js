@@ -11,6 +11,7 @@ import Fonts from '../../theme/fonts';
 import NavigationRouteNames from '../../routes/screenNames';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
+import commonStyles from '../../theme/styles';
 
 const UpcomingClassComponent = (props) => {
   const { classDetails, index } = props;
@@ -18,12 +19,12 @@ const UpcomingClassComponent = (props) => {
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
 
-  const classDetailNavigation = (classId) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+  const classDetailNavigation = (uuid) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { uuid });
   };
 
   return (
-    <TouchableOpacity onPress={() => classDetailNavigation(classDetails.id)} style={{ flex: 1 }}>
+    <TouchableOpacity onPress={() => classDetailNavigation(classDetails.uuid)} style={{ flex: 1 }}>
       <View
         style={{
           backgroundColor: Colors.lightBlue,
@@ -34,26 +35,26 @@ const UpcomingClassComponent = (props) => {
           marginRight: RfW(8),
         }}>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-          <View style={{ flex: 0.3 }}>
+          <View style={{ flex: 0.2 }}>
             <TutorImageComponent
               tutor={isStudent ? classDetails?.tutor : classDetails?.students[0]}
-              styling={{ alignSelf: 'center', borderRadius: RfH(49), height: RfH(98), width: RfH(98) }}
+              styling={{ alignSelf: 'center', borderRadius: RfH(64), height: RfH(64), width: RfH(64) }}
             />
           </View>
           <View
             style={{
-              flex: 0.7,
+              flex: 0.8,
               flexDirection: 'column',
               justifyContent: 'flex-start',
               alignItems: 'stretch',
-              marginLeft: RfW(8),
+              marginLeft: RfW(16),
             }}>
             <Text style={{ fontSize: 16, color: Colors.primaryText, fontFamily: Fonts.semiBold }}>
               {isStudent
                 ? `${classDetails?.offering?.displayName} by ${getFullName(classDetails?.tutor?.contactDetail)} `
                 : `${classDetails?.offering?.displayName} for ${getFullName(classDetails?.students[0]?.contactDetail)}`}
             </Text>
-            <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+            <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(2) }]}>
               {`${classDetails?.offering?.parentOffering?.displayName} | ${classDetails?.offering?.parentOffering?.parentOffering?.displayName} `}
             </Text>
             <View
@@ -61,31 +62,20 @@ const UpcomingClassComponent = (props) => {
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
+                marginTop: RfH(8),
               }}>
               <Icon
                 type="FontAwesome"
                 name="calendar-o"
                 style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
               />
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+              <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(2) }]}>
                 {printDate(classDetails.startDate)}
+                {' at '}
+                {printTime(classDetails.startDate)}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}>
-              <Icon
-                type="Feather"
-                name="clock"
-                style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
-              />
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
-              </Text>
-            </View>
+
             <View
               style={{
                 flexDirection: 'row',
@@ -97,7 +87,7 @@ const UpcomingClassComponent = (props) => {
                 name="computer"
                 style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
               />
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
+              <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(2) }]}>
                 {classDetails.onlineClass ? 'Online' : 'Offline'} Class
               </Text>
             </View>

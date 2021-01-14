@@ -113,6 +113,7 @@ function AboutUs() {
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
                 alignItems: 'stretch',
+                marginLeft: RfW(8),
               }}>
               <View
                 style={{
@@ -120,31 +121,17 @@ function AboutUs() {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.name}</Text>
+                <Text style={[commonStyles.headingPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.name}</Text>
               </View>
-              <Text
-                style={{
-                  color: Colors.secondaryText,
-                  fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-                  marginTop: RfH(2),
-                }}>
-                {item.designation}
-              </Text>
+              <Text style={commonStyles.regularPrimaryText}>{item.designation}</Text>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginTop: RfH(2),
+                  marginTop: RfH(8),
                 }}>
-                <Text
-                  style={{
-                    color: Colors.secondaryText,
-                    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
-                    marginTop: RfH(2),
-                  }}>
-                  {item.desc}
-                </Text>
+                <Text style={commonStyles.smallPrimaryText}>{item.desc}</Text>
               </View>
               <TouchableOpacity
                 style={{
@@ -177,18 +164,9 @@ function AboutUs() {
       <View style={{ height: RfH(16) }} />
       <View style={[commonStyles.mainContainer]}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View>
-            <Text style={[styles.aboutText]}>
-              GuruQ is India’s best tutoring platform that connects students with the right tutors. With the GuruQ
-              platform, students can personalize their tuitions classes with respect to the mode of class (Home or
-              online), type of class (individual or group) and budget.
-            </Text>
-          </View>
-          <View style={{ height: RfH(8) }} />
-
           <TouchableOpacity
             onPress={() => Linking.openURL(ABOUT_US_URL)}
-            style={{ marginTop: RfH(20) }}
+            style={{ marginTop: RfH(0) }}
             activeOpacity={0.8}>
             <Image
               style={{
@@ -199,6 +177,17 @@ function AboutUs() {
               resizeMode="stretch"
             />
           </TouchableOpacity>
+
+          <View style={commonStyles.blankViewSmall} />
+
+          <View>
+            <Text style={styles.aboutText}>
+              GuruQ is India’s best tutoring platform that connects students with the right tutors. GuruQ provides
+              qualified and certified tutors for School Education, competitive exams, language learning, and study
+              abroad needs. We have 15000 + tutors pan India for all boards, subjects and classes in all budgets that
+              teach online and offline on our platform.
+            </Text>
+          </View>
 
           <View style={{ height: RfH(24) }} />
           <View

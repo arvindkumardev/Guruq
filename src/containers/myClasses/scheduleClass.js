@@ -28,6 +28,7 @@ function ScheduleClass(props) {
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
 
+  console.log("tutorClasses",tutorClasses)
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -38,6 +39,7 @@ function ScheduleClass(props) {
         const scheduledClasses = data.getScheduledClasses.map((item) => ({
           startDate: item.startDate,
           classId: item.id,
+          uuid:item.uuid
         }));
         const classes = tutorClasses;
         for (let i = 0; i < scheduledClasses.length; i++) {
@@ -78,7 +80,7 @@ function ScheduleClass(props) {
     if (classData) {
       const classes = [];
       for (let i = 0; i < classData.count; i++) {
-        classes.push({ startDate: '', isScheduled: false, classId: '' });
+        classes.push({ startDate: '', isScheduled: false, classId: '',uuid:'' });
       }
       setTutorClasses(classes);
       getScheduleClassCall();
@@ -101,8 +103,8 @@ function ScheduleClass(props) {
     });
   };
 
-  const classDetailNavigation = (classId) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { classId });
+  const classDetailNavigation = (uuid) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { uuid });
   };
 
   const tutorDetail = (item) => {
@@ -170,7 +172,7 @@ function ScheduleClass(props) {
   const renderClassView = (item, index) => (
     <View style={{ flex: 0.5, marginTop: RfH(16) }}>
       <TouchableWithoutFeedback
-        onPress={() => (item.isScheduled ? classDetailNavigation(item.classId) : isStudent ? showSlotPopup() : null)}
+        onPress={() => (item.isScheduled ? classDetailNavigation(item.uuid) : isStudent ? showSlotPopup() : null)}
         activeOpacity={0.8}>
         <View>
           <View

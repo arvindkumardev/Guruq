@@ -17,7 +17,7 @@ import commonStyles from '../../theme/styles';
 import { API_URL, STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { alertBox, getFullName, getToken, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import { ADD_DOCUMENT_TO_CLASS, RE_SCHEDULE_CLASS } from '../student/booking.mutation';
-import { GET_CLASS_DETAILS } from '../student/class.query';
+import { GET_CLASS_DETAILS_BY_UUID } from '../student/class.query';
 import styles from '../student/tutorListing/styles';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
@@ -31,7 +31,7 @@ function ScheduledClassDetails(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const { route } = props;
-  const { classId } = route.params;
+  const { uuid } = route.params;
 
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
@@ -54,14 +54,14 @@ function ScheduledClassDetails(props) {
     });
   }, []);
 
-  const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
+  const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS_BY_UUID, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
-        setClassData(data.getClassDetails);
+        setClassData(data.classDetails);
       }
     },
   });
@@ -82,7 +82,7 @@ function ScheduledClassDetails(props) {
           positiveText: 'Ok',
           onPositiveClick: () => {
             setShowReschedulePopup(false);
-            getClassDetails({ variables: { classId } });
+            getClassDetails({ variables: { uuid } });
           },
         });
       }
@@ -96,7 +96,7 @@ function ScheduledClassDetails(props) {
     },
     onCompleted(data) {
       if (data) {
-        getClassDetails({ variables: { classId } });
+        getClassDetails({ variables: { uuid } });
       }
     },
   });
@@ -145,10 +145,10 @@ function ScheduledClassDetails(props) {
   };
 
   useEffect(() => {
-    if (classId && isFocussed) {
-      getClassDetails({ variables: { classId } });
+    if (uuid && isFocussed) {
+      getClassDetails({ variables: { uuid } });
     }
-  }, [classId, isFocussed]);
+  }, [uuid, isFocussed]);
 
   useEffect(() => {
     if (route.params.showReviewModal && isFocussed && isStudent) {
@@ -169,15 +169,15 @@ function ScheduledClassDetails(props) {
 
   const goToCancelReason = () => {
     setOpenMenu(false);
-    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId });
+    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId: classData?.classEntity?.id });
   };
   const goToHelp = () => {
     setOpenMenu(false);
-    navigation.navigate(NavigationRouteNames.CUSTOMER_CARE, { classId });
+    navigation.navigate(NavigationRouteNames.CUSTOMER_CARE, { classId: classData?.classEntity?.id });
   };
 
   const goToOnlineClass = () => {
-    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { classDetails: classData?.classEntity });
+    navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { uuid: classData?.classEntity?.uuid });
   };
 
   const openRescheduleModal = () => {
@@ -383,19 +383,52 @@ function ScheduledClassDetails(props) {
               </Text>
             </View>
           </View>
+
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
           <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
             <IconButtonWrapper
-              iconImage={Images.bell}
+              iconImage={classData?.classEntity?.onlineClass ? Images.laptop : Images.home}
               iconWidth={RfW(16)}
               iconHeight={RfH(16)}
               imageResizeMode="contain"
             />
-            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-              <Text style={commonStyles.headingPrimaryText}>Notification alert</Text>
-              <Text style={commonStyles.mediumMutedText}>20 minutes before</Text>
+            <View style={commonStyles.horizontalChildrenSpaceView}>
+              <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(16) }]}>
+                <Text style={commonStyles.headingPrimaryText}>Class Mode</Text>
+                <Text style={commonStyles.mediumMutedText}>
+                  {classData?.classEntity?.onlineClass ? 'Online ' : 'Offline '}Class
+                </Text>
+              </View>
+
+              {classData?.classEntity?.demoClass && (
+                <View
+                  style={{
+                    backgroundColor: Colors.orange,
+                    marginRight: RfW(16),
+                    paddingHorizontal: RfW(8),
+                    paddingVertical: RfH(4),
+                    borderRadius: RfH(8),
+                  }}>
+                  <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>Demo</Text>
+                </View>
+              )}
             </View>
           </View>
+
+          {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
+          {/* <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}> */}
+          {/*  <IconButtonWrapper */}
+          {/*    iconImage={Images.bell} */}
+          {/*    iconWidth={RfW(16)} */}
+          {/*    iconHeight={RfH(16)} */}
+          {/*    imageResizeMode="contain" */}
+          {/*  /> */}
+          {/*  <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}> */}
+          {/*    <Text style={commonStyles.headingPrimaryText}>Notification alert</Text> */}
+          {/*    <Text style={commonStyles.mediumMutedText}>20 minutes before</Text> */}
+          {/*  </View> */}
+          {/* </View> */}
+
           <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
           <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
             <IconButtonWrapper
@@ -410,14 +443,16 @@ function ScheduledClassDetails(props) {
                 {classData?.classEntity?.students?.length} participants to join the Class
               </Text>
             </View>
-            <View>
-              <IconButtonWrapper
-                iconImage={Images.messaging}
-                iconHeight={24}
-                iconWidth={24}
-                submitFunction={() => setShowMessageModal(true)}
-              />
-            </View>
+            {classData?.isMessagingAllowed && (
+              <View>
+                <IconButtonWrapper
+                  iconImage={Images.messaging}
+                  iconHeight={24}
+                  iconWidth={24}
+                  submitFunction={() => setShowMessageModal(true)}
+                />
+              </View>
+            )}
           </View>
           <FlatList
             style={{ marginBottom: RfH(16), marginLeft: 40 }}
@@ -440,7 +475,7 @@ function ScheduledClassDetails(props) {
               </View>
             </View>
             <View>
-              {userTypeVal === UserTypeEnum.TUTOR.label && (
+              {classData?.isUploadAttachmentAllowed && (
                 <IconButtonWrapper
                   iconImage={Images.add}
                   iconWidth={20}
@@ -519,6 +554,7 @@ function ScheduledClassDetails(props) {
             </View>
           </View>
           <View style={commonStyles.lineSeparatorWithVerticalMargin} />
+
           {classData?.isClassJoinAllowed && (
             <View
               style={{
