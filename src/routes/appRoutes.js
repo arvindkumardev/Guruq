@@ -65,6 +65,7 @@ import ReferEarn from '../containers/referAndEarn/referEarn';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import Notifications from '../containers/student/dashboard/notifications';
 import MonthCalendarView from '../containers/calendar/monthCalendarView';
+import Wallet from '../containers/wallet/wallet';
 
 const Stack = createStackNavigator();
 
@@ -262,6 +263,7 @@ const AppStack = (props) => {
         component={MonthCalendarView}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name={NavigationRouteNames.WALLET} component={Wallet} options={{ headerShown: false }} />
     </>
   );
 

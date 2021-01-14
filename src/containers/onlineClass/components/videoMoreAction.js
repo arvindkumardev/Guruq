@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Modal, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import Colors from '../../../theme/colors';
 import { RfH, RfW } from '../../../utils/helpers';
 import Images from '../../../theme/images';

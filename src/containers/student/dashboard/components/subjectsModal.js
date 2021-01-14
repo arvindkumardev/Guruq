@@ -1,8 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Text, View } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Modal, Text, View, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Colors, Images } from '../../../../theme';
 import { getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';

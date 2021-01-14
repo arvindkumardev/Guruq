@@ -1,6 +1,5 @@
-import { Linking, Text, TouchableOpacity, View } from 'react-native';
+import { Linking, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { IconButtonWrapper, ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';

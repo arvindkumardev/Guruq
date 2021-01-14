@@ -19,6 +19,7 @@ import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
 import ProficiencyTest from '../containers/tutor/proficiencyTest';
 import StudentListing from '../containers/tutor/studentDetails/studentListing';
 import StudentDetails from '../containers/tutor/studentDetails/studentDetails';
+import Profile from '../containers/tutor/profile/profile';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,8 @@ export const getTutorRoutes = (tutorInfo) => {
           options={{ headerShown: false }}
         />
       )}
+
+      <Stack.Screen name={NavigationRouteNames.TUTOR.PROFILE} component={Profile} options={{ headerShown: false }} />
 
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.SUBJECTS_LIST}

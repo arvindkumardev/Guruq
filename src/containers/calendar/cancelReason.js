@@ -1,9 +1,8 @@
-import { FlatList, Keyboard, Text, TextInput, View } from 'react-native';
+import { FlatList, Keyboard, Text, TextInput, View, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
 import { CustomRadioButton, ScreenHeader, Loader } from '../../components';

@@ -201,7 +201,14 @@ function TutorDashboard(props) {
     <>
       <StatusBar barStyle="dark-content" />
       <Loader isLoading={loadingScheduledClasses || loadingTutorsOffering} />
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          backgroundColor: Colors.white,
+        }}>
         {/* <View style={{ height: RfH(44), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}> */}
         {/*  <View style={{ flexDirection: 'row' }} /> */}
         {/*  /!* <View> *!/ */}
@@ -227,7 +234,7 @@ function TutorDashboard(props) {
               </Text>
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
-              <TouchableWithoutFeedback onPress={() => changeTab(5)}>
+              <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.PROFILE)}>
                 <UserImageComponent height={40} width={40} fontSize={16} styling={{ borderRadius: RfH(40) }} />
               </TouchableWithoutFeedback>
             </View>
@@ -242,7 +249,7 @@ function TutorDashboard(props) {
                   <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                     Upcoming Classes
                   </Text>
-                  <TouchableWithoutFeedback onPress={() => changeTab(2)}>
+                  <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.CALENDAR)}>
                     <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                       View All
                     </Text>

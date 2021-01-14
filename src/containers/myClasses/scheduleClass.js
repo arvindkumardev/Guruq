@@ -1,8 +1,7 @@
 import { useMutation } from '@apollo/react-hooks';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { FlatList, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import moment from 'moment';

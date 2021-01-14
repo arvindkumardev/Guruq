@@ -1,8 +1,17 @@
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {
+  FlatList,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
@@ -86,9 +95,9 @@ function Profile(props) {
     } else if (item.name === 'My Cart') {
       navigation.navigate(NavigationRouteNames.STUDENT.MY_CART);
     } else if (item.name === 'Calendar') {
-      changeTab(2);
+      navigation.navigate(NavigationRouteNames.STUDENT.CALENDAR);
     } else if (item.name === 'Schedule Classes') {
-      changeTab(3);
+      navigation.navigate(NavigationRouteNames.STUDENT.MY_CLASSES);
     } else if (item.name === 'Add Study Area') {
       navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
     } else {
@@ -165,6 +174,7 @@ function Profile(props) {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          backgroundColor: Colors.white,
         }}>
         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
           <TouchableOpacity
@@ -184,7 +194,7 @@ function Profile(props) {
         </View>
       </View>
 
-      <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
+      <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
         <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
           <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(20) }}>
             <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
@@ -211,28 +221,27 @@ function Profile(props) {
           </View>
           <View style={commonStyles.blankGreyViewSmall} />
           <View>
-            <TouchableWithoutFeedback
-              onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-              style={[styles.userMenuParentView, { height: 60 }]}>
-              <IconButtonWrapper
-                iconHeight={RfH(16)}
-                iconWidth={RfW(16)}
-                iconImage={Images.profile}
-                imageResizeMode="contain"
-              />
-
-              <View style={styles.menuItemParentView}>
-                <Text style={styles.menuItemPrimaryText}>My Account</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Personal, Addresses, Parents & Education Detail
-                </Text>
+            <TouchableWithoutFeedback onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}>
+              <View style={[styles.userMenuParentView, { height: 60 }]}>
+                <IconButtonWrapper
+                  iconHeight={RfH(16)}
+                  iconWidth={RfW(16)}
+                  iconImage={Images.profile}
+                  imageResizeMode="contain"
+                />
+                <View style={styles.menuItemParentView}>
+                  <Text style={styles.menuItemPrimaryText}>My Account</Text>
+                  <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                    Personal, Addresses, Parents & Education Detail
+                  </Text>
+                </View>
+                <IconButtonWrapper
+                  iconWidth={RfW(24)}
+                  iconHeight={RfH(24)}
+                  imageResizeMode="contain"
+                  iconImage={isAccountMenuOpen ? Images.collapse_grey : Images.expand_gray}
+                />
               </View>
-              <IconButtonWrapper
-                iconWidth={RfW(24)}
-                iconHeight={RfH(24)}
-                imageResizeMode="contain"
-                iconImage={isAccountMenuOpen ? Images.collapse_grey : Images.expand_gray}
-              />
             </TouchableWithoutFeedback>
           </View>
           {isAccountMenuOpen && (
@@ -382,10 +391,12 @@ function Profile(props) {
             <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.personal} />
             <View style={styles.menuItemParentView}>
               <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}>
-                <Text style={styles.menuItemPrimaryText}>Help</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Customer Care, FAQs, Send feedback
-                </Text>
+                <View>
+                  <Text style={styles.menuItemPrimaryText}>Help</Text>
+                  <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                    Customer Care, FAQs, Send feedback
+                  </Text>
+                </View>
               </TouchableWithoutFeedback>
             </View>
           </View>
@@ -397,10 +408,12 @@ function Profile(props) {
               <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
               <View style={styles.menuItemParentView}>
                 <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.ABOUT_US)}>
-                  <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
-                  <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                    About Us, Team, Know More
-                  </Text>
+                  <View>
+                    <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
+                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                      About Us, Team, Know More
+                    </Text>
+                  </View>
                 </TouchableWithoutFeedback>
               </View>
             </View>
@@ -412,10 +425,12 @@ function Profile(props) {
             <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
             <View style={styles.menuItemParentView}>
               <TouchableWithoutFeedback onPress={onChangePasswordClick}>
-                <Text style={styles.menuItemPrimaryText}>Change Password</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  Reset your password
-                </Text>
+                <View>
+                  <Text style={styles.menuItemPrimaryText}>Change Password</Text>
+                  <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                    Reset your password
+                  </Text>
+                </View>
               </TouchableWithoutFeedback>
             </View>
           </View>
