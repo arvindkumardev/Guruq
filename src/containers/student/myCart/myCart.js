@@ -311,6 +311,8 @@ const MyCart = () => {
         setPaymentStatus('');
         setBookingData('');
         setPaymentModal(false);
+
+        cancelPendingBooking({ variables: { orderId: bookingData.id } });
       },
       negativeText: 'No',
     });
@@ -700,6 +702,7 @@ const MyCart = () => {
         qPointsRedeemed={qPointsRedeemed}
         handlePaytmPayment={handlePaytmPayment}
         hidePaymentPopup={() => setShowPaymentModal(false)}
+        handleCancelPendingBooking={(orderId) => cancelPendingBooking({ variables: { orderId } })}
       />
       {paymentModal && !isEmpty(bookingData) && (
         <CustomModalWebView
