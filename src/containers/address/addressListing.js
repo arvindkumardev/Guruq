@@ -28,9 +28,7 @@ function AddressListing() {
   const [getStudentDetails, { loading: studentDetailLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -43,9 +41,7 @@ function AddressListing() {
   const [getTutorDetails, { loading: tutorDetailLoading }] = useLazyQuery(GET_TUTOR_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -58,9 +54,7 @@ function AddressListing() {
   const [deleteTutorAddress, { loading: tutorAddressDeleteLoading }] = useMutation(DELETE_TUTOR_ADDRESS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -72,9 +66,7 @@ function AddressListing() {
   const [deleteStudentAddress, { loading: studentAddressDeleteLoading }] = useMutation(DELETE_STUDENT_ADDRESS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -142,9 +134,9 @@ function AddressListing() {
             <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
               {item.city}, {item.state}, {item.country}
             </Text>
-            {/* <Text style={commonStyles.mediumMutedText}>{`${item.street}, ${item.subArea}`}</Text> */}
+            <Text style={commonStyles.mediumMutedText}>{`${item.street}, ${item.subArea}`}</Text>
             <Text style={commonStyles.mediumMutedText}>{item.fullAddress}</Text>
-            {/* <Text style={commonStyles.mediumMutedText}>{`${item.State}, ${item.country}`}</Text> */}
+            <Text style={commonStyles.mediumMutedText}>{item.landmark}</Text>
           </View>
 
           <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>

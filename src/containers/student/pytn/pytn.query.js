@@ -92,7 +92,6 @@ export const GET_ACCEPTED_TUTOR_NEED = gql`
               degreeLevel
             }
             fieldOfStudy
-            subjects
             board
             startDate
             endDate

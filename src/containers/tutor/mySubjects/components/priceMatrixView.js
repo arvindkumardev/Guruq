@@ -87,9 +87,7 @@ function PriceMatrixView(props) {
   const [updateOffering, { loading: offeringLoading }] = useMutation(CREATE_UPDATE_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {

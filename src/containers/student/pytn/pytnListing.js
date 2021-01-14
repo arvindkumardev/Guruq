@@ -23,20 +23,18 @@ function PytnListing(props) {
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const studentInfo = useReactiveVar(studentDetails);
 
-  const [orderItems, setOrderItems] = useState([]);
+  const [pytnList, setPytnList] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
 
-  const [getTutionNeeds, { loading: loadingTutionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
+  const [getTuitionNeeds, { loading: loadingTuitionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
         setIsListEmpty(data?.searchStudentPYTN?.edges.length === 0);
-        setOrderItems(data?.searchStudentPYTN?.edges);
+        setPytnList(data?.searchStudentPYTN?.edges);
       }
     },
   });
@@ -44,16 +42,18 @@ function PytnListing(props) {
   const [deletePYTN, { loading: pytnDelete }] = useMutation(DELETE_STUDENT_PYTN, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
         alertBox('Request removed successfully', '', {
           positiveText: 'Ok',
           onPositiveClick: () => {
-            getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
+            getTuitionNeeds({
+              variables: {
+                searchDto: { studentId: studentInfo.id, page: 1, size: 100, sortBy: 'createdDate', sortOrder: 'desc' },
+              },
+            });
           },
         });
       }
@@ -62,7 +62,11 @@ function PytnListing(props) {
 
   useEffect(() => {
     if (isFocussed) {
-      getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
+      getTuitionNeeds({
+        variables: {
+          searchDto: { studentId: studentInfo.id, page: 1, size: 100, sortBy: 'createdDate', sortOrder: 'desc' },
+        },
+      });
     }
   }, [isFocussed]);
 
@@ -148,11 +152,11 @@ function PytnListing(props) {
         }}>
         <Text style={commonStyles.mediumPrimaryText}>
           {!isEmpty(item.acceptedPytns)
-            ? `Your request has been accepted by ${item.acceptedPytns.length} tutors`
+            ? `Request accepted by ${item.acceptedPytns.length} tutors`
             : 'Not accepted yet'}
         </Text>
         <TouchableOpacity onPress={() => removePytn(item)}>
-          <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
+          <Text style={[commonStyles.mediumPrimaryText, { color: Colors.orangeRed, textAlign: 'right' }]}>Remove</Text>
         </TouchableOpacity>
       </View>
       <View style={commonStyles.lineSeparator} />
@@ -165,7 +169,7 @@ function PytnListing(props) {
 
   return (
     <>
-      <Loader isLoading={loadingTutionNeeds || pytnDelete} />
+      <Loader isLoading={loadingTuitionNeeds || pytnDelete} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader
           homeIcon
@@ -180,7 +184,7 @@ function PytnListing(props) {
             <View style={{ paddingHorizontal: RfW(16) }}>
               <FlatList
                 showsVerticalScrollIndicator={false}
-                data={orderItems}
+                data={pytnList}
                 renderItem={({ item }) => renderClassItem(item)}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingBottom: RfH(170) }}

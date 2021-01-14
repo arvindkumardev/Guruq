@@ -34,9 +34,7 @@ function AddEditBankDetails(props) {
   const [saveBankDetail, { loading: saveBankDetailLoading }] = useMutation(ADD_UPDATE_BANK_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {

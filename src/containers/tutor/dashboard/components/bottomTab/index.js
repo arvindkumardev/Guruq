@@ -57,7 +57,7 @@ function BottomTab(props) {
             style={styles.iconStyle}
             resizeMode="contain"
           />
-          <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>Wallet</Text>
+          <Text style={activeTab === 4 ? styles.bottomTabActive : styles.bottomText}>QPoints</Text>
         </Button>
         <Button
           style={{ backgroundColor: Colors.white }}

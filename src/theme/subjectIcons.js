@@ -128,7 +128,22 @@ const SubjectIcons = {
   ssc_government_exams_gray: require('../assets/images/subject/ssc-govt.png'),
   ssc_government_exams_disable: require('../assets/images/subject/ssc-govt-d.png'),
 
+  science: require('../assets/images/subject/science-c.png'),
+  science_gray: require('../assets/images/subject/science.png'),
+  science_disable: require('../assets/images/subject/science-d.png'),
+
   accounts_professional: require('../assets/images/subject/accounts-d.png'),
+  engineering_entrance: require('../assets/images/subject/engineering-entrance-d.png'),
+  medical_entrance: require('../assets/images/subject/medical-entrance-d.png'),
+  law_entrance: require('../assets/images/subject/law-entrance-d.png'),
+
+  marathi: require('../assets/images/subject/marathi-c.png'),
+  marathi_gray: require('../assets/images/subject/marathi.png'),
+  marathi_disable: require('../assets/images/subject/marathi-d.png'),
+
+  urdu: require('../assets/images/subject/urdu-c.png'),
+  urdu_gray: require('../assets/images/subject/urdu.png'),
+  urdu_disable: require('../assets/images/subject/urdu-d.png'),
 };
 
 export default SubjectIcons;

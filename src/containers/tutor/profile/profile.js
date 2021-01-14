@@ -14,17 +14,8 @@ import {
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { appMetaData, notificationsList, tutorDetails, userDetails } from '../../../apollo/cache';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import {
-  alertBox,
-  APP_VERSION,
-  comingSoonAlert,
-  getFullName,
-  getSaveData,
-  logout,
-  RfH,
-  RfW,
-} from '../../../utils/helpers';
+import { APP_VERSION, LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { alertBox, comingSoonAlert, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
 import { Loader, IconButtonWrapper, UserImageComponent } from '../../../components';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
@@ -45,7 +36,7 @@ const ACCOUNT_OPTIONS = [
 
 const MY_CLASS_OPTIONS = [
   { name: 'Calendar', icon: Images.calendar },
-  { name: 'Student Request', icon: Images.classes },
+  { name: 'Student PYTN Requests', icon: Images.classes },
 ];
 
 function Profile(props) {
@@ -76,7 +67,7 @@ function Profile(props) {
           mobile: number,
           country: { dialCode: countryCode },
         };
-        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, {
+        navigation.navigate(NavigationRouteNames.OTP_CHANGE_PASSWORD, {
           mobileObj,
           fromChangePassword: true,
           newUser: false,
@@ -127,10 +118,10 @@ function Profile(props) {
     } else if (item.name === 'Send Feedback') {
       navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
     } else if (item.name === 'Calendar') {
-      navigation.navigate(NavigationRouteNames.STUDENT.CALENDAR);
+      navigation.navigate(NavigationRouteNames.CALENDAR);
     } else if (item.name === 'My Students') {
       comingSoonAlert();
-    } else if (item.name === 'Student Request') {
+    } else if (item.name === 'Student PYTN Requests') {
       navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS);
     } else {
       return null;
@@ -286,18 +277,18 @@ function Profile(props) {
           </View>
         </TouchableWithoutFeedback>
 
-        <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-        <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_LISTING)}>
-          <View style={styles.userMenuParentView}>
-            <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.multiple_user} />
-            <View style={styles.menuItemParentView}>
-              <Text style={styles.menuItemPrimaryText}>My Students</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Student details
-              </Text>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
+        {/* <View style={commonStyles.lineSeparatorWithHorizontalMargin} /> */}
+        {/* <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_LISTING)}> */}
+        {/*  <View style={styles.userMenuParentView}> */}
+        {/*    <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.multiple_user} /> */}
+        {/*    <View style={styles.menuItemParentView}> */}
+        {/*      <Text style={styles.menuItemPrimaryText}>My Students</Text> */}
+        {/*      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}> */}
+        {/*        Student details */}
+        {/*      </Text> */}
+        {/*    </View> */}
+        {/*  </View> */}
+        {/* </TouchableWithoutFeedback> */}
 
         <View style={commonStyles.blankGreyViewSmall} />
 
@@ -307,7 +298,7 @@ function Profile(props) {
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Classes</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Classes, Students, Student Requests
+                Classes, Students, Student PYTN Requests
               </Text>
             </View>
             <IconButtonWrapper
@@ -444,9 +435,7 @@ function Profile(props) {
           </View>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', marginTop: 24, marginBottom: 16 }}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.versionText, { textAlign: 'center' }]}>
-            Powered by RHA Technologies
-          </Text>
+          <Text style={commonStyles.rhaText}>Powered by RHA Technologies</Text>
         </View>
       </ScrollView>
     </View>

@@ -1,34 +1,33 @@
-import { useLazyQuery, useReactiveVar,useMutation, useSubscription } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar, useSubscription } from '@apollo/client';
 import emojiUtils from 'emoji-utils';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
+import { isSameUser } from 'react-native-gifted-chat/lib/utils';
 import SlackMessage from '../../../components/Chat/SlackMessage';
 import IconButtonWrapper from '../../../components/IconWrapper';
 import Colors from '../../../theme/colors';
 import Fonts from '../../../theme/fonts';
 import Images from '../../../theme/images';
-import {userDetails} from  '../../../apollo/cache';
+import { userDetails } from '../../../apollo/cache';
 import { getFullName, RfH, RfW } from '../../../utils/helpers';
-import { GET_CHAT_MESSAGES, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
+import { ENTER_CHAT, GET_CHAT_MESSAGES, LEAVE_CHAT, NEW_CHAT_MESSAGE, SEND_CHAT_MESSAGE } from './chat.graphql';
 import { dimensions } from './style';
-import { isSameUser } from 'react-native-gifted-chat/lib/utils';
 
 const VideoMessagingModal = (props) => {
-  const { visible, onClose, channelName } = props;
+  const { visible, onClose, channelName, callbacks } = props;
+
   const userInfo = useReactiveVar(userDetails);
   const [chatMessageIds, setChatMessageIds] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
-  console.log(userInfo,"userInfouserInfouserInfo")
+
   const getMessageToRender = (message) => {
-    console.log(message,"messagemessagemessagerender===")
     return {
       ...message,
       _id: message?.id,
       createdAt: message?.createdDate,
-      user: { _id: message?.createdBy.id,
-         name: getFullName(message?.createdBy) },
+      user: { _id: message?.createdBy.id, name: getFullName(message?.createdBy) },
     };
   };
 
@@ -38,15 +37,9 @@ const VideoMessagingModal = (props) => {
       console.log(e);
     },
     onCompleted: (data) => {
-      console.log(data);
       if (data && data?.sendChatMessage) {
-        let obj = data.sendChatMessage
-        obj['createdBy'] = {
-          ...obj.createdBy,
-          id:userInfo.id
-        }
         const message = data.sendChatMessage;
-        if (!chatMessageIds.includes(message.id)) {
+        if (!chatMessageIds.includes(message.id) && !message.isSystem) {
           setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
           setChatMessageIds([...chatMessageIds, message.id]);
         }
@@ -54,59 +47,70 @@ const VideoMessagingModal = (props) => {
     },
   });
 
-  const [getChatMessages, { loading: loadingGetChatMessage, refetch: fetchMessages }] = useLazyQuery(
-    GET_CHAT_MESSAGES,
-    {
-      fetchPolicy: 'no-cache',
-      onError: (e) => {
-        console.log(e);
-      },
-      onCompleted: (data) => {
-        console.log('getChatMessages', data, channelName);
-        if (data) {
-          if (data?.getChatMessages) {
-            let ms = [];
-            // eslint-disable-next-line no-restricted-syntax
-            for (const message of data.getChatMessages) {
-              if (!chatMessageIds.includes(message.id)) {
-                ms = GiftedChat.append(ms, getMessageToRender(message));
-                setChatMessageIds([...chatMessageIds, message.id]);
-              }
-            }
-            if(ms.length > 0){
-              setChatMessages(ms.reverse());
-
+  const [getChatMessages, { loading: loadingGetChatMessage }] = useLazyQuery(GET_CHAT_MESSAGES, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      // console.log('getChatMessages', data, channelName);
+      if (data) {
+        if (data?.getChatMessages) {
+          let ms = [];
+          // eslint-disable-next-line no-restricted-syntax
+          for (const message of data.getChatMessages) {
+            if (!chatMessageIds.includes(message.id) && !message.isSystem) {
+              ms = GiftedChat.append(ms, getMessageToRender(message));
+              setChatMessageIds([...chatMessageIds, message.id]);
             }
           }
+          if (ms.length > 0) {
+            setChatMessages(ms.reverse());
+          }
         }
-        console.log('getChatMessages - setChatMessageIds', chatMessageIds);
-      },
-    }
-  );
+      }
+      // console.log('getChatMessages - setChatMessageIds', chatMessageIds);
+    },
+  });
   useEffect(() => {
     getChatMessages({ variables: { channelName: props.channelName } });
   }, [channelName]);
 
+  // console.log(channelName);
   const { loading: loadingNewMessageEvent } = useSubscription(NEW_CHAT_MESSAGE, {
+    // variables: { channelName },
+    fetchPolicy: 'network-only',
     onSubscriptionData: ({ subscriptionData: { data } }) => {
       console.log('onSubscriptionData: ', data);
-      if (data && data?.chatMessageSent) {
-        let obj = data.chatMessageSent
-        obj['createdBy'] = {
-          ...obj.createdBy,
-          id:userInfo.id
+
+      if (data && data?.chatMessageSent && data?.chatMessageSent.channel === channelName) {
+        const message = data.chatMessageSent;
+
+        if (message.isSystem && !callbacks.isHost) {
+          if (message.text === 'SHOW_WHITEBOARD') {
+            if (callbacks && callbacks.showWhiteboardCallback) {
+              callbacks.showWhiteboardCallback();
+            }
+          }
+          if (message.text === 'HIDE_WHITEBOARD') {
+            if (callbacks && callbacks.hideWhiteboardCallback) {
+              callbacks.hideWhiteboardCallback();
+            }
+          }
         }
-        const message = obj;
+
         if (!chatMessageIds.includes(message.id)) {
           setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
           setChatMessageIds([...chatMessageIds, message.id]);
+
+          // console.log('getMessageToRender(message)', getMessageToRender(message));
         }
       }
     },
   });
 
   const onSend = (newMessages = []) => {
-    console.log(newMessages);
+    // console.log(newMessages);
 
     sendMessage({
       variables: {
@@ -118,13 +122,26 @@ const VideoMessagingModal = (props) => {
     });
   };
 
+  useEffect(() => {
+    if (callbacks && callbacks.isHost) {
+      sendMessage({
+        variables: {
+          chatMessageDto: {
+            channel: channelName,
+            text: callbacks?.onToggleWhiteboard ? 'SHOW_WHITEBOARD' : 'HIDE_WHITEBOARD',
+            isSystem: true,
+          },
+        },
+      });
+    }
+  }, [callbacks?.onToggleWhiteboard]);
+
   const renderMessage = (props) => {
     const {
       user,
       position,
       currentMessage: { text: currText },
     } = props;
-
 
     let messageTextStyle;
 
@@ -137,19 +154,49 @@ const VideoMessagingModal = (props) => {
       };
     }
 
-    return <SlackMessage {...props} 
-   
-    wrapperStyle={{
-      backgroundColor:position == 'right' ? '#07a6ee':'#E8E8E8',
-      paddingHorizontal:8,paddingVertical:8,
-      borderRadius:8,
-      marginRight: isSameUser ? 16 :60,
-    }}
-    usernameStyle={{
-      color:position=='right' ?'white':'black'
-    }}
-    messageTextStyle={messageTextStyle} />;
+    return (
+      <SlackMessage
+        {...props}
+        wrapperStyle={{
+          backgroundColor: position === 'right' ? '#07a6ee' : '#E8E8E8',
+          paddingHorizontal: 8,
+          paddingVertical: 8,
+          borderRadius: 8,
+          marginRight: isSameUser ? 16 : 60,
+        }}
+        usernameStyle={{
+          color: position === 'right' ? 'white' : 'black',
+        }}
+        messageTextStyle={messageTextStyle}
+      />
+    );
   };
+
+  const [enterChat, { loading: loadingEnterChat }] = useMutation(ENTER_CHAT, { fetchPolicy: 'no-cache' });
+  const [leaveChat, { loading: loadingLeaveChat }] = useMutation(LEAVE_CHAT, { fetchPolicy: 'no-cache' });
+
+  const closeMessageModal = () => {
+    leaveChat();
+    onClose(false);
+  };
+
+  useEffect(() => {
+    console.log('focused.... called');
+
+    if (visible) {
+      enterChat();
+
+      if (channelName) {
+        getChatMessages({ variables: { channelName: props.channelName } });
+      }
+    }
+
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      console.log('cleanup.... leavechat');
+      leaveChat();
+    };
+  }, [visible]);
 
   return (
     <Modal
@@ -198,7 +245,7 @@ const VideoMessagingModal = (props) => {
               }}>
               Messages
             </Text>
-            <TouchableOpacity onPress={() => onClose(false)}>
+            <TouchableOpacity onPress={() => closeMessageModal()}>
               <IconButtonWrapper iconImage={Images.cross} iconWidth={RfW(20)} iconHeight={RfH(20)} />
             </TouchableOpacity>
           </View>
@@ -230,6 +277,11 @@ VideoMessagingModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
   channelName: PropTypes.string,
+  callbacks: PropTypes.object,
+};
+
+VideoMessagingModal.defaultProps = {
+  callbacks: {},
 };
 
 export default VideoMessagingModal;

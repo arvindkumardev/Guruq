@@ -7,17 +7,17 @@ import moment from 'moment';
 import { isEmpty, range } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 import { CustomSelect, IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
-import { alertBox, endOfDay, printDate, RfH, RfW, startOfDay } from '../../../utils/helpers';
+import { alertBox, RfH, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { Colors, Images } from '../../../theme';
 import { UPDATE_AVAILABILITY } from '../tutor.mutation';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 
 const DEFAULT_SLOT = {
-  startTime: '06:00',
-  startInt: 6,
-  endTime: '22:00',
-  endInt: 22,
+  startTime: '00:00',
+  startInt: 0,
+  endTime: '24:00',
+  endInt: 24,
   active: true,
 };
 
@@ -33,9 +33,7 @@ function UpdateSchedule(props) {
   const [updateAvailability, { loading: availabilityLoading }] = useMutation(UPDATE_AVAILABILITY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -50,17 +48,21 @@ function UpdateSchedule(props) {
   useEffect(() => {
     if (!isEmpty(timeSlots)) {
       const slotArr = [];
-      timeSlots.forEach((slot) => {
-        const startTime = moment(slot.startDate).format('HH:mm');
-        const endTime = moment(slot.endDate).format('HH:mm');
-        slotArr.push({
-          startTime,
-          startInt: parseInt(startTime.replace(':00', '')),
-          endTime,
-          endInt: parseInt(endTime.replace(':00', '')),
-          active: slot.active,
+      console.log('timeSlots', timeSlots);
+      timeSlots
+        .sort((a, b) => (a.endDate - b.endDate ? 1 : -1))
+        .forEach((slot) => {
+          const startTime = moment(slot.startDate).format('HH:mm');
+          const endTime = moment(slot.endDate).format('HH:mm');
+          slotArr.push({
+            startTime,
+            startInt: parseInt(startTime.replace(':00', '')),
+            endTime,
+            endInt: parseInt(endTime.replace(':00', '')),
+            active: slot.active,
+          });
         });
-      });
+      console.log('slotArr', slotArr);
       setSlots(slotArr);
     } else {
       setSlots([DEFAULT_SLOT]);
@@ -71,7 +73,7 @@ function UpdateSchedule(props) {
   const getDropdownData = (index) => {
     let slotRange = [];
     if (index === slots.length - 1) {
-      slotRange = range(slots[index].startInt + 1, 23);
+      slotRange = range(slots[index].startInt + 1, 25);
     } else {
       slotRange = range(slots[index].startInt + 1, slots[index + 1].startInt + 1);
     }
@@ -99,17 +101,17 @@ function UpdateSchedule(props) {
   const addSlot = () => {
     if (!isEmpty(slots)) {
       const lastSlot = slots[slots.length - 1];
-      if (!isEmpty(lastSlot.endTime) && lastSlot.endInt !== 22) {
+      if (!isEmpty(lastSlot.endTime) && lastSlot.endInt !== 24) {
         const newSlot = {
           startTime: lastSlot.endTime,
           startInt: lastSlot.endInt,
           endTime: '',
-          endInt: 22,
+          endInt: 24,
           active: true,
         };
         setSlots((slots) => [...slots, newSlot]);
-      } else if (lastSlot.endInt === 22) {
-        alertBox('Slot creation is only allowed upto 10:00 P.M', '');
+      } else if (lastSlot.endInt === 24) {
+        alertBox('You have selected the maximum possible slot', '');
       } else {
         alertBox('Please provide the end time for the previous slot', '');
       }
@@ -280,9 +282,9 @@ function UpdateSchedule(props) {
           </Button>
         </View>
         <View style={{ marginTop: RfH(20), paddingHorizontal: RfW(10) }}>
-          <Text style={[commonStyles.smallMutedText, { marginTop: RfH(20) }]}>
-            *Slots creation is only allowed in between 06:00 A.M to 10 P.M.
-          </Text>
+          {/* <Text style={[commonStyles.smallMutedText, { marginTop: RfH(20) }]}> */}
+          {/*  *Slots creation is only allowed in between 06:00 A.M to 10 P.M. */}
+          {/* </Text> */}
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(5) }]}>
             **Please mark slots as in active if you are not available.
           </Text>

@@ -27,7 +27,7 @@ import styles from '../tutorListing/styles';
 import { alertBox, getFullName, getToken, printCurrency, RfH, RfW } from '../../../utils/helpers';
 import { API_URL, DASHBOARD_URL, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
-import { ADD_TO_CART, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
+import { ADD_TO_CART, CANCEL_PENDING_BOOKINGS, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
 import { GET_MY_QPOINTS_BALANCE } from '../../common/graphql-query';
 import CustomModalWebView from '../../../components/CustomModalWebView';
 import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
@@ -63,10 +63,7 @@ const MyCart = () => {
   const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        console.log(error);
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -84,12 +81,20 @@ const MyCart = () => {
   //   fetchPolicy: 'no-cache',
   // });
 
+  const [cancelPendingBooking, { loading: cancelPendingBookingLoading }] = useMutation(CANCEL_PENDING_BOOKINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
   const [createNewBooking, { loading: bookingLoading }] = useMutation(CREATE_BOOKING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -118,9 +123,7 @@ const MyCart = () => {
     fetchPolicy: 'no-cache',
     variables: { searchDto: { userId: userInfo?.id } },
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -135,9 +138,7 @@ const MyCart = () => {
   const [addToCart, { loading: addTocartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -226,9 +227,7 @@ const MyCart = () => {
   const [removeItem, { loading: removeLoading }] = useMutation(REMOVE_CART_ITEM, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -281,6 +280,9 @@ const MyCart = () => {
           setPaymentStatus('');
         },
         negativeText: 'Cancel',
+        onNegativeClick: () => {
+          cancelPendingBooking({ variables: { orderId: bookingData.id } });
+        },
       });
     }
   }, [paymentModal]);
@@ -309,6 +311,8 @@ const MyCart = () => {
         setPaymentStatus('');
         setBookingData('');
         setPaymentModal(false);
+
+        cancelPendingBooking({ variables: { orderId: bookingData.id } });
       },
       negativeText: 'No',
     });
@@ -441,7 +445,7 @@ const MyCart = () => {
   );
 
   const onSetQPoints = (val) => {
-    if (val <= qPoints) {
+    if (val <= qPoints && val <= amount) {
       setQPointsRedeemed(val);
     }
   };
@@ -562,7 +566,9 @@ const MyCart = () => {
 
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
-      <Loader isLoading={cartLoading || removeLoading || addTocartLoading || bookingLoading} />
+      <Loader
+        isLoading={cartLoading || removeLoading || addTocartLoading || bookingLoading || cancelPendingBookingLoading}
+      />
       <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
       {!cartEmpty ? (
         <View style={{ flex: 1 }}>
@@ -695,8 +701,8 @@ const MyCart = () => {
         amount={amount}
         qPointsRedeemed={qPointsRedeemed}
         handlePaytmPayment={handlePaytmPayment}
-        // discount={appliedCouponValue}
         hidePaymentPopup={() => setShowPaymentModal(false)}
+        handleCancelPendingBooking={(orderId) => cancelPendingBooking({ variables: { orderId } })}
       />
       {paymentModal && !isEmpty(bookingData) && (
         <CustomModalWebView

@@ -26,9 +26,7 @@ const ChooseSubjectComponent = (props) => {
   const [getOfferingMasterData, { loading: loadingOfferingMasterData }] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        console.log('e', e);
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {

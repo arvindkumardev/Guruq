@@ -4,19 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import moment from 'moment';
-import {
-  BackArrow,
-  DateSlotSelectorModal,
-  IconButtonWrapper,
-  Loader,
-  ScreenHeader,
-  TutorImageComponent,
-} from '../../components';
+import { DateSlotSelectorModal, IconButtonWrapper, Loader, ScreenHeader, TutorImageComponent } from '../../components';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import { SCHEDULE_CLASS } from '../student/class.mutation';
 import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
 import { studentDetails, userType } from '../../apollo/cache';
@@ -39,9 +31,7 @@ function ScheduleClass(props) {
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data && data.getScheduledClasses) {
@@ -73,9 +63,8 @@ function ScheduleClass(props) {
   const [scheduleClass, { loading: scheduleLoading }] = useMutation(SCHEDULE_CLASS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
+      alertBox('There is a conflict at this time, please choose another time slot.');
     },
     onCompleted: (data) => {
       if (data) {

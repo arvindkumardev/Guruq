@@ -57,9 +57,7 @@ function ScheduledClassDetails(props) {
   const [getClassDetails, { loading: classDetailsLoading }] = useLazyQuery(GET_CLASS_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -276,7 +274,14 @@ function ScheduledClassDetails(props) {
               }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: RfH(15) }}>
                 <BackArrow action={onBackPress} />
-                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 0.9 }]}>
+                <View
+                  style={[
+                    commonStyles.verticallyStretchedItemsView,
+                    {
+                      marginLeft: RfW(16),
+                      flex: 0.9,
+                    },
+                  ]}>
                   <Text
                     style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}
                     numberOfLines={1}>
@@ -545,7 +550,7 @@ function ScheduledClassDetails(props) {
           {/* )} */}
         </ScrollView>
 
-        {classData && (
+        {classData && classData?.classEntity?.uuid && (
           <VideoMessagingModal
             onClose={() => setShowMessageModal(false)}
             visible={showMessageModal}

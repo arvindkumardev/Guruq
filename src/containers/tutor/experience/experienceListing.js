@@ -23,9 +23,7 @@ function ExperienceListing() {
   const [getExperienceList, { loading: experienceListLoading }] = useLazyQuery(GET_EXPERIENCE_LIST, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -38,9 +36,7 @@ function ExperienceListing() {
   const [deleteExperienceDetail, { loading: experienceDeleteLoading }] = useMutation(DELETE_TUTOR_EXPERIENCE, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -85,10 +81,10 @@ function ExperienceListing() {
           styling={{ marginTop: RfH(5) }}
         />
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-          <Text style={commonStyles.regularPrimaryText}>{item?.title}</Text>
-          <Text style={commonStyles.mediumMutedText}>
-            {item?.institution?.name} - {startCase(item.employmentType)}
+          <Text style={commonStyles.regularPrimaryText}>
+            {item?.title}, {item?.institution?.name}
           </Text>
+          <Text style={commonStyles.mediumMutedText}>{startCase(item.employmentType)}</Text>
           <Text style={commonStyles.mediumMutedText}>
             {formatDate(item.startDate, 'YYYY')} - {!item.current ? formatDate(item.endDate, 'YYYY') : 'Present'}
           </Text>

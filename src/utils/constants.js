@@ -31,8 +31,10 @@ export const LOTTIE_JSON_FILES = {
 
 export const FRONTEND_URL = 'http://stagingv2.guruq.in';
 export const DASHBOARD_URL = 'http://dashboardv2.guruq.in';
-export const API_URL = 'http://apiv2.guruq.in/api';
+
 // export const API_URL = 'http://10.0.0.6:5000';
+export const API_URL = 'http://apiv2.guruq.in/api';
+
 export const ATTACHMENT_PREVIEW_URL = `${API_URL}/upload/preview?filePath=`;
 export const IMAGES_BASE_URL = 'https://guruq.in/guruq-new';
 
@@ -41,11 +43,11 @@ export const QPOINTS_FAQ_URL = `${DASHBOARD_URL}/faqs/qpoints-faqs`;
 export const BOOKING_FAQ_URL = `${DASHBOARD_URL}/faqs/booking-faqs`;
 export const LEGAL_FAQ_URL = `${DASHBOARD_URL}/faqs/legal-terms-conditions`;
 
-export const ABOUT_US_URL = `https://guruq.in/about-us`;
-export const CEO_MESSAGE_URL = `https://guruq.in/ceo-message`;
-export const CSR_URL = `https://guruq.in/guruq-csr`;
-export const IN_NEWS_URL = 'https://guruq.in/guruq-in-news';
-export const ACADEMIC_BOARD_URL = 'https://guruq.in/academic-board';
+export const ABOUT_US_URL = `${FRONTEND_URL}/about-us`;
+export const CEO_MESSAGE_URL = `${FRONTEND_URL}/ceo-message`;
+export const CSR_URL = `${FRONTEND_URL}/guruq-csr`;
+export const IN_NEWS_URL = `${FRONTEND_URL}/guruq-in-news`;
+export const ACADEMIC_BOARD_URL = `${FRONTEND_URL}/academic-board`;
 
 export const SCHOOL_EDUCATION = 'School Education';
 export const COMPETITIVE_EXAM = 'Competitive Exam';

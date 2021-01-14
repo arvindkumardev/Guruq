@@ -23,9 +23,7 @@ function AwardListing() {
   const [getAwardList, { loading: awardListLoading }] = useLazyQuery(GET_AWARD_LIST, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -38,9 +36,7 @@ function AwardListing() {
   const [deleteAwardDetail, { loading: awardDeleteLoading }] = useMutation(DELETE_AWARD_DETAIL, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {

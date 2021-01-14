@@ -9,19 +9,19 @@ import {
   StatusBar,
   Text,
   TouchableOpacity,
-  View,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
 import { appMetaData, notificationsList, studentDetails, userDetails } from '../../../apollo/cache';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import { IconButtonWrapper, UserImageComponent, Loader } from '../../../components';
+import { APP_VERSION, LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { IconButtonWrapper, Loader, UserImageComponent } from '../../../components';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
-import { alertBox, APP_VERSION, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
 import styles from './styles';
 
 const PERSONAL_OPTIONS = [
@@ -95,7 +95,7 @@ function Profile(props) {
     } else if (item.name === 'My Cart') {
       navigation.navigate(NavigationRouteNames.STUDENT.MY_CART);
     } else if (item.name === 'Calendar') {
-      navigation.navigate(NavigationRouteNames.STUDENT.CALENDAR);
+      navigation.navigate(NavigationRouteNames.CALENDAR);
     } else if (item.name === 'Schedule Classes') {
       navigation.navigate(NavigationRouteNames.STUDENT.MY_CLASSES);
     } else if (item.name === 'Add Study Area') {
@@ -120,7 +120,7 @@ function Profile(props) {
           mobile: number,
           country: { dialCode: countryCode },
         };
-        navigation.navigate(NavigationRouteNames.OTP_VERIFICATION, {
+        navigation.navigate(NavigationRouteNames.OTP_CHANGE_PASSWORD, {
           mobileObj,
           fromChangePassword: true,
           newUser: false,
@@ -488,9 +488,7 @@ function Profile(props) {
             </View>
           </View>
           <View style={{ flex: 1, justifyContent: 'center', marginTop: 24, marginBottom: 16 }}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.versionText, { textAlign: 'center' }]}>
-              Powered by RHA Technologies
-            </Text>
+            <Text style={commonStyles.rhaText}>Powered by RHA Technologies</Text>
           </View>
         </ScrollView>
       </View>

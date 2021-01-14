@@ -40,9 +40,7 @@ function CalendarView(props) {
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       setScheduledClasses(data.getScheduledClasses);
@@ -54,9 +52,7 @@ function CalendarView(props) {
   const [getScheduledClassesCount, { loading: loadingScheduledCountClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       const dateArray = [];
@@ -171,14 +167,15 @@ function CalendarView(props) {
           <View style={{ flex: 1, alignItems: 'center' }}>
             {showHeader && <Text style={commonStyles.headingPrimaryText}>Your Schedule</Text>}
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <IconButtonWrapper
-              iconHeight={RfH(24)}
-              iconImage={Images.calendar}
-              iconWidth={RfW(16)}
-              submitFunction={() => navigation.navigate(routeNames.MONTH_CALENDAR_VIEW)}
-            />
-          </View>
+          {/*<View style={{ alignItems: 'flex-end' }}>*/}
+          {/*  <IconButtonWrapper*/}
+          {/*    iconHeight={RfH(24)}*/}
+          {/*    iconImage={Images.calendar}*/}
+          {/*    iconWidth={RfW(20 )}*/}
+          {/*    imageResizeMode="contain"*/}
+          {/*    submitFunction={() => navigation.navigate(routeNames.MONTH_CALENDAR_VIEW)}*/}
+          {/*  />*/}
+          {/*</View>*/}
         </View>
         <View>
           <ScrollView

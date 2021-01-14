@@ -14,7 +14,6 @@ import Wallet from '../containers/wallet/wallet';
 import { Colors, Images } from '../theme';
 import { RfH, RfW } from '../utils/helpers';
 import NavigationRouteNames from './screenNames';
-import commonStyles from '../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../utils/constants';
 
 const Tab = createBottomTabNavigator();
@@ -35,34 +34,54 @@ function MyTabBar({ state, descriptors, navigation }) {
 
         const renderIcon = (name) => {
           if (name === 'Home') {
-            if (isFocused) {
-              return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(16)} iconImage={Images.home_active} />;
-            }
-            return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(16)} iconImage={Images.home} />;
+            return (
+              <IconButtonWrapper
+                iconHeight={RfH(20)}
+                iconWidth={RfW(16)}
+                iconImage={isFocused ? Images.home_active : Images.home}
+                imageResizeMode="contain"
+              />
+            );
           }
           if (name === 'Calendar') {
-            if (isFocused) {
-              return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(16)} iconImage={Images.calendar_active} />;
-            }
-            return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(16)} iconImage={Images.calendar} />;
+            return (
+              <IconButtonWrapper
+                iconHeight={RfH(20)}
+                iconWidth={RfW(16)}
+                iconImage={isFocused ? Images.calendar_active : Images.calendar}
+                imageResizeMode="contain"
+              />
+            );
           }
           if (name === 'My Classes') {
-            if (isFocused) {
-              return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(16)} iconImage={Images.classes_active} />;
-            }
-            return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(16)} iconImage={Images.classes} />;
+            return (
+              <IconButtonWrapper
+                iconHeight={RfH(20)}
+                iconWidth={RfW(16)}
+                iconImage={isFocused ? Images.classes_active : Images.classes}
+                imageResizeMode="contain"
+              />
+            );
           }
           if (name === 'Wallet') {
-            if (isFocused) {
-              return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(18)} iconImage={Images.wallet_active} />;
-            }
-            return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(18)} iconImage={Images.wallet} />;
+            return (
+              <IconButtonWrapper
+                iconHeight={RfH(20)}
+                iconWidth={RfW(16)}
+                iconImage={isFocused ? Images.wallet_active : Images.wallet}
+                imageResizeMode="contain"
+              />
+            );
           }
           if (name === 'Profile') {
-            if (isFocused) {
-              return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(16)} iconImage={Images.profile_active} />;
-            }
-            return <IconButtonWrapper iconHeight={RfH(20)} iconWidth={RfW(16)} iconImage={Images.profile} />;
+            return (
+              <IconButtonWrapper
+                iconHeight={RfH(20)}
+                iconWidth={RfW(16)}
+                iconImage={isFocused ? Images.profile_active : Images.profile}
+                imageResizeMode="contain"
+              />
+            );
           }
         };
 
@@ -125,7 +144,7 @@ export function StudentBottomTabs() {
         options={{
           tabBarLabel: 'Calendar',
         }}
-        name={NavigationRouteNames.STUDENT.CALENDAR}
+        name={NavigationRouteNames.CALENDAR}
         component={CalendarView}
       />
       <Tab.Screen
@@ -167,7 +186,7 @@ export function TutorBottomTabs() {
         options={{
           tabBarLabel: 'Calendar',
         }}
-        name={NavigationRouteNames.STUDENT.CALENDAR}
+        name={NavigationRouteNames.CALENDAR}
         component={CalendarView}
       />
       <Tab.Screen

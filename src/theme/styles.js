@@ -14,12 +14,11 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     paddingHorizontal: RfW(16),
   },
-  buttonContainerView:{
+  buttonContainerView: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'center',
-    
   },
   buttonPrimary: {
     backgroundColor: Colors.brandBlue2,
@@ -254,6 +253,12 @@ const styles = StyleSheet.create({
     fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.regular,
     color: Colors.darkGrey,
+  },
+
+  rhaText: {
+    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
+    color: Colors.secondaryText,
+    textAlign: 'center',
   },
 });
 export default styles;

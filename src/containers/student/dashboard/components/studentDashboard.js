@@ -15,7 +15,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import Swiper from 'react-native-swiper';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { isEmpty } from 'lodash';
 import { interestingOfferingData, offeringsMasterData, studentDetails, userDetails } from '../../../../apollo/cache';
@@ -31,7 +30,7 @@ import { Colors, Images } from '../../../../theme';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { alertBox, getFullName, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, deviceWidth, getFullName, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
 import { GET_CART_ITEMS, GET_SCHEDULED_CLASSES } from '../../booking.query';
 import { MARK_INTERESTED_OFFERING_SELECTED } from '../../dashboard-mutation';
 import { GET_INTERESTED_OFFERINGS, GET_OFFERINGS_MASTER_DATA, GET_SPONSORED_TUTORS } from '../../dashboard-query';
@@ -42,6 +41,7 @@ import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 
 const carouselItems = [Images.dash_img1, Images.dash_img2, Images.dash_img3];
+
 function StudentDashboard(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
@@ -80,9 +80,7 @@ function StudentDashboard(props) {
   const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -94,9 +92,7 @@ function StudentDashboard(props) {
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -108,9 +104,7 @@ function StudentDashboard(props) {
   const [getSponsoredTutors, { loading: loadingSponsoredTutors }] = useLazyQuery(GET_SPONSORED_TUTORS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -140,9 +134,7 @@ function StudentDashboard(props) {
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       setUpcomingClasses(data.getScheduledClasses);
@@ -485,7 +477,7 @@ function StudentDashboard(props) {
             <TouchableOpacity onPress={() => setStudentOfferingModalVisible(true)}>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
                 {selectedOffering && (
-                  <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4) }}>
+                  <Text style={{ color: Colors.primaryText, fontSize: 17, marginTop: RfH(4) }} numberOfLines={1}>
                     {selectedOffering?.parentOffering?.displayName} - {selectedOffering?.displayName}
                   </Text>
                 )}
@@ -554,8 +546,8 @@ function StudentDashboard(props) {
               paddingHorizontal: RfW(16),
             }}>
             <View style={{ flex: 0.7 }}>
-              <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
-                Hi {userInfo.firstName}
+              <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }} numberOfLines={1}>
+                Hi {userInfo?.firstName}
               </Text>
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
@@ -573,7 +565,7 @@ function StudentDashboard(props) {
                   <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                     Upcoming Classes
                   </Text>
-                  <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.CALENDAR)}>
+                  <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CALENDAR)}>
                     <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                       View All
                     </Text>
@@ -688,17 +680,18 @@ function StudentDashboard(props) {
               style={{ marginTop: RfH(20) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: Dimensions.get('window').width, height: RfH(170) }}
+                style={{ width: deviceWidth() - RfW(32), height: 170 }}
                 source={Images.post_needs}
                 resizeMode="stretch"
               />
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
-              style={{ marginBottom: RfH(15) }}
+              style={{ marginBottom: RfH(16) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: Dimensions.get('window').width, height: RfH(200) }}
+                style={{ width: deviceWidth() - RfW(32), height: 200 }}
                 source={Images.refer_earn_new}
                 resizeMode="stretch"
               />

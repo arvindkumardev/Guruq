@@ -146,11 +146,7 @@ const AppStack = (props) => {
 
   const getCommonRoutes = () => (
     <>
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.CALENDAR}
-        component={CalendarView}
-        options={{ headerShown: false }}
-      />
+      {/*<Stack.Screen name={NavigationRouteNames.CALENDAR} component={CalendarView} options={{ headerShown: false }} />*/}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
         component={scheduledClassDetails}
@@ -253,11 +249,15 @@ const AppStack = (props) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.OTP_VERIFICATION}
+        name={NavigationRouteNames.OTP_CHANGE_PASSWORD}
         component={OtpVerification}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.SET_PASSWORD} component={SetPassword} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.CHANGE_PASSWORD}
+        component={SetPassword}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.MONTH_CALENDAR_VIEW}
         component={MonthCalendarView}
@@ -398,17 +398,18 @@ const AppStack = (props) => {
                 component={EnterPassword}
                 options={{ headerShown: false }}
               />
-              <Stack.Screen
-                name={NavigationRouteNames.OTP_VERIFICATION}
-                component={OtpVerification}
-                options={{ headerShown: false }}
-              />
+
               <Stack.Screen
                 name={NavigationRouteNames.SET_PASSWORD}
                 component={SetPassword}
                 options={{ headerShown: false }}
               />
               <Stack.Screen name={NavigationRouteNames.REGISTER} component={SignUp} options={{ headerShown: false }} />
+              <Stack.Screen
+                name={NavigationRouteNames.OTP_VERIFICATION}
+                component={OtpVerification}
+                options={{ headerShown: false }}
+              />
             </>
           )}
           {isUserLoggedIn && userType === UserTypeEnum.OTHER.label && (

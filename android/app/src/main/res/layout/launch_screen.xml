@@ -1,62 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/primary_light"
-    android:gravity="center"
-    android:orientation="vertical">
-
-    <View
-        android:id="@+id/view4"
-        android:layout_width="match_parent"
-        android:layout_height="63dp" />
-
-    <View
-        android:id="@+id/view3"
-        android:layout_width="match_parent"
-        android:layout_height="42dp" />
-
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+              android:background="@color/primary_light"
+>
     <ImageView
-        android:layout_width="233dp"
-        android:layout_height="233dp"
-        android:layout_marginTop="24dp"
-        android:src="@mipmap/icon" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-50dp"
-        android:text="Find the best"
-        android:textColor="#fff"
-        android:textFontWeight="600"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tutors and Institutes"
-        android:textColor="#fff"
-        android:textFontWeight="600"
-        android:textSize="20sp" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="134dp" />
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="177dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#fff"
-        android:alpha="0.5"
-        android:text="Powered by RHA Technologies" />
-
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/splash"
+            android:gravity="center"/>
 </LinearLayout>

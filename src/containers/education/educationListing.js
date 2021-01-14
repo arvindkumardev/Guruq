@@ -9,7 +9,7 @@ import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
 import { userType } from '../../apollo/cache';
 import commonStyles from '../../theme/styles';
 import { Colors, Images } from '../../theme';
-import {alertBox, printDate, printYear, RfH, RfW} from '../../utils/helpers';
+import { alertBox, printDate, printYear, RfH, RfW } from '../../utils/helpers';
 import NavigationRouteNames from '../../routes/screenNames';
 import { UserTypeEnum } from '../../common/userType.enum';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
@@ -105,7 +105,7 @@ function EducationListing() {
         <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
           {item.board && (
             <Text style={commonStyles.regularPrimaryText}>
-              {item?.board}, {item?.grade}
+              {item?.board}, {item?.grade} {item?.fieldOfStudy ? item?.fieldOfStudy : ''}
             </Text>
           )}
           {item.degree && (
@@ -177,7 +177,7 @@ function EducationListing() {
                 commonStyles.regularMutedText,
                 { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
               ]}>
-              Looks like you haven't provided your education qualification.
+              You haven't provided your education qualification.
             </Text>
             <Button
               onPress={() => handleAddEditEducation()}

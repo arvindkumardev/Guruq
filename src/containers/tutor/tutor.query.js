@@ -34,10 +34,8 @@ export const GET_TUTOR_DETAILS = gql`
           name
         }
         fieldOfStudy
-        higherSecondaryStream
         board
         grade
-        subjects
       }
     }
   }

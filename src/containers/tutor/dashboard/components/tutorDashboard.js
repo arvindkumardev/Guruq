@@ -57,9 +57,7 @@ function TutorDashboard(props) {
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       setUpcomingClasses(data.getScheduledClasses);
@@ -70,9 +68,7 @@ function TutorDashboard(props) {
     fetchPolicy: 'no-cache',
     variables: { tutorId: tutorInfo?.id },
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -230,7 +226,7 @@ function TutorDashboard(props) {
             }}>
             <View style={{ flex: 0.7 }}>
               <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
-                Hi {userInfo.firstName}
+                Hi {userInfo?.firstName}
               </Text>
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
@@ -249,7 +245,7 @@ function TutorDashboard(props) {
                   <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                     Upcoming Classes
                   </Text>
-                  <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.CALENDAR)}>
+                  <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CALENDAR)}>
                     <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                       View All
                     </Text>

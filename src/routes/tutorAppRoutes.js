@@ -20,6 +20,7 @@ import ProficiencyTest from '../containers/tutor/proficiencyTest';
 import StudentListing from '../containers/tutor/studentDetails/studentListing';
 import StudentDetails from '../containers/tutor/studentDetails/studentDetails';
 import Profile from '../containers/tutor/profile/profile';
+import { TutorBottomTabs } from './bottomTabs';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +37,7 @@ export const getTutorRoutes = (tutorInfo) => {
       {tutorInfo.activeForListing ? (
         <Stack.Screen
           name={NavigationRouteNames.TUTOR.DASHBOARD}
-          component={TutorDashboardContainer}
+          component={TutorBottomTabs}
           options={{ headerShown: false }}
         />
       ) : (

@@ -12,7 +12,7 @@ import { GET_TUTOR_AVAILABILITY } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { endOfDay, RfH, RfW, startOfDay } from '../../utils/helpers';
+import { endOfDay, printDate, RfH, RfW, startOfDay } from '../../utils/helpers';
 
 const DateSlotSelectorModal = (props) => {
   const [selectedSlot, setSelectedSlot] = useState({});
@@ -22,9 +22,7 @@ const DateSlotSelectorModal = (props) => {
   const [getTutorAvailability, { loading: loaderAvailability }] = useLazyQuery(GET_TUTOR_AVAILABILITY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-      }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -41,8 +39,8 @@ const DateSlotSelectorModal = (props) => {
         tutorAvailability: {
           tutorId,
           studentId,
-          startDate: startOfDay(date),
-          endDate: endOfDay(date),
+          startDate: printDate(date),
+          endDate: printDate(date),
         },
       },
     });

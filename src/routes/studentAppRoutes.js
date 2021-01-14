@@ -26,6 +26,7 @@ import Refund from '../containers/student/purchasedHistory/refund';
 import MyStudyAreas from '../containers/student/studyArea/myStudyAreas';
 import OrderDetails from '../containers/student/purchasedHistory/orderDetails';
 import StudentOnBoard from '../containers/student/studentOnBoard';
+import {StudentBottomTabs} from "./bottomTabs";
 
 const Stack = createStackNavigator();
 
@@ -41,7 +42,7 @@ export const getStudentRoutes = (studentInfo) => {
       )}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.DASHBOARD}
-        component={StudentDashboardContainer}
+        component={StudentBottomTabs}
         options={{ headerShown: false }}
       />
       <Stack.Screen
