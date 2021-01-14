@@ -20,7 +20,14 @@ const Tab = createBottomTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation }) {
   return (
-    <View style={{ flexDirection: 'row', paddingVertical: RfH(12) }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        paddingVertical: RfH(12),
+        borderTopColor: Colors.borderColor,
+        borderTopWidth: 2,
+        backgroundColor: Colors.white,
+      }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =

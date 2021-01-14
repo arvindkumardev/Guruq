@@ -89,6 +89,23 @@ function StudentDashboard(props) {
     },
   });
 
+  // useFocusEffect(() => {
+  //   const backAction = () => {
+  //     if () {
+  //       alertBox('Alert', 'Do you really want to exit?', {
+  //         positiveText: 'Yes',
+  //         onPositiveClick: () => {
+  //           BackHandler.exitApp();
+  //         },
+  //         negativeText: 'No',
+  //       });
+  //     }
+  //     return true;
+  //   };
+  //   const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+  //   return () => backHandler.remove();
+  // }, []);
+
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {

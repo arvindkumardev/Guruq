@@ -1058,7 +1058,6 @@
 					"\"${PODS_ROOT}/Headers/Public/RCTTypeSafety\"",
 					"\"${PODS_ROOT}/Headers/Public/RNCAsyncStorage\"",
 					"\"${PODS_ROOT}/Headers/Public/RNCMaskedView\"",
-					"\"${PODS_ROOT}/Headers/Public/RNCPicker\"",
 					"\"${PODS_ROOT}/Headers/Public/RNDateTimePicker\"",
 					"\"${PODS_ROOT}/Headers/Public/RNDeviceInfo\"",
 					"\"${PODS_ROOT}/Headers/Public/RNGestureHandler\"",
