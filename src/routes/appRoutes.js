@@ -65,6 +65,7 @@ import ReferEarn from '../containers/referAndEarn/referEarn';
 import OnlineClass from '../containers/onlineClass/onlineClass';
 import Notifications from '../containers/student/dashboard/notifications';
 import MonthCalendarView from '../containers/calendar/monthCalendarView';
+import Wallet from '../containers/wallet/wallet';
 
 const Stack = createStackNavigator();
 
@@ -145,11 +146,7 @@ const AppStack = (props) => {
 
   const getCommonRoutes = () => (
     <>
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.CALENDAR}
-        component={CalendarView}
-        options={{ headerShown: false }}
-      />
+      {/*<Stack.Screen name={NavigationRouteNames.CALENDAR} component={CalendarView} options={{ headerShown: false }} />*/}
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
         component={scheduledClassDetails}
@@ -261,11 +258,12 @@ const AppStack = (props) => {
         component={SetPassword}
         options={{ headerShown: false }}
       />
-        <Stack.Screen
-            name={NavigationRouteNames.MONTH_CALENDAR_VIEW}
-            component={MonthCalendarView}
-            options={{ headerShown: false }}
-        />
+      <Stack.Screen
+        name={NavigationRouteNames.MONTH_CALENDAR_VIEW}
+        component={MonthCalendarView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.WALLET} component={Wallet} options={{ headerShown: false }} />
     </>
   );
 

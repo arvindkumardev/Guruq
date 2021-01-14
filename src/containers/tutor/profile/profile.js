@@ -1,22 +1,21 @@
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { appMetaData, notificationsList, tutorDetails, userDetails } from '../../../apollo/cache';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
-import {
-  alertBox,
-  APP_VERSION,
-  comingSoonAlert,
-  getFullName,
-  getSaveData,
-  logout,
-  RfH,
-  RfW,
-} from '../../../utils/helpers';
+import { APP_VERSION, LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { alertBox, comingSoonAlert, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
 import { Loader, IconButtonWrapper, UserImageComponent } from '../../../components';
 import { Colors, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
@@ -119,9 +118,7 @@ function Profile(props) {
     } else if (item.name === 'Send Feedback') {
       navigation.navigate(NavigationRouteNames.SEND_FEEDBACK);
     } else if (item.name === 'Calendar') {
-      changeTab(2);
-    } else if (item.name === 'My Classes') {
-      changeTab(3);
+      navigation.navigate(NavigationRouteNames.CALENDAR);
     } else if (item.name === 'My Students') {
       comingSoonAlert();
     } else if (item.name === 'Student PYTN Requests') {
@@ -144,55 +141,58 @@ function Profile(props) {
   };
 
   const renderItem = (item) => (
-    <TouchableWithoutFeedback
-      onPress={() => personalDetails(item)}
-      style={[
-        styles.userMenuParentView,
-        {
-          height: RfH(44),
-          justifyContent: 'space-between',
-          paddingLeft: RfW(48),
-          borderBottomColor: Colors.lightGrey,
-        },
-      ]}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
-        <Text style={[commonStyles.mediumMutedText, { marginLeft: RfW(16) }]}>{item.name}</Text>
+    <TouchableWithoutFeedback onPress={() => personalDetails(item)}>
+      <View
+        style={[
+          styles.userMenuParentView,
+          {
+            height: RfH(44),
+            justifyContent: 'space-between',
+            paddingLeft: RfW(48),
+            borderBottomColor: Colors.lightGrey,
+          },
+        ]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <IconButtonWrapper iconImage={item.icon} iconHeight={RfH(16)} iconWidth={RfW(16)} imageResizeMode="contain" />
+          <Text style={[commonStyles.mediumMutedText, { marginLeft: RfW(16) }]}>{item.name}</Text>
+        </View>
+        <IconButtonWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
       </View>
-      <IconButtonWrapper iconImage={Images.chevronRight} iconHeight={RfH(20)} iconWidth={RfW(20)} />
     </TouchableWithoutFeedback>
   );
 
   return (
-    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0 }]}>
+    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
       <StatusBar barStyle="dark-content" />
       <Loader isLoading={forgotPasswordLoading} />
-      <View
-        style={{
-          height: 44,
-          paddingHorizontal: RfW(16),
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <View style={{ flexDirection: 'row' }} />
-
-        <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
-          {notificationCount > 0 && (
-            <View style={{ position: 'absolute', left: 6, top: 6, zIndex: 10 }}>
-              <Image
-                source={Images.small_active_blue}
-                resizeMode="contain"
-                style={{ height: RfH(10), width: RfW(10) }}
-              />
-            </View>
-          )}
-          <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} />
-        </TouchableOpacity>
-      </View>
 
       <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
-        <View style={{ paddingHorizontal: RfW(16), height: 54 }}>
+        <View
+          style={{
+            paddingHorizontal: RfW(16),
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: Colors.white,
+          }}>
+          <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
+            <TouchableOpacity
+              style={{ padding: 10 }}
+              onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
+              {notificationCount > 0 && (
+                <View style={{ position: 'absolute', left: 6, top: 6, zIndex: 10 }}>
+                  <Image
+                    source={Images.small_active_blue}
+                    resizeMode="contain"
+                    style={{ height: RfH(12), width: RfW(12) }}
+                  />
+                </View>
+              )}
+              <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} resizeMode="contain" />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(20) }}>
           <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
         </View>
         <View
@@ -216,26 +216,26 @@ function Profile(props) {
         </View>
         <View style={commonStyles.blankGreyViewSmall} />
         <View>
-          <TouchableWithoutFeedback
-            onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-            style={[styles.userMenuParentView, { height: RfH(60) }]}>
-            <IconButtonWrapper
-              iconHeight={RfH(16)}
-              iconWidth={RfW(16)}
-              iconImage={Images.profile}
-              imageResizeMode="contain"
-            />
-            <View style={styles.menuItemParentView}>
-              <Text style={styles.menuItemPrimaryText}>My Account</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Personal, Address, Education, Experience & Business Details
-              </Text>
+          <TouchableWithoutFeedback onPress={() => setIsAccountMenuOpen(!isAccountMenuOpen)}>
+            <View style={[styles.userMenuParentView, { height: RfH(60) }]}>
+              <IconButtonWrapper
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                iconImage={Images.profile}
+                imageResizeMode="contain"
+              />
+              <View style={styles.menuItemParentView}>
+                <Text style={styles.menuItemPrimaryText}>My Account</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                  Personal, Address, Education, Experience & Business Details
+                </Text>
+              </View>
+              <IconButtonWrapper
+                iconWidth={RfW(24)}
+                iconHeight={RfH(24)}
+                iconImage={isAccountMenuOpen ? Images.collapse_grey : Images.expand_gray}
+              />
             </View>
-            <IconButtonWrapper
-              iconWidth={RfW(24)}
-              iconHeight={RfH(24)}
-              iconImage={isAccountMenuOpen ? Images.collapse_grey : Images.expand_gray}
-            />
           </TouchableWithoutFeedback>
         </View>
         {isAccountMenuOpen && (
@@ -340,10 +340,12 @@ function Profile(props) {
           <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.personal} />
           <View style={styles.menuItemParentView}>
             <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}>
-              <Text style={styles.menuItemPrimaryText}>Help</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Customer Care, FAQs, Send feedback
-              </Text>
+              <View>
+                <Text style={styles.menuItemPrimaryText}>Help</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                  Customer Care, FAQs, Send feedback
+                </Text>
+              </View>
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -355,10 +357,12 @@ function Profile(props) {
             <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.aboutGuru} />
             <View style={styles.menuItemParentView}>
               <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.ABOUT_US)}>
-                <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                  About Us, Team, Know More
-                </Text>
+                <View>
+                  <Text style={styles.menuItemPrimaryText}>About GuruQ</Text>
+                  <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                    About Us, Team, Know More
+                  </Text>
+                </View>
               </TouchableWithoutFeedback>
             </View>
           </View>
@@ -370,10 +374,12 @@ function Profile(props) {
           <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.settings} />
           <View style={styles.menuItemParentView}>
             <TouchableWithoutFeedback onPress={() => onChangePasswordClick()}>
-              <Text style={styles.menuItemPrimaryText}>Change Password</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Reset your password
-              </Text>
+              <View>
+                <Text style={styles.menuItemPrimaryText}>Change Password</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
+                  Reset your password
+                </Text>
+              </View>
             </TouchableWithoutFeedback>
           </View>
         </View>

@@ -40,6 +40,8 @@ const NavigationRouteNames = {
   OTP_CHANGE_PASSWORD: 'otp_change_password',
   CHANGE_PASSWORD: 'change_password',
   MONTH_CALENDAR_VIEW: 'month_calendar_view',
+  WALLET: 'wallet',
+  CALENDAR: 'calendar',
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
     MY_STUDY_AREAS: 'my_study_areas',
@@ -47,7 +49,6 @@ const NavigationRouteNames = {
     BOARD: 'student_board',
     CLASS: 'student_class',
     DASHBOARD: 'student_dashboard',
-    CALENDAR: 'student_calendar',
     CLASSES: 'student_classes',
     TUTOR: 'student_tutor',
     PROFILE: 'student_profile',
@@ -101,6 +102,7 @@ const NavigationRouteNames = {
     ADD_DATA: 'add_data',
     STUDENT_LISTING: 'student_listing',
     STUDENT_DETAILS: 'student_details',
+    PROFILE: 'Profile',
   },
 };
 

@@ -1,10 +1,20 @@
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+  TouchableWithoutFeedback,
+  BackHandler,
+} from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { isEmpty } from 'lodash';
@@ -79,6 +89,21 @@ function StudentDashboard(props) {
       }
     },
   });
+
+  useFocusEffect(() => {
+    const backAction = () => {
+      alertBox('Alert', 'Do you really want to exit?', {
+        positiveText: 'Yes',
+        onPositiveClick: () => {
+          BackHandler.exitApp();
+        },
+        negativeText: 'No',
+      });
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, []);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
@@ -448,7 +473,14 @@ function StudentDashboard(props) {
       <Loader isLoading={interestedOfferingsLoading} />
       <NotificationRedirection />
 
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          backgroundColor: Colors.white,
+        }}>
         <View
           style={{
             height: RfH(44),
@@ -535,7 +567,7 @@ function StudentDashboard(props) {
               </Text>
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
-              <TouchableWithoutFeedback onPress={() => changeTab(5)}>
+              <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.PROFILE)}>
                 <UserImageComponent height={40} width={40} fontSize={16} styling={{ borderRadius: RfH(40) }} />
               </TouchableWithoutFeedback>
             </View>
@@ -549,7 +581,7 @@ function StudentDashboard(props) {
                   <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                     Upcoming Classes
                   </Text>
-                  <TouchableWithoutFeedback onPress={() => changeTab(2)}>
+                  <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CALENDAR)}>
                     <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                       View All
                     </Text>

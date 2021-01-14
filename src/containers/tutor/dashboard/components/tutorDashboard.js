@@ -1,11 +1,12 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import {
+  BackHandler,
   Dimensions,
   FlatList,
   Image,
@@ -28,7 +29,7 @@ import { getBoxColor } from '../../../../theme/colors';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { deviceWidth, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, deviceWidth, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
@@ -51,6 +52,21 @@ function TutorDashboard(props) {
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.85);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 3) / 4);
+
+  useFocusEffect(() => {
+    const backAction = () => {
+      alertBox('Alert', 'Do you really want to exit?', {
+        positiveText: 'Yes',
+        onPositiveClick: () => {
+          BackHandler.exitApp();
+        },
+        negativeText: 'No',
+      });
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, []);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
@@ -195,7 +211,14 @@ function TutorDashboard(props) {
     <>
       <StatusBar barStyle="dark-content" />
       <Loader isLoading={loadingScheduledClasses || loadingTutorsOffering} />
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'stretch' }}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          backgroundColor: Colors.white,
+        }}>
         {/* <View style={{ height: RfH(44), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}> */}
         {/*  <View style={{ flexDirection: 'row' }} /> */}
         {/*  /!* <View> *!/ */}
@@ -221,7 +244,7 @@ function TutorDashboard(props) {
               </Text>
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
-              <TouchableWithoutFeedback onPress={() => changeTab(5)}>
+              <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.PROFILE)}>
                 <UserImageComponent height={40} width={40} fontSize={16} styling={{ borderRadius: RfH(40) }} />
               </TouchableWithoutFeedback>
             </View>
@@ -236,7 +259,7 @@ function TutorDashboard(props) {
                   <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                     Upcoming Classes
                   </Text>
-                  <TouchableWithoutFeedback onPress={() => changeTab(2)}>
+                  <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CALENDAR)}>
                     <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
                       View All
                     </Text>

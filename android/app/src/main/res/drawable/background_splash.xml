@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+            android:opacity="opaque"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/primary_light">
 
     <!--    <item-->
     <!--            android:width="400dp"-->
@@ -8,10 +13,11 @@
     <!--            android:gravity="center"/>-->
     <item android:drawable="@color/primary_light"/>
         <item
-                android:width="300dp"
-                android:height="800dp"
-                android:drawable="@drawable/splash"
-                android:gravity="center"/>
+                android:width="400dp"
+                android:height="900dp"
+                android:adjustViewBounds="true"
+                android:gravity="fill"
+                android:drawable="@drawable/splash"/>
 <!--        <item>-->
 <!--            <bitmap-->
 <!--                    android:gravity="center"-->

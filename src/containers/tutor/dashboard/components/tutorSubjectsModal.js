@@ -1,8 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FlatList, Modal, Text, View } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { FlatList, Modal, Text, View, TouchableWithoutFeedback } from 'react-native';
 import { IconButtonWrapper } from '../../../../components';
 import { Colors, Fonts, Images } from '../../../../theme';
 import { getBoxColor } from '../../../../theme/colors';

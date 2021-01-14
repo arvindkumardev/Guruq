@@ -96,7 +96,7 @@ function CalendarView(props) {
           <IconButtonWrapper
             iconHeight={RfH(72)}
             iconWidth={RfW(72)}
-            styling={{ alignSelf: 'center' }}
+            styling={{ alignSelf: 'center', borderRadius: RfH(8) }}
             iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
           />
         </View>
@@ -259,7 +259,7 @@ function CalendarView(props) {
                   <Button
                     block
                     style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-                    onPress={() => changeTab(3)}>
+                    onPress={() => navigation.navigate(routeNames.STUDENT.MY_CLASSES)}>
                     <Text style={commonStyles.textButtonPrimary}>{isStudent ? 'Schedule Now' : 'View Classes'}</Text>
                   </Button>
                 )}
