@@ -675,14 +675,17 @@ function StudentDashboard(props) {
                 </View>
               </View>
             )}
+
+            <View style={commonStyles.blankViewMedium} />
+
             <TouchableOpacity
               onPress={() => navigation.navigate(NavigationRouteNames.PYTN_LISTING, { selectedOffering })}
               style={{ marginTop: RfH(20) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: deviceWidth() - RfW(32), height: 170 }}
+                style={{ width: deviceWidth() - RfW(32), height: (441 / 1031) * (deviceWidth() - RfW(32)) }}
                 source={Images.post_needs}
-                resizeMode="stretch"
+                resizeMode="contain"
               />
             </TouchableOpacity>
 
@@ -691,9 +694,9 @@ function StudentDashboard(props) {
               style={{ marginBottom: RfH(16) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: deviceWidth() - RfW(32), height: 200 }}
+                style={{ width: deviceWidth() - RfW(32), height: (560 / 1031) * (deviceWidth() - RfW(32)) }}
                 source={Images.refer_earn_new}
-                resizeMode="stretch"
+                resizeMode="contain"
               />
             </TouchableOpacity>
           </View>

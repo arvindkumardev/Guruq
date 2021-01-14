@@ -78,8 +78,6 @@ const Images = {
   free_demo: require('../assets/images/free-demo.png'),
   free_demo_filled: require('../assets/images/free-demo-filled.png'),
   //----
-  four_stars: require('../assets/images/four_stars.png'),
-  //----
   golden_star: require('../assets/images/golden-star.png'),
   golden_star_half: require('../assets/images/golden-star-half.png'),
   gprs: require('../assets/images/gprs.png'),

@@ -6,19 +6,20 @@ import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
 import { useLazyQuery, useMutation } from '@apollo/client';
+import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import { Colors, Images } from '../../../theme';
 import { getFullName, getSaveData, getTutorImage, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
-import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import { GET_FAVOURITE_TUTORS } from '../tutor-query';
 
 function compareTutors(props) {
   const navigation = useNavigation();
   const [tutorData, setTutorData] = useState([]);
-  const [isFisrtFav, setIsFirstFav] = useState(false);
+  const [isFirstFav, setIsFirstFav] = useState(false);
   const [isSecondFav, setIsSecondFav] = useState(false);
   const [tutorClicked, setTutorClicked] = useState(0);
   const { route } = props;
@@ -93,7 +94,7 @@ function compareTutors(props) {
   const markFavouriteTutor = (tutorId, tutorClicked) => {
     if (tutorClicked === 0) {
       setTutorClicked(0);
-      if (isFisrtFav) {
+      if (isFirstFav) {
         removeFavourite({
           variables: { tutorFavourite: { tutor: { id: tutorId } } },
         });
@@ -122,7 +123,7 @@ function compareTutors(props) {
         <IconButtonWrapper
           iconWidth={RfH(20)}
           iconHeight={RfH(20)}
-          iconImage={Images.cross}
+          iconImage={Images.delete}
           imageResizeMode="contain"
           styling={styles.crossIcon}
           submitFunction={() => removeFromCompare(index)}
@@ -136,16 +137,44 @@ function compareTutors(props) {
         />
         {/* FIXME */}
         <Text style={styles.compareTutorName}>{getFullName(item?.contactDetail)}</Text>
-        <Text style={{ color: Colors.darkGrey, alignSelf: 'center' }}>
-          ₹ {item.tutorOfferings[0].budgets[0].price}/ hour
-        </Text>
+        <View style={[commonStyles.horizontalChildrenCenterView, { marginVertical: RfH(8) }]}>
+          <IconButtonWrapper
+            iconImage={item?.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
+            iconHeight={RfH(15)}
+            iconWidth={RfW(15)}
+            imageResizeMode="contain"
+            styling={{ marginRight: RfW(4) }}
+          />
+          {item?.averageRating > 0 ? (
+            <Text style={styles.chargeText}>{parseFloat(item?.averageRating).toFixed(1)}</Text>
+          ) : (
+            <Text
+              style={{
+                color: Colors.secondaryText,
+                fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+              }}>
+              NOT RATED
+            </Text>
+          )}
+          {item?.reviewCount > 0 && (
+            <Text
+              style={{
+                color: Colors.secondaryText,
+                fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                marginLeft: RfW(8),
+              }}>
+              {item?.reviewCount} Reviews
+            </Text>
+          )}
+        </View>
+
         <View style={[commonStyles.horizontalChildrenCenterView, { marginTop: RfH(8) }]}>
           <IconButtonWrapper iconHeight={RfH(18)} iconWidth={RfH(18)} iconImage={Images.user_board} />
           <IconButtonWrapper
             iconHeight={RfH(18)}
             iconWidth={RfH(18)}
             iconImage={
-              index === 0 && isFisrtFav
+              index === 0 && isFirstFav
                 ? Images.heartFilled
                 : index === 1 && isSecondFav
                 ? Images.heartFilled
@@ -187,44 +216,19 @@ function compareTutors(props) {
     return (
       <View style={styles.informationParentMargin}>
         <Text style={styles.switchText}>Basic Information</Text>
-        <Text style={[styles.infoCategoryText, { marginTop: RfH(16) }]}>User Reviews</Text>
+        <Text style={[styles.infoCategoryText, { marginTop: RfH(16) }]}>Price / Class</Text>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12) }]}>
           <View style={commonStyles.horizontalChildrenView}>
-            <Text>{item[0]?.averageRating}</Text>
-            <IconButtonWrapper
-              iconWidth={RfW(76)}
-              iconHeight={RfH(13)}
-              iconImage={Images.four_stars}
-              imageResizeMode="contain"
-              styling={{ marginHorizontal: RfH(6) }}
-            />
-            <IconButtonWrapper
-              iconWidth={RfW(13)}
-              iconHeight={RfH(13)}
-              iconImage={Images.grey_star}
-              imageResizeMode="contain"
-              styling={{ alignSelf: 'center' }}
-            />
+            <Text style={{ color: Colors.darkGrey, alignSelf: 'center' }}>
+              ₹ {item[0].selectedSubject?.budgetDetails.find((b) => !b.demo && b.count === 1).price}/ hour
+            </Text>
           </View>
+
           <View style={commonStyles.horizontalChildrenView}>
-            <IconButtonWrapper
-              iconWidth={RfW(13)}
-              iconHeight={RfH(13)}
-              iconImage={Images.grey_star}
-              styling={{ alignSelf: 'center' }}
-            />
-            <IconButtonWrapper
-              iconWidth={RfW(76)}
-              iconHeight={RfH(13)}
-              iconImage={Images.four_stars}
-              styling={{ marginHorizontal: RfH(6) }}
-            />
-            <Text>{item[1]?.averageRating}</Text>
+            <Text style={{ color: Colors.darkGrey, alignSelf: 'center' }}>
+              ₹ {item[1].selectedSubject?.budgetDetails.find((b) => !b.demo && b.count === 1).price}/ hour
+            </Text>
           </View>
-        </View>
-        <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={styles.ratingText}>{item[0]?.reviewCount} reviews</Text>
-          <Text style={styles.ratingText}>{item[1]?.reviewCount} reviews</Text>
         </View>
         {item[0]?.educationDetails &&
           item[0]?.educationDetails[0]?.degree &&
@@ -260,64 +264,31 @@ function compareTutors(props) {
         <Text style={styles.infoCategoryText}>Mode of Tuition</Text>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12) }]}>
           <View style={commonStyles.verticallyStretchedItemsView}>
-            {item[0]?.tutorOfferings[0]?.budgets[0]?.onlineClass && (
-              <View style={commonStyles.horizontalChildrenView}>
-                <IconButtonWrapper
-                  iconHeight={RfH(11)}
-                  iconWidth={RfW(18)}
-                  iconImage={Images.laptop}
-                  styling={{ alignSelf: 'center' }}
-                  imageResizeMode="contain"
-                />
-                <Text style={styles.typeItemText}>
-                  {item[0]?.tutorOfferings[0]?.budgets[0]?.onlineClass ? 'Online' : ''}
-                </Text>
-              </View>
-            )}
-            {!item[0]?.tutorOfferings[0]?.budgets[0]?.onlineClass && (
-              <View style={commonStyles.horizontalChildrenView}>
-                <IconButtonWrapper
-                  iconHeight={RfH(13)}
-                  iconWidth={RfW(18)}
-                  iconImage={Images.home}
-                  imageResizeMode="contain"
-                  styling={{ alignSelf: 'center' }}
-                />
-                <Text style={styles.typeItemText}>
-                  {!item[0]?.tutorOfferings[0]?.budgets[0]?.onlineClass ? 'Offline' : ''}
-                </Text>
-              </View>
-            )}
+            <View style={commonStyles.horizontalChildrenView}>
+              {/* <IconButtonWrapper */}
+              {/*  iconHeight={RfH(11)} */}
+              {/*  iconWidth={RfW(18)} */}
+              {/*  iconImage={Images.laptop} */}
+              {/*  styling={{ alignSelf: 'center' }} */}
+              {/*  imageResizeMode="contain" */}
+              {/* /> */}
+
+              <Text style={styles.typeItemText}>{item[0]?.selectedSubject?.onlineClass && 'Online'}</Text>
+              <Text style={styles.typeItemText}>{item[0]?.selectedSubject?.offlineClass && 'Offline'}</Text>
+            </View>
           </View>
           <View style={commonStyles.verticallyStretchedItemsView}>
-            {item[1]?.tutorOfferings[0]?.budgets[0]?.onlineClass && (
-              <View style={commonStyles.horizontalChildrenView}>
-                <IconButtonWrapper
-                  iconHeight={RfH(11)}
-                  iconWidth={RfW(18)}
-                  iconImage={Images.laptop}
-                  imageResizeMode="contain"
-                  styling={{ alignSelf: 'center' }}
-                />
-                <Text style={styles.typeItemText}>
-                  {item[1]?.tutorOfferings[0]?.budgets[0]?.onlineClass ? 'Online' : ''}
-                </Text>
-              </View>
-            )}
-            {!item[1]?.tutorOfferings[0]?.budgets[0]?.onlineClass && (
-              <View style={commonStyles.horizontalChildrenView}>
-                <IconButtonWrapper
-                  iconHeight={RfH(13)}
-                  iconWidth={RfW(18)}
-                  iconImage={Images.home}
-                  imageResizeMode="contain"
-                  styling={{ alignSelf: 'center' }}
-                />
-                <Text style={styles.typeItemText}>
-                  {!item[1]?.tutorOfferings[0]?.budgets[0]?.onlineClass ? 'Offline' : ''}
-                </Text>
-              </View>
-            )}
+            <View style={commonStyles.horizontalChildrenView}>
+              {/* <IconButtonWrapper */}
+              {/*  iconHeight={RfH(11)} */}
+              {/*  iconWidth={RfW(18)} */}
+              {/*  iconImage={Images.laptop} */}
+              {/*  imageResizeMode="contain" */}
+              {/*  styling={{ alignSelf: 'center' }} */}
+              {/* /> */}
+              <Text style={styles.typeItemText}>{item[1]?.selectedSubject?.onlineClass && 'Online'}</Text>
+              <Text style={styles.typeItemText}>{item[1]?.selectedSubject?.offlineClass && 'Offline'}</Text>
+            </View>
           </View>
         </View>
         <View style={[commonStyles.lineSeparator, { marginTop: RfH(6) }]} />
