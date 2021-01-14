@@ -445,7 +445,7 @@ const MyCart = () => {
   );
 
   const onSetQPoints = (val) => {
-    if (val <= qPoints) {
+    if (val <= qPoints && val <= amount) {
       setQPointsRedeemed(val);
     }
   };
