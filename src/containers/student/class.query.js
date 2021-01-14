@@ -27,6 +27,8 @@ export const GET_CLASS_DETAILS = gql`
       isRescheduleAllowed
       isCancelAllowed
       isClassJoinAllowed
+      isMessagingAllowed
+      isUploadAttachmentAllowed
 
       classEntity {
         id
@@ -110,6 +112,8 @@ export const GET_CLASS_DETAILS_BY_UUID = gql`
       isRescheduleAllowed
       isCancelAllowed
       isClassJoinAllowed
+      isMessagingAllowed
+      isUploadAttachmentAllowed
 
       classEntity {
         id

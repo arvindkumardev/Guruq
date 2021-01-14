@@ -443,14 +443,16 @@ function ScheduledClassDetails(props) {
                 {classData?.classEntity?.students?.length} participants to join the Class
               </Text>
             </View>
-            <View>
-              <IconButtonWrapper
-                iconImage={Images.messaging}
-                iconHeight={24}
-                iconWidth={24}
-                submitFunction={() => setShowMessageModal(true)}
-              />
-            </View>
+            {classData?.isMessagingAllowed && (
+              <View>
+                <IconButtonWrapper
+                  iconImage={Images.messaging}
+                  iconHeight={24}
+                  iconWidth={24}
+                  submitFunction={() => setShowMessageModal(true)}
+                />
+              </View>
+            )}
           </View>
           <FlatList
             style={{ marginBottom: RfH(16), marginLeft: 40 }}
@@ -473,7 +475,7 @@ function ScheduledClassDetails(props) {
               </View>
             </View>
             <View>
-              {userTypeVal === UserTypeEnum.TUTOR.label && (
+              {classData?.isUploadAttachmentAllowed && (
                 <IconButtonWrapper
                   iconImage={Images.add}
                   iconWidth={20}
@@ -552,35 +554,36 @@ function ScheduledClassDetails(props) {
             </View>
           </View>
           <View style={commonStyles.lineSeparatorWithVerticalMargin} />
-          {/* {classData?.isClassJoinAllowed && ( */}
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: RfH(16),
-              marginBottom: RfH(34),
-            }}>
-            <Button
-              block
-              onPress={goToOnlineClass}
-              style={[
-                commonStyles.buttonPrimary,
-                {
-                  borderRadius: 4,
-                  marginHorizontal: 0,
-                },
-              ]}>
-              <IconButtonWrapper
-                iconImage={Images.video}
-                iconHeight={RfH(16)}
-                iconWidth={RfW(16)}
-                styling={{ alignSelf: 'center' }}
-              />
-              <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
-            </Button>
-          </View>
-          {/* )} */}
+
+          {classData?.isClassJoinAllowed && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: RfH(16),
+                marginBottom: RfH(34),
+              }}>
+              <Button
+                block
+                onPress={goToOnlineClass}
+                style={[
+                  commonStyles.buttonPrimary,
+                  {
+                    borderRadius: 4,
+                    marginHorizontal: 0,
+                  },
+                ]}>
+                <IconButtonWrapper
+                  iconImage={Images.video}
+                  iconHeight={RfH(16)}
+                  iconWidth={RfW(16)}
+                  styling={{ alignSelf: 'center' }}
+                />
+                <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
+              </Button>
+            </View>
+          )}
         </ScrollView>
 
         {classData && classData?.classEntity?.uuid && (
