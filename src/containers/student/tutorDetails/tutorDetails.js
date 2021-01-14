@@ -164,8 +164,8 @@ function TutorDetails(props) {
           demoClass: item.demoClass,
           freeDemo: item.freeDemo,
           groupClass: item.groupClass === 0 || item.groupClass === 1,
-          onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
           individualClass: item.groupClass === 0 || item.groupClass === 2,
+          onlineClass: item.onlineClass === 0 || item.onlineClass === 1,
           offlineClass: item.onlineClass === 0 || item.onlineClass === 2,
           budgetDetails: item.budgets,
         }));
@@ -253,7 +253,7 @@ function TutorDetails(props) {
     compareArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID));
     if (compareArray == null) {
       const newArray = [];
-      newArray.push(tutorData);
+      newArray.push({ ...tutorData, selectedSubject });
       await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
       storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(newArray)).then(() => {
         setShowCompareModal(true);
@@ -263,7 +263,7 @@ function TutorDetails(props) {
       if (compareArray[0].id === tutorData?.id) {
         setShowCompareModal(true);
       } else {
-        compareArray.push(tutorData);
+        compareArray.push({ ...tutorData, selectedSubject });
         await removeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID);
         storeData(LOCAL_STORAGE_DATA_KEY.COMPARE_TUTOR_ID, JSON.stringify(compareArray)).then(() => {
           setShowCompareModal(true);

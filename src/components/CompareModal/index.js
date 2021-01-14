@@ -42,25 +42,14 @@ const compareModal = (props) => {
     return (
       <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
         {item && (
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.lightOrange,
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              padding: 8,
-              borderRadius: 48,
-            }}
-            onPress={() => removeFromCompare(index)}>
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconWidth={RfH(20)}
-                iconHeight={RfH(20)}
-                iconImage={Images.delete}
-                imageResizeMode="contain"
-              />
-            </View>
-          </TouchableOpacity>
+          <IconButtonWrapper
+            iconWidth={RfH(20)}
+            iconHeight={RfH(20)}
+            iconImage={Images.delete}
+            imageResizeMode="contain"
+            styling={styles.crossIcon}
+            submitFunction={() => removeFromCompare(index)}
+          />
         )}
 
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
