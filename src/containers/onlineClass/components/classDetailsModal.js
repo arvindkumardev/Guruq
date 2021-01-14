@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../../../theme/colors';
-import {getFullName, printDate, printTime, RfH, RfW} from '../../../utils/helpers';
+import { getFullName, getSubjectIcons, printDate, printTime, RfH, RfW } from '../../../utils/helpers';
 import Images from '../../../theme/images';
 import IconButtonWrapper from '../../../components/IconWrapper';
 import Fonts from '../../../theme/fonts';
@@ -60,7 +60,12 @@ const ClassDetailsModal = (props) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
+              <IconButtonWrapper
+                iconHeight={RfH(48)}
+                iconWidth={RfW(32)}
+                iconImage={getSubjectIcons(classDetails?.offering?.displayName)}
+                imageResizeMode="contain"
+              />
             </View>
             <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
               <Text style={commonStyles.headingPrimaryText}>

@@ -21,7 +21,7 @@ import IconButtonWrapper from '../../components/IconWrapper';
 import { Colors } from '../../theme';
 import Images from '../../theme/images';
 import commonStyles from '../../theme/styles';
-import { alertBox, getFullName, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getFullName, getSubjectIcons, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import ClassDetailsModal from './components/classDetailsModal';
 import requestCameraAndAudioPermission from './components/permission';
 import styles from './components/style';
@@ -365,7 +365,6 @@ export default class Video extends Component<Props, State> {
             style={[
               commonStyles.regularPrimaryText,
               {
-                height: RfH(88),
                 paddingTop: Platform.OS === 'ios' ? RfH(44) : RfH(10),
                 // marginTop: 16,
                 color: Colors.white,
@@ -401,13 +400,18 @@ export default class Video extends Component<Props, State> {
               <TouchableWithoutFeedback onPress={this.switchCamera}>
                 <View
                   style={{
-                    width: 44,
-                    height: 44,
+                    width: RfH(44),
+                    height: RfH(44),
                     // borderRadius: 44,
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <IconButtonWrapper iconImage={Images.camera_switch} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                  <IconButtonWrapper
+                    iconImage={Images.camera_switch}
+                    iconWidth={RfW(24)}
+                    iconHeight={RfH(24)}
+                    imageResizeMode="contain"
+                  />
                 </View>
               </TouchableWithoutFeedback>
 
@@ -987,7 +991,6 @@ export default class Video extends Component<Props, State> {
       <>
         <View
           style={{
-            // height: RfH(44),
             paddingVertical: Platform.OS === 'ios' ? RfH(44) : RfH(15),
             paddingHorizontal: RfW(16),
             justifyContent: 'center',
@@ -1009,7 +1012,7 @@ export default class Video extends Component<Props, State> {
                 <View
                   style={{
                     height: RfH(100),
-                    width: RfW(100),
+                    width: RfH(100),
                     borderRadius: 100,
                     backgroundColor: Colors.lightBlue,
                     flexDirection: 'row',
@@ -1038,7 +1041,7 @@ export default class Video extends Component<Props, State> {
               <TouchableWithoutFeedback onPress={this.togglePreview}>
                 <View
                   style={{
-                    width: RfW(54),
+                    width: RfH(54),
                     height: RfH(54),
                     backgroundColor: this.state.videoMuted ? Colors.white : '#222222',
                     borderRadius: 54,
@@ -1048,8 +1051,9 @@ export default class Video extends Component<Props, State> {
                   }}>
                   <IconButtonWrapper
                     iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
-                    iconWidth={RfW(24)}
+                    iconWidth={RfH(24)}
                     iconHeight={RfH(24)}
+                    imageResizeMode="contain"
                   />
                 </View>
               </TouchableWithoutFeedback>
@@ -1057,7 +1061,7 @@ export default class Video extends Component<Props, State> {
               <TouchableWithoutFeedback onPress={this.audioToggle}>
                 <View
                   style={{
-                    width: RfW(54),
+                    width: RfH(54),
                     height: RfH(54),
                     backgroundColor: this.state.audioMuted ? Colors.white : '#222222',
                     borderRadius: 54,
@@ -1077,24 +1081,20 @@ export default class Video extends Component<Props, State> {
 
           <View
             style={{
-              flex: 0.5,
+              flex: 0.4,
               backgroundColor: Colors.lightPurple,
               // paddingTop: RfH(44),
               justifyContent: 'flex-start',
               alignSelf: 'stretch',
             }}>
             <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
-              <View
-                style={{
-                  height: RfH(72),
-                  width: RfW(72),
-                  backgroundColor: Colors.lightPurple,
-                  borderRadius: 8,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
-              </View>
+              <IconButtonWrapper
+                iconHeight={RfH(60)}
+                iconWidth={RfW(60)}
+                iconImage={getSubjectIcons(this.props.classDetails?.offering?.displayName)}
+                imageResizeMode="contain"
+                styling={{ marginLeft: RfW(20) }}
+              />
               <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
                 <Text style={commonStyles.headingPrimaryText}>
                   {`${this.props.classDetails?.offering?.displayName} by ${getFullName(

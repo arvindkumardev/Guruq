@@ -13,15 +13,15 @@ export default StyleSheet.create({
     flex: 1,
   },
   buttonHolder: {
-    height: 100,
-    flex: 1,
+    // height: RfH(80),
+    marginTop: RfH(20),
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
   },
   button: {
     paddingHorizontal: RfW(54),
-    paddingVertical: RfH(16),
+    paddingVertical: RfH(10),
     backgroundColor: Colors.brandBlue2,
     borderRadius: RfH(8),
     marginHorizontal: RfW(8),

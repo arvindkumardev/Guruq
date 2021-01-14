@@ -12,7 +12,7 @@ import analytics from '@react-native-firebase/analytics';
 
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { sum, isEmpty } from 'lodash';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import {
   IconButtonWrapper,
   Loader,
@@ -28,7 +28,7 @@ import { alertBox, getFullName, getToken, printCurrency, RfH, RfW } from '../../
 import { API_URL, DASHBOARD_URL, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CANCEL_PENDING_BOOKINGS, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
-import { GET_MY_QPOINTS_BALANCE } from '../../common/graphql-query';
+import { GET_MY_QPOINTS_BALANCE, GET_STUDENT_DETAILS } from '../../common/graphql-query';
 import CustomModalWebView from '../../../components/CustomModalWebView';
 import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 import { userDetails, studentDetails } from '../../../apollo/cache';
@@ -38,6 +38,7 @@ const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
   // const [showCouponModal, setShowCouponModal] = useState(false);
   const navigation = useNavigation();
+  const isFocussed = useIsFocused();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [cartEmpty, setCartEmpty] = useState(false);
   const [amount, setAmount] = useState(0);
@@ -53,6 +54,19 @@ const MyCart = () => {
   const userInfo = useReactiveVar(userDetails);
   const [paymentStatus, setPaymentStatus] = useState('success');
   const [showAllSubjects, setShowAllSubjects] = useState(false);
+  const [addresses, setAddresses] = useState([]);
+
+  const [getStudentDetails, { loading: studentDetailLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setAddresses(data?.getStudentDetails?.addresses);
+      }
+    },
+  });
 
   // const [applyCoupons, setApplyCoupons] = useState(false);
   // const [appliedCouponCode, setAppliedCouponCode] = useState('');
@@ -77,9 +91,6 @@ const MyCart = () => {
       }
     },
   });
-  // const { loading: cartLoading, error: cartError, data: cartItemData } = useQuery(GET_CART_ITEMS, {
-  //   fetchPolicy: 'no-cache',
-  // });
 
   const [cancelPendingBooking, { loading: cancelPendingBookingLoading }] = useMutation(CANCEL_PENDING_BOOKINGS, {
     fetchPolicy: 'no-cache',
@@ -154,6 +165,12 @@ const MyCart = () => {
     getCartItems();
     getMyQpointBalance();
   }, []);
+
+  useEffect(() => {
+    if (isFocussed) {
+      getStudentDetails();
+    }
+  }, [isFocussed]);
 
   useEffect(() => {
     getToken().then((tk) => {
@@ -267,8 +284,6 @@ const MyCart = () => {
     setShowPaymentModal(false);
     setPaymentModal(true);
     setBookingData(bookingData);
-    // console.log('bookingId', bookingId);
-    // setPaymentUrl(`http://apiv2.guruq.in/api/payment/paytm/startTransaction/${bookingId}`);
   };
 
   useEffect(() => {
@@ -678,32 +693,19 @@ const MyCart = () => {
           </Button>
         </View>
       )}
-
-      {/* <QPointPayModal */}
-      {/*  visible={showQPointPayModal} */}
-      {/*  onClose={() => setShowQPointPayModal(false)} */}
-      {/*  amount={amount} */}
-      {/*  deductedAgaintQPoint={qPoints} */}
-      {/*  totalAmount={amount} */}
-      {/*  qPoint={qPoints} */}
-      {/*  amountToPayAfterQPoint={amount - qPoints} */}
-      {/*  onPayNow={() => createBooking()} */}
-      {/* /> */}
-      {/* <CouponModal */}
-      {/*  visible={showCouponModal} */}
-      {/*  onClose={() => setShowCouponModal(false)} */}
-      {/*  checkCoupon={(couponCode) => checkCoupon(couponCode)} */}
-      {/* /> */}
-      <PaymentMethodModal
-        visible={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        bookingData={{ itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeemed) }}
-        amount={amount}
-        qPointsRedeemed={qPointsRedeemed}
-        handlePaytmPayment={handlePaytmPayment}
-        hidePaymentPopup={() => setShowPaymentModal(false)}
-        handleCancelPendingBooking={(orderId) => cancelPendingBooking({ variables: { orderId } })}
-      />
+      {showPaymentModal && (
+        <PaymentMethodModal
+          visible={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          bookingData={{ itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeemed) }}
+          amount={amount}
+          qPointsRedeemed={qPointsRedeemed}
+          handlePaytmPayment={handlePaytmPayment}
+          hidePaymentPopup={() => setShowPaymentModal(false)}
+          handleCancelPendingBooking={(orderId) => cancelPendingBooking({ variables: { orderId } })}
+          addresses={addresses}
+        />
+      )}
       {paymentModal && !isEmpty(bookingData) && (
         <CustomModalWebView
           url={`${API_URL}/payment/paytm/startTransaction/${bookingData.uuid}?token=${token}`}
