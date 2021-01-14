@@ -25,8 +25,9 @@ function MyTabBar({ state, descriptors, navigation }) {
         flexDirection: 'row',
         paddingVertical: RfH(12),
         borderTopColor: Colors.borderColor,
-        borderTopWidth: 2,
+        borderTopWidth: RfH(0.5),
         backgroundColor: Colors.white,
+        alignItems: 'center',
       }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];

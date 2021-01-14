@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
   TouchableWithoutFeedback,
+  BackHandler,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -89,22 +90,20 @@ function StudentDashboard(props) {
     },
   });
 
-  // useFocusEffect(() => {
-  //   const backAction = () => {
-  //     if () {
-  //       alertBox('Alert', 'Do you really want to exit?', {
-  //         positiveText: 'Yes',
-  //         onPositiveClick: () => {
-  //           BackHandler.exitApp();
-  //         },
-  //         negativeText: 'No',
-  //       });
-  //     }
-  //     return true;
-  //   };
-  //   const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-  //   return () => backHandler.remove();
-  // }, []);
+  useFocusEffect(() => {
+    const backAction = () => {
+      alertBox('Alert', 'Do you really want to exit?', {
+        positiveText: 'Yes',
+        onPositiveClick: () => {
+          BackHandler.exitApp();
+        },
+        negativeText: 'No',
+      });
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, []);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',

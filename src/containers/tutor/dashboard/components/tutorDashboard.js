@@ -1,11 +1,12 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import {
+  BackHandler,
   Dimensions,
   FlatList,
   Image,
@@ -29,7 +30,7 @@ import { getBoxColor } from '../../../../theme/colors';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, getSubjectIcons, getUserImageUrl, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
@@ -53,6 +54,21 @@ function TutorDashboard(props) {
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.85);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 3) / 4);
+
+  useFocusEffect(() => {
+    const backAction = () => {
+      alertBox('Alert', 'Do you really want to exit?', {
+        positiveText: 'Yes',
+        onPositiveClick: () => {
+          BackHandler.exitApp();
+        },
+        negativeText: 'No',
+      });
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => backHandler.remove();
+  }, []);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
