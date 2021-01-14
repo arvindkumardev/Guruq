@@ -23,10 +23,10 @@ function PytnListing(props) {
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const studentInfo = useReactiveVar(studentDetails);
 
-  const [orderItems, setOrderItems] = useState([]);
+  const [pytnList, setPytnList] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
 
-  const [getTutionNeeds, { loading: loadingTutionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
+  const [getTuitionNeeds, { loading: loadingTuitionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
@@ -34,7 +34,7 @@ function PytnListing(props) {
     onCompleted: (data) => {
       if (data) {
         setIsListEmpty(data?.searchStudentPYTN?.edges.length === 0);
-        setOrderItems(data?.searchStudentPYTN?.edges);
+        setPytnList(data?.searchStudentPYTN?.edges);
       }
     },
   });
@@ -49,7 +49,11 @@ function PytnListing(props) {
         alertBox('Request removed successfully', '', {
           positiveText: 'Ok',
           onPositiveClick: () => {
-            getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
+            getTuitionNeeds({
+              variables: {
+                searchDto: { studentId: studentInfo.id, page: 1, size: 100, sortBy: 'createdDate', sortOrder: 'desc' },
+              },
+            });
           },
         });
       }
@@ -58,7 +62,11 @@ function PytnListing(props) {
 
   useEffect(() => {
     if (isFocussed) {
-      getTutionNeeds({ variables: { searchDto: { studentId: studentInfo.id, page: 1, size: 100 } } });
+      getTuitionNeeds({
+        variables: {
+          searchDto: { studentId: studentInfo.id, page: 1, size: 100, sortBy: 'createdDate', sortOrder: 'desc' },
+        },
+      });
     }
   }, [isFocussed]);
 
@@ -161,7 +169,7 @@ function PytnListing(props) {
 
   return (
     <>
-      <Loader isLoading={loadingTutionNeeds || pytnDelete} />
+      <Loader isLoading={loadingTuitionNeeds || pytnDelete} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader
           homeIcon
@@ -176,7 +184,7 @@ function PytnListing(props) {
             <View style={{ paddingHorizontal: RfW(16) }}>
               <FlatList
                 showsVerticalScrollIndicator={false}
-                data={orderItems}
+                data={pytnList}
                 renderItem={({ item }) => renderClassItem(item)}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingBottom: RfH(170) }}
