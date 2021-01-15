@@ -1,4 +1,4 @@
-import { Linking, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
+import { Linking, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useReactiveVar } from '@apollo/client';
@@ -8,14 +8,7 @@ import { Colors, Fonts, Images } from '../../theme';
 import { alertBox, RfH, RfW } from '../../utils/helpers';
 import NavigationRouteNames from '../../routes/screenNames';
 import IconWrapper from '../../components/IconWrapper';
-import {
-  BOOKING_FAQ_URL,
-  GENERAL_FAQ_URL,
-  LEGAL_FAQ_URL,
-  QPOINTS_FAQ_URL,
-  STUDENT_FAQ_URL,
-  TUTOR_FAQ_URL,
-} from '../../utils/constants';
+import { STUDENT_FAQ_URL, TUTOR_FAQ_URL } from '../../utils/constants';
 import { userDetails } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
 
@@ -70,7 +63,7 @@ function CustomerCare() {
       <Text style={[commonStyles.regularPrimaryText, { padding: RfW(16), fontFamily: Fonts.semiBold }]}>FAQs</Text>
 
       <View style={{ backgroundColor: Colors.white, padding: RfH(16) }}>
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
               url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
@@ -87,11 +80,11 @@ function CustomerCare() {
             imageResizeMode="contain"
             iconImage={Images.right_arrow_grey}
           />
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
 
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
               url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
@@ -108,11 +101,11 @@ function CustomerCare() {
             imageResizeMode="contain"
             iconImage={Images.right_arrow_grey}
           />
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
 
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
               url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
@@ -129,11 +122,11 @@ function CustomerCare() {
             imageResizeMode="contain"
             iconImage={Images.right_arrow_grey}
           />
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
 
         <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
               url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
@@ -150,7 +143,7 @@ function CustomerCare() {
             imageResizeMode="contain"
             iconImage={Images.right_arrow_grey}
           />
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </View>
     </View>
   );

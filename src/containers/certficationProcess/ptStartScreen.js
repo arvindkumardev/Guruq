@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View, ScrollView } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 import { Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
-import { RFValue } from 'react-native-responsive-fontsize';
 import { getSubjectIcons, RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import Images from '../../theme/images';
-import { Colors, Fonts } from '../../theme';
+import { Colors } from '../../theme';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
 import NavigationRouteNames from '../../routes/screenNames';
 import { GET_TUTOR_OFFERING_DETAIL } from './certification-query';
@@ -310,27 +309,29 @@ const PtStartScreen = (props) => {
             </>
           )}
 
+          {!isEmpty(ptDetail) && ptDetail?.status === PtStatus.PASSED.label && (
+            <Button
+              onPress={handleClick}
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
+              <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
+            </Button>
+          )}
+
           {!isEmpty(ptDetail) &&
             ptDetail?.status !== PtStatus.PASSED.label &&
             ptDetail?.status !== PtStatus.EXEMPTED.label &&
-            (!attemptExhausted ? (
-              <Button
-                onPress={handleClick}
-                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
-                <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
-              </Button>
-            ) : (
+            attemptExhausted && (
               <View style={{ marginTop: RfH(20), justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
-                  {'All PT attempts Exhausted.\n Contact the customer care.'}
+                  {'All PT attempts Exhausted.\n Contact the customer support.'}
                 </Text>
                 <Button
                   onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}
                   style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
-                  <Text style={commonStyles.textButtonPrimary}>Customer care</Text>
+                  <Text style={commonStyles.textButtonPrimary}>Customer Support</Text>
                 </Button>
               </View>
-            ))}
+            )}
         </View>
       </ScrollView>
       {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}

@@ -6,8 +6,7 @@ import styles from './styles';
 import { Colors, Images } from '../../theme';
 import LoginCheck from '../common/login/loginCheck';
 import { GET_OFFERINGS_MASTER_DATA } from '../student/dashboard-query';
-import {appMetaData, offeringsMasterData} from '../../apollo/cache';
-import { DASHBOARD_URL } from '../../utils/constants';
+import { offeringsMasterData } from '../../apollo/cache';
 
 function SplashScreen() {
   const [getOfferingMasterData] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {

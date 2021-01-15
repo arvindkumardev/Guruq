@@ -8,13 +8,15 @@ import { isEmpty } from 'lodash';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
-import { IconButtonWrapper, ScreenHeader } from '../../../components';
+import { IconButtonWrapper, ScreenHeader, TutorImageComponent } from '../../../components';
 import { Colors, Images } from '../../../theme';
 import { getFileUrl, getFullName, getSaveData, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import { GET_FAVOURITE_TUTORS } from '../tutor-query';
+import routeNames from '../../../routes/screenNames';
+import Loader from "../../../components/Loader";
 
 function compareTutors(props) {
   const navigation = useNavigation();
@@ -91,6 +93,17 @@ function compareTutors(props) {
     },
   });
 
+  const goToTutorDetails = (item) => {
+    console.log("item",item)
+    navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
+      tutorData: item,
+      parentOffering: item.offering?.parentOffering?.id,
+      parentParentOffering: item.offering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: item.offering?.parentOffering?.displayName,
+      parentParentOfferingName: item.offering?.parentOffering?.parentOffering?.displayName,
+    });
+  };
+
   const markFavouriteTutor = (tutorId, tutorClicked) => {
     if (tutorClicked === 0) {
       setTutorClicked(0);
@@ -128,11 +141,10 @@ function compareTutors(props) {
           styling={styles.crossIcon}
           submitFunction={() => removeFromCompare(index)}
         />
-        <IconButtonWrapper
-          iconWidth={RfH(70)}
-          iconHeight={RfH(70)}
-          iconImage={getFileUrl(item?.profileImage?.original)}
-          imageResizeMode="contain"
+        <TutorImageComponent
+          tutor={item}
+          height={70}
+          width={70}
           styling={{ alignSelf: 'center', borderRadius: RfH(12) }}
         />
         {/* FIXME */}
@@ -185,9 +197,13 @@ function compareTutors(props) {
             submitFunction={() => markFavouriteTutor(item.id, index)}
           />
         </View>
-        <Button block bordered style={{ marginHorizontal: RfW(16), marginTop: RfH(24) }}>
-          <Text style={{ color: Colors.brandBlue2 }}>Book Class</Text>
-        </Button>
+        {/*<Button*/}
+        {/*  block*/}
+        {/*  bordered*/}
+        {/*  style={{ marginHorizontal: RfW(16), marginTop: RfH(24) }}*/}
+        {/*  onPress={() => goToTutorDetails(item)}>*/}
+        {/*  <Text style={{ color: Colors.brandBlue2 }}>Book Class</Text>*/}
+        {/*</Button>*/}
       </View>
     );
   };
@@ -265,27 +281,12 @@ function compareTutors(props) {
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(12) }]}>
           <View style={commonStyles.verticallyStretchedItemsView}>
             <View style={commonStyles.horizontalChildrenView}>
-              {/* <IconButtonWrapper */}
-              {/*  iconHeight={RfH(11)} */}
-              {/*  iconWidth={RfW(18)} */}
-              {/*  iconImage={Images.laptop} */}
-              {/*  styling={{ alignSelf: 'center' }} */}
-              {/*  imageResizeMode="contain" */}
-              {/* /> */}
-
               <Text style={styles.typeItemText}>{item[0]?.selectedSubject?.onlineClass && 'Online'}</Text>
               <Text style={styles.typeItemText}>{item[0]?.selectedSubject?.offlineClass && 'Offline'}</Text>
             </View>
           </View>
           <View style={commonStyles.verticallyStretchedItemsView}>
             <View style={commonStyles.horizontalChildrenView}>
-              {/* <IconButtonWrapper */}
-              {/*  iconHeight={RfH(11)} */}
-              {/*  iconWidth={RfW(18)} */}
-              {/*  iconImage={Images.laptop} */}
-              {/*  imageResizeMode="contain" */}
-              {/*  styling={{ alignSelf: 'center' }} */}
-              {/* /> */}
               <Text style={styles.typeItemText}>{item[1]?.selectedSubject?.onlineClass && 'Online'}</Text>
               <Text style={styles.typeItemText}>{item[1]?.selectedSubject?.offlineClass && 'Offline'}</Text>
             </View>
@@ -352,18 +353,21 @@ function compareTutors(props) {
     );
   };
   return (
-    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
-      <ScreenHeader label="Compare Tutors" horizontalPadding={16} lineVisible homeIcon />
-      {!isEmpty(tutorData) && (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8), paddingHorizontal: RfW(16) }]}>
-            <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[0], 0)}</View>
-            <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[1], 1)}</View>
-          </View>
-          <View>{renderBasicInfoView(tutorData)}</View>
-        </ScrollView>
-      )}
-    </View>
+    <>
+      <Loader isLoading={removeFavouriteLoading || favouriteLoading || loadingFavouriteTutors} />
+      <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.white }]}>
+        <ScreenHeader label="Compare Tutors" horizontalPadding={16} lineVisible homeIcon />
+        {!isEmpty(tutorData) && (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8), paddingHorizontal: RfW(16) }]}>
+              <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[0], 0)}</View>
+              <View style={{ flex: 0.5 }}>{renderTutorView(tutorData[1], 1)}</View>
+            </View>
+            <View>{renderBasicInfoView(tutorData)}</View>
+          </ScrollView>
+        )}
+      </View>
+    </>
   );
 }
 

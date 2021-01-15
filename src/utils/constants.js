@@ -29,17 +29,12 @@ export const LOTTIE_JSON_FILES = {
   loaderJson: require('../assets/json/loader1.json'),
 };
 
-export const FRONTEND_URL = 'http://stagingv2.guruq.in';
-export const DASHBOARD_URL = 'http://stagingdashboard.guruq.in/';
-export const API_URL = 'http://stagingapi.guruq.in/graphql';
+export const FRONTEND_URL = 'https://new.guruq.in';
+export const DASHBOARD_URL = 'https://dashboard.guruq.in';
+export const API_URL = 'https://api.guruq.in';
+export const GRAPH_API_URL = `${API_URL}/gql`;
 
 export const ATTACHMENT_PREVIEW_URL = `${API_URL}/upload/preview?filePath=`;
-export const IMAGES_BASE_URL = 'https://guruq.in/guruq-new';
-
-// export const GENERAL_FAQ_URL = `${DASHBOARD_URL}/faqs/general-issues`;
-// export const QPOINTS_FAQ_URL = `${DASHBOARD_URL}/faqs/qpoints-faqs`;
-// export const BOOKING_FAQ_URL = `${DASHBOARD_URL}/faqs/booking-faqs`;
-// export const LEGAL_FAQ_URL = `${DASHBOARD_URL}/faqs/legal-terms-conditions`;
 
 export const STUDENT_FAQ_URL = `${FRONTEND_URL}/student-faq`;
 export const TUTOR_FAQ_URL = `${FRONTEND_URL}/tutor-faq`;

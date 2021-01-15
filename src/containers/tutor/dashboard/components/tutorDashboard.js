@@ -36,14 +36,23 @@ import TutorSubjectsModal from './tutorSubjectsModal';
 import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 
-const carouselItems = [Images.tutor_home_banner_1, Images.tutor_home_banner_2, Images.tutor_home_banner_3];
+const carouselItems = [
+  {
+    image: Images.tutor_home_banner_1,
+    routeName: NavigationRouteNames.PERSONAL_DETAILS,
+  },
+  {
+    image: Images.tutor_home_banner_2,
+    routeName: NavigationRouteNames.TUTOR.VIEW_SCHEDULE,
+  },
+  { image: Images.tutor_home_banner_3, routeName: NavigationRouteNames.TUTOR.SUBJECTS_LIST },
+];
 function TutorDashboard(props) {
   const navigation = useNavigation();
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
   const [refreshSubjectList, setRefreshSubjectList] = useState(false);
-  const { changeTab } = props;
   const tutorInfo = useReactiveVar(tutorDetails);
   const userInfo = useReactiveVar(userDetails);
 
@@ -156,15 +165,18 @@ function TutorDashboard(props) {
   };
 
   const renderCardItem = (item) => (
-    <View style={{ width: ITEM_WIDTH, alignItems: 'center', justifyContent: 'center' }}>
+    <TouchableOpacity
+      style={{ width: ITEM_WIDTH, alignItems: 'center', justifyContent: 'center' }}
+      onPress={() => navigation.navigate(item.routeName)}
+      activeOpacity={0.8}>
       <CustomImage
-        image={item}
+        image={item.image}
         imageWidth={ITEM_WIDTH}
         imageHeight={ITEM_HEIGHT}
         imageResizeMode="contain"
         styling={{ borderRadius: RfW(3) }}
       />
-    </View>
+    </TouchableOpacity>
   );
 
   const pagination = () => (

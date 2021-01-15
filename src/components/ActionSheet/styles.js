@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     position: 'absolute',
     bottom: 0,
-    marginBottom: RfH(25),
+    marginBottom: Platform.OS === 'ios' ? RfH(25) : RfH(10),
     width: deviceWidth() - RfW(20),
     alignSelf: 'center',
   },

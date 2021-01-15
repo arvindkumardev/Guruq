@@ -57,7 +57,7 @@ function TutorListing(props) {
     degreeLevel: 0,
     experience: 0,
     averageRating: 0,
-    minBudget: 0,
+    minBudget: 1,
     maxBudget: 0,
     teachingMode: 0,
     page: 1,

@@ -118,10 +118,10 @@ const AppStack = (props) => {
     });
 
     // notificationPayload({
-    //   screen: 'tutor_detail',
-    //   tutor_id: 38480,
-    //   offering_id: 249,
+    //   screen: 'scheduled_class_details',
+    //   uuid: '7ffed5c5-6b13-4fb4-8719-41c3015e2981',
     // });
+
     messaging().onNotificationOpenedApp((remoteMessage) => {
       if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
         notificationPayload(remoteMessage.data);

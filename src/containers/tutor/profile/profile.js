@@ -46,6 +46,8 @@ function Profile(props) {
   const tutorInfo = useReactiveVar(tutorDetails);
   const appMetaDataObj = useReactiveVar(appMetaData);
 
+  console.log("appMetaDataObj",appMetaDataObj)
+
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBookingMenuOpen, setIsBookingMenuOpen] = useState(false);
   const [isAboutGuruMenuOpen, setIsAboutGuruMenuOpen] = useState(false);
