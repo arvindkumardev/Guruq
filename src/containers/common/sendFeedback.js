@@ -2,15 +2,18 @@ import { View, Text, FlatList, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Input, Item, Textarea, Button } from 'native-base';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
 import { ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors, Fonts } from '../../theme';
-import {getFullName, RfH, RfW} from '../../utils/helpers';
+import { getFullName, RfH, RfW } from '../../utils/helpers';
 import { ADD_ENQUIRY } from './graphql-mutation';
 import { userDetails } from '../../apollo/cache';
 import { SEARCH_IN_INQUIRY } from './graphql-query';
 
 function SendFeedback() {
+  const navigation = useNavigation();
+
   const [query, setQuery] = useState('');
   const [message, setMessage] = useState('');
   const userInfo = useReactiveVar(userDetails);
@@ -33,6 +36,7 @@ function SendFeedback() {
     onCompleted: (data) => {
       if (data) {
         Alert.alert('Feedback sent!');
+        navigation.goBack();
       }
     },
   });
@@ -51,6 +55,7 @@ function SendFeedback() {
             email: userInfo.email,
             title: query,
             text: message,
+            source: 'APP',
           },
         },
       });
@@ -99,7 +104,7 @@ function SendFeedback() {
             numberOfLines={10}
             value={message}
             onChangeText={(text) => setMessage(text)}
-            style={{ height: RfH(100) }}
+            style={{ height: RfH(100), flex: 1 }}
           />
         </Item>
       </View>
@@ -107,15 +112,15 @@ function SendFeedback() {
       <Button onPress={() => onAddingEnquiry()} block style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
         <Text style={commonStyles.textButtonPrimary}>Send Message</Text>
       </Button>
-      <View style={{ height: RfH(80) }} />
-      <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Feedback History</Text>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={feedbackData}
-        renderItem={({ item, index }) => renderFeedbacks(item, index)}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingBottom: RfH(32) }}
-      />
+      {/* <View style={{ height: RfH(80) }} /> */}
+      {/* <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Feedback History</Text> */}
+      {/* <FlatList */}
+      {/*  showsVerticalScrollIndicator={false} */}
+      {/*  data={feedbackData} */}
+      {/*  renderItem={({ item, index }) => renderFeedbacks(item, index)} */}
+      {/*  keyExtractor={(item, index) => index.toString()} */}
+      {/*  contentContainerStyle={{ paddingBottom: RfH(32) }} */}
+      {/* /> */}
     </View>
   );
 }
