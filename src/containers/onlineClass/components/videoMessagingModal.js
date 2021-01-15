@@ -97,13 +97,15 @@ const VideoMessagingModal = (props) => {
               callbacks.hideWhiteboardCallback();
             }
           }
-        }
+        } else {
+          if (!chatMessageIds.includes(message.id)) {
+            setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
+            setChatMessageIds([...chatMessageIds, message.id]);
+          }
 
-        if (!chatMessageIds.includes(message.id)) {
-          setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
-          setChatMessageIds([...chatMessageIds, message.id]);
-
-          // console.log('getMessageToRender(message)', getMessageToRender(message));
+          if (!message.isSystem && callbacks.messageReceived) {
+            callbacks.messageReceived();
+          }
         }
       }
     },

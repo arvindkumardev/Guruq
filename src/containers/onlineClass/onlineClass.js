@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import { userDetails } from '../../apollo/cache';
 import Video from './Video';
 import Loader from '../../components/Loader';
@@ -92,13 +93,15 @@ const OnlineClass = (props) => {
     <View style={{ flex: 1 }}>
       <Loader isLoading={loadingMeetingDetailsForInterview || loadingMeetingDetailsForClass} />
 
-      <Video
-        userInfo={userInfo}
-        channelName={uuid}
-        meetingDetails={meetingDetails}
-        onCallEnd={callEnded}
-        onPressBack={onPressBack}
-      />
+      {!isEmpty(meetingDetails) && !isEmpty(userInfo) && (
+        <Video
+          userInfo={userInfo}
+          channelName={uuid}
+          meetingDetails={meetingDetails}
+          onCallEnd={callEnded}
+          onPressBack={onPressBack}
+        />
+      )}
     </View>
   );
 };

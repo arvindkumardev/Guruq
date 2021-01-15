@@ -58,6 +58,7 @@ interface State {
 
   whiteboardEnabled: false;
   videoQuality: string;
+  messageCount: number;
 }
 
 // const appId = '20be4eff902f4d9ea78c2f8c168556cd';
@@ -88,6 +89,7 @@ export default class Video extends Component<Props, State> {
       whiteboardEnabled: false,
 
       videoQuality: 'high',
+      messageCount: 0,
     };
     if (Platform.OS === 'android') {
       // Request required permissions from Android
@@ -129,6 +131,8 @@ export default class Video extends Component<Props, State> {
    * @description Function to initialize the Rtc Engine, attach event listeners and actions
    */
   init = async () => {
+    console.log('this.props.meetingDetails', this.props.meetingDetails);
+    console.log('this.props.meetingDetails.appId', this.props.meetingDetails.appId);
     this._engine = await RtcEngine.create(this.props.meetingDetails.appId);
     await this._engine.enableVideo();
     await this._engine.setAudioProfile(AudioProfile.Default, AudioScenario.Education);
@@ -304,6 +308,7 @@ export default class Video extends Component<Props, State> {
 
   toggleMessageBox = () => {
     this.setState({ showMessageBox: !this.state.showMessageBox });
+    this.setState({ messageCount: 0 });
   };
 
   toggleClassDetails = () => {
@@ -326,16 +331,23 @@ export default class Video extends Component<Props, State> {
     }
   };
 
+  messageReceived = () => {
+    console.log('got message');
+    this.setState({ messageCount: this.state.messageCount + 1 });
+  };
+
   getParticipant = (id) => {
     const participants = [
-      ...this.props.meetingDetails.students,
+      ...this.props.meetingDetails.guests,
       this.props.meetingDetails.host,
       {
         firstName: 'Screen',
         lastName: 'Share',
-        id: this.props.meetingDetails,
+        id: this.props.meetingDetails.shareId,
       },
     ];
+
+    console.log('participants', participants, id);
 
     return participants.find((p) => p.user?.id === id);
   };
@@ -498,7 +510,7 @@ export default class Video extends Component<Props, State> {
                               zOrderMediaOverlay
                             />
                           ) : (
-                            this._renderVideoMutedView(participant?.contactDetail?.firstName)
+                            this._renderVideoMutedView(participant?.firstName)
                           )}
                         </TouchableWithoutFeedback>
                         {audioItem && !audioItem.status && (
@@ -675,6 +687,19 @@ export default class Video extends Component<Props, State> {
                     alignItems: 'center',
                   }}>
                   <IconButtonWrapper iconImage={Images.messaging_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                  {this.state.messageCount > 0 && (
+                    <View
+                      style={{
+                        width: 10,
+                        height: 10,
+                        backgroundColor: Colors.orangeRed,
+                        position: 'absolute',
+                        top: 0,
+                        right: 20,
+                        borderRadius: 10,
+                      }}
+                    />
+                  )}
                   <Text
                     style={[
                       commonStyles.smallPrimaryText,
@@ -760,6 +785,7 @@ export default class Video extends Component<Props, State> {
               hideWhiteboardCallback: () => this.toggleWhiteboard(false),
               onToggleWhiteboard: this.state.whiteboardEnabled,
               isHost: this.props.userInfo.type === UserTypeEnum.TUTOR.label,
+              messageReceived: () => this.messageReceived(),
             }}
           />
         )}
@@ -793,7 +819,7 @@ export default class Video extends Component<Props, State> {
             alignItems: 'center',
             marginBottom: 8,
           }}>
-          <Text style={{ color: Colors.primaryText, fontSize: selected ? 48 : 36 }}>{firstName[0]}</Text>
+          <Text style={{ color: Colors.primaryText, fontSize: selected ? 48 : 36 }}>{firstName && firstName[0]}</Text>
         </View>
         <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>{firstName}</Text>
       </View>
@@ -885,7 +911,7 @@ export default class Video extends Component<Props, State> {
                         zOrderMediaOverlay
                       />
                     ) : (
-                      this._renderVideoMutedView(participant?.contactDetail?.firstName, true)
+                      this._renderVideoMutedView(participant?.firstName, true)
                     )}
                   </View>
                 </TouchableWithoutFeedback>
@@ -941,7 +967,7 @@ export default class Video extends Component<Props, State> {
                     zOrderMediaOverlay
                   />
                 ) : (
-                  this._renderVideoMutedView(participant?.contactDetail?.firstName, false, true)
+                  this._renderVideoMutedView(participant?.firstName, false, true)
                 )}
               </TouchableWithoutFeedback>
             )}
@@ -973,7 +999,7 @@ export default class Video extends Component<Props, State> {
                       paddingHorizontal: 8,
                     },
                   ]}>
-                  {participant?.contactDetail?.firstName}
+                  {participant?.firstName}
                 </Text>
               </View>
             )}
@@ -1085,18 +1111,18 @@ export default class Video extends Component<Props, State> {
               alignSelf: 'stretch',
             }}>
             {!isEmpty(this.props.meetingDetails) && (
-              <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32),alignItems: 'center'}]}>
-                {/*<View*/}
-                {/*  style={{*/}
-                {/*    height: RfH(72),*/}
-                {/*    width: RfW(72),*/}
-                {/*    backgroundColor: Colors.lightPurple,*/}
-                {/*    borderRadius: 8,*/}
-                {/*    alignItems: 'center',*/}
-                {/*    justifyContent: 'center',*/}
-                {/*  }}>*/}
-                {/*  <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />*/}
-                {/*</View>*/}
+              <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32), alignItems: 'center' }]}>
+                {/* <View */}
+                {/*  style={{ */}
+                {/*    height: RfH(72), */}
+                {/*    width: RfW(72), */}
+                {/*    backgroundColor: Colors.lightPurple, */}
+                {/*    borderRadius: 8, */}
+                {/*    alignItems: 'center', */}
+                {/*    justifyContent: 'center', */}
+                {/*  }}> */}
+                {/*  <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} /> */}
+                {/* </View> */}
                 <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
                   <Text style={commonStyles.headingPrimaryText}>{this.props.meetingDetails.title}</Text>
                   <Text style={commonStyles.mediumMutedText}>{this.props.meetingDetails.description}</Text>
