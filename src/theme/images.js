@@ -253,6 +253,10 @@ const Images = {
   deleteWhite: require('../assets/images/delete_white.png'),
   editPicture: require('../assets/images/editPicture.png'),
 
+  tutor_home_banner_1: require('../assets/images/home-banner-tutor-1.png'),
+  tutor_home_banner_2: require('../assets/images/home-banner-tutor-2.png'),
+  tutor_home_banner_3: require('../assets/images/home-banner-tutor-3.png'),
+
   ...SubjectIcons,
 };
 
