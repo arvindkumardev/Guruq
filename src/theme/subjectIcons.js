@@ -1,6 +1,13 @@
 /* eslint-disable no-dupe-keys */
 /* eslint-disable global-require */
 const SubjectIcons = {
+  abroad: require('../assets/images/subject/abroad.png'),
+  cbse: require('../assets/images/subject/cbse.png'),
+  ib: require('../assets/images/subject/ib.png'),
+  icse: require('../assets/images/subject/icse.png'),
+  igcse: require('../assets/images/subject/igcse.png'),
+  language: require('../assets/images/subject/languagestudyarea.png'),
+
   accountancy: require('../assets/images/subject/accountancy-c.png'),
   accountancy_gray: require('../assets/images/subject/accountancy.png'),
   accountancy_disabled: require('../assets/images/subject/accountancy-d.png'),
