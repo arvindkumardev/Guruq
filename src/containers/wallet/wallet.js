@@ -125,7 +125,7 @@ function Wallet() {
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={loadingPointsTransactions || loadingPointsBalance} />
       <View style={{ height: RfH(44), marginHorizontal: RfW(16), alignItems: 'center', justifyContent: 'center' }}>
-        {showHeader && <Text style={commonStyles.headingPrimaryText}>My QPoints</Text>}
+        {showHeader && <Text style={commonStyles.headingPrimaryText}>My Q-Points</Text>}
       </View>
       <View>
         <ScrollView
@@ -133,7 +133,7 @@ function Wallet() {
           onScroll={(event) => handleScroll(event)}
           scrollEventThrottle={16}
           scrollEnabled={transactionData.length > 0}>
-          <Text style={[commonStyles.pageTitleThirdRow, { marginHorizontal: RfW(16) }]}>My QPoints</Text>
+          <Text style={[commonStyles.pageTitleThirdRow, { marginHorizontal: RfW(16) }]}>My Q-Points</Text>
 
           {renderBalanceView()}
 

@@ -72,7 +72,7 @@ function MyTabBar({ state, descriptors, navigation }) {
               />
             );
           }
-          if (name === 'QPoints') {
+          if (name === 'Q-Points') {
             return (
               <IconButtonWrapper
                 iconHeight={RfH(17)}
@@ -166,7 +166,7 @@ export function StudentBottomTabs() {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'QPoints',
+          tabBarLabel: 'Q-Points',
         }}
         name={NavigationRouteNames.WALLET}
         component={Wallet}
@@ -201,7 +201,7 @@ export function TutorBottomTabs() {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'QPoints',
+          tabBarLabel: 'Q-Points',
         }}
         name={NavigationRouteNames.WALLET}
         component={Wallet}

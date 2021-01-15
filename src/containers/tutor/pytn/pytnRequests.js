@@ -54,19 +54,19 @@ function PytnRequests() {
     },
   });
 
-  const onSubmit = () => {
+  const onSubmit = (request) => {
     // if (priceVal === 0) {
     //   alertBox('Please enter the amount');
     // } else if (priceVal < selectedPytn.minPrice || priceVal > selectedPytn.maxPrice) {
     //   alertBox('Please enter the correct amount');
     // } else
-    if (isEmpty(selectedPytn.acceptedPytns)) {
+    if (isEmpty(request.acceptedPytns) && !isEmpty(request)) {
       setShowPriceModal(false);
       acceptStudentPytn({
         variables: {
           studentPYTNAcceptDto: {
-            studentPytnId: selectedPytn.id,
-            price: selectedPytn.maxPrice,
+            studentPytnId: request.id,
+            price: request.maxPrice,
           },
         },
       });
@@ -75,9 +75,9 @@ function PytnRequests() {
       acceptStudentPytn({
         variables: {
           studentPYTNAcceptDto: {
-            studentPytnId: selectedPytn.id,
-            price: selectedPytn.maxPrice,
-            id: selectedPytn.acceptedPytns[0].id,
+            studentPytnId: request.id,
+            price: request.maxPrice,
+            id: request.acceptedPytns[0].id,
           },
         },
       });
@@ -95,7 +95,7 @@ function PytnRequests() {
     // setShowPriceModal(true);
     alertBox(`Do you want to accept the request?`, '', {
       positiveText: 'Yes',
-      onPositiveClick: () => onSubmit(),
+      onPositiveClick: () => onSubmit(request),
       negativeText: 'No',
     });
   };
@@ -205,7 +205,7 @@ function PytnRequests() {
         enabled>
         <ScreenHeader label="Student PYTN Requests" homeIcon horizontalPadding={RfW(16)} />
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
-          {!isListEmpty && (
+          {!isEmpty(requests) && (
             <FlatList
               data={requests}
               renderItem={({ item, index }) => renderClassItem(item, index)}
