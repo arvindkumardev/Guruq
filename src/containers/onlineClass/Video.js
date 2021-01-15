@@ -60,7 +60,7 @@ interface State {
   videoQuality: string;
 }
 
-const appId = '20be4eff902f4d9ea78c2f8c168556cd';
+// const appId = '20be4eff902f4d9ea78c2f8c168556cd';
 
 export default class Video extends Component<Props, State> {
   _engine: RtcEngine;
@@ -242,7 +242,7 @@ export default class Video extends Component<Props, State> {
       onPositiveClick: async () => {
         await this._engine?.leaveChannel();
         this.setState({ peerIds: [], joinSucceed: false });
-        this.props.onCallEnd();
+        this.props.onCallEnd(true);
       },
       negativeText: 'No',
     });
@@ -295,7 +295,7 @@ export default class Video extends Component<Props, State> {
   };
 
   onBackPress = () => {
-    this.props.onCallEnd(true);
+    this.props.onCallEnd(false);
   };
 
   toggleDetailedActions = async () => {
@@ -364,7 +364,6 @@ export default class Video extends Component<Props, State> {
             style={[
               commonStyles.regularPrimaryText,
               {
-                height: RfH(88),
                 paddingTop: Platform.OS === 'ios' ? RfH(44) : RfH(10),
                 // marginTop: 16,
                 color: Colors.white,
@@ -398,13 +397,18 @@ export default class Video extends Component<Props, State> {
               <TouchableWithoutFeedback onPress={this.switchCamera}>
                 <View
                   style={{
-                    width: 44,
-                    height: 44,
+                    width: RfH(44),
+                    height: RfH(44),
                     // borderRadius: 44,
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <IconButtonWrapper iconImage={Images.camera_switch} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                  <IconButtonWrapper
+                    iconImage={Images.camera_switch}
+                    iconWidth={RfW(24)}
+                    iconHeight={RfH(24)}
+                    imageResizeMode="contain"
+                  />
                 </View>
               </TouchableWithoutFeedback>
 
@@ -984,7 +988,6 @@ export default class Video extends Component<Props, State> {
       <>
         <View
           style={{
-            // height: RfH(44),
             paddingVertical: Platform.OS === 'ios' ? RfH(44) : RfH(15),
             paddingHorizontal: RfW(16),
             justifyContent: 'center',
@@ -1006,7 +1009,7 @@ export default class Video extends Component<Props, State> {
                 <View
                   style={{
                     height: RfH(100),
-                    width: RfW(100),
+                    width: RfH(100),
                     borderRadius: 100,
                     backgroundColor: Colors.lightBlue,
                     flexDirection: 'row',
@@ -1035,7 +1038,7 @@ export default class Video extends Component<Props, State> {
               <TouchableWithoutFeedback onPress={this.togglePreview}>
                 <View
                   style={{
-                    width: RfW(54),
+                    width: RfH(54),
                     height: RfH(54),
                     backgroundColor: this.state.videoMuted ? Colors.white : '#222222',
                     borderRadius: 54,
@@ -1045,8 +1048,9 @@ export default class Video extends Component<Props, State> {
                   }}>
                   <IconButtonWrapper
                     iconImage={this.state.videoMuted ? Images.video_call_mute : Images.video_call}
-                    iconWidth={RfW(24)}
+                    iconWidth={RfH(24)}
                     iconHeight={RfH(24)}
+                    imageResizeMode="contain"
                   />
                 </View>
               </TouchableWithoutFeedback>
@@ -1054,7 +1058,7 @@ export default class Video extends Component<Props, State> {
               <TouchableWithoutFeedback onPress={this.audioToggle}>
                 <View
                   style={{
-                    width: RfW(54),
+                    width: RfH(54),
                     height: RfH(54),
                     backgroundColor: this.state.audioMuted ? Colors.white : '#222222',
                     borderRadius: 54,
@@ -1074,7 +1078,7 @@ export default class Video extends Component<Props, State> {
 
           <View
             style={{
-              flex: 0.5,
+              flex: 0.4,
               backgroundColor: Colors.lightPurple,
               // paddingTop: RfH(44),
               justifyContent: 'flex-start',

@@ -279,8 +279,7 @@ function MyClasses() {
           showsVerticalScrollIndicator={false}
           onScroll={(event) => handleScroll(event)}
           stickyHeaderIndices={[1]}
-          scrollEventThrottle={16}
-          scrollEnabled={!isEmpty && orderItems.length > 2}>
+          scrollEventThrottle={16}>
           <View>
             <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
           </View>

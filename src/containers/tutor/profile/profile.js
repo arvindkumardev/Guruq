@@ -167,37 +167,37 @@ function Profile(props) {
       <Loader isLoading={forgotPasswordLoading} />
 
       <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
-        <View
-          style={{
-            paddingHorizontal: RfW(16),
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: Colors.white,
-          }}>
-          <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-            <TouchableOpacity
-              style={{ padding: 10 }}
-              onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>
-              {notificationCount > 0 && (
-                <View style={{ position: 'absolute', left: 6, top: 6, zIndex: 10 }}>
-                  <Image
-                    source={Images.small_active_blue}
-                    resizeMode="contain"
-                    style={{ height: RfH(12), width: RfW(12) }}
-                  />
-                </View>
-              )}
-              <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} resizeMode="contain" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        {/*<View*/}
+        {/*  style={{*/}
+        {/*    paddingHorizontal: RfW(16),*/}
+        {/*    flexDirection: 'row',*/}
+        {/*    justifyContent: 'space-between',*/}
+        {/*    alignItems: 'center',*/}
+        {/*    backgroundColor: Colors.white,*/}
+        {/*  }}>*/}
+        {/*  <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>*/}
+        {/*    <TouchableOpacity*/}
+        {/*      style={{ padding: 10 }}*/}
+        {/*      onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}>*/}
+        {/*      {notificationCount > 0 && (*/}
+        {/*        <View style={{ position: 'absolute', left: 6, top: 6, zIndex: 10 }}>*/}
+        {/*          <Image*/}
+        {/*            source={Images.small_active_blue}*/}
+        {/*            resizeMode="contain"*/}
+        {/*            style={{ height: RfH(12), width: RfW(12) }}*/}
+        {/*          />*/}
+        {/*        </View>*/}
+        {/*      )}*/}
+        {/*      <Image source={Images.bell} style={{ height: RfH(16), width: RfW(16) }} resizeMode="contain" />*/}
+        {/*    </TouchableOpacity>*/}
+        {/*  </View>*/}
+        {/*</View>*/}
         <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(20) }}>
           <Text style={commonStyles.pageTitleThirdRow}>My Profile</Text>
         </View>
         <View
           style={{
-            height: 102,
+            height: RfH(100),
             backgroundColor: Colors.white,
             paddingHorizontal: RfW(16),
             justifyContent: 'center',

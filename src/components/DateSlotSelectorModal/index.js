@@ -7,7 +7,7 @@ import { Modal, Text, View } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
-import { IconButtonWrapper, Loader } from '..';
+import { CustomSelect, IconButtonWrapper, Loader } from '..';
 import { GET_TUTOR_AVAILABILITY } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
@@ -126,20 +126,19 @@ const DateSlotSelectorModal = (props) => {
                 <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>Start Time</Text>
                 <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>End Time</Text>
               </View>
-              <View style={commonStyles.horizontalChildrenSpaceView}>
-                <Picker
-                  iosHeader="Start Time"
-                  Header="Start Time"
-                  mode="default"
-                  textStyle={{ color: Colors.brandBlue2 }}
-                  placeholder="Select Start Time"
-                  placeholderStyle={{ fontSize: 15 }}
-                  selectedValue={selectedSlot}
-                  onValueChange={(value) => setSelectedSlot(value)}>
-                  {availability.map((slot, i) => (
-                    <Picker.Item label={moment(slot.startDate).format('hh:mm A')} value={slot} key={i} />
-                  ))}
-                </Picker>
+              <View style={[commonStyles.horizontalChildrenSpaceView, { paddingLeft: RfW(15) }]}>
+                <CustomSelect
+                  label="Start Time"
+                  data={availability.map((item) => ({ label: moment(item.startDate).format('hh:mm A'), value: item }))}
+                  value={selectedSlot}
+                  placeholder="Select time"
+                  onChangeHandler={(value) => value && setSelectedSlot(value)}
+                  containerStyle={{
+                    width: RfW(90),
+                    height: RfH(44),
+                    justifyContent: 'center',
+                  }}
+                />
                 <Text style={{ marginRight: RfW(16), textAlign: 'center' }}>
                   {!isEmpty(selectedSlot) ? moment(selectedSlot.endDate).format('hh:mm A') : '--'}
                 </Text>
