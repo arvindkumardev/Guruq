@@ -440,7 +440,8 @@ const MyCart = () => {
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={styles.tutorDetails}>
-              {item?.onlineClass ? 'Online' : 'Offline'} {item.groupSize === 1 ? 'Individual' : 'Group'} Class
+              {item?.onlineClass ? 'Online' : 'Offline'} {item.groupSize === 1 ? 'Individual' : 'Group'}{' '}
+              {item.demo ? 'Demo' : ''} Class
             </Text>
 
             <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>

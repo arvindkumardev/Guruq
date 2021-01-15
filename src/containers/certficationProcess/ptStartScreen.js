@@ -300,7 +300,7 @@ const PtStartScreen = (props) => {
           {!isEmpty(ptDetail) && ptDetail?.status === PtStatus.EXEMPTED.label && (
             <>
               <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
-                <Text style={commonStyles.headingPrimaryText}> You are exempted from the test</Text>
+                <Text style={commonStyles.headingPrimaryText}>You are exempted from the test</Text>
               </View>
               <Button
                 onPress={handleClick}

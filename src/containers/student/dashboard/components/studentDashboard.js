@@ -41,7 +41,7 @@ import NotificationRedirection from '../../../notification/notificationRedirecti
 import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 
-const carouselItems = [Images.dash_img1, Images.dash_img2, Images.dash_img3];
+const carouselItems = [Images.student_home_banner_1, Images.student_home_banner_2, Images.student_home_banner_3];
 
 function StudentDashboard(props) {
   const navigation = useNavigation();

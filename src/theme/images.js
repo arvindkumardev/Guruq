@@ -257,6 +257,10 @@ const Images = {
   tutor_home_banner_2: require('../assets/images/home-banner-tutor-2.png'),
   tutor_home_banner_3: require('../assets/images/home-banner-tutor-3.png'),
 
+  student_home_banner_1: require('../assets/images/home-banner-student-1.png'),
+  student_home_banner_2: require('../assets/images/home-banner-student-2.png'),
+  student_home_banner_3: require('../assets/images/home-banner-student-3.png'),
+
   ...SubjectIcons,
 };
 

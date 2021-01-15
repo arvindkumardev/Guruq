@@ -1,13 +1,13 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Button } from 'native-base';
 import analytics from '@react-native-firebase/analytics';
 
 import { useNavigation } from '@react-navigation/native';
-import { useMutation,useReactiveVar } from '@apollo/client';
-import { CustomRadioButton, IconButtonWrapper, Loader } from '../../../../components';
+import { useMutation, useReactiveVar } from '@apollo/client';
+import { IconButtonWrapper, Loader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../../theme';
 import { alertBox, printCurrency, RfH, RfW } from '../../../../utils/helpers';
@@ -15,9 +15,8 @@ import routeNames from '../../../../routes/screenNames';
 import styles from './styles';
 import { ADD_TO_CART } from '../../booking.mutation';
 import PriceMatrixComponent from './priceMatrixComponent';
-import {
-  studentDetails
-} from '../../../../apollo/cache';
+import { studentDetails } from '../../../../apollo/cache';
+
 const AddToCartModal = (props) => {
   const { visible, onClose, selectedSubject, isDemoClass, isRenewal } = props;
   const { budgetDetails } = selectedSubject;
@@ -37,21 +36,21 @@ const AddToCartModal = (props) => {
     onCompleted: (data) => {
       if (data) {
         onClose(false);
-        fireLogEvent(data)
+        fireLogEvent(data);
         navigation.navigate(routeNames.STUDENT.MY_CART);
       }
     },
   });
   const fireLogEvent = async (data) => {
-    let {tutorOffering,count,onlineClass} = data.addToCart
-    let payload={
+    const { tutorOffering, count, onlineClass } = data.addToCart;
+    const payload = {
       tutorOfferingId: tutorOffering.id,
       classCount: count,
-      classMode:onlineClass ? 'online' :'offline',
-      studentId:studentInfo.id
-    }
-    await analytics().logEvent('add_to_cart',payload)
-  }
+      classMode: onlineClass ? 'online' : 'offline',
+      studentId: studentInfo.id,
+    };
+    await analytics().logEvent('add_to_cart', payload);
+  };
   const calculateAmount = (noClasses, isOnline) => {
     const applicableBudgets = budgetDetails
       .filter((budget) => budget.onlineClass === isOnline && budget.demo === isDemoClass)
@@ -101,7 +100,7 @@ const AddToCartModal = (props) => {
     }
   };
 
-  const onAddingIntoCart =  () => {
+  const onAddingIntoCart = () => {
     if (amount === 0 && !isDemoClass) {
       alertBox('Error', 'Amount should be greater than zero for booking');
     } else {
@@ -117,7 +116,6 @@ const AddToCartModal = (props) => {
       addToCart({
         variables: { cartCreateDto: cartCreate },
       });
-     
     }
   };
 
@@ -173,7 +171,7 @@ const AddToCartModal = (props) => {
           <View>
             <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'center' }]}>
               <Text style={commonStyles.mediumPrimaryText}>{`Mode of ${isDemoClass ? 'Demo ' : ''}Class`}</Text>
-              <View style={commonStyles.horizontalChildrenCenterView}>
+              <View style={[commonStyles.horizontalChildrenCenterView, { flex: 1 }]}>
                 {selectedSubject.onlineClass > 0 && (
                   <TouchableWithoutFeedback onPress={() => changeClassMode(true)}>
                     <View
