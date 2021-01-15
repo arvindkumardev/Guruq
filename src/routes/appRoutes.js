@@ -146,25 +146,15 @@ const AppStack = (props) => {
 
   const getCommonRoutes = () => (
     <>
-      {/*<Stack.Screen name={NavigationRouteNames.CALENDAR} component={CalendarView} options={{ headerShown: false }} />*/}
+      {/* <Stack.Screen name={NavigationRouteNames.CALENDAR} component={CalendarView} options={{ headerShown: false }} /> */}
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
+        name={NavigationRouteNames.SCHEDULED_CLASS_DETAILS}
         component={scheduledClassDetails}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.CANCEL_REASON}
+        name={NavigationRouteNames.CANCEL_REASON}
         component={cancelReason}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.MY_CLASSES}
-        component={MyClasses}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SCHEDULE_CLASS}
-        component={scheduleClass}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.ADDRESS} component={AddressListing} options={{ headerShown: false }} />
@@ -230,11 +220,6 @@ const AppStack = (props) => {
       <Stack.Screen
         name={NavigationRouteNames.RATINGS_REVIEWS}
         component={RatingReviews}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.UPDATE_VERSION}
-        component={UpdateVersion}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />

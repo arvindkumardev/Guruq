@@ -75,7 +75,7 @@ function CalendarView(props) {
   });
 
   const classDetailNavigation = (uuid) => {
-    navigation.navigate(routeNames.STUDENT.SCHEDULED_CLASS_DETAILS, { uuid });
+    navigation.navigate(routeNames.SCHEDULED_CLASS_DETAILS, { uuid });
   };
 
   const renderClassItem = (classDetails) => (

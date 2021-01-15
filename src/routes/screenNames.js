@@ -12,7 +12,7 @@ const NavigationRouteNames = {
   PYTN_HISTORY: 'pytn_history',
   PYTN_ADD: 'pytn_add',
   PYTN_DETAILS: 'pytn_details',
-  ONLINE_CLASS: 'online_class1',
+  ONLINE_CLASS: 'online_class',
 
   WEB_VIEW: 'web_view',
   NOTIFICATIONS: 'notifications',
@@ -24,13 +24,11 @@ const NavigationRouteNames = {
   ADDRESS_MAP_VIEW: 'address_map_view',
   EDUCATION: 'education',
   ADD_EDIT_EDUCATION: 'add_edit_education',
-
   PERSONAL_DETAILS: 'personal_details',
   EXPERIENCE: 'experience',
   ADD_EDIT_EXPERIENCE: 'add_edit_experience',
   BANK_DETAILS: 'bank_details',
   ADD_EDIT_BANK_DETAILS: 'add_edit_bank_details',
-
   AWARD_LISTING: 'awards_listing',
   ADD_EDIT_AWARD_DETAILS: 'add_edit_award_details',
   BUSINESS_DETAILS: 'add_edit_bank_details',
@@ -42,6 +40,9 @@ const NavigationRouteNames = {
   MONTH_CALENDAR_VIEW: 'month_calendar_view',
   WALLET: 'wallet',
   CALENDAR: 'calendar',
+  SCHEDULED_CLASS_DETAILS: 'scheduled_class_details',
+  CANCEL_REASON: 'cancel_reason',
+
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
     MY_STUDY_AREAS: 'my_study_areas',
@@ -54,15 +55,12 @@ const NavigationRouteNames = {
     PROFILE: 'student_profile',
     COMPARE_TUTORS: 'compare_tutors',
     TUTOR_DETAILS: 'tutor_details',
+    SCHEDULE_CLASS: 'schedule_class',
     MY_CART: 'my_cart',
     PAYMENT_METHOD: 'payment_method',
     BOOKING_CONFIRMED: 'booking_confirmed',
     PAYMENT_RECEIVED: 'payment_received',
     MY_CLASSES: 'my_classes',
-    SCHEDULE_CLASS: 'schedule_class',
-    SCHEDULED_CLASS_DETAILS: 'scheduled_class_details',
-    CANCEL_REASON: 'cancel_reason',
-    ONLINE_CLASS: 'online_class',
     RATE_AND_REVIEW: 'rate and review',
     DETAILED_RATING: 'detailed rating',
     COMPARE_MODAL: 'compare_modal',
@@ -77,8 +75,6 @@ const NavigationRouteNames = {
   TUTOR: {
     ON_BOARDING: 'tutor_on_boarding',
     DASHBOARD: 'tutor_dashboard',
-    CANCEL_REASON: 'cancel_reason',
-    ONLINE_CLASS: 'online_class',
     WELCOME_SCREEN: 'welcome_screen',
     CERTIFICATE_STEPS: 'certificate_steps',
     CERTIFICATION_COMPLETED_VIEW: 'certification_completed_view',

@@ -30,10 +30,8 @@ export const LOTTIE_JSON_FILES = {
 };
 
 export const FRONTEND_URL = 'http://stagingv2.guruq.in';
-export const DASHBOARD_URL = 'http://10.0.0.99:3000';
-
-// export const API_URL = 'http://10.0.0.99:5000';
-export const API_URL = 'http://apiv2.guruq.in/api';
+export const DASHBOARD_URL = 'http://stagingdashboard.guruq.in/';
+export const API_URL = 'http://stagingapi.guruq.in/graphql';
 
 export const ATTACHMENT_PREVIEW_URL = `${API_URL}/upload/preview?filePath=`;
 export const IMAGES_BASE_URL = 'https://guruq.in/guruq-new';

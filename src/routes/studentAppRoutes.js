@@ -26,6 +26,8 @@ import Refund from '../containers/student/purchasedHistory/refund';
 import MyStudyAreas from '../containers/student/studyArea/myStudyAreas';
 import OrderDetails from '../containers/student/purchasedHistory/orderDetails';
 import StudentOnBoard from '../containers/student/studentOnBoard';
+import MyClasses from '../containers/myClasses/classes';
+import scheduleClass from '../containers/myClasses/scheduleClass';
 
 const Stack = createStackNavigator();
 
@@ -137,6 +139,16 @@ export const getStudentRoutes = (studentInfo) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.REFUND} component={Refund} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.MY_CLASSES}
+        component={MyClasses}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.STUDENT.SCHEDULE_CLASS}
+        component={scheduleClass}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.ORDER_DETAILS}
         component={OrderDetails}

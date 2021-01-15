@@ -104,7 +104,7 @@ function ScheduleClass(props) {
   };
 
   const classDetailNavigation = (uuid) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { uuid });
+    navigation.navigate(NavigationRouteNames.SCHEDULED_CLASS_DETAILS, { uuid });
   };
 
   const tutorDetail = (item) => {
