@@ -36,7 +36,7 @@ import TutorSubjectsModal from './tutorSubjectsModal';
 import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 
-const carouselItems = [Images.dash_img1, Images.dash_img2, Images.dash_img3];
+const carouselItems = [Images.tutor_home_banner_1, Images.tutor_home_banner_2, Images.tutor_home_banner_3];
 function TutorDashboard(props) {
   const navigation = useNavigation();
   const [upcomingClasses, setUpcomingClasses] = useState([]);
