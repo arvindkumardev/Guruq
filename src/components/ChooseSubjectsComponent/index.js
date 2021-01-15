@@ -65,15 +65,6 @@ const ChooseSubjectComponent = (props) => {
     setShowSubmitButton(false);
   };
 
-  const onSelectGrade = (item) => {
-    setSelectedClass(item);
-    setSelectedSubjects([]);
-    setShowSubmitButton(false);
-    if (selectedStudyAreaObj.length === 3) {
-      setShowSubmitButton(true);
-    }
-  };
-
   const onSelectSubjects = (item) => {
     let array = [];
     if (isMultipleSubjectSelectionAllowed) {
@@ -91,6 +82,16 @@ const ChooseSubjectComponent = (props) => {
     }
     setSelectedSubjects(array);
     setShowSubmitButton(array.length > 0);
+  };
+
+  const onSelectGrade = (item) => {
+    setSelectedClass(item);
+    setSelectedSubjects([]);
+    setShowSubmitButton(false);
+    if (selectedStudyAreaObj.length === 3) {
+      onSelectSubjects(item);
+      setShowSubmitButton(true);
+    }
   };
 
   const renderArea = (item) => (

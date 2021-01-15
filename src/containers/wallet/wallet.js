@@ -2,7 +2,6 @@ import { FlatList, ScrollView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import ProgressCircle from 'react-native-progress-circle';
 import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../theme/styles';
 import { printCurrency, printDateTime, RfH, RfW } from '../../utils/helpers';
@@ -71,16 +70,6 @@ function Wallet() {
             marginHorizontal: RfW(16),
           },
         ]}>
-        {/* <ProgressCircle */}
-        {/*  percent={(balanceData.balance / balanceData.earn) * 100} */}
-        {/*  radius={32} */}
-        {/*  borderWidth={6} */}
-        {/*  color={Colors.brandBlue2} */}
-        {/*  shadowColor={Colors.lightGrey} */}
-        {/*  outerCircleStyle={{ backgroundColor: Colors.lightGrey }} */}
-        {/*  bgColor={Colors.lightPurple} */}
-        {/* /> */}
-
         <View style={commonStyles.verticallyCenterItemsView}>
           <Text
             style={[
@@ -145,70 +134,12 @@ function Wallet() {
           scrollEventThrottle={16}
           scrollEnabled={transactionData.length > 0}>
           <Text style={[commonStyles.pageTitleThirdRow, { marginHorizontal: RfW(16) }]}>My QPoints</Text>
-          {/* <View style={{ height: RfH(44) }} />
-          <View
-            style={[
-              commonStyles.horizontalChildrenSpaceView,
-              { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: RfH(8), marginHorizontal: RfW(16) },
-            ]}>
-            <Text>Balance</Text>
-            <Text
-              style={{
-                fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-                fontFamily: Fonts.semiBold,
-                color: Colors.brandBlue2,
-              }}>
-              ₹ 300.00
-            </Text>
-          </View> */}
-          {/* <View style={[commonStyles.horizontalChildrenView]}>
-            {/* <IconButtonWrapper iconWidth={RfH(21)} iconHeight={RfH(21)} iconImage={Images.coin} /> */}
-          {/* <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(8) }]}>1 Q point = 1 INR</Text> */}
-
-          {/* </View> */}
 
           {renderBalanceView()}
 
-          {/* <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16) }]}>
-            <View
-              style={[
-                commonStyles.verticallyCenterItemsView,
-                {
-                  flex: 0.5,
-                  backgroundColor: Colors.lightGreen,
-                  padding: RfH(8),
-                  borderRadius: RfH(8),
-                  marginRight: RfW(4),
-                },
-              ]}>
-              <Image source={Images.activities} />
-              <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8), fontFamily: Fonts.semiBold }]}>
-                My Activities
-              </Text>
-            </View>
-            <View
-              style={[
-                commonStyles.verticallyCenterItemsView,
-                {
-                  flex: 0.5,
-                  backgroundColor: Colors.lightOrange,
-                  padding: RfH(8),
-                  borderRadius: RfH(8),
-                  marginLeft: RfW(4),
-                },
-              ]}>
-              <Image source={Images.earn} />
-              <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8), fontFamily: Fonts.semiBold }]}>
-                Earn More
-              </Text>
-            </View>
-          </View> */}
-          {/* <View style={{ height: RfH(16) }} /> */}
-
           <View
             style={[commonStyles.horizontalChildrenSpaceView, { backgroundColor: Colors.lightGrey, padding: RfW(16) }]}>
-            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Transaction history</Text>
-            {/* <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2 }]}>View All</Text> */}
+            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>My Activity</Text>
           </View>
           <FlatList
             showsVerticalScrollIndicator={false}
