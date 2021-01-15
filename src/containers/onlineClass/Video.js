@@ -649,7 +649,7 @@ export default class Video extends Component<Props, State> {
                     alignItems: 'center',
                     // paddingBottom: 8,
                   }}>
-                  <IconButtonWrapper iconImage={Images.share_screen} iconWidth={RfW(24)} iconHeight={RfH(24)} />
+                  <IconButtonWrapper iconImage={Images.whiteboard} iconWidth={RfW(24)} iconHeight={RfH(24)} />
                   <Text
                     style={[
                       commonStyles.smallPrimaryText,
@@ -658,7 +658,7 @@ export default class Video extends Component<Props, State> {
                         color: Colors.white,
                       },
                     ]}>
-                    Share
+                    Whiteboard
                   </Text>
                 </View>
               </TouchableWithoutFeedback>

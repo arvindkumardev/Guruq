@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import analytics from '@react-native-firebase/analytics';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -19,6 +19,7 @@ import { CREATE_BOOKING, MAKE_PAYMENT } from '../../containers/student/booking.m
 import Dash from '../Dash';
 import { OrderStatusEnum, PaymentMethodEnum, PaymentStatusEnum } from './paymentMethod.enum';
 import NavigationRouteNames from '../../routes/screenNames';
+import { DUPLICATE_FOUND, INVALID_INPUT } from '../../common/errorCodes';
 
 const convenienceCharges = 100;
 let bookingDataObj = {};
@@ -46,6 +47,12 @@ const PaymentMethod = (props) => {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
+      if (e && e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === DUPLICATE_FOUND) {
+          alertBox('Demo class already booked');
+        }
+      }
     },
     onCompleted: (data) => {
       if (data) {

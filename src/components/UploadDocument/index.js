@@ -95,7 +95,7 @@ function UploadDocument(props) {
       // cropping: true,
       compressImageMaxHeight: 600,
       compressImageMaxWidth: 600,
-      compressImageQuality: Platform.OS === 'android' ? 0.2 : 0.2,
+      compressImageQuality: Platform.OS === 'android' ? 1 : 1,
       mediaType: 'photo',
     })
       .then((image) => {
@@ -126,7 +126,7 @@ function UploadDocument(props) {
       multiple: snapCount > 1,
       maxFiles: snapCount - imageSet.length,
       showsSelectedCount: true,
-      compressImageQuality: Platform.OS === 'android' ? 0.2 : 0.2,
+      compressImageQuality: Platform.OS === 'android' ? 1 : 1,
       mediaType: 'photo',
     })
       .then((images) => {

@@ -156,6 +156,7 @@ const Images = {
   searchIcon: require('../assets/images/search.png'),
   settings: require('../assets/images/setting.png'),
   share_screen: require('../assets/images/share-screen.png'),
+  whiteboard: require('../assets/images/whiteboard.png'),
   share: require('../assets/images/share.png'),
   single_user: require('../assets/images/single_user.png'),
   small_active_blue: require('../assets/images/small_active_blue.png'),
