@@ -9,11 +9,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-import { APP_BUILD_VERSION, getToken } from './utils/helpers';
+import { getToken } from './utils/helpers';
 import { appMetaData, isLoggedIn, isSplashScreenVisible, isTokenLoading, userType } from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
-import { DASHBOARD_URL } from './utils/constants';
+import { APP_BUILD_VERSION, DASHBOARD_URL } from './utils/constants';
 
 const getActiveRouteName = (state) => {
   const route = state.routes[state.index];
@@ -31,27 +31,8 @@ function App() {
   const isUserLoggedIn = useReactiveVar(isLoggedIn);
   const isUserTokenLoading = useReactiveVar(isTokenLoading);
   const showSplashScreen = useReactiveVar(isSplashScreenVisible);
-  // const userInfo = useReactiveVar(userDetails);
   const userTypeVal = useReactiveVar(userType);
   const [isForceUpdate, setIsForceUpdate] = useState(false);
-  // const isNetworkConnectivityError = useReactiveVar(networkConnectivityError);
-
-  // const netInfo = useNetInfo({
-  //   reachabilityUrl: 'http://localhost:5000',
-  //   reachabilityTest: async (response) => response.status === 204,
-  //   reachabilityLongTimeout: 60 * 1000, // 60s
-  //   reachabilityShortTimeout: 5 * 1000, // 5s
-  //   reachabilityRequestTimeout: 15 * 1000, // 15s
-  // });
-  //
-  // // Subscribe
-  // const unsubscribe = NetInfo.addEventListener((state) => {
-  //   console.log('Connection type', state.type);
-  //   console.log('Is connected?', state.isConnected);
-  //   console.log('State: ', state);
-  //
-  //   networkConnectivityError(!state.isConnected);
-  // });
 
   useEffect(() => {
     const state = navigationRef.current.getRootState();
@@ -109,6 +90,7 @@ function App() {
     const res = await fetch(`${DASHBOARD_URL}/app-version.json`, {
       method: 'GET',
     }).then((response) => response.json());
+    console.log('dddddddddddddd', res);
     const appData = res[Platform.OS.toLowerCase()];
     appMetaData(appData);
     if (appData.isUnderMaintenance) {

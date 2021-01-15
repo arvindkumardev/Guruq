@@ -20,7 +20,7 @@ const UpcomingClassComponent = (props) => {
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
 
   const classDetailNavigation = (uuid) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, { uuid });
+    navigation.navigate(NavigationRouteNames.SCHEDULED_CLASS_DETAILS, { uuid });
   };
 
   return (

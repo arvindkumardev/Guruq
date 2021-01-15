@@ -83,7 +83,7 @@ const PRICE_DATA = [
   {
     name: 'Under ₹250',
     checked: false,
-    filterData: { minBudget: 0, maxBudget: 250 },
+    filterData: { minBudget: 1, maxBudget: 250 },
     id: 2,
     displayValue: '0 - 250',
   },

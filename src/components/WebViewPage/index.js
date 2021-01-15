@@ -26,7 +26,7 @@ const WebViewPage = (props) => {
   const onMessage = (payload) => {
     console.log('payload', payload);
   };
-  console.log(url, label, token);
+  console.log(url,token);
 
   return (
     <>

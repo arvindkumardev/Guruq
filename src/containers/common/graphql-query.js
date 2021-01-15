@@ -38,32 +38,6 @@ export const ME_QUERY = gql`
   }
 `;
 
-// export const GET_CURRENT_STUDENT_QUERY = gql`
-//   query GetCurrentStudent {
-//     getCurrentStudent {
-//       id
-//       contactDetail {
-//         firstName
-//         lastName
-//         phoneNumber {
-//           countryCode
-//           number
-//         }
-//         email
-//         dob
-//         gender
-//       }
-//       user {
-//         onBoarded
-//       }
-//       profileImage {
-//         filename
-//         original
-//       }
-//     }
-//   }
-// `;
-
 export const GET_STUDENT_DETAILS = gql`
   query GetStudentDetails {
     getStudentDetails {

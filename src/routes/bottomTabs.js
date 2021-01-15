@@ -23,7 +23,8 @@ function MyTabBar({ state, descriptors, navigation }) {
     <View
       style={{
         flexDirection: 'row',
-        paddingVertical: RfH(12),
+        paddingTop: RfH(12),
+        paddingBottom: Platform.OS === 'ios' ? RfH(0) : RfH(12),
         borderTopColor: Colors.borderColor,
         borderTopWidth: RfH(0.5),
         backgroundColor: Colors.white,

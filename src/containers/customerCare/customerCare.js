@@ -1,4 +1,4 @@
-import { Linking, Text, TouchableOpacity, View } from 'react-native';
+import { Linking, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useReactiveVar } from '@apollo/client';

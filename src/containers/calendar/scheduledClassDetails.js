@@ -169,7 +169,7 @@ function ScheduledClassDetails(props) {
 
   const goToCancelReason = () => {
     setOpenMenu(false);
-    navigation.navigate(NavigationRouteNames.STUDENT.CANCEL_REASON, { classId: classData?.classEntity?.id });
+    navigation.navigate(NavigationRouteNames.CANCEL_REASON, { classId: classData?.classEntity?.id });
   };
   const goToHelp = () => {
     setOpenMenu(false);

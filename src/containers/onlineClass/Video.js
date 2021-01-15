@@ -1085,18 +1085,18 @@ export default class Video extends Component<Props, State> {
               alignSelf: 'stretch',
             }}>
             {!isEmpty(this.props.meetingDetails) && (
-              <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32) }]}>
-                <View
-                  style={{
-                    height: RfH(72),
-                    width: RfW(72),
-                    backgroundColor: Colors.lightPurple,
-                    borderRadius: 8,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />
-                </View>
+              <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32),alignItems: 'center'}]}>
+                {/*<View*/}
+                {/*  style={{*/}
+                {/*    height: RfH(72),*/}
+                {/*    width: RfW(72),*/}
+                {/*    backgroundColor: Colors.lightPurple,*/}
+                {/*    borderRadius: 8,*/}
+                {/*    alignItems: 'center',*/}
+                {/*    justifyContent: 'center',*/}
+                {/*  }}>*/}
+                {/*  <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} />*/}
+                {/*</View>*/}
                 <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
                   <Text style={commonStyles.headingPrimaryText}>{this.props.meetingDetails.title}</Text>
                   <Text style={commonStyles.mediumMutedText}>{this.props.meetingDetails.description}</Text>

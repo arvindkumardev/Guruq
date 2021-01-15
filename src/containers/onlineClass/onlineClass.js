@@ -77,7 +77,7 @@ const OnlineClass = (props) => {
     if (forInterview) {
       navigation.goBack();
     } else {
-      navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS, {
+      navigation.navigate(NavigationRouteNames.SCHEDULED_CLASS_DETAILS, {
         uuid,
         showReviewModal,
       });

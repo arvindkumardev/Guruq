@@ -4,15 +4,20 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import apolloLogger from 'apollo-link-logger';
 import { onError } from '@apollo/client/link/error';
-import { getToken } from '../utils/helpers';
-import { API_URL } from '../utils/constants';
+import { alertBox, getToken } from '../utils/helpers';
+import { GRAPH_API_URL } from '../utils/constants';
 
-const GRAPHQL_ENDPOINT = `${API_URL}/graphql`;
+const GRAPHQL_ENDPOINT = `${GRAPH_API_URL}`;
 
 let apolloClient = null;
 
 const errorLink = onError(({ graphQLErrors }) => {
-  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message }) => {
+      console.log(message);
+      // alertBox('Something went wrong', 'Please try again');
+    });
+  }
 });
 const httpLink = createHttpLink({ uri: GRAPHQL_ENDPOINT, credentials: 'same-origin' });
 const authLink = setContext(async (req, { headers }) => {

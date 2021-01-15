@@ -118,10 +118,10 @@ const AppStack = (props) => {
     });
 
     // notificationPayload({
-    //   screen: 'tutor_detail',
-    //   tutor_id: 38480,
-    //   offering_id: 249,
+    //   screen: 'scheduled_class_details',
+    //   uuid: '7ffed5c5-6b13-4fb4-8719-41c3015e2981',
     // });
+
     messaging().onNotificationOpenedApp((remoteMessage) => {
       if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.data)) {
         notificationPayload(remoteMessage.data);
@@ -146,25 +146,15 @@ const AppStack = (props) => {
 
   const getCommonRoutes = () => (
     <>
-      {/*<Stack.Screen name={NavigationRouteNames.CALENDAR} component={CalendarView} options={{ headerShown: false }} />*/}
+      {/* <Stack.Screen name={NavigationRouteNames.CALENDAR} component={CalendarView} options={{ headerShown: false }} /> */}
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SCHEDULED_CLASS_DETAILS}
+        name={NavigationRouteNames.SCHEDULED_CLASS_DETAILS}
         component={scheduledClassDetails}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.CANCEL_REASON}
+        name={NavigationRouteNames.CANCEL_REASON}
         component={cancelReason}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.MY_CLASSES}
-        component={MyClasses}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SCHEDULE_CLASS}
-        component={scheduleClass}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.ADDRESS} component={AddressListing} options={{ headerShown: false }} />
@@ -230,11 +220,6 @@ const AppStack = (props) => {
       <Stack.Screen
         name={NavigationRouteNames.RATINGS_REVIEWS}
         component={RatingReviews}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.UPDATE_VERSION}
-        component={UpdateVersion}
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.REFER_EARN} component={ReferEarn} options={{ headerShown: false }} />

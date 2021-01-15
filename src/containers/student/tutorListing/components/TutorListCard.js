@@ -63,7 +63,6 @@ function TutorListCard(props) {
         <View style={[commonStyles.horizontalChildrenStartView]}>
           <View style={styles.userIconParent}>
             <TutorImageComponent tutor={tutor} />
-
             {isSponsored && (
               <View
                 style={{
