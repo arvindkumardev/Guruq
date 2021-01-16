@@ -151,7 +151,7 @@ function Refund(props) {
           {cancelSummary.scheduled > 0 && isEmpty(orderData.refund) && (
             <View style={{ marginBottom: RfH(15) }}>
               <Text style={[commonStyles.smallPrimaryText, { color: Colors.orangeRed }]}>
-                All unscheduled classes will be cancelled.
+                All scheduled classes will be cancelled.
               </Text>
             </View>
           )}

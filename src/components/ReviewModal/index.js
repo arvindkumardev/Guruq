@@ -101,14 +101,7 @@ const ReviewModal = (props) => {
   };
 
   return (
-    <Modal
-      animationType="fade"
-      transparent
-      backdropOpacity={1}
-      visible={visible}
-      onRequestClose={() => {
-        onClose(false);
-      }}>
+    <Modal animationType="fade" transparent backdropOpacity={1} visible={visible}>
       <View
         style={[
           commonStyles.verticallyStretchedItemsView,
