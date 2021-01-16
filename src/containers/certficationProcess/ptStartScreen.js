@@ -316,8 +316,20 @@ const PtStartScreen = (props) => {
               </View>
             </>
           )}
+          {!isEmpty(ptDetail) && ptDetail?.status === PtStatus.EXEMPTED.label && (
+            <>
+              <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
+                <Text style={commonStyles.headingPrimaryText}>You are exempted from the test</Text>
+              </View>
+              {/* <Button */}
+              {/*  onPress={handleClick} */}
+              {/*  style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}> */}
+              {/*  <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text> */}
+              {/* </Button> */}
+            </>
+          )}
 
-          {!isEmpty(ptDetail) && isEmpty(ptDetail.proficiencyTest) ? (
+          {!isEmpty(ptDetail) && isEmpty(ptDetail.proficiencyTest) && ptDetail?.status === PtStatus.PENDING.label && (
             <View style={commonStyles.verticallyCenterItemsView}>
               <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
                 PT not available for the selected subject, please contact customer support.
@@ -329,31 +341,10 @@ const PtStartScreen = (props) => {
                 <Text style={commonStyles.textButtonPrimary}>Customer Support</Text>
               </Button>
             </View>
-          ) : (
-            !isEmpty(ptDetail) &&
-            !attemptExhausted && (
-              <Button
-                onPress={handleClick}
-                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
-                <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
-              </Button>
-            )
-          )}
-
-          {!isEmpty(ptDetail) && ptDetail?.status === PtStatus.EXEMPTED.label && (
-            <>
-              <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: RfH(100) }}>
-                <Text style={commonStyles.headingPrimaryText}>You are exempted from the test</Text>
-              </View>
-              <Button
-                onPress={handleClick}
-                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
-                <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
-              </Button>
-            </>
           )}
 
           {!isEmpty(ptDetail) &&
+            !isEmpty(ptDetail.proficiencyTest) &&
             ptDetail?.status !== PtStatus.PASSED.label &&
             ptDetail?.status !== PtStatus.EXEMPTED.label &&
             attemptExhausted && (
@@ -367,6 +358,15 @@ const PtStartScreen = (props) => {
                   <Text style={commonStyles.textButtonPrimary}>Customer Support</Text>
                 </Button>
               </View>
+            )}
+          {!isEmpty(ptDetail) &&
+            ((!isEmpty(ptDetail.proficiencyTest) && !attemptExhausted) ||
+              ptDetail?.status === PtStatus.EXEMPTED.label) && (
+              <Button
+                onPress={handleClick}
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
+                <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
+              </Button>
             )}
         </View>
       </ScrollView>
