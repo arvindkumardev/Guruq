@@ -29,7 +29,7 @@ export const LOTTIE_JSON_FILES = {
   loaderJson: require('../assets/json/loader1.json'),
 };
 
-export const FRONTEND_URL = 'https://new.guruq.in';
+export const FRONTEND_URL = 'https://staging.guruq.in/';
 export const DASHBOARD_URL = 'https://stagingdashboard.guruq.in';
 export const API_URL = 'https://stagingapi.guruq.in';
 export const GRAPH_API_URL = `${API_URL}/graphql`;
