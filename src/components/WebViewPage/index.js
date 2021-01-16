@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import { getToken, RfW } from '../../utils/helpers';
 import { ScreenHeader } from '../index';
+import InPlaceLoader from '../InPlaceLoader';
 
 const WebViewPage = (props) => {
   const { route } = props;
@@ -26,18 +27,20 @@ const WebViewPage = (props) => {
   const onMessage = (payload) => {
     console.log('payload', payload);
   };
-  console.log(url,token);
+  console.log(url, token);
 
   return (
     <>
       <ScreenHeader label={label} homeIcon horizontalPadding={RfW(16)} />
-      {token && (
+      {token && url && (
         <WebView
-          source={{ uri: `${url}/${token}` }}
+          source={{ uri: `${url}` }}
           javaScriptEnabled
           domStorageEnabled
           onMessage={onMessage}
+          renderLoading={() => <InPlaceLoader isLoading text="Please wait..." />}
           injectedJavaScript={INJECTEDJAVASCRIPT}
+          startInLoadingState
         />
       )}
     </>

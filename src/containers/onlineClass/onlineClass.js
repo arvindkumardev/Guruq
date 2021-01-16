@@ -14,7 +14,7 @@ const OnlineClass = (props) => {
   const isFocussed = useIsFocused();
 
   const { route } = props;
-  const { uuid, forInterview } = route.params;
+  const { uuid, isInterview } = route.params;
 
   const userInfo = useReactiveVar(userDetails);
   const [token, setToken] = useState('');
@@ -66,7 +66,7 @@ const OnlineClass = (props) => {
 
   useEffect(() => {
     if (isFocussed) {
-      if (forInterview) {
+      if (isInterview) {
         getMeetingDetailsForInterview({ variables: { uuid } });
       } else {
         getMeetingDetailsForClass({ variables: { uuid } });
@@ -75,7 +75,7 @@ const OnlineClass = (props) => {
   }, [isFocussed]);
 
   const callEnded = (showReviewModal) => {
-    if (forInterview) {
+    if (isInterview) {
       navigation.goBack();
     } else {
       navigation.navigate(NavigationRouteNames.SCHEDULED_CLASS_DETAILS, {

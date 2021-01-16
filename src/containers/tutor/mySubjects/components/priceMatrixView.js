@@ -46,22 +46,20 @@ function PriceMatrixView(props) {
         }
       });
 
-      let maxValue = 0;
+      let maxValueOnline = 0;
       Object.entries(pm.online).forEach(([key, value]) => {
         if (value !== 0) {
-          maxValue = value;
-        } else {
-          pm.online[key] = maxValue;
+          maxValueOnline = value;
         }
+        pm.online[key] = maxValueOnline;
       });
 
-      maxValue = 0;
+      let maxValueOffline = 0;
       Object.entries(pm.offline).forEach(([key, value]) => {
         if (value !== 0) {
-          maxValue = value;
-        } else {
-          pm.offline[key] = maxValue;
+          maxValueOffline = value;
         }
+        pm.offline[key] = maxValueOffline;
       });
 
       setPriceMatrix(pm);

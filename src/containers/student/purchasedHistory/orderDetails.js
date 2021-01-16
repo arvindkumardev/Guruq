@@ -242,11 +242,13 @@ function OrderDetails(props) {
         </View>
       </ScrollView>
 
-      <Button
-        onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: orderData })}
-        style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginVertical: RfH(30) }]}>
-        <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
-      </Button>
+      {cancelSummary.unscheduled > 0 && (
+        <Button
+          onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: orderData })}
+          style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginVertical: RfH(30) }]}>
+          <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
+        </Button>
+      )}
       <ActionSheet
         actions={menuItem}
         cancelText="Dismiss"

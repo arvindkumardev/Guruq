@@ -241,7 +241,7 @@ export default class Video extends Component<Props, State> {
   };
 
   callEndedHandle = () => {
-    alertBox('Do you really want to end the class?', '', {
+    alertBox('Do you really want to end the session?', '', {
       positiveText: 'Yes',
       onPositiveClick: async () => {
         await this._engine?.leaveChannel();
@@ -765,7 +765,7 @@ export default class Video extends Component<Props, State> {
               You're the only one here
             </Text>
             <Text style={[commonStyles.regularPrimaryText, { color: Colors.white }]}>
-              Please wait for other members to join the class.
+              Please wait for other members to join the session.
             </Text>
           </View>
         )}
@@ -1112,17 +1112,6 @@ export default class Video extends Component<Props, State> {
             }}>
             {!isEmpty(this.props.meetingDetails) && (
               <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32), alignItems: 'center' }]}>
-                {/* <View */}
-                {/*  style={{ */}
-                {/*    height: RfH(72), */}
-                {/*    width: RfW(72), */}
-                {/*    backgroundColor: Colors.lightPurple, */}
-                {/*    borderRadius: 8, */}
-                {/*    alignItems: 'center', */}
-                {/*    justifyContent: 'center', */}
-                {/*  }}> */}
-                {/*  <IconButtonWrapper iconHeight={RfH(48)} iconWidth={RfW(32)} iconImage={Images.book} /> */}
-                {/* </View> */}
                 <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
                   <Text style={commonStyles.headingPrimaryText}>{this.props.meetingDetails.title}</Text>
                   <Text style={commonStyles.mediumMutedText}>{this.props.meetingDetails.description}</Text>
@@ -1141,18 +1130,18 @@ export default class Video extends Component<Props, State> {
                 moment(this.props.meetingDetails.allowedEndDate).isAfter(moment()) && (
                   <TouchableWithoutFeedback onPress={this.startCall}>
                     <View style={styles.button}>
-                      <Text style={styles.buttonText}> Join Class </Text>
+                      <Text style={styles.buttonText}> Join Session </Text>
                     </View>
                   </TouchableWithoutFeedback>
                 )}
               {moment(this.props.meetingDetails.allowedStartDate).isAfter(moment()) && (
                 <Text>
-                  Class starting in {moment(this.props.meetingDetails.allowedStartDate).diff(moment(), 'minutes')}
+                  Session starting in {moment(this.props.meetingDetails.allowedStartDate).diff(moment(), 'minutes')}
                 </Text>
               )}
 
               {isEmpty(this.props.meetingDetails) ||
-                (moment(this.props.meetingDetails.allowedEndDate).isBefore(moment()) && <Text>Class Has Ended</Text>)}
+                (moment(this.props.meetingDetails.allowedEndDate).isBefore(moment()) && <Text>Session Has Ended</Text>)}
             </View>
           </View>
         </View>
