@@ -30,9 +30,9 @@ export const LOTTIE_JSON_FILES = {
 };
 
 export const FRONTEND_URL = 'https://new.guruq.in';
-export const DASHBOARD_URL = 'https://dashboard.guruq.in';
-export const API_URL = 'https://api.guruq.in';
-export const GRAPH_API_URL = `${API_URL}/gql`;
+export const DASHBOARD_URL = 'https://stagingdashboard.guruq.in';
+export const API_URL = 'https://stagingapi.guruq.in';
+export const GRAPH_API_URL = `${API_URL}/graphql`;
 
 export const ATTACHMENT_PREVIEW_URL = `${API_URL}/upload/preview?filePath=`;
 

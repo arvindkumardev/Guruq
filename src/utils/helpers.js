@@ -346,3 +346,9 @@ export const processGeoData = (geoData) => {
     longitude,
   };
 };
+
+export const passwordPolicy = (pass) => {
+  const alphaRegex = /\w+/;
+  const numericRegex = /\d+/;
+  return pass.length >= 8 && numericRegex.test(pass) && alphaRegex.test(pass);
+};

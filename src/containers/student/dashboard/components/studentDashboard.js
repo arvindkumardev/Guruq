@@ -41,12 +41,27 @@ import NotificationRedirection from '../../../notification/notificationRedirecti
 import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 
-const carouselItems = [Images.student_home_banner_1, Images.student_home_banner_2, Images.student_home_banner_3];
+const carouselItems = [
+  {
+    image: Images.student_home_banner_1,
+    routeName: NavigationRouteNames.STUDENT.MY_CLASSES,
+    params: { tab: '' },
+  },
+  {
+    image: Images.student_home_banner_2,
+    routeName: NavigationRouteNames.CUSTOMER_CARE,
+    params: {},
+  },
+  {
+    image: Images.student_home_banner_3,
+    routeName: NavigationRouteNames.STUDENT.MY_CLASSES,
+    params: { tab: 'history' },
+  },
+];
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
-  const { changeTab } = props;
 
   const userInfo = useReactiveVar(userDetails);
   const offeringMasterData = useReactiveVar(offeringsMasterData);
@@ -416,15 +431,18 @@ function StudentDashboard(props) {
   };
 
   const renderCardItem = (item) => (
-    <View style={{ width: ITEM_WIDTH, alignItems: 'center', justifyContent: 'center' }}>
+    <TouchableOpacity
+      style={{ width: ITEM_WIDTH, alignItems: 'center', justifyContent: 'center' }}
+      onPress={() => navigation.navigate(item.routeName, item.params)}
+      activeOpacity={0.8}>
       <CustomImage
-        image={item}
+        image={item.image}
         imageWidth={ITEM_WIDTH}
         imageHeight={ITEM_HEIGHT}
         imageResizeMode="contain"
         styling={{ borderRadius: RfW(3) }}
       />
-    </View>
+    </TouchableOpacity>
   );
 
   const pagination = () => (

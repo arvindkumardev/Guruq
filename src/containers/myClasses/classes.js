@@ -11,7 +11,6 @@ import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { getFullName, RfH, RfW } from '../../utils/helpers';
 import { SEARCH_ORDER_ITEMS } from '../student/booking.query';
-import { OrderStatus } from '../student/enums';
 import styles from './styles';
 import { GET_TUTOR_OFFERINGS } from '../student/tutor-query';
 import AddToCartModal from '../student/tutorDetails/components/addToCartModal';
@@ -19,12 +18,13 @@ import NavigationRouteNames from '../../routes/screenNames';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
 
-function MyClasses() {
+function MyClasses(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
-
+  const tab = props?.route?.params?.tab;
+  const isHistory = tab === 'history';
   const [isHistorySelected, setIsHistorySelected] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -34,7 +34,6 @@ function MyClasses() {
   const [selectedSubject, setSelectedSubject] = useState({});
   const [openClassModal, setOpenClassModal] = useState(false);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
-
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -81,19 +80,19 @@ function MyClasses() {
       }
     },
   });
-
   useEffect(() => {
     if (isFocussed) {
       searchOrderItems({
         variables: {
           bookingSearchDto: {
-            // orderStatus: OrderStatus.COMPLETE.label,
             showActive: true,
-            showHistory: isHistorySelected,
-            showWithAvailableClasses: !isHistorySelected,
+            showHistory: isHistory,
+            showWithAvailableClasses: !isHistory,
+            size: 100,
           },
         },
       });
+      setIsHistorySelected(isHistory);
     }
   }, [isFocussed]);
 
@@ -119,6 +118,7 @@ function MyClasses() {
           showActive: true,
           showHistory: isHistory,
           showWithAvailableClasses: !isHistory,
+          size: 100,
         },
       },
     });
