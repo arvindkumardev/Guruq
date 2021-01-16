@@ -121,6 +121,8 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
         onBoarded
       }
       lead {
+        id
+        uuid
         certificationStage
         backgroundCheck {
           status

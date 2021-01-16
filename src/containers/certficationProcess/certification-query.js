@@ -94,6 +94,8 @@ export const GET_TUTOR_ALL_DETAILS = gql`
         gender
       }
       lead {
+        id
+        uuid
         certificationStage
         interview {
           status
