@@ -3,10 +3,11 @@ import { Icon, Input, Item, Label } from 'native-base';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useReactiveVar } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import { alertBox, isValidEmail, removeToken, RfH, RfW, storeData } from '../../../utils/helpers';
+import {alertBox, isValidEmail, passwordPolicy, removeToken, RfH, RfW, storeData} from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
@@ -38,7 +39,7 @@ function SignUp(props) {
       if (data) {
         removeToken().then(() => {
           storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signUp.token).then(() => {
-            console.log("data.signUp",data.signUp)
+            console.log('data.signUp', data.signUp);
             userDetails(data.signUp);
             userType(data.signUp.type);
             isLoggedIn(true);
@@ -61,6 +62,11 @@ function SignUp(props) {
       alertBox('Please enter a valid email Id');
     } else if (!password) {
       alertBox('Please enter password.');
+    } else if (!passwordPolicy(password)) {
+      alertBox(
+        'Please provide a valid password',
+        'Password should be 8 character long with atleast one number and one alphabet'
+      );
     } else {
       addUser({
         variables: {
@@ -78,6 +84,8 @@ function SignUp(props) {
     }
   };
 
+  const handleChange = (value) => value.replace(/[^A-Za-z0-9.]/g, '');
+
   return (
     <MainContainer isLoading={addUserLoading} onBackPress={onBackPress}>
       {isUserLoggedIn && <LoginCheck />}
@@ -92,11 +100,11 @@ function SignUp(props) {
               <View style={{ flexDirection: 'row' }}>
                 <Item floatingLabel style={{ flex: 0.5 }}>
                   <Label>First Name</Label>
-                  <Input onChangeText={(text) => setFirstName(text)} />
+                  <Input onChangeText={(text) => setFirstName(handleChange(text))} value={firstName} />
                 </Item>
                 <Item floatingLabel style={{ flex: 0.5 }}>
                   <Label>Last Name</Label>
-                  <Input onChangeText={(text) => setLastName(text)} />
+                  <Input onChangeText={(text) => setLastName(handleChange(text))} value={lastName} />
                 </Item>
               </View>
               <Item floatingLabel style={{ marginTop: RfH(40) }}>

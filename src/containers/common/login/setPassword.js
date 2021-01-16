@@ -6,7 +6,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import styles from './styles';
-import { RfH, RfW, storeData } from '../../../utils/helpers';
+import { alertBox, passwordPolicy, RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
 import { isLoggedIn, userDetails, userType } from '../../../apollo/cache';
@@ -57,12 +57,17 @@ function SetPassword({ route }) {
   const onClickContinue = () => {
     if (isEmpty(password)) {
       Alert.alert('Please enter the password!');
+    } else if (!passwordPolicy(password)) {
+      alertBox(
+        'Please provide a valid password',
+        'Password should be 8 character long with atleast one number and one alphabet'
+      );
     } else if (isEmpty(confirmPassword)) {
       Alert.alert('Please enter the confirm password!');
     } else if (password === confirmPassword) {
       setUserPassword({ variables: { password } });
     } else {
-      Alert.alert('Password mismatch!');
+      Alert.alert('New password and confirm password should be same!');
     }
   };
 

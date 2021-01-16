@@ -20,6 +20,7 @@ function BookingList() {
   const [bookingData, setBookingData] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
+  const [refreshData, setRefreshData] = useState(false);
 
   const [searchBookings, { loading: loadingBookings }] = useLazyQuery(SEARCH_BOOKINGS, {
     fetchPolicy: 'no-cache',
@@ -33,6 +34,7 @@ function BookingList() {
         );
         setBookingData(bookingDataList);
         setIsListEmpty(isEmpty(bookingDataList));
+        setRefreshData(!refreshData);
       }
     },
   });
@@ -41,7 +43,7 @@ function BookingList() {
     if (isFocussed) {
       searchBookings({
         variables: {
-          searchDto: { showWithAvailableClasses: true },
+          searchDto: { showWithAvailableClasses: true, size: 100 },
         },
       });
     }
@@ -102,6 +104,7 @@ function BookingList() {
           keyExtractor={(item, index) => index.toString()}
           scrollEnabled={bookingData.length > 5}
           ListFooterComponent={<View style={{ height: RfH(20) }} />}
+          extraData={refreshData}
         />
       ) : (
         <View style={{ flex: 1, paddingTop: RfH(70), alignItems: 'center' }}>
