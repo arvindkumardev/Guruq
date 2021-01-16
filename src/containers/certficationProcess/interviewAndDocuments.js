@@ -143,15 +143,21 @@ const InterviewAndDocument = () => {
         </View>
       </TouchableOpacity>
 
-      <View style={{ marginVertical: RfH(16) }}>
-        <Button
-          onPress={() =>
-            navigation.navigate(NavigationRouteNames.ONLINE_CLASS, { uuid: tutorDetail?.lead.uuid, isInterview: true })
-          }
-          style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
-          <Text style={commonStyles.textButtonPrimary}>Start Interview</Text>
-        </Button>
-      </View>
+      {tutorDetail?.lead?.interview?.status === InterviewStatus.SCHEDULED.label &&
+        !isEmpty(tutorDetail?.lead?.interview?.conductedBy) && (
+          <View style={{ marginVertical: RfH(16) }}>
+            <Button
+              onPress={() =>
+                navigation.navigate(NavigationRouteNames.ONLINE_CLASS, {
+                  uuid: tutorDetail?.lead.uuid,
+                  isInterview: true,
+                })
+              }
+              style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}>
+              <Text style={commonStyles.textButtonPrimary}>Start Interview</Text>
+            </Button>
+          </View>
+        )}
 
       <TouchableOpacity
         style={[styles.interviewCard, { borderLeftColor: Colors.green }]}
