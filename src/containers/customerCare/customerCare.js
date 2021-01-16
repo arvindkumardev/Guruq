@@ -85,7 +85,7 @@ function CustomerCare() {
           onPress={() =>
             navigation.navigate(NavigationRouteNames.WEB_VIEW, {
               url: userInfo.type === UserTypeEnum.STUDENT.label ? STUDENT_FAQ_URL : TUTOR_FAQ_URL,
-              label: 'General Issues',
+              label: 'FAQs',
             })
           }
           style={commonStyles.horizontalChildrenSpaceView}>

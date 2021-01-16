@@ -26,12 +26,12 @@ const WebViewPage = (props) => {
   const onMessage = (payload) => {
     console.log('payload', payload);
   };
-  console.log(url,token);
+  console.log(url, token);
 
   return (
     <>
       <ScreenHeader label={label} homeIcon horizontalPadding={RfW(16)} />
-      {token && (
+      {token && url && (
         <WebView
           source={{ uri: `${url}/${token}` }}
           javaScriptEnabled

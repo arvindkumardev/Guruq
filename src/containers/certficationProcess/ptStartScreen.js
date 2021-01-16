@@ -16,6 +16,7 @@ import { PtStatus } from '../tutor/enums';
 import { MARK_CERTIFIED } from './certification-mutation';
 import ActionModal from './components/helpSection';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
+import { GET_OFFERINGS_MASTER_DATA } from '../student/dashboard-query';
 
 const PtStartScreen = (props) => {
   const navigation = useNavigation();
@@ -27,6 +28,19 @@ const PtStartScreen = (props) => {
   const [offering, setOffering] = useState({});
   const [attemptExhausted, setAttemptExhausted] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+
+  const [getOfferingMasterData, { loading: loadingOfferingMasterData }] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        console.log('e', e);
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        offeringsMasterData(data.offerings.edges);
+      }
+    },
+  });
 
   const [getTutorOfferingDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_OFFERING_DETAIL, {
     fetchPolicy: 'no-cache',
@@ -69,6 +83,10 @@ const PtStartScreen = (props) => {
       }
     },
   });
+
+  useEffect(() => {
+    getOfferingMasterData();
+  }, []);
 
   useEffect(() => {
     if (isFocussed && offeringMasterData) {
@@ -299,7 +317,7 @@ const PtStartScreen = (props) => {
             </>
           )}
 
-          {isEmpty(ptDetail.proficiencyTest) && (
+          {!isEmpty(ptDetail) && isEmpty(ptDetail.proficiencyTest) ? (
             <View style={commonStyles.verticallyCenterItemsView}>
               <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
                 PT not available for the selected subject, please contact customer support.
@@ -311,6 +329,15 @@ const PtStartScreen = (props) => {
                 <Text style={commonStyles.textButtonPrimary}>Customer Support</Text>
               </Button>
             </View>
+          ) : (
+            !isEmpty(ptDetail) &&
+            !attemptExhausted && (
+              <Button
+                onPress={handleClick}
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
+                <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
+              </Button>
+            )
           )}
 
           {!isEmpty(ptDetail) && ptDetail?.status === PtStatus.EXEMPTED.label && (
@@ -324,14 +351,6 @@ const PtStartScreen = (props) => {
                 <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
               </Button>
             </>
-          )}
-
-          {!isEmpty(ptDetail) && (
-            <Button
-              onPress={handleClick}
-              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
-              <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
-            </Button>
           )}
 
           {!isEmpty(ptDetail) &&

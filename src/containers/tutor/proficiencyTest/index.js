@@ -29,7 +29,7 @@ const ProficiencyTest = (props) => {
 
   useEffect(() => {
     if (token) {
-      setUrl(`${DASHBOARD_URL}/tutor/embed/tutor-proficiency-test/${offeringId}/start/${token}`);
+      setUrl(`${DASHBOARD_URL}/tutor-proficiency-test/${offeringId}/start/${token}`);
     }
   }, [token]);
 
