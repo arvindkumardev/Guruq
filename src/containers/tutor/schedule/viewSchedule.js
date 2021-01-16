@@ -9,7 +9,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
-import {endOfDay, print24Time, printDate, printTime, RfH, RfW, startOfDay} from '../../../utils/helpers';
+import { endOfDay, print24Time, printDate, printTime, RfH, RfW, startOfDay } from '../../../utils/helpers';
 import { Colors, Images } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_AVAILABILITY_DATA } from '../../student/class.query';
@@ -20,7 +20,7 @@ function ViewSchedule() {
   const isFocussed = useIsFocused();
   const navigation = useNavigation();
   const [timeSlots, setTimeSlots] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(moment());
   const [isListEmpty, setIsListEmpty] = useState(false);
   const tutorInfo = useReactiveVar(tutorDetails);
 
@@ -54,7 +54,7 @@ function ViewSchedule() {
     }
   }, [isFocussed]);
 
-  const handleCreateSchedule = (selectedDate,timeSlots) => {
+  const handleCreateSchedule = (selectedDate, timeSlots) => {
     navigation.navigate(NavigationRouteNames.TUTOR.UPDATE_SCHEDULE, { selectedDate, timeSlots });
   };
 
@@ -84,7 +84,7 @@ function ViewSchedule() {
           horizontalPadding={RfW(16)}
           showRightIcon
           rightIcon={Images.add}
-          onRightIconClick={() => handleCreateSchedule(new Date(),{})}
+          onRightIconClick={() => handleCreateSchedule(new Date(), {})}
         />
         <View style={{ height: RfH(44) }} />
         <View style={{ paddingHorizontal: RfW(16) }}>
@@ -157,17 +157,17 @@ function ViewSchedule() {
               Let students know your availability. Mark your availability now!
             </Text>
             <View style={{ height: RfH(40) }} />
-            {!moment(selectedDate).isBefore(new Date()) && (
+            {moment(selectedDate).isSameOrAfter() && (
               <Button
                 block
                 style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-                onPress={() => handleCreateSchedule(selectedDate,{})}>
+                onPress={() => handleCreateSchedule(selectedDate, {})}>
                 <Text style={commonStyles.textButtonPrimary}>Create Schedule</Text>
               </Button>
             )}
           </View>
         )}
-        {!isListEmpty && (
+        {!isListEmpty && moment(selectedDate).isSameOrAfter() && (
           <View
             style={{
               flexDirection: 'row',
@@ -181,7 +181,7 @@ function ViewSchedule() {
             <View style={{ paddingBottom: RfH(32), paddingTop: RfH(8) }}>
               <Button
                 style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]}
-                onPress={() => handleCreateSchedule(selectedDate,timeSlots)}>
+                onPress={() => handleCreateSchedule(selectedDate, timeSlots)}>
                 <Text style={commonStyles.textButtonPrimary}>Edit Availability</Text>
               </Button>
             </View>

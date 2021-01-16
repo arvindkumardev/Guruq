@@ -21,6 +21,34 @@ const DEFAULT_SLOT = {
   active: true,
 };
 
+const SLOT_DATA = [
+  { label: '00:01', value: 0 },
+  { label: '01:00', value: 1 },
+  { label: '02:00', value: 2 },
+  { label: '03:00', value: 3 },
+  { label: '04:00', value: 4 },
+  { label: '05:00', value: 5 },
+  { label: '06:00', value: 6 },
+  { label: '07:00', value: 7 },
+  { label: '08:00', value: 8 },
+  { label: '09:00', value: 9 },
+  { label: '10:00', value: 10 },
+  { label: '11:00', value: 11 },
+  { label: '12:00', value: 12 },
+  { label: '13:00', value: 13 },
+  { label: '14:00', value: 14 },
+  { label: '15:00', value: 15 },
+  { label: '16:00', value: 16 },
+  { label: '17:00', value: 17 },
+  { label: '18:00', value: 18 },
+  { label: '19:00', value: 19 },
+  { label: '20:00', value: 20 },
+  { label: '21:00', value: 21 },
+  { label: '22:00', value: 22 },
+  { label: '23:00', value: 23 },
+  { label: '23:59', value: 24 },
+];
+
 function UpdateSchedule(props) {
   const navigation = useNavigation();
   const timeSlots = props?.route?.params.timeSlots;
@@ -29,6 +57,9 @@ function UpdateSchedule(props) {
   const [endDate, setEndDate] = useState(selectedDate);
   const [refreshSlots, setRefreshSlots] = useState(false);
   const [slots, setSlots] = useState([]);
+  const [startSlot, setStartSlot] = useState();
+  const [endSlot, setEndSlot] = useState();
+  const [showAddButton, setShowAddButton] = useState(false);
 
   const [updateAvailability, { loading: availabilityLoading }] = useMutation(UPDATE_AVAILABILITY, {
     fetchPolicy: 'no-cache',
@@ -69,34 +100,34 @@ function UpdateSchedule(props) {
     }
     setRefreshSlots(true);
   }, []);
-
-  const getDropdownData = (index) => {
-    let slotRange = [];
-    if (index === slots.length - 1) {
-      slotRange = range(slots[index].startInt + 1, 25);
-    } else {
-      slotRange = range(slots[index].startInt + 1, slots[index + 1].startInt + 1);
-    }
-    return slotRange.map((slot) => ({
-      label: `${`0${slot}`.slice(-2)}:00`,
-      value: `${`0${slot}`.slice(-2)}:00`,
-    }));
-  };
-
-  const setEndTime = (value, index) => {
-    const slotArr = [];
-    slots.forEach((slot, slotIndex) => {
-      if (slotIndex < index && value) {
-        slotArr.push(slot);
-      } else if (slotIndex === index + 1 && value) {
-        slotArr.push({ ...slot, startTime: value, startInt: parseInt(value.replace(':00', '')) });
-      } else {
-        slotArr.push({ ...slot, endTime: value, endInt: value ? parseInt(value.replace(':00', '')) : 0 });
-      }
-    });
-    setSlots(slotArr);
-    setRefreshSlots(true);
-  };
+  //
+  // const getDropdownData = (index) => {
+  //   let slotRange = [];
+  //   if (index === slots.length - 1) {
+  //     slotRange = range(slots[index].startInt + 1, 25);
+  //   } else {
+  //     slotRange = range(slots[index].startInt + 1, slots[index + 1].startInt + 1);
+  //   }
+  //   return slotRange.map((slot) => ({
+  //     label: `${`0${slot}`.slice(-2)}:00`,
+  //     value: `${`0${slot}`.slice(-2)}:00`,
+  //   }));
+  // };
+  //
+  // const setEndTime = (value, index) => {
+  //   const slotArr = [];
+  //   slots.forEach((slot, slotIndex) => {
+  //     if (slotIndex < index && value) {
+  //       slotArr.push(slot);
+  //     } else if (slotIndex === index + 1 && value) {
+  //       slotArr.push({ ...slot, startTime: value, startInt: parseInt(value.replace(':00', '')) });
+  //     } else {
+  //       slotArr.push({ ...slot, endTime: value, endInt: value ? parseInt(value.replace(':00', '')) : 0 });
+  //     }
+  //   });
+  //   setSlots(slotArr);
+  //   setRefreshSlots(true);
+  // };
 
   const addSlot = () => {
     if (!isEmpty(slots)) {
@@ -166,19 +197,34 @@ function UpdateSchedule(props) {
     setRefreshSlots(true);
   };
 
+  const handleSave = () => {
+    setSlots((slotes) => [...slots, []]);
+  };
+
   const renderItem = (item, index) => (
     <View>
       <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16) }]}>
-        <View style={{ flex: 0.2, alignItems: 'center' }}>
-          <Text style={commonStyles.regularPrimaryText}>{item?.startTime}</Text>
-        </View>
         <CustomSelect
-          data={getDropdownData(index)}
-          value={item?.endTime}
-          onChangeHandler={(value) => setEndTime(value, index)}
+          data={SLOT_DATA}
+          value={startSlot}
+          onChangeHandler={(value) => setStartSlot(value)}
+          placeholder="Select start time"
+          containerStyle={{
+            flex: 0.33,
+            backgroundColor: Colors.lightGrey,
+            borderRadius: 8,
+            height: RfH(44),
+            justifyContent: 'center',
+            paddingHorizontal: RfW(10),
+          }}
+        />
+        <CustomSelect
+          data={SLOT_DATA}
+          value={endSlot}
+          onChangeHandler={(value) => setEndSlot(value)}
           placeholder="Select end time"
           containerStyle={{
-            flex: 0.32,
+            flex: 0.33,
             backgroundColor: Colors.lightGrey,
             borderRadius: 8,
             height: RfH(44),
@@ -187,18 +233,50 @@ function UpdateSchedule(props) {
           }}
         />
         <View style={{ flex: 0.2 }}>
-          <Switch value={item?.active} onValueChange={(val) => markActiveInactive(index, val)} />
+          <Button style={[commonStyles.buttonPrimary, { width: RfW(50), alignSelf: 'center' }]} onSaveSlot={handleSave}>
+            <Text style={commonStyles.textButtonPrimary}>Save</Text>
+          </Button>
         </View>
-        {index !== 0 ? (
-          <IconButtonWrapper
-            iconWidth={RfW(20)}
-            iconHeight={RfH(20)}
-            iconImage={Images.delete}
-            submitFunction={() => handleDelete(index)}
-          />
-        ) : (
-          <View style={{ width: RfW(20) }} />
-        )}
+      </View>
+    </View>
+  );
+
+  const renderAddSlot = () => (
+    <View>
+      <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16) }]}>
+        <CustomSelect
+          data={SLOT_DATA}
+          value={startSlot}
+          onChangeHandler={(value) => setStartSlot(value)}
+          placeholder="Select start time"
+          containerStyle={{
+            flex: 0.33,
+            backgroundColor: Colors.lightGrey,
+            borderRadius: 8,
+            height: RfH(44),
+            justifyContent: 'center',
+            paddingHorizontal: RfW(10),
+          }}
+        />
+        <CustomSelect
+          data={SLOT_DATA}
+          value={endSlot}
+          onChangeHandler={(value) => setEndSlot(value)}
+          placeholder="Select end time"
+          containerStyle={{
+            flex: 0.33,
+            backgroundColor: Colors.lightGrey,
+            borderRadius: 8,
+            height: RfH(44),
+            justifyContent: 'center',
+            paddingHorizontal: RfW(10),
+          }}
+        />
+        <View style={{ flex: 0.2 }}>
+          <Button style={[commonStyles.buttonPrimary, { width: RfW(50), alignSelf: 'center' }]} onSaveSlot={handleSave}>
+            <Text style={commonStyles.textButtonPrimary}>Save</Text>
+          </Button>
+        </View>
       </View>
     </View>
   );
@@ -254,13 +332,13 @@ function UpdateSchedule(props) {
         <View style={[commonStyles.blankGreyViewSmall, { marginTop: RfH(16), height: RfH(1) }]} />
         <View style={{ height: RfH(10) }} />
         <View style={{ flexDirection: 'row', marginTop: RfH(20) }}>
-          <View style={{ flex: 0.32, alignItems: 'center' }}>
+          <View style={{ flex: 0.32, alignItems: 'flex-end' }}>
             <Text style={commonStyles.headingPrimaryText}> Start Time*</Text>
           </View>
-          <View style={{ flex: 0.32, alignItems: 'center' }}>
+          <View style={{ flex: 0.32, alignItems: 'flex-end' }}>
             <Text style={commonStyles.headingPrimaryText}> End Time*</Text>
           </View>
-          <View style={{ flex: 0.26, alignItems: 'center' }}>
+          <View style={{ flex: 0.32, alignItems: 'flex-end' }}>
             <Text style={commonStyles.headingPrimaryText}>Active**</Text>
           </View>
         </View>
@@ -274,13 +352,16 @@ function UpdateSchedule(props) {
             contentContainerStyle={{ paddingBottom: RfH(30) }}
             scrollEnabled={slots.length > 5}
           />
+          {renderAddSlot()}
         </View>
-        <View style={{ paddingHorizontal: RfW(40), marginTop: RfH(16) }}>
-          <Button onPress={addSlot} block style={{ backgroundColor: Colors.lightGrey }}>
-            <Text style={{ color: Colors.brandBlue, marginRight: RfW(8) }}>Add New Slot</Text>
-            <IconButtonWrapper iconWidth={RfW(20)} iconHeight={RfH(20)} iconImage={Images.plus_blue} />
-          </Button>
-        </View>
+        {showAddButton && (
+          <View style={{ paddingHorizontal: RfW(40), marginTop: RfH(16) }}>
+            <Button onPress={addSlot} block style={{ backgroundColor: Colors.lightGrey }}>
+              <Text style={{ color: Colors.brandBlue, marginRight: RfW(8) }}>Add New Slot</Text>
+              <IconButtonWrapper iconWidth={RfW(20)} iconHeight={RfH(20)} iconImage={Images.plus_blue} />
+            </Button>
+          </View>
+        )}
         <View style={{ marginTop: RfH(20), paddingHorizontal: RfW(10) }}>
           {/* <Text style={[commonStyles.smallMutedText, { marginTop: RfH(20) }]}> */}
           {/*  *Slots creation is only allowed in between 06:00 A.M to 10 P.M. */}
