@@ -23,7 +23,10 @@ const TutorAvailabilitySlots = (props) => {
     onCompleted: (data) => {
       setAvailability([]);
       if (data) {
-        setAvailability(data.getAvailabilityData);
+        const slotData = [...data.getAvailabilityData];
+        setAvailability(
+          slotData.sort((a, b) => (moment(a.startDate).format('HH:MM') > moment(b.startDate).format('HH:MM') ? 1 : -1))
+        );
       }
     },
   });
@@ -84,15 +87,28 @@ const TutorAvailabilitySlots = (props) => {
           opacity: 1,
           paddingBottom: RfH(34),
         }}>
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>
-          <Text style={commonStyles.headingPrimaryText}>Available Slots</Text>
-          <IconButtonWrapper
-            iconHeight={RfH(20)}
-            iconWidth={RfW(20)}
-            styling={{ alignSelf: 'flex-end' }}
-            iconImage={Images.cross}
-            submitFunction={onClose}
-          />
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            {
+              height: RfH(44),
+              backgroundColor: Colors.lightBlue,
+            },
+          ]}>
+          <View style={{ flex: 1 }}>
+            <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Available Slots</Text>
+          </View>
+          <View style={{ flex: 0.5 }}>
+            <IconButtonWrapper
+              styling={{ alignSelf: 'flex-end' }}
+              containerStyling={{ paddingHorizontal: RfW(16) }}
+              iconHeight={RfH(20)}
+              iconWidth={RfW(20)}
+              iconImage={Images.cross}
+              submitFunction={onClose}
+              imageResizeMode="contain"
+            />
+          </View>
         </View>
         <View style={{ paddingHorizontal: RfW(16) }}>
           <CalendarStrip
@@ -125,13 +141,10 @@ const TutorAvailabilitySlots = (props) => {
             onDateSelected={(d) => getAvailabilityData(d)}
           />
         </View>
-        <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(48) }}>
-          <Text style={{ fontFamily: 'SegoeUI-Bold', fontSize: RFValue(16, STANDARD_SCREEN_SIZE) }}>Select Slot</Text>
-        </View>
         <View style={{ alignItems: 'center', paddingTop: RfH(24) }}>
           {availability.length > 0 && (
             <FlatList
-              style={{ height: RfH(200) }}
+              style={{ minHeight: RfH(150) }}
               data={availability}
               numColumns={2}
               showsVerticalScrollIndicator={false}
@@ -141,8 +154,8 @@ const TutorAvailabilitySlots = (props) => {
             />
           )}
           {availability.length === 0 && (
-            <View style={{ height: RfH(200) }}>
-              <Text> No Slots Available</Text>
+            <View style={{ height: RfH(150), justifyContent: 'center' }}>
+              <Text style={commonStyles.regularMutedText}> No Slots Available</Text>
             </View>
           )}
         </View>

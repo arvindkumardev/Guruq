@@ -44,7 +44,7 @@ function SubjectList() {
     },
     onCompleted: (data) => {
       if (data) {
-        alertBox(`Enabled Successfully`, '', {
+        alertBox(`Subject Enabled Successfully`, '', {
           positiveText: 'Ok',
           onPositiveClick: () => getTutorOffering(),
         });
@@ -59,7 +59,7 @@ function SubjectList() {
     },
     onCompleted: (data) => {
       if (data) {
-        alertBox(`Disabled Successfully`, '', {
+        alertBox(`Subject Disabled Successfully`, '', {
           positiveText: 'Ok',
           onPositiveClick: () => getTutorOffering(),
         });
@@ -105,11 +105,11 @@ function SubjectList() {
 
   const renderSubjects = (item) => (
     <View style={{ paddingHorizontal: RfW(16) }}>
-      <View style={commonStyles.horizontalChildrenSpaceView}>
-        <TouchableOpacity
-          style={[commonStyles.horizontalChildrenView, { paddingVertical: RfH(16), width: '70%' }]}
-          onPress={() => handleSubjectClick(item)}
-          activeOpacity={0.8}>
+      <TouchableOpacity
+        style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(16) }]}
+        onPress={() => handleSubjectClick(item)}
+        activeOpacity={0.8}>
+        <View style={{ flexDirection: 'row' }}>
           <IconButtonWrapper iconImage={getSubjectIcons(item.offering.displayName)} />
           <View style={{ marginLeft: RfW(16) }}>
             <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
@@ -119,22 +119,35 @@ function SubjectList() {
               {`${item?.offering?.parentOffering?.displayName} | ${item?.offering?.displayName}`}
             </Text>
           </View>
-        </TouchableOpacity>
-
-        <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-          {/* <Switch value={item.active} onValueChange={() => markActiveInactive(item)} /> */}
-          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} />
         </View>
+        <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} />
+      </TouchableOpacity>
+      <View style={[commonStyles.horizontalChildrenSpaceView]}>
+        <View>
+          {item.stage === TutorOfferingStageEnum.PT_PENDING.label && (
+            <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>Proficiency Test Pending</Text>
+          )}
+          {item.stage === TutorOfferingStageEnum.BUDGET_PENDING.label && (
+            <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>Price Matrix Pending</Text>
+          )}
+          {item.stage === TutorOfferingStageEnum.OFFERING_DETAILED_PENDING.label && (
+            <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>
+              Short description pending
+            </Text>
+          )}
+          {item.stage === TutorOfferingStageEnum.COMPLETED.label && (
+            <Text style={[commonStyles.regularPrimaryText, { color: item.active ? Colors.green : Colors.orangeRed }]}>
+              {item.active ? 'Active' : 'Inactive'}
+            </Text>
+          )}
+        </View>
+        {item.stage === TutorOfferingStageEnum.COMPLETED.label && (
+          <View>
+            <Switch value={item.active} onValueChange={() => markActiveInactive(item)} />
+          </View>
+        )}
       </View>
-      {item.stage === TutorOfferingStageEnum.PT_PENDING.label && (
-        <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>Proficiency test pending</Text>
-      )}
-      {item.stage === TutorOfferingStageEnum.BUDGET_PENDING.label && (
-        <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}> Price matrix pending</Text>
-      )}
-      {item.stage === TutorOfferingStageEnum.OFFERING_DETAILED_PENDING.label && (
-        <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>Short description pending</Text>
-      )}
+
       <View style={commonStyles.lineSeparatorWithMargin} />
     </View>
   );

@@ -667,11 +667,13 @@ function TutorDetails(props) {
               </Button>
             </View>
 
-            <TutorAvailabilitySlots
-              visible={showDateSlotModal}
-              onClose={() => setShowDateSlotModal(false)}
-              tutorId={tutorData?.id}
-            />
+            {showDateSlotModal && (
+              <TutorAvailabilitySlots
+                visible={showDateSlotModal}
+                onClose={() => setShowDateSlotModal(false)}
+                tutorId={tutorData?.id}
+              />
+            )}
             {showClassModePopup && (
               <AddToCartModal
                 visible={showClassModePopup}

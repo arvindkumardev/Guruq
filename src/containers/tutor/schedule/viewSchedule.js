@@ -7,6 +7,7 @@ import { Button } from 'native-base';
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { sortBy } from 'lodash';
 import { Loader, ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { endOfDay, print24Time, printDate, printTime, RfH, RfW, startOfDay } from '../../../utils/helpers';
@@ -30,7 +31,11 @@ function ViewSchedule() {
       console.log(e);
     },
     onCompleted: (data) => {
-      setTimeSlots(data.getAvailabilityData);
+      setTimeSlots(
+        data.getAvailabilityData.sort((a, b) =>
+          moment(a.startDate).format('HH:MM') > moment(b.startDate).format('HH:MM') ? 1 : -1
+        )
+      );
       setIsListEmpty(data.getAvailabilityData.length === 0);
     },
   });
@@ -123,7 +128,7 @@ function ViewSchedule() {
         </View>
         {!isListEmpty ? (
           <FlatList
-            data={timeSlots.sort((a, b) => (a.endDate - b.endDate ? 1 : -1))}
+            data={timeSlots}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => renderItem(item, index)}
             keyExtractor={(item, index) => index.toString()}
@@ -167,26 +172,26 @@ function ViewSchedule() {
             )}
           </View>
         )}
-        {!isListEmpty && moment(selectedDate).isSameOrAfter() && (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              bottom: 0,
-              backgroundColor: Colors.white,
-              left: 0,
-              right: 0,
-              position: 'absolute',
-            }}>
-            <View style={{ paddingBottom: RfH(32), paddingTop: RfH(8) }}>
-              <Button
-                style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]}
-                onPress={() => handleCreateSchedule(selectedDate, timeSlots)}>
-                <Text style={commonStyles.textButtonPrimary}>Edit Availability</Text>
-              </Button>
-            </View>
-          </View>
-        )}
+        {/*{isListEmpty && moment(selectedDate).isSameOrAfter() && (*/}
+        {/*  <View*/}
+        {/*    style={{*/}
+        {/*      flexDirection: 'row',*/}
+        {/*      justifyContent: 'center',*/}
+        {/*      bottom: 0,*/}
+        {/*      backgroundColor: Colors.white,*/}
+        {/*      left: 0,*/}
+        {/*      right: 0,*/}
+        {/*      position: 'absolute',*/}
+        {/*    }}>*/}
+        {/*    <View style={{ paddingBottom: RfH(32), paddingTop: RfH(8) }}>*/}
+        {/*      <Button*/}
+        {/*        style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]}*/}
+        {/*        onPress={() => handleCreateSchedule(selectedDate, timeSlots)}>*/}
+        {/*        <Text style={commonStyles.textButtonPrimary}>Add Availability</Text>*/}
+        {/*      </Button>*/}
+        {/*    </View>*/}
+        {/*  </View>*/}
+        {/*)}*/}
       </View>
     </>
   );

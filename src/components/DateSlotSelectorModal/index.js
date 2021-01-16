@@ -77,15 +77,28 @@ const DateSlotSelectorModal = (props) => {
             opacity: 1,
             paddingBottom: RfH(40),
           }}>
-          <View style={[commonStyles.horizontalChildrenSpaceView, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>
-            <Text style={commonStyles.headingPrimaryText}>Available Slots</Text>
-            <IconButtonWrapper
-              iconHeight={RfH(20)}
-              iconWidth={RfW(20)}
-              styling={{ alignSelf: 'flex-end' }}
-              iconImage={Images.cross}
-              submitFunction={() => onClose(false)}
-            />
+          <View
+              style={[
+                commonStyles.horizontalChildrenSpaceView,
+                {
+                  height: RfH(44),
+                  backgroundColor: Colors.lightBlue,
+                },
+              ]}>
+            <View style={{ flex: 1 }}>
+              <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Available Slots</Text>
+            </View>
+            <View style={{ flex: 0.5 }}>
+              <IconButtonWrapper
+                  styling={{ alignSelf: 'flex-end' }}
+                  containerStyling={{ paddingHorizontal: RfW(16) }}
+                  iconHeight={RfH(20)}
+                  iconWidth={RfW(20)}
+                  iconImage={Images.cross}
+                  submitFunction={onClose}
+                  imageResizeMode="contain"
+              />
+            </View>
           </View>
           <View style={{ paddingHorizontal: RfW(16) }}>
             <CalendarStrip

@@ -43,7 +43,6 @@ const SLOT_DATA = [
 
 function UpdateSchedule(props) {
   const navigation = useNavigation();
-  const timeSlots = props?.route?.params.timeSlots;
   const selectedDate = props?.route?.params.selectedDate;
   const [startDate, setStartDate] = useState(selectedDate);
   const [endDate, setEndDate] = useState(selectedDate);
@@ -53,6 +52,7 @@ function UpdateSchedule(props) {
   const [endSlot, setEndSlot] = useState();
   const [showAddButton, setShowAddButton] = useState(false);
 
+  console.log(startDate, 'endDate', endDate);
   const [updateAvailability, { loading: availabilityLoading }] = useMutation(UPDATE_AVAILABILITY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -212,8 +212,11 @@ function UpdateSchedule(props) {
                 }}>
                 <CustomDatePicker
                   value={startDate}
-                  placeholder="Please select the start date"
-                  onChangeHandler={(d) => setStartDate(d)}
+                  placeholder="Select start date"
+                  onChangeHandler={(d) => {
+                    setStartDate(d);
+                    setEndDate(endDate > d ? endDate : d);
+                  }}
                   textInputContainer={{ flex: 1 }}
                   textInputStyle={commonStyles.regularPrimaryText}
                   minimumDate={new Date()}
@@ -230,7 +233,7 @@ function UpdateSchedule(props) {
                   marginTop: RfH(8),
                 }}>
                 <CustomDatePicker
-                  placeholder="Please select the end date"
+                  placeholder="Select end date"
                   value={endDate}
                   onChangeHandler={(d) => setEndDate(d)}
                   textInputContainer={{ flex: 1 }}
