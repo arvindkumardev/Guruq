@@ -14,7 +14,7 @@ import { UPDATE_AVAILABILITY } from '../tutor.mutation';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 
 const SLOT_DATA = [
-  { label: '00:01', value: { slot: '00:01', val: 0 } },
+  { label: '00:00', value: { slot: '00:00', val: 0 } },
   { label: '01:00', value: { slot: '01:00', val: 1 } },
   { label: '02:00', value: { slot: '02:00', val: 2 } },
   { label: '03:00', value: { slot: '03:00', val: 3 } },
@@ -38,7 +38,7 @@ const SLOT_DATA = [
   { label: '21:00', value: { slot: '21:00', val: 21 } },
   { label: '22:00', value: { slot: '22:00', val: 22 } },
   { label: '23:00', value: { slot: '23:00', val: 23 } },
-  { label: '23:59', value: { slot: '23:59', val: 24 } },
+  { label: '24:00', value: { slot: '23:59:59', val: 24 } },
 ];
 
 function UpdateSchedule(props) {
@@ -86,8 +86,8 @@ function UpdateSchedule(props) {
       const endDateStr = moment(endDate).format('YYYY-MM-DD');
       slots.forEach((obj) => {
         availableArray.push({
-          startTime: `${moment(startDateStr + obj.startSlot.slot, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
-          endTime: `${moment(startDateStr + obj.endSlot.slot, 'YYYY-MM-DDLT').format('YYYY-MM-DDTHH:mm:s')}0+05:30`,
+          startTime: `${moment(startDateStr + obj.startSlot.slot, 'YYYY-MM-DDLTS').format('YYYY-MM-DDTHH:mm:ssZ')}`,
+          endTime: `${moment(startDateStr + obj.endSlot.slot, 'YYYY-MM-DDLTS').format('YYYY-MM-DDTHH:mm:ssZ')}`,
           active: obj.active,
         });
       });
