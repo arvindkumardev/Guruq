@@ -45,7 +45,7 @@ export const GET_TUTOR_OFFERING_DETAIL = gql`
   query GetTutorOfferingDetails($tutorOfferingId: Int!) {
     getTutorOfferingDetails(tutorOfferingId: $tutorOfferingId) {
       id
-      offerings {
+      offering {
         id
         displayName
         level
@@ -64,6 +64,12 @@ export const GET_TUTOR_OFFERING_DETAIL = gql`
           displayName
         }
       }
+
+      offerings {
+        id
+        displayName
+        level
+      }
       stage
       allowedPTAttempts
 
@@ -73,6 +79,9 @@ export const GET_TUTOR_OFFERING_DETAIL = gql`
         score
         notAttempted
         maxMarks
+        proficiencyTest {
+          id
+        }
       }
     }
   }
