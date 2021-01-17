@@ -10,7 +10,7 @@ import Loader from '../../components/Loader';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import styles from './styles';
-import { GET_TUTOR_ALL_DETAILS } from './certification-query';
+import { GET_TUTOR_ALL_DETAILS, GET_TUTOR_LEAD_INTERVIEW_DETAILS } from './certification-query';
 import NavigationRouteNames from '../../routes/screenNames';
 import { MARK_CERTIFIED } from './certification-mutation';
 import { InterviewStatus } from '../tutor/enums';
@@ -24,6 +24,18 @@ const InterviewAndDocument = () => {
   const [tutorDetail, setTutorDetail] = useState({});
   const [openMenu, setOpenMenu] = useState(false);
 
+  const [getTutorLeadDetails, { loading: loadingTutorLeadDetails }] = useLazyQuery(GET_TUTOR_LEAD_INTERVIEW_DETAILS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setTutorDetail({ ...tutorDetail, lead: { ...data.getTutorLeadDetails } });
+      }
+    },
+  });
+
   const [getTutorDetails, { loading: tutorLeadDetailLoading }] = useLazyQuery(GET_TUTOR_ALL_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -32,6 +44,8 @@ const InterviewAndDocument = () => {
     onCompleted: (data) => {
       if (data) {
         setTutorDetail(data.getTutorDetails);
+
+        getTutorLeadDetails();
       }
     },
   });

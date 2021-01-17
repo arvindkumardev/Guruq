@@ -111,6 +111,11 @@ export const GET_TUTOR_ALL_DETAILS = gql`
           startDate
           endDate
           mode
+          conductedBy {
+            id
+            firstName
+            lastName
+          }
         }
       }
       profileCompletion
@@ -234,6 +239,27 @@ export const GET_TUTOR_ALL_DETAILS = gql`
         branchAddress
         accountNumber
         ifscCode
+      }
+    }
+  }
+`;
+
+export const GET_TUTOR_LEAD_INTERVIEW_DETAILS = gql`
+  query GetTutorLeadDetails {
+    getTutorLeadDetails {
+      id
+      uuid
+      certificationStage
+      interview {
+        status
+        startDate
+        endDate
+        mode
+        conductedBy {
+          id
+          firstName
+          lastName
+        }
       }
     }
   }
