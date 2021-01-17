@@ -30,7 +30,7 @@ function BookingList() {
     onCompleted: (data) => {
       if (data) {
         const bookingDataList = data?.searchBookings.edges.filter(
-          (item) => item.orderStatus !== OrderStatusEnum.PENDING.label
+          (item) => item.orderStatus !== OrderStatusEnum.CANCELLED.label
         );
         setBookingData(bookingDataList);
         setIsListEmpty(isEmpty(bookingDataList));
@@ -43,7 +43,7 @@ function BookingList() {
     if (isFocussed) {
       searchBookings({
         variables: {
-          searchDto: { showWithAvailableClasses: true, size: 100 },
+          searchDto: { size: 100 },
         },
       });
     }
@@ -76,7 +76,7 @@ function BookingList() {
               commonStyles.smallPrimaryText,
               { color: item.orderStatus === OrderStatusEnum.COMPLETE.label ? Colors.green : Colors.orangeRed },
             ]}>
-            {enumLabelToText(item.orderStatus)}
+            {enumLabelToText(item.orderStatus) === 'Cancelled' ? 'Payment Failed' : enumLabelToText(item.orderStatus)}
           </Text>
         </View>
 
@@ -133,7 +133,14 @@ function BookingList() {
           </Text>
           <Button
             onPress={() => setShowAllSubjects(true)}
-            style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
+            style={[
+              commonStyles.buttonPrimary,
+              {
+                alignSelf: 'center',
+                marginTop: RfH(64),
+                width: RfW(190),
+              },
+            ]}>
             <Text style={commonStyles.textButtonPrimary}>Start Booking</Text>
           </Button>
         </View>

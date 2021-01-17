@@ -5,17 +5,16 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Button } from 'native-base';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { IconButtonWrapper, Loader } from '../../components';
 import routeNames from '../../routes/screenNames';
 import { Colors, Images } from '../../theme';
-import { getBoxColor } from '../../theme/colors';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { endOfDay, getFullName, getSubjectIcons, printTime, RfH, RfW, startOfDay } from '../../utils/helpers';
+import { getFullName, getSubjectIcons, printDate, printTime, RfH, RfW } from '../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../student/booking.query';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
@@ -25,31 +24,27 @@ function CalendarView(props) {
   const isFocussed = useIsFocused();
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
-  const { changeTab } = props;
 
   const [showHeader, setShowHeader] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [scheduledClasses, setScheduledClasses] = useState([]);
+  // const [scheduledClasses, setScheduledClasses] = useState([]);
   const [allScheduledClasses, setAllScheduledClasses] = useState([]);
   const [markedDates, setMarkeddates] = useState([]);
-  const [openMenu, setOpenMenu] = useState(false);
-  const [currentView, setCurrentView] = useState(0);
 
-  const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      console.log(e);
-    },
-    onCompleted: (data) => {
-      setScheduledClasses(data.getScheduledClasses);
-      setIsEmpty(data.getScheduledClasses.length === 0);
-      setRefresh((refresh) => !refresh);
-    },
-  });
+  // const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+  //   fetchPolicy: 'no-cache',
+  //   onError: (e) => {
+  //     console.log(e);
+  //   },
+  //   onCompleted: (data) => {
+  //     setScheduledClasses(data.getScheduledClasses);
+  //     setIsEmpty(data.getScheduledClasses.length === 0);
+  //     setRefresh((refresh) => !refresh);
+  //   },
+  // });
 
-  const [getScheduledClassesCount, { loading: loadingScheduledCountClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
+  const [getScheduledClassesForWeek, { loading: loadingScheduledCountClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
@@ -70,6 +65,9 @@ function CalendarView(props) {
       }
       setMarkeddates(dateArray);
       setAllScheduledClasses(data.getScheduledClasses);
+
+      console.log('selectedDate', selectedDate);
+
       setRefresh((refresh) => !refresh);
     },
   });
@@ -130,25 +128,29 @@ function CalendarView(props) {
     setShowHeader(scrollPosition > 30);
   };
 
-  const getScheduledClassesByDate = (date) => {
-    setScheduledClasses([]);
-    setSelectedDate(date);
-    getScheduledClasses({
-      variables: {
-        classesSearchDto: {
-          startDate: startOfDay(date),
-          endDate: endOfDay(date),
-        },
-      },
-    });
-  };
+  // const getScheduledClassesByDate = (date) => {
+  //   setSelectedDate(date);
+  //   // setScheduledClasses(allScheduledClasses.filter((c) => moment(c.startDate).isSame(moment(date), 'date')));
+  //   // getScheduledClasses({
+  //   //   variables: {
+  //   //     classesSearchDto: {
+  //   //       startDate: printDate(date),
+  //   //       endDate: printDate(date),
+  //   //     },
+  //   //   },
+  //   // });
+  // };
 
-  const getScheduledClassesForWeek = (startDate) => {
-    getScheduledClassesCount({
+  const getScheduledClassesForWeekData = (startDate) => {
+    console.log('getScheduledClassesForWeekData', moment(startDate).toDate());
+
+    // setSelectedDate(moment(startDate).toDate());
+
+    getScheduledClassesForWeek({
       variables: {
         classesSearchDto: {
-          startDate,
-          endDate: moment(startDate, 'DD-MM-YYYY').add(6, 'days'),
+          startDate: moment(startDate).isoWeekday(1).startOf('day'),
+          endDate: moment(startDate).isoWeekday(7).endOf('day'),
         },
       },
     });
@@ -156,14 +158,15 @@ function CalendarView(props) {
 
   useEffect(() => {
     if (isFocussed) {
-      getScheduledClassesByDate(selectedDate);
-      getScheduledClassesForWeek(moment());
+      // getScheduledClassesByDate(selectedDate);
+      getScheduledClassesForWeekData(new Date());
     }
   }, [isFocussed]);
 
   return (
     <>
-      <Loader isLoading={loadingScheduledClasses} />
+      <Loader isLoading={loadingScheduledCountClasses} />
+
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
         <View style={[commonStyles.horizontalChildrenEqualSpaceView, { height: RfH(44), justifyContent: 'center' }]}>
           <View style={{ flex: 1, alignItems: 'center' }}>
@@ -221,13 +224,20 @@ function CalendarView(props) {
                 daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
                 markedDates={markedDates}
                 onHeaderSelected={(a) => console.log(a)}
-                onWeekChanged={(start, end) => getScheduledClassesForWeek(start)}
-                onDateSelected={(d) => getScheduledClassesByDate(d)}
+                onWeekChanged={(start, end) => {
+                  getScheduledClassesForWeekData(start);
+                }}
+                onDateSelected={(d) => {
+                  if (!d.isSame(selectedDate, 'day')) {
+                    setSelectedDate(d.toDate());
+                  }
+                }}
               />
             </View>
 
             <View style={commonStyles.lineSeparatorWithVerticalMargin} />
-            {isEmpty ? (
+            {allScheduledClasses &&
+            allScheduledClasses.filter((c) => moment(c.startDate).isSame(moment(selectedDate), 'day')).count === 0 ? (
               <View>
                 <Image
                   source={Images.empty_schedule}
@@ -269,7 +279,10 @@ function CalendarView(props) {
             ) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
-                data={scheduledClasses}
+                data={
+                  allScheduledClasses &&
+                  allScheduledClasses.filter((c) => moment(c.startDate).isSame(moment(selectedDate), 'date'))
+                }
                 renderItem={({ item }) => renderClassItem(item)}
                 keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={{ paddingBottom: RfH(170) }}

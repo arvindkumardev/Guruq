@@ -14,13 +14,15 @@ function NotificationRedirection() {
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const navigation = useNavigation();
 
-  console.log("notificationPayloadObj",notificationPayloadObj)
+  console.log('notificationPayloadObj', notificationPayloadObj);
 
   const tutorRedirection = () => {
     console.log('notificationPayloadObj', notificationPayloadObj, offeringMasterData);
     if (notificationPayloadObj.tutor_id && notificationPayloadObj.offering_id) {
       notificationPayload({});
-      const selectedOffering = offeringMasterData.find((s) => s?.id === notificationPayloadObj?.offering_id);
+      const selectedOffering = offeringMasterData.find(
+        (s) => String(s?.id) === String(notificationPayloadObj?.offering_id)
+      );
       if (selectedOffering) {
         navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
           tutorId: notificationPayloadObj.tutor_id,
@@ -42,6 +44,13 @@ function NotificationRedirection() {
     }
   };
 
+  const wallet = () => {
+    if (notificationPayloadObj.uuid) {
+      notificationPayload({});
+      navigation.navigate(NavigationRouteNames.WALLET, {});
+    }
+  };
+
   useEffect(() => {
     if (!isEmpty(notificationPayloadObj) && notificationPayloadObj.screen) {
       console.log('notificationPayloadObj.screen', notificationPayloadObj);
@@ -52,6 +61,10 @@ function NotificationRedirection() {
         }
         case NavigationRouteNames.SCHEDULED_CLASS_DETAILS: {
           classDetail();
+          break;
+        }
+        case NavigationRouteNames.WALLET: {
+          wallet();
           break;
         }
       }

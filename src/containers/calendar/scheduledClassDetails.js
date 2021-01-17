@@ -556,20 +556,24 @@ function ScheduledClassDetails(props) {
             </View>
             <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-            {classData?.isClassJoinAllowed && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: RfH(16),
-                  marginBottom: RfH(34),
-                }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: RfH(16),
+                marginBottom: RfH(34),
+              }}>
+              {!classData?.isClassEnded ? (
                 <Button
                   block
-                  onPress={goToOnlineClass}
+                  onPress={() =>
+                    classData?.isClassJoinAllowed
+                      ? goToOnlineClass()
+                      : alertBox('You can join the class 15 mins before the start time.')
+                  }
                   style={[
-                    commonStyles.buttonPrimary,
+                    classData?.isClassJoinAllowed ? commonStyles.buttonPrimary : commonStyles.disableButton,
                     {
                       borderRadius: 4,
                       marginHorizontal: 0,
@@ -583,8 +587,10 @@ function ScheduledClassDetails(props) {
                   />
                   <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
                 </Button>
-              </View>
-            )}
+              ) : (
+                <Text>Class Has Ended!</Text>
+              )}
+            </View>
           </ScrollView>
         )}
         {classData && classData?.classEntity?.uuid && (

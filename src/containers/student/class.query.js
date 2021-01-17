@@ -112,6 +112,7 @@ export const GET_CLASS_DETAILS_BY_UUID = gql`
       isRescheduleAllowed
       isCancelAllowed
       isClassJoinAllowed
+      isClassEnded
       isMessagingAllowed
       isUploadAttachmentAllowed
 

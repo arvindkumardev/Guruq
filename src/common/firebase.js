@@ -1,13 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
-import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
-import {
-  
-  storeData,
-  getSaveData,
-  removeData,
-  
-} from '../utils/helpers'; 
 import { isEmpty } from 'lodash';
+import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
+import { getSaveData, storeData } from '../utils/helpers';
 
 // import inAppMessaging from '@react-native-firebase/in-app-messaging';
 //
@@ -17,41 +11,42 @@ import { isEmpty } from 'lodash';
 const registerAppWithFCM = async () => {
   await messaging().registerDeviceForRemoteMessages();
 };
+
+const saveNotificationPayload = async (remoteMessage) => {
+  const data = {};
+  data.message = remoteMessage.notification.body;
+  data.sentTime = remoteMessage.sentTime;
+  data.isRead = false;
+  data.messageId = remoteMessage.messageId;
+  data.title = remoteMessage.notification.title;
+  let notifyArray = [];
+  notifyArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST));
+  if (notifyArray && notifyArray.length > 0) {
+    const newArray = [...notifyArray, data];
+    storeData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST, JSON.stringify(newArray)).then(() => {
+      console.log('Store data succesfully', newArray);
+    });
+  } else {
+    const newArray = [data];
+    storeData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST, JSON.stringify(newArray)).then(() => {
+      console.log('Store data succesfully', newArray);
+    });
+  }
+};
+
 const onMessage = () => {
   console.log('ON MESSAGE EVENT REGISTER');
   messaging().onMessage(async (remoteMessage) => {
     if (!isEmpty(remoteMessage) && !isEmpty(remoteMessage.notification)) {
       saveNotificationPayload(remoteMessage);
     }
-    // console.log('remoteMessage forground', remoteMessage);
+    console.log('remoteMessage forground', remoteMessage);
     // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     // PushNotification.localNotification({
     //   title: 'notification.title',
     //   message: 'notification.body!',
     // });
   });
-};
- const saveNotificationPayload = async (remoteMessage) => {
-
-  let data = {}
-  data['message'] = remoteMessage.notification.body
-  data['sentTime'] = remoteMessage.sentTime
-  data['isRead'] = false
-  data['messageId']=remoteMessage.messageId
-  data['title'] = remoteMessage.notification.title
-  let notifyArray = [];
-  notifyArray = JSON.parse(await getSaveData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST));
-  if(notifyArray && notifyArray.length > 0){
-  let newArray =  [...notifyArray,data]
-  storeData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST, JSON.stringify(newArray)).then(() => {
-      console.log('Store data succesfully',newArray)
-  });
-}else{
-  let newArray =  [data]
-  storeData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST, JSON.stringify(newArray)).then(() => {
-      console.log('Store data succesfully',newArray)
-  });
-}
 };
 const requestUserPermission = async () => {
   const authStatus = await messaging().requestPermission({
@@ -114,4 +109,11 @@ const firebaseConfig = {
 //     }
 //   }
 // };
-export { initializeNotification, requestUserPermission, getFcmToken, registerAppWithFCM,saveNotificationPayload, firebaseConfig };
+export {
+  initializeNotification,
+  requestUserPermission,
+  getFcmToken,
+  registerAppWithFCM,
+  saveNotificationPayload,
+  firebaseConfig,
+};
