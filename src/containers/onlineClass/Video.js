@@ -23,7 +23,7 @@ import IconButtonWrapper from '../../components/IconWrapper';
 import { Colors } from '../../theme';
 import Images from '../../theme/images';
 import commonStyles from '../../theme/styles';
-import { alertBox, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { alertBox, printDate, printDateTime, printTime, RfH, RfW } from '../../utils/helpers';
 import MeetingDetailsModal from './components/meetingDetailsModal';
 import requestCameraAndAudioPermission from './components/permission';
 import styles from './components/style';
@@ -1111,17 +1111,19 @@ export default class Video extends Component<Props, State> {
               alignSelf: 'stretch',
             }}>
             {!isEmpty(this.props.meetingDetails) && (
-              <View style={[commonStyles.horizontalChildrenStartView, { marginTop: RfH(32), alignItems: 'center' }]}>
-                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
-                  <Text style={commonStyles.headingPrimaryText}>{this.props.meetingDetails.title}</Text>
-                  <Text style={commonStyles.mediumMutedText}>{this.props.meetingDetails.description}</Text>
-                  <Text style={commonStyles.mediumMutedText}>
-                    {printDate(this.props.meetingDetails?.startDate)}
-                    {' at '}
-                    {printTime(this.props.meetingDetails?.startDate)} {' - '}
-                    {printTime(this.props.meetingDetails?.endDate)}
-                  </Text>
-                </View>
+              <View
+                style={[
+                  commonStyles.verticallyStretchedItemsView,
+                  { alignItems: 'center', marginTop: RfW(16), marginLeft: RfW(8) },
+                ]}>
+                <Text style={commonStyles.headingPrimaryText}>{this.props.meetingDetails.title}</Text>
+                <Text style={commonStyles.mediumMutedText}>{this.props.meetingDetails.description}</Text>
+                <Text style={commonStyles.mediumMutedText}>
+                  {printDate(this.props.meetingDetails?.startDate)}
+                  {' at '}
+                  {printTime(this.props.meetingDetails?.startDate)} {' - '}
+                  {printTime(this.props.meetingDetails?.endDate)}
+                </Text>
               </View>
             )}
 
@@ -1134,11 +1136,6 @@ export default class Video extends Component<Props, State> {
                     </View>
                   </TouchableWithoutFeedback>
                 )}
-              {moment(this.props.meetingDetails.allowedStartDate).isAfter(moment()) && (
-                <Text>
-                  Session starting in {moment(this.props.meetingDetails.allowedStartDate).diff(moment(), 'minutes')}
-                </Text>
-              )}
 
               {isEmpty(this.props.meetingDetails) ||
                 (moment(this.props.meetingDetails.allowedEndDate).isBefore(moment()) && <Text>Session Has Ended</Text>)}
