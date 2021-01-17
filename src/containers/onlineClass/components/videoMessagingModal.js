@@ -16,7 +16,7 @@ import { ENTER_CHAT, GET_CHAT_MESSAGES, LEAVE_CHAT, NEW_CHAT_MESSAGE, SEND_CHAT_
 import { dimensions } from './style';
 
 const VideoMessagingModal = (props) => {
-  const { visible, onClose, channelName, callbacks } = props;
+  const { visible, onClose, channelName, callbacks, allowPosting } = props;
 
   const userInfo = useReactiveVar(userDetails);
   const [chatMessageIds, setChatMessageIds] = useState([]);
@@ -265,6 +265,7 @@ const VideoMessagingModal = (props) => {
                 _id: userInfo.id,
               }}
               renderMessage={renderMessage}
+              renderInputToolbar={!allowPosting ? () => null : undefined}
             />
           </View>
 
@@ -277,6 +278,7 @@ const VideoMessagingModal = (props) => {
 
 VideoMessagingModal.propTypes = {
   visible: PropTypes.bool,
+  allowPosting: PropTypes.bool,
   onClose: PropTypes.func,
   channelName: PropTypes.string,
   callbacks: PropTypes.object,
@@ -284,6 +286,7 @@ VideoMessagingModal.propTypes = {
 
 VideoMessagingModal.defaultProps = {
   callbacks: {},
+  allowPosting: true,
 };
 
 export default VideoMessagingModal;

@@ -444,16 +444,16 @@ function ScheduledClassDetails(props) {
                   {classData?.classEntity?.students?.length} participants to join the Class
                 </Text>
               </View>
-              {classData?.isMessagingAllowed && (
-                <View>
-                  <IconButtonWrapper
-                    iconImage={Images.messaging}
-                    iconHeight={24}
-                    iconWidth={24}
-                    submitFunction={() => setShowMessageModal(true)}
-                  />
-                </View>
-              )}
+              {/* {classData?.isMessagingAllowed && ( */}
+              <View>
+                <IconButtonWrapper
+                  iconImage={Images.messaging}
+                  iconHeight={24}
+                  iconWidth={24}
+                  submitFunction={() => setShowMessageModal(true)}
+                />
+              </View>
+              {/* )} */}
             </View>
             <FlatList
               style={{ marginBottom: RfH(16), marginLeft: 40 }}
@@ -588,7 +588,9 @@ function ScheduledClassDetails(props) {
                   <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
                 </Button>
               ) : (
-                <Text>Class Has Ended!</Text>
+                <Button style={commonStyles.buttonOutlineSecondary}>
+                  <Text>Class Has Ended!</Text>
+                </Button>
               )}
             </View>
           </ScrollView>
@@ -598,6 +600,7 @@ function ScheduledClassDetails(props) {
             onClose={() => setShowMessageModal(false)}
             visible={showMessageModal}
             channelName={classData?.classEntity?.uuid}
+            allowPosting={classData?.isMessagingAllowed}
           />
         )}
 
