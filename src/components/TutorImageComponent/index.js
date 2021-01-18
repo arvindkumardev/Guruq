@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { getFileUrl, getNameInitials, RfH } from '../../utils/helpers';
@@ -14,7 +14,7 @@ const TutorImageComponent = (props) => {
 
   return (
     <>
-      {tutor?.profileImage?.original ? (
+      {tutor && tutor?.profileImage?.original ? (
         <CustomImage
           imageWidth={RfH(width)}
           imageHeight={RfH(height)}
