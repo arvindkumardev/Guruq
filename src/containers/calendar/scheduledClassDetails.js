@@ -36,6 +36,8 @@ function ScheduledClassDetails(props) {
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
 
+  const [classReviewed, setClassReviewed] = useState(false);
+
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [showReschedulePopup, setShowReschedulePopup] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
@@ -151,7 +153,7 @@ function ScheduledClassDetails(props) {
   }, [uuid, isFocussed]);
 
   useEffect(() => {
-    if (route.params.showReviewModal && isFocussed && isStudent) {
+    if (route.params.showReviewModal && isFocussed && isStudent && !classReviewed) {
       setShowReviewPopup(true);
     }
   }, [route.params.showReviewModal, isFocussed]);
@@ -614,10 +616,13 @@ function ScheduledClassDetails(props) {
           />
         )}
 
-        {showReviewPopup && (
+        {showReviewPopup && !classReviewed && (
           <RateReview
             visible={showReviewPopup}
-            onClose={() => setShowReviewPopup(false)}
+            onClose={() => {
+              setShowReviewPopup(false);
+              setClassReviewed(true);
+            }}
             classDetails={classData?.classEntity}
           />
         )}
