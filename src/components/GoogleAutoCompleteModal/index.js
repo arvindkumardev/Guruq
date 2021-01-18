@@ -4,7 +4,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Text, View } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { isUndefined } from 'lodash';
 import { Colors, Images } from '../../theme';
 import { deviceHeight, processGeoData, RfH, RfW } from '../../utils/helpers';
 import { GOOGLE_API_KEY } from '../../utils/constants';
@@ -69,12 +68,12 @@ const GoogleAutoCompleteModal = (props) => {
               key: GOOGLE_API_KEY,
               language: 'en',
             }}
-            textInputProps={{
-              // Super hacky..
-              ref: (textInput) => {
-                setTimeout(() => textInput && textInput.focus(), 100);
-              },
-            }}
+            // textInputProps={{
+            //   // Super hacky..
+            //   ref: (textInput) => {
+            //     setTimeout(() => textInput && textInput.focus(), 100);
+            //   },
+            // }}
             renderHeaderComponent={() => (
               <View style={{ padding: 8, backgroundColor: Colors.lightGrey }}>
                 <Text>Click to select the address</Text>

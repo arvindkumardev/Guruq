@@ -41,8 +41,6 @@ function AddEditAddress(props) {
     }
   );
 
-  console.log('address', editAddress);
-
   const [saveStudentAddress, { loading: loadingSaveStudentAddress }] = useMutation(ADD_UPDATE_STUDENT_ADDRESS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -251,13 +249,12 @@ function AddEditAddress(props) {
             </View>
           </View>
         </ScrollView>
-
         <GoogleAutoCompleteModal
           visible={showGoogleSearchModal}
           onClose={() => setShowGoogleSearchModal(false)}
           onSelect={(data) => {
             setShowGoogleSearchModal(false);
-            setAddress({ ...address, ...data });
+            setAddress((address) => ({ ...address, ...data }));
           }}
         />
       </View>
