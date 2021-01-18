@@ -1,9 +1,9 @@
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import {
+  BackHandler,
   Dimensions,
   FlatList,
   Image,
@@ -11,9 +11,8 @@ import {
   StatusBar,
   Text,
   TouchableOpacity,
-  View,
   TouchableWithoutFeedback,
-  BackHandler,
+  View,
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -585,9 +584,11 @@ function StudentDashboard(props) {
               </Text>
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
-              <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.PROFILE)}>
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.PROFILE)}>
                 <UserImageComponent height={40} width={40} fontSize={16} styling={{ borderRadius: RfH(40) }} />
-              </TouchableWithoutFeedback>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -753,12 +754,8 @@ function StudentDashboard(props) {
   );
 }
 
-StudentDashboard.propTypes = {
-  changeTab: PropTypes.func,
-};
+StudentDashboard.propTypes = {};
 
-StudentDashboard.defaultProps = {
-  changeTab: null,
-};
+StudentDashboard.defaultProps = {};
 
 export default StudentDashboard;

@@ -4,6 +4,7 @@ import { Button, Footer, FooterTab } from 'native-base';
 import { Colors, Images } from '../../../../../theme';
 import styles from './styles';
 
+// FIXME: REMOVE ME
 function BottomTab(props) {
   const { activeTab, changeTab } = props;
   return (

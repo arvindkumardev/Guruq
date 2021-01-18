@@ -59,7 +59,7 @@ function TutorDashboard(props) {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const SLIDER_WIDTH = Dimensions.get('window').width;
-  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.90);
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.9);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 3) / 4);
 
   useFocusEffect(() => {
@@ -256,9 +256,11 @@ function TutorDashboard(props) {
               </Text>
             </View>
             <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
-              <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.PROFILE)}>
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.PROFILE)}>
                 <UserImageComponent height={40} width={40} fontSize={16} styling={{ borderRadius: RfH(40) }} />
-              </TouchableWithoutFeedback>
+              </TouchableOpacity>
             </View>
           </View>
 
