@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import Colors from '../../../theme/colors';
 import styles from './styles';
-import {alertBox, isValidEmail, passwordPolicy, removeToken, RfH, RfW, storeData} from '../../../utils/helpers';
+import { alertBox, isValidEmail, passwordPolicy, removeToken, RfH, RfW, storeData } from '../../../utils/helpers';
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
@@ -79,6 +79,8 @@ function SignUp(props) {
           email: email.toLowerCase().trim(),
           password,
           referCode,
+          utmSource: 'App',
+          utmMedium: 'Signup',
         },
       });
     }
