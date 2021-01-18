@@ -68,12 +68,9 @@ const GoogleAutoCompleteModal = (props) => {
               key: GOOGLE_API_KEY,
               language: 'en',
             }}
-            // textInputProps={{
-            //   // Super hacky..
-            //   ref: (textInput) => {
-            //     setTimeout(() => textInput && textInput.focus(), 100);
-            //   },
-            // }}
+            textInputProps={{
+              ref: (textInput) => (textInput ? textInput.focus() : () => {}),
+            }}
             renderHeaderComponent={() => (
               <View style={{ padding: 8, backgroundColor: Colors.lightGrey }}>
                 <Text>Click to select the address</Text>
