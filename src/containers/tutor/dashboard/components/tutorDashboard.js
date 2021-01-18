@@ -1,7 +1,7 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-restricted-syntax */
 import { useLazyQuery, useReactiveVar } from '@apollo/client';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +29,7 @@ import { getBoxColor } from '../../../../theme/colors';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
-import { alertBox, deviceWidth, getSubjectIcons, RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, deviceWidth, getSubjectIcons, printDate, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
@@ -47,8 +47,12 @@ const carouselItems = [
   },
   { image: Images.tutor_home_banner_3, routeName: NavigationRouteNames.TUTOR.SUBJECTS_LIST },
 ];
+
 function TutorDashboard(props) {
   const navigation = useNavigation();
+
+  const isFocused = useIsFocused();
+
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
@@ -83,7 +87,7 @@ function TutorDashboard(props) {
       console.log(e);
     },
     onCompleted: (data) => {
-      setUpcomingClasses(data.getScheduledClasses);
+      setUpcomingClasses(data.getScheduledClasses.filter((c) => moment(c.endDate).isAfter(moment())));
     },
   });
 
@@ -108,7 +112,7 @@ function TutorDashboard(props) {
   });
 
   useEffect(() => {
-    if (!isEmpty(tutorInfo)) {
+    if (!isEmpty(tutorInfo) && isFocused) {
       getScheduledClasses({
         variables: {
           classesSearchDto: {
@@ -120,7 +124,7 @@ function TutorDashboard(props) {
       });
       getTutorOffering();
     }
-  }, [tutorInfo]);
+  }, [tutorInfo, isFocused]);
 
   const renderSubjects = (item, index) => {
     return (
@@ -269,12 +273,21 @@ function TutorDashboard(props) {
           <View style={{ paddingHorizontal: RfW(16) }}>
             {upcomingClasses.length > 0 && (
               <View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                  }}>
                   <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                     Upcoming Classes
                   </Text>
                   <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CALENDAR)}>
-                    <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                    <Text
+                      style={{
+                        color: Colors.brandBlue2,
+                        fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                      }}>
                       View All
                     </Text>
                   </TouchableWithoutFeedback>
@@ -293,13 +306,22 @@ function TutorDashboard(props) {
 
             {subjects.length > 0 && (
               <View style={{ marginTop: RfH(24) }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                  }}>
                   <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
                     My Active Subjects
                   </Text>
                   <TouchableWithoutFeedback
                     onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECTS_LIST)}>
-                    <Text style={{ color: Colors.brandBlue2, fontSize: RFValue(15, STANDARD_SCREEN_SIZE) }}>
+                    <Text
+                      style={{
+                        color: Colors.brandBlue2,
+                        fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                      }}>
                       View All
                     </Text>
                   </TouchableWithoutFeedback>
@@ -323,7 +345,10 @@ function TutorDashboard(props) {
               style={{ marginTop: RfH(20) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: deviceWidth() - RfW(32), height: (441 / 1031) * (deviceWidth() - RfW(32)) }}
+                style={{
+                  width: deviceWidth() - RfW(32),
+                  height: (441 / 1031) * (deviceWidth() - RfW(32)),
+                }}
                 source={Images.pytn_tutor}
                 resizeMode="contain"
               />
@@ -333,7 +358,10 @@ function TutorDashboard(props) {
               style={{ marginBottom: RfH(15) }}
               activeOpacity={0.8}>
               <Image
-                style={{ width: deviceWidth() - RfW(32), height: (560 / 1031) * (deviceWidth() - RfW(32)) }}
+                style={{
+                  width: deviceWidth() - RfW(32),
+                  height: (560 / 1031) * (deviceWidth() - RfW(32)),
+                }}
                 source={Images.refer_earn_tutor}
                 resizeMode="contain"
               />

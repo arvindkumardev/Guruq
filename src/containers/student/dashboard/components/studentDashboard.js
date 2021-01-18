@@ -60,7 +60,7 @@ const carouselItems = [
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
-  const isFocussed = useIsFocused();
+  const isFocused = useIsFocused();
 
   const userInfo = useReactiveVar(userDetails);
   const offeringMasterData = useReactiveVar(offeringsMasterData);
@@ -178,7 +178,7 @@ function StudentDashboard(props) {
   }, []);
 
   useEffect(() => {
-    if (!isEmpty(selectedOffering) && isFocussed) {
+    if (!isEmpty(selectedOffering) && isFocused) {
       getFavouriteTutors({
         variables: {
           parentOfferingId: selectedOffering?.id,
@@ -190,7 +190,7 @@ function StudentDashboard(props) {
         },
       });
     }
-  }, [selectedOffering, isFocussed]);
+  }, [selectedOffering, isFocused]);
 
   useEffect(() => {
     if (!isEmpty(selectedOffering) && !isEmpty(offeringMasterData)) {
@@ -199,7 +199,7 @@ function StudentDashboard(props) {
   }, [offeringMasterData, selectedOffering]);
 
   useEffect(() => {
-    if (isFocussed) {
+    if (isFocused) {
       if (isEmpty(interestedOfferings)) {
         getInterestedOfferings();
       } else {
@@ -216,7 +216,7 @@ function StudentDashboard(props) {
         },
       });
     }
-  }, [isFocussed]);
+  }, [isFocused]);
 
   const [markInterestedOffering] = useMutation(MARK_INTERESTED_OFFERING_SELECTED, {
     fetchPolicy: 'no-cache',
