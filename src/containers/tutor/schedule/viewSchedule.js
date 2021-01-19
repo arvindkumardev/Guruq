@@ -41,13 +41,14 @@ function ViewSchedule() {
   });
 
   const getAvailabilityData = (date) => {
+    console.log(date);
     setSelectedDate(date);
     getAvailability({
       variables: {
         tutorAvailability: {
           tutorId: tutorInfo?.id,
-          startDate: printDate(date),
-          endDate: printDate(date),
+          startDate: moment(date).startOf('day').toDate(),
+          endDate: moment(date).endOf('day').toDate(),
         },
       },
     });
@@ -105,8 +106,16 @@ function ViewSchedule() {
               disabledDateNameStyle={{ color: Colors.black }}
               disabledDateNumberStyle={{ color: Colors.black }}
               selectedDate={new Date()}
-              dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
-              dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
+              dateNameStyle={{
+                fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
+                fontWeight: '400',
+                color: Colors.black,
+              }}
+              dateNumberStyle={{
+                fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                fontWeight: '400',
+                color: Colors.black,
+              }}
               style={{ height: 102, paddingBottom: 10 }}
               calendarAnimation={{ type: 'parallel', duration: 300 }}
               daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
@@ -172,26 +181,26 @@ function ViewSchedule() {
             )}
           </View>
         )}
-        {/*{isListEmpty && moment(selectedDate).isSameOrAfter() && (*/}
-        {/*  <View*/}
-        {/*    style={{*/}
-        {/*      flexDirection: 'row',*/}
-        {/*      justifyContent: 'center',*/}
-        {/*      bottom: 0,*/}
-        {/*      backgroundColor: Colors.white,*/}
-        {/*      left: 0,*/}
-        {/*      right: 0,*/}
-        {/*      position: 'absolute',*/}
-        {/*    }}>*/}
-        {/*    <View style={{ paddingBottom: RfH(32), paddingTop: RfH(8) }}>*/}
-        {/*      <Button*/}
-        {/*        style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]}*/}
-        {/*        onPress={() => handleCreateSchedule(selectedDate, timeSlots)}>*/}
-        {/*        <Text style={commonStyles.textButtonPrimary}>Add Availability</Text>*/}
-        {/*      </Button>*/}
-        {/*    </View>*/}
-        {/*  </View>*/}
-        {/*)}*/}
+        {/* {isListEmpty && moment(selectedDate).isSameOrAfter() && ( */}
+        {/*  <View */}
+        {/*    style={{ */}
+        {/*      flexDirection: 'row', */}
+        {/*      justifyContent: 'center', */}
+        {/*      bottom: 0, */}
+        {/*      backgroundColor: Colors.white, */}
+        {/*      left: 0, */}
+        {/*      right: 0, */}
+        {/*      position: 'absolute', */}
+        {/*    }}> */}
+        {/*    <View style={{ paddingBottom: RfH(32), paddingTop: RfH(8) }}> */}
+        {/*      <Button */}
+        {/*        style={[commonStyles.buttonPrimary, { width: RfW(144), alignSelf: 'center' }]} */}
+        {/*        onPress={() => handleCreateSchedule(selectedDate, timeSlots)}> */}
+        {/*        <Text style={commonStyles.textButtonPrimary}>Add Availability</Text> */}
+        {/*      </Button> */}
+        {/*    </View> */}
+        {/*  </View> */}
+        {/* )} */}
       </View>
     </>
   );
