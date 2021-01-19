@@ -52,6 +52,7 @@ function MyClasses(props) {
     },
   });
 
+
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -369,6 +370,8 @@ function MyClasses(props) {
             onClose={() => setOpenClassModal(false)}
             selectedSubject={selectedSubject}
             isDemoClass={false}
+            noOfClass={renewClassObj.count}
+            isOnlineRenewal={renewClassObj.onlineClass}
             isRenewal
           />
         )}

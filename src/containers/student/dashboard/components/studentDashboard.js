@@ -303,92 +303,65 @@ function StudentDashboard(props) {
   );
 
   const renderSponsoredTutor = (item) => (
-    <View style={{ marginBottom: RfH(16), flex: 1 }}>
-      <TouchableWithoutFeedback
-        onPress={() => goToTutorDetails(item)}
+    <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
+      <View
         style={{
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          alignItems: 'stretch',
+          width: RfW(90),
+          borderRadius: 8,
+          marginHorizontal: RfW(10),
+          marginTop: RfH(20),
         }}>
-        <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              paddingVertical: RfH(16),
-              marginRight: RfW(16),
-            }}>
-            <View
-              style={{
-                flex: 0.3,
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <TutorImageComponent tutor={item?.tutor} height={64} width={64} styling={{ borderRadius: RfH(64) }} />
-            </View>
-            <View
-              style={{
-                flex: 0.7,
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'stretch',
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-                  {getFullName(item?.tutor?.contactDetail)}
-                </Text>
-              </View>
-              <Text style={{ color: Colors.secondaryText, fontSize: 14, marginTop: RfH(2) }}>
-                {item?.tutor?.teachingExperience ? `${item?.tutor?.teachingExperience} years of Experience` : ''}
-              </Text>
+        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <TutorImageComponent
+            tutor={item?.tutor}
+            styling={{ alignSelf: 'center', borderRadius: RfH(64), width: RfH(64), height: RfH(64) }}
+          />
 
-              <View style={{ flexDirection: 'row', marginTop: RfH(8) }}>
-                <IconButtonWrapper
-                  iconImage={item.tutor.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
-                  iconHeight={RfH(16)}
-                  iconWidth={RfW(16)}
-                  imageResizeMode="contain"
-                  styling={{ marginRight: RfW(8) }}
-                />
-                {item?.tutor?.averageRating > 0 ? (
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      color: Colors.primaryText,
-                      fontFamily: Fonts.bold,
-                    }}>
-                    {parseFloat(item?.tutor?.averageRating)}
-                  </Text>
-                ) : (
-                  <Text
-                    style={{
-                      color: Colors.secondaryText,
-                      fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
-                    }}>
-                    NOT RATED
-                  </Text>
-                )}
-              </View>
-            </View>
+          <Text
+            numberOfLines={1}
+            style={[commonStyles.mediumPrimaryText, { marginTop: 8, fontFamily: Fonts.semiBold, textAlign: 'center' }]}>
+            {getFullName(item?.tutor?.contactDetail)}
+          </Text>
+          {/*<Text style={{ color: Colors.secondaryText, fontSize: 14 }}>*/}
+          {/*  {item?.tutor?.teachingExperience ? `${item?.tutor?.teachingExperience} years of Experience` : ''}*/}
+          {/*</Text>*/}
+          <View style={{ flexDirection: 'row', marginTop: RfH(8) }}>
+            <IconButtonWrapper
+              iconImage={item.tutor.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
+              iconHeight={RfH(16)}
+              iconWidth={RfW(16)}
+              imageResizeMode="contain"
+              styling={{ marginRight: RfW(8) }}
+            />
+            {item?.tutor?.averageRating > 0 ? (
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: Colors.primaryText,
+                  fontFamily: Fonts.bold,
+                }}>
+                {parseFloat(item?.tutor?.averageRating)}
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  color: Colors.secondaryText,
+                  fontSize: RFValue(13, STANDARD_SCREEN_SIZE),
+                }}>
+                NOT RATED
+              </Text>
+            )}
           </View>
         </View>
-      </TouchableWithoutFeedback>
-    </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 
   const renderTutors = (item) => (
     <TouchableWithoutFeedback onPress={() => goToTutorDetails(item)}>
       <View
         style={{
-          width: RfW(80),
+          width: RfW(90),
           borderRadius: 8,
           marginHorizontal: RfW(10),
           marginTop: RfH(20),
@@ -702,11 +675,18 @@ function StudentDashboard(props) {
                 </View>
                 <View>
                   <FlatList
-                    showsVerticalScrollIndicator={false}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
                     data={sponsoredTutors}
-                    renderItem={({ item, index }) => renderSponsoredTutor(item, index)}
+                    renderItem={({ item }) => renderSponsoredTutor(item)}
                     keyExtractor={(item, index) => index.toString()}
                   />
+                  {/* <FlatList */}
+                  {/*  showsVerticalScrollIndicator={false} */}
+                  {/*  data={sponsoredTutors} */}
+                  {/*  renderItem={({ item, index }) => renderSponsoredTutor(item, index)} */}
+                  {/*  keyExtractor={(item, index) => index.toString()} */}
+                  {/* /> */}
                 </View>
               </View>
             )}

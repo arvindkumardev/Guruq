@@ -7,6 +7,7 @@ import analytics from '@react-native-firebase/analytics';
 
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useReactiveVar } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import { IconButtonWrapper, Loader } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../../theme';
@@ -18,14 +19,14 @@ import PriceMatrixComponent from './priceMatrixComponent';
 import { studentDetails } from '../../../../apollo/cache';
 
 const AddToCartModal = (props) => {
-  const { visible, onClose, selectedSubject, isDemoClass, isRenewal } = props;
+  const { visible, onClose, selectedSubject, isDemoClass, isRenewal, noOfClass, isOnlineRenewal } = props;
   const { budgetDetails } = selectedSubject;
   const studentInfo = useReactiveVar(studentDetails);
   const navigation = useNavigation();
-  const [numberOfClass, setNumberOfClass] = useState(1);
+  const [numberOfClass, setNumberOfClass] = useState(noOfClass);
   const [amount, setAmount] = useState(0);
   const [classPrice, setClassPrice] = useState(0);
-  const [isOnlineClassMode, setIsOnlineClassMode] = useState(selectedSubject.onlineClass);
+  const [isOnlineClassMode, setIsOnlineClassMode] = useState(selectedSubject.onlineClass && isOnlineRenewal);
   const demoClassPrice = budgetDetails.filter((budget) => budget.demo === true);
 
   const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
@@ -70,11 +71,12 @@ const AddToCartModal = (props) => {
     if (visible) {
       if (isDemoClass) {
         const isOnlineFreeClass =
-          selectedSubject.onlineClass && (!demoClassPrice || !demoClassPrice.some((item) => item.onlineClass));
+          selectedSubject.onlineClass && (!isEmpty(demoClassPrice) || demoClassPrice.some((item) => item.onlineClass));
+        console.log('isOnlineFreeClass', isOnlineFreeClass);
         setIsOnlineClassMode(isOnlineFreeClass);
-        setAmount(calculateAmount(1, isOnlineFreeClass));
+        setAmount(calculateAmount(noOfClass, isOnlineFreeClass));
       } else {
-        setAmount(calculateAmount(1, isOnlineClassMode));
+        setAmount(calculateAmount(noOfClass, isOnlineClassMode));
       }
     }
   }, [visible]);
@@ -277,6 +279,8 @@ AddToCartModal.propTypes = {
   selectedSubject: PropTypes.object,
   isDemoClass: PropTypes.bool,
   isRenewal: PropTypes.bool,
+  noOfClass: PropTypes.number,
+  isOnlineRenewal: PropTypes.bool,
 };
 
 AddToCartModal.defaultProps = {
@@ -285,6 +289,8 @@ AddToCartModal.defaultProps = {
   selectedSubject: {},
   isDemoClass: false,
   isRenewal: false,
+  noOfClass: 1,
+  isOnlineRenewal: true,
 };
 
 export default AddToCartModal;

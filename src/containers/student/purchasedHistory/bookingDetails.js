@@ -9,8 +9,6 @@ import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
 import { enumLabelToText, getFullName, printCurrency, printDateTime, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { tutorDetails } from '../../../apollo/cache';
-import routeNames from '../../../routes/screenNames';
 import NavigationRouteNames from '../../../routes/screenNames';
 import ActionSheet from '../../../components/ActionSheet';
 import { GET_BOOKING_DETAIL } from '../booking.query';
@@ -20,7 +18,6 @@ function BookingDetails(props) {
   const bookingId = route?.params?.bookingId;
   const navigation = useNavigation();
   const [openMenu, setOpenMenu] = useState(false);
-  // const [token, setToken] = useState('');
   const [bookingData, setBookingData] = useState({});
 
   const [getBooking, { loading: getBookingLoader }] = useLazyQuery(GET_BOOKING_DETAIL, {
@@ -45,7 +42,7 @@ function BookingDetails(props) {
 
   const goToCustomerCare = () => {
     setOpenMenu(false);
-    navigation.navigate(routeNames.CUSTOMER_CARE);
+    navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
   };
   //
   // const goToInvoice = () => {
@@ -61,6 +58,15 @@ function BookingDetails(props) {
     { label: 'Help', handler: goToCustomerCare, isEnabled: true },
   ]);
 
+  const tutorDetailsHandler = (item) => {
+    navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
+      tutorId: item.tutor.id,
+      parentOffering: item.offering?.parentOffering?.id,
+      parentParentOffering: item.offering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: item.offering?.parentOffering?.displayName,
+      parentParentOfferingName: item.offering?.parentOffering?.parentOffering?.displayName,
+    });
+  };
   const renderClassItem = (item) => (
     <View style={{ marginTop: RfH(30), paddingHorizontal: RfW(16) }}>
       <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName} Class</Text>
@@ -72,7 +78,7 @@ function BookingDetails(props) {
         </Text>
         {isEmpty(item.refund) && (
           <TouchableOpacity
-            onPress={() => navigation.navigate(routeNames.STUDENT.ORDER_DETAILS, { orderData: item })}
+            onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.ORDER_DETAILS, { orderData: item })}
             activeOpacity={0.8}>
             <Text
               style={[
@@ -107,7 +113,7 @@ function BookingDetails(props) {
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginVertical: RfH(8) }]}>
         <TouchableOpacity
           style={commonStyles.horizontalChildrenStartView}
-          onPress={() => tutorDetails(item)}
+          onPress={() => tutorDetailsHandler(item)}
           activeOpacity={0.8}>
           <View style={commonStyles.verticallyStretchedItemsView}>
             <TutorImageComponent

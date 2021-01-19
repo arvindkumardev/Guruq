@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
+import { Button } from 'native-base';
 import { Colors, Fonts, Images } from '../../../theme';
 import { alertBox, getFullName, getSubjectIcons, RfH, RfW, titleCaseIfExists } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
@@ -15,6 +16,8 @@ import { offeringsMasterData } from '../../../apollo/cache';
 import { GET_ACCEPTED_TUTOR_NEED } from './pytn.query';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
 import NavigationRouteNames from '../../../routes/screenNames';
+import AddToCartModal from '../tutorDetails/components/addToCartModal';
+import { GET_TUTOR_OFFERINGS } from '../tutor-query';
 
 function PytnDetail(props) {
   const { route } = props;
@@ -25,6 +28,37 @@ function PytnDetail(props) {
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const [tutorData, setTutorData] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
+  const [openClassModal, setOpenClassModal] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState({});
+
+  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        // const error = e.graphQLErrors[0].extensions.exception.response;
+      }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const selectedOffering = data?.getTutorOfferings.find((sub) => sub.offering.id === classData?.offering?.id);
+        if (selectedOffering) {
+          setSelectedSubject({
+            id: selectedOffering.offering.id,
+            displayName: selectedOffering.offering.displayName,
+            offeringId: selectedOffering.id,
+            demoClass: selectedOffering.demoClass,
+            freeDemo: selectedOffering.freeDemo,
+            groupClass: selectedOffering.groupClass === 0 || selectedOffering.groupClass === 1,
+            onlineClass: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 1,
+            individualClass: selectedOffering.groupClass === 0 || selectedOffering.groupClass === 2,
+            offlineClass: selectedOffering.onlineClass === 0 || selectedOffering.onlineClass === 2,
+            budgetDetails: selectedOffering.budgets,
+          });
+          setOpenClassModal(true);
+        }
+      }
+    },
+  });
 
   const [getAcceptedTutorNeeds, { loading: loadingAcceptedTutor }] = useLazyQuery(GET_ACCEPTED_TUTOR_NEED, {
     fetchPolicy: 'no-cache',
@@ -55,6 +89,12 @@ function PytnDetail(props) {
       }
     },
   });
+
+  const handleBookClass = (tutor) => {
+    getTutorOffering({
+      variables: { tutorId: tutor.id },
+    });
+  };
 
   const getRootOfferingName = (offering) =>
     offeringMasterData.find((item) => item.id === offering?.offering?.id)?.rootOffering?.displayName;
@@ -210,11 +250,29 @@ function PytnDetail(props) {
                   flexDirection: 'column',
                   justifyContent: 'flex-end',
                   alignItems: 'flex-end',
-                  alignSelf: 'center',
                 }}>
-                <View>
+                <View style={{ alignSelf: 'center' }}>
                   <Text style={styles.chargeText}>₹ {item.price}/Hr</Text>
                 </View>
+                <Button
+                  style={[
+                    {
+                      backgroundColor: Colors.brandBlue2,
+                      width: RfW(90),
+                      height: RfH(30),
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: 8,
+                      alignSelf: 'flex-end',
+                      marginRight: RfH(0),
+                      marginLeft: RfW(16),
+                      marginTop: RfH(10),
+                    },
+                  ]}
+                  onPress={() => handleBookClass(item.tutor)}>
+                  <Text style={commonStyles.textButtonPrimary}>Book Class</Text>
+                </Button>
               </View>
             </View>
           </View>
@@ -225,7 +283,7 @@ function PytnDetail(props) {
 
   return (
     <>
-      <Loader isLoading={loadingAcceptedTutor || pytnDelete} />
+      <Loader isLoading={loadingAcceptedTutor || pytnDelete || loadingTutorsOffering} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader homeIcon label="Post Your Tutor Need Detail" horizontalPadding={RfW(16)} />
         <View style={{ flex: 1 }}>
@@ -270,6 +328,17 @@ function PytnDetail(props) {
               </View>
             )}
           </View>
+          {openClassModal && (
+            <AddToCartModal
+              visible={openClassModal}
+              onClose={() => setOpenClassModal(false)}
+              selectedSubject={selectedSubject}
+              isDemoClass={false}
+              noOfClass={classData.count}
+              isOnlineRenewal={classData.onlineClass}
+              isRenewal
+            />
+          )}
         </View>
       </View>
     </>
