@@ -147,7 +147,7 @@ function AddEditAddress(props) {
             <View style={commonStyles.blankViewSmall} />
             <View>
               <Item floatingLabel>
-                <Label style={commonStyles.mediumMutedText}>Area , Locality</Label>
+                <Label style={commonStyles.mediumMutedText}>Area, Locality</Label>
                 <Input
                   value={address.subArea}
                   onChangeText={(text) => setAddress({ ...address, subArea: text })}
