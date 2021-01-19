@@ -245,7 +245,7 @@ function StudentDashboard(props) {
 
   const goToTutorDetails = (item) => {
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
-      tutorData: item.tutor,
+      tutorId: item.tutor.id,
       parentOffering: selectedOffering?.id,
       parentParentOffering: selectedOffering?.parentOffering?.id,
       parentOfferingName: selectedOffering?.parentOffering?.displayName,

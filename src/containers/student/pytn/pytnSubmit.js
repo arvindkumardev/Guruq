@@ -23,7 +23,7 @@ function PytnSubmit(props) {
   const [minPrice, setMinPrice] = useState(0);
   const [isOnline, setIsOnline] = useState(true);
   const [isIndividual, setIsIndividual] = useState(true);
-  const [noOfGroupClasses, setNoOfGroupClasses] = useState(2);
+  const [noOfGroupClasses, setNoOfGroupClasses] = useState(1);
 
   const [createPYTN, { loading: pytnLoading }] = useMutation(CREATE_STUDENT_PYTN, {
     fetchPolicy: 'no-cache',

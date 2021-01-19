@@ -17,7 +17,7 @@ function TutorListCard(props) {
 
   const goToTutorDetails = () => {
     navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
-      tutorData: tutor,
+      tutorId: tutor.id,
       parentOffering: offering?.parentOffering?.id,
       parentParentOffering: offering?.parentOffering?.parentOffering?.id,
       parentOfferingName: offering?.parentOffering?.displayName,

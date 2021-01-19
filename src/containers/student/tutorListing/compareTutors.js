@@ -96,7 +96,7 @@ function compareTutors(props) {
   const goToTutorDetails = (item) => {
     console.log("item",item)
     navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
-      tutorData: item,
+      tutorId: item.id,
       parentOffering: item.offering?.parentOffering?.id,
       parentParentOffering: item.offering?.parentOffering?.parentOffering?.id,
       parentOfferingName: item.offering?.parentOffering?.displayName,

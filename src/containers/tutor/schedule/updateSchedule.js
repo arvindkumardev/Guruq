@@ -86,8 +86,8 @@ function UpdateSchedule(props) {
       const endDateStr = moment(endDate).format('YYYY-MM-DD');
       slots.forEach((obj) => {
         availableArray.push({
-          startTime: `${moment(startDateStr + obj.startSlot.slot, 'YYYY-MM-DDLTS').format('YYYY-MM-DDTHH:mm:ssZ')}`,
-          endTime: `${moment(startDateStr + obj.endSlot.slot, 'YYYY-MM-DDLTS').format('YYYY-MM-DDTHH:mm:ssZ')}`,
+          startTime: obj.startSlot.slot,
+          endTime: obj.endSlot.slot,
           active: obj.active,
         });
       });

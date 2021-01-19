@@ -77,7 +77,7 @@ function PytnDetail(props) {
 
   const goToTutorDetails = (item) => {
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
-      tutorData: item.tutor,
+      tutorId: item.tutor.id,
       parentOffering: classData?.offering?.parentOffering?.id,
       parentParentOffering: classData?.offering?.parentOffering?.parentOffering?.id,
       parentOfferingName: classData?.offering?.parentOffering?.displayName,

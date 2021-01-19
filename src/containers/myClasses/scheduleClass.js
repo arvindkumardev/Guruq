@@ -28,7 +28,7 @@ function ScheduleClass(props) {
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
 
-  console.log("tutorClasses",tutorClasses)
+  console.log('tutorClasses', tutorClasses);
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -39,7 +39,7 @@ function ScheduleClass(props) {
         const scheduledClasses = data.getScheduledClasses.map((item) => ({
           startDate: item.startDate,
           classId: item.id,
-          uuid:item.uuid
+          uuid: item.uuid,
         }));
         const classes = tutorClasses;
         for (let i = 0; i < scheduledClasses.length; i++) {
@@ -80,7 +80,7 @@ function ScheduleClass(props) {
     if (classData) {
       const classes = [];
       for (let i = 0; i < classData.count; i++) {
-        classes.push({ startDate: '', isScheduled: false, classId: '',uuid:'' });
+        classes.push({ startDate: '', isScheduled: false, classId: '', uuid: '' });
       }
       setTutorClasses(classes);
       getScheduleClassCall();
