@@ -41,7 +41,6 @@ function ViewSchedule() {
   });
 
   const getAvailabilityData = (date) => {
-    console.log(date);
     setSelectedDate(date);
     getAvailability({
       variables: {
