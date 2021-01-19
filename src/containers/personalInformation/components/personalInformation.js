@@ -213,12 +213,12 @@ function PersonalInformation(props) {
           <View style={{ height: RfH(24) }} />
           {isUpdateAllowed ? (
             <Item floatingLabel>
-              <Label style={commonStyles.mediumMutedText}>First name</Label>
+              <Label style={commonStyles.mediumMutedText}>First Name</Label>
               <Input value={firstName} onChangeText={(text) => setFirstName(text)} />
             </Item>
           ) : (
             <View>
-              <Text style={commonStyles.mediumMutedText}>First name</Text>
+              <Text style={commonStyles.mediumMutedText}>First Name</Text>
               <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.firstName}</Text>
             </View>
           )}
@@ -231,7 +231,7 @@ function PersonalInformation(props) {
             </Item>
           ) : (
             <View>
-              <Text style={commonStyles.mediumMutedText}>Last name</Text>
+              <Text style={commonStyles.mediumMutedText}>Last Name</Text>
               <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.lastName}</Text>
             </View>
           )}
@@ -245,7 +245,7 @@ function PersonalInformation(props) {
           <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(8) }]}>{userInfo?.phoneNumber?.number}</Text>
 
           <View style={{ height: RfH(24) }} />
-          <Text style={commonStyles.regularMutedText}>Date of birth</Text>
+          <Text style={commonStyles.regularMutedText}>Date of Birth</Text>
           {isUpdateAllowed ? (
             <View style={{ height: RfH(44), borderBottomColor: Colors.darkGrey, borderBottomWidth: 1 }}>
               <CustomDatePicker
