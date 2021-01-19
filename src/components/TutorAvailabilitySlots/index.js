@@ -36,8 +36,8 @@ const TutorAvailabilitySlots = (props) => {
       variables: {
         tutorAvailability: {
           tutorId,
-          startDate: printDate(date),
-          endDate: printDate(date),
+          startDate: moment(date).startOf('day'),
+          endDate: moment(date).endOf('day'),
         },
       },
     });

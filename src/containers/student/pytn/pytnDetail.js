@@ -90,7 +90,7 @@ function PytnDetail(props) {
       <View style={{ height: RfH(20) }} />
       <View style={commonStyles.horizontalChildrenSpaceView}>
         <Text style={commonStyles.headingPrimaryText}>{getRootOfferingName(classData)}</Text>
-        <Text style={commonStyles.headingPrimaryText}>₹ {`${classData.minPrice}-${classData.maxPrice}`}</Text>
+        <Text style={commonStyles.headingPrimaryText}>₹ {classData.maxPrice}</Text>
       </View>
       <View style={commonStyles.horizontalChildrenSpaceView}>
         <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>

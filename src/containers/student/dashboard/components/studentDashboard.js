@@ -303,7 +303,7 @@ function StudentDashboard(props) {
   );
 
   const renderSponsoredTutor = (item) => (
-    <View style={{ marginTop: RfH(16), flex: 1 }}>
+    <View style={{ marginBottom: RfH(16), flex: 1 }}>
       <TouchableWithoutFeedback
         onPress={() => goToTutorDetails(item)}
         style={{
@@ -317,7 +317,7 @@ function StudentDashboard(props) {
               flexDirection: 'row',
               justifyContent: 'flex-start',
               alignItems: 'flex-start',
-              paddingVertical: RfH(13),
+              paddingVertical: RfH(16),
               marginRight: RfW(16),
             }}>
             <View
