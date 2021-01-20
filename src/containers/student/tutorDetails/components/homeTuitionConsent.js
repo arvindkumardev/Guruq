@@ -85,31 +85,67 @@ const HomeTuitionConsentModal = (props) => {
           <Text style={[commonStyles.headingMutedText]}>
             Please ensure you take all the following safety measures during your Home Tuition classes.
           </Text>
-          <View style={{ marginTop: RfH(20), paddingLeft: RfW(20) }}>
-            <View style={{ flexDirection: 'row' }}>
-              {/* <IconButtonWrapper iconImage={Images.delete} iconHeight={RfH(10)} iconWidth={RfH(10)} /> */}
-              <Text style={[commonStyles.regularMutedText]}>Wear mask</Text>
+          <View style={{ marginTop: RfH(20), marginRight: RfH(10) }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <IconButtonWrapper
+                iconImage={require('../../../../assets/images/homeTuitionConsent/wearing_mask.png')}
+                iconHeight={RfH(20)}
+                iconWidth={RfH(20)}
+                styling={{ marginRight: RfW(10) }}
+                imageResizeMode="contain"
+              />
+              <Text style={[commonStyles.smallMutedText]}>Wear mask</Text>
             </View>
 
-            <View style={{ flexDirection: 'row', marginTop: RfH(10) }}>
-              {/* <IconButtonWrapper iconImage={Images.delete} iconHeight={RfH(10)} iconWidth={RfH(10)} /> */}
-              <Text style={[commonStyles.regularMutedText]}>Maintain social distancing (6 ft. apart)</Text>
+            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+              <IconButtonWrapper
+                iconImage={require('../../../../assets/images/homeTuitionConsent/social_distancing.png')}
+                iconHeight={RfH(20)}
+                iconWidth={RfH(20)}
+                styling={{ marginRight: RfW(10) }}
+                imageResizeMode="contain"
+              />
+              <Text style={[commonStyles.smallMutedText]}>Maintain social distancing (6 ft. apart)</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: RfH(10) }}>
-              {/* <IconButtonWrapper iconImage={Images.delete} iconHeight={RfH(10)} iconWidth={RfH(10)} /> */}
-              <Text style={[commonStyles.regularMutedText]}>Monitor temperature before and after class</Text>
+            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+              <IconButtonWrapper
+                iconImage={require('../../../../assets/images/homeTuitionConsent/temperature_monitoring.png')}
+                iconHeight={RfH(20)}
+                iconWidth={RfH(20)}
+                styling={{ marginRight: RfW(10) }}
+                imageResizeMode="contain"
+              />
+              <Text style={[commonStyles.smallMutedText]}>Monitor temperature before and after class</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: RfH(10) }}>
-              {/* <IconButtonWrapper iconImage={Images.delete} iconHeight={RfH(10)} iconWidth={RfH(10)} /> */}
-              <Text style={[commonStyles.regularMutedText]}>Sanitise your hands regularly</Text>
+            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+              <IconButtonWrapper
+                iconImage={require('../../../../assets/images/homeTuitionConsent/sanitising_hands.png')}
+                iconHeight={RfH(20)}
+                iconWidth={RfH(20)}
+                styling={{ marginRight: RfW(10) }}
+                imageResizeMode="contain"
+              />
+              <Text style={[commonStyles.smallMutedText]}>Sanitise your hands regularly</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: RfH(10) }}>
-              {/* <IconButtonWrapper iconImage={Images.delete} iconHeight={RfH(10)} iconWidth={RfH(10)} /> */}
-              <Text style={[commonStyles.regularMutedText]}>Sit in reserved area (preferably outside)</Text>
+            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+              <IconButtonWrapper
+                iconImage={require('../../../../assets/images/homeTuitionConsent/reservered_area.png')}
+                iconHeight={RfH(20)}
+                iconWidth={RfH(20)}
+                styling={{ marginRight: RfW(10) }}
+                imageResizeMode="contain"
+              />
+              <Text style={[commonStyles.smallMutedText]}>Sit in reserved area (preferably outside)</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: RfH(10) }}>
-              {/* <IconButtonWrapper iconImage={Images.delete} iconHeight={RfH(10)} iconWidth={RfH(10)} /> */}
-              <Text style={[commonStyles.regularMutedText]}>Avoid sharing food</Text>
+            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+              <IconButtonWrapper
+                iconImage={require('../../../../assets/images/homeTuitionConsent/consumables.png')}
+                iconHeight={RfH(20)}
+                iconWidth={RfH(20)}
+                styling={{ marginRight: RfW(10) }}
+                imageResizeMode="contain"
+              />
+              <Text style={[commonStyles.smallMutedText]}>Avoid sharing food</Text>
             </View>
           </View>
         </View>
