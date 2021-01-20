@@ -18,6 +18,7 @@ import { ADD_TO_CART } from '../../booking.mutation';
 import PriceMatrixComponent from './priceMatrixComponent';
 import { studentDetails } from '../../../../apollo/cache';
 import HomeTuitionConsentModal from './homeTuitionConsent';
+import { DUPLICATE_FOUND } from '../../../../common/errorCodes';
 
 const AddToCartModal = (props) => {
   const { visible, onClose, selectedSubject, isDemoClass, isRenewal, noOfClass, isOnlineRenewal } = props;
@@ -36,6 +37,12 @@ const AddToCartModal = (props) => {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === DUPLICATE_FOUND) {
+          alertBox(error.message);
+        }
+      }
     },
     onCompleted: (data) => {
       if (data) {
