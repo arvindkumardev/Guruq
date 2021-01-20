@@ -166,7 +166,7 @@ const SORT_DATA = [
 const MODE_OF_CLASS_DATA = [
   { name: 'Any', checked: true, id: 1, filterData: { teachingMode: 0 }, displayValue: '' },
   { name: 'Online', checked: false, id: 2, filterData: { teachingMode: 1 }, displayValue: 'Online' },
-  { name: 'Offline', checked: false, id: 3, filterData: { teachingMode: 2 }, displayValue: 'Offline' },
+  { name: 'Home Tuition', checked: false, id: 3, filterData: { teachingMode: 2 }, displayValue: 'Home Tuition' },
 ];
 
 export const FILTER_DATA = [

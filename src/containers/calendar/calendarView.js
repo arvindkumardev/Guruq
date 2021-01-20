@@ -113,9 +113,9 @@ function CalendarView(props) {
             {`${printTime(classDetails.startDate)} - ${printTime(classDetails.endDate)}`}
           </Text>
           <Text style={commonStyles.mediumMutedText}>
-            {`${classDetails?.onlineClass ? 'Online' : 'Offline'} ${
+            {`${classDetails?.onlineClass ? 'Online' : 'Home Tuition'} ${
               classDetails?.groupClass ? 'Group' : 'Individual'
-            } ${classDetails?.demo ? 'Demo' : ''} Class`}
+            } ${classDetails?.demo ? 'Demo' : ''}Class`}
           </Text>
         </View>
         <View />

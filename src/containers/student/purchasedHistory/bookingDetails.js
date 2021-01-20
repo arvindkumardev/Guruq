@@ -131,7 +131,7 @@ function BookingDetails(props) {
               {getFullName(item?.tutor?.contactDetail)}
             </Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              {item.onlineClass ? 'Online' : 'Offline'} - Individual Class
+              {item.onlineClass ? 'Online' : 'Home Tuition'} - Individual Class
             </Text>
           </View>
         </TouchableOpacity>

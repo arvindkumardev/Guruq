@@ -6,7 +6,7 @@ import { useLazyQuery } from '@apollo/client';
 import moment from 'moment';
 import { Button } from 'native-base';
 import { isEmpty } from 'lodash';
-import { ActionSheet, IconButtonWrapper, Loader, ScreenHeader, TutorImageComponent } from '../../../components';
+import { ActionSheet, Loader, ScreenHeader, TutorImageComponent } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
@@ -144,7 +144,7 @@ function OrderDetails(props) {
               T-{orderData?.tutor.id}
             </Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              {orderData?.onlineClass ? 'Online' : 'Offline'} Classes
+              {orderData?.onlineClass ? 'Online Classes' : 'Home Tuition'}
             </Text>
           </View>
         </TouchableOpacity>

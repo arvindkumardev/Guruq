@@ -357,17 +357,21 @@ const MyCart = () => {
   };
 
   const addClass = (item) => {
-    const cartCreate = {
-      tutorOfferingId: item.tutorOffering.id,
-      count: 1,
-      groupSize: 1,
-      demo: item.demo,
-      onlineClass: item.onlineClass,
-      price: item.mrp / item.count,
-    };
-    addToCart({
-      variables: { cartCreateDto: cartCreate },
-    });
+    if (item.demo) {
+      alertBox("You can't add more than one demo class");
+    } else {
+      const cartCreate = {
+        tutorOfferingId: item.tutorOffering.id,
+        count: 1,
+        groupSize: 1,
+        demo: item.demo,
+        onlineClass: item.onlineClass,
+        price: item.mrp / item.count,
+      };
+      addToCart({
+        variables: { cartCreateDto: cartCreate },
+      });
+    }
   };
 
   const removeClassItem = (item) => {
@@ -396,7 +400,7 @@ const MyCart = () => {
           },
           {
             text: 'OK',
-            onPress: () => removeClassItem(item),
+            onPress: () => removeCartItem(item),
           },
         ],
         { cancelable: false }
@@ -440,8 +444,8 @@ const MyCart = () => {
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={styles.tutorDetails}>
-              {item?.onlineClass ? 'Online' : 'Offline'} {item.groupSize === 1 ? 'Individual' : 'Group'}{' '}
-              {item.demo ? 'Demo' : ''} Class
+              {item?.onlineClass ? 'Online' : 'Home Tuition'} {item.groupSize === 1 ? 'Individual' : 'Group'}{' '}
+              {item.demo ? 'Demo' : ''}Class
             </Text>
 
             <Text style={[commonStyles.mediumPrimaryText, { fontFamily: Fonts.bold }]}>

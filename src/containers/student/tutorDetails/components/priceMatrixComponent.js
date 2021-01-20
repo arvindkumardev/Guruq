@@ -122,7 +122,7 @@ function PriceMatrixComponent(props) {
                 },
               ]}>
               <View style={{ flex: 0.25 }}>
-                <Text style={styles.tutorDetails}>Offline Class</Text>
+                <Text style={styles.tutorDetails}>Home Tuition</Text>
               </View>
               <View
                 style={{

@@ -8,7 +8,7 @@ import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
-import { IconButtonWrapper, Loader } from '../../../../components';
+import { IconButtonWrapper, Loader, CustomCheckBox } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../../theme';
 import { alertBox, printCurrency, RfH, RfW } from '../../../../utils/helpers';
@@ -17,6 +17,7 @@ import styles from './styles';
 import { ADD_TO_CART } from '../../booking.mutation';
 import PriceMatrixComponent from './priceMatrixComponent';
 import { studentDetails } from '../../../../apollo/cache';
+import HomeTuitionConsentModal from './homeTuitionConsent';
 
 const AddToCartModal = (props) => {
   const { visible, onClose, selectedSubject, isDemoClass, isRenewal, noOfClass, isOnlineRenewal } = props;
@@ -26,8 +27,10 @@ const AddToCartModal = (props) => {
   const [numberOfClass, setNumberOfClass] = useState(noOfClass);
   const [amount, setAmount] = useState(0);
   const [classPrice, setClassPrice] = useState(0);
+  const [offlineClassConsent, setOfflineClassConsent] = useState(false);
   const [isOnlineClassMode, setIsOnlineClassMode] = useState(selectedSubject.onlineClass && isOnlineRenewal);
   const demoClassPrice = budgetDetails.filter((budget) => budget.demo === true);
+  const [showHomeConsent, setShowHomeConsent] = useState(false);
 
   const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
@@ -72,7 +75,6 @@ const AddToCartModal = (props) => {
       if (isDemoClass) {
         const isOnlineFreeClass =
           selectedSubject.onlineClass && (!isEmpty(demoClassPrice) || demoClassPrice.some((item) => item.onlineClass));
-        console.log('isOnlineFreeClass', isOnlineFreeClass);
         setIsOnlineClassMode(isOnlineFreeClass);
         setAmount(calculateAmount(noOfClass, isOnlineFreeClass));
       } else {
@@ -105,6 +107,8 @@ const AddToCartModal = (props) => {
   const onAddingIntoCart = () => {
     if (amount === 0 && !isDemoClass) {
       alertBox('Error', 'Amount should be greater than zero for booking');
+    } else if (!isOnlineClassMode && !offlineClassConsent) {
+      alertBox('Please tick the home tuition consent');
     } else {
       const cartCreate = {
         tutorOfferingId: selectedSubject.offeringId,
@@ -205,12 +209,28 @@ const AddToCartModal = (props) => {
                         iconWidth={20}
                         iconHeight={20}
                       />
-                      <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Offline</Text>
+                      <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Home Tuition</Text>
                     </View>
                   </TouchableWithoutFeedback>
                 )}
               </View>
             </View>
+            {!isOnlineClassMode && (
+              <View style={{ flexDirection: 'row', marginTop: RfH(10) }}>
+                <CustomCheckBox
+                  enabled={offlineClassConsent}
+                  iconHeight={20}
+                  submitFunction={() => setOfflineClassConsent((offlineClassConsent) => !offlineClassConsent)}
+                />
+                <Text style={[commonStyles.smallMutedText, { marginLeft: RfW(10) }]}>
+                  I hereby give my consent to the GuruQ certified tutor for conducting home classes for me/ my child at
+                  my given residential address.{' '}
+                  <TouchableWithoutFeedback onPress={() => setShowHomeConsent(true)}>
+                    <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue }]}>Read More</Text>
+                  </TouchableWithoutFeedback>
+                </Text>
+              </View>
+            )}
             {!isDemoClass && (
               <PriceMatrixComponent
                 budgets={selectedSubject.budgetDetails}
@@ -269,6 +289,12 @@ const AddToCartModal = (props) => {
           </Button>
         </View>
       </View>
+      <HomeTuitionConsentModal
+        isSelected={offlineClassConsent}
+        setConsentValue={() => setOfflineClassConsent((offlineClassConsent) => !offlineClassConsent)}
+        onClose={() => setShowHomeConsent(false)}
+        visible={showHomeConsent}
+      />
     </Modal>
   );
 };

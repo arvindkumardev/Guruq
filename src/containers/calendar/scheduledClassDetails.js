@@ -399,7 +399,7 @@ function ScheduledClassDetails(props) {
                 <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(16) }]}>
                   <Text style={commonStyles.headingPrimaryText}>Class Mode</Text>
                   <Text style={commonStyles.mediumMutedText}>
-                    {classData?.classEntity?.onlineClass ? 'Online ' : 'Offline '}Class
+                    {classData?.classEntity?.onlineClass ? 'Online Class' : 'Home Tuition'}
                   </Text>
                 </View>
 

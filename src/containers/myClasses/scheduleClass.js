@@ -161,7 +161,7 @@ function ScheduleClass(props) {
               </Text>
             )}
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              {classData?.onlineClass ? 'Online' : 'Offline'} Classes
+              {classData?.onlineClass ? 'Online Classes' : 'Home Tuition'}
             </Text>
           </View>
         </TouchableOpacity>

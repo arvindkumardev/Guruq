@@ -79,16 +79,15 @@ const UpcomingClassComponent = (props) => {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'flex-start',
                 alignItems: 'center',
               }}>
               <Icon
                 type="MaterialIcons"
                 name="computer"
-                style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2 }}
+                style={{ fontSize: 15, marginRight: RfW(8), color: Colors.brandBlue2, alignSelf: 'center' }}
               />
               <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(2) }]}>
-                {classDetails.onlineClass ? 'Online' : 'Offline'} Class
+                {classDetails.onlineClass ? 'Online Class' : 'Home Tuition'}
               </Text>
             </View>
           </View>

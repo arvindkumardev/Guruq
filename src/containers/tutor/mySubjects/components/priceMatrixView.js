@@ -246,7 +246,7 @@ function PriceMatrixView(props) {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Text style={commonStyles.regularPrimaryText}>Offline Classes</Text>
+          <Text style={commonStyles.regularPrimaryText}>Home Tuition</Text>
         </View>
       </View>
       <View>
@@ -297,7 +297,7 @@ function PriceMatrixView(props) {
                 style={{ marginRight: RfW(20) }}
                 color={Colors.brandBlue}
               />
-              <Text style={commonStyles.mediumPrimaryText}> Offline</Text>
+              <Text style={commonStyles.mediumPrimaryText}> Home Tuition</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -325,7 +325,7 @@ function PriceMatrixView(props) {
                 <Text style={commonStyles.mediumPrimaryText}>Online</Text>
                 <View
                   style={{
-                    width: RfW(100),
+                    width: RfW(90),
                     backgroundColor: Colors.lightGrey,
                     height: RfH(44),
                     alignItems: 'center',
@@ -349,10 +349,10 @@ function PriceMatrixView(props) {
             )}
             {modeDemoClass !== 1 && (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={commonStyles.mediumPrimaryText}>Offline</Text>
+                <Text style={commonStyles.mediumPrimaryText}>Home Tuition</Text>
                 <View
                   style={{
-                    width: RfW(100),
+                    width: RfW(90),
                     backgroundColor: Colors.lightGrey,
                     height: RfH(44),
                     alignItems: 'center',

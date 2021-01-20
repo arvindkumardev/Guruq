@@ -135,7 +135,7 @@ function PytnSubmit(props) {
                   enabled={!isOnline}
                   submitFunction={() => setIsOnline(false)}
                 />
-                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Offline</Text>
+                <Text style={[commonStyles.headingMutedText, { marginLeft: RfW(8) }]}>Home Tuition</Text>
               </View>
             </TouchableWithoutFeedback>
             <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />

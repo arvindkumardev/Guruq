@@ -6,7 +6,7 @@ import { Images, Colors } from '../../theme';
 import { RfH, RfW } from '../../utils/helpers';
 
 function CustomCheckBox(props) {
-  const { iconHeight, iconWidth, styling, enabled, submitFunction } = props;
+  const { iconHeight, styling, enabled, submitFunction } = props;
 
   return (
     <View>
@@ -14,8 +14,8 @@ function CustomCheckBox(props) {
         {enabled ? (
           <View
             style={{
-              height: RfH(22),
-              width: RfH(22),
+              height: RfH(iconHeight),
+              width: RfH(iconHeight),
               borderRadius: RfH(5),
               alignItems: 'center',
               justifyContent: 'center',
@@ -23,13 +23,17 @@ function CustomCheckBox(props) {
               backgroundColor: Colors.brandBlue2,
               borderWidth: 1,
             }}>
-            <Image source={Images.tick} style={[styling, { height: RfH(12), width: RfH(12) }]} resizeMode="contain" />
+            <Image
+              source={Images.tick}
+              style={[styling, { height: RfH(iconHeight - 10), width: RfH(iconHeight - 10) }]}
+              resizeMode="contain"
+            />
           </View>
         ) : (
           <View
             style={{
-              height: RfH(22),
-              width: RfH(22),
+              height: RfH(iconHeight),
+              width: RfH(iconHeight),
               borderRadius: RfH(5),
               borderColor: Colors.black,
               borderWidth: 1,
@@ -50,8 +54,8 @@ CustomCheckBox.propTypes = {
 };
 
 CustomCheckBox.defaultProps = {
-  iconHeight: RfH(18),
-  iconWidth: RfW(18),
+  iconHeight: RfH(22),
+  iconWidth: RfW(12),
   styling: {},
   enabled: false,
   submitFunction: null,
