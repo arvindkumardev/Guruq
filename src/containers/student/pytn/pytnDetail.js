@@ -251,9 +251,9 @@ function PytnDetail(props) {
                   justifyContent: 'flex-end',
                   alignItems: 'flex-end',
                 }}>
-                <View style={{ alignSelf: 'center' }}>
-                  <Text style={styles.chargeText}>₹ {item.price}/Hr</Text>
-                </View>
+                {/*<View style={{ alignSelf: 'center' }}>*/}
+                {/*  <Text style={styles.chargeText}>₹ {item.price}/Hr</Text>*/}
+                {/*</View>*/}
                 <Button
                   style={[
                     {

@@ -33,6 +33,7 @@ import CustomModalWebView from '../../../components/CustomModalWebView';
 import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 import { userDetails, studentDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
+import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 
 const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
@@ -106,6 +107,12 @@ const MyCart = () => {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        if (error.errorCode === DUPLICATE_FOUND) {
+          alertBox(error.message);
+        }
+      }
     },
     onCompleted: (data) => {
       if (data) {
