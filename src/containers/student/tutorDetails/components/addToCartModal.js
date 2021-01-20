@@ -115,7 +115,7 @@ const AddToCartModal = (props) => {
     if (amount === 0 && !isDemoClass) {
       alertBox('Error', 'Amount should be greater than zero for booking');
     } else if (!isOnlineClassMode && !offlineClassConsent) {
-      alertBox('Please tick the home tuition consent');
+      alertBox('Please provide your consent for home tuition.');
     } else {
       const cartCreate = {
         tutorOfferingId: selectedSubject.offeringId,
@@ -181,99 +181,107 @@ const AddToCartModal = (props) => {
           </View>
         </View>
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-          <View>
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'center' }]}>
-              <Text style={commonStyles.mediumPrimaryText}>{`Mode of ${isDemoClass ? 'Demo ' : ''}Class`}</Text>
-              <View style={[commonStyles.horizontalChildrenCenterView, { flex: 1 }]}>
-                {selectedSubject.onlineClass > 0 && (
-                  <TouchableWithoutFeedback onPress={() => changeClassMode(true)}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        paddingVertical: 8,
-                      }}>
-                      <IconButtonWrapper
-                        iconImage={isOnlineClassMode ? Images.radio : Images.radio_button_null}
-                        iconWidth={20}
-                        iconHeight={20}
-                      />
-                      <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                )}
-                {selectedSubject.offlineClass && (
-                  <TouchableWithoutFeedback onPress={() => changeClassMode(false)}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginLeft: RfW(16),
-                        alignItems: 'center',
-                        paddingVertical: 8,
-                      }}>
-                      <IconButtonWrapper
-                        iconImage={!isOnlineClassMode ? Images.radio : Images.radio_button_null}
-                        iconWidth={20}
-                        iconHeight={20}
-                      />
-                      <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Home Tuition</Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                )}
-              </View>
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), alignItems: 'center' }]}>
+            <Text style={commonStyles.mediumPrimaryText}>{`Mode of ${isDemoClass ? 'Demo ' : ''}Class`}</Text>
+            <View style={[commonStyles.horizontalChildrenCenterView, { flex: 1 }]}>
+              {selectedSubject.onlineClass > 0 && (
+                <TouchableWithoutFeedback onPress={() => changeClassMode(true)}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingVertical: 8,
+                    }}>
+                    <IconButtonWrapper
+                      iconImage={isOnlineClassMode ? Images.radio : Images.radio_button_null}
+                      iconWidth={20}
+                      iconHeight={20}
+                    />
+                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Online</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
+              {selectedSubject.offlineClass && (
+                <TouchableWithoutFeedback onPress={() => changeClassMode(false)}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginLeft: RfW(16),
+                      alignItems: 'center',
+                      paddingVertical: 8,
+                    }}>
+                    <IconButtonWrapper
+                      iconImage={!isOnlineClassMode ? Images.radio : Images.radio_button_null}
+                      iconWidth={20}
+                      iconHeight={20}
+                    />
+                    <Text style={[styles.appliedFilterText, { marginLeft: RfH(8) }]}>Home Tuition</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
             </View>
-            {!isOnlineClassMode && (
-              <View style={{ flexDirection: 'row', marginTop: RfH(10) }}>
-                <CustomCheckBox
-                  enabled={offlineClassConsent}
-                  iconHeight={20}
-                  submitFunction={() => setOfflineClassConsent((offlineClassConsent) => !offlineClassConsent)}
-                />
-                <Text style={[commonStyles.smallMutedText, { marginLeft: RfW(10) }]}>
-                  I hereby give my consent to the GuruQ certified tutor for conducting home classes for me/ my child at
-                  my given residential address.{' '}
-                  <TouchableWithoutFeedback onPress={() => setShowHomeConsent(true)}>
-                    <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue }]}>Read More</Text>
-                  </TouchableWithoutFeedback>
-                </Text>
-              </View>
-            )}
-            {!isDemoClass && (
-              <PriceMatrixComponent
-                budgets={selectedSubject.budgetDetails}
-                showOnline={isOnlineClassMode}
-                showOffline={!isOnlineClassMode}
-              />
-            )}
-            {!isDemoClass && (
-              <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
-                <Text style={commonStyles.regularPrimaryText}>Number of Classes</Text>
-                <View style={styles.bookingSelectorParent}>
-                  <TouchableWithoutFeedback onPress={removeClass}>
-                    <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
-                      <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
-                    </View>
-                  </TouchableWithoutFeedback>
-
-                  <Text style={{ fontFamily: Fonts.semiBold }}>{numberOfClass}</Text>
-
-                  <TouchableWithoutFeedback onPress={addClass}>
-                    <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
-                      <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-              </View>
-            )}
-            {/* {amount !== 0 && ( */}
-            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), marginBottom: RfH(34) }]}>
-              <Text style={commonStyles.regularPrimaryText}>Total Amount</Text>
-              <Text style={commonStyles.headingPrimaryText}>
-                {numberOfClass} x ₹{classPrice} = ₹{printCurrency(amount)}
-              </Text>
-            </View>
-            {/* )} */}
           </View>
+        </View>
+
+        {!isOnlineClassMode && (
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: RfH(10),
+              backgroundColor: Colors.lightGrey,
+              padding: RfW(16),
+            }}>
+            <CustomCheckBox
+              enabled={offlineClassConsent}
+              iconHeight={20}
+              submitFunction={() => setOfflineClassConsent((offlineClassConsent) => !offlineClassConsent)}
+            />
+            <Text style={[commonStyles.mediumMutedText, { marginLeft: RfW(10), flex: 1 }]}>
+              I hereby give my consent to the GuruQ certified tutor for conducting home classes for me/ my child at my
+              given residential address.{' '}
+              <TouchableWithoutFeedback onPress={() => setShowHomeConsent(true)}>
+                <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue }]}>Read More</Text>
+              </TouchableWithoutFeedback>
+            </Text>
+          </View>
+        )}
+
+        <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
+          {!isDemoClass && (
+            <PriceMatrixComponent
+              budgets={selectedSubject.budgetDetails}
+              showOnline={isOnlineClassMode}
+              showOffline={!isOnlineClassMode}
+            />
+          )}
+          {!isDemoClass && (
+            <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
+              <Text style={commonStyles.regularPrimaryText}>Number of Classes</Text>
+              <View style={styles.bookingSelectorParent}>
+                <TouchableWithoutFeedback onPress={removeClass}>
+                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
+                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
+                  </View>
+                </TouchableWithoutFeedback>
+
+                <Text style={{ fontFamily: Fonts.semiBold }}>{numberOfClass}</Text>
+
+                <TouchableWithoutFeedback onPress={addClass}>
+                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
+                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </View>
+          )}
+          {/* {amount !== 0 && ( */}
+          <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16), marginBottom: RfH(34) }]}>
+            <Text style={commonStyles.regularPrimaryText}>Total Amount</Text>
+            <Text style={commonStyles.headingPrimaryText}>
+              {numberOfClass} x ₹{classPrice} = ₹{printCurrency(amount)}
+            </Text>
+          </View>
+          {/* )} */}
         </View>
 
         <View style={commonStyles.lineSeparator} />

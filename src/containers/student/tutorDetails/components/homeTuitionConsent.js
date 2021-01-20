@@ -1,11 +1,11 @@
 /* eslint-disable no-restricted-syntax */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { CustomCheckBox, IconButtonWrapper } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { deviceHeight, RfH, RfW } from '../../../../utils/helpers';
 
 const HomeTuitionConsentModal = (props) => {
   const { visible, isSelected, setConsentValue, onClose } = props;
@@ -31,6 +31,7 @@ const HomeTuitionConsentModal = (props) => {
           backgroundColor: Colors.white,
           opacity: 1,
           paddingBottom: RfH(34),
+          height: deviceHeight() * 0.8,
         }}>
         <View
           style={[
@@ -55,100 +56,169 @@ const HomeTuitionConsentModal = (props) => {
             />
           </View>
         </View>
-        <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, marginTop: RfH(10) }]}>
-          <View style={{ flexDirection: 'row', marginTop: RfH(5), paddingHorizontal: RfW(20) }}>
-            <CustomCheckBox enabled={isSelected} iconHeight={18} submitFunction={setConsentValue} />
-            <TouchableOpacity style={{ marginLeft: RfW(10) }} activeOpacity={0.8} onPress={setConsentValue}>
-              <Text style={[commonStyles.smallMutedText]}>
-                {'I acknowledge the contagious nature of COVID -19 and voluntarily assume the risk that me / my child/ my' +
-                  'family or friends or any other person who may have contact may be exposed to or be infected by COVID-19.'}
-              </Text>
-              <Text style={[commonStyles.smallMutedText, { marginTop: RfH(10) }]}>
-                {'I will follow all safety guidelines laid down by the government of India and also accept the sole ' +
-                  'responsibility for any injury, if caused to me / my child/ my family or friends or any other person'}
-              </Text>
-              <Text style={[commonStyles.smallMutedText, { marginTop: RfH(10) }]}>
-                Please ensure you take all the following safety measures during your Home Tuition classes.
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            marginTop: RfH(20),
-            marginHorizontal: RfW(20),
-            backgroundColor: Colors.lightGrey,
-            marginBottom: RfH(30),
-            paddingHorizontal: RfW(15),
-            paddingVertical: RfH(20),
-          }}>
-          <Text style={[commonStyles.headingMutedText]}>
-            Please ensure you take all the following safety measures during your Home Tuition classes.
-          </Text>
-          <View style={{ marginTop: RfH(20), marginRight: RfH(10) }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconImage={require('../../../../assets/images/homeTuitionConsent/wearing_mask.png')}
-                iconHeight={RfH(20)}
-                iconWidth={RfH(20)}
-                styling={{ marginRight: RfW(10) }}
-                imageResizeMode="contain"
-              />
-              <Text style={[commonStyles.smallMutedText]}>Wear mask</Text>
-            </View>
 
-            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconImage={require('../../../../assets/images/homeTuitionConsent/social_distancing.png')}
-                iconHeight={RfH(20)}
-                iconWidth={RfH(20)}
-                styling={{ marginRight: RfW(10) }}
-                imageResizeMode="contain"
-              />
-              <Text style={[commonStyles.smallMutedText]}>Maintain social distancing (6 ft. apart)</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconImage={require('../../../../assets/images/homeTuitionConsent/temperature_monitoring.png')}
-                iconHeight={RfH(20)}
-                iconWidth={RfH(20)}
-                styling={{ marginRight: RfW(10) }}
-                imageResizeMode="contain"
-              />
-              <Text style={[commonStyles.smallMutedText]}>Monitor temperature before and after class</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconImage={require('../../../../assets/images/homeTuitionConsent/sanitising_hands.png')}
-                iconHeight={RfH(20)}
-                iconWidth={RfH(20)}
-                styling={{ marginRight: RfW(10) }}
-                imageResizeMode="contain"
-              />
-              <Text style={[commonStyles.smallMutedText]}>Sanitise your hands regularly</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconImage={require('../../../../assets/images/homeTuitionConsent/reservered_area.png')}
-                iconHeight={RfH(20)}
-                iconWidth={RfH(20)}
-                styling={{ marginRight: RfW(10) }}
-                imageResizeMode="contain"
-              />
-              <Text style={[commonStyles.smallMutedText]}>Sit in reserved area (preferably outside)</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
-              <IconButtonWrapper
-                iconImage={require('../../../../assets/images/homeTuitionConsent/consumables.png')}
-                iconHeight={RfH(20)}
-                iconWidth={RfH(20)}
-                styling={{ marginRight: RfW(10) }}
-                imageResizeMode="contain"
-              />
-              <Text style={[commonStyles.smallMutedText]}>Avoid sharing food</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, marginTop: RfH(10) }]}>
+            <View style={{ flexDirection: 'row', marginTop: RfH(5) }}>
+              <CustomCheckBox enabled={isSelected} iconHeight={18} submitFunction={setConsentValue} />
+              <TouchableOpacity style={{ marginLeft: RfW(10) }} activeOpacity={0.8} onPress={setConsentValue}>
+                <Text style={[commonStyles.mediumPrimaryText]}>
+                  {'I acknowledge the contagious nature of COVID -19 and voluntarily assume the risk that me / my child/ my' +
+                    'family or friends or any other person who may have contact may be exposed to or be infected by COVID-19.'}
+                </Text>
+                <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(10) }]}>
+                  {'I will follow all safety guidelines laid down by the government of India and also accept the sole ' +
+                    'responsibility for any injury, if caused to me / my child/ my family or friends or any other person'}
+                </Text>
+                <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(10) }]}>
+                  Please ensure you take all the following safety measures during your Home Tuition classes.
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
+
+          <View
+            style={{
+              marginTop: RfH(20),
+              // backgroundColor: Colors.lightGrey,
+              marginBottom: RfH(30),
+              paddingHorizontal: RfW(15),
+              paddingVertical: RfH(20),
+            }}>
+            <Text style={[commonStyles.headingPrimaryText]}>
+              Please ensure you take all the following safety measures during your Home Tuition classes.
+            </Text>
+            <View style={{ marginTop: RfH(20), marginRight: RfH(10) }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: RfW(40),
+                    height: RfH(40),
+                    borderRadius: 40,
+                    backgroundColor: Colors.lightGrey,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: RfW(20),
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={require('../../../../assets/images/homeTuitionConsent/wearing_mask.png')}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfH(20)}
+                    imageResizeMode="contain"
+                  />
+                </View>
+                <Text style={[commonStyles.mediumPrimaryText]}>Wear mask</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: RfW(40),
+                    height: RfH(40),
+                    borderRadius: 40,
+                    backgroundColor: Colors.lightGrey,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: RfW(20),
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={require('../../../../assets/images/homeTuitionConsent/social_distancing.png')}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfH(20)}
+                    imageResizeMode="contain"
+                  />
+                </View>
+                <Text style={[commonStyles.mediumPrimaryText]}>Maintain social distancing (6 ft. apart)</Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: RfW(40),
+                    height: RfH(40),
+                    borderRadius: 40,
+                    backgroundColor: Colors.lightGrey,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: RfW(20),
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={require('../../../../assets/images/homeTuitionConsent/temperature_monitoring.png')}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfH(20)}
+                    imageResizeMode="contain"
+                  />
+                </View>
+                <Text style={[commonStyles.mediumPrimaryText]}>Monitor temperature before and after class</Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: RfW(40),
+                    height: RfH(40),
+                    borderRadius: 40,
+                    backgroundColor: Colors.lightGrey,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: RfW(20),
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={require('../../../../assets/images/homeTuitionConsent/sanitising_hands.png')}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfH(20)}
+                    imageResizeMode="contain"
+                  />
+                </View>
+                <Text style={[commonStyles.mediumPrimaryText]}>Sanitise your hands regularly</Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: RfW(40),
+                    height: RfH(40),
+                    borderRadius: 40,
+                    backgroundColor: Colors.lightGrey,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: RfW(20),
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={require('../../../../assets/images/homeTuitionConsent/reservered_area.png')}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfH(20)}
+                    imageResizeMode="contain"
+                  />
+                </View>
+                <Text style={[commonStyles.mediumPrimaryText]}>Sit in reserved area (preferably outside)</Text>
+              </View>
+              <View style={{ flexDirection: 'row', marginTop: RfH(10), alignItems: 'center' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: RfW(40),
+                    height: RfH(40),
+                    borderRadius: 40,
+                    backgroundColor: Colors.lightGrey,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: RfW(20),
+                  }}>
+                  <IconButtonWrapper
+                    iconImage={require('../../../../assets/images/homeTuitionConsent/consumables.png')}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfH(20)}
+                    imageResizeMode="contain"
+                  />
+                </View>
+                <Text style={[commonStyles.mediumPrimaryText]}>Avoid sharing food</Text>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
       </View>
     </Modal>
   );
