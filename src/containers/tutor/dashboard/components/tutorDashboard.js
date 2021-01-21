@@ -235,14 +235,30 @@ function TutorDashboard(props) {
           alignItems: 'stretch',
           backgroundColor: Colors.white,
         }}>
-        {/* <View style={{ height: RfH(44), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}> */}
-        {/*  <View style={{ flexDirection: 'row' }} /> */}
-        {/*  /!* <View> *!/ */}
-        {/*  /!*  <TouchableOpacity onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.NOTIFICATIONS)}> *!/ */}
-        {/*  /!*    <Image source={Images.bell} style={{ height: RfH(16), width: RfW(14) }} /> *!/ */}
-        {/*  /!*  </TouchableOpacity> *!/ */}
-        {/*  /!* </View> *!/ */}
-        {/* </View> */}
+        <TouchableOpacity
+          onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
+          style={{ paddingLeft: RfW(8) }}>
+          <IconButtonWrapper
+            iconImage={Images.bell}
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
+            imageResizeMode="contain"
+          />
+          {/* <View */}
+          {/*  style={{ */}
+          {/*    backgroundColor: Colors.orange, */}
+          {/*    borderRadius: RfH(20), */}
+          {/*    position: 'absolute', */}
+          {/*    top: RfH(-10), */}
+          {/*    left: RfW(0), */}
+          {/*    alignItems: 'center', */}
+          {/*    justifyContent: 'center', */}
+          {/*    height: RfH(16), */}
+          {/*    width: RfH(16), */}
+          {/*  }}> */}
+          {/*  <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>2</Text> */}
+          {/* </View> */}
+        </TouchableOpacity>
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View

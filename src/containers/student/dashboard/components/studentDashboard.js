@@ -322,9 +322,9 @@ function StudentDashboard(props) {
             style={[commonStyles.mediumPrimaryText, { marginTop: 8, fontFamily: Fonts.semiBold, textAlign: 'center' }]}>
             {getFullName(item?.tutor?.contactDetail)}
           </Text>
-          {/*<Text style={{ color: Colors.secondaryText, fontSize: 14 }}>*/}
-          {/*  {item?.tutor?.teachingExperience ? `${item?.tutor?.teachingExperience} years of Experience` : ''}*/}
-          {/*</Text>*/}
+          {/* <Text style={{ color: Colors.secondaryText, fontSize: 14 }}> */}
+          {/*  {item?.tutor?.teachingExperience ? `${item?.tutor?.teachingExperience} years of Experience` : ''} */}
+          {/* </Text> */}
           <View style={{ flexDirection: 'row', marginTop: RfH(8) }}>
             <IconButtonWrapper
               iconImage={item.tutor.averageRating > 0 ? Images.filledStar : Images.unFilledStar}
@@ -516,30 +516,30 @@ function StudentDashboard(props) {
                 </View>
               )}
             </TouchableOpacity>
-            {/* <TouchableOpacity */}
-            {/*  onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)} */}
-            {/*  style={{ paddingLeft: RfW(8) }}> */}
-            {/*  <IconButtonWrapper */}
-            {/*    iconImage={Images.bell} */}
-            {/*    iconHeight={RfH(20)} */}
-            {/*    iconWidth={RfW(20)} */}
-            {/*    imageResizeMode="contain" */}
-            {/*  /> */}
-            {/*  <View */}
-            {/*    style={{ */}
-            {/*      backgroundColor: Colors.orange, */}
-            {/*      borderRadius: RfH(20), */}
-            {/*      position: 'absolute', */}
-            {/*      top: RfH(-10), */}
-            {/*      left: RfW(0), */}
-            {/*      alignItems: 'center', */}
-            {/*      justifyContent: 'center', */}
-            {/*      height: RfH(16), */}
-            {/*      width: RfH(16), */}
-            {/*    }}> */}
-            {/*    <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>2</Text> */}
-            {/*  </View> */}
-            {/* </TouchableOpacity> */}
+            <TouchableOpacity
+              onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
+              style={{ paddingLeft: RfW(8) }}>
+              <IconButtonWrapper
+                iconImage={Images.bell}
+                iconHeight={RfH(20)}
+                iconWidth={RfW(20)}
+                imageResizeMode="contain"
+              />
+              {/*<View*/}
+              {/*  style={{*/}
+              {/*    backgroundColor: Colors.orange,*/}
+              {/*    borderRadius: RfH(20),*/}
+              {/*    position: 'absolute',*/}
+              {/*    top: RfH(-10),*/}
+              {/*    left: RfW(0),*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'center',*/}
+              {/*    height: RfH(16),*/}
+              {/*    width: RfH(16),*/}
+              {/*  }}>*/}
+              {/*  <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>2</Text>*/}
+              {/*</View>*/}
+            </TouchableOpacity>
           </View>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
