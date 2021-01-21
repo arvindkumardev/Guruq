@@ -20,7 +20,7 @@
         android:layout_marginTop="-50dp"
         android:textSize="20sp"
         android:textFontWeight="600"
-        android:text="Find the best" />
+        android:text="India's Best" />
 
     <TextView
         android:id="@+id/textView2"
@@ -28,6 +28,6 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textFontWeight="600"
-        android:text="Tutors and Institutes" />
+        android:text=" Tutoring Platform" />
 
 </LinearLayout>

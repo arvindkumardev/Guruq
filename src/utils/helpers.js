@@ -8,13 +8,7 @@ import moment from 'moment';
 import { isEmpty, isNumber, isUndefined, startCase } from 'lodash';
 import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mobile';
 import Images from '../theme/images';
-import {
-  API_URL,
-  ATTACHMENT_PREVIEW_URL,
-  FRONTEND_URL,
-  LOCAL_STORAGE_DATA_KEY,
-  STANDARD_SCREEN_DIMENSIONS,
-} from './constants';
+import { ATTACHMENT_PREVIEW_URL, IMAGES_URL, LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
 import 'intl';
 import {
   interestingOfferingData,
@@ -30,7 +24,6 @@ import {
   userType,
 } from '../apollo/cache';
 import initializeApollo from '../apollo/apollo';
-import Dash from '../components/Dash';
 
 const countryData = require('../components/NationalityDropdown/country/countries.json');
 
@@ -132,7 +125,7 @@ export const titleCaseIfExists = (inputString) => {
 
 export const getFileUrl = (filename) => {
   return filename && filename.startsWith('images/tutordoc')
-    ? `${FRONTEND_URL}/api/${filename}`
+    ? `${IMAGES_URL}/${filename}`
     : `${ATTACHMENT_PREVIEW_URL}${filename}`;
 };
 
