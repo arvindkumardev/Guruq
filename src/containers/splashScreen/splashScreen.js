@@ -7,6 +7,7 @@ import { Colors, Images } from '../../theme';
 import LoginCheck from '../common/login/loginCheck';
 import { GET_OFFERINGS_MASTER_DATA } from '../student/dashboard-query';
 import { offeringsMasterData } from '../../apollo/cache';
+import { deviceHeight, deviceWidth } from '../../utils/helpers';
 
 function SplashScreen() {
   const [getOfferingMasterData] = useLazyQuery(GET_OFFERINGS_MASTER_DATA, {
@@ -26,12 +27,22 @@ function SplashScreen() {
   }, []);
 
   return (
-    <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.brandBlue }]}>
+    <View
+      style={[
+        commonStyles.mainContainer,
+        { alignItems: 'center', paddingHorizontal: 0, backgroundColor: Colors.brandBlue },
+      ]}>
       <LoginCheck />
-      <Image style={styles.splashImage} source={Images.splashScreen} resizeMode="contain" />
-      <Text style={styles.msgOne}>Find the best</Text>
-      <Text style={styles.msgTwo}>Tutors and Institutes</Text>
-      <Text style={styles.bottomMsg}>Powered by RHA Technologies</Text>
+      <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <Image
+          style={{ width: deviceWidth(), height: deviceHeight() }}
+          source={Images.splashScreen1}
+          resizeMode="contain"
+        />
+        {/* <Text style={styles.msgOne}>India's Best</Text> */}
+        {/* <Text style={styles.msgTwo}>Tutoring Platform</Text> */}
+      </View>
+      {/* <Text style={styles.bottomMsg}>Powered by RHA Technologies</Text> */}
     </View>
   );
 }

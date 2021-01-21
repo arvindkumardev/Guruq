@@ -18,24 +18,8 @@ export const VERIFY_PHONE_NUMBER_MUTATION = gql`
 `;
 
 export const SIGNUP_MUTATION = gql`
-  mutation SignUp(
-    $phoneNumber: PhoneNumberInputDto!
-    $firstName: String!
-    $lastName: String!
-    $email: String!
-    $password: String!
-    $referCode: String!
-  ) {
-    signUp(
-      user: {
-        phoneNumber: $phoneNumber
-        firstName: $firstName
-        lastName: $lastName
-        email: $email
-        password: $password
-        referralCode: $referCode
-      }
-    ) {
+  mutation SignUp($userDto: CreateUpdateUserDto!) {
+    signUp(user: $userDto) {
       id
       token
       firstName

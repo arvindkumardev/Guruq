@@ -21,7 +21,7 @@ function SignUp(props) {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [referCode, setReferCode] = useState('');
+  const [referralCode, setReferralCode] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
   const isUserLoggedIn = useReactiveVar(isLoggedIn);
 
@@ -70,17 +70,19 @@ function SignUp(props) {
     } else {
       addUser({
         variables: {
-          phoneNumber: {
-            countryCode: route.params.countryCode,
-            number: route.params.number,
+          userDto: {
+            phoneNumber: {
+              countryCode: route.params.countryCode,
+              number: route.params.number,
+            },
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            email: email.toLowerCase().trim(),
+            password,
+            referralCode,
+            utmSource: 'App',
+            utmMedium: 'Signup',
           },
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          email: email.toLowerCase().trim(),
-          password,
-          referCode,
-          utmSource: 'App',
-          utmMedium: 'Signup',
         },
       });
     }
@@ -125,7 +127,7 @@ function SignUp(props) {
               </Item>
               <Item floatingLabel style={{ marginTop: RfH(40) }}>
                 <Label>Referral Code</Label>
-                <Input onChangeText={(text) => setReferCode(text)} />
+                <Input onChangeText={(text) => setReferralCode(text)} />
               </Item>
               {/* <Text style={styles.applyIcon}>APPLY</Text> */}
             </View>

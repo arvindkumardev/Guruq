@@ -13,10 +13,10 @@
     <!--            android:gravity="center"/>-->
     <item android:drawable="@color/primary_light"/>
         <item
-                android:width="400dp"
-                android:height="900dp"
+                android:width="fill_parent"
+                android:height="wrap_content"
                 android:adjustViewBounds="true"
-                android:gravity="fill"
+                android:gravity="center"
                 android:drawable="@drawable/splash"/>
 <!--        <item>-->
 <!--            <bitmap-->

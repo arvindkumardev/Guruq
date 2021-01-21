@@ -2,25 +2,27 @@ import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { RfH, RfW } from '../../utils/helpers';
+import { Colors } from '../../theme';
 
 const styles = StyleSheet.create({
   splashImage: {
-    height: RfH(210),
-    width: RfW(210),
-    marginTop: RfH(179),
-    marginHorizontal: RfW(71),
-    alignSelf: 'center',
+    height: RfH(195),
+    width: RfW(195),
+    // marginTop: RfH(175),
+    // marginHorizontal: RfW(71),
+    // marginBottom: RfH(0),
+    // alignSelf: 'center',
   },
   msgOne: {
-    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    color: '#fff',
+    fontSize: RFValue(24, STANDARD_SCREEN_SIZE),
+    color: Colors.white,
     fontFamily: 'SegoeUI-Semibold',
     alignSelf: 'center',
-    marginTop: RfH(-45),
+    marginTop: RfH(-30),
   },
   msgTwo: {
-    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    color: '#fff',
+    fontSize: RFValue(24, STANDARD_SCREEN_SIZE),
+    color: Colors.white,
     fontFamily: 'SegoeUI-Semibold',
     alignSelf: 'center',
   },
