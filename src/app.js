@@ -9,7 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-import {clearAllLocalStorage, getToken, removeToken} from './utils/helpers';
+import { clearAllLocalStorage, getToken, removeToken } from './utils/helpers';
 import {
   appMetaData,
   interestingOfferingData,
@@ -101,10 +101,9 @@ function App() {
   }, []);
 
   const getAppMetaData = async () => {
-    const res = await fetch(`${DASHBOARD_URL}/app-version.json`, {
+    const res = await fetch(`${DASHBOARD_URL}/app-version.json?${new Date().getTime()}`, {
       method: 'GET',
     }).then((response) => response.json());
-    console.log('dddddddddddddd', res);
     const appData = res[Platform.OS.toLowerCase()];
     appMetaData(appData);
     if (appData.isUnderMaintenance) {
