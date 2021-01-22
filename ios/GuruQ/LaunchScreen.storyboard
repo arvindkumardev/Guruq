@@ -16,14 +16,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="iZL-sK-2xV">
-                                <rect key="frame" x="91" y="99" width="233" height="698"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="iZL-sK-2xV">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" red="0.1117663607" green="0.3403634727" blue="0.60294657949999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="iZL-sK-2xV" secondAttribute="trailing" id="2de-5o-PxA"/>
+                            <constraint firstItem="iZL-sK-2xV" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" id="4Y6-3q-CfC"/>
+                            <constraint firstItem="iZL-sK-2xV" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="8bQ-E9-7rZ"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="iZL-sK-2xV" secondAttribute="trailing" constant="90" id="Emz-Yr-3Wv"/>
                             <constraint firstItem="iZL-sK-2xV" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" id="ITw-nl-osq"/>
                             <constraint firstItem="iZL-sK-2xV" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="Op9-0q-kyi"/>
@@ -31,6 +34,7 @@
                             <constraint firstItem="iZL-sK-2xV" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" id="QQp-P0-94N"/>
                             <constraint firstItem="iZL-sK-2xV" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="91" id="SQW-xc-guc"/>
                             <constraint firstAttribute="bottom" secondItem="iZL-sK-2xV" secondAttribute="bottom" id="WjM-18-OK1"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="iZL-sK-2xV" secondAttribute="bottom" id="buk-ZO-szE"/>
                             <constraint firstItem="iZL-sK-2xV" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="154" id="dUs-dB-cQk"/>
                             <constraint firstItem="iZL-sK-2xV" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" id="lPb-k0-pv7"/>
                             <constraint firstAttribute="bottom" secondItem="iZL-sK-2xV" secondAttribute="bottom" id="tCT-ok-QUT"/>

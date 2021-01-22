@@ -24,6 +24,7 @@
 		4B22E8FC6561464FA6FCBE78 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3BE76C50EB4E402193C07063 /* Zocial.ttf */; };
 		5022148751F140DE9847A3ED /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08474DB0BD1D48CA9296516F /* Fontisto.ttf */; };
 		55827C0025A6DCA1003A720D /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55827BFF25A6DCA1003A720D /* test.swift */; };
+		55B4DAA125BB1C92005D8E86 /* Launch Screen1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55B4DAA025BB1C92005D8E86 /* Launch Screen1.storyboard */; };
 		59D685F9E6F9A770785BC572 /* libPods-GuruQ.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4128759C910DB762599F371 /* libPods-GuruQ.a */; };
 		5B850A92D6A945A1A64AF6E1 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 513883F588914E6684E6849B /* FontAwesome.ttf */; };
 		625DF3E593164695A793FFD7 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7929E887C6284D4286F10610 /* FontAwesome5_Regular.ttf */; };
@@ -99,6 +100,7 @@
 		513883F588914E6684E6849B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		545FC21A8805A9088CF9380F /* Pods-GuruQ-GuruQTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuruQ-GuruQTests.release.xcconfig"; path = "Target Support Files/Pods-GuruQ-GuruQTests/Pods-GuruQ-GuruQTests.release.xcconfig"; sourceTree = "<group>"; };
 		55827BFF25A6DCA1003A720D /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
+		55B4DAA025BB1C92005D8E86 /* Launch Screen1.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen1.storyboard"; sourceTree = "<group>"; };
 		62ABD74B1A9C23D49F7A4457 /* Pods-GuruQ-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuruQ-tvOS.release.xcconfig"; path = "Target Support Files/Pods-GuruQ-tvOS/Pods-GuruQ-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		6866965CA80336E8C8557CE9 /* Pods-GuruQ-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuruQ-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-GuruQ-tvOSTests/Pods-GuruQ-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		69116DD09F734418B0B82635 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				55B4DAA025BB1C92005D8E86 /* Launch Screen1.storyboard */,
 			);
 			name = GuruQ;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				6AF5534927184F00BE477115 /* FontAwesome5_Solid.ttf in Resources */,
 				5022148751F140DE9847A3ED /* Fontisto.ttf in Resources */,
 				D2BC0F5243CE4DE5A838A95E /* Foundation.ttf in Resources */,
+				55B4DAA125BB1C92005D8E86 /* Launch Screen1.storyboard in Resources */,
 				7ADD401D828C4DA89B380757 /* Ionicons.ttf in Resources */,
 				24DBCB24DBCF49FBBB3D53CE /* MaterialCommunityIcons.ttf in Resources */,
 				691A0F2A2E13497EBFBEC439 /* MaterialIcons.ttf in Resources */,
