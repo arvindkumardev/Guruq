@@ -13,7 +13,7 @@ import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
 import Loader from '../../../components/Loader';
-import { GET_TUTION_NEED_LISTING } from './pytn.query';
+import { GET_PYTN_LISTING } from './pytn.query';
 import { offeringsMasterData, studentDetails } from '../../../apollo/cache';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
 
@@ -26,7 +26,7 @@ function PytnListing(props) {
   const [pytnList, setPytnList] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
 
-  const [getTuitionNeeds, { loading: loadingTuitionNeeds }] = useLazyQuery(GET_TUTION_NEED_LISTING, {
+  const [getTuitionNeeds, { loading: loadingTuitionNeeds }] = useLazyQuery(GET_PYTN_LISTING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);

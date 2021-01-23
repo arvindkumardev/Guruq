@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const MARK_CERTIFIED = gql`
-  mutation certificationStageComplete {
-    certificationStageComplete {
+  mutation CertificationStageComplete($currentStage: TutorCertificationStageEnum!) {
+    certificationStageComplete(currentStage: $currentStage) {
       id
     }
   }

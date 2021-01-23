@@ -17,6 +17,7 @@ import { MARK_CERTIFIED } from './certification-mutation';
 import ActionModal from './components/helpSection';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 import { tutorDetails, userLocation } from '../../apollo/cache';
+import { TutorCertificationStageEnum } from '../tutor/enums';
 
 const CompleteYourProfile = () => {
   const isFocussed = useIsFocused();
@@ -96,7 +97,7 @@ const CompleteYourProfile = () => {
   };
 
   const handleNext = () => {
-    markCertified();
+    markCertified({ variables: { currentStage: TutorCertificationStageEnum.PROFILE_COMPLETION_PENDING.label } });
   };
 
   return (

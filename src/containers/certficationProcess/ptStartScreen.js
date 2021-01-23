@@ -12,7 +12,7 @@ import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
 import NavigationRouteNames from '../../routes/screenNames';
 import { GET_TUTOR_OFFERING_DETAIL } from './certification-query';
 import { offeringsMasterData, tutorDetails } from '../../apollo/cache';
-import { PtStatus } from '../tutor/enums';
+import { PtStatus, TutorCertificationStageEnum } from '../tutor/enums';
 import { MARK_CERTIFIED } from './certification-mutation';
 import ActionModal from './components/helpSection';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
@@ -103,7 +103,7 @@ const PtStartScreen = (props) => {
 
     if (ptDetail?.status === PtStatus.PASSED.label || ptDetail?.status === PtStatus.EXEMPTED.label) {
       if (isOnBoarding) {
-        markCertified();
+        markCertified({ variables: { currentStage: TutorCertificationStageEnum.PROFICIENCY_TEST_PENDING.label } });
       } else {
         navigation.goBack();
       }

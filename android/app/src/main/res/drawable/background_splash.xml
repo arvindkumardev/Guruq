@@ -13,8 +13,8 @@
     <!--            android:gravity="center"/>-->
     <item android:drawable="@color/primary_light"/>
         <item
-                android:width="fill_parent"
-                android:height="wrap_content"
+                android:width="562dp"
+                android:height="1218dp"
                 android:adjustViewBounds="true"
                 android:gravity="center"
                 android:drawable="@drawable/splash"/>

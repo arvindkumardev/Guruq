@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const GET_TUTION_NEED_LISTING = gql`
+export const GET_PYTN_LISTING = gql`
   query SearchStudentPYTN($searchDto: StudentPYTNSearchDto!) {
     searchStudentPYTN(searchDto: $searchDto) {
       edges {
@@ -43,7 +43,7 @@ export const GET_TUTION_NEED_LISTING = gql`
   }
 `;
 
-export const GET_ACCEPTED_TUTOR_NEED = gql`
+export const GET_ACCEPTED_PYTN = gql`
   query GetStudentPytnAccepted($acceptedSearchDto: StudentPytnAcceptedSearchDto!) {
     getStudentPytnAccepted(acceptedSearchDto: $acceptedSearchDto) {
       edges {

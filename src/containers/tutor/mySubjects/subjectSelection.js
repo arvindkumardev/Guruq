@@ -8,6 +8,7 @@ import commonStyles from '../../../theme/styles';
 import { ChooseSubjectComponent, Loader, ScreenHeader } from '../../../components';
 import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../tutor.mutation';
 import { MARK_CERTIFIED } from '../../certficationProcess/certification-mutation';
+import { TutorCertificationStageEnum } from '../enums';
 
 function SubjectSelection(props) {
   const navigation = useNavigation();
@@ -39,7 +40,7 @@ function SubjectSelection(props) {
     onCompleted: (data) => {
       if (data) {
         if (isOnBoarding) {
-          markCertified();
+          markCertified({ variables: { currentStage: TutorCertificationStageEnum.OFFERING_PENDING.label } });
         } else {
           navigation.goBack();
         }

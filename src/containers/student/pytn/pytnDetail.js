@@ -13,7 +13,7 @@ import { IconButtonWrapper, ScreenHeader, TutorImageComponent } from '../../../c
 import Loader from '../../../components/Loader';
 import styles from './styles';
 import { offeringsMasterData } from '../../../apollo/cache';
-import { GET_ACCEPTED_TUTOR_NEED } from './pytn.query';
+import { GET_ACCEPTED_PYTN } from './pytn.query';
 import { DELETE_STUDENT_PYTN } from './pytn.mutation';
 import NavigationRouteNames from '../../../routes/screenNames';
 import AddToCartModal from '../tutorDetails/components/addToCartModal';
@@ -60,7 +60,7 @@ function PytnDetail(props) {
     },
   });
 
-  const [getAcceptedTutorNeeds, { loading: loadingAcceptedTutor }] = useLazyQuery(GET_ACCEPTED_TUTOR_NEED, {
+  const [getAcceptedTutorNeeds, { loading: loadingAcceptedTutor }] = useLazyQuery(GET_ACCEPTED_PYTN, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);

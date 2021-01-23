@@ -29,11 +29,11 @@ export const LOTTIE_JSON_FILES = {
   loaderJson: require('../assets/json/loader1.json'),
 };
 
-export const FRONTEND_URL = 'https://staging.guruq.in';
-export const IMAGES_URL = 'https://stagingimages.guruq.in';
-export const DASHBOARD_URL = 'https://stagingdashboard.guruq.in';
-export const CLASSES_URL = 'https://stagingclasses.guruq.in';
-export const API_URL = 'https://stagingapi.guruq.in';
+export const FRONTEND_URL = 'https://new.guruq.in';
+export const IMAGES_URL = 'https://images.guruq.in';
+export const DASHBOARD_URL = 'https://dashboard.guruq.in';
+export const CLASSES_URL = 'https://classes.guruq.in';
+export const API_URL = 'https://api.guruq.in';
 // export const API_URL = 'http://10.0.0.99:5000';
 export const GRAPH_API_URL = `${API_URL}/graphql`;
 

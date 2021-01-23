@@ -11,6 +11,7 @@ import { MARK_CERTIFIED } from './certification-mutation';
 import { Loader } from '../../components';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 import { tutorDetails } from '../../apollo/cache';
+import { TutorCertificationStageEnum } from '../tutor/enums';
 
 const TutorWelcomeScreen = () => {
   const navigation = useNavigation();
@@ -37,15 +38,14 @@ const TutorWelcomeScreen = () => {
   });
 
   const handleClick = () => {
-    markCertified();
+    markCertified({ variables: { currentStage: TutorCertificationStageEnum.REGISTERED.label } });
   };
 
   return (
     <>
       <Loader isLoading={markTutorCertifiedLoading || getCurrentTutorLoading} />
       <View style={{ flex: 1, alignItems: 'center', paddingTop: RfH(140), backgroundColor: Colors.white }}>
-
-        <Image source={Images.tutorWelcome} style={ { height: RfH(219), width: RfH(256) }} />
+        <Image source={Images.tutorWelcome} style={{ height: RfH(219), width: RfH(256) }} />
 
         <View style={{ marginTop: RfH(52), alignItems: 'center' }}>
           <Text style={commonStyles.headingPrimaryText}> Welcome to GuruQ!</Text>
