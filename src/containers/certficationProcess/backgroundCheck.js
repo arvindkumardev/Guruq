@@ -99,7 +99,7 @@ function BackgroundCheck() {
               <Text />
               <WebView
                 source={{
-                  uri: `${DASHBOARD_URL}/terms`,
+                  uri: `${DASHBOARD_URL}/terms.html`,
                 }}
                 javaScriptEnabled
                 domStorageEnabled

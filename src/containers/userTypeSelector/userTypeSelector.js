@@ -101,7 +101,7 @@ function UserTypeSelector() {
         <View style={{ marginTop: RfH(16) }}>
           <TouchableOpacity onPress={() => createStudent()}>
             <Image
-              style={{ alignSelf: 'center', marginTop: 16, width: RfW(80), height: RfH(80) }}
+              style={{ alignSelf: 'center', marginTop: 16, width: RfW(150), height: RfH(150) }}
               source={Images.student}
             />
           </TouchableOpacity>
@@ -111,7 +111,7 @@ function UserTypeSelector() {
         <View style={{ marginTop: RfH(48) }}>
           <TouchableOpacity onPress={createTutor}>
             <Image
-              style={{ alignSelf: 'center', marginTop: 12, width: RfW(80), height: RfH(80) }}
+              style={{ alignSelf: 'center', marginTop: 12, width: RfW(150), height: RfH(150) }}
               source={Images.tutor}
             />
           </TouchableOpacity>
