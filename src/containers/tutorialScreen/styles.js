@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   centerImage: {
-    width: RfW(178),
-    height: RfH(383),
-    marginTop: RfH(44),
+    width: RfW(200),
+    height: RfH(428),
+    // marginTop: RfH(44),
   },
   title: {
     fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
