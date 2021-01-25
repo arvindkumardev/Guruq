@@ -177,7 +177,6 @@ const Images = {
   study_area: require('../assets/images/study-area.png'),
   subjects_b: require('../assets/images/subjects-b.png'),
   subjects: require('../assets/images/subjects.png'),
-  teacher: require('../assets/images/teacher.png'),
   test_results: require('../assets/images/test-results.png'),
   thumb_range: require('../assets/images/thumb-range.png'),
   tick: require('../assets/images/tick.png'),
