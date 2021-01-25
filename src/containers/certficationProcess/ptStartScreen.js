@@ -176,7 +176,7 @@ const PtStartScreen = (props) => {
             alignItems: 'center',
             marginTop: RfH(10),
           }}>
-          <Text style={commonStyles.regularPrimaryText}>In Correct</Text>
+          <Text style={commonStyles.regularPrimaryText}>Incorrect</Text>
           <View
             style={{
               paddingVertical: RfH(10),
@@ -300,12 +300,12 @@ const PtStartScreen = (props) => {
                     <View style={{ marginHorizontal: RfW(16) }}>
                       <View style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center' }]}>
                         <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
-                        <Text style={{ marginLeft: RfW(16) }}>There will be 30 questions.</Text>
+                        <Text style={{ marginLeft: RfW(16) }}>There are 30 questions in the test.</Text>
                       </View>
                       <View
                         style={[commonStyles.horizontalChildrenStartView, { alignItems: 'center', marginTop: RfH(8) }]}>
                         <IconButtonWrapper iconImage={Images.active_blue_circle} iconWidth={8} iconHeight={8} />
-                        <Text style={{ marginLeft: RfW(16) }}>You will have 30 minutes to complete the test.</Text>
+                        <Text style={{ marginLeft: RfW(16) }}>You have 30 minutes to complete the test.</Text>
                       </View>
                     </View>
                     <Text style={[commonStyles.regularPrimaryText, { marginTop: RfH(20), textAlign: 'center' }]}>
@@ -332,7 +332,7 @@ const PtStartScreen = (props) => {
           {!isEmpty(ptDetail) && isEmpty(ptDetail.proficiencyTest) && ptDetail?.status === PtStatus.PENDING.label && (
             <View style={commonStyles.verticallyCenterItemsView}>
               <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
-                PT not available for the selected subject, please contact customer support.
+                PT not available for this subject, please contact customer support.
               </Text>
 
               <Button
