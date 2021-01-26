@@ -30,8 +30,11 @@ const DateSlotSelectorModal = (props) => {
       }
     },
   });
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const getAvailabilityData = (date) => {
+    setSelectedDate(date);
+
     setSelectedSlot({});
     setAvailability([]);
     getTutorAvailability({
@@ -107,7 +110,7 @@ const DateSlotSelectorModal = (props) => {
                 alignSelf: 'flex-start',
                 paddingBottom: RfH(8),
               }}
-              selectedDate={new Date()}
+              selectedDate={selectedDate}
               highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
               highlightDateNameStyle={{ color: Colors.brandBlue2 }}
               disabledDateNameStyle={{ color: Colors.darkGrey }}

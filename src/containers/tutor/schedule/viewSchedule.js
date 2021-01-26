@@ -41,6 +41,7 @@ function ViewSchedule() {
 
   const getAvailabilityData = (date) => {
     setSelectedDate(date);
+
     getAvailability({
       variables: {
         tutorAvailability: {
@@ -103,7 +104,7 @@ function ViewSchedule() {
               highlightDateNameStyle={{ color: Colors.brandBlue2 }}
               disabledDateNameStyle={{ color: Colors.black }}
               disabledDateNumberStyle={{ color: Colors.black }}
-              selectedDate={new Date()}
+              selectedDate={selectedDate}
               dateNameStyle={{
                 fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
                 fontWeight: '400',

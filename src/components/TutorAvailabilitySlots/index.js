@@ -15,6 +15,7 @@ import { endOfDay, printDate, RfH, RfW, startOfDay } from '../../utils/helpers';
 const TutorAvailabilitySlots = (props) => {
   const [availability, setAvailability] = useState([]);
   const { visible, onClose, tutorId } = props;
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const [getAvailability, { loading: availabilityError }] = useLazyQuery(GET_AVAILABILITY_DATA, {
     onError: (e) => {
@@ -32,6 +33,8 @@ const TutorAvailabilitySlots = (props) => {
   });
 
   const getAvailabilityData = (date) => {
+    setSelectedDate(date);
+
     getAvailability({
       variables: {
         tutorAvailability: {
@@ -117,7 +120,7 @@ const TutorAvailabilitySlots = (props) => {
               alignSelf: 'flex-start',
               paddingBottom: RfH(8),
             }}
-            selectedDate={new Date()}
+            selectedDate={selectedDate}
             highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
             highlightDateNameStyle={{ color: Colors.brandBlue2 }}
             disabledDateNameStyle={{ color: Colors.black }}
