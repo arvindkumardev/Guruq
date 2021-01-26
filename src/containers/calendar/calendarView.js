@@ -141,10 +141,10 @@ function CalendarView(props) {
   //   // });
   // };
 
-  const getScheduledClassesForWeekData = (startDate) => {
-    console.log('getScheduledClassesForWeekData', moment(startDate).toDate());
+  const [weekStartDate, setWeekStartDate] = useState();
 
-    // setSelectedDate(moment(startDate).toDate());
+  const getScheduledClassesForWeekData = (startDate) => {
+    setWeekStartDate(moment(startDate).isoWeekday(1).startOf('day').toDate());
 
     getScheduledClassesForWeek({
       variables: {
@@ -158,7 +158,6 @@ function CalendarView(props) {
 
   useEffect(() => {
     if (isFocussed) {
-      // getScheduledClassesByDate(selectedDate);
       getScheduledClassesForWeekData(new Date());
     }
   }, [isFocussed]);
@@ -225,7 +224,9 @@ function CalendarView(props) {
                 markedDates={markedDates}
                 onHeaderSelected={(a) => console.log(a)}
                 onWeekChanged={(start, end) => {
-                  getScheduledClassesForWeekData(start);
+                  if (!start.isSame(weekStartDate, 'day')) {
+                    getScheduledClassesForWeekData(start);
+                  }
                 }}
                 onDateSelected={(d) => {
                   if (!d.isSame(selectedDate, 'day')) {
