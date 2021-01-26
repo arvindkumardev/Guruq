@@ -222,6 +222,7 @@ const Images = {
   nopytn: require('../assets/images/nopytn.png'),
 
   emptyFavTutor: require('../assets/images/nopytn.png'),
+  emptyList: require('../assets/images/no-data-found.png'),
   emptyTutorList: require('../assets/images/noTutorFound.png'),
   subjectSwitcher: require('../assets/images/switch-subject.png'),
   filledStar: require('../assets/images/filledStar.png'),
