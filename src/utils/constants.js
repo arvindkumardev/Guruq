@@ -35,7 +35,7 @@ export const DASHBOARD_URL = 'https://dashboard.guruq.in';
 export const CLASSES_URL = 'https://classes.guruq.in';
 export const API_URL = 'https://api.guruq.in';
 // export const API_URL = 'http://10.0.0.99:5000';
-export const GRAPH_API_URL = `${API_URL}/graphql`;
+export const GRAPH_API_URL = `${API_URL}/gql`;
 
 export const ATTACHMENT_PREVIEW_URL = `${IMAGES_URL}/upload/preview?filePath=`;
 

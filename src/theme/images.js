@@ -114,7 +114,7 @@ const Images = {
   empty_classes: require('../assets/images/no-classes.png'),
   empty_schedule: require('../assets/images/no-schedule.png'),
   //--------------------------
-  onBoardingFirst: require('../assets/images/tutorDetail5.png'),
+  onBoardingFirst: require('../assets/images/onboarding1.png'),
   onBoardingSecond: require('../assets/images/onboarding2.png'),
   onBoardingThird: require('../assets/images/onboarding3.png'),
   //--------------------------
@@ -184,7 +184,7 @@ const Images = {
   tutor_active: require('../assets/images/tutor_active.png'),
   tutor_tab: require('../assets/images/tutor_tab.png'),
   tutor_icon: require('../assets/images/tutor-icon.png'),
-  tutor: require('../assets/images/teacher-01.png'),
+  tutor: require('../assets/images/tutor.png'),
   //-------
   two_users: require('../assets/images/two_users.png'),
   //-------
