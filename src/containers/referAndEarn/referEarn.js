@@ -55,7 +55,7 @@ function ReferEarn() {
             iconWidth={deviceWidth() - 32}
             iconHeight={RfH((deviceWidth() - 32) * 1.3)}
             styling={{ alignSelf: 'flex-start' }}
-            imageResizeMode={'contain'}
+            imageResizeMode="contain"
           />
         </View>
       </View>
@@ -122,7 +122,9 @@ function ReferEarn() {
                 type: 'success',
               });
             }}>
-            <Text style={{ color: Colors.brandBlue2 }}>{userInfo.referralCode}</Text>
+            <Text style={{ fontSize: RFValue(24, STANDARD_SCREEN_SIZE), color: Colors.brandBlue2 }}>
+              {userInfo.referralCode}
+            </Text>
           </Button>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: RfH(36) }}>
