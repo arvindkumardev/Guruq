@@ -558,43 +558,45 @@ function ScheduledClassDetails(props) {
             </View>
             <View style={commonStyles.lineSeparatorWithVerticalMargin} />
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: RfH(16),
-                marginBottom: RfH(34),
-              }}>
-              {!classData?.isClassEnded ? (
-                <Button
-                  block
-                  onPress={() =>
-                    classData?.isClassJoinAllowed
-                      ? goToOnlineClass()
-                      : alertBox('You can join the class 15 mins before the start time.')
-                  }
-                  style={[
-                    classData?.isClassJoinAllowed ? commonStyles.buttonPrimary : commonStyles.disableButton,
-                    {
-                      borderRadius: 4,
-                      marginHorizontal: 0,
-                    },
-                  ]}>
-                  <IconButtonWrapper
-                    iconImage={Images.video}
-                    iconHeight={RfH(16)}
-                    iconWidth={RfW(16)}
-                    styling={{ alignSelf: 'center' }}
-                  />
-                  <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
-                </Button>
-              ) : (
-                <Button style={commonStyles.buttonOutlineSecondary}>
-                  <Text>Class Has Ended!</Text>
-                </Button>
-              )}
-            </View>
+            {classData?.classEntity?.onlineClass && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: RfH(16),
+                  marginBottom: RfH(34),
+                }}>
+                {!classData?.isClassEnded ? (
+                  <Button
+                    block
+                    onPress={() =>
+                      classData?.isClassJoinAllowed
+                        ? goToOnlineClass()
+                        : alertBox('You can join the class 15 mins before the start time.')
+                    }
+                    style={[
+                      classData?.isClassJoinAllowed ? commonStyles.buttonPrimary : commonStyles.disableButton,
+                      {
+                        borderRadius: 4,
+                        marginHorizontal: 0,
+                      },
+                    ]}>
+                    <IconButtonWrapper
+                      iconImage={Images.video}
+                      iconHeight={RfH(16)}
+                      iconWidth={RfW(16)}
+                      styling={{ alignSelf: 'center' }}
+                    />
+                    <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
+                  </Button>
+                ) : (
+                  <Button style={commonStyles.buttonOutlineSecondary}>
+                    <Text>Class Has Ended!</Text>
+                  </Button>
+                )}
+              </View>
+            )}
           </ScrollView>
         )}
         {classData && classData?.classEntity?.uuid && (
