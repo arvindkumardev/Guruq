@@ -66,20 +66,22 @@ function TutorDashboard(props) {
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.9);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 3) / 4);
 
-  useFocusEffect(() => {
-    const backAction = () => {
-      alertBox('Alert', 'Do you really want to exit?', {
-        positiveText: 'Yes',
-        onPositiveClick: () => {
-          BackHandler.exitApp();
-        },
-        negativeText: 'No',
-      });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-    return () => backHandler.remove();
-  }, []);
+  useEffect(() => {
+    if (isFocused) {
+      const backAction = () => {
+        alertBox('Alert', 'Do you really want to exit?', {
+          positiveText: 'Yes',
+          onPositiveClick: () => {
+            BackHandler.exitApp();
+          },
+          negativeText: 'No',
+        });
+        return true;
+      };
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+      return () => backHandler.remove();
+    }
+  }, [isFocused]);
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',

@@ -104,20 +104,22 @@ function StudentDashboard(props) {
     },
   });
 
-  useFocusEffect(() => {
-    const backAction = () => {
-      alertBox('Alert', 'Do you really want to exit?', {
-        positiveText: 'Yes',
-        onPositiveClick: () => {
-          BackHandler.exitApp();
-        },
-        negativeText: 'No',
-      });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-    return () => backHandler.remove();
-  }, []);
+  useEffect(() => {
+    if (isFocused) {
+      const backAction = () => {
+        alertBox('Alert', 'Do you really want to exit?', {
+          positiveText: 'Yes',
+          onPositiveClick: () => {
+            BackHandler.exitApp();
+          },
+          negativeText: 'No',
+        });
+        return true;
+      };
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+      return () => backHandler.remove();
+    }
+  }, [isFocused]);
 
   const [getFavouriteTutors, { loading: loadingFavouriteTutors }] = useLazyQuery(GET_FAVOURITE_TUTORS, {
     fetchPolicy: 'no-cache',
@@ -525,20 +527,20 @@ function StudentDashboard(props) {
                 iconWidth={RfW(20)}
                 imageResizeMode="contain"
               />
-              {/*<View*/}
-              {/*  style={{*/}
-              {/*    backgroundColor: Colors.orange,*/}
-              {/*    borderRadius: RfH(20),*/}
-              {/*    position: 'absolute',*/}
-              {/*    top: RfH(-10),*/}
-              {/*    left: RfW(0),*/}
-              {/*    alignItems: 'center',*/}
-              {/*    justifyContent: 'center',*/}
-              {/*    height: RfH(16),*/}
-              {/*    width: RfH(16),*/}
-              {/*  }}>*/}
-              {/*  <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>2</Text>*/}
-              {/*</View>*/}
+              {/* <View */}
+              {/*  style={{ */}
+              {/*    backgroundColor: Colors.orange, */}
+              {/*    borderRadius: RfH(20), */}
+              {/*    position: 'absolute', */}
+              {/*    top: RfH(-10), */}
+              {/*    left: RfW(0), */}
+              {/*    alignItems: 'center', */}
+              {/*    justifyContent: 'center', */}
+              {/*    height: RfH(16), */}
+              {/*    width: RfH(16), */}
+              {/*  }}> */}
+              {/*  <Text style={{ fontSize: 10, font: Fonts.bold, color: Colors.white }}>2</Text> */}
+              {/* </View> */}
             </TouchableOpacity>
           </View>
         </View>
