@@ -183,7 +183,7 @@ function AddressListing() {
         ) : (
           <View style={{ flex: 1, paddingTop: RfH(100), alignItems: 'center' }}>
             <Image
-              source={Images.empty_cart}
+              source={Images.emptyList}
               style={{
                 height: RfH(264),
                 width: RfW(248),

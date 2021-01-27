@@ -26,6 +26,7 @@ function NotificationRedirection() {
       if (selectedOffering) {
         navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
           tutorId: notificationPayloadObj.tutor_id,
+          currentOffering: selectedOffering,
           parentOffering: selectedOffering?.id,
           parentParentOffering: selectedOffering?.parentOffering?.id,
           parentOfferingName: selectedOffering?.displayName,

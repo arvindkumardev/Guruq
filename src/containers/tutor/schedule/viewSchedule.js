@@ -166,8 +166,7 @@ function ViewSchedule() {
                 commonStyles.regularMutedText,
                 { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
               ]}>
-              {/* Let me know your availabilityYou haven't provided your availability for the day. Mark your availability now!. */}
-              Let students know your availability. Mark your availability now!
+              Let students know when you are available. Mark your Availability now!
             </Text>
             <View style={{ height: RfH(40) }} />
             {moment(selectedDate).isSameOrAfter() && (

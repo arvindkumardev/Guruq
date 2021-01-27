@@ -181,7 +181,7 @@ function SubjectList() {
         ) : (
           <View style={{ flex: 1, paddingTop: RfH(70), alignItems: 'center' }}>
             <Image
-              source={Images.empty_cart}
+              source={Images.emptyList}
               style={{
                 height: RfH(264),
                 width: RfW(248),

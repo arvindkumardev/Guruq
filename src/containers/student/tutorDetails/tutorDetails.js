@@ -43,6 +43,7 @@ function TutorDetails(props) {
 
   const tutorId = route?.params?.tutorId;
   const tutorDataObj = route?.params?.tutorData;
+  const currentOffering = route?.params?.currentOffering;
 
   const parentOffering = route?.params?.parentOffering;
 
@@ -144,14 +145,16 @@ function TutorDetails(props) {
           budgetDetails: item.budgets,
         }));
         if (!isEmpty(subjectList)) {
-          setSelectedSubject(subjectList[0]);
+          const currentSelectedOffering = currentOffering
+            ? subjectList.find((s) => s.id === currentOffering?.id)
+            : subjectList[0];
+          setSelectedSubject(currentSelectedOffering);
         }
         setSubjects(subjectList);
         setRefreshList(!refreshList);
       }
     },
   });
-
 
   const onBackPress = () => {
     navigation.goBack();

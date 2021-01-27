@@ -61,6 +61,7 @@ function BookingDetails(props) {
   const tutorDetailsHandler = (item) => {
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
       tutorId: item.tutor.id,
+      currentOffering: item?.offering,
       parentOffering: item.offering?.parentOffering?.id,
       parentParentOffering: item.offering?.parentOffering?.parentOffering?.id,
       parentOfferingName: item.offering?.parentOffering?.displayName,
@@ -247,7 +248,7 @@ function BookingDetails(props) {
               <View style={{ paddingHorizontal: RfW(8) }}>
                 <View style={{ height: RfH(16) }} />
                 <View style={commonStyles.horizontalChildrenSpaceView}>
-                  <Text style={commonStyles.mediumMutedText}>Paid by Q points</Text>
+                  <Text style={commonStyles.mediumMutedText}>Q points Redeemed</Text>
                   <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
                     ₹{bookingData.pointsRedeemed ? printCurrency(bookingData.pointsRedeemed) : '0'}
                   </Text>

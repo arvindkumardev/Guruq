@@ -41,13 +41,13 @@ const TutorVerificationScreen = () => {
       <View style={{ flex: 1, alignItems: 'center', paddingTop: RfH(100), backgroundColor: Colors.white }}>
         <Image source={Images.pendingStatus} style={{ width: RfW(300), height: RfH(300) }} resizeMode="contain" />
         <View style={{ marginTop: RfH(52), alignItems: 'center' }}>
-          <Text style={commonStyles.headingPrimaryText}> Verification pending</Text>
+          <Text style={commonStyles.headingPrimaryText}>Verification Pending</Text>
           <Text
             style={[
               commonStyles.regularPrimaryText,
               { marginTop: RfH(14), paddingHorizontal: RfW(15), textAlign: 'center' },
             ]}>
-            Your background verification is pending. Once its done you will be able to avail sessions.
+            Soon as your background check is completed you will be able to start teaching on GuruQ!
           </Text>
         </View>
         <Button

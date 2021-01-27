@@ -14,12 +14,12 @@ import { EmploymentTypeEnum } from '../../common/enums';
 import { tutorDetails } from '../../../apollo/cache';
 
 const EMPLOYMENT_TYPE = [
-  { value: 'FULL_TIME', label: 'FULL TIME' },
-  { value: 'PART_TIME', label: 'PART TIME' },
-  { value: 'SELF_EMPLOYED', label: 'SELF EMPLOYED' },
-  { value: 'FREELANCE', label: 'FREELANCE' },
-  { value: 'INTERNSHIP', label: 'INTERNSHIP' },
-  { value: 'TRAINEE', label: 'TRAINEE' },
+  { value: 'FULL_TIME', label: 'Full Time' },
+  { value: 'PART_TIME', label: 'Part Time' },
+  { value: 'SELF_EMPLOYED', label: 'Self Employed' },
+  { value: 'FREELANCE', label: 'Freelance' },
+  { value: 'INTERNSHIP', label: 'Internship' },
+  { value: 'TRAINEE', label: 'Trainee' },
 ];
 function AddEditExperience(props) {
   const navigation = useNavigation();

@@ -106,7 +106,7 @@ const CertificationProcessSteps = (props) => {
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFICIENCY_TEST_PENDING.label) {
       setStep(2);
-      setButtonText('Start proficiency Test');
+      setButtonText('Start Proficiency Test');
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFILE_COMPLETION_PENDING.label) {
       setStep(3);
@@ -126,7 +126,7 @@ const CertificationProcessSteps = (props) => {
     <View style={{ backgroundColor: Colors.white }}>
       <Loader isLoading={tutorLeadDetailLoading} />
       <ScreenHeader
-        label="Certification Process"
+        label="Tutor Certification Process"
         showRightIcon
         rightIcon={Images.vertical_dots_b}
         onRightIconClick={() => setOpenMenu(true)}
@@ -167,7 +167,7 @@ const CertificationProcessSteps = (props) => {
             iconWidth={RfW(24)}
           />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
-            Pass the Proficiency Test
+            Take the Proficiency Test
           </Text>
         </View>
 
@@ -203,7 +203,7 @@ const CertificationProcessSteps = (props) => {
             iconWidth={RfW(24)}
           />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
-            Upload The Required Documents and Schedule Your Interview
+            Schedule your Interview and Upload Required Documents
           </Text>
         </View>
 
@@ -233,7 +233,7 @@ const CertificationProcessSteps = (props) => {
             iconWidth={RfW(24)}
           />
           <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10), width: '80%' }]}>
-            Background Check by GuruQ team to verify credentials
+            Consent to Background Check
           </Text>
         </View>
 

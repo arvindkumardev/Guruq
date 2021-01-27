@@ -350,12 +350,12 @@ const PtStartScreen = (props) => {
             attemptExhausted && (
               <View style={{ marginTop: RfH(20), justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={[commonStyles.headingPrimaryText, { textAlign: 'center' }]}>
-                  {'All PT attempts Exhausted.\n Contact the customer support.'}
+                  You have No Attempts Left. Contact the GuruQ Team for Help.
                 </Text>
                 <Button
                   onPress={() => navigation.navigate(NavigationRouteNames.CUSTOMER_CARE)}
                   style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(40), width: RfW(230) }]}>
-                  <Text style={commonStyles.textButtonPrimary}>Customer Support</Text>
+                  <Text style={commonStyles.textButtonPrimary}>Contact GuruQ</Text>
                 </Button>
               </View>
             )}

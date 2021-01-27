@@ -110,6 +110,7 @@ function ScheduleClass(props) {
   const tutorDetail = (item) => {
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
       tutorId: item.tutor.id,
+      currentOffering: item?.offering,
       parentOffering: item.offering?.parentOffering?.id,
       parentParentOffering: item.offering?.parentOffering?.parentOffering?.id,
       parentOfferingName: item.offering?.parentOffering?.displayName,

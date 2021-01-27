@@ -162,6 +162,7 @@ function ScheduledClassDetails(props) {
     const selectedOffering = classData?.classEntity?.offering;
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
       tutorId: classData?.classEntity.tutor.id,
+      currentOffering: selectedOffering,
       parentOffering: selectedOffering?.parentOffering?.id,
       parentParentOffering: selectedOffering?.parentOffering?.parentOffering?.id,
       parentOfferingName: selectedOffering?.displayName,

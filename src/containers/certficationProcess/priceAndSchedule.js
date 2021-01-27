@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
@@ -45,9 +45,7 @@ const PriceAndSchedule = () => {
       />
       {openMenu && <ActionModal isVisible={openMenu} closeMenu={() => setOpenMenu(false)} />}
       <View style={{ paddingHorizontal: RfW(20), paddingVertical: RfH(15) }}>
-        <Text style={commonStyles.headingPrimaryText}>
-          Mark your availability and Update price metrics to make your course visible to students.
-        </Text>
+        <Text style={commonStyles.headingPrimaryText}>Mark your Availability and Update your Price/hour.</Text>
       </View>
       <TouchableOpacity
         style={[styles.interviewCard, { borderLeftColor: Colors.orange }]}
@@ -98,6 +96,12 @@ const PriceAndSchedule = () => {
           </View>
         </View>
       </TouchableOpacity>
+
+      <View style={{ marginTop: RfH(34) }}>
+        <Text style={commonStyles.headingMutedText}>
+          Note: Students will not be able to book classes with you without this information.
+        </Text>
+      </View>
     </View>
   );
 };

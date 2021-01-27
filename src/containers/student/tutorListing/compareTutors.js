@@ -97,6 +97,7 @@ function compareTutors(props) {
     console.log("item",item)
     navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
       tutorId: item.id,
+      currentOffering: item.offering,
       parentOffering: item.offering?.parentOffering?.id,
       parentParentOffering: item.offering?.parentOffering?.parentOffering?.id,
       parentOfferingName: item.offering?.parentOffering?.displayName,
