@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { Button, Input, Item, Label } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { isEmpty, omit } from 'lodash';
+import { isEmpty } from 'lodash';
 import {
   CustomCheckBox,
   CustomRadioButton,
@@ -57,7 +57,7 @@ function AddEditEducation(props) {
 
   useEffect(() => {
     if (!isEmpty(educationDetail) && !isEmpty(degree)) {
-      setSchoolName(educationDetail.school.name);
+      setSchoolName(educationDetail.school?.name);
       setStartDate(educationDetail.startDate);
       setEndDate(educationDetail.endDate);
       setIsCurrent(educationDetail.isCurrent);
@@ -66,15 +66,15 @@ function AddEditEducation(props) {
       setEduId(educationDetail?.id);
       setSelectedDegree(degree.find((item) => item.id === educationDetail?.degree?.id));
       if (educationDetail?.board) {
-        setSelectedBoard(boards.find((item) => item.displayName === educationDetail?.board.toUpperCase()));
-        const board = boards.find((item) => item.displayName === educationDetail?.board.toUpperCase());
+        setSelectedBoard(boards.find((item) => item.displayName === educationDetail?.board?.toUpperCase()));
+        const board = boards.find((item) => item.displayName === educationDetail?.board?.toUpperCase());
         if (board) {
           const classes = offeringMasterData.filter((item) => item?.parentOffering?.id === board?.id);
           setSelectedClass(classes.find((item) => item.name === educationDetail?.grade));
         }
         if (educationDetail.fieldOfStudy) {
           setSelectedStream(
-            highSchoolStreams.find((item) => item.value.toUpperCase() === educationDetail?.fieldOfStudy.toUpperCase())
+            highSchoolStreams.find((item) => item.value.toUpperCase() === educationDetail?.fieldOfStudy?.toUpperCase())
           );
         }
       }

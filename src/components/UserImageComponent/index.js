@@ -3,11 +3,11 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useReactiveVar } from '@apollo/client';
-import { getNameInitials, RfH } from '../../utils/helpers';
+import { getFileUrl, getNameInitials, RfH } from '../../utils/helpers';
 import styles from '../../containers/student/pytn/styles';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
-import { ATTACHMENT_PREVIEW_URL, STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import CustomImage from '../CustomImage';
 import { userDetails } from '../../apollo/cache';
 
@@ -20,7 +20,7 @@ const UserImageComponent = (props) => {
         <CustomImage
           imageWidth={RfH(width)}
           imageHeight={RfH(height)}
-          image={`${ATTACHMENT_PREVIEW_URL}${userInfo?.profileImage?.original}`}
+          image={getFileUrl(userInfo?.profileImage?.original)}
           imageResizeMode="cover"
           styling={styling}
         />

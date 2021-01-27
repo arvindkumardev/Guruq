@@ -192,7 +192,7 @@ export const getSubjectIcons = (name, disabled = false) => {
 };
 
 export const formatDate = (date, format) => {
-  return moment(date).format(format);
+  return date && format ? moment(date).format(format) : '';
 };
 
 export const convertDateTime = (date) => {
@@ -221,11 +221,11 @@ export const print24TimeWithTimeZone = (date) => {
 };
 
 export const startOfDay = (date) => {
-  return `${moment(date).format('YYYY-MM-DDT00:00:00')}Z`;
+  return date ? `${moment(date).format('YYYY-MM-DDT00:00:00')}Z` : '';
 };
 
 export const endOfDay = (date) => {
-  return `${moment(date).format('YYYY-MM-DDT23:59:59')}Z`;
+  return date ? `${moment(date).format('YYYY-MM-DDT23:59:59')}Z` : '';
 };
 
 export const isValidMobile = (mobileObject) => {
