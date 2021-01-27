@@ -2,7 +2,7 @@ import { Image, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import commonStyles from '../../theme/styles';
-import { Images } from '../../theme';
+import { Colors, Images } from '../../theme';
 import { RfH, RfW, storeData } from '../../utils/helpers';
 import { LOCAL_STORAGE_DATA_KEY } from '../../utils/constants';
 import styles from './style';
@@ -96,27 +96,41 @@ function UserTypeSelector() {
           <Text style={styles.helloText}>Hello</Text>
           <Text style={styles.userName}>{userInfo.firstName}</Text>
         </View>
-        <Text style={styles.subHeading}>Continue as </Text>
+        <Text style={[styles.subHeading, { marginBottom: RfH(17) }]}>Continue as a</Text>
 
-        <View style={{ marginTop: RfH(16) }}>
-          <TouchableOpacity onPress={() => createStudent()}>
-            <Image
-              style={{ alignSelf: 'center', marginTop: 16, width: RfW(150), height: RfH(150) }}
-              source={Images.student}
-            />
-          </TouchableOpacity>
-        </View>
-        <Text style={[styles.subHeading, { marginTop: RfH(16) }]}>Student</Text>
+        <TouchableOpacity
+          onPress={() => createStudent()}
+          style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: RfH(17) }}>
+          <View
+            style={{
+              borderRadius: RfH(16),
+              backgroundColor: Colors.white,
+              width: 210,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              paddingBottom: RfH(17),
+            }}>
+            <Image style={{ alignSelf: 'center', width: RfW(120), height: RfH(120) }} source={Images.student} />
+            <Text style={[styles.subHeading, { marginTop: RfH(17) }]}>Student</Text>
+          </View>
+        </TouchableOpacity>
 
-        <View style={{ marginTop: RfH(48) }}>
-          <TouchableOpacity onPress={createTutor}>
-            <Image
-              style={{ alignSelf: 'center', marginTop: 12, width: RfW(150), height: RfH(150) }}
-              source={Images.tutor}
-            />
-          </TouchableOpacity>
-        </View>
-        <Text style={[styles.subHeading, { marginTop: RfH(16) }]}>Tutor</Text>
+        <TouchableOpacity
+          onPress={() => createTutor()}
+          style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: RfH(34) }}>
+          <View
+            style={{
+              borderRadius: RfH(16),
+              backgroundColor: Colors.white,
+              width: 210,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              paddingBottom: RfH(17),
+            }}>
+            <Image style={{ alignSelf: 'center', width: RfW(120), height: RfH(120) }} source={Images.tutor} />
+            <Text style={[styles.subHeading, { marginTop: RfH(17) }]}>Tutor</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </>
   );

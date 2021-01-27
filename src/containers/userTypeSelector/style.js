@@ -10,8 +10,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    marginTop: RfH(44),
-    height: RfH(98),
+    marginTop: RfH(88),
   },
   helloText: {
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
   },
   subHeading: {
     textAlign: 'center',
-    marginTop: RfH(44),
+    marginTop: RfH(34),
     fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
     color: Colors.black,
     fontFamily: Fonts.semiBold,
