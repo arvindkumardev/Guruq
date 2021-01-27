@@ -45,10 +45,6 @@ const Images = {
   confirmed_booking: require('../assets/images/confirmed_booking.png'),
   cross: require('../assets/images/cross.png'),
   customer_care: require('../assets/images/customer-care.png'),
-  dash_img1: require('../assets/images/dash-img.png'),
-  dash_img2: require('../assets/images/dash-img2.png'),
-  dash_img3: require('../assets/images/dash-img3.png'),
-  dash_img4: require('../assets/images/dash-img4.png'),
   delete: require('../assets/images/delete.png'),
   demo: require('../assets/images/demo.png'),
   discount: require('../assets/images/discount.png'),
@@ -56,7 +52,6 @@ const Images = {
   document_upload: require('../assets/images/document_upload.png'),
   dots: require('../assets/images/dots.png'),
   expand: require('../assets/images/dropdown.png'),
-  earn: require('../assets/images/earn.png'),
   edit: require('../assets/images/edit.png'),
   education_b: require('../assets/images/education-b.png'),
   education_g: require('../assets/images/education-g.png'),
@@ -216,7 +211,6 @@ const Images = {
 
   arrow_down: require('../assets/images/arrow-down.png'),
 
-  dash_tutor_img: require('../assets/images/dash_tutor_img.png'),
   b_star: require('../assets/images/b_star.png'),
   coin: require('../assets/images/coin.png'),
   nopytn: require('../assets/images/nopytn.png'),
