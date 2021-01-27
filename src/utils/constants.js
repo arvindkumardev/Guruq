@@ -84,3 +84,5 @@ export const IOS_APP_URL = 'https://apps.apple.com/us/app/guruq/id1497650705';
 export const ANDROID_APP_URL = 'https://play.google.com/store/apps/details?id=com.guruq&hl=en_IN';
 export const APP_BUILD_VERSION = DeviceInfo.getBuildNumber();
 export const APP_VERSION = DeviceInfo.getVersion();
+
+export const GURUQ_WHATSAPP_NUMBER = '7375006806';
