@@ -43,7 +43,7 @@ function Refund(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        alertBox('Order cancelled successfully', '', {
+        alertBox('Booking cancelled successfully', '', {
           positiveText: 'Ok',
           onPositiveClick: () => {
             setShowCancelReason(false);
@@ -91,7 +91,7 @@ function Refund(props) {
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(32) }} />
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Order Details</Text>
+            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Booking Details</Text>
             <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
               ₹ {orderData?.price ? parseFloat(orderData?.price).toFixed(2) : '0.00'}
             </Text>

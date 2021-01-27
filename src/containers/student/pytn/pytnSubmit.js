@@ -223,7 +223,7 @@ function PytnSubmit(props) {
             {/* </Item> */}
             <Item floatingLabel style={{ flex: 0.48, marginLeft: RfW(8) }}>
               <Input
-                placeholder="Max Price per hour"
+                placeholder="Max Price/Hour"
                 value={maxPrice}
                 onChangeText={(text) => setMaxPrice(text)}
                 keyboardType="numeric"

@@ -1,4 +1,4 @@
-import { Linking, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Linking, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useReactiveVar } from '@apollo/client';
@@ -8,7 +8,7 @@ import { Colors, Fonts, Images } from '../../theme';
 import { alertBox, RfH, RfW } from '../../utils/helpers';
 import NavigationRouteNames from '../../routes/screenNames';
 import IconWrapper from '../../components/IconWrapper';
-import { STUDENT_FAQ_URL, TUTOR_FAQ_URL } from '../../utils/constants';
+import { GURUQ_WHATSAPP_NUMBER, STUDENT_FAQ_URL, TUTOR_FAQ_URL } from '../../utils/constants';
 import { userDetails } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
 
@@ -18,7 +18,7 @@ function CustomerCare() {
   const userInfo = useReactiveVar(userDetails);
 
   const openWhatsApp = () => {
-    const url = `whatsapp://send?text=Hi&phone=919891587300`;
+    const url = `whatsapp://send?text=Hi&phone=91${GURUQ_WHATSAPP_NUMBER}`;
     Linking.openURL(url)
       .then((data) => {
         console.log(`WhatsApp Opened successfully ${data}`); // <---Success
@@ -52,7 +52,7 @@ function CustomerCare() {
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(16) }]} />
         <TouchableOpacity onPress={openWhatsApp}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.regularPrimaryText}>+91-9891587300</Text>
+            <Text style={commonStyles.regularPrimaryText}>+91-{GURUQ_WHATSAPP_NUMBER}</Text>
             <IconButtonWrapper iconWidth={RfH(20)} iconHeight={RfH(20)} iconImage={Images.whatsapp} />
           </View>
         </TouchableOpacity>

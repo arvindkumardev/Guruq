@@ -76,7 +76,7 @@ function StudyAreaSelector() {
       <ScreenHeader label="Select Your Study Area" homeIcon horizontalPadding={RfW(16)} />
       <View style={{ paddingHorizontal: RfW(16) }}>
         <Text style={styles.subHeading}>Select Your Study Area</Text>
-        <Text style={styles.subHeadingText}>This will help us to find the best tutors for you</Text>
+        <Text style={styles.subHeadingText}>This will help us find the best tutors for you</Text>
         <View style={[styles.areaParentView, { marginTop: RfH(50) }]}>
           <FlatList
             data={offeringMasterData && offeringMasterData.filter((s) => s.level === 0)}

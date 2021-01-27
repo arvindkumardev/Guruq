@@ -75,7 +75,7 @@ function OrderDetails(props) {
     if (!isEmpty(cancelSummary)) {
       setMenuItem([
         {
-          label: 'Cancel Order',
+          label: 'Cancel Booking',
           handler: openCancelConfirm,
           isEnabled: cancelSummary.refund > 0,
         },
@@ -189,7 +189,7 @@ function OrderDetails(props) {
     <View style={{ flex: 1, backgroundColor: Colors.white }}>
       <Loader isLoading={loadingScheduledClasses || cancellationSummaryLoading} />
       <ScreenHeader
-        label="Order Details"
+        label="Booking Details"
         homeIcon
         horizontalPadding={RfW(16)}
         showRightIcon

@@ -379,7 +379,7 @@ function Profile(props) {
             <View style={styles.menuItemParentView}>
               <Text style={styles.menuItemPrimaryText}>Refer A Friend</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.menuItemSecondaryText}>
-                Send invitation to friend and earn
+                Send invitation to friend and earn Q-Points
               </Text>
             </View>
           </TouchableOpacity>

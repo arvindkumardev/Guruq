@@ -443,7 +443,7 @@ function ScheduledClassDetails(props) {
               <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 1 }]}>
                 <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
                 <Text style={commonStyles.mediumMutedText}>
-                  {classData?.classEntity?.students?.length} participants to join the Class
+                  {classData?.classEntity?.students?.length} participant(s) to join the Class
                 </Text>
               </View>
               {/* {classData?.isMessagingAllowed && ( */}
