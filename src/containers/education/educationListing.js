@@ -92,6 +92,10 @@ function EducationListing() {
     navigation.navigate(NavigationRouteNames.ADD_EDIT_EDUCATION, { detail: item });
   };
 
+  const isEditAllowed = () => {
+    return isStudent();
+  };
+
   const renderEducation = (item) => (
     <View style={{ marginTop: RfH(20) }}>
       <View style={commonStyles.horizontalChildrenStartView}>
@@ -120,14 +124,17 @@ function EducationListing() {
           </Text>
         </View>
       </View>
-      <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-        <TouchableWithoutFeedback onPress={() => handleAddEditEducation(item)}>
-          <Text style={{ color: Colors.orange }}>Edit</Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
-          <Text style={{ color: Colors.orange }}>Delete</Text>
-        </TouchableWithoutFeedback>
-      </View>
+
+      {isEditAllowed() && (
+        <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
+          <TouchableWithoutFeedback onPress={() => handleAddEditEducation(item)}>
+            <Text style={{ color: Colors.orange }}>Edit</Text>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
+            <Text style={{ color: Colors.orange }}>Delete</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      )}
       <View style={commonStyles.lineSeparator} />
     </View>
   );
@@ -139,7 +146,7 @@ function EducationListing() {
           homeIcon
           label="Education"
           horizontalPadding={RfW(16)}
-          showRightIcon
+          showRightIcon={isEditAllowed}
           rightIcon={Images.add}
           onRightIconClick={handleAddEditEducation}
         />

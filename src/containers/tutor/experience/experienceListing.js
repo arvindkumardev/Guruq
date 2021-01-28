@@ -90,14 +90,16 @@ function ExperienceListing() {
           </Text>
         </View>
       </View>
-      <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-        <TouchableWithoutFeedback onPress={() => handleAddEditExperience(item)}>
-          <Text style={{ color: Colors.orange }}>Edit</Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
-          <Text style={{ color: Colors.orange }}>Delete</Text>
-        </TouchableWithoutFeedback>
-      </View>
+      {false && (
+        <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
+          <TouchableWithoutFeedback onPress={() => handleAddEditExperience(item)}>
+            <Text style={{ color: Colors.orange }}>Edit</Text>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
+            <Text style={{ color: Colors.orange }}>Delete</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      )}
       <View style={commonStyles.lineSeparator} />
     </View>
   );
@@ -109,7 +111,7 @@ function ExperienceListing() {
           homeIcon
           label="Manage Experiences"
           horizontalPadding={RfW(16)}
-          showRightIcon
+          showRightIcon={false}
           rightIcon={Images.add}
           onRightIconClick={handleAddEditExperience}
         />

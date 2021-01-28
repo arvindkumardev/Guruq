@@ -33,6 +33,10 @@ function PersonalDetails() {
     }
   };
 
+  const isEditAllowed = () => {
+    return userInfo.type === UserTypeEnum.STUDENT.label;
+  };
+
   return (
     <>
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
@@ -41,9 +45,9 @@ function PersonalDetails() {
           label={isEditClicked ? 'Edit Personal Details' : 'Personal Details'}
           horizontalPadding={RfW(16)}
           showRightText
-          rightText={isEditClicked ? '' : 'EDIT'}
+          rightText={isEditClicked || isEditAllowed() ? '' : 'EDIT'}
           rightTextStyle={{ color: Colors.orangeRed, fontFamily: Fonts.semiBold }}
-          onRightTextClick={() => setIsEditClicked(true)}
+          onRightTextClick={() => (isEditAllowed() ? {} : setIsEditClicked(true))}
           lineVisible={false}
           handleBack={() => {
             if (isEditClicked) {
@@ -58,7 +62,7 @@ function PersonalDetails() {
             referenceType={userInfo.type}
             referenceId={userInfo.type === UserTypeEnum.STUDENT.label ? studentInfo.id : tutorInfo.id}
             userInfo={userInfo}
-            isUpdateAllowed={isEditClicked}
+            isUpdateAllowed={isEditClicked || isEditAllowed()}
             onUpdate={(data) => updateDetails(data)}
           />
         </View>

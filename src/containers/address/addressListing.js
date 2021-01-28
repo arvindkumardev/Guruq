@@ -105,6 +105,10 @@ function AddressListing() {
     navigation.navigate(routeNames.ADD_EDIT_ADDRESS, { address });
   };
 
+  const isEditAllowed = () => {
+    return isStudent();
+  };
+
   const renderAddress = (item) => (
     <View>
       <View style={commonStyles.horizontalChildrenStartView}>
@@ -139,14 +143,16 @@ function AddressListing() {
             <Text style={commonStyles.mediumMutedText}>{item.landmark}</Text>
           </View>
 
-          <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>
-            <TouchableWithoutFeedback onPress={() => handleAddEditAddress(item)}>
-              <Text style={{ color: Colors.orangeRed }}>EDIT</Text>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
-              <Text style={{ color: Colors.orangeRed, marginLeft: RfW(16) }}>DELETE</Text>
-            </TouchableWithoutFeedback>
-          </View>
+          {isEditAllowed() && (
+            <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>
+              <TouchableWithoutFeedback onPress={() => handleAddEditAddress(item)}>
+                <Text style={{ color: Colors.orangeRed }}>EDIT</Text>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
+                <Text style={{ color: Colors.orangeRed, marginLeft: RfW(16) }}>DELETE</Text>
+              </TouchableWithoutFeedback>
+            </View>
+          )}
         </View>
       </View>
 
@@ -166,7 +172,7 @@ function AddressListing() {
           homeIcon
           label="Manage Address"
           horizontalPadding={RfW(16)}
-          showRightIcon
+          showRightIcon={isEditAllowed}
           onRightIconClick={handleAddEditAddress}
           rightIcon={Images.add}
         />

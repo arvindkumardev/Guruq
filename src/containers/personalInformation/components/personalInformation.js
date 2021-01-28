@@ -200,15 +200,17 @@ function PersonalInformation(props) {
           <View style={{ height: RfH(24) }} />
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <UserImageComponent height={100} width={100} fontSize={30} styling={{ borderRadius: RfH(80) }} />
-            <IconButtonWrapper
-              iconImage={Images.editPicture}
-              iconWidth={RfW(25)}
-              iconHeight={RfH(25)}
-              containerStyling={{ position: 'absolute', left: -RfW(25), top: RfH(5) }}
-              submitFunction={() => {
-                setIsUploadModalOpen(true);
-              }}
-            />
+            {isUpdateAllowed && (
+              <IconButtonWrapper
+                iconImage={Images.editPicture}
+                iconWidth={RfW(25)}
+                iconHeight={RfH(25)}
+                containerStyling={{ position: 'absolute', left: -RfW(25), top: RfH(5) }}
+                submitFunction={() => {
+                  setIsUploadModalOpen(true);
+                }}
+              />
+            )}
           </View>
           <View style={{ height: RfH(24) }} />
           {isUpdateAllowed ? (
