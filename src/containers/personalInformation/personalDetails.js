@@ -33,9 +33,10 @@ function PersonalDetails() {
     }
   };
 
-  const isEditAllowed = () => {
-    return userInfo.type === UserTypeEnum.STUDENT.label || (tutorInfo && !tutorInfo.certified);
-  };
+  const isEditAllowed =
+    userInfo.type === UserTypeEnum.STUDENT.label ||
+    (tutorInfo && !tutorInfo.certified) ||
+    (tutorInfo && !tutorInfo.user.onBoarded);
 
   return (
     <>
@@ -44,7 +45,7 @@ function PersonalDetails() {
           homeIcon
           label={isEditClicked ? 'Edit Personal Details' : 'Personal Details'}
           horizontalPadding={RfW(16)}
-          showRightText={userInfo.type === UserTypeEnum.STUDENT.label || (tutorInfo && !tutorInfo.certified)}
+          showRightText={isEditAllowed}
           rightText={isEditClicked ? '' : 'EDIT'}
           rightTextStyle={{ color: Colors.orangeRed, fontFamily: Fonts.semiBold }}
           onRightTextClick={() => setIsEditClicked(true)}
@@ -62,7 +63,7 @@ function PersonalDetails() {
             referenceType={userInfo.type}
             referenceId={userInfo.type === UserTypeEnum.STUDENT.label ? studentInfo.id : tutorInfo.id}
             userInfo={userInfo}
-            isUpdateAllowed={isEditClicked || isEditAllowed()}
+            isUpdateAllowed={isEditClicked && isEditAllowed}
             onUpdate={(data) => updateDetails(data)}
           />
         </View>

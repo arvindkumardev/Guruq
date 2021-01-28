@@ -14,6 +14,7 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_EXPERIENCE_LIST } from './experience.query';
 import { DELETE_TUTOR_EXPERIENCE } from './experience.mutation';
 import { tutorDetails } from '../../../apollo/cache';
+import { UserTypeEnum } from '../../../common/userType.enum';
 
 function ExperienceListing() {
   const navigation = useNavigation();
@@ -73,9 +74,7 @@ function ExperienceListing() {
     navigation.navigate(NavigationRouteNames.ADD_EDIT_EXPERIENCE, { detail: item || {} });
   };
 
-  const isEditAllowed = () => {
-    return tutorInfo && !tutorInfo.certified;
-  };
+  const isEditAllowed = (tutorInfo && !tutorInfo.certified) || (tutorInfo && !tutorInfo.user.onBoarded);
 
   const renderExperiences = (item) => (
     <View style={{ marginTop: RfH(20) }}>
@@ -98,7 +97,7 @@ function ExperienceListing() {
         </View>
       </View>
       <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-        {isEditAllowed() && (
+        {isEditAllowed && (
           <>
             <TouchableWithoutFeedback onPress={() => handleAddEditExperience(item)}>
               <Text style={{ color: Colors.orange }}>Edit</Text>
@@ -120,7 +119,7 @@ function ExperienceListing() {
           homeIcon
           label="Manage Experiences"
           horizontalPadding={RfW(16)}
-          showRightIcon={tutorInfo && !tutorInfo.certified}
+          showRightIcon={isEditAllowed}
           rightIcon={Images.add}
           onRightIconClick={handleAddEditExperience}
         />

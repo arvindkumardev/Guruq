@@ -106,9 +106,10 @@ function AddressListing() {
     navigation.navigate(routeNames.ADD_EDIT_ADDRESS, { address });
   };
 
-  const isEditAllowed = () => {
-    return isStudent || (tutorInfo && !tutorInfo.certified);
-  };
+  const isEditAllowed =
+    userTypeVal === UserTypeEnum.STUDENT.label ||
+    (tutorInfo && !tutorInfo.certified) ||
+    (tutorInfo && !tutorInfo.user.onBoarded);
 
   const renderAddress = (item) => (
     <View>
@@ -145,7 +146,7 @@ function AddressListing() {
           </View>
 
           <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>
-            {isEditAllowed() && (
+            {isEditAllowed && (
               <>
                 <TouchableWithoutFeedback onPress={() => handleAddEditAddress(item)}>
                   <Text style={{ color: Colors.orangeRed }}>EDIT</Text>
@@ -175,7 +176,7 @@ function AddressListing() {
           homeIcon
           label="Manage Addresses"
           horizontalPadding={RfW(16)}
-          showRightIcon={isStudent || (tutorInfo && !tutorInfo.certified)}
+          showRightIcon={isEditAllowed}
           onRightIconClick={handleAddEditAddress}
           rightIcon={Images.add}
         />

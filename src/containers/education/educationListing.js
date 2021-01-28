@@ -94,9 +94,10 @@ function EducationListing() {
     navigation.navigate(NavigationRouteNames.ADD_EDIT_EDUCATION, { detail: item });
   };
 
-  const isEditAllowed = () => {
-    return isStudent || (tutorInfo && !tutorInfo.certified);
-  };
+  const isEditAllowed =
+    userTypeVal === UserTypeEnum.STUDENT.label ||
+    (tutorInfo && !tutorInfo.certified) ||
+    (tutorInfo && !tutorInfo.user.onBoarded);
 
   const renderEducation = (item) => (
     <View style={{ marginTop: RfH(20) }}>
@@ -128,7 +129,7 @@ function EducationListing() {
       </View>
 
       <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-        {isEditAllowed() && (
+        {isEditAllowed && (
           <>
             <TouchableWithoutFeedback onPress={() => handleAddEditEducation(item)}>
               <Text style={{ color: Colors.orange }}>Edit</Text>
@@ -150,7 +151,7 @@ function EducationListing() {
           homeIcon
           label="Education"
           horizontalPadding={RfW(16)}
-          showRightIcon={isStudent || (tutorInfo && !tutorInfo.certified)}
+          showRightIcon={isEditAllowed}
           rightIcon={Images.add}
           onRightIconClick={handleAddEditEducation}
         />
