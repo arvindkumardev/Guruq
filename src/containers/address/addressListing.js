@@ -4,9 +4,8 @@ import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
-import Badge from '@react-navigation/bottom-tabs/src/views/Badge';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
-import { userType } from '../../apollo/cache';
+import { tutorDetails, userType } from '../../apollo/cache';
 import commonStyles from '../../theme/styles';
 import { Colors, Fonts, Images } from '../../theme';
 import { alertBox, RfH, RfW } from '../../utils/helpers';
@@ -24,6 +23,8 @@ function AddressListing() {
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
   const [addresses, setAddresses] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
+
+  const tutorInfo = useReactiveVar(tutorDetails);
 
   const [getStudentDetails, { loading: studentDetailLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -106,7 +107,7 @@ function AddressListing() {
   };
 
   const isEditAllowed = () => {
-    return isStudent();
+    return isStudent || (tutorInfo && !tutorInfo.certified);
   };
 
   const renderAddress = (item) => (
@@ -143,16 +144,18 @@ function AddressListing() {
             <Text style={commonStyles.mediumMutedText}>{item.landmark}</Text>
           </View>
 
-          {isEditAllowed() && (
-            <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>
-              <TouchableWithoutFeedback onPress={() => handleAddEditAddress(item)}>
-                <Text style={{ color: Colors.orangeRed }}>EDIT</Text>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
-                <Text style={{ color: Colors.orangeRed, marginLeft: RfW(16) }}>DELETE</Text>
-              </TouchableWithoutFeedback>
-            </View>
-          )}
+          <View style={[commonStyles.horizontalChildrenView, { margin: RfH(8) }]}>
+            {isEditAllowed() && (
+              <>
+                <TouchableWithoutFeedback onPress={() => handleAddEditAddress(item)}>
+                  <Text style={{ color: Colors.orangeRed }}>EDIT</Text>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
+                  <Text style={{ color: Colors.orangeRed, marginLeft: RfW(16) }}>DELETE</Text>
+                </TouchableWithoutFeedback>
+              </>
+            )}
+          </View>
         </View>
       </View>
 
@@ -170,9 +173,9 @@ function AddressListing() {
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader
           homeIcon
-          label="Manage Address"
+          label="Manage Addresses"
           horizontalPadding={RfW(16)}
-          showRightIcon={isEditAllowed}
+          showRightIcon={isStudent || (tutorInfo && !tutorInfo.certified)}
           onRightIconClick={handleAddEditAddress}
           rightIcon={Images.add}
         />

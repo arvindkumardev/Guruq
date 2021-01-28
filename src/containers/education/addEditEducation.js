@@ -157,9 +157,10 @@ function AddEditEducation(props) {
         }),
         ...(eduId && { id: eduId }),
       };
+
       if (educationType === 0) {
-        dto.board = selectedBoard.name;
-        dto.grade = selectedClass.name;
+        dto.board = selectedBoard.displayName;
+        dto.grade = selectedClass.displayName;
         if (selectedClass.name === 'Class 11' || selectedClass.name === 'Class 12') {
           // dto.subjects = selectedStream.label;
           dto.fieldOfStudy = selectedStream.label;

@@ -6,7 +6,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { startCase } from 'lodash';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
-import { userType } from '../../apollo/cache';
+import { tutorDetails, userType } from '../../apollo/cache';
 import commonStyles from '../../theme/styles';
 import { Colors, Images } from '../../theme';
 import { alertBox, printDate, printYear, RfH, RfW } from '../../utils/helpers';
@@ -23,6 +23,8 @@ function EducationListing() {
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
   const [educationDetails, setEducationDetails] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
+
+  const tutorInfo = useReactiveVar(tutorDetails);
 
   const [getStudentDetails, { loading: studentDetailLoading }] = useLazyQuery(GET_STUDENT_EDUCATION_DETAILS, {
     fetchPolicy: 'no-cache',
@@ -93,7 +95,7 @@ function EducationListing() {
   };
 
   const isEditAllowed = () => {
-    return isStudent();
+    return isStudent || (tutorInfo && !tutorInfo.certified);
   };
 
   const renderEducation = (item) => (
@@ -125,16 +127,18 @@ function EducationListing() {
         </View>
       </View>
 
-      {isEditAllowed() && (
-        <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-          <TouchableWithoutFeedback onPress={() => handleAddEditEducation(item)}>
-            <Text style={{ color: Colors.orange }}>Edit</Text>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
-            <Text style={{ color: Colors.orange }}>Delete</Text>
-          </TouchableWithoutFeedback>
-        </View>
-      )}
+      <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
+        {isEditAllowed() && (
+          <>
+            <TouchableWithoutFeedback onPress={() => handleAddEditEducation(item)}>
+              <Text style={{ color: Colors.orange }}>Edit</Text>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
+              <Text style={{ color: Colors.orange }}>Delete</Text>
+            </TouchableWithoutFeedback>
+          </>
+        )}
+      </View>
       <View style={commonStyles.lineSeparator} />
     </View>
   );
@@ -146,7 +150,7 @@ function EducationListing() {
           homeIcon
           label="Education"
           horizontalPadding={RfW(16)}
-          showRightIcon={isEditAllowed}
+          showRightIcon={isStudent || (tutorInfo && !tutorInfo.certified)}
           rightIcon={Images.add}
           onRightIconClick={handleAddEditEducation}
         />

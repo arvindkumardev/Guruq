@@ -34,7 +34,7 @@ function PersonalDetails() {
   };
 
   const isEditAllowed = () => {
-    return userInfo.type === UserTypeEnum.STUDENT.label;
+    return userInfo.type === UserTypeEnum.STUDENT.label || (tutorInfo && !tutorInfo.certified);
   };
 
   return (
@@ -44,10 +44,10 @@ function PersonalDetails() {
           homeIcon
           label={isEditClicked ? 'Edit Personal Details' : 'Personal Details'}
           horizontalPadding={RfW(16)}
-          showRightText
-          rightText={isEditClicked || isEditAllowed() ? '' : 'EDIT'}
+          showRightText={userInfo.type === UserTypeEnum.STUDENT.label || (tutorInfo && !tutorInfo.certified)}
+          rightText={isEditClicked ? '' : 'EDIT'}
           rightTextStyle={{ color: Colors.orangeRed, fontFamily: Fonts.semiBold }}
-          onRightTextClick={() => (isEditAllowed() ? {} : setIsEditClicked(true))}
+          onRightTextClick={() => setIsEditClicked(true)}
           lineVisible={false}
           handleBack={() => {
             if (isEditClicked) {

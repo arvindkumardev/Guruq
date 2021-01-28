@@ -1,6 +1,6 @@
 import { FlatList, Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
@@ -13,12 +13,15 @@ import NavigationRouteNames from '../../../routes/screenNames';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { GET_EXPERIENCE_LIST } from './experience.query';
 import { DELETE_TUTOR_EXPERIENCE } from './experience.mutation';
+import { tutorDetails } from '../../../apollo/cache';
 
 function ExperienceListing() {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const [experienceList, setExperienceList] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
+
+  const tutorInfo = useReactiveVar(tutorDetails);
 
   const [getExperienceList, { loading: experienceListLoading }] = useLazyQuery(GET_EXPERIENCE_LIST, {
     fetchPolicy: 'no-cache',
@@ -70,6 +73,10 @@ function ExperienceListing() {
     navigation.navigate(NavigationRouteNames.ADD_EDIT_EXPERIENCE, { detail: item || {} });
   };
 
+  const isEditAllowed = () => {
+    return tutorInfo && !tutorInfo.certified;
+  };
+
   const renderExperiences = (item) => (
     <View style={{ marginTop: RfH(20) }}>
       <View style={commonStyles.horizontalChildrenStartView}>
@@ -90,16 +97,18 @@ function ExperienceListing() {
           </Text>
         </View>
       </View>
-      {false && (
-        <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
-          <TouchableWithoutFeedback onPress={() => handleAddEditExperience(item)}>
-            <Text style={{ color: Colors.orange }}>Edit</Text>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
-            <Text style={{ color: Colors.orange }}>Delete</Text>
-          </TouchableWithoutFeedback>
-        </View>
-      )}
+      <View style={[commonStyles.horizontalChildrenEqualSpaceView, { marginTop: RfH(16), marginBottom: RfH(8) }]}>
+        {isEditAllowed() && (
+          <>
+            <TouchableWithoutFeedback onPress={() => handleAddEditExperience(item)}>
+              <Text style={{ color: Colors.orange }}>Edit</Text>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => handleDeleteConfirmation(item)}>
+              <Text style={{ color: Colors.orange }}>Delete</Text>
+            </TouchableWithoutFeedback>
+          </>
+        )}
+      </View>
       <View style={commonStyles.lineSeparator} />
     </View>
   );
@@ -111,7 +120,7 @@ function ExperienceListing() {
           homeIcon
           label="Manage Experiences"
           horizontalPadding={RfW(16)}
-          showRightIcon={false}
+          showRightIcon={tutorInfo && !tutorInfo.certified}
           rightIcon={Images.add}
           onRightIconClick={handleAddEditExperience}
         />

@@ -86,3 +86,6 @@ export const APP_BUILD_VERSION = DeviceInfo.getBuildNumber();
 export const APP_VERSION = DeviceInfo.getVersion();
 
 export const GURUQ_WHATSAPP_NUMBER = '7375006806';
+
+export const MIN_AGE_STUDENT = 5;
+export const MIN_AGE_TUTOR = 18;
