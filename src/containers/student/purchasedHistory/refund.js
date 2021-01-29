@@ -93,7 +93,7 @@ function Refund(props) {
           <View style={commonStyles.horizontalChildrenSpaceView}>
             <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Booking Details</Text>
             <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-              ₹ {orderData?.price ? parseFloat(orderData?.price).toFixed(2) : '0.00'}
+              ₹ {orderData?.price ? orderData?.price : '0'}
             </Text>
           </View>
           <Text style={commonStyles.mediumMutedText}>
