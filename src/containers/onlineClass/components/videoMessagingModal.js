@@ -97,13 +97,13 @@ const VideoMessagingModal = (props) => {
               callbacks.hideWhiteboardCallback();
             }
           }
-        } else {
+        } else if (!message.isSystem) {
           if (!chatMessageIds.includes(message.id)) {
             setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
             setChatMessageIds([...chatMessageIds, message.id]);
           }
 
-          if (!message.isSystem && callbacks.messageReceived) {
+          if (callbacks.messageReceived) {
             callbacks.messageReceived();
           }
         }

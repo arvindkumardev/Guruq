@@ -73,7 +73,7 @@ const qPointPayModal = (props) => {
                   marginTop: 0,
                 },
               ]}>
-              Apply Q Points
+              Apply Q-Points
             </Text>
           </View>
           <View>
@@ -109,7 +109,7 @@ const qPointPayModal = (props) => {
             <Text style={styles.tutorDetails}>₹{amount}</Text>
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={styles.tutorDetails}>Paid by Q points</Text>
+            <Text style={styles.tutorDetails}>Q-Points Redeemed</Text>
             <Text style={styles.tutorDetails}>₹{deductedAgaintQPoint}</Text>
           </View>
           <View style={[commonStyles.borderBottom, { marginVertical: RfH(16) }]} />

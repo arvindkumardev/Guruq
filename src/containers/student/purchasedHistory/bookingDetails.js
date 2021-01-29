@@ -248,7 +248,7 @@ function BookingDetails(props) {
               <View style={{ paddingHorizontal: RfW(8) }}>
                 <View style={{ height: RfH(16) }} />
                 <View style={commonStyles.horizontalChildrenSpaceView}>
-                  <Text style={commonStyles.mediumMutedText}>Q points Redeemed</Text>
+                  <Text style={commonStyles.mediumMutedText}>Q-Points Redeemed</Text>
                   <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
                     ₹{bookingData.pointsRedeemed ? printCurrency(bookingData.pointsRedeemed) : '0'}
                   </Text>

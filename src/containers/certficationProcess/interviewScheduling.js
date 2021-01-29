@@ -72,8 +72,8 @@ function InterviewScheduling() {
     getInterviewAvailability({
       variables: {
         availabilityDto: {
-          startDate: moment.utc(new Date(value)).format('YYYY-MM-DD'),
-          endDate: moment.utc(new Date(value)).add(1, 'day').format('YYYY-MM-DD'),
+          startDate: moment(new Date(value)).startOf('day'),
+          endDate: moment(new Date(value)).endOf('day'),
         },
       },
     });

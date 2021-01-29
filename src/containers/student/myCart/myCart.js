@@ -498,7 +498,7 @@ const MyCart = () => {
                   fontFamily: Fonts.semiBold,
                 },
               ]}>
-              Apply Q Points
+              Apply Q-Points
             </Text>
           </View>
 
@@ -570,7 +570,7 @@ const MyCart = () => {
         <>
           <View style={commonStyles.lineSeparator} />
           <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
-            <Text style={[commonStyles.mediumPrimaryText, { color: Colors.darkGrey }]}>Paid by Q points</Text>
+            <Text style={[commonStyles.mediumPrimaryText, { color: Colors.darkGrey }]}>Paid by Q-Points</Text>
             <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2, fontWeight: 'bold' }]}>
               - ₹{printCurrency(qPointsRedeemed) * 1}
             </Text>

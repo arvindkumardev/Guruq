@@ -239,7 +239,7 @@ function PytnRequests() {
                   commonStyles.regularMutedText,
                   { marginHorizontal: RfW(40), textAlign: 'center', marginTop: RfH(16) },
                 ]}>
-                No student has sent you a tuition request yet. Ensure your profile is up to date to recieve requests.
+                No student has sent you a tuition request yet. Ensure your profile is up to date to receive requests.
               </Text>
             </View>
           )}

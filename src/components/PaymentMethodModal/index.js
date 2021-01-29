@@ -350,7 +350,7 @@ const PaymentMethod = (props) => {
                 <View style={commonStyles.lineSeparator} />
                 <View style={[commonStyles.horizontalChildrenSpaceView, { height: 44, alignItems: 'center' }]}>
                   <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                    Paid by Q points
+                    Q-Points Redeemed
                   </Text>
                   <Text
                     style={{
