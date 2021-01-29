@@ -74,7 +74,7 @@ function Wallet() {
           <Text
             style={[
               commonStyles.headingPrimaryText,
-              { fontFamily: Fonts.semiBold, fontSize: RFValue(34, STANDARD_SCREEN_SIZE) },
+              { flex: 1, fontFamily: Fonts.semiBold, fontSize: RFValue(34, STANDARD_SCREEN_SIZE) },
             ]}>
             {printCurrency(balanceData.balance)}
           </Text>
@@ -82,15 +82,19 @@ function Wallet() {
         </View>
 
         <View style={commonStyles.verticallyCenterItemsView}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            {printCurrency(balanceData.earn)}
-          </Text>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+              {printCurrency(balanceData.earn)}
+            </Text>
+          </View>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Total Points</Text>
         </View>
         <View style={commonStyles.verticallyCenterItemsView}>
-          <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed, fontFamily: Fonts.semiBold }]}>
-            {printCurrency(balanceData.redeem)}
-          </Text>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed, fontFamily: Fonts.semiBold }]}>
+              {printCurrency(balanceData.redeem)}
+            </Text>
+          </View>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Points Redeemed</Text>
         </View>
       </View>
