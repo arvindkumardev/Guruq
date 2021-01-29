@@ -19,12 +19,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   centerImage: {
-    width: RfW(200),
-    height: RfH(428),
+    width: RfW(440),
+    height: RfH(450),
     // marginTop: RfH(44),
   },
   title: {
-    fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(30, STANDARD_SCREEN_SIZE),
     marginTop: RfH(22),
     textAlign: 'center',
     color: Colors.white,

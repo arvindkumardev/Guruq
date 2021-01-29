@@ -34,6 +34,7 @@ function MyClasses(props) {
   const [selectedSubject, setSelectedSubject] = useState({});
   const [openClassModal, setOpenClassModal] = useState(false);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
+
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -51,7 +52,6 @@ function MyClasses(props) {
       }
     },
   });
-
 
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',

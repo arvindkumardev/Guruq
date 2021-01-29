@@ -13,6 +13,7 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { getFullName, RfH, RfW } from '../../../utils/helpers';
 import { GET_CANCELLATION_SUMMARY, GET_SCHEDULED_CLASSES } from '../booking.query';
 import NavigationRouteNames from '../../../routes/screenNames';
+import routeNames from '../../../routes/screenNames';
 
 function OrderDetails(props) {
   const { route } = props;
@@ -47,6 +48,7 @@ function OrderDetails(props) {
         const scheduledClasses = data.getScheduledClasses.map((item) => ({
           startDate: item.startDate,
           classId: item.id,
+          uuid: item.uuid,
         }));
         const classes = tutorClasses;
         for (let i = 0; i < scheduledClasses.length; i++) {
@@ -155,7 +157,11 @@ function OrderDetails(props) {
 
   const renderClassView = (item, index) => (
     <View style={{ flex: 0.5, marginTop: RfH(16) }}>
-      <View
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() =>
+          item.isScheduled ? navigation.navigate(routeNames.SCHEDULED_CLASS_DETAILS, { uuid: item.uuid }) : {}
+        }
         style={{
           marginRight: RfW(8),
           marginLeft: RfW(8),
@@ -182,7 +188,7 @@ function OrderDetails(props) {
             </Text>
           </View>
         )}
-      </View>
+      </TouchableOpacity>
     </View>
   );
 

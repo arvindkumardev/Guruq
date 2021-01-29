@@ -118,7 +118,22 @@ function ScheduleClass(props) {
     });
   };
 
-  const renderTutorDetails = () => (
+  const renderOfferingBookingDetails = () => (
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={() =>
+        navigation.navigate(NavigationRouteNames.STUDENT.VIEW_BOOKING_DETAILS, { bookingId: classData?.order?.id })
+      }>
+      <View style={{ height: RfH(30) }} />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={commonStyles.headingMutedText}>Booking Reference</Text>
+        <Text style={commonStyles.headingPrimaryText}>{classData?.order?.orderId}</Text>
+      </View>
+      {/* <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} /> */}
+    </TouchableOpacity>
+  );
+
+  const renderOfferingDetails = () => (
     <View>
       <View style={{ height: RfH(30) }} />
       <Text style={commonStyles.headingPrimaryText}>
@@ -136,6 +151,11 @@ function ScheduleClass(props) {
         </Text>
       </View>
       <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
+    </View>
+  );
+
+  const renderTutorDetails = () => (
+    <View>
       <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(20) }]}>
         <TouchableOpacity
           style={commonStyles.horizontalChildrenStartView}
@@ -234,8 +254,10 @@ function ScheduleClass(props) {
   return (
     <>
       <Loader isLoading={scheduleLoading || loadingScheduledClasses} />
-      <ScreenHeader label="Schedule Class" homeIcon horizontalPadding={RfW(16)} />
+      <ScreenHeader label="Schedule Classes" homeIcon horizontalPadding={RfW(16)} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
+        {renderOfferingBookingDetails()}
+        {renderOfferingDetails()}
         {renderTutorDetails()}
         <View style={{ height: RfH(20) }} />
         <FlatList

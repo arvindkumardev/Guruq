@@ -211,6 +211,7 @@ export const SEARCH_ORDER_ITEMS = gql`
         order {
           id
           uuid
+          orderId
           orderStatus
           owner {
             id
