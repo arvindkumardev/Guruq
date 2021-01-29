@@ -203,7 +203,7 @@ function PytnRequests() {
         behavior={Platform.select({ android: '', ios: 'padding' })}
         // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
         enabled>
-        <ScreenHeader label="Student PYTN Requests" homeIcon horizontalPadding={RfW(16)} />
+        <ScreenHeader label="Student Tuition Requests" homeIcon horizontalPadding={RfW(16)} />
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
           {!isEmpty(requests) && (
             <FlatList
@@ -232,14 +232,14 @@ function PytnRequests() {
                   commonStyles.pageTitleThirdRow,
                   { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center', marginHorizontal: RfW(20) },
                 ]}>
-                No data found
+                No Requests Yet
               </Text>
               <Text
                 style={[
                   commonStyles.regularMutedText,
                   { marginHorizontal: RfW(40), textAlign: 'center', marginTop: RfH(16) },
                 ]}>
-                Once student raised the request for tuition it will appear here.
+                No student has sent you a tuition request yet. Ensure your profile is up to date to recieve requests.
               </Text>
             </View>
           )}

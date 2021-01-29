@@ -76,20 +76,20 @@ function Wallet() {
               commonStyles.headingPrimaryText,
               { fontFamily: Fonts.semiBold, fontSize: RFValue(34, STANDARD_SCREEN_SIZE) },
             ]}>
-            ₹ {printCurrency(balanceData.balance)}
+            {printCurrency(balanceData.balance)}
           </Text>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Balance</Text>
         </View>
 
         <View style={commonStyles.verticallyCenterItemsView}>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-            ₹ {printCurrency(balanceData.earn)}
+            {printCurrency(balanceData.earn)}
           </Text>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Total Points</Text>
         </View>
         <View style={commonStyles.verticallyCenterItemsView}>
           <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed, fontFamily: Fonts.semiBold }]}>
-            ₹ {printCurrency(balanceData.redeem)}
+            {printCurrency(balanceData.redeem)}
           </Text>
           <Text style={[commonStyles.smallMutedText, { marginTop: RfH(8) }]}>Points Redeemed</Text>
         </View>
@@ -102,19 +102,27 @@ function Wallet() {
       <View style={{ paddingHorizontal: RfW(16) }}>
         <View style={commonStyles.horizontalChildrenSpaceView}>
           <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>{item.pointType.title}</Text>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>
-            {item.pointType.actionType === 'EARN' ? '+' : ''} {item.points}
+          <Text
+            style={[
+              commonStyles.regularPrimaryText,
+              {
+                fontFamily: Fonts.bold,
+                color: item.pointType.actionType === 'EARN' ? Colors.primaryText : Colors.orangeRed,
+              },
+            ]}>
+            {item.pointType.actionType === 'EARN' ? '+' : ''}
+            {item.points}
           </Text>
         </View>
         <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(4) }]}>
           <Text style={commonStyles.mediumMutedText}>{printDateTime(item.createdDate)}</Text>
-          <Text
-            style={[
-              commonStyles.mediumMutedText,
-              { color: item.pointType.actionType === 'EARN' ? Colors.brandBlue2 : Colors.orangeRed },
-            ]}>
-            {item.pointType.actionType === 'EARN' ? 'Earn' : 'Redeem'}
-          </Text>
+          {/* <Text */}
+          {/*  style={[ */}
+          {/*    commonStyles.mediumMutedText, */}
+          {/*    { color: item.pointType.actionType === 'EARN' ? Colors.brandBlue2 : Colors.orangeRed }, */}
+          {/*  ]}> */}
+          {/*  {item.pointType.actionType === 'EARN' ? 'Earn' : 'Redeem'} */}
+          {/* </Text> */}
         </View>
         <View style={[commonStyles.lineSeparator, { marginVertical: RfH(24) }]} />
       </View>
