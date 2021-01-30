@@ -11,22 +11,16 @@ import { ADD_ENQUIRY } from './graphql-mutation';
 import { userDetails } from '../../apollo/cache';
 import { SEARCH_IN_INQUIRY } from './graphql-query';
 
-function SendFeedback() {
+function SendFeedback(props) {
   const navigation = useNavigation();
+  const { route } = props;
+
+  const { orderId, classId } = route?.params;
 
   const [query, setQuery] = useState('');
   const [message, setMessage] = useState('');
   const userInfo = useReactiveVar(userDetails);
-  const [feedbackData, setFeedbackData] = useState([
-    {
-      message:
-        'Hi I like the way teachers are sharing their knowledge with us and glad to see that we are part of this platform.',
-    },
-    {
-      message:
-        'Hi I like the way teachers are sharing their knowledge with us and glad to see that we are part of this platform.',
-    },
-  ]);
+  const [feedbackData, setFeedbackData] = useState([]);
 
   const [addEnquiry, { loading: addEnquiryLoading }] = useMutation(ADD_ENQUIRY, {
     fetchPolicy: 'no-cache',
@@ -47,18 +41,25 @@ function SendFeedback() {
     } else if (!message) {
       Alert.alert('Please enter message!');
     } else {
-      addEnquiry({
-        variables: {
-          inquiryDto: {
-            name: getFullName(userInfo),
-            mobile: userInfo.phoneNumber.number,
-            email: userInfo.email,
-            title: query,
-            text: message,
-            source: 'APP',
-          },
-        },
-      });
+      const inquiryDto = {
+        name: getFullName(userInfo),
+        mobile: userInfo.phoneNumber.number,
+        email: userInfo.email,
+        title: query,
+        text: message,
+        source: 'APP',
+      };
+
+      if (orderId > 0) {
+        inquiryDto.order = { id: orderId };
+        inquiryDto.type = 'SUPPORT';
+      }
+      if (classId > 0) {
+        inquiryDto.classEntity = { id: classId };
+        inquiryDto.type = 'SUPPORT';
+      }
+
+      addEnquiry({ variables: { inquiryDto } });
     }
   };
 

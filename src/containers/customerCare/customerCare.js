@@ -12,8 +12,10 @@ import { GURUQ_WHATSAPP_NUMBER, STUDENT_FAQ_URL, TUTOR_FAQ_URL } from '../../uti
 import { userDetails } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
 
-function CustomerCare() {
+function CustomerCare(props) {
   const navigation = useNavigation();
+
+  const { route } = props;
 
   const userInfo = useReactiveVar(userDetails);
 
@@ -62,7 +64,7 @@ function CustomerCare() {
 
       <View style={{ backgroundColor: Colors.white, padding: RfH(16) }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(NavigationRouteNames.SEND_FEEDBACK)}
+          onPress={() => navigation.navigate(NavigationRouteNames.SEND_FEEDBACK, route?.params)}
           style={commonStyles.horizontalChildrenSpaceView}>
           <View>
             <Text style={commonStyles.regularPrimaryText}>Send Feedback</Text>

@@ -189,14 +189,15 @@ function ScheduledClassDetails(props) {
   };
 
   useEffect(() => {
-    if (!isEmpty(classData)) {
-      const menuItemData = [
+    let menuItemData = [{ label: 'Help', handler: goToHelp, isEnabled: true }];
+    if (!isEmpty(classData) && (classData?.isRescheduleAllowed || classData?.isCancelAllowed)) {
+      menuItemData = [
         { label: 'Reschedule Class', handler: openRescheduleModal, isEnabled: classData?.isRescheduleAllowed },
         { label: 'Cancel Class', handler: goToCancelReason, isEnabled: classData?.isCancelAllowed },
-        { label: 'Help', handler: goToHelp, isEnabled: true },
+        ...menuItemData,
       ];
-      setMenuItem(menuItemData);
     }
+    setMenuItem(menuItemData);
   }, [classData]);
 
   const onBackPress = () => {
@@ -300,15 +301,14 @@ function ScheduledClassDetails(props) {
                 </View>
 
                 <View>
-                  {(classData?.isRescheduleAllowed || classData?.isCancelAllowed) && (
-                    <IconButtonWrapper
-                      iconImage={Images.vertical_dots_b}
-                      iconHeight={RfH(20)}
-                      iconWidth={RfW(20)}
-                      submitFunction={() => setOpenMenu(!openMenu)}
-                      styling={{ alignSelf: 'center' }}
-                    />
-                  )}
+                  <IconButtonWrapper
+                    iconImage={Images.vertical_dots_b}
+                    iconHeight={RfH(20)}
+                    iconWidth={RfW(20)}
+                    submitFunction={() => setOpenMenu(!openMenu)}
+                    styling={{ alignSelf: 'center' }}
+                  />
+
                   {/* {openMenu && ( */}
                   {/*  <View */}
                   {/*    style={{ */}

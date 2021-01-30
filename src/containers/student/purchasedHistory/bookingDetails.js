@@ -42,7 +42,7 @@ function BookingDetails(props) {
 
   const goToCustomerCare = () => {
     setOpenMenu(false);
-    navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
+    navigation.navigate(NavigationRouteNames.CUSTOMER_CARE, { orderId: bookingId });
   };
   //
   // const goToInvoice = () => {
