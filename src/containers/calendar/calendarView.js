@@ -197,6 +197,7 @@ function CalendarView(props) {
                 }}
                 highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
                 highlightDateNameStyle={{ color: Colors.brandBlue2 }}
+                highlightDateContainerStyle={{ backgroundColor: Colors.lightBlue }}
                 disabledDateNameStyle={{ color: Colors.black }}
                 disabledDateNumberStyle={{ color: Colors.black }}
                 selectedDate={selectedDate}
@@ -220,7 +221,7 @@ function CalendarView(props) {
                       }
                 }
                 calendarAnimation={{ type: 'parallel', duration: 300 }}
-                daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+                // daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
                 markedDates={markedDates}
                 onHeaderSelected={(a) => console.log(a)}
                 onWeekChanged={(start, end) => {

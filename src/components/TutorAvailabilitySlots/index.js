@@ -123,13 +123,14 @@ const TutorAvailabilitySlots = (props) => {
             selectedDate={selectedDate}
             highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
             highlightDateNameStyle={{ color: Colors.brandBlue2 }}
+            highlightDateContainerStyle={{ backgroundColor: Colors.lightBlue }}
             disabledDateNameStyle={{ color: Colors.black }}
             disabledDateNumberStyle={{ color: Colors.black }}
             dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
             dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
             style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
             calendarAnimation={{ type: 'parallel', duration: 300 }}
-            daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
+            // daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
             // markedDates={[
             //   {
             //     date: new Date(),
