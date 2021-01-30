@@ -23,7 +23,7 @@ import IconButtonWrapper from '../../components/IconWrapper';
 import { Colors } from '../../theme';
 import Images from '../../theme/images';
 import commonStyles from '../../theme/styles';
-import { alertBox, printDate, printDateTime, printTime, RfH, RfW } from '../../utils/helpers';
+import { alertBox, deviceWidth, printDate, printDateTime, printTime, RfH, RfW } from '../../utils/helpers';
 import MeetingDetailsModal from './components/meetingDetailsModal';
 import requestCameraAndAudioPermission from './components/permission';
 import styles from './components/style';
@@ -741,12 +741,13 @@ export default class Video extends Component<Props, State> {
         <TouchableOpacity
           activeOpacity={0.9}
           onPress={this.toggleDetailedActions}
-          style={{ width: 100, height: 120, borderRadius: 20, marginHorizontal: RfW(8) }}>
+          style={{ flex: 1, width: 100, height: 120, marginHorizontal: RfW(8) }}>
           {!this.state.videoMuted ? (
             <RtcLocalView.SurfaceView
               style={styles.max}
               channelId={this.props.meetingDetails.channel}
               renderMode={VideoRenderMode.Hidden}
+              zOrderMediaOverlay
             />
           ) : (
             <View
@@ -807,12 +808,19 @@ export default class Video extends Component<Props, State> {
               <View style={{ flex: 1, marginRight: RfW(8) }}>
                 <TouchableWithoutFeedback onPress={() => this.changeSelectedVideo(value)}>
                   <View style={{ width: 100, height: 120 }}>
-                    {videoItem && videoItem.status ? (
+                    {videoItem &&
+                    videoItem.status &&
+                    participant.firstName !== 'Screen' &&
+                    participant.lastName !== 'Share' ? (
                       <RtcRemoteView.SurfaceView
-                        style={[{ width: 100, height: 120, borderRadius: 20 }]}
+                        style={[{ flex: 1, width: 100, height: 120 }]}
                         uid={value}
                         channelId={this.props.meetingDetails.channel}
-                        renderMode={VideoRenderMode.Hidden}
+                        renderMode={
+                          participant.firstName === 'Screen' && participant.lastName === 'Share'
+                            ? VideoRenderMode.Fit
+                            : VideoRenderMode.Hidden
+                        }
                         zOrderMediaOverlay
                       />
                     ) : (
@@ -873,7 +881,7 @@ export default class Video extends Component<Props, State> {
                         ? VideoRenderMode.Fit
                         : VideoRenderMode.Hidden
                     }
-                    zOrderMediaOverlay
+                    zOrderMediaOverlay={false}
                   />
                 ) : (
                   this._renderVideoMutedView(participant?.firstName, false, true)
