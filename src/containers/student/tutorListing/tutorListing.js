@@ -62,7 +62,7 @@ function TutorListing(props) {
     teachingMode: 0,
     page: 1,
     size: 50,
-    sortBy: 'tutor.teachingExperience',
+    sortBy: 'teachingExperience',
     sortOrder: 'desc',
     active: true,
   });
@@ -420,6 +420,7 @@ function TutorListing(props) {
                 isFavourite={favourites.includes(item.id)}
                 isSponsored={sponsoredTutors.includes(item.id)}
                 markFavouriteTutor={() => markFavouriteTutor(item.id)}
+                teachingMode={filterValues.teachingMode}
               />
             )}
             keyExtractor={(item, index) => index.toString()}

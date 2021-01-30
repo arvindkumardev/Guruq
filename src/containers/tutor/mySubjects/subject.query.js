@@ -8,6 +8,7 @@ export const SEARCH_TUTOR_OFFERINGS = gql`
       freeDemo
       onlineClass
       groupClass
+      minBudgetPrice
       tutor {
         id
       }

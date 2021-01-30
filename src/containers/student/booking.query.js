@@ -33,6 +33,7 @@ export const GET_CART_ITEMS = gql`
       }
       tutorOffering {
         id
+        minBudgetPrice
         budgets {
           id
           price

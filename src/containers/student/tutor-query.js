@@ -26,6 +26,7 @@ export const SEARCH_TUTORS = gql`
         }
         tutorOfferings {
           id
+          minBudgetPrice
           # offering {
           #   id
           #   name
@@ -114,6 +115,7 @@ export const GET_TUTOR_OFFERINGS = gql`
       freeDemo
       onlineClass
       groupClass
+      minBudgetPrice
       tutor {
         id
       }

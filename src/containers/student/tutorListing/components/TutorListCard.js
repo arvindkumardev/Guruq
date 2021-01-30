@@ -12,7 +12,7 @@ import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import routeNames from '../../../../routes/screenNames';
 
 function TutorListCard(props) {
-  const { tutor, offering, markFavouriteTutor, isFavourite, isSponsored } = props;
+  const { tutor, offering, markFavouriteTutor, isFavourite, isSponsored, teachingMode } = props;
   const navigation = useNavigation();
 
   const goToTutorDetails = () => {
@@ -29,6 +29,10 @@ function TutorListCard(props) {
   const getTutorBudget = () => {
     const tutorOffering =
       tutor.tutorOfferings && tutor.tutorOfferings.find((s) => s.offerings.find((o) => o.id === offering.id));
+
+    if (teachingMode === 0) {
+      return tutorOffering.minBudgetPrice;
+    }
     const onlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === true && s.count === 1);
     const offlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === false && s.count === 1);
     if (onlineBudget && offlineBudget) {
