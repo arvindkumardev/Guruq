@@ -102,7 +102,6 @@ const VideoMessagingModal = (props) => {
             setChatMessages(GiftedChat.append(chatMessages, getMessageToRender(message)));
             setChatMessageIds([...chatMessageIds, message.id]);
           }
-
           if (callbacks.messageReceived) {
             callbacks.messageReceived();
           }
@@ -188,9 +187,9 @@ const VideoMessagingModal = (props) => {
     if (visible) {
       enterChat();
 
-      if (channelName) {
-        getChatMessages({ variables: { channelName: props.channelName } });
-      }
+      // if (channelName) {
+      //   getChatMessages({ variables: { channelName: props.channelName } });
+      // }
     }
 
     // Specify how to clean up after this effect:

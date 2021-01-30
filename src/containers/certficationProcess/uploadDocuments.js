@@ -5,7 +5,7 @@ import { isArray, isEmpty } from 'lodash';
 import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors, Images } from '../../theme';
-import { alertBox, getToken, RfH, RfW } from '../../utils/helpers';
+import {alertBox, getFileUrl, getToken, RfH, RfW} from '../../utils/helpers';
 import { ADD_TUTOR_DOCUMENT_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS } from '../tutor/tutor.mutation';
 import UploadDocument from '../../components/UploadDocument';
 import { GET_TUTOR_ALL_DETAILS } from './certification-query';
@@ -255,7 +255,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       idProofDetails.attachment.type !== 'application/pdf'
-                        ? `${ATTACHMENT_PREVIEW_URL}${idProofDetails.attachment.original}`
+                        ? getFileUrl(idProofDetails.attachment.original)
                         : Images.pdf
                     }
                   />
@@ -330,7 +330,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       addressProofDetails.attachment.type !== 'application/pdf'
-                        ? `${ATTACHMENT_PREVIEW_URL}${addressProofDetails.attachment.original}`
+                        ? getFileUrl(addressProofDetails.attachment.original)
                         : Images.pdf
                     }
                   />
@@ -379,7 +379,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       panCardDetails.attachment.type !== 'application/pdf'
-                        ? `${ATTACHMENT_PREVIEW_URL}${panCardDetails.attachment.original}`
+                        ? getFileUrl(panCardDetails.attachment.original)
                         : Images.pdf
                     }
                   />
@@ -427,7 +427,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       qualificationDetails.attachment.type !== 'application/pdf'
-                        ? `${ATTACHMENT_PREVIEW_URL}${qualificationDetails.attachment.original}`
+                        ? getFileUrl(qualificationDetails.attachment.original)
                         : Images.pdf
                     }
                   />

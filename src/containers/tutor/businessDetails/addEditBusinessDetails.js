@@ -14,12 +14,12 @@ import {
 } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import { alertBox, getToken, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getFileUrl, getToken, RfH, RfW } from '../../../utils/helpers';
 import { ADD_UPDATE_BUSINESS_DETAILS } from './business.mutation';
 import { tutorDetails } from '../../../apollo/cache';
 import { ADD_TUTOR_DOCUMENT_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS } from '../tutor.mutation';
 import { DocumentTypeEnum } from '../../common/enums';
-import { ATTACHMENT_PREVIEW_URL } from '../../../utils/constants';
+import { API_URL, ATTACHMENT_PREVIEW_URL } from '../../../utils/constants';
 
 function AddEditBusinessDetails(props) {
   const businessDetail = props?.route?.params?.businessDetails;
@@ -125,7 +125,7 @@ function AddEditBusinessDetails(props) {
     const formdata = new FormData();
     formdata.append('file', file);
     try {
-      const res = await fetch(`http://apiv2.guruq.in/api/upload/file`, {
+      const res = await fetch(`${API_URL}/upload/file`, {
         headers,
         method: 'POST',
         body: formdata,
@@ -248,7 +248,7 @@ function AddEditBusinessDetails(props) {
                     imageResizeMode="cover"
                     iconImage={
                       panCardDoc.attachment.type !== 'application/pdf'
-                        ? `${ATTACHMENT_PREVIEW_URL}${panCardDoc.attachment.original}`
+                        ? getFileUrl(panCardDoc.attachment.original)
                         : Images.pdf
                     }
                     submitFunction={() => {
@@ -300,7 +300,7 @@ function AddEditBusinessDetails(props) {
                       imageResizeMode="cover"
                       iconImage={
                         gstinDoc.attachment.type !== 'application/pdf'
-                          ? `${ATTACHMENT_PREVIEW_URL}${gstinDoc.attachment.original}`
+                          ? getFileUrl(gstinDoc.attachment.original)
                           : Images.pdf
                       }
                       submitFunction={() => {

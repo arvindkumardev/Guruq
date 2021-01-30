@@ -29,19 +29,19 @@ export const LOTTIE_JSON_FILES = {
   loaderJson: require('../assets/json/loader1.json'),
 };
 
-export const FRONTEND_URL = 'https://new.guruq.in';
+export const FRONTEND_URL = 'https://guruq.in';
 export const IMAGES_URL = 'https://images.guruq.in';
 export const DASHBOARD_URL = 'https://dashboard.guruq.in';
 export const CLASSES_URL = 'https://classes.guruq.in';
-// export const API_URL = 'https://api.guruq.in';
-// export const GRAPH_API_URL = `${API_URL}/gql`;
-export const API_URL = 'http://10.0.0.11:5000';
-export const GRAPH_API_URL = `${API_URL}/graphql`;
+export const API_URL = 'https://api.guruq.in';
+export const GRAPH_API_URL = `${API_URL}/gql`;
+// export const API_URL = 'http://10.0.0.11:5000';
+// export const GRAPH_API_URL = `${API_URL}/graphql`;
 
 export const ATTACHMENT_PREVIEW_URL = `${IMAGES_URL}/upload/preview?filePath=`;
 
-export const STUDENT_FAQ_URL = `${FRONTEND_URL}/student-faq`;
-export const TUTOR_FAQ_URL = `${FRONTEND_URL}/tutor-faq`;
+export const STUDENT_FAQ_URL = `${FRONTEND_URL}/student-faq-m`;
+export const TUTOR_FAQ_URL = `${FRONTEND_URL}/tutor-faq-m`;
 
 export const ABOUT_US_URL = `${FRONTEND_URL}/about-us`;
 export const CEO_MESSAGE_URL = `${FRONTEND_URL}/ceo-message`;

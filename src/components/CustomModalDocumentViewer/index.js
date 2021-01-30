@@ -8,12 +8,13 @@ import style from './style';
 import InPlaceLoader from '../InPlaceLoader';
 import { ScreenHeader } from '../index';
 import { ATTACHMENT_PREVIEW_URL } from '../../utils/constants';
+import { getFileUrl } from '../../utils/helpers';
 
 function CustomModalDocumentViewer(props) {
   const { document, backButtonHandler, modalVisible } = props;
 
   const [isError, setIsError] = useState(false);
-  const source = { uri: `${ATTACHMENT_PREVIEW_URL}${document.attachment.original}`, cache: true };
+  const source = { uri: getFileUrl(document.attachment.original), cache: true };
 
   const handleShare = async () => {
     await Share.share({
