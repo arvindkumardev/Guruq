@@ -23,7 +23,7 @@ import IconButtonWrapper from '../../components/IconWrapper';
 import { Colors } from '../../theme';
 import Images from '../../theme/images';
 import commonStyles from '../../theme/styles';
-import { alertBox, printDate, printDateTime, printTime, RfH, RfW } from '../../utils/helpers';
+import { alertBox, deviceWidth, printDate, printDateTime, printTime, RfH, RfW } from '../../utils/helpers';
 import MeetingDetailsModal from './components/meetingDetailsModal';
 import requestCameraAndAudioPermission from './components/permission';
 import styles from './components/style';
@@ -348,8 +348,13 @@ export default class Video extends Component<Props, State> {
     ];
 
     console.log('participants', participants, id);
+    console.log(
+      'participants.find((p) => String(p.user?.id) === String(id))',
+      id,
+      participants.find((p) => String(p?.id) === String(id))
+    );
 
-    return participants.find((p) => p.user?.id === id);
+    return participants.find((p) => String(p?.id) === String(id));
   };
 
   changeVideoStreamType = (type) => {
@@ -484,7 +489,7 @@ export default class Video extends Component<Props, State> {
               // right: -(deviceWidth() - 120),
               right: RfW(16),
               borderRadius: 20,
-              zIndex: 9,
+              zIndex: 99,
             }}>
             {this.state.whiteboardEnabled ? (
               <>
@@ -535,10 +540,10 @@ export default class Video extends Component<Props, State> {
                   })}
               </>
             ) : (
-              <View style={{ width: 100, height: 120 }}>
+              <View style={{ flex: 1, backgroundColor: '#444444', justifyContent: 'center', alignItems: 'center' }}>
                 {!this.state.videoMuted ? (
                   <RtcLocalView.SurfaceView
-                    style={styles.max}
+                    style={{ flex: 1, width: 80, height: 100 }}
                     channelId={this.props.meetingDetails.channel}
                     renderMode={VideoRenderMode.Hidden}
                   />
@@ -829,112 +834,115 @@ export default class Video extends Component<Props, State> {
   _renderRemoteVideos = () => {
     const { peerIds } = this.state;
     return (
-      <ScrollView
-        style={[styles.remoteContainer, { bottom: this.state.showDetailedActions ? 100 : 44 }]}
-        contentContainerStyle={{ paddingHorizontal: 2.5 }}
-        horizontal>
-        <TouchableOpacity
-          onPress={this.toggleDetailedActions}
-          style={{ width: 100, height: 120, borderRadius: 20, marginHorizontal: RfW(8) }}>
-          {!this.state.videoMuted ? (
-            <RtcLocalView.SurfaceView
-              style={styles.max}
-              channelId={this.props.meetingDetails.channel}
-              renderMode={VideoRenderMode.Hidden}
-            />
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: '#444444',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+      <View
+        style={{ flexDirection: 'row', position: 'absolute', left: 0, bottom: 0, zIndex: 99, width: deviceWidth() }}>
+        <ScrollView
+          style={[styles.remoteContainer, { bottom: this.state.showDetailedActions ? 100 : 44 }]}
+          contentContainerStyle={{ paddingHorizontal: 2.5 }}
+          horizontal>
+          <TouchableOpacity
+            onPress={this.toggleDetailedActions}
+            style={{ width: 100, height: 120, borderRadius: 20, marginHorizontal: RfW(8) }}>
+            {!this.state.videoMuted ? (
+              <RtcLocalView.SurfaceView
+                style={styles.max}
+                channelId={this.props.meetingDetails.channel}
+                renderMode={VideoRenderMode.Hidden}
+              />
+            ) : (
               <View
                 style={{
-                  height: RfH(60),
-                  width: RfW(60),
-                  borderRadius: 60,
-                  backgroundColor: Colors.lightBlue,
-                  flexDirection: 'row',
+                  flex: 1,
+                  backgroundColor: '#444444',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text
+                <View
                   style={{
-                    color: Colors.primaryText,
-                    fontSize: 36,
+                    height: RfH(60),
+                    width: RfW(60),
+                    borderRadius: 60,
+                    backgroundColor: Colors.lightBlue,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  {this.props.userInfo.firstName[0]}
+                  <Text
+                    style={{
+                      color: Colors.primaryText,
+                      fontSize: 36,
+                    }}>
+                    {this.props.userInfo.firstName[0]}
+                  </Text>
+                </View>
+                <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(8), color: Colors.white }]}>
+                  {this.props.userInfo.firstName}
                 </Text>
               </View>
-              <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(8), color: Colors.white }]}>
-                {this.props.userInfo.firstName}
-              </Text>
-            </View>
-          )}
+            )}
 
-          {this.state.audioMuted && (
-            <View
-              style={{
-                flexDirection: 'row',
-                position: 'absolute',
-                top: 8,
-                right: 8,
-                zIndex: 1,
-              }}>
-              <IconButtonWrapper iconImage={Images.microphone_mute_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
-            </View>
-          )}
-        </TouchableOpacity>
-
-        {peerIds
-          .filter((uid) => uid !== this.state.selectedUid)
-          .map((value, index, array) => {
-            const audioItem = this.state.audioStates.find((s) => s.uid === value);
-            const videoItem = this.state.videoStates.find((s) => s.uid === value);
-
-            const participant = this.getParticipant(value);
-
-            console.log('videoItem', videoItem, peerIds, participant);
-            return (
-              <View style={{ flex: 1, marginRight: RfW(8) }}>
-                <TouchableWithoutFeedback onPress={() => this.changeSelectedVideo(value)}>
-                  <View style={{ width: 100, height: 120, borderRadius: 20 }}>
-                    {videoItem && videoItem.status ? (
-                      <RtcRemoteView.SurfaceView
-                        // style={styles.remyesote}
-                        style={[styles.remote, { borderRadius: 20 }]}
-                        uid={value}
-                        channelId={this.props.meetingDetails.channel}
-                        renderMode={VideoRenderMode.Hidden}
-                        zOrderMediaOverlay
-                      />
-                    ) : (
-                      this._renderVideoMutedView(participant?.firstName, true)
-                    )}
-                  </View>
-                </TouchableWithoutFeedback>
-                {audioItem && !audioItem.status && (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      position: 'absolute',
-                      // bottom: 8,
-                      right: 8,
-                      zIndex: 2,
-                    }}>
-                    <IconButtonWrapper
-                      iconImage={Images.microphone_mute_white}
-                      iconWidth={RfW(24)}
-                      iconHeight={RfH(24)}
-                    />
-                  </View>
-                )}
+            {this.state.audioMuted && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  zIndex: 1,
+                }}>
+                <IconButtonWrapper iconImage={Images.microphone_mute_white} iconWidth={RfW(24)} iconHeight={RfH(24)} />
               </View>
-            );
-          })}
-      </ScrollView>
+            )}
+          </TouchableOpacity>
+
+          {peerIds
+            .filter((uid) => uid !== this.state.selectedUid)
+            .map((value, index, array) => {
+              const audioItem = this.state.audioStates.find((s) => s.uid === value);
+              const videoItem = this.state.videoStates.find((s) => s.uid === value);
+
+              const participant = this.getParticipant(value);
+
+              console.log('videoItem', videoItem, peerIds, participant);
+              return (
+              <View style={{ flex: 1, marginRight: RfW(8) }}>
+                  <TouchableWithoutFeedback onPress={() => this.changeSelectedVideo(value)}>
+                    <View style={{ width: 100, height: 120, borderRadius: 20 }}>
+                      {videoItem && videoItem.status ? (
+                        <RtcRemoteView.SurfaceView
+                          // style={styles.remyesote}
+                          style={[styles.remote, { borderRadius: 20 }]}
+                          uid={value}
+                          channelId={this.props.meetingDetails.channel}
+                          renderMode={VideoRenderMode.Hidden}
+                          zOrderMediaOverlay
+                        />
+                      ) : (
+                        this._renderVideoMutedView(participant?.firstName, true)
+                      )}
+                    </View>
+                  </TouchableWithoutFeedback>
+                  {audioItem && !audioItem.status && (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        position: 'absolute',
+                        // bottom: 8,
+                        right: 8,
+                        zIndex: 2,
+                      }}>
+                      <IconButtonWrapper
+                        iconImage={Images.microphone_mute_white}
+                        iconWidth={RfW(24)}
+                        iconHeight={RfH(24)}
+                      />
+                    </View>
+                  )}
+                </View>
+              );
+            })}
+        </ScrollView>
+      </View>
     );
   };
 
