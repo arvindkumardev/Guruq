@@ -161,7 +161,7 @@ function Refund(props) {
           <View style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(12) }]}>
             <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Refundable amount</Text>
             <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
-              ₹ {cancelSummary?.refund}
+              ₹ {isEmpty(orderData.refund) ? cancelSummary?.refund : orderData?.refund?.amount}
             </Text>
           </View>
         </View>

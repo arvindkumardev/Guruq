@@ -14,6 +14,7 @@ import { getFullName, RfH, RfW } from '../../../utils/helpers';
 import { GET_CANCELLATION_SUMMARY, GET_SCHEDULED_CLASSES } from '../booking.query';
 import NavigationRouteNames from '../../../routes/screenNames';
 import routeNames from '../../../routes/screenNames';
+import { OrderStatusEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 
 function OrderDetails(props) {
   const { route } = props;
@@ -79,7 +80,7 @@ function OrderDetails(props) {
         {
           label: 'Cancel Booking',
           handler: openCancelConfirm,
-          isEnabled: cancelSummary.refund > 0,
+          isEnabled: true,
         },
         { label: 'Help', handler: goToCustomerCare, isEnabled: true },
       ]);
@@ -249,7 +250,7 @@ function OrderDetails(props) {
         </View>
       </ScrollView>
 
-      {cancelSummary.unscheduled > 0 && (
+      {cancelSummary.unscheduled > 0 && orderData.orderStatus === OrderStatusEnum.COMPLETE.label && (
         <Button
           onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: orderData })}
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginVertical: RfH(30) }]}>

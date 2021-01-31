@@ -79,7 +79,11 @@ function BookingDetails(props) {
         </Text>
         {isEmpty(item.refund) && (
           <TouchableOpacity
-            onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.ORDER_DETAILS, { orderData: item })}
+            onPress={() =>
+              navigation.navigate(NavigationRouteNames.STUDENT.ORDER_DETAILS, {
+                orderData: { ...item, order: { orderId: bookingData.orderId } },
+              })
+            }
             activeOpacity={0.8}>
             <Text
               style={[
@@ -196,7 +200,15 @@ function BookingDetails(props) {
               <View style={commonStyles.horizontalChildrenSpaceView}>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.4 }]}>Amount</Text>
                 <Text style={[commonStyles.regularPrimaryText, { flex: 0.6, fontFamily: Fonts.semiBold }]}>
-                  ₹ {printCurrency(bookingData.payableAmount)}
+                  ₹ {printCurrency(bookingData.payableAmount)} ({printCurrency(bookingData.orderPayment.paymentStatus)})
+                </Text>
+              </View>
+              <View style={commonStyles.horizontalChildrenSpaceView}>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.4 }]}>Booking Status</Text>
+                <Text style={[commonStyles.regularPrimaryText, { flex: 0.6, fontFamily: Fonts.semiBold }]}>
+                  {enumLabelToText(bookingData.orderStatus) === 'Cancelled'
+                    ? 'Payment Failed'
+                    : enumLabelToText(bookingData.orderStatus)}
                 </Text>
               </View>
             </View>

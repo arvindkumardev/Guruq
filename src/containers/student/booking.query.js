@@ -119,6 +119,7 @@ export const GET_BOOKING_DETAIL = gql`
         mrp
         price
         pointsRedeemed
+        orderStatus
         offering {
           id
           name
