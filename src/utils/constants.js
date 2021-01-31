@@ -90,3 +90,5 @@ export const GURUQ_WHATSAPP_NUMBER = '7375006806';
 
 export const MIN_AGE_STUDENT = 5;
 export const MIN_AGE_TUTOR = 18;
+
+export const RAZORPAY_KEY = 'rzp_test_0kNEbt0JJ60aiz';
