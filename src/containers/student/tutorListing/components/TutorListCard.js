@@ -31,7 +31,7 @@ function TutorListCard(props) {
       tutor.tutorOfferings && tutor.tutorOfferings.find((s) => s.offerings.find((o) => o.id === offering.id));
 
     if (teachingMode === 0) {
-      return tutorOffering.minBudgetPrice;
+      return tutorOffering?.minBudgetPrice;
     }
     const onlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === true && s.count === 1);
     const offlineBudget = tutorOffering?.budgets.find((s) => s.onlineClass === false && s.count === 1);

@@ -239,7 +239,7 @@ function CalendarView(props) {
 
             <View style={commonStyles.lineSeparatorWithVerticalMargin} />
             {allScheduledClasses &&
-            allScheduledClasses.filter((c) => moment(c.startDate).isSame(moment(selectedDate), 'day')).count === 0 ? (
+            allScheduledClasses.filter((c) => moment(c.startDate).isSame(moment(selectedDate), 'day')).length === 0 ? (
               <View>
                 <Image
                   source={Images.empty_schedule}
