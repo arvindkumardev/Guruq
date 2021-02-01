@@ -344,7 +344,7 @@ export const processGeoData = (geoData) => {
 };
 
 export const passwordPolicy = (pass) => {
-  const alphaRegex = /\w+/;
-  const numericRegex = /\d+/;
+  const alphaRegex = /[a-zA-Z]/;
+  const numericRegex = /[0-9]/;
   return pass.length >= 8 && numericRegex.test(pass) && alphaRegex.test(pass);
 };
