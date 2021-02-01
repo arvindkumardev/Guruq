@@ -15,7 +15,8 @@ function SendFeedback(props) {
   const navigation = useNavigation();
   const { route } = props;
 
-  const { orderId, classId } = route?.params;
+  const orderId = route?.params?.orderId;
+  const classId = route?.params?.classId;
 
   const [query, setQuery] = useState('');
   const [message, setMessage] = useState('');
