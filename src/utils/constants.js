@@ -36,6 +36,7 @@ export const CLASSES_URL = 'https://classes.guruq.in';
 export const API_URL = 'https://api.guruq.in';
 export const GRAPH_API_URL = `${API_URL}/gql`;
 // export const API_URL = 'http://10.0.0.11:5000';
+// export const API_URL = 'https://stagingapi.guruq.in';
 // export const GRAPH_API_URL = `${API_URL}/graphql`;
 
 export const ATTACHMENT_PREVIEW_URL = `${IMAGES_URL}/upload/preview?filePath=`;
