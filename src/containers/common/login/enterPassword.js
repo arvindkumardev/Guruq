@@ -11,7 +11,7 @@ import { RfH, RfW, storeData } from '../../../utils/helpers';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { INVALID_INPUT, NOT_FOUND } from '../../../common/errorCodes';
 import { FORGOT_PASSWORD_MUTATION, SIGNIN_MUTATION } from '../graphql-mutation';
-import { isLoggedIn, userDetails, userType } from '../../../apollo/cache';
+import {isLoggedIn, userDetails, userToken, userType} from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import MainContainer from './components/mainContainer';
 import LoginCheck from './loginCheck';
@@ -44,6 +44,7 @@ function EnterPassword(props) {
       if (data && data.signIn) {
         storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.signIn.token).then(() => {
           isLoggedIn(true);
+          userToken(data.signIn.token);
           // userDetails(data.me);
           // userType(data.me.type);
           console.log(true);

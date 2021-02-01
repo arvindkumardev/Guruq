@@ -8,7 +8,12 @@ import moment from 'moment';
 import { isEmpty, isNumber, isUndefined, startCase } from 'lodash';
 import { parsePhoneNumberFromString as parseMobile } from 'libphonenumber-js/mobile';
 import Images from '../theme/images';
-import { ATTACHMENT_PREVIEW_URL, IMAGES_URL, LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_DIMENSIONS } from './constants';
+import {
+  DOCUMENT_PREVIEW_URL,
+  LOCAL_STORAGE_DATA_KEY,
+  PROFILE_IMAGE_PREVIEW_URL,
+  STANDARD_SCREEN_DIMENSIONS,
+} from './constants';
 import 'intl';
 import {
   interestingOfferingData,
@@ -21,6 +26,7 @@ import {
   tutorDetails,
   userDetails,
   userLocation,
+  userToken,
   userType,
 } from '../apollo/cache';
 import initializeApollo from '../apollo/apollo';
@@ -123,10 +129,12 @@ export const titleCaseIfExists = (inputString) => {
   return str.join(' ').trim();
 };
 
-export const getFileUrl = (filename) => {
-  return filename && filename.startsWith('images/tutordoc')
-    ? `${IMAGES_URL}/${filename}`
-    : `${ATTACHMENT_PREVIEW_URL}${filename}`;
+export const getProfileImageUrl = (filename) => {
+  return filename && `${PROFILE_IMAGE_PREVIEW_URL}${filename}`;
+};
+
+export const getDocumentFileUrl = (filename, token) => {
+  return filename && `${DOCUMENT_PREVIEW_URL}${filename}&token=${token}`;
 };
 
 export const alertBox = (
@@ -286,6 +294,7 @@ export const logout = () => {
   removeToken().then(() => {
     isTokenLoading(true);
     isLoggedIn(false);
+    userToken('');
     isSplashScreenVisible(true);
     userType('');
     networkConnectivityError(false);

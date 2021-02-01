@@ -14,12 +14,12 @@ import {
 } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import { alertBox, getFileUrl, getToken, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getDocumentFileUrl, getToken, RfH, RfW } from '../../../utils/helpers';
 import { ADD_UPDATE_BUSINESS_DETAILS } from './business.mutation';
-import { tutorDetails } from '../../../apollo/cache';
+import { tutorDetails, userToken } from '../../../apollo/cache';
 import { ADD_TUTOR_DOCUMENT_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS } from '../tutor.mutation';
 import { DocumentTypeEnum } from '../../common/enums';
-import { API_URL, ATTACHMENT_PREVIEW_URL } from '../../../utils/constants';
+import { API_URL } from '../../../utils/constants';
 
 function AddEditBusinessDetails(props) {
   const businessDetail = props?.route?.params?.businessDetails;
@@ -33,6 +33,8 @@ function AddEditBusinessDetails(props) {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isPanCardDoc, setIsPanCardDoc] = useState(true);
   const [isFileUploading, setIsFileUploading] = useState(false);
+
+  const userTokenVal = useReactiveVar(userToken);
 
   const tutorInfo = useReactiveVar(tutorDetails);
   const [viewDocument, setViewDocument] = useState(false);
@@ -217,7 +219,7 @@ function AddEditBusinessDetails(props) {
           )}
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: RfH(24) }}>
             <View>
-              <Text style={commonStyles.mediumMutedText}> Pan Card</Text>
+              <Text style={commonStyles.mediumMutedText}>Pan Card</Text>
               {isEmpty(panCardDoc) && (
                 <TouchableOpacity
                   style={{
@@ -248,7 +250,7 @@ function AddEditBusinessDetails(props) {
                     imageResizeMode="cover"
                     iconImage={
                       panCardDoc.attachment.type !== 'application/pdf'
-                        ? getFileUrl(panCardDoc.attachment.original)
+                        ? getDocumentFileUrl(panCardDoc.attachment.original, userTokenVal)
                         : Images.pdf
                     }
                     submitFunction={() => {
@@ -300,7 +302,7 @@ function AddEditBusinessDetails(props) {
                       imageResizeMode="cover"
                       iconImage={
                         gstinDoc.attachment.type !== 'application/pdf'
-                          ? getFileUrl(gstinDoc.attachment.original)
+                          ? getDocumentFileUrl(gstinDoc.attachment.original, userTokenVal)
                           : Images.pdf
                       }
                       submitFunction={() => {

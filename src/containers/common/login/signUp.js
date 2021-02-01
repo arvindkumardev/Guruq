@@ -11,7 +11,7 @@ import { alertBox, isValidEmail, passwordPolicy, removeToken, RfH, RfW, storeDat
 import { SIGNUP_MUTATION } from '../graphql-mutation';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import MainContainer from './components/mainContainer';
-import { isLoggedIn, userDetails, userType } from '../../../apollo/cache';
+import {isLoggedIn, userDetails, userToken, userType} from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import LoginCheck from './loginCheck';
 
@@ -43,6 +43,7 @@ function SignUp(props) {
             userDetails(data.signUp);
             userType(data.signUp.type);
             isLoggedIn(true);
+            userToken('');
           });
         });
       }

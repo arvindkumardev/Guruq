@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 import { ScrollView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
 import { useLazyQuery, useMutation } from '@apollo/client';
@@ -10,13 +9,13 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, ScreenHeader, TutorImageComponent } from '../../../components';
 import { Colors, Images } from '../../../theme';
-import { getFileUrl, getFullName, getSaveData, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
+import { getFullName, getSaveData, removeData, RfH, RfW, storeData } from '../../../utils/helpers';
 import styles from './styles';
 import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { MARK_FAVOURITE, REMOVE_FAVOURITE } from '../tutor-mutation';
 import { GET_FAVOURITE_TUTORS } from '../tutor-query';
 import routeNames from '../../../routes/screenNames';
-import Loader from "../../../components/Loader";
+import Loader from '../../../components/Loader';
 
 function compareTutors(props) {
   const navigation = useNavigation();
@@ -94,7 +93,7 @@ function compareTutors(props) {
   });
 
   const goToTutorDetails = (item) => {
-    console.log("item",item)
+    console.log('item', item);
     navigation.navigate(routeNames.STUDENT.TUTOR_DETAILS, {
       tutorId: item.id,
       currentOffering: item.offering,
@@ -198,13 +197,13 @@ function compareTutors(props) {
             submitFunction={() => markFavouriteTutor(item.id, index)}
           />
         </View>
-        {/*<Button*/}
-        {/*  block*/}
-        {/*  bordered*/}
-        {/*  style={{ marginHorizontal: RfW(16), marginTop: RfH(24) }}*/}
-        {/*  onPress={() => goToTutorDetails(item)}>*/}
-        {/*  <Text style={{ color: Colors.brandBlue2 }}>Book Class</Text>*/}
-        {/*</Button>*/}
+        {/* <Button */}
+        {/*  block */}
+        {/*  bordered */}
+        {/*  style={{ marginHorizontal: RfW(16), marginTop: RfH(24) }} */}
+        {/*  onPress={() => goToTutorDetails(item)}> */}
+        {/*  <Text style={{ color: Colors.brandBlue2 }}>Book Class</Text> */}
+        {/* </Button> */}
       </View>
     );
   };

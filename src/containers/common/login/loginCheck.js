@@ -8,7 +8,7 @@ import {
   isTokenLoading,
   studentDetails,
   tutorDetails,
-  userDetails,
+  userDetails, userToken,
   userType,
 } from '../../../apollo/cache';
 import { UserTypeEnum } from '../../../common/userType.enum';
@@ -60,6 +60,7 @@ function LoginCheck() {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       isLoggedIn(false);
+      userToken('');
       isTokenLoading(false);
       userDetails({});
       isSplashScreenVisible(false);

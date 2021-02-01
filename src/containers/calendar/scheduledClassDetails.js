@@ -236,16 +236,17 @@ function ScheduledClassDetails(props) {
 
   const renderAttachments = (item) => {
     return (
-      <View style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(16) }]}>
-        <View style={commonStyles.horizontalChildrenView}>
+      <View style={[commonStyles.horizontalChildrenSpaceView, { paddingRight: RfW(16), marginTop: RfH(16) }]}>
+        <TouchableOpacity
+          style={commonStyles.horizontalChildrenView}
+          onPress={() => {
+            setViewDocument(true);
+            setSelectedDoc(item);
+          }}>
           <IconButtonWrapper
             iconImage={item.attachment.type === 'application/pdf' ? Images.pdf : Images.jpg}
             iconHeight={RfH(45)}
             iconWidth={RfH(45)}
-            submitFunction={() => {
-              setViewDocument(true);
-              setSelectedDoc(item);
-            }}
           />
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
             <Text style={commonStyles.headingPrimaryText}>{item?.name}</Text>
@@ -254,7 +255,7 @@ function ScheduledClassDetails(props) {
               {printDate(item?.createdDate)}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   };

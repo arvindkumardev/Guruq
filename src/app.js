@@ -9,22 +9,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-import { clearAllLocalStorage, getToken, removeToken } from './utils/helpers';
-import {
-  appMetaData,
-  interestingOfferingData,
-  isLoggedIn,
-  isSplashScreenVisible,
-  isTokenLoading,
-  networkConnectivityError,
-  notificationPayload,
-  offeringsMasterData,
-  studentDetails,
-  tutorDetails,
-  userDetails,
-  userLocation,
-  userType,
-} from './apollo/cache';
+import { getToken } from './utils/helpers';
+import { appMetaData, isLoggedIn, isSplashScreenVisible, isTokenLoading, userToken, userType } from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
 import { APP_BUILD_VERSION, DASHBOARD_URL } from './utils/constants';
@@ -57,15 +43,18 @@ function App() {
   }, []);
 
   const bootstrapAsync = async () => {
-    let userToken;
+    let jwtToken;
     try {
-      userToken = await getToken();
-      if (userToken) {
+      jwtToken = await getToken();
+      if (jwtToken) {
         isLoggedIn(true);
+        // set token in cache
+        userToken(jwtToken);
       }
     } catch (e) {
       // Restoring token failed
       isLoggedIn(false);
+      userToken('');
     } finally {
       SplashScreen.hide();
       crashlytics().log('App mounted.');

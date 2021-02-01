@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { getFileUrl, getNameInitials, RfH } from '../../utils/helpers';
+import { getProfileImageUrl, getNameInitials, RfH } from '../../utils/helpers';
 import styles from '../../containers/student/pytn/styles';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
@@ -18,7 +18,7 @@ const TutorImageComponent = (props) => {
         <CustomImage
           imageWidth={RfH(width)}
           imageHeight={RfH(height)}
-          image={getFileUrl(tutor?.profileImage?.original)}
+          image={getProfileImageUrl(tutor?.profileImage?.original)}
           imageResizeMode="cover"
           styling={styling}
         />

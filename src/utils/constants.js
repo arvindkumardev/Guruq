@@ -35,7 +35,10 @@ export const GRAPH_API_URL = `${API_URL}/gql`;
 // export const API_URL = 'https://stagingapi.guruq.in';
 // export const GRAPH_API_URL = `${API_URL}/graphql`;
 
-export const ATTACHMENT_PREVIEW_URL = `${IMAGES_URL}/upload/preview?filePath=`;
+// export const ATTACHMENT_PREVIEW_URL = `${IMAGES_URL}/upload/preview?filePath=`;
+
+export const PROFILE_IMAGE_PREVIEW_URL = `${IMAGES_URL}/preview/profile-image?filePath=`;
+export const DOCUMENT_PREVIEW_URL = `${IMAGES_URL}/preview/document?filePath=`;
 
 export const STUDENT_FAQ_URL = `${FRONTEND_URL}/student-faq-m`;
 export const TUTOR_FAQ_URL = `${FRONTEND_URL}/tutor-faq-m`;

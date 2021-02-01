@@ -3,18 +3,21 @@ import { Modal, Share, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Pdf from 'react-native-pdf';
 import { WebView } from 'react-native-webview';
+import { useReactiveVar } from '@apollo/client';
 import { Images } from '../../theme';
 import style from './style';
 import InPlaceLoader from '../InPlaceLoader';
 import { ScreenHeader } from '../index';
-import { ATTACHMENT_PREVIEW_URL } from '../../utils/constants';
-import { getFileUrl } from '../../utils/helpers';
+import { getDocumentFileUrl } from '../../utils/helpers';
+import { userToken } from '../../apollo/cache';
 
 function CustomModalDocumentViewer(props) {
   const { document, backButtonHandler, modalVisible } = props;
 
+  const userTokenVal = useReactiveVar(userToken);
+
   const [isError, setIsError] = useState(false);
-  const source = { uri: getFileUrl(document.attachment.original), cache: true };
+  const source = { uri: getDocumentFileUrl(document.attachment.original, userTokenVal), cache: false };
 
   const handleShare = async () => {
     await Share.share({

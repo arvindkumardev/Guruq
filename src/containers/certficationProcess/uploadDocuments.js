@@ -1,18 +1,19 @@
 import { ScrollView, StatusBar, Text, TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { isArray, isEmpty } from 'lodash';
 import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors, Images } from '../../theme';
-import {alertBox, getFileUrl, getToken, RfH, RfW} from '../../utils/helpers';
+import { alertBox, getDocumentFileUrl, getToken, RfH, RfW } from '../../utils/helpers';
 import { ADD_TUTOR_DOCUMENT_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS } from '../tutor/tutor.mutation';
 import UploadDocument from '../../components/UploadDocument';
 import { GET_TUTOR_ALL_DETAILS } from './certification-query';
 import { DocumentTypeEnum } from '../common/enums';
 import Loader from '../../components/Loader';
 import ActionModal from './components/helpSection';
-import { API_URL, ATTACHMENT_PREVIEW_URL } from '../../utils/constants';
+import { API_URL } from '../../utils/constants';
+import { userToken } from '../../apollo/cache';
 
 const DOCUMENT_NAME_ID_PROOF = 'id proof';
 const DOCUMENT_NAME_ADDRESS_PROOF = 'address proof';
@@ -32,6 +33,8 @@ function UploadDocuments() {
   const [qualificationDetails, setQualificationDetails] = useState('');
   const [tutorDetail, setTutorDetail] = useState({});
   const [openMenu, setOpenMenu] = useState(false);
+
+  const userTokenVal = useReactiveVar(userToken);
 
   const [token, setToken] = useState();
   useEffect(() => {
@@ -255,7 +258,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       idProofDetails.attachment.type !== 'application/pdf'
-                        ? getFileUrl(idProofDetails.attachment.original)
+                        ? getDocumentFileUrl(idProofDetails.attachment.original, userTokenVal)
                         : Images.pdf
                     }
                   />
@@ -330,7 +333,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       addressProofDetails.attachment.type !== 'application/pdf'
-                        ? getFileUrl(addressProofDetails.attachment.original)
+                        ? getDocumentFileUrl(addressProofDetails.attachment.original, userTokenVal)
                         : Images.pdf
                     }
                   />
@@ -379,7 +382,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       panCardDetails.attachment.type !== 'application/pdf'
-                        ? getFileUrl(panCardDetails.attachment.original)
+                        ? getDocumentFileUrl(panCardDetails.attachment.original, userTokenVal)
                         : Images.pdf
                     }
                   />
@@ -427,7 +430,7 @@ function UploadDocuments() {
                     imageResizeMode="cover"
                     iconImage={
                       qualificationDetails.attachment.type !== 'application/pdf'
-                        ? getFileUrl(qualificationDetails.attachment.original)
+                        ? getDocumentFileUrl(qualificationDetails.attachment.original, userTokenVal)
                         : Images.pdf
                     }
                   />

@@ -13,7 +13,7 @@ import styles from './styles';
 import { GET_TUTOR_ALL_DETAILS, GET_TUTOR_LEAD_INTERVIEW_DETAILS } from './certification-query';
 import NavigationRouteNames from '../../routes/screenNames';
 import { MARK_CERTIFIED } from './certification-mutation';
-import {InterviewStatus, TutorCertificationStageEnum} from '../tutor/enums';
+import { InterviewStatus, TutorCertificationStageEnum } from '../tutor/enums';
 import ActionModal from './components/helpSection';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 import { tutorDetails } from '../../apollo/cache';

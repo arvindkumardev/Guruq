@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useReactiveVar } from '@apollo/client';
-import { getFileUrl, getNameInitials, RfH } from '../../utils/helpers';
+import { getProfileImageUrl, getNameInitials, RfH } from '../../utils/helpers';
 import styles from '../../containers/student/pytn/styles';
 import { Colors } from '../../theme';
 import commonStyles from '../../theme/styles';
@@ -20,7 +20,7 @@ const UserImageComponent = (props) => {
         <CustomImage
           imageWidth={RfH(width)}
           imageHeight={RfH(height)}
-          image={getFileUrl(userInfo?.profileImage?.original)}
+          image={getProfileImageUrl(userInfo?.profileImage?.original)}
           imageResizeMode="cover"
           styling={styling}
         />

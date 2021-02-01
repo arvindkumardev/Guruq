@@ -9,7 +9,7 @@ import styles from './styles';
 import { alertBox, passwordPolicy, RfH, RfW, storeData } from '../../../utils/helpers';
 import { SET_PASSWORD_MUTATION } from '../graphql-mutation';
 import MainContainer from './components/mainContainer';
-import { isLoggedIn, userDetails, userType } from '../../../apollo/cache';
+import {isLoggedIn, userDetails, userToken, userType} from '../../../apollo/cache';
 import { LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { INVALID_INPUT } from '../../../common/errorCodes';
 import LoginCheck from './loginCheck';
@@ -42,6 +42,7 @@ function SetPassword({ route }) {
         } else if (data.setPassword) {
           storeData(LOCAL_STORAGE_DATA_KEY.USER_TOKEN, data.setPassword.token).then(() => {
             isLoggedIn(true);
+            userToken(data.setPassword.token);
             // userDetails(data.setPassword);
             // userType(data.setPassword.type);
           });
