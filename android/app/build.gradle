@@ -151,6 +151,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('guruq.keystore')
+            storePassword 'guruq@123'
+            keyAlias 'guruq'
+            keyPassword 'guruq@123'
+        }
     }
     buildTypes {
         debug {
