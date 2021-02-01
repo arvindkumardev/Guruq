@@ -2,16 +2,19 @@ import { FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { isEmpty } from 'lodash';
+import { Button } from 'native-base';
 import { Loader, ScreenHeader, TutorImageComponent } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
-import { enumLabelToText, getFullName, printCurrency, printDateTime, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, enumLabelToText, getFullName, printCurrency, printDateTime, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import NavigationRouteNames from '../../../routes/screenNames';
 import ActionSheet from '../../../components/ActionSheet';
 import { GET_BOOKING_DETAIL } from '../booking.query';
+import { CANCEL_PENDING_BOOKINGS } from '../booking.mutation';
+import { OrderStatusEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 
 function BookingDetails(props) {
   const { route } = props;
@@ -33,6 +36,17 @@ function BookingDetails(props) {
     },
   });
 
+  const [cancelPendingBooking, { loading: cancelPendingBookingLoading }] = useMutation(CANCEL_PENDING_BOOKINGS, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      console.log(data);
+      navigation.goBack();
+    },
+  });
+
   useEffect(() => {
     // getToken().then((tk) => {
     //   setToken(tk);
@@ -44,14 +58,6 @@ function BookingDetails(props) {
     setOpenMenu(false);
     navigation.navigate(NavigationRouteNames.CUSTOMER_CARE, { orderId: bookingId });
   };
-  //
-  // const goToInvoice = () => {
-  //   setOpenMenu(false);
-  //   navigation.navigate(routeNames.WEB_VIEW, {
-  //     url: `http://dashboardv2.guruq.in/invoice/${bookingData?.id}?token=${token}`,
-  //     label: 'Invoice',
-  //   });
-  // };
 
   const [menuItem, setMenuItem] = useState([
     // { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
@@ -77,7 +83,7 @@ function BookingDetails(props) {
           {' | '}
           {item.offering?.parentOffering?.displayName}
         </Text>
-        {isEmpty(item.refund) && (
+        {isEmpty(item.refund) && bookingData.orderStatus !== OrderStatusEnum.PENDING.label && (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate(NavigationRouteNames.STUDENT.ORDER_DETAILS, {
@@ -155,9 +161,20 @@ function BookingDetails(props) {
     </View>
   );
 
+  const callCancelPendingBooking = () => {
+    alertBox('Cancel Booking', 'Are you sure you want to cancel this booking?', {
+      positiveText: 'Yes',
+      onPositiveClick: () => {
+        cancelPendingBooking({ variables: { orderId: bookingId } });
+      },
+      negativeText: 'No',
+      onNegativeClick: () => {},
+    });
+  };
+
   return (
     <>
-      <Loader isLoading={getBookingLoader} />
+      <Loader isLoading={getBookingLoader || cancelPendingBookingLoading} />
       <View style={(commonStyles.mainContainer, { flex: 1, backgroundColor: Colors.white })}>
         <ScreenHeader
           label="Booking details"
@@ -213,6 +230,25 @@ function BookingDetails(props) {
               </View>
             </View>
             <View style={{ height: RfH(10) }} />
+
+            {bookingData.orderStatus === OrderStatusEnum.PENDING.label && (
+              <View style={{ marginVertical: 10 }}>
+                <Button
+                  onPress={() => callCancelPendingBooking()}
+                  style={[
+                    commonStyles.buttonPrimary,
+                    {
+                      backgroundColor: Colors.orangeRed,
+                      width: RfW(144),
+                      alignSelf: 'center',
+                      marginHorizontal: 0,
+                    },
+                  ]}>
+                  <Text style={commonStyles.textButtonPrimary}>Cancel Booking</Text>
+                </Button>
+              </View>
+            )}
+
             <FlatList
               showsVerticalScrollIndicator={false}
               data={bookingData?.orderItems}
