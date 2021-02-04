@@ -359,12 +359,15 @@ const PtStartScreen = (props) => {
                 </Button>
               </View>
             )}
+
           {!isEmpty(ptDetail) &&
-            ((!isEmpty(ptDetail.proficiencyTest) && !attemptExhausted) ||
-              ptDetail?.status === PtStatus.EXEMPTED.label) && (
+            !isEmpty(ptDetail.proficiencyTest) &&
+            (!attemptExhausted ||
+              ptDetail?.status === PtStatus.EXEMPTED.label ||
+              ptDetail?.status === PtStatus.PASSED.label) && (
               <Button
                 onPress={handleClick}
-                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(20), width: RfW(230) }]}>
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(60), width: RfW(230) }]}>
                 <Text style={commonStyles.textButtonPrimary}>{getButtonText()}</Text>
               </Button>
             )}
