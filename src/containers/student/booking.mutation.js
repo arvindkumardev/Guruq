@@ -183,6 +183,18 @@ export const CANCEL_PENDING_BOOKINGS = gql`
   }
 `;
 
+export const GENERATE_INVOICE = gql`
+  mutation GenerateInvoice($orderId: Int!) {
+    generateInvoice(orderId: $orderId) {
+      id
+      attachment {
+        id
+        original
+      }
+    }
+  }
+`;
+
 export const CANCEL_ORDER_ITEMS = gql`
   mutation CancelOrderItem($orderItemId: Int!, $cancelReason: ClassCancelReasonEnum!, $comments: String!) {
     cancelOrderItem(orderItemId: $orderItemId, cancelReason: $cancelReason, comments: $comments) {

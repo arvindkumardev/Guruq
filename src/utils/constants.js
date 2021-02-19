@@ -26,7 +26,7 @@ export const LOTTIE_JSON_FILES = {
 };
 
 export const FRONTEND_URL = 'https://guruq.in';
-export const IMAGES_URL = 'https://images.guruq.in';
+export const IMAGES_URL = 'http://10.0.0.8:5000';
 export const DASHBOARD_URL = 'https://dashboard.guruq.in';
 export const CLASSES_URL = 'https://classes.guruq.in';
 export const API_URL = 'https://api.guruq.in';

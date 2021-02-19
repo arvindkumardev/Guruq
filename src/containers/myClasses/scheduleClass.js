@@ -122,7 +122,9 @@ function ScheduleClass(props) {
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={() =>
-        navigation.navigate(NavigationRouteNames.STUDENT.VIEW_BOOKING_DETAILS, { bookingId: classData?.order?.id })
+        isStudent
+          ? navigation.navigate(NavigationRouteNames.STUDENT.VIEW_BOOKING_DETAILS, { bookingId: classData?.order?.id })
+          : {}
       }>
       <View style={{ height: RfH(30) }} />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

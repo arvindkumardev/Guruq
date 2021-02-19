@@ -273,7 +273,7 @@ function CalendarView(props) {
                   <Button
                     block
                     style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-                    onPress={() => navigation.navigate(routeNames.STUDENT.MY_CLASSES)}>
+                    onPress={() => navigation.navigate(routeNames.MY_CLASSES)}>
                     <Text style={commonStyles.textButtonPrimary}>{isStudent ? 'Schedule Now' : 'View Classes'}</Text>
                   </Button>
                 )}

@@ -13,8 +13,9 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import NavigationRouteNames from '../../../routes/screenNames';
 import ActionSheet from '../../../components/ActionSheet';
 import { GET_BOOKING_DETAIL } from '../booking.query';
-import { CANCEL_PENDING_BOOKINGS } from '../booking.mutation';
+import { CANCEL_PENDING_BOOKINGS, GENERATE_INVOICE } from '../booking.mutation';
 import { OrderStatusEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
+import CustomModalDocumentViewer from '../../../components/CustomModalDocumentViewer';
 
 function BookingDetails(props) {
   const { route } = props;
@@ -22,6 +23,9 @@ function BookingDetails(props) {
   const navigation = useNavigation();
   const [openMenu, setOpenMenu] = useState(false);
   const [bookingData, setBookingData] = useState({});
+
+  const [currentInvoice, setCurrentInvoice] = useState({});
+  const [viewInvoice, setViewInvoice] = useState(false);
 
   const [getBooking, { loading: getBookingLoader }] = useLazyQuery(GET_BOOKING_DETAIL, {
     fetchPolicy: 'no-cache',
@@ -47,12 +51,42 @@ function BookingDetails(props) {
     },
   });
 
+  const [generateInvoice, { loading: generateInvoiceLoading }] = useMutation(GENERATE_INVOICE, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      console.log(data);
+      // navigation.goBack();
+
+      setCurrentInvoice({ ...data.generateInvoice, name: 'Invoice' });
+      setViewInvoice(true);
+    },
+  });
+
   useEffect(() => {
     // getToken().then((tk) => {
     //   setToken(tk);
     // });
     getBooking();
   }, []);
+
+  const downloadInvoice = () => {
+    setOpenMenu(false);
+
+    if (bookingData.invoice) {
+      setCurrentInvoice({ ...bookingData.invoice, name: 'Invoice' });
+      setViewInvoice(true);
+    } else {
+      generateInvoice({ variables: { orderId: bookingId } });
+    }
+
+    // navigation.navigate(NavigationRouteNames.WEB_VIEW, {
+    //   url: '',
+    //   label: 'Invoice',
+    // });
+  };
 
   const goToCustomerCare = () => {
     setOpenMenu(false);
@@ -61,6 +95,7 @@ function BookingDetails(props) {
 
   const [menuItem, setMenuItem] = useState([
     // { label: 'Generate Invoice', handler: goToInvoice, isEnabled: true },
+    { label: 'Download Invoice', handler: downloadInvoice, isEnabled: true },
     { label: 'Help', handler: goToCustomerCare, isEnabled: true },
   ]);
 
@@ -334,6 +369,14 @@ function BookingDetails(props) {
           isVisible={openMenu}
           topLabel=""
         />
+
+        {viewInvoice && !isEmpty(currentInvoice) && (
+          <CustomModalDocumentViewer
+            document={currentInvoice}
+            modalVisible={viewInvoice}
+            backButtonHandler={() => setViewInvoice(false)}
+          />
+        )}
       </View>
     </>
   );

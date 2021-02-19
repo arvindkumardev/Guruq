@@ -139,13 +139,9 @@ export const getStudentRoutes = (studentInfo) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.STUDENT.REFUND} component={Refund} options={{ headerShown: false }} />
+      <Stack.Screen name={NavigationRouteNames.MY_CLASSES} component={MyClasses} options={{ headerShown: false }} />
       <Stack.Screen
-        name={NavigationRouteNames.STUDENT.MY_CLASSES}
-        component={MyClasses}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={NavigationRouteNames.STUDENT.SCHEDULE_CLASS}
+        name={NavigationRouteNames.SCHEDULE_CLASS}
         component={scheduleClass}
         options={{ headerShown: false }}
       />

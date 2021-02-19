@@ -34,19 +34,19 @@ function BottomTab(props) {
 
           <Text style={activeTab === 2 ? styles.bottomTabActive : styles.bottomText}>Calendar</Text>
         </Button>
-        {/*<Button*/}
-        {/*  style={{ backgroundColor: Colors.white }}*/}
-        {/*  vertical*/}
-        {/*  active={activeTab === 3}*/}
-        {/*  onPress={() => changeTab(3)}>*/}
-        {/*  <Image*/}
-        {/*    source={activeTab === 3 ? Images.classes_active : Images.classes}*/}
-        {/*    style={styles.iconStyle}*/}
-        {/*    resizeMode="contain"*/}
-        {/*  />*/}
+        <Button
+          style={{ backgroundColor: Colors.white }}
+          vertical
+          active={activeTab === 3}
+          onPress={() => changeTab(3)}>
+          <Image
+            source={activeTab === 3 ? Images.classes_active : Images.classes}
+            style={styles.iconStyle}
+            resizeMode="contain"
+          />
 
-        {/*  <Text style={activeTab === 3 ? styles.bottomTabActive : styles.bottomText}>Classes</Text>*/}
-        {/*</Button>*/}
+          <Text style={activeTab === 3 ? styles.bottomTabActive : styles.bottomText}>Classes</Text>
+        </Button>
         <Button
           style={{ backgroundColor: Colors.white }}
           vertical

@@ -97,7 +97,7 @@ function Profile(props) {
     } else if (item.name === 'Calendar') {
       navigation.navigate(NavigationRouteNames.CALENDAR);
     } else if (item.name === 'Schedule Classes') {
-      navigation.navigate(NavigationRouteNames.STUDENT.MY_CLASSES);
+      navigation.navigate(NavigationRouteNames.MY_CLASSES);
     } else if (item.name === 'Add Study Area') {
       navigation.navigate(NavigationRouteNames.STUDENT.STUDY_AREA);
     } else {

@@ -43,7 +43,7 @@ import UserImageComponent from '../../../../components/UserImageComponent';
 const carouselItems = [
   {
     image: Images.student_home_banner_1,
-    routeName: NavigationRouteNames.STUDENT.MY_CLASSES,
+    routeName: NavigationRouteNames.MY_CLASSES,
     params: { tab: '' },
   },
   {
@@ -53,7 +53,7 @@ const carouselItems = [
   },
   {
     image: Images.student_home_banner_3,
-    routeName: NavigationRouteNames.STUDENT.MY_CLASSES,
+    routeName: NavigationRouteNames.MY_CLASSES,
     params: { tab: 'history' },
   },
 ];

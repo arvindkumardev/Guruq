@@ -98,7 +98,7 @@ function MyClasses(props) {
   }, [isFocussed]);
 
   const goToScheduleClasses = (item) => {
-    navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: item });
+    navigation.navigate(NavigationRouteNames.SCHEDULE_CLASS, { classData: item });
   };
 
   const handleScroll = (event) => {

@@ -43,6 +43,9 @@ const NavigationRouteNames = {
   SCHEDULED_CLASS_DETAILS: 'scheduled_class_details',
   CANCEL_REASON: 'cancel_reason',
 
+  MY_CLASSES: 'my_classes',
+  SCHEDULE_CLASS: 'schedule_class',
+
   STUDENT: {
     ON_BOARDING: 'student_on_boarding',
     MY_STUDY_AREAS: 'my_study_areas',
@@ -55,12 +58,10 @@ const NavigationRouteNames = {
     PROFILE: 'student_profile',
     COMPARE_TUTORS: 'compare_tutors',
     TUTOR_DETAILS: 'tutor_details',
-    SCHEDULE_CLASS: 'schedule_class',
     MY_CART: 'my_cart',
     PAYMENT_METHOD: 'payment_method',
     BOOKING_CONFIRMED: 'booking_confirmed',
     PAYMENT_RECEIVED: 'payment_received',
-    MY_CLASSES: 'my_classes',
     RATE_AND_REVIEW: 'rate and review',
     DETAILED_RATING: 'detailed rating',
     COMPARE_MODAL: 'compare_modal',

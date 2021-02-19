@@ -23,6 +23,7 @@ module.exports = {
     curly: 'error',
     'react/prop-types': 0,
     'react/require-default-props': 0,
+    'no-nested-ternary': 0,
   },
   plugins: ['prettier'],
 };

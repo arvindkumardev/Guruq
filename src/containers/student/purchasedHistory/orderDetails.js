@@ -13,7 +13,6 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { getFullName, RfH, RfW } from '../../../utils/helpers';
 import { GET_CANCELLATION_SUMMARY, GET_SCHEDULED_CLASSES } from '../booking.query';
 import NavigationRouteNames from '../../../routes/screenNames';
-import routeNames from '../../../routes/screenNames';
 import { OrderStatusEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
 
 function OrderDetails(props) {
@@ -161,7 +160,7 @@ function OrderDetails(props) {
       <TouchableOpacity
         activeOpacity={0.9}
         onPress={() =>
-          item.isScheduled ? navigation.navigate(routeNames.SCHEDULED_CLASS_DETAILS, { uuid: item.uuid }) : {}
+          item.isScheduled ? navigation.navigate(NavigationRouteNames.SCHEDULED_CLASS_DETAILS, { uuid: item.uuid }) : {}
         }
         style={{
           marginRight: RfW(8),
@@ -252,7 +251,7 @@ function OrderDetails(props) {
 
       {cancelSummary.unscheduled > 0 && orderData.orderStatus === OrderStatusEnum.COMPLETE.label && (
         <Button
-          onPress={() => navigation.navigate(NavigationRouteNames.STUDENT.SCHEDULE_CLASS, { classData: orderData })}
+          onPress={() => navigation.navigate(NavigationRouteNames.SCHEDULE_CLASS, { classData: orderData })}
           style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginVertical: RfH(30) }]}>
           <Text style={commonStyles.textButtonPrimary}>Schedule Class</Text>
         </Button>

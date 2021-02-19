@@ -161,7 +161,7 @@ export function StudentBottomTabs() {
         options={{
           tabBarLabel: 'Classes',
         }}
-        name={NavigationRouteNames.STUDENT.MY_CLASSES}
+        name={NavigationRouteNames.MY_CLASSES}
         component={MyClasses}
       />
       <Tab.Screen
@@ -198,6 +198,13 @@ export function TutorBottomTabs() {
         }}
         name={NavigationRouteNames.CALENDAR}
         component={CalendarView}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabel: 'Classes',
+        }}
+        name={NavigationRouteNames.MY_CLASSES}
+        component={MyClasses}
       />
       <Tab.Screen
         options={{

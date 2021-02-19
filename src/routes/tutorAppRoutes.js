@@ -20,6 +20,8 @@ import ProficiencyTest from '../containers/tutor/proficiencyTest';
 import StudentListing from '../containers/tutor/studentDetails/studentListing';
 import StudentDetails from '../containers/tutor/studentDetails/studentDetails';
 import Profile from '../containers/tutor/profile/profile';
+import scheduleClass from '../containers/myClasses/scheduleClass';
+import MyClasses from '../containers/myClasses/classes';
 
 const Stack = createStackNavigator();
 
@@ -114,6 +116,12 @@ export const getTutorRoutes = (tutorInfo) => {
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.STUDENT_DETAILS}
         component={StudentDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.MY_CLASSES} component={MyClasses} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.SCHEDULE_CLASS}
+        component={scheduleClass}
         options={{ headerShown: false }}
       />
     </>

@@ -9,6 +9,8 @@ import { alertBox, RfH, RfW } from '../../../../utils/helpers';
 import commonStyles from '../../../../theme/styles';
 import { Colors } from '../../../../theme';
 import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../../tutor.mutation';
+import CustomModalWebView from '../../../../components/CustomModalWebView';
+import { STUDENT_FAQ_URL } from '../../../../utils/constants';
 
 const PM = {
   online: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
@@ -22,6 +24,8 @@ function PriceMatrixView(props) {
   const [demoClassPm, setDemoClassPM] = useState({ online: 0, offline: 0 });
   const [isDemoClass, setIsDemoClass] = useState(offering.demoClass);
   const [modeDemoClass, setModeDemoClass] = useState(0);
+
+  const [offlineClassEnabled, setOfflineClassEnabled] = useState(false);
 
   useEffect(() => {
     if (!isEmpty(offering.budgets)) {
@@ -91,7 +95,15 @@ function PriceMatrixView(props) {
       if (data) {
         alertBox('Price matrix updated successfully!', '', {
           positiveText: 'Ok',
-          onPositiveClick: () => navigation.goBack(),
+          onPositiveClick: () => {
+            // check for offline and show the relevant popup
+            if (priceMatrix.offline['1'] > 0) {
+              // show message
+              setOfflineClassEnabled(true);
+            } else {
+              navigation.goBack();
+            }
+          },
         });
       }
     },
@@ -336,7 +348,10 @@ function PriceMatrixView(props) {
                   <Input
                     value={demoClassPm.online.toString()}
                     onChangeText={(value) =>
-                      setDemoClassPM((demoClassPm) => ({ ...demoClassPm, online: value ? parseInt(value) : 0 }))
+                      setDemoClassPM((demoClassPm) => ({
+                        ...demoClassPm,
+                        online: value ? parseInt(value) : 0,
+                      }))
                     }
                     style={{ textAlign: 'center' }}
                     placeholder="Price"
@@ -363,7 +378,10 @@ function PriceMatrixView(props) {
                   <Input
                     value={demoClassPm.offline.toString()}
                     onChangeText={(value) =>
-                      setDemoClassPM((demoClassPm) => ({ ...demoClassPm, offline: value ? parseInt(value) : 0 }))
+                      setDemoClassPM((demoClassPm) => ({
+                        ...demoClassPm,
+                        offline: value ? parseInt(value) : 0,
+                      }))
                     }
                     style={{ textAlign: 'center' }}
                     placeholder="Price"
@@ -392,6 +410,16 @@ function PriceMatrixView(props) {
           <Text style={commonStyles.textButtonPrimary}>Update price matrix</Text>
         </Button>
       </View>
+
+      {offlineClassEnabled && (
+        <CustomModalWebView
+          url={STUDENT_FAQ_URL}
+          headerText="Offline Class Etiquette"
+          modalVisible
+          onNavigationStateChange={() => {}}
+          backButtonHandler={() => navigation.goBack()}
+        />
+      )}
     </ScrollView>
   );
 }
