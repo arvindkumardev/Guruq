@@ -6,9 +6,8 @@ import ScreenHeader from '../../../components/ScreenHeader';
 import { getToken, RfW } from '../../../utils/helpers';
 import { Images } from '../../../theme';
 import ActionModal from '../../certficationProcess/components/helpSection';
-import InPlaceLoader from '../../../components/InPlaceLoader';
 import { DASHBOARD_URL } from '../../../utils/constants';
-import Loader from "../../../components/Loader";
+import Loader from '../../../components/Loader';
 
 const ProficiencyTest = (props) => {
   const { route } = props;
@@ -27,9 +26,9 @@ const ProficiencyTest = (props) => {
     getToken().then((tk) => {
       setToken(tk);
     });
-    setTimeout(()=>{
-      setIsLoading(false)
-    },10000)
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 10000);
   }, []);
 
   useEffect(() => {

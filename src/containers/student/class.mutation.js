@@ -34,3 +34,11 @@ export const CANCEL_CLASS = gql`
     }
   }
 `;
+
+export const CANCEL_CLASS_REQUEST = gql`
+  mutation AddInquiry($inquiryDto: CreateUpdateInquiryDto!) {
+    addInquiry(inquiryDto: $inquiryDto) {
+      id
+    }
+  }
+`;

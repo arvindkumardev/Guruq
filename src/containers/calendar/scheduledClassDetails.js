@@ -24,7 +24,7 @@ import { UserTypeEnum } from '../../common/userType.enum';
 import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
 import ActionSheet from '../../components/ActionSheet';
 import UploadDocument from '../../components/UploadDocument';
-import { DocumentTypeEnum } from '../common/enums';
+import { ClassStatusEnum, DocumentTypeEnum } from '../common/enums';
 import CustomModalDocumentViewer from '../../components/CustomModalDocumentViewer';
 
 function ScheduledClassDetails(props) {
@@ -170,9 +170,9 @@ function ScheduledClassDetails(props) {
     });
   };
 
-  const goToCancelReason = () => {
+  const goToCancelReason = (pastClass = false) => {
     setOpenMenu(false);
-    navigation.navigate(NavigationRouteNames.CANCEL_REASON, { classId: classData?.classEntity?.id });
+    navigation.navigate(NavigationRouteNames.CANCEL_REASON, { classId: classData?.classEntity?.id, pastClass });
   };
   const goToHelp = () => {
     setOpenMenu(false);
@@ -188,6 +188,19 @@ function ScheduledClassDetails(props) {
     setShowReschedulePopup(true);
   };
 
+  const openClassDidNotHappen = () => {
+    setOpenMenu(false);
+
+    setTimeout(() => {
+      // confirm
+      alertBox(`If the class didn't happen, you can request for class cancellation and reschedule it`, '', {
+        positiveText: 'Raise Cancel Request',
+        negativeText: 'Close',
+        onPositiveClick: () => goToCancelReason(true),
+      });
+    }, 100);
+  };
+
   useEffect(() => {
     let menuItemData = [{ label: 'Help', handler: goToHelp, isEnabled: true }];
     if (!isEmpty(classData) && (classData?.isRescheduleAllowed || classData?.isCancelAllowed)) {
@@ -197,6 +210,14 @@ function ScheduledClassDetails(props) {
         ...menuItemData,
       ];
     }
+
+    if (!isEmpty(classData) && classData?.classEntity.status === ClassStatusEnum.PENDING.label) {
+      menuItemData = [
+        { label: "Class Didn't Happen", handler: openClassDidNotHappen, isEnabled: true },
+        ...menuItemData,
+      ];
+    }
+
     setMenuItem(menuItemData);
   }, [classData]);
 

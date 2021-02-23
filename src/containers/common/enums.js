@@ -77,3 +77,10 @@ export const ClassCancelReasonEnum = {
   },
   OTHER: { label: 'OTHER', value: 1, displayName: 'Other' },
 };
+
+export const ClassStatusEnum = {
+  PENDING: { value: 1, label: 'PENDING' },
+  RESCHEDULED: { value: 2, label: 'RESCHEDULED' },
+  COMPLETE: { value: 3, label: 'COMPLETE' },
+  CANCELLED: { value: 4, label: 'CANCELLED' },
+};

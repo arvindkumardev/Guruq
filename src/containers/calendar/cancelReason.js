@@ -8,9 +8,9 @@ import { isEmpty } from 'lodash';
 import { CustomRadioButton, ScreenHeader, Loader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors } from '../../theme';
-import { alertBox, RfH, RfW } from '../../utils/helpers';
+import { alertBox, getFullName, RfH, RfW } from '../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { CANCEL_CLASS } from '../student/class.mutation';
+import { CANCEL_CLASS, CANCEL_CLASS_REQUEST } from '../student/class.mutation';
 import NavigationRouteNames from '../../routes/screenNames';
 import { ClassCancelReasonEnum } from '../common/enums';
 import { userDetails } from '../../apollo/cache';
@@ -18,7 +18,7 @@ import { userDetails } from '../../apollo/cache';
 function CancelReason(props) {
   const { route } = props;
   const navigation = useNavigation();
-  const { classId } = route.params;
+  const { classId, pastClass } = route.params;
 
   const userInfo = useReactiveVar(userDetails);
 
@@ -35,6 +35,26 @@ function CancelReason(props) {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         // const error = e.graphQLErrors[0].extensions.exception.response;
       }
+    },
+    onCompleted: (data) => {
+      if (data) {
+        alertBox('Class cancelled successfully', '', {
+          positiveText: 'Ok',
+          onPositiveClick: () => {
+            navigation.navigate(NavigationRouteNames[userInfo.type].DASHBOARD, { tabId: 2 });
+          },
+        });
+      }
+    },
+  });
+
+  const [cancelClassRequest, { loading: cancelClassRequestLoading }] = useMutation(CANCEL_CLASS_REQUEST, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      // if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+      // const error = e.graphQLErrors[0].extensions.exception.response;
+      // }
+      console.log(e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -70,6 +90,22 @@ function CancelReason(props) {
   const onCancelClass = () => {
     if (isEmpty(cancelReason)) {
       alertBox('Please provide the cancellation reason');
+    } else if (pastClass) {
+      cancelClassRequest({
+        variables: {
+          inquiryDto: {
+            name: getFullName(userInfo),
+            mobile: userInfo.phoneNumber.number,
+            email: userInfo.email,
+            title: `Class cancel request: C-${classId}`,
+            text: cancelReason,
+            source: 'APP',
+            classEntity: { id: classId },
+            type: 'SUPPORT',
+            requestType: 'CLASS_CANCEL',
+          },
+        },
+      });
     } else {
       cancelClass({
         variables: {
@@ -83,7 +119,8 @@ function CancelReason(props) {
 
   return (
     <>
-      <Loader isLoading={cancelLoading} />
+      <Loader isLoading={cancelLoading || cancelClassRequestLoading} />
+
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
         <ScreenHeader label="Cancel Reason" homeIcon />
         <Text style={[{ paddingVertical: RfH(20) }, commonStyles.headingPrimaryText]}>
