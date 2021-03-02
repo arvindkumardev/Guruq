@@ -31,7 +31,7 @@ function CustomModalDocumentViewer(props) {
       visible={modalVisible}
       animationType="slideIn"
       backdropOpacity={1}
-      transparent
+      // transparent
       onRequestClose={backButtonHandler}>
       <ScreenHeader
         label={document.name}

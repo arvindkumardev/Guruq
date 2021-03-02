@@ -10,7 +10,7 @@ import commonStyles from '../../../../theme/styles';
 import { Colors } from '../../../../theme';
 import { CREATE_UPDATE_TUTOR_OFFERINGS } from '../../tutor.mutation';
 import CustomModalWebView from '../../../../components/CustomModalWebView';
-import { STUDENT_FAQ_URL } from '../../../../utils/constants';
+import { OFFLINE_CLASS_ETIQUETTE } from '../../../../utils/constants';
 
 const PM = {
   online: { 1: 0, 6: 0, 11: 0, 26: 0, 51: 0 },
@@ -413,7 +413,7 @@ function PriceMatrixView(props) {
 
       {offlineClassEnabled && (
         <CustomModalWebView
-          url={STUDENT_FAQ_URL}
+          url={OFFLINE_CLASS_ETIQUETTE}
           headerText="Offline Class Etiquette"
           modalVisible
           onNavigationStateChange={() => {}}

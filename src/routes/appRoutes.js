@@ -249,6 +249,12 @@ const AppStack = (props) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={NavigationRouteNames.WALLET} component={Wallet} options={{ headerShown: false }} />
+
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
+        component={UploadDocuments}
+        options={{ headerShown: false }}
+      />
     </>
   );
 

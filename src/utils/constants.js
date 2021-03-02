@@ -42,6 +42,7 @@ export const DOCUMENT_PREVIEW_URL = `${IMAGES_URL}/preview/document?filePath=`;
 
 export const STUDENT_FAQ_URL = `${FRONTEND_URL}/student-faq-m`;
 export const TUTOR_FAQ_URL = `${FRONTEND_URL}/tutor-faq-m`;
+export const OFFLINE_CLASS_ETIQUETTE = `${FRONTEND_URL}/offline-class-etiquette-m`;
 
 export const ABOUT_US_URL = `${FRONTEND_URL}/about-us`;
 export const CEO_MESSAGE_URL = `${FRONTEND_URL}/ceo-message`;

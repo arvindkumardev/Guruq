@@ -20,6 +20,7 @@ import { GET_OFFERINGS_MASTER_DATA } from '../../student/dashboard-query';
 const TutorOnBoard = () => {
   const isFocussed = useIsFocused();
   const navigation = useNavigation();
+  const tutorInfo = useReactiveVar(tutorDetails);
   const [tutorDetail, setTutorDetail] = useState({});
   const offeringMasterData = useReactiveVar(offeringsMasterData);
 
@@ -107,10 +108,7 @@ const TutorOnBoard = () => {
   return (
     <View style={{ backgroundColor: Colors.white, flex: 1 }}>
       <Loader isLoading={tutorLeadDetailLoading || getCurrentTutorLoading || markOnboardedLoading} />
-      <ScreenHeader
-          label="Complete Profile"
-          horizontalPadding={RfW(16)}
-      />
+      <ScreenHeader label="Complete Profile" horizontalPadding={RfW(16)} />
       <TouchableOpacity
         style={[styles.stepCard, { borderLeftColor: Colors.lightGreen, justifyContent: 'space-between' }]}
         activeOpacity={0.8}
@@ -206,6 +204,37 @@ const TutorOnBoard = () => {
           </Text>
         </View>
       </TouchableOpacity>
+
+      {!tutorInfo.user.onBoarded && (
+        <TouchableOpacity
+          style={[styles.stepCard, { borderLeftColor: Colors.lightOrange, justifyContent: 'space-between' }]}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS)}>
+          <View style={{ flexDirection: 'row' }}>
+            <IconButtonWrapper
+              iconImage={Images.documentUpload}
+              iconWidth={RfH(24)}
+              iconHeight={RfW(24)}
+              imageResizeMode="contain"
+            />
+            <Text style={[commonStyles.regularPrimaryText, { marginLeft: RfW(10) }]}>Documents</Text>
+          </View>
+          <View>
+            <Text
+              style={[
+                commonStyles.mediumPrimaryText,
+                {
+                  color:
+                    isEmpty(tutorDetail?.documents) || tutorDetail?.documents.length !== 4
+                      ? Colors.orangeRed
+                      : Colors.green,
+                },
+              ]}>
+              {isEmpty(tutorDetail?.documents) || tutorDetail?.documents.length !== 4 ? 'Pending' : 'Updated'}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
 
       {!isEmpty(tutorDetail) && isButtonVisible() && (
         <Button
