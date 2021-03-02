@@ -25,8 +25,8 @@ export const LOTTIE_JSON_FILES = {
   loaderJson: require('../assets/json/loader1.json'),
 };
 
-const isDev = true;
-const isProd = false;
+const isDev = false;
+const isProd = true;
 
 const dev = {
   FRONTEND_URL: 'https://staging.guruq.in',
