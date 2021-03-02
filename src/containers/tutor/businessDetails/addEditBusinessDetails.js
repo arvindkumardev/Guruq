@@ -6,10 +6,10 @@ import { isEmpty, omit } from 'lodash';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import {
   CustomCheckBox,
+  CustomModalDocumentViewer,
   IconButtonWrapper,
   Loader,
   ScreenHeader,
-  CustomModalDocumentViewer,
   UploadDocument,
 } from '../../../components';
 import commonStyles from '../../../theme/styles';
@@ -19,7 +19,7 @@ import { ADD_UPDATE_BUSINESS_DETAILS } from './business.mutation';
 import { tutorDetails, userToken } from '../../../apollo/cache';
 import { ADD_TUTOR_DOCUMENT_DETAILS, DELETE_TUTOR_DOCUMENT_DETAILS } from '../tutor.mutation';
 import { DocumentTypeEnum } from '../../common/enums';
-import { API_URL } from '../../../utils/constants';
+import { urlConfig } from '../../../utils/constants';
 
 function AddEditBusinessDetails(props) {
   const businessDetail = props?.route?.params?.businessDetails;
@@ -127,7 +127,7 @@ function AddEditBusinessDetails(props) {
     const formdata = new FormData();
     formdata.append('file', file);
     try {
-      const res = await fetch(`${API_URL}/upload/file`, {
+      const res = await fetch(`${urlConfig.API_URL}/upload/file`, {
         headers,
         method: 'POST',
         body: formdata,

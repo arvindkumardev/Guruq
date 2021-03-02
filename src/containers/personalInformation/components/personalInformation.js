@@ -7,7 +7,7 @@ import moment from 'moment';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, Loader } from '../../../components';
 import { alertBox, getToken, isValidMobile, printDate, RfH, RfW } from '../../../utils/helpers';
-import { API_URL, IND_COUNTRY_OBJ, MIN_AGE_STUDENT, MIN_AGE_TUTOR } from '../../../utils/constants';
+import { IND_COUNTRY_OBJ, MIN_AGE_STUDENT, MIN_AGE_TUTOR, urlConfig } from '../../../utils/constants';
 import { Colors, Images } from '../../../theme';
 import CustomDatePicker from '../../../components/CustomDatePicker';
 import {
@@ -165,7 +165,7 @@ function PersonalInformation(props) {
     setIsFileUploading(true);
 
     try {
-      const res = await fetch(`${API_URL}/upload/file`, {
+      const res = await fetch(`${urlConfig.API_URL}/upload/file`, {
         headers,
         method: 'POST',
         body: formdata,

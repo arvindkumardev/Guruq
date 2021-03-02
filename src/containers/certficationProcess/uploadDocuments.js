@@ -1,4 +1,4 @@
-import { ScrollView, StatusBar, Text, TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native';
+import { ScrollView, StatusBar, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { isArray, isEmpty } from 'lodash';
@@ -12,7 +12,7 @@ import { GET_TUTOR_ALL_DETAILS } from './certification-query';
 import { DocumentTypeEnum } from '../common/enums';
 import Loader from '../../components/Loader';
 import ActionModal from './components/helpSection';
-import { API_URL } from '../../utils/constants';
+import { urlConfig } from '../../utils/constants';
 import { userToken } from '../../apollo/cache';
 
 const DOCUMENT_NAME_ID_PROOF = 'id proof';
@@ -132,7 +132,7 @@ function UploadDocuments() {
     setIsFileUploading(true);
 
     try {
-      const res = await fetch(`${API_URL}/upload/file`, {
+      const res = await fetch(`${urlConfig.API_URL}/upload/file`, {
         headers,
         method: 'POST',
         body: formdata,

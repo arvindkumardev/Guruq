@@ -13,7 +13,7 @@ import { getToken } from './utils/helpers';
 import { appMetaData, isLoggedIn, isSplashScreenVisible, isTokenLoading, userToken, userType } from './apollo/cache';
 import AppStack from './routes/appRoutes';
 import initializeApollo from './apollo/apollo';
-import { APP_BUILD_VERSION, DASHBOARD_URL } from './utils/constants';
+import { APP_BUILD_VERSION, urlConfig } from './utils/constants';
 
 const getActiveRouteName = (state) => {
   const route = state.routes[state.index];
@@ -90,7 +90,7 @@ function App() {
   }, []);
 
   const getAppMetaData = async () => {
-    const res = await fetch(`${DASHBOARD_URL}/app-version.json?${new Date().getTime()}`, {
+    const res = await fetch(`${urlConfig.DASHBOARD_URL}/app-version.json?${new Date().getTime()}`, {
       method: 'GET',
     }).then((response) => response.json());
     const appData = res[Platform.OS.toLowerCase()];

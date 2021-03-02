@@ -14,7 +14,7 @@ import commonStyles from '../../theme/styles';
 import { UPDATE_BACKGROUND_CHECK } from './certification-mutation';
 import { GET_TUTOR_LEAD_DETAIL } from './certification-query';
 import { BackgroundCheckStatusEnum } from '../common/enums';
-import { DASHBOARD_URL } from '../../utils/constants';
+import { urlConfig } from '../../utils/constants';
 import { GET_CURRENT_TUTOR_QUERY } from '../common/graphql-query';
 import { tutorDetails } from '../../apollo/cache';
 import ActionModal from './components/helpSection';
@@ -99,7 +99,7 @@ function BackgroundCheck() {
               <Text />
               <WebView
                 source={{
-                  uri: `${DASHBOARD_URL}/terms.html`,
+                  uri: `${urlConfig.DASHBOARD_URL}/terms.html`,
                 }}
                 javaScriptEnabled
                 domStorageEnabled

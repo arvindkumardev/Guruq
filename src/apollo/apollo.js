@@ -5,9 +5,9 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import apolloLogger from 'apollo-link-logger';
 import { onError } from '@apollo/client/link/error';
 import { getToken } from '../utils/helpers';
-import { GRAPH_API_URL } from '../utils/constants';
+import { urlConfig } from '../utils/constants';
 
-const GRAPHQL_ENDPOINT = `${GRAPH_API_URL}`;
+const GRAPHQL_ENDPOINT = `${urlConfig.GRAPH_API_URL}`;
 
 let apolloClient = null;
 

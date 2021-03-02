@@ -25,30 +25,50 @@ export const LOTTIE_JSON_FILES = {
   loaderJson: require('../assets/json/loader1.json'),
 };
 
-export const FRONTEND_URL = 'https://guruq.in';
-export const IMAGES_URL = 'http://10.0.0.8:5000';
-export const DASHBOARD_URL = 'https://dashboard.guruq.in';
-export const CLASSES_URL = 'https://classes.guruq.in';
-export const API_URL = 'https://api.guruq.in';
-export const GRAPH_API_URL = `${API_URL}/gql`;
-// export const API_URL = 'http://10.0.0.11:5000';
-// export const API_URL = 'https://stagingapi.guruq.in';
-// export const GRAPH_API_URL = `${API_URL}/graphql`;
+const isDev = true;
+const isProd = false;
+
+const dev = {
+  FRONTEND_URL: 'https://staging.guruq.in',
+  IMAGES_URL: 'http://10.0.0.9:5000',
+  DASHBOARD_URL: 'https://stagingdashboard.guruq.in',
+  CLASSES_URL: 'https://stagingclasses.guruq.in',
+  API_URL: 'http://10.0.0.9:5000',
+  GRAPH_API_URL: 'http://10.0.0.9:5000/graphql',
+};
+const staging = {
+  FRONTEND_URL: 'https://staging.guruq.in',
+  IMAGES_URL: 'https://stagingimages.guruq.in',
+  DASHBOARD_URL: 'https://stagingdashboard.guruq.in',
+  CLASSES_URL: 'https://stagingclasses.guruq.in',
+  API_URL: 'https://stagingapi.guruq.in',
+  GRAPH_API_URL: 'https://stagingapi.guruq.in/graphql',
+};
+const production = {
+  FRONTEND_URL: 'https://guruq.in',
+  IMAGES_URL: 'https://images.guruq.in',
+  DASHBOARD_URL: 'https://dashboard.guruq.in',
+  CLASSES_URL: 'https://classes.guruq.in',
+  API_URL: 'https://api.guruq.in',
+  GRAPH_API_URL: 'https://api.guruq.in/gql',
+};
+
+export const urlConfig = isDev ? dev : isProd ? production : staging;
 
 // export const ATTACHMENT_PREVIEW_URL = `${IMAGES_URL}/upload/preview?filePath=`;
 
-export const PROFILE_IMAGE_PREVIEW_URL = `${IMAGES_URL}/preview/profile-image?filePath=`;
-export const DOCUMENT_PREVIEW_URL = `${IMAGES_URL}/preview/document?filePath=`;
+export const PROFILE_IMAGE_PREVIEW_URL = `${urlConfig.IMAGES_URL}/preview/profile-image?filePath=`;
+export const DOCUMENT_PREVIEW_URL = `${urlConfig.IMAGES_URL}/preview/document?filePath=`;
 
-export const STUDENT_FAQ_URL = `${FRONTEND_URL}/student-faq-m`;
-export const TUTOR_FAQ_URL = `${FRONTEND_URL}/tutor-faq-m`;
-export const OFFLINE_CLASS_ETIQUETTE = `${FRONTEND_URL}/offline-class-etiquette-m`;
+export const STUDENT_FAQ_URL = `${urlConfig.FRONTEND_URL}/student-faq-m`;
+export const TUTOR_FAQ_URL = `${urlConfig.FRONTEND_URL}/tutor-faq-m`;
+export const OFFLINE_CLASS_ETIQUETTE = `${urlConfig.FRONTEND_URL}/offline-class-etiquette-m`;
 
-export const ABOUT_US_URL = `${FRONTEND_URL}/about-us`;
-export const CEO_MESSAGE_URL = `${FRONTEND_URL}/ceo-message`;
-export const CSR_URL = `${FRONTEND_URL}/guruq-csr`;
-export const IN_NEWS_URL = `${FRONTEND_URL}/guruq-in-news`;
-export const ACADEMIC_BOARD_URL = `${FRONTEND_URL}/academic-board`;
+export const ABOUT_US_URL = `${urlConfig.FRONTEND_URL}/about-us`;
+export const CEO_MESSAGE_URL = `${urlConfig.FRONTEND_URL}/ceo-message`;
+export const CSR_URL = `${urlConfig.FRONTEND_URL}/guruq-csr`;
+export const IN_NEWS_URL = `${urlConfig.FRONTEND_URL}/guruq-in-news`;
+export const ACADEMIC_BOARD_URL = `${urlConfig.FRONTEND_URL}/academic-board`;
 
 export const SCHOOL_EDUCATION = 'School Education';
 export const COMPETITIVE_EXAM = 'Competitive Exam';
@@ -92,5 +112,4 @@ export const GURUQ_WHATSAPP_NUMBER = '7375006806';
 export const MIN_AGE_STUDENT = 5;
 export const MIN_AGE_TUTOR = 18;
 
-// export const RAZORPAY_KEY = 'rzp_test_0kNEbt0JJ60aiz';
-export const RAZORPAY_KEY = 'rzp_live_iVRwHQCLxAFyBQ';
+export const RAZORPAY_KEY = isProd ? 'rzp_live_iVRwHQCLxAFyBQ' : 'rzp_test_0kNEbt0JJ60aiz';

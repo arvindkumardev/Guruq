@@ -6,7 +6,7 @@ import { Button, Input, Item, Label } from 'native-base';
 import Geolocation from '@react-native-community/geolocation';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty, omit } from 'lodash';
-import { IconButtonWrapper, ScreenHeader, Loader } from '../../components';
+import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
 import commonStyles from '../../theme/styles';
 import { Colors, Images } from '../../theme';
 import { alertBox, processGeoData, RfH, RfW } from '../../utils/helpers';
@@ -15,7 +15,7 @@ import { AddressTypeEnum } from '../common/enums';
 import GoogleAutoCompleteModal from '../../components/GoogleAutoCompleteModal';
 import { UserTypeEnum } from '../../common/userType.enum';
 import { userType } from '../../apollo/cache';
-import { API_URL, GOOGLE_API_KEY } from '../../utils/constants';
+import { GOOGLE_API_KEY } from '../../utils/constants';
 
 function AddEditAddress(props) {
   const { route } = props;

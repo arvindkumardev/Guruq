@@ -6,7 +6,7 @@ import ScreenHeader from '../../../components/ScreenHeader';
 import { getToken, RfW } from '../../../utils/helpers';
 import { Images } from '../../../theme';
 import ActionModal from '../../certficationProcess/components/helpSection';
-import { DASHBOARD_URL } from '../../../utils/constants';
+import { urlConfig } from '../../../utils/constants';
 import Loader from '../../../components/Loader';
 
 const ProficiencyTest = (props) => {
@@ -33,12 +33,12 @@ const ProficiencyTest = (props) => {
 
   useEffect(() => {
     if (token) {
-      setUrl(`${DASHBOARD_URL}/tutor-proficiency-test/${offeringId}/start/${token}`);
+      setUrl(`${urlConfig.DASHBOARD_URL}/tutor-proficiency-test/${offeringId}/start/${token}`);
     }
   }, [token]);
 
   const onNavigationStateChange = (event) => {
-    if (event.url.includes(`${DASHBOARD_URL}/tutor/start-proficiency-test/${offeringId}/complete`)) {
+    if (event.url.includes(`${urlConfig.DASHBOARD_URL}/tutor/start-proficiency-test/${offeringId}/complete`)) {
       navigation.goBack();
     } else {
       console.log('url', event.url);

@@ -11,7 +11,7 @@ import { Button } from 'native-base';
 import analytics from '@react-native-firebase/analytics';
 
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { sum, isEmpty } from 'lodash';
+import { isEmpty, sum } from 'lodash';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import {
   IconButtonWrapper,
@@ -25,13 +25,13 @@ import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
 import { alertBox, getFullName, getToken, printCurrency, RfH, RfW } from '../../../utils/helpers';
-import { API_URL, DASHBOARD_URL, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { STANDARD_SCREEN_SIZE, urlConfig } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
 import { ADD_TO_CART, CANCEL_PENDING_BOOKINGS, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
 import { GET_MY_QPOINTS_BALANCE, GET_STUDENT_DETAILS } from '../../common/graphql-query';
 import CustomModalWebView from '../../../components/CustomModalWebView';
 import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
-import { userDetails, studentDetails } from '../../../apollo/cache';
+import { studentDetails, userDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 
@@ -310,7 +310,7 @@ const MyCart = () => {
   }, [paymentModal]);
 
   const handlePaymentAuthorization = async (event) => {
-    if (event.url.indexOf(`${DASHBOARD_URL}/booking/confirmation`) > -1) {
+    if (event.url.indexOf(`${urlConfig.DASHBOARD_URL}/booking/confirmation`) > -1) {
       setPaymentStatus('success');
       setPaymentModal(false);
       navigation.navigate(NavigationRouteNames.STUDENT.BOOKING_CONFIRMED, {
@@ -318,7 +318,7 @@ const MyCart = () => {
         paymentMethod: PaymentMethodEnum.PAYTM.value,
       });
       setBookingData({});
-    } else if (event.url.indexOf(`${DASHBOARD_URL}/booking/failure`) > -1) {
+    } else if (event.url.indexOf(`${urlConfig.DASHBOARD_URL}/booking/failure`) > -1) {
       setPaymentModal(false);
       setPaymentStatus('failure');
     } else {
@@ -720,7 +720,7 @@ const MyCart = () => {
       )}
       {paymentModal && !isEmpty(bookingData) && (
         <CustomModalWebView
-          url={`${API_URL}/payment/paytm/startTransaction/${bookingData.uuid}?token=${token}`}
+          url={`${urlConfig.API_URL}/payment/paytm/startTransaction/${bookingData.uuid}?token=${token}`}
           headerText="Payment"
           modalVisible={paymentModal}
           onNavigationStateChange={handlePaymentAuthorization}
