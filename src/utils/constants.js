@@ -26,7 +26,7 @@ export const LOTTIE_JSON_FILES = {
 };
 
 const isDev = false;
-const isProd = true;
+const isProd = false;
 
 const dev = {
   FRONTEND_URL: 'https://staging.guruq.in',
