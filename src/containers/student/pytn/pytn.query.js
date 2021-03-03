@@ -22,6 +22,7 @@ export const GET_PYTN_LISTING = gql`
         onlineClass
         minPrice
         maxPrice
+        createdDate
         acceptedPytns {
           id
           price
@@ -127,6 +128,7 @@ export const SEARCH_TUTOR_PYTN_REQUESTS = gql`
         onlineClass
         minPrice
         maxPrice
+        createdDate
         acceptedPytns {
           id
           price

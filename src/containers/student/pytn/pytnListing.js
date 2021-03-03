@@ -8,7 +8,7 @@ import { Button } from 'native-base';
 import { isEmpty } from 'lodash';
 import { Colors, Fonts, Images } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
-import { alertBox, getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getSubjectIcons, printDate, RfH, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper, ScreenHeader } from '../../../components';
@@ -150,11 +150,15 @@ function PytnListing(props) {
           alignItems: 'center',
           paddingVertical: RfH(20),
         }}>
-        <Text style={commonStyles.mediumPrimaryText}>
-          {!isEmpty(item.acceptedPytns)
-            ? `Request accepted by ${item.acceptedPytns.length} tutors`
-            : 'Not accepted yet'}
-        </Text>
+        <View style={commonStyles.verticallyStretchedItemsView}>
+          <Text>Created On {printDate(item.createdDate)}</Text>
+
+          <Text style={commonStyles.headingPrimaryText}>
+            {!isEmpty(item.acceptedPytns)
+              ? `Request accepted by ${item.acceptedPytns.length} tutors`
+              : 'Not accepted yet'}
+          </Text>
+        </View>
         <TouchableOpacity onPress={() => removePytn(item)}>
           <Text style={[commonStyles.mediumPrimaryText, { color: Colors.orangeRed, textAlign: 'right' }]}>Remove</Text>
         </TouchableOpacity>
