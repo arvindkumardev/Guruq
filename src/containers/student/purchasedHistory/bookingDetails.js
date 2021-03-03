@@ -209,7 +209,7 @@ function BookingDetails(props) {
 
   return (
     <>
-      <Loader isLoading={getBookingLoader || cancelPendingBookingLoading} />
+      <Loader isLoading={getBookingLoader || cancelPendingBookingLoading || generateInvoiceLoading} />
       <View style={(commonStyles.mainContainer, { flex: 1, backgroundColor: Colors.white })}>
         <ScreenHeader
           label="Booking details"
