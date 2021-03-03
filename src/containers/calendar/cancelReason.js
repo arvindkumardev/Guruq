@@ -58,12 +58,16 @@ function CancelReason(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        alertBox('Class cancelled successfully', '', {
-          positiveText: 'Ok',
-          onPositiveClick: () => {
-            navigation.navigate(NavigationRouteNames[userInfo.type].DASHBOARD, { tabId: 2 });
-          },
-        });
+        alertBox(
+          'Class cancellation request is raised, please wait for GuruQ team to approve it and then you can reschedule the class.',
+          '',
+          {
+            positiveText: 'Ok',
+            onPositiveClick: () => {
+              navigation.navigate(NavigationRouteNames[userInfo.type].DASHBOARD, { tabId: 2 });
+            },
+          }
+        );
       }
     },
   });

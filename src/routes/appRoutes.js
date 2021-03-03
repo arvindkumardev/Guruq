@@ -338,11 +338,11 @@ const AppStack = (props) => {
                   component={InterviewScheduling}
                   options={{ headerShown: false }}
                 />
-                <Stack.Screen
-                  name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}
-                  component={UploadDocuments}
-                  options={{ headerShown: false }}
-                />
+                {/*<Stack.Screen*/}
+                {/*  name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}*/}
+                {/*  component={UploadDocuments}*/}
+                {/*  options={{ headerShown: false }}*/}
+                {/*/>*/}
               </>
             )}
             {tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&

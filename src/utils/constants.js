@@ -30,11 +30,11 @@ const isProd = false;
 
 const dev = {
   FRONTEND_URL: 'https://staging.guruq.in',
-  IMAGES_URL: 'http://10.0.0.9:5000',
+  IMAGES_URL: 'http://10.0.0.99:5000',
   DASHBOARD_URL: 'https://stagingdashboard.guruq.in',
   CLASSES_URL: 'https://stagingclasses.guruq.in',
-  API_URL: 'http://10.0.0.9:5000',
-  GRAPH_API_URL: 'http://10.0.0.9:5000/graphql',
+  API_URL: 'http://10.0.0.99:5000',
+  GRAPH_API_URL: 'http://10.0.0.99:5000/graphql',
 };
 const staging = {
   FRONTEND_URL: 'https://staging.guruq.in',
