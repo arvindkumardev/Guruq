@@ -69,13 +69,18 @@ export const DocumentTypeEnum = {
 
 export const ClassCancelReasonEnum = {
   NOT_AVAILABLE: { label: 'NOT_AVAILABLE', value: 1, displayName: 'Unavailable to take classes at the scheduled time' },
-  TUTOR_NOT_RELIABLE: { label: 'TUTOR_NOT_RELIABLE', value: 1, displayName: 'Did not find tutor reliable' },
+  TUTOR_NOT_RELIABLE: { label: 'TUTOR_NOT_RELIABLE', value: 2, displayName: 'Did not find tutor reliable' },
   TUTOR_QUALITY_NOT_SATISFACTORY: {
     label: 'TUTOR_QUALITY_NOT_SATISFACTORY',
-    value: 1,
+    value: 3,
     displayName: 'Unsatisfied with the quality of tutor',
   },
-  OTHER: { label: 'OTHER', value: 1, displayName: 'Other' },
+  TUTOR_DENIED_TO_TAKE_CLASS: {
+    label: 'TUTOR_DENIED_TO_TAKE_CLASS',
+    value: 5,
+    displayName: 'Tutor denied to take class',
+  },
+  OTHER: { label: 'OTHER', value: 4, displayName: 'Other' },
 };
 
 export const ClassStatusEnum = {
