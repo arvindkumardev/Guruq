@@ -296,10 +296,10 @@ function ScheduledClassDetails(props) {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  paddingHorizontal: RfW(16),
+                  paddingRight: RfW(16),
                   flex: 1,
                 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: RfH(15) }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: RfH(16) }}>
                   <BackArrow action={onBackPress} />
                   <View
                     style={[
