@@ -1,30 +1,30 @@
 /* eslint-disable no-restricted-syntax */
-import {useLazyQuery, useMutation, useReactiveVar} from '@apollo/client';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {Button} from 'native-base';
-import React, {useEffect, useState} from 'react';
-import {Alert, FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {isEmpty} from 'lodash';
-import {DUPLICATE_FOUND} from '../../common/errorCodes';
-import {DateSlotSelectorModal, IconButtonWrapper, RateReview, TutorImageComponent} from '../../components';
+import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { Button } from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { isEmpty } from 'lodash';
+import { DUPLICATE_FOUND } from '../../common/errorCodes';
+import { DateSlotSelectorModal, IconButtonWrapper, RateReview, TutorImageComponent } from '../../components';
 import BackArrow from '../../components/BackArrow';
 import Loader from '../../components/Loader';
 import NavigationRouteNames from '../../routes/screenNames';
-import {Colors, Images} from '../../theme';
+import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
-import {STANDARD_SCREEN_SIZE, urlConfig} from '../../utils/constants';
-import {alertBox, getFullName, getToken, printDate, printTime, RfH, RfW} from '../../utils/helpers';
-import {ADD_DOCUMENT_TO_CLASS, RE_SCHEDULE_CLASS} from '../student/booking.mutation';
-import {GET_CLASS_DETAILS_BY_UUID} from '../student/class.query';
+import { STANDARD_SCREEN_SIZE, urlConfig } from '../../utils/constants';
+import { alertBox, getFullName, getToken, printDate, printTime, RfH, RfW } from '../../utils/helpers';
+import { ADD_DOCUMENT_TO_CLASS, RE_SCHEDULE_CLASS } from '../student/booking.mutation';
+import { GET_CLASS_DETAILS_BY_UUID } from '../student/class.query';
 import styles from '../student/tutorListing/styles';
-import {userType} from '../../apollo/cache';
-import {UserTypeEnum} from '../../common/userType.enum';
+import { userType } from '../../apollo/cache';
+import { UserTypeEnum } from '../../common/userType.enum';
 import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
 import ActionSheet from '../../components/ActionSheet';
 import UploadDocument from '../../components/UploadDocument';
-import {ClassStatusEnum, DocumentTypeEnum} from '../common/enums';
+import { ClassStatusEnum, DocumentTypeEnum } from '../common/enums';
 import CustomModalDocumentViewer from '../../components/CustomModalDocumentViewer';
 
 function ScheduledClassDetails(props) {
@@ -211,7 +211,7 @@ function ScheduledClassDetails(props) {
       ];
     }
 
-    if (!isEmpty(classData) && classData?.classEntity.status === ClassStatusEnum.PENDING.label) {
+    if (!isEmpty(classData) && classData.isClassEnded && classData.isMessagingAllowed) {
       menuItemData = [
         { label: "Class Didn't Happen", handler: openClassDidNotHappen, isEnabled: true },
         ...menuItemData,
