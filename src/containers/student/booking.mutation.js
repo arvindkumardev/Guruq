@@ -189,6 +189,10 @@ export const GENERATE_INVOICE = gql`
       id
       attachment {
         id
+        filename
+        name
+        size
+        type
         original
       }
     }
