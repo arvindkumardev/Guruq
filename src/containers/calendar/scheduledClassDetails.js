@@ -170,9 +170,9 @@ function ScheduledClassDetails(props) {
     });
   };
 
-  const goToCancelReason = (pastClass = false) => {
+  const goToCancelReason = () => {
     setOpenMenu(false);
-    navigation.navigate(NavigationRouteNames.CANCEL_REASON, { classId: classData?.classEntity?.id, pastClass });
+    navigation.navigate(NavigationRouteNames.CANCEL_REASON, { classId: classData?.classEntity?.id, pastClass: false });
   };
   const goToHelp = () => {
     setOpenMenu(false);
@@ -196,7 +196,11 @@ function ScheduledClassDetails(props) {
       alertBox(`If the class didn't happen, you can request for class cancellation and reschedule it`, '', {
         positiveText: 'Raise Cancel Request',
         negativeText: 'Close',
-        onPositiveClick: () => goToCancelReason(true),
+        onPositiveClick: () =>
+          navigation.navigate(NavigationRouteNames.CANCEL_REASON, {
+            classId: classData?.classEntity?.id,
+            pastClass: true,
+          }),
       });
     }, 100);
   };
