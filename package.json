@@ -71,6 +71,7 @@
     "react-native-reanimated": "^1.9.0",
     "react-native-responsive-fontsize": "^0.4.3",
     "react-native-safe-area-context": "^3.1.8",
+    "react-native-scratch": "^1.2.1",
     "react-native-screens": "^2.9.0",
     "react-native-section-alphabet-list": "^1.0.1",
     "react-native-snap-carousel": "^3.9.1",
