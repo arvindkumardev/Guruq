@@ -155,14 +155,15 @@ export const CHECK_COUPON = gql`
   mutation CheckCoupon($code: String!) {
     checkCoupon(code: $code) {
       id
-      version
-      deleted
       active
+      title
       code
       isPercentage
       discount
       maxDiscount
-      expiry
+      expiryDate
+      useLimit
+      usedCount
     }
   }
 `;

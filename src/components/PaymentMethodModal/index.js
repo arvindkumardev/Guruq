@@ -35,6 +35,7 @@ const PaymentMethod = (props) => {
     handlePaytmPayment,
     handleCancelPendingBooking,
     addresses,
+    appliedCoupon,
   } = props;
 
   const navigation = useNavigation();
@@ -181,7 +182,7 @@ const PaymentMethod = (props) => {
       bookingData.orderPayment.amount = amount;
       bookingData.itemPrice = amount;
       bookingData.orderStatus = OrderStatusEnum.PENDING.label;
-      bookingData.promotionId = 0;
+      bookingData.promotionId = appliedCoupon && appliedCoupon.id > 0 ? appliedCoupon.id : 0;
       hidePaymentPopup();
       createNewBooking({
         variables: { orderCreateDto: bookingData },
@@ -196,7 +197,7 @@ const PaymentMethod = (props) => {
     bookingData.orderPayment.amount = amount;
     bookingData.itemPrice = amount;
     bookingData.orderStatus = OrderStatusEnum.PENDING.label;
-    bookingData.promotionId = 0;
+    bookingData.promotionId = appliedCoupon && appliedCoupon.id > 0 ? appliedCoupon.id : 0;
     bookingData.billingAddress = { id: selectedAddress.id };
     hidePaymentPopup();
     createNewBooking({
@@ -633,6 +634,7 @@ PaymentMethod.defaultProps = {
   bookingData: {},
   amount: 0,
   discount: 0,
+  appliedCoupon: {},
   qPointsRedeemed: 0,
   handlePaytmPayment: null,
 };
@@ -643,6 +645,7 @@ PaymentMethod.propTypes = {
   bookingData: PropTypes.object,
   amount: PropTypes.number,
   discount: PropTypes.number,
+  appliedCoupon: PropTypes.object,
   qPointsRedeemed: PropTypes.number,
   hidePaymentPopup: PropTypes.func,
   handlePaytmPayment: PropTypes.func,

@@ -34,10 +34,11 @@ import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentM
 import { studentDetails, userDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
+import CouponModal from '../tutorListing/components/couponModal';
 
 const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
-  // const [showCouponModal, setShowCouponModal] = useState(false);
+  const [showCouponModal, setShowCouponModal] = useState(false);
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -69,11 +70,9 @@ const MyCart = () => {
     },
   });
 
-  // const [applyCoupons, setApplyCoupons] = useState(false);
-  // const [appliedCouponCode, setAppliedCouponCode] = useState('');
-  // const [appliedCouponValue, setAppliedCouponValue] = useState(0);
-
-  // const [couponCode, setCouponCode] = useState('');
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState({});
+  const [appliedCouponValue, setAppliedCouponValue] = useState(0);
 
   const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
     fetchPolicy: 'no-cache',
@@ -131,7 +130,7 @@ const MyCart = () => {
     bookingData.orderPayment.amount = amount;
     bookingData.itemPrice = amount;
     bookingData.orderStatus = OrderStatusEnum.PENDING.label;
-    bookingData.promotionId = 0;
+    bookingData.promotionId = couponApplied ? appliedCoupon.id : 0;
     createNewBooking({
       variables: { orderCreateDto: bookingData },
     });
@@ -185,63 +184,38 @@ const MyCart = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   if (cartItemData) {
-  //     if (cartItemData?.getCartItems.length > 0) {
-  //       setCartItems(cartItemData.getCartItems);
-  //       setAmount(sum(cartItemData.getCartItems.map((item) => item.price)));
-  //       setIsEmpty(false);
-  //     } else {
-  //       setIsEmpty(true);
-  //     }
-  //   }
-  // }, [cartItemData?.getCartItems]);
+  const applyCoupon = (promotion) => {
+    if (promotion) {
+      if (!promotion.isPercentage) {
+        if (promotion.maxDiscount >= promotion.discount) {
+          setAppliedCouponValue(promotion.discount);
+        } else {
+          setAppliedCouponValue(promotion.maxDiscount);
+        }
+      } else {
+        let discountedAmount = 0;
+        discountedAmount = (amount * promotion.discount) / 100;
+        if (promotion.maxDiscount >= discountedAmount) {
+          setAppliedCouponValue(discountedAmount);
+        } else {
+          setAppliedCouponValue(promotion.maxDiscount);
+        }
+      }
 
-  // useEffect(() => {
-  //   if (userData) {
-  //     setQPoints(userData.me.qPoints);
-  //   }
-  // }, [userData]);
+      setAppliedCoupon(promotion);
+      setCouponApplied(true);
 
-  // const [checkCouponCode, { loading: couponLoading }] = useMutation(CHECK_COUPON, {
-  //   fetchPolicy: 'no-cache',
-  //   onError: (e) => {
-  //     if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-  //       const error = e.graphQLErrors[0].extensions.exception.response;
-  //     }
-  //   },
-  //   onCompleted: (data) => {
-  //     if (data) {
-  //       if (!data.checkCoupon.isPercentage) {
-  //         if (data.checkCoupon.maxDiscount >= data.checkCoupon.discount) {
-  //           setAppliedCouponValue(data.checkCoupon.discount);
-  //         } else {
-  //           setAppliedCouponValue(data.checkCoupon.maxDiscount);
-  //         }
-  //       } else {
-  //         let discountedAmount = 0;
-  //         discountedAmount = (amount * data.checkCoupon.discount) / 100;
-  //         if (data.checkCoupon.maxDiscount >= discountedAmount) {
-  //           setAppliedCouponValue(discountedAmount);
-  //         } else {
-  //           setAppliedCouponValue(data.checkCoupon.maxDiscount);
-  //         }
-  //       }
-  //       setAppliedCouponCode(data.checkCoupon.code);
-  //       setApplyCoupons(true);
-  //     }
-  //   },
-  // });
-  //
-  // const checkCoupon = () => {
-  //   if (couponCode !== '') {
-  //     checkCouponCode({
-  //       variables: { code: couponCode },
-  //     });
-  //   } else {
-  //     alertBox('Error', 'Please provide the coupon code');
-  //   }
-  // };
+      setShowCouponModal(false);
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon({});
+    setAppliedCouponValue(0);
+
+    setCouponApplied(false);
+    setShowCouponModal(false);
+  };
 
   const gotoTutors = (subject) => {
     setShowAllSubjects(false);
@@ -485,8 +459,9 @@ const MyCart = () => {
             commonStyles.horizontalChildrenSpaceView,
             {
               backgroundColor: Colors.white,
-              height: RfH(44),
+              // height: RfH(44),
               alignItems: 'center',
+              paddingVertical: RfW(16),
               paddingHorizontal: RfW(16),
             },
           ]}>
@@ -546,8 +521,86 @@ const MyCart = () => {
     </View>
   );
 
+  const renderCouponView = () => {
+    return (
+      <TouchableWithoutFeedback onPress={() => setShowCouponModal(true)}>
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            {
+              backgroundColor: Colors.white,
+              // height: RfH(44),
+              alignItems: 'center',
+              paddingVertical: RfW(16),
+              paddingHorizontal: RfW(16),
+            },
+          ]}>
+          <View style={[commonStyles.horizontalChildrenStartView]}>
+            <IconButtonWrapper iconHeight={RfH(32)} iconWidth={RfW(32)} iconImage={Images.discount} />
+
+            <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfW(16) }]}>
+              <Text
+                style={[
+                  commonStyles.regularPrimaryText,
+                  {
+                    color: Colors.black,
+                    fontFamily: Fonts.semiBold,
+                  },
+                ]}>
+                APPLY COUPON
+              </Text>
+            </View>
+          </View>
+
+          <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} />
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  };
+
+  const renderAppliedCouponView = () => {
+    return (
+      <View
+        style={[
+          commonStyles.horizontalChildrenSpaceView,
+          {
+            backgroundColor: Colors.white,
+            // height: RfH(44),
+            alignItems: 'center',
+            paddingVertical: RfW(16),
+            paddingHorizontal: RfW(16),
+          },
+        ]}>
+        <View style={[commonStyles.horizontalChildrenStartView]}>
+          <IconButtonWrapper iconHeight={RfH(32)} iconWidth={RfW(32)} iconImage={Images.discount} />
+
+          <View style={[commonStyles.verticallyStretchedItemsView, { paddingHorizontal: RfW(16) }]}>
+            <Text
+              style={[
+                commonStyles.regularPrimaryText,
+                {
+                  color: Colors.black,
+                  fontFamily: Fonts.semiBold,
+                },
+              ]}>
+              {appliedCoupon.code}
+            </Text>
+            <Text style={[commonStyles.mediumMutedText]}>Offer applied on the booking</Text>
+          </View>
+        </View>
+
+        <IconButtonWrapper
+          iconHeight={RfH(20)}
+          iconWidth={RfW(20)}
+          iconImage={Images.blue_cross}
+          submitFunction={() => removeCoupon()}
+        />
+      </View>
+    );
+  };
+
   const getPayableAmount = () => {
-    return amount - qPointsRedeemed;
+    return amount - qPointsRedeemed - appliedCouponValue;
   };
 
   const renderCartDetails = () => (
@@ -556,15 +609,15 @@ const MyCart = () => {
         <Text style={commonStyles.mediumPrimaryText}>Sub Total</Text>
         <Text style={commonStyles.mediumPrimaryText}>₹{printCurrency(amount)}</Text>
       </View>
-      {/* {applyCoupons && ( */}
-      {/*  <View> */}
-      {/*    <View style={commonStyles.lineSeparator} /> */}
-      {/*    <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}> */}
-      {/*      <Text style={commonStyles.mediumPrimaryText}>{appliedCouponCode}</Text> */}
-      {/*      <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2 }]}>-₹{appliedCouponValue}</Text> */}
-      {/*    </View> */}
-      {/*  </View> */}
-      {/* )} */}
+      {couponApplied && (
+        <View>
+          <View style={commonStyles.lineSeparator} />
+          <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
+            <Text style={commonStyles.mediumPrimaryText}>Coupon Discount</Text>
+            <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2 }]}>- ₹{appliedCouponValue}</Text>
+          </View>
+        </View>
+      )}
 
       {qPointsRedeemed !== 0 && (
         <>
@@ -616,7 +669,8 @@ const MyCart = () => {
 
             <View style={commonStyles.blankViewSmall} />
 
-            {/* {renderCouponView()} */}
+            {!couponApplied && renderCouponView()}
+            {couponApplied && renderAppliedCouponView()}
 
             <View style={commonStyles.blankViewSmall} />
 
@@ -712,6 +766,8 @@ const MyCart = () => {
           bookingData={{ itemPrice: amount, redeemQPoints: parseFloat(qPointsRedeemed) }}
           amount={amount}
           qPointsRedeemed={qPointsRedeemed}
+          discount={appliedCouponValue}
+          appliedCoupon={appliedCoupon}
           handlePaytmPayment={handlePaytmPayment}
           hidePaymentPopup={() => setShowPaymentModal(false)}
           handleCancelPendingBooking={(orderId) => cancelPendingBooking({ variables: { orderId } })}
@@ -732,6 +788,8 @@ const MyCart = () => {
         onSelectSubject={gotoTutors}
         visible={showAllSubjects}
       />
+
+      <CouponModal visible={showCouponModal} onClose={() => setShowCouponModal(false)} applyCoupon={applyCoupon} />
     </View>
   );
 };

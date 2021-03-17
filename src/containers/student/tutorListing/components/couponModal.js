@@ -1,20 +1,43 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, View, Text, TouchableWithoutFeedback } from 'react-native';
-import { Item, Input } from 'native-base';
+import { KeyboardAvoidingView, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Input, Item } from 'native-base';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useMutation } from '@apollo/client';
 import { Colors, Fonts, Images } from '../../../../theme';
-import { RfH, RfW } from '../../../../utils/helpers';
+import { alertBox, RfH, RfW } from '../../../../utils/helpers';
 import commonStyles from '../../../../theme/styles';
-import { IconButtonWrapper } from '../../../../components';
-import styles from '../styles';
+import { IconButtonWrapper, Loader } from '../../../../components';
 import { CHECK_COUPON } from '../../booking.mutation';
 import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 
-const qPointPayModal = (props) => {
-  const { visible, onClose, availableCoupons, checkCoupon } = props;
+const CouponModal = (props) => {
+  const { visible, onClose, applyCoupon } = props;
   const [couponCode, setCouponCode] = useState('');
+
+  const [checkCouponCode, { loading: couponLoading }] = useMutation(CHECK_COUPON, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+      alertBox('Error', 'Please provide a valid coupon code.');
+    },
+    onCompleted: (data) => {
+      if (data) {
+        applyCoupon(data.checkCoupon);
+      }
+    },
+  });
+
+  const checkCoupon = () => {
+    console.log(couponCode);
+    if (couponCode !== '') {
+      checkCouponCode({
+        variables: { code: couponCode },
+      });
+    } else {
+      alertBox('Error', 'Please provide the coupon code.');
+    }
+  };
 
   return (
     <Modal
@@ -24,116 +47,91 @@ const qPointPayModal = (props) => {
       onRequestClose={() => {
         onClose(false);
       }}>
-      <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.8, flexDirection: 'column' }} />
-      <View
-        style={{
-          bottom: 0,
-          left: 0,
-          right: 0,
-          position: 'absolute',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'stretch',
-          backgroundColor: Colors.white,
-          paddingBottom: RfH(34),
-        }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.select({ android: '', ios: 'padding' })} enabled>
+        <Loader isLoading={couponLoading} />
+
+        <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.8, flexDirection: 'column' }} />
         <View
-          style={{
-            backgroundColor: Colors.lightBlue,
-            opacity: 0.5,
-          }}>
-          <IconButtonWrapper
-            iconHeight={RfH(20)}
-            iconWidth={RfW(20)}
-            styling={{ alignSelf: 'flex-end', marginVertical: RfH(16), marginRight: RfW(16) }}
-            iconImage={Images.cross}
-            submitFunction={() => onClose(false)}
-          />
-          <View style={[commonStyles.horizontalChildrenView, { marginHorizontal: RfW(16), marginBottom: RfH(8) }]}>
-            <Item underline={false} style={{ flex: 1 }}>
+          style={[
+            commonStyles.verticallyStretchedItemsView,
+            { backgroundColor: Colors.lightGrey, paddingBottom: RfH(60) },
+          ]}>
+          <View
+            style={{
+              backgroundColor: Colors.lightBlue,
+              opacity: 0.5,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingVertical: RfH(16),
+              paddingHorizontal: RfW(16),
+            }}>
+            <Text style={[commonStyles.headingPrimaryText, { color: Colors.black }]}>APPLY COUPONS</Text>
+
+            <IconButtonWrapper
+              iconHeight={RfH(20)}
+              iconWidth={RfW(20)}
+              iconImage={Images.cross}
+              submitFunction={() => onClose(false)}
+            />
+          </View>
+
+          <View style={{ backgroundColor: Colors.lightGrey }}>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                {
+                  borderColor: '#dddddd',
+                  borderWidth: 1,
+                  backgroundColor: Colors.white,
+                  marginHorizontal: RfW(16),
+                  marginVertical: RfH(16),
+                },
+              ]}>
               <Input
                 placeholder="Enter Coupon Code"
                 onChangeText={(text) => setCouponCode(text)}
                 style={{
-                  backgroundColor: Colors.white,
-                  borderRadius: 8,
+                  borderRadius: 0,
+                  borderColor: '#dddddd',
+                  borderWidth: 0,
                   height: RfH(40),
+                  paddingLeft: RfW(16),
                   fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+                  fontFamily: Fonts.semiBold,
                 }}
               />
-            </Item>
-            <View>
-              <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => checkCoupon(couponCode)}>
-                <Text
-                  style={{
-                    marginLeft: RfW(16),
-                    color: Colors.brandBlue2,
-                  }}>
-                  APPLY
-                </Text>
-              </TouchableWithoutFeedback>
+
+              <View>
+                <TouchableOpacity
+                  style={{ flex: 1, paddingTop: RfH(8), paddingBottom: RfH(8) }}
+                  onPress={() => checkCoupon()}>
+                  <Text
+                    style={{
+                      marginLeft: RfW(16),
+                      paddingRight: RfW(16),
+                      color: Colors.brandBlue2,
+                    }}>
+                    APPLY
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-
-          <View
-            style={{
-              backgroundColor: Colors.darkGrey,
-              paddingHorizontal: RfW(16),
-              height: RfH(48),
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-            }}>
-            <Text style={{ color: Colors.black }}>Available Coupons</Text>
-          </View>
         </View>
-        <View style={{ paddingHorizontal: RfW(16), marginTop: RfH(16) }}>
-          <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text style={commonStyles.headingPrimaryText}>GURUQ</Text>
-          </View>
-          <Text style={{ marginTop: RfH(16), color: Colors.darkGrey }}>Get 20% off</Text>
-          <Text style={{ color: Colors.darkGrey, fontSize: RFValue(12, STANDARD_SCREEN_SIZE) }}>
-            Valid till 1 of april.
-          </Text>
-          <View style={[commonStyles.borderBottom, { marginVertical: RfH(16) }]} />
-          <View style={commonStyles.horizontalChildrenSpaceView}>
-            <Text
-              style={[
-                commonStyles.mediumPrimaryText,
-                {
-                  backgroundColor: Colors.lightBlue,
-                  padding: RfH(8),
-                  borderWidth: 1,
-                  borderColor: Colors.brandBlue2,
-                  borderStyle: 'solid',
-                  borderRadius: 1,
-                },
-              ]}>
-              GURUQ
-            </Text>
-            <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => checkCoupon()}>
-              <Text style={[commonStyles.smallPrimaryText, { color: Colors.brandBlue2 }]}>APPLY</Text>
-            </TouchableWithoutFeedback>
-          </View>
-          <View style={[commonStyles.borderBottom, { marginVertical: RfH(16) }]} />
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
 
-qPointPayModal.propTypes = {
+CouponModal.propTypes = {
   visible: PropTypes.bool,
   onClose: PropTypes.func,
-  availableCoupons: PropTypes.array,
-  checkCoupon: PropTypes.func,
+  applyCoupon: PropTypes.func,
 };
 
-qPointPayModal.defaultProps = {
+CouponModal.defaultProps = {
   visible: false,
   onClose: null,
-  availableCoupons: [],
-  checkCoupon: null,
 };
 
-export default qPointPayModal;
+export default CouponModal;
