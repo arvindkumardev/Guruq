@@ -22,7 +22,7 @@ import { GET_TUTOR_OFFERINGS } from '../tutor-query';
 function PytnDetail(props) {
   const { route } = props;
 
-  const classData = route?.params?.data;
+  const pytnDetails = route?.params?.data;
   const studentPytnId = route?.params?.studentPytnId;
   const navigation = useNavigation();
   const offeringMasterData = useReactiveVar(offeringsMasterData);
@@ -40,7 +40,7 @@ function PytnDetail(props) {
     },
     onCompleted: (data) => {
       if (data) {
-        const selectedOffering = data?.getTutorOfferings.find((sub) => sub.offering.id === classData?.offering?.id);
+        const selectedOffering = data?.getTutorOfferings.find((sub) => sub.offering.id === pytnDetails?.offering?.id);
         if (selectedOffering) {
           setSelectedSubject({
             id: selectedOffering.offering.id,
@@ -118,11 +118,11 @@ function PytnDetail(props) {
   const goToTutorDetails = (item) => {
     navigation.navigate(NavigationRouteNames.STUDENT.TUTOR_DETAILS, {
       tutorId: item.tutor.id,
-      currentOffering: classData?.offering,
-      parentOffering: classData?.offering?.parentOffering?.id,
-      parentParentOffering: classData?.offering?.parentOffering?.parentOffering?.id,
-      parentOfferingName: classData?.offering?.parentOffering?.displayName,
-      parentParentOfferingName: classData?.offering?.parentOffering?.parentOffering?.displayName,
+      currentOffering: pytnDetails?.offering,
+      parentOffering: pytnDetails?.offering?.parentOffering?.id,
+      parentParentOffering: pytnDetails?.offering?.parentOffering?.parentOffering?.id,
+      parentOfferingName: pytnDetails?.offering?.parentOffering?.displayName,
+      parentParentOfferingName: pytnDetails?.offering?.parentOffering?.parentOffering?.displayName,
     });
   };
 
@@ -130,14 +130,14 @@ function PytnDetail(props) {
     <View>
       <View style={{ height: RfH(20) }} />
       <View style={commonStyles.horizontalChildrenSpaceView}>
-        <Text style={commonStyles.headingPrimaryText}>{getRootOfferingName(classData)}</Text>
-        <Text style={commonStyles.headingPrimaryText}>₹ {classData.maxPrice}</Text>
+        <Text style={commonStyles.headingPrimaryText}>{getRootOfferingName(pytnDetails)}</Text>
+        <Text style={commonStyles.headingPrimaryText}>₹ {pytnDetails.maxPrice}</Text>
       </View>
       <View style={commonStyles.horizontalChildrenSpaceView}>
         <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-          {classData?.offering?.parentOffering?.parentOffering?.displayName}
+          {pytnDetails?.offering?.parentOffering?.parentOffering?.displayName}
           {' | '}
-          {classData?.offering?.parentOffering?.displayName}
+          {pytnDetails?.offering?.parentOffering?.displayName}
         </Text>
       </View>
       <View style={[commonStyles.lineSeparator, { marginTop: RfH(8) }]} />
@@ -148,7 +148,7 @@ function PytnDetail(props) {
               iconWidth={RfH(64)}
               iconHeight={RfH(64)}
               imageResizeMode="cover"
-              iconImage={getSubjectIcons(classData?.offering?.displayName)}
+              iconImage={getSubjectIcons(pytnDetails?.offering?.displayName)}
             />
           </View>
           <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
@@ -158,13 +158,13 @@ function PytnDetail(props) {
                 fontFamily: Fonts.semiBold,
                 marginTop: RfH(2),
               }}>
-              {classData?.offering?.displayName}
+              {pytnDetails?.offering?.displayName}
             </Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              {classData.groupSize > 1 ? 'Group' : 'Individual'} Class
+              {pytnDetails.groupSize > 1 ? 'Group' : 'Individual'} Class
             </Text>
             <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-              {classData.onlineClass ? 'Online' : 'Offline'} Class
+              {pytnDetails.onlineClass ? 'Online' : 'Offline'} Class
             </Text>
           </View>
         </View>
@@ -174,14 +174,14 @@ function PytnDetail(props) {
               commonStyles.headingPrimaryText,
               { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
             ]}>
-            {classData.count}
+            {pytnDetails.count}
           </Text>
           <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>
           <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
         </View>
       </View>
       <View style={[commonStyles.lineSeparator, { marginTop: RfH(16) }]} />
-      <TouchableOpacity style={{ paddingVertical: RfH(16) }} onPress={() => removePytn(classData)}>
+      <TouchableOpacity style={{ paddingVertical: RfH(16) }} onPress={() => removePytn(pytnDetails)}>
         <Text style={[commonStyles.mediumPrimaryText, { textAlign: 'right' }]}>Remove</Text>
       </TouchableOpacity>
       <View style={commonStyles.lineSeparator} />
@@ -252,9 +252,9 @@ function PytnDetail(props) {
                   justifyContent: 'flex-end',
                   alignItems: 'flex-end',
                 }}>
-                {/*<View style={{ alignSelf: 'center' }}>*/}
-                {/*  <Text style={styles.chargeText}>₹ {item.price}/Hr</Text>*/}
-                {/*</View>*/}
+                {/* <View style={{ alignSelf: 'center' }}> */}
+                {/*  <Text style={styles.chargeText}>₹ {item.price}/Hr</Text> */}
+                {/* </View> */}
                 <Button
                   style={[
                     {
@@ -335,9 +335,11 @@ function PytnDetail(props) {
               onClose={() => setOpenClassModal(false)}
               selectedSubject={selectedSubject}
               isDemoClass={false}
-              noOfClass={classData.count}
-              isOnlineRenewal={classData.onlineClass}
+              noOfClass={pytnDetails.count}
+              isOnlineRenewal={pytnDetails.onlineClass}
               isRenewal
+              isPytn
+              pytnDetails={pytnDetails}
             />
           )}
         </View>

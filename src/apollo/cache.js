@@ -28,3 +28,7 @@ export const interestingOfferingData = makeVar([]);
 export const notificationPayload = makeVar({});
 
 export const notificationsList = makeVar([]);
+
+export const activeCoupon = makeVar({});
+
+export const pytnBooking = makeVar(false);

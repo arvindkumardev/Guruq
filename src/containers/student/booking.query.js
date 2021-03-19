@@ -55,6 +55,21 @@ export const GET_CART_ITEMS = gql`
       }
       promotion {
         id
+        active
+        title
+        code
+        isPercentage
+        discount
+        maxDiscount
+        expiryDate
+        useLimit
+        usedCount
+        firstTimeBookingOnly
+        minCartAmount
+        maxCartAmount
+      }
+      pytnEntity {
+        id
       }
     }
   }

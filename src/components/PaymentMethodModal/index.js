@@ -370,6 +370,13 @@ const PaymentMethod = (props) => {
     );
   };
 
+  const getPayableAmount = () => {
+    const payable =
+      amount + (paymentMethod === PaymentMethodEnum.CASH.value ? convenienceCharges : 0) - discount - qPointsRedeemed;
+
+    return payable > 0 ? payable : 0;
+  };
+
   return (
     <Modal
       animationType="fade"
@@ -513,15 +520,7 @@ const PaymentMethod = (props) => {
                 },
               ]}>
               <View>
-                <Text style={commonStyles.headingPrimaryText}>
-                  ₹
-                  {printCurrency(
-                    amount +
-                      (paymentMethod === PaymentMethodEnum.CASH.value ? convenienceCharges : 0) -
-                      discount -
-                      qPointsRedeemed
-                  )}
-                </Text>
+                <Text style={commonStyles.headingPrimaryText}>₹{printCurrency(getPayableAmount())}</Text>
                 <Text style={commonStyles.smallMutedText}>Payable Amount</Text>
               </View>
               <View>

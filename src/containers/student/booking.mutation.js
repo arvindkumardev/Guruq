@@ -61,6 +61,18 @@ export const ADD_TO_CART = gql`
       }
       promotion {
         id
+        active
+        title
+        code
+        isPercentage
+        discount
+        maxDiscount
+        expiryDate
+        useLimit
+        usedCount
+        firstTimeBookingOnly
+        minCartAmount
+        maxCartAmount
       }
     }
   }
@@ -71,6 +83,12 @@ export const REMOVE_CART_ITEM = gql`
     removeFromCart(cartItemId: $cartItemId) {
       id
     }
+  }
+`;
+
+export const REMOVE_ALL_CART_ITEM = gql`
+  mutation RemoveAllFromCart {
+    removeAllFromCart
   }
 `;
 
@@ -164,6 +182,16 @@ export const CHECK_COUPON = gql`
       expiryDate
       useLimit
       usedCount
+      firstTimeBookingOnly
+      minCartAmount
+      maxCartAmount
+    }
+  }
+`;
+export const REMOVE_COUPON = gql`
+  mutation RemoveCoupon($code: String!) {
+    removeCoupon(code: $code) {
+      id
     }
   }
 `;

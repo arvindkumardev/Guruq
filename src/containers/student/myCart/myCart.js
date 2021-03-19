@@ -13,6 +13,7 @@ import analytics from '@react-native-firebase/analytics';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty, sum } from 'lodash';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   IconButtonWrapper,
   Loader,
@@ -25,13 +26,20 @@ import { Colors, Fonts, Images } from '../../../theme';
 import commonStyles from '../../../theme/styles';
 import styles from '../tutorListing/styles';
 import { alertBox, getFullName, getToken, printCurrency, RfH, RfW } from '../../../utils/helpers';
-import { STANDARD_SCREEN_SIZE, urlConfig } from '../../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE, urlConfig } from '../../../utils/constants';
 import { GET_CART_ITEMS } from '../booking.query';
-import { ADD_TO_CART, CANCEL_PENDING_BOOKINGS, CREATE_BOOKING, REMOVE_CART_ITEM } from '../booking.mutation';
+import {
+  ADD_TO_CART,
+  CANCEL_PENDING_BOOKINGS,
+  CHECK_COUPON,
+  CREATE_BOOKING,
+  REMOVE_CART_ITEM,
+  REMOVE_COUPON,
+} from '../booking.mutation';
 import { GET_MY_QPOINTS_BALANCE, GET_STUDENT_DETAILS } from '../../common/graphql-query';
 import CustomModalWebView from '../../../components/CustomModalWebView';
 import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
-import { studentDetails, userDetails } from '../../../apollo/cache';
+import { activeCoupon, offeringsMasterData, pytnBooking, studentDetails, userDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import CouponModal from '../tutorListing/components/couponModal';
@@ -58,6 +66,9 @@ const MyCart = () => {
   const [showAllSubjects, setShowAllSubjects] = useState(false);
   const [addresses, setAddresses] = useState([]);
 
+  const activeCouponVar = useReactiveVar(activeCoupon);
+  const isPytnBooking = useReactiveVar(pytnBooking);
+
   const [getStudentDetails, { loading: studentDetailLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -70,9 +81,17 @@ const MyCart = () => {
     },
   });
 
-  const [couponApplied, setCouponApplied] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState({});
+  const [couponApplied, setCouponApplied] = useState(!isEmpty(activeCouponVar));
+  const [appliedCoupon, setAppliedCoupon] = useState(activeCouponVar);
   const [appliedCouponValue, setAppliedCouponValue] = useState(0);
+
+  useEffect(() => {
+    if (!cartEmpty && !isEmpty(activeCouponVar) && amount > 0) {
+      console.log('useEffect: ', amount, activeCouponVar);
+      applyCoupon(activeCouponVar);
+      pytnBooking(cartItems.filter((ci) => !isEmpty(ci.pytnEntity)).length > 0);
+    }
+  }, [cartItems, amount]);
 
   const [getCartItems, { loading: cartLoading }] = useLazyQuery(GET_CART_ITEMS, {
     fetchPolicy: 'no-cache',
@@ -81,6 +100,7 @@ const MyCart = () => {
     },
     onCompleted: (data) => {
       if (data) {
+        console.log('data?.getCartItems: ', data?.getCartItems);
         if (data?.getCartItems.length > 0) {
           setCartItems(data.getCartItems);
           setAmount(sum(data.getCartItems.map((item) => item.price)));
@@ -186,35 +206,63 @@ const MyCart = () => {
 
   const applyCoupon = (promotion) => {
     if (promotion) {
-      if (!promotion.isPercentage) {
-        if (promotion.maxDiscount >= promotion.discount) {
-          setAppliedCouponValue(promotion.discount);
+      console.log(amount, promotion.minCartAmount);
+      if (promotion.minCartAmount === 0 || (amount >= promotion.minCartAmount && amount <= promotion.maxCartAmount)) {
+        if (!promotion.isPercentage) {
+          if (promotion.maxDiscount >= promotion.discount) {
+            setAppliedCouponValue(promotion.discount);
+          } else {
+            setAppliedCouponValue(promotion.maxDiscount);
+          }
         } else {
-          setAppliedCouponValue(promotion.maxDiscount);
+          let discountedAmount = 0;
+          discountedAmount = (amount * promotion.discount) / 100;
+          if (promotion.maxDiscount >= discountedAmount) {
+            setAppliedCouponValue(discountedAmount);
+          } else {
+            setAppliedCouponValue(promotion.maxDiscount);
+          }
         }
+
+        setAppliedCoupon(promotion);
+        setCouponApplied(true);
+
+        setShowCouponModal(false);
+
+        // set the coupon as well
+        activeCoupon(promotion);
+        AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(promotion));
       } else {
-        let discountedAmount = 0;
-        discountedAmount = (amount * promotion.discount) / 100;
-        if (promotion.maxDiscount >= discountedAmount) {
-          setAppliedCouponValue(discountedAmount);
-        } else {
-          setAppliedCouponValue(promotion.maxDiscount);
-        }
+        setAppliedCoupon({});
+        setCouponApplied(false);
+        alertBox('Error', `Minimum cart value required: ₹${promotion.minCartAmount}`);
       }
-
-      setAppliedCoupon(promotion);
-      setCouponApplied(true);
-
-      setShowCouponModal(false);
     }
   };
 
-  const removeCoupon = () => {
-    setAppliedCoupon({});
-    setAppliedCouponValue(0);
+  const [removeCouponCode, { loading: removeCouponLoading }] = useMutation(REMOVE_COUPON, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        setAppliedCoupon({});
+        setAppliedCouponValue(0);
 
-    setCouponApplied(false);
-    setShowCouponModal(false);
+        setCouponApplied(false);
+        setShowCouponModal(false);
+
+        activeCoupon({});
+
+        // set the coupon as well
+        AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON);
+      }
+    },
+  });
+
+  const removeCoupon = () => {
+    removeCouponCode({ variables: { code: appliedCoupon.code } });
   };
 
   const gotoTutors = (subject) => {
@@ -404,17 +452,21 @@ const MyCart = () => {
               </Text>
             </View>
             <View style={styles.bookingSelectorParent}>
-              <TouchableWithoutFeedback onPress={() => removeClass(item)}>
-                <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
-                  <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
-                </View>
-              </TouchableWithoutFeedback>
+              {!isPytnBooking && (
+                <TouchableWithoutFeedback onPress={() => removeClass(item)}>
+                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
+                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
               <Text style={commonStyles.headingPrimaryText}>{item?.count}</Text>
-              <TouchableWithoutFeedback onPress={() => addClass(item)}>
-                <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
-                  <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
-                </View>
-              </TouchableWithoutFeedback>
+              {!isPytnBooking && (
+                <TouchableWithoutFeedback onPress={() => addClass(item)}>
+                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
+                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
             </View>
           </View>
           <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -536,19 +588,10 @@ const MyCart = () => {
             },
           ]}>
           <View style={[commonStyles.horizontalChildrenStartView]}>
-            <IconButtonWrapper iconHeight={RfH(32)} iconWidth={RfW(32)} iconImage={Images.discount} />
+            <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.discount} />
 
             <View style={[commonStyles.horizontalChildrenStartView, { paddingHorizontal: RfW(16) }]}>
-              <Text
-                style={[
-                  commonStyles.regularPrimaryText,
-                  {
-                    color: Colors.black,
-                    fontFamily: Fonts.semiBold,
-                  },
-                ]}>
-                APPLY COUPON
-              </Text>
+              <Text style={commonStyles.regularPrimaryText}>Apply Coupon</Text>
             </View>
           </View>
 
@@ -589,18 +632,21 @@ const MyCart = () => {
           </View>
         </View>
 
-        <IconButtonWrapper
-          iconHeight={RfH(20)}
-          iconWidth={RfW(20)}
-          iconImage={Images.blue_cross}
-          submitFunction={() => removeCoupon()}
-        />
+        {!isPytnBooking && (
+          <IconButtonWrapper
+            iconHeight={RfH(20)}
+            iconWidth={RfW(20)}
+            iconImage={Images.blue_cross}
+            submitFunction={() => removeCoupon()}
+          />
+        )}
       </View>
     );
   };
 
   const getPayableAmount = () => {
-    return amount - qPointsRedeemed - appliedCouponValue;
+    const payable = amount - qPointsRedeemed - appliedCouponValue;
+    return payable > 0 ? payable : 0;
   };
 
   const renderCartDetails = () => (
@@ -647,7 +693,14 @@ const MyCart = () => {
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
       <Loader
-        isLoading={cartLoading || removeLoading || addTocartLoading || bookingLoading || cancelPendingBookingLoading}
+        isLoading={
+          cartLoading ||
+          removeLoading ||
+          addTocartLoading ||
+          bookingLoading ||
+          cancelPendingBookingLoading ||
+          removeCouponLoading
+        }
       />
       <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
       {!cartEmpty ? (

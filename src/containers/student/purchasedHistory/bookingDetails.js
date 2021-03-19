@@ -319,17 +319,42 @@ function BookingDetails(props) {
                     ₹{printCurrency(bookingData.subTotal)}
                   </Text>
                 </View>
-                <View style={commonStyles.horizontalChildrenSpaceView}>
-                  <Text style={commonStyles.mediumMutedText}>Convenience charges</Text>
+                <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
+                  <Text style={commonStyles.mediumMutedText}>Convenience Charges</Text>
                   <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
                     ₹{bookingData.convenienceCharges ? printCurrency(bookingData.convenienceCharges) : '0'}
                   </Text>
                 </View>
               </View>
               <View style={{ height: RfH(16) }} />
+              {bookingData.discount > 0 && (
+                <>
+                  <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
+                  <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfW(8) }}>
+                    {/* <View style={{ height: RfH(16) }} /> */}
+                    <View style={commonStyles.horizontalChildrenSpaceView}>
+                      <Text style={commonStyles.mediumMutedText}>Discount</Text>
+                      <Text
+                        style={[
+                          commonStyles.mediumMutedText,
+                          { color: Colors.brandBlue2, fontFamily: Fonts.semiBold },
+                        ]}>
+                        - ₹{bookingData.discount ? printCurrency(bookingData.discount) : '0'}
+                      </Text>
+                    </View>
+                    {/* {bookingData?.promotion?.code && ( */}
+                    {/*  <View style={commonStyles.horizontalChildrenSpaceView}> */}
+                    {/*    <Text style={commonStyles.mediumMutedText}>{bookingData?.promotion?.code} Applied</Text> */}
+                    {/*    <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹200</Text> */}
+                    {/*  </View> */}
+                    {/* )} */}
+                    {/* <View style={{ height: RfH(16) }} /> */}
+                  </View>
+                </>
+              )}
               <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
-              <View style={{ paddingHorizontal: RfW(8) }}>
-                <View style={{ height: RfH(16) }} />
+              <View style={{ paddingHorizontal: RfW(8), paddingVertical: RfW(8) }}>
+                {/* <View style={{ height: RfH(16) }} /> */}
                 <View style={commonStyles.horizontalChildrenSpaceView}>
                   <Text style={commonStyles.mediumMutedText}>Q-Points Redeemed</Text>
                   <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>
@@ -342,7 +367,7 @@ function BookingDetails(props) {
                 {/*    <Text style={[commonStyles.mediumMutedText, { fontFamily: Fonts.semiBold }]}>₹200</Text> */}
                 {/*  </View> */}
                 {/* )} */}
-                <View style={{ height: RfH(16) }} />
+                {/* <View style={{ height: RfH(16) }} /> */}
               </View>
               <View style={[commonStyles.lineSeparator, { flex: 0 }]} />
               <View style={{ height: RfH(16) }} />

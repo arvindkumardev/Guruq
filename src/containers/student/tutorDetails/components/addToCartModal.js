@@ -8,20 +8,32 @@ import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
+import AsyncStorage from '@react-native-community/async-storage';
 import { IconButtonWrapper, Loader, CustomCheckBox } from '../../../../components';
 import commonStyles from '../../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../../theme';
 import { alertBox, printCurrency, RfH, RfW } from '../../../../utils/helpers';
 import routeNames from '../../../../routes/screenNames';
 import styles from './styles';
-import { ADD_TO_CART } from '../../booking.mutation';
+import { ADD_TO_CART, REMOVE_ALL_CART_ITEM } from '../../booking.mutation';
 import PriceMatrixComponent from './priceMatrixComponent';
-import { studentDetails } from '../../../../apollo/cache';
+import { activeCoupon, pytnBooking, studentDetails } from '../../../../apollo/cache';
 import HomeTuitionConsentModal from './homeTuitionConsent';
 import { DUPLICATE_FOUND } from '../../../../common/errorCodes';
+import { LOCAL_STORAGE_DATA_KEY } from '../../../../utils/constants';
 
 const AddToCartModal = (props) => {
-  const { visible, onClose, selectedSubject, isDemoClass, isRenewal, noOfClass, isOnlineRenewal } = props;
+  const {
+    visible,
+    onClose,
+    selectedSubject,
+    isDemoClass,
+    isRenewal,
+    noOfClass,
+    isOnlineRenewal,
+    isPytn,
+    pytnDetails,
+  } = props;
   const { budgetDetails } = selectedSubject;
   const studentInfo = useReactiveVar(studentDetails);
   const navigation = useNavigation();
@@ -32,6 +44,27 @@ const AddToCartModal = (props) => {
   const [isOnlineClassMode, setIsOnlineClassMode] = useState(selectedSubject.onlineClass && isOnlineRenewal);
   const demoClassPrice = budgetDetails.filter((budget) => budget.demo === true);
   const [showHomeConsent, setShowHomeConsent] = useState(false);
+
+  const isPytnBooking = useReactiveVar(pytnBooking);
+
+  const [removeAllCartItems, { loading: removeAllCartItemsLoading }] = useMutation(REMOVE_ALL_CART_ITEM, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {},
+  });
+
+  const fireLogEvent = async (data) => {
+    const { tutorOffering, count, onlineClass } = data.addToCart;
+    const payload = {
+      tutorOfferingId: tutorOffering.id,
+      classCount: count,
+      classMode: onlineClass ? 'online' : 'offline',
+      studentId: studentInfo.id,
+    };
+    await analytics().logEvent('add_to_cart', payload);
+  };
 
   const [addToCart, { loading: cartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
@@ -48,20 +81,18 @@ const AddToCartModal = (props) => {
       if (data) {
         onClose(false);
         fireLogEvent(data);
+
+        console.log(data);
+
+        // set the promotion
+        activeCoupon(data?.addToCart?.promotion);
+        AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(data?.addToCart?.promotion));
+
         navigation.navigate(routeNames.STUDENT.MY_CART);
       }
     },
   });
-  const fireLogEvent = async (data) => {
-    const { tutorOffering, count, onlineClass } = data.addToCart;
-    const payload = {
-      tutorOfferingId: tutorOffering.id,
-      classCount: count,
-      classMode: onlineClass ? 'online' : 'offline',
-      studentId: studentInfo.id,
-    };
-    await analytics().logEvent('add_to_cart', payload);
-  };
+
   const calculateAmount = (noClasses, isOnline) => {
     const applicableBudgets = budgetDetails
       .filter((budget) => budget.onlineClass === isOnline && budget.demo === isDemoClass)
@@ -72,6 +103,10 @@ const AddToCartModal = (props) => {
         perClassPrice = budget.price;
       }
     });
+
+    if (isPytn && !isEmpty(pytnDetails)) {
+      perClassPrice = pytnDetails.maxPrice;
+    }
 
     setClassPrice(perClassPrice);
     return noClasses * perClassPrice;
@@ -111,7 +146,7 @@ const AddToCartModal = (props) => {
     }
   };
 
-  const onAddingIntoCart = () => {
+  const processAddToCart = () => {
     if (amount === 0 && !isDemoClass) {
       alertBox('Error', 'Amount should be greater than zero for booking');
     } else if (!isOnlineClassMode && !offlineClassConsent) {
@@ -126,9 +161,52 @@ const AddToCartModal = (props) => {
         price: amount,
         renewal: isRenewal,
       };
+
+      if (isPytn) {
+        cartCreate.pytnEntity = { id: pytnDetails.id };
+      }
+
       addToCart({
         variables: { cartCreateDto: cartCreate },
       });
+    }
+  };
+
+  const onAddingIntoCart = () => {
+    console.log('isPytn, isPytnBooking', isPytn, isPytnBooking);
+
+    if (isPytn) {
+      alertBox(
+        `All existing items from your cart will be removed. Do you want to discard the cart and coupons applied to book this PYTN request.`,
+        '',
+        {
+          positiveText: 'Yes',
+          negativeText: 'No',
+          onPositiveClick: () => {
+            removeAllCartItems();
+            // set the coupon as well
+            activeCoupon({});
+            AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON);
+            processAddToCart();
+            pytnBooking(true);
+          },
+        }
+      );
+    } else if (isPytnBooking) {
+      alertBox(`Exiting PYTN cart items will be removed. Do you want to discard the cart add this item to cart.`, '', {
+        positiveText: 'Yes',
+        negativeText: 'No',
+        onPositiveClick: () => {
+          removeAllCartItems();
+          // set the coupon as well
+          activeCoupon({});
+          AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON);
+          processAddToCart();
+          pytnBooking(false);
+        },
+      });
+    } else {
+      processAddToCart();
     }
   };
 
@@ -140,7 +218,7 @@ const AddToCartModal = (props) => {
       onRequestClose={() => {
         onClose(false);
       }}>
-      <Loader isLoading={cartLoading} />
+      <Loader isLoading={cartLoading || removeAllCartItemsLoading} />
       <View style={{ flex: 1, backgroundColor: Colors.black, opacity: 0.5, flexDirection: 'column' }} />
       <View
         style={{
@@ -185,7 +263,7 @@ const AddToCartModal = (props) => {
             <Text style={commonStyles.mediumPrimaryText}>{`Mode of ${isDemoClass ? 'Demo ' : ''}Class`}</Text>
             <View style={[commonStyles.horizontalChildrenCenterView, { flex: 1 }]}>
               {selectedSubject.onlineClass > 0 && (
-                <TouchableWithoutFeedback onPress={() => changeClassMode(true)}>
+                <TouchableWithoutFeedback onPress={() => (!isPytn ? changeClassMode(true) : {})}>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -202,7 +280,7 @@ const AddToCartModal = (props) => {
                 </TouchableWithoutFeedback>
               )}
               {selectedSubject.offlineClass && (
-                <TouchableWithoutFeedback onPress={() => changeClassMode(false)}>
+                <TouchableWithoutFeedback onPress={() => (!isPytn ? changeClassMode(false) : {})}>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -258,19 +336,23 @@ const AddToCartModal = (props) => {
             <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(16) }]}>
               <Text style={commonStyles.regularPrimaryText}>Number of Classes</Text>
               <View style={styles.bookingSelectorParent}>
-                <TouchableWithoutFeedback onPress={removeClass}>
-                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
-                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
-                  </View>
-                </TouchableWithoutFeedback>
+                {!isPytn && (
+                  <TouchableWithoutFeedback onPress={removeClass}>
+                    <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
+                      <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.minus_blue} />
+                    </View>
+                  </TouchableWithoutFeedback>
+                )}
 
                 <Text style={{ fontFamily: Fonts.semiBold }}>{numberOfClass}</Text>
 
-                <TouchableWithoutFeedback onPress={addClass}>
-                  <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
-                    <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
-                  </View>
-                </TouchableWithoutFeedback>
+                {!isPytn && (
+                  <TouchableWithoutFeedback onPress={addClass}>
+                    <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(10) }}>
+                      <IconButtonWrapper iconWidth={RfW(12)} iconHeight={RfH(12)} iconImage={Images.plus_blue} />
+                    </View>
+                  </TouchableWithoutFeedback>
+                )}
               </View>
             </View>
           )}
@@ -322,6 +404,8 @@ AddToCartModal.propTypes = {
   isRenewal: PropTypes.bool,
   noOfClass: PropTypes.number,
   isOnlineRenewal: PropTypes.bool,
+  isPytn: PropTypes.bool,
+  pytnDetails: PropTypes.object,
 };
 
 AddToCartModal.defaultProps = {
@@ -332,6 +416,8 @@ AddToCartModal.defaultProps = {
   isRenewal: false,
   noOfClass: 1,
   isOnlineRenewal: true,
+  isPytn: false,
+  pytnDetails: {},
 };
 
 export default AddToCartModal;

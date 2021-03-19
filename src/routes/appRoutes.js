@@ -5,7 +5,14 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { notificationPayload, notificationsList, studentDetails, tutorDetails, userDetails } from '../apollo/cache';
+import {
+  activeCoupon,
+  notificationPayload,
+  notificationsList,
+  studentDetails,
+  tutorDetails,
+  userDetails,
+} from '../apollo/cache';
 import {
   getFcmToken,
   initializeNotification,
@@ -81,6 +88,13 @@ const AppStack = (props) => {
     // clearAllLocalStorage();
     AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ONBOARDING_SHOWN).then((val) => {
       setIsGettingStartedVisible(isEmpty(val));
+    });
+
+    // load the coupon as well
+    AsyncStorage.getItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON).then((val) => {
+      if (!isEmpty(val)) {
+        activeCoupon(JSON.parse(val));
+      }
     });
   }, []);
 
@@ -338,11 +352,11 @@ const AppStack = (props) => {
                   component={InterviewScheduling}
                   options={{ headerShown: false }}
                 />
-                {/*<Stack.Screen*/}
-                {/*  name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS}*/}
-                {/*  component={UploadDocuments}*/}
-                {/*  options={{ headerShown: false }}*/}
-                {/*/>*/}
+                {/* <Stack.Screen */}
+                {/*  name={NavigationRouteNames.TUTOR.UPLOAD_DOCUMENTS} */}
+                {/*  component={UploadDocuments} */}
+                {/*  options={{ headerShown: false }} */}
+                {/* /> */}
               </>
             )}
             {tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&

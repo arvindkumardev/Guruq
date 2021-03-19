@@ -9,6 +9,7 @@ export const LOCAL_STORAGE_DATA_KEY = {
   ONBOARDING_SHOWN: 'onboarding_shown',
   COMPARE_TUTOR_ID: 'compare_tutors',
   NOTIFICATION_LIST: 'notification_list',
+  ACTIVE_COUPON: 'active_coupon',
 };
 
 export const inputs = {};

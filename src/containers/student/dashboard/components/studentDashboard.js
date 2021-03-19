@@ -17,7 +17,13 @@ import {
 import { RFValue } from 'react-native-responsive-fontsize';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { isEmpty } from 'lodash';
-import { interestingOfferingData, offeringsMasterData, studentDetails, userDetails } from '../../../../apollo/cache';
+import {
+  interestingOfferingData,
+  offeringsMasterData,
+  pytnBooking,
+  studentDetails,
+  userDetails,
+} from '../../../../apollo/cache';
 import {
   IconButtonWrapper,
   Loader,
@@ -100,6 +106,7 @@ function StudentDashboard(props) {
     onCompleted: (data) => {
       if (data) {
         setCartCount(data.getCartItems.length);
+        pytnBooking(data.getCartItems.filter((ci) => !isEmpty(ci.pytnEntity)).length > 0);
       }
     },
   });
