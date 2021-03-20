@@ -23,6 +23,7 @@ export const GET_PYTN_LISTING = gql`
         minPrice
         maxPrice
         createdDate
+        pending
         acceptedPytns {
           id
           price
@@ -50,6 +51,7 @@ export const GET_ACCEPTED_PYTN = gql`
       edges {
         studentPytnEntity {
           id
+          pending
         }
         tutor {
           id
@@ -129,6 +131,7 @@ export const SEARCH_TUTOR_PYTN_REQUESTS = gql`
         minPrice
         maxPrice
         createdDate
+        pending
         acceptedPytns {
           id
           price

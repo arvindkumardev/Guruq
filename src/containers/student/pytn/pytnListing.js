@@ -51,7 +51,14 @@ function PytnListing(props) {
           onPositiveClick: () => {
             getTuitionNeeds({
               variables: {
-                searchDto: { studentId: studentInfo.id, page: 1, size: 100, sortBy: 'createdDate', sortOrder: 'desc' },
+                searchDto: {
+                  studentId: studentInfo.id,
+                  pending: true,
+                  page: 1,
+                  size: 100,
+                  sortBy: 'createdDate',
+                  sortOrder: 'desc',
+                },
               },
             });
           },
@@ -64,7 +71,14 @@ function PytnListing(props) {
     if (isFocussed) {
       getTuitionNeeds({
         variables: {
-          searchDto: { studentId: studentInfo.id, page: 1, size: 100, sortBy: 'createdDate', sortOrder: 'desc' },
+          searchDto: {
+            studentId: studentInfo.id,
+            pending: true,
+            page: 1,
+            size: 100,
+            sortBy: 'createdDate',
+            sortOrder: 'desc',
+          },
         },
       });
     }
