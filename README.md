@@ -193,3 +193,6 @@ rm -rf node_modules && yarn install && cd ios && rm -rf Pods Podfile.lock && pod
 
 
 rm -rf ./android/app/src/main/res/drawable-*; rm -rf ./android/app/src/main/res/raw-*
+
+Apple M1 fixes:
+export LC_ALL="en_US.UTF-8"
