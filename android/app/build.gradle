@@ -132,8 +132,8 @@ android {
         applicationId "com.guruq"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 53
-        versionName "2.0.2"
+        versionCode 5000000
+        versionName "2.1.0"
         multiDexEnabled true
     }
     splits {

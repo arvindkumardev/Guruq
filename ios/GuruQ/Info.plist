@@ -28,6 +28,8 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>paytmMAndJE08510053061154</string>
+				<string>guruq</string>
+				<string>https</string>
 			</array>
 		</dict>
 	</array>
