@@ -204,10 +204,45 @@ const MyCart = () => {
     });
   }, []);
 
+  const checkIfPromotionApplies = (promotion) => {
+    if (promotion) {
+      if (
+        promotion.minCartAmount === 0 ||
+        promotion.minCartAmount >= promotion.maxCartAmount ||
+        (amount >= promotion.minCartAmount && amount <= promotion.maxCartAmount)
+      ) {
+        if (
+          promotion.minCartItemCount === 0 ||
+          promotion.minCartItemCount >= promotion.maxCartItemCount ||
+          (cartItems.length >= promotion.minCartItemCount && cartItems.length <= promotion.maxCartItemCount)
+        ) {
+          const totalClassCount = cartItems?.reduce(function (tot, arr) {
+            // return the sum with previous value
+            return tot + arr.count;
+            // set initial value as 0
+          }, 0);
+
+          if (promotion.minClassCount === 0 || totalClassCount >= promotion.minClassCount) {
+            return true;
+          }
+          alertBox('Error', `Minimum ${promotion.minClassCount} class count required to apply this coupon!`);
+        } else {
+          alertBox('Error', `Minimum ${promotion.minCartItemCount} cart items required to apply this coupon!`);
+        }
+      } else {
+        alertBox('Error', `Minimum ₹${promotion.minCartAmount} cart value required to apply this coupon`);
+      }
+    }
+    setAppliedCoupon({});
+    setCouponApplied(false);
+    return false;
+  };
+
   const applyCoupon = (promotion) => {
     if (promotion) {
-      console.log(amount, promotion.minCartAmount);
-      if (promotion.minCartAmount === 0 || (amount >= promotion.minCartAmount && amount <= promotion.maxCartAmount)) {
+      const isPromotionApplicable = checkIfPromotionApplies(promotion);
+
+      if (isPromotionApplicable) {
         if (!promotion.isPercentage) {
           if (promotion.maxDiscount >= promotion.discount) {
             setAppliedCouponValue(promotion.discount);
@@ -232,10 +267,6 @@ const MyCart = () => {
         // set the coupon as well
         activeCoupon(promotion);
         AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(promotion));
-      } else {
-        setAppliedCoupon({});
-        setCouponApplied(false);
-        alertBox('Error', `Minimum cart value required: ₹${promotion.minCartAmount}`);
       }
     }
   };
@@ -706,7 +737,12 @@ const MyCart = () => {
       {!cartEmpty ? (
         <View style={{ flex: 1 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ paddingHorizontal: RfW(16), paddingVertical: RfH(16), backgroundColor: Colors.white }}>
+            <View
+              style={{
+                paddingHorizontal: RfW(16),
+                paddingVertical: RfH(16),
+                backgroundColor: Colors.white,
+              }}>
               <FlatList
                 showsHorizontalScrollIndicator={false}
                 data={cartItems}
@@ -807,7 +843,14 @@ const MyCart = () => {
           </Text>
           <Button
             onPress={() => setShowAllSubjects(true)}
-            style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
+            style={[
+              commonStyles.buttonPrimary,
+              {
+                alignSelf: 'center',
+                marginTop: RfH(64),
+                width: RfW(190),
+              },
+            ]}>
             <Text style={commonStyles.textButtonPrimary}>Start Booking</Text>
           </Button>
         </View>

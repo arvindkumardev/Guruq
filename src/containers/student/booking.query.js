@@ -67,6 +67,9 @@ export const GET_CART_ITEMS = gql`
         firstTimeBookingOnly
         minCartAmount
         maxCartAmount
+        minCartItemCount
+        maxCartItemCount
+        minClassCount
       }
       pytnEntity {
         id

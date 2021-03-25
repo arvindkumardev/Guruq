@@ -73,6 +73,9 @@ export const ADD_TO_CART = gql`
         firstTimeBookingOnly
         minCartAmount
         maxCartAmount
+        minCartItemCount
+        maxCartItemCount
+        minClassCount
       }
     }
   }
@@ -185,6 +188,9 @@ export const CHECK_COUPON = gql`
       firstTimeBookingOnly
       minCartAmount
       maxCartAmount
+      minCartItemCount
+      maxCartItemCount
+      minClassCount
     }
   }
 `;
