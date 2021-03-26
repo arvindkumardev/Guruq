@@ -43,6 +43,7 @@ import { activeCoupon, offeringsMasterData, pytnBooking, studentDetails, userDet
 import NavigationRouteNames from '../../../routes/screenNames';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import CouponModal from '../tutorListing/components/couponModal';
+import CouponApplied from '../../../components/CouponApplied';
 
 const MyCart = () => {
   // const [showQPointPayModal, setShowQPointPayModal] = useState(false);
@@ -83,12 +84,13 @@ const MyCart = () => {
 
   const [couponApplied, setCouponApplied] = useState(!isEmpty(activeCouponVar));
   const [appliedCoupon, setAppliedCoupon] = useState(activeCouponVar);
+  const [showCouponAppliedModal, setShowCouponAppliedModal] = useState(false);
   const [appliedCouponValue, setAppliedCouponValue] = useState(0);
 
   useEffect(() => {
     if (!cartEmpty && !isEmpty(activeCouponVar) && amount > 0) {
       console.log('useEffect: ', amount, activeCouponVar);
-      applyCoupon(activeCouponVar);
+      applyCoupon(activeCouponVar, false);
       pytnBooking(cartItems.filter((ci) => !isEmpty(ci.pytnEntity)).length > 0);
     }
   }, [cartItems, amount]);
@@ -238,7 +240,7 @@ const MyCart = () => {
     return false;
   };
 
-  const applyCoupon = (promotion) => {
+  const applyCoupon = (promotion, showAppliedModal = true) => {
     if (promotion) {
       const isPromotionApplicable = checkIfPromotionApplies(promotion);
 
@@ -263,6 +265,7 @@ const MyCart = () => {
         setCouponApplied(true);
 
         setShowCouponModal(false);
+        setShowCouponAppliedModal(showAppliedModal);
 
         // set the coupon as well
         activeCoupon(promotion);
@@ -886,6 +889,14 @@ const MyCart = () => {
       />
 
       <CouponModal visible={showCouponModal} onClose={() => setShowCouponModal(false)} applyCoupon={applyCoupon} />
+
+      {showCouponAppliedModal && (
+        <CouponApplied
+          coupon={appliedCoupon}
+          couponValue={appliedCouponValue}
+          handleClose={() => setShowCouponAppliedModal(false)}
+        />
+      )}
     </View>
   );
 };

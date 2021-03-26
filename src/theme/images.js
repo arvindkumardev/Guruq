@@ -251,6 +251,8 @@ const Images = {
   student_home_banner_2: require('../assets/images/banners/home-banner-student-2.png'),
   student_home_banner_3: require('../assets/images/banners/home-banner-student-3.png'),
 
+  discount1: require('../assets/images/discount1.png'),
+
   ...SubjectIcons,
 };
 
