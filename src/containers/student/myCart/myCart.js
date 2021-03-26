@@ -245,27 +245,24 @@ const MyCart = () => {
       const isPromotionApplicable = checkIfPromotionApplies(promotion);
 
       if (isPromotionApplicable) {
+        let discountAmount = 0;
         if (!promotion.isPercentage) {
-          if (promotion.maxDiscount >= promotion.discount) {
-            setAppliedCouponValue(promotion.discount);
-          } else {
-            setAppliedCouponValue(promotion.maxDiscount);
-          }
+          discountAmount = Math.min(promotion.discount, amount);
         } else {
-          let discountedAmount = 0;
-          discountedAmount = (amount * promotion.discount) / 100;
-          if (promotion.maxDiscount >= discountedAmount) {
-            setAppliedCouponValue(discountedAmount);
-          } else {
-            setAppliedCouponValue(promotion.maxDiscount);
-          }
+          discountAmount = Math.round((amount * promotion.discount) / 100);
         }
+
+        // final check on max discount that can be applied
+        setAppliedCouponValue(Math.min(promotion.maxDiscount, discountAmount));
 
         setAppliedCoupon(promotion);
         setCouponApplied(true);
 
         setShowCouponModal(false);
         setShowCouponAppliedModal(showAppliedModal);
+
+        // set qpoints to 0
+        setQPointsRedeemed(0);
 
         // set the coupon as well
         activeCoupon(promotion);
@@ -532,7 +529,7 @@ const MyCart = () => {
   );
 
   const onSetQPoints = (val) => {
-    if (val <= qPoints && val <= amount) {
+    if (val <= qPoints && val <= getPayableAmount()) {
       setQPointsRedeemed(val);
     }
   };
