@@ -24,6 +24,8 @@ export const IND_COUNTRY_OBJ = {
 
 export const LOTTIE_JSON_FILES = {
   loaderJson: require('../assets/json/loader1.json'),
+  fireworks1: require('../assets/json/fireworks1.json'),
+  fireworks2: require('../assets/json/fireworks2.json'),
 };
 
 const isDev = false;
