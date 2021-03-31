@@ -46,6 +46,7 @@ const AddToCartModal = (props) => {
   const [showHomeConsent, setShowHomeConsent] = useState(false);
 
   const isPytnBooking = useReactiveVar(pytnBooking);
+  const activeCouponVar = useReactiveVar(activeCoupon);
 
   const [removeAllCartItems, { loading: removeAllCartItemsLoading }] = useMutation(REMOVE_ALL_CART_ITEM, {
     fetchPolicy: 'no-cache',
@@ -84,9 +85,11 @@ const AddToCartModal = (props) => {
 
         console.log(data);
 
-        // set the promotion
-        activeCoupon(data?.addToCart?.promotion);
-        AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(data?.addToCart?.promotion));
+        if ((!activeCouponVar || isPytnBooking) && data?.addToCart?.promotion) {
+          // set the promotion
+          activeCoupon(data?.addToCart?.promotion);
+          AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(data?.addToCart?.promotion));
+        }
 
         navigation.navigate(routeNames.STUDENT.MY_CART);
       }
