@@ -6,6 +6,7 @@ import {
   BackHandler,
   FlatList,
   Image,
+  Linking,
   ScrollView,
   StatusBar,
   Text,
@@ -15,12 +16,14 @@ import {
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
+import DeepLinking from 'react-native-deep-linking';
 import {
   interestingOfferingData,
   offeringsMasterData,
   pytnBooking,
   studentDetails,
   userDetails,
+  userType,
 } from '../../../../apollo/cache';
 import {
   IconButtonWrapper,
@@ -43,6 +46,7 @@ import StudentOfferingModal from './studentOfferingModal';
 import NotificationRedirection from '../../../notification/notificationRedirection';
 import UserImageComponent from '../../../../components/UserImageComponent';
 import StudentTopCarousel from './studentTopCarousel';
+import { UserTypeEnum } from '../../../../common/userType.enum';
 
 function StudentDashboard(props) {
   const navigation = useNavigation();
@@ -85,6 +89,27 @@ function StudentDashboard(props) {
       }
     },
   });
+
+  const handleUrl = ({ url }) => {
+    if (url.endsWith('/my-cart')) {
+      navigation.navigate(NavigationRouteNames.STUDENT.MY_CART);
+    }
+    if (url.endsWith('/pytn-listing')) {
+      navigation.navigate(NavigationRouteNames.PYTN_LISTING);
+    }
+  };
+
+  useEffect(() => {
+    Linking.addEventListener('url', handleUrl);
+
+    Linking.getInitialURL()
+      .then((url) => {
+        handleUrl({ url });
+      })
+      .catch((err) => console.error('An error occurred', err));
+
+    return () => Linking.removeEventListener('url', handleUrl);
+  }, []);
 
   useEffect(() => {
     if (isFocused) {

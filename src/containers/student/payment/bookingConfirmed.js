@@ -1,15 +1,17 @@
 import { Text, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Images, Colors, Fonts } from '../../../theme';
 import routeNames from '../../../routes/screenNames';
 import { RfH, RfW } from '../../../utils/helpers';
 import commonStyles from '../../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { IconButtonWrapper } from '../../../components';
 import { PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
+import { activeCoupon } from '../../../apollo/cache';
 
 function bookingConfirmed(props) {
   const { route } = props;
@@ -18,6 +20,12 @@ function bookingConfirmed(props) {
   const isCash = PaymentMethodEnum.CASH.value === paymentMethod;
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    // reset coupon
+    activeCoupon({});
+    AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON);
+  }, []);
 
   return (
     <View style={commonStyles.mainContainer}>

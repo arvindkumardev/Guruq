@@ -1,8 +1,7 @@
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import commonStyles from '../../theme/styles';
-import styles from './styles';
 import { Colors, Images } from '../../theme';
 import LoginCheck from '../common/login/loginCheck';
 import { GET_OFFERINGS_MASTER_DATA } from '../student/dashboard-query';

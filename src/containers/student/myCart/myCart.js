@@ -208,14 +208,9 @@ const MyCart = () => {
 
   const checkIfPromotionApplies = (promotion) => {
     if (promotion) {
-      if (
-        promotion.minCartAmount === 0 ||
-        promotion.minCartAmount >= promotion.maxCartAmount ||
-        (amount >= promotion.minCartAmount && amount <= promotion.maxCartAmount)
-      ) {
+      if (promotion.minCartAmount === 0 || amount >= promotion.minCartAmount) {
         if (
           promotion.minCartItemCount === 0 ||
-          promotion.minCartItemCount >= promotion.maxCartItemCount ||
           (cartItems.length >= promotion.minCartItemCount && cartItems.length <= promotion.maxCartItemCount)
         ) {
           const totalClassCount = cartItems?.reduce(function (tot, arr) {
