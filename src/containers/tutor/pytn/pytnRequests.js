@@ -1,4 +1,4 @@
-import { FlatList, KeyboardAvoidingView, Text, View, ScrollView, Image } from 'react-native';
+import { FlatList, Image, KeyboardAvoidingView, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
-import { alertBox, getSubjectIcons, printDate, printDateTime, printTime, RfH, RfW } from '../../../utils/helpers';
+import { alertBox, getSubjectIcons, printDate, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_TUTOR_PYTN_REQUESTS } from '../../student/pytn/pytn.query';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { offeringsMasterData } from '../../../apollo/cache';

@@ -10,6 +10,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  Linking,
   ScrollView,
   StatusBar,
   Text,
@@ -127,6 +128,24 @@ function TutorDashboard(props) {
       getTutorOffering();
     }
   }, [tutorInfo, isFocused]);
+
+  const handleUrl = ({ url }) => {
+    if (url.endsWith('/pytn-listing')) {
+      navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS);
+    }
+  };
+
+  useEffect(() => {
+    Linking.addEventListener('url', handleUrl);
+
+    Linking.getInitialURL()
+      .then((url) => {
+        handleUrl({ url });
+      })
+      .catch((err) => console.error('An error occurred', err));
+
+    return () => Linking.removeEventListener('url', handleUrl);
+  }, []);
 
   const renderSubjects = (item, index) => {
     return (
