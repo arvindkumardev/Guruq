@@ -1,6 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 import moment from 'moment';
-import { Button, Picker } from 'native-base';
+import { Button } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Modal, Text, View } from 'react-native';
@@ -12,7 +12,7 @@ import { GET_TUTOR_AVAILABILITY } from '../../containers/student/class.query';
 import { Colors, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { endOfDay, printDate, RfH, RfW, startOfDay } from '../../utils/helpers';
+import { RfH, RfW } from '../../utils/helpers';
 
 const DateSlotSelectorModal = (props) => {
   const [selectedSlot, setSelectedSlot] = useState({});
@@ -116,22 +116,30 @@ const DateSlotSelectorModal = (props) => {
               highlightDateContainerStyle={{ backgroundColor: Colors.lightBlue }}
               disabledDateNameStyle={{ color: Colors.darkGrey }}
               disabledDateNumberStyle={{ color: Colors.darkGrey }}
-              dateNameStyle={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
-              dateNumberStyle={{ fontSize: RFValue(17, STANDARD_SCREEN_SIZE), fontWeight: '400', color: Colors.black }}
+              dateNameStyle={{
+                fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
+                fontWeight: '400',
+                color: Colors.black,
+              }}
+              dateNumberStyle={{
+                fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+                fontWeight: '400',
+                color: Colors.black,
+              }}
               style={{ height: 100, paddingTop: 20, paddingBottom: 10 }}
               calendarAnimation={{ type: 'parallel', duration: 300 }}
               // daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-              markedDates={[
-                {
-                  date: new Date(),
-                  dots: [
-                    {
-                      color: Colors.brandBlue,
-                      selectedColor: Colors.brandBlue,
-                    },
-                  ],
-                },
-              ]}
+              // markedDates={[
+              //   {
+              //     date: new Date(),
+              //     dots: [
+              //       {
+              //         color: Colors.brandBlue,
+              //         selectedColor: Colors.brandBlue,
+              //       },
+              //     ],
+              //   },
+              // ]}
               onHeaderSelected={(a) => console.log(a)}
               onDateSelected={(d) => getAvailabilityData(d)}
             />
@@ -139,14 +147,23 @@ const DateSlotSelectorModal = (props) => {
           {!isEmpty(availability) ? (
             <View>
               <View
-                style={[commonStyles.horizontalChildrenSpaceView, { paddingHorizontal: RfW(16), marginTop: RfH(20) }]}>
+                style={[
+                  commonStyles.horizontalChildrenSpaceView,
+                  {
+                    paddingHorizontal: RfW(16),
+                    marginTop: RfH(20),
+                  },
+                ]}>
                 <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>Start Time</Text>
                 <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>End Time</Text>
               </View>
               <View style={[commonStyles.horizontalChildrenSpaceView, { paddingLeft: RfW(15) }]}>
                 <CustomSelect
                   label="Start Time"
-                  data={availability.map((item) => ({ label: moment(item.startDate).format('hh:mm A'), value: item }))}
+                  data={availability.map((item) => ({
+                    label: moment(item.startDate).format('hh:mm A'),
+                    value: item,
+                  }))}
                   value={selectedSlot}
                   placeholder="Select time"
                   onChangeHandler={(value) => value && setSelectedSlot(value)}
