@@ -21,8 +21,9 @@ const CouponModal = (props) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
         alertBox('Error', error.message);
+      } else {
+        alertBox('Error', 'Please provide a valid coupon code.');
       }
-      alertBox('Error', 'Please provide a valid coupon code.');
     },
     onCompleted: (data) => {
       if (data) {

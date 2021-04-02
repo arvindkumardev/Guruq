@@ -212,8 +212,13 @@ const MyCart = () => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
         const error = e.graphQLErrors[0].extensions.exception.response;
         alertBox('Error', error.message);
+      } else {
+        alertBox('Error', 'Please provide a valid coupon code.');
       }
-      alertBox('Error', 'Please provide a valid coupon code.');
+      // remove any coupon applied
+      activeCoupon({});
+      // set the coupon as well
+      AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON);
     },
     onCompleted: (data) => {},
   });
