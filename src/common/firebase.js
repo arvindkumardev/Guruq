@@ -24,12 +24,12 @@ const saveNotificationPayload = async (remoteMessage) => {
   if (notifyArray && notifyArray.length > 0) {
     const newArray = [...notifyArray, data];
     storeData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST, JSON.stringify(newArray)).then(() => {
-      console.log('Store data succesfully', newArray);
+      console.log('Store data successfully', newArray);
     });
   } else {
     const newArray = [data];
     storeData(LOCAL_STORAGE_DATA_KEY.NOTIFICATION_LIST, JSON.stringify(newArray)).then(() => {
-      console.log('Store data succesfully', newArray);
+      console.log('Store data successfully', newArray);
     });
   }
 };

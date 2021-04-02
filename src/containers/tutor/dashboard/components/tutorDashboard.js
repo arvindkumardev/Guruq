@@ -36,6 +36,7 @@ import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
 import TutorSubjectsModal from './tutorSubjectsModal';
 import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
+import NotificationRedirection from '../../../notification/notificationRedirection';
 
 const carouselItems = [
   {
@@ -248,6 +249,8 @@ function TutorDashboard(props) {
     <>
       <StatusBar barStyle="dark-content" />
       <Loader isLoading={loadingScheduledClasses || loadingTutorsOffering} />
+      <NotificationRedirection />
+
       <View
         style={{
           flex: 1,

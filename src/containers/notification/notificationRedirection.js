@@ -53,6 +53,7 @@ function NotificationRedirection() {
   };
 
   useEffect(() => {
+    console.log('notificationPayloadObj.screen', notificationPayloadObj);
     if (!isEmpty(notificationPayloadObj) && notificationPayloadObj.screen) {
       console.log('notificationPayloadObj.screen', notificationPayloadObj);
       switch (notificationPayloadObj.screen) {
@@ -66,6 +67,10 @@ function NotificationRedirection() {
         }
         case NavigationRouteNames.WALLET: {
           wallet();
+          break;
+        }
+        case NavigationRouteNames.TUTOR.STUDENT_REQUESTS: {
+          navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS);
           break;
         }
       }
