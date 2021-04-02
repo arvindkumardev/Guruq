@@ -30,8 +30,8 @@ import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE, urlConfig } from '../../.
 import { GET_CART_ITEMS } from '../booking.query';
 import {
   ADD_TO_CART,
+  APPLY_COUPON,
   CANCEL_PENDING_BOOKINGS,
-  CHECK_COUPON,
   CREATE_BOOKING,
   REMOVE_CART_ITEM,
   REMOVE_COUPON,
@@ -39,7 +39,7 @@ import {
 import { GET_MY_QPOINTS_BALANCE, GET_STUDENT_DETAILS } from '../../common/graphql-query';
 import CustomModalWebView from '../../../components/CustomModalWebView';
 import { OrderStatusEnum, PaymentMethodEnum } from '../../../components/PaymentMethodModal/paymentMethod.enum';
-import { activeCoupon, offeringsMasterData, pytnBooking, studentDetails, userDetails } from '../../../apollo/cache';
+import { activeCoupon, pytnBooking, studentDetails, userDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { DUPLICATE_FOUND } from '../../../common/errorCodes';
 import CouponModal from '../tutorListing/components/couponModal';
@@ -174,7 +174,7 @@ const MyCart = () => {
   //   fetchPolicy: 'no-cache',
   // });
 
-  const [addToCart, { loading: addTocartLoading }] = useMutation(ADD_TO_CART, {
+  const [addToCart, { loading: addToCartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
@@ -205,6 +205,18 @@ const MyCart = () => {
       setToken(tk);
     });
   }, []);
+
+  const [markCouponUsed, { loading: markCouponUsedLoading }] = useMutation(APPLY_COUPON, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
+        const error = e.graphQLErrors[0].extensions.exception.response;
+        alertBox('Error', error.message);
+      }
+      alertBox('Error', 'Please provide a valid coupon code.');
+    },
+    onCompleted: (data) => {},
+  });
 
   const checkIfPromotionApplies = (promotion) => {
     if (promotion) {
@@ -262,6 +274,11 @@ const MyCart = () => {
         // set the coupon as well
         activeCoupon(promotion);
         AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(promotion));
+
+        // mark coupon as used
+        markCouponUsed({
+          variables: { code: promotion.code },
+        });
       }
     }
   };
@@ -722,10 +739,11 @@ const MyCart = () => {
         isLoading={
           cartLoading ||
           removeLoading ||
-          addTocartLoading ||
+          addToCartLoading ||
           bookingLoading ||
           cancelPendingBookingLoading ||
-          removeCouponLoading
+          removeCouponLoading ||
+          markCouponUsedLoading
         }
       />
       <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
