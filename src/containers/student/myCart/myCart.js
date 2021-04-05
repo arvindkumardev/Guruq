@@ -310,7 +310,9 @@ const MyCart = () => {
   });
 
   const removeCoupon = () => {
-    removeCouponCode({ variables: { code: appliedCoupon.code } });
+    if (appliedCoupon) {
+      removeCouponCode({ variables: { code: appliedCoupon.code } });
+    }
   };
 
   const gotoTutors = (subject) => {
@@ -374,6 +376,8 @@ const MyCart = () => {
         negativeText: 'Cancel',
         onNegativeClick: () => {
           cancelPendingBooking({ variables: { orderId: bookingData.id } });
+
+          removeCoupon();
         },
       });
     }
