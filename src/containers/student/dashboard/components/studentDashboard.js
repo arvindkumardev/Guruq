@@ -91,10 +91,10 @@ function StudentDashboard(props) {
   });
 
   const handleUrl = ({ url }) => {
-    if (url.endsWith('/my-cart')) {
+    if (url?.endsWith('/my-cart')) {
       navigation.navigate(NavigationRouteNames.STUDENT.MY_CART);
     }
-    if (url.endsWith('/pytn-listing')) {
+    if (url?.endsWith('/pytn-listing')) {
       navigation.navigate(NavigationRouteNames.PYTN_LISTING);
     }
   };

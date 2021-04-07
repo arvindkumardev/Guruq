@@ -131,7 +131,7 @@ function TutorDashboard(props) {
   }, [tutorInfo, isFocused]);
 
   const handleUrl = ({ url }) => {
-    if (url.endsWith('/pytn-listing')) {
+    if (url?.endsWith('/pytn-listing')) {
       navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS);
     }
   };

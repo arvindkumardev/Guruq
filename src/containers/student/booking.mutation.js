@@ -195,13 +195,6 @@ export const CHECK_COUPON = gql`
   }
 `;
 
-export const APPLY_COUPON = gql`
-  mutation ApplyCoupon($code: String!) {
-    applyCoupon(code: $code) {
-      id
-    }
-  }
-`;
 export const REMOVE_COUPON = gql`
   mutation RemoveCoupon($code: String!) {
     removeCoupon(code: $code) {

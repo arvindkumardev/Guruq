@@ -113,6 +113,7 @@ export const SEARCH_TUTOR_PYTN_REQUESTS = gql`
     searchTutorPYTN(searchDto: $searchDto) {
       edges {
         id
+        active
         offering {
           id
           displayName

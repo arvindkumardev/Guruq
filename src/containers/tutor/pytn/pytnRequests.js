@@ -1,4 +1,4 @@
-import { FlatList, Image, KeyboardAvoidingView, Text, View } from 'react-native';
+import { FlatList, Image, KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -14,8 +14,11 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { offeringsMasterData } from '../../../apollo/cache';
 import { ACCEPT_STUDENT_PYTN } from '../../student/pytn/pytn.mutation';
 import PriceInputModal from './priceInputModal';
+import styles from '../../student/tutorListing/styles';
 
 function PytnRequests() {
+  const itemsPerPage = 25;
+
   const [requests, setRequests] = useState([]);
   const [selectedPytn, setSelectedPytn] = useState({});
   const [priceVal, setPriceVal] = useState(0);
@@ -23,6 +26,10 @@ function PytnRequests() {
   const [isListEmpty, setIsListEmpty] = useState(false);
   const isFocussed = useIsFocused();
   const offeringMasterData = useReactiveVar(offeringsMasterData);
+  const [loadMore, setLoadMore] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [getPytnRequests, { loading: pytnRequestLoading }] = useLazyQuery(SEARCH_TUTOR_PYTN_REQUESTS, {
     fetchPolicy: 'no-cache',
@@ -31,11 +38,32 @@ function PytnRequests() {
     },
     onCompleted: (data) => {
       if (data) {
-        setRequests(data.searchTutorPYTN.edges);
-        setIsListEmpty(data?.searchTutorPYTN?.edges.length === 0);
+        console.log('data', data);
+
+        if (!loadMore) {
+          setRequests(data.searchTutorPYTN?.edges);
+          setCurrentPage(1);
+        } else {
+          let newReqs = Object.assign([], requests);
+          newReqs = newReqs.concat(data.searchTutorPYTN?.edges);
+
+          console.log(newReqs);
+
+          setRequests(newReqs);
+        }
+        setHasMore(data?.searchTutorPYTN?.edges?.length === itemsPerPage);
+        setLoadMore(false);
+        setIsListEmpty(data?.searchTutorPYTN?.edges?.length === 0);
       }
     },
   });
+
+  const loadPytnData = (page) => {
+    setCurrentPage(page);
+    getPytnRequests({
+      variables: { searchDto: { page, size: itemsPerPage, sortBy: 'createdDate', sortOrder: 'asc' } },
+    });
+  };
 
   const [acceptStudentPytn, { loading: acceptStudentPytnLoading }] = useMutation(ACCEPT_STUDENT_PYTN, {
     fetchPolicy: 'no-cache',
@@ -47,9 +75,8 @@ function PytnRequests() {
         alertBox(`Request ${isEmpty(selectedPytn.acceptedPytns) ? 'accepted' : 'edited'} successfully`, '', {
           positiveText: 'Ok',
           onPositiveClick: () => {
-            getPytnRequests({
-              variables: { searchDto: { pending: true, size: 25, sortBy: 'createdDate', sortOrder: 'asc' } },
-            });
+            setCurrentPage(1);
+            loadPytnData(1);
           },
         });
       }
@@ -104,11 +131,15 @@ function PytnRequests() {
 
   useEffect(() => {
     if (isFocussed) {
-      getPytnRequests({
-        variables: { searchDto: { pending: true, size: 25, sortBy: 'createdDate', sortOrder: 'asc' } },
-      });
+      setCurrentPage(1);
+      loadPytnData(1);
     }
   }, [isFocussed]);
+
+  const handleLoadMore = () => {
+    setLoadMore(true);
+    loadPytnData(currentPage + 1);
+  };
 
   const getRootOfferingName = (offering) =>
     offeringMasterData.find((item) => item.id === offering?.offering?.id)?.rootOffering?.displayName;
@@ -182,17 +213,54 @@ function PytnRequests() {
           <Text>Created On {printDate(item.createdDate)}</Text>
         </View>
 
-        {isEmpty(item.acceptedPytns) ? (
-          <Button
-            block
-            style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-            onPress={() => handleAccept(item)}>
-            <Text style={commonStyles.textButtonPrimary}>Accept Request</Text>
-          </Button>
+        {item.pending ? (
+          <>
+            {isEmpty(item.acceptedPytns) ? (
+              <Button
+                block
+                style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+                onPress={() => handleAccept(item)}>
+                <Text style={commonStyles.textButtonPrimary}>Accept Request</Text>
+              </Button>
+            ) : (
+              <Text
+                style={[
+                  commonStyles.headingPrimaryText,
+                  {
+                    color: Colors.brandBlue2,
+                    paddingVertical: RfH(10),
+                  },
+                ]}>
+                Accepted
+              </Text>
+            )}
+          </>
         ) : (
-          <Text style={[commonStyles.headingPrimaryText, { color: Colors.brandBlue2, paddingVertical: RfH(10) }]}>
-            Accepted
-          </Text>
+          <>
+            {item.active ? (
+              <Text
+                style={[
+                  commonStyles.headingPrimaryText,
+                  {
+                    color: Colors.green,
+                    paddingVertical: RfH(10),
+                  },
+                ]}>
+                Closed
+              </Text>
+            ) : (
+              <Text
+                style={[
+                  commonStyles.headingPrimaryText,
+                  {
+                    color: Colors.orangeRed,
+                    paddingVertical: RfH(10),
+                  },
+                ]}>
+                Expired
+              </Text>
+            )}
+          </>
         )}
       </View>
       <View style={commonStyles.lineSeparator} />
@@ -217,6 +285,17 @@ function PytnRequests() {
               contentContainerStyle={{ paddingBottom: RfH(120) }}
               showsVerticalScrollIndicator={false}
               scrollEnabled={requests.length > 3}
+              ListFooterComponent={
+                <>
+                  {hasMore && (
+                    <View style={{ paddingTop: RfH(20), paddingBottom: RfH(20) }}>
+                      <TouchableOpacity style={styles.footerLoadMore} onPress={handleLoadMore}>
+                        <Text>Load More</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </>
+              }
             />
           )}
 
@@ -234,7 +313,11 @@ function PytnRequests() {
               <Text
                 style={[
                   commonStyles.pageTitleThirdRow,
-                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center', marginHorizontal: RfW(20) },
+                  {
+                    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                    textAlign: 'center',
+                    marginHorizontal: RfW(20),
+                  },
                 ]}>
                 No Requests Yet
               </Text>

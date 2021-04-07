@@ -4,12 +4,14 @@ import { KeyboardAvoidingView, Modal, Text, TouchableOpacity, View } from 'react
 import { Input } from 'native-base';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useMutation } from '@apollo/client';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Colors, Fonts, Images } from '../../../../theme';
 import { alertBox, RfH, RfW } from '../../../../utils/helpers';
 import commonStyles from '../../../../theme/styles';
 import { IconButtonWrapper, Loader } from '../../../../components';
 import { CHECK_COUPON } from '../../booking.mutation';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import { activeCoupon } from '../../../../apollo/cache';
 
 const CouponModal = (props) => {
   const { visible, onClose, applyCoupon } = props;
@@ -24,6 +26,10 @@ const CouponModal = (props) => {
       } else {
         alertBox('Error', 'Please provide a valid coupon code.');
       }
+      // remove any coupon applied
+      activeCoupon({});
+      // set the coupon as well
+      AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON);
     },
     onCompleted: (data) => {
       if (data) {

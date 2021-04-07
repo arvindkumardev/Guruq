@@ -30,7 +30,6 @@ import { LOCAL_STORAGE_DATA_KEY, STANDARD_SCREEN_SIZE, urlConfig } from '../../.
 import { GET_CART_ITEMS } from '../booking.query';
 import {
   ADD_TO_CART,
-  APPLY_COUPON,
   CANCEL_PENDING_BOOKINGS,
   CREATE_BOOKING,
   REMOVE_CART_ITEM,
@@ -170,9 +169,6 @@ const MyCart = () => {
       }
     },
   });
-  // const { loading: meLoading, error: meError, data: userData } = useQuery(ME_QUERY, {
-  //   fetchPolicy: 'no-cache',
-  // });
 
   const [addToCart, { loading: addToCartLoading }] = useMutation(ADD_TO_CART, {
     fetchPolicy: 'no-cache',
@@ -206,85 +202,30 @@ const MyCart = () => {
     });
   }, []);
 
-  const [markCouponUsed, { loading: markCouponUsedLoading }] = useMutation(APPLY_COUPON, {
-    fetchPolicy: 'no-cache',
-    onError: (e) => {
-      if (e.graphQLErrors && e.graphQLErrors.length > 0) {
-        const error = e.graphQLErrors[0].extensions.exception.response;
-        alertBox('Error', error.message);
-      } else {
-        alertBox('Error', 'Please provide a valid coupon code.');
-      }
-      // remove any coupon applied
-      activeCoupon({});
-      // set the coupon as well
-      AsyncStorage.removeItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON);
-    },
-    onCompleted: (data) => {},
-  });
-
-  const checkIfPromotionApplies = (promotion) => {
-    if (promotion) {
-      if (promotion.minCartAmount === 0 || amount >= promotion.minCartAmount) {
-        if (
-          promotion.minCartItemCount === 0 ||
-          (cartItems.length >= promotion.minCartItemCount && cartItems.length <= promotion.maxCartItemCount)
-        ) {
-          const totalClassCount = cartItems?.reduce(function (tot, arr) {
-            // return the sum with previous value
-            return tot + arr.count;
-            // set initial value as 0
-          }, 0);
-
-          if (promotion.minClassCount === 0 || totalClassCount >= promotion.minClassCount) {
-            return true;
-          }
-          alertBox('Error', `Minimum ${promotion.minClassCount} class count required to apply this coupon!`);
-        } else {
-          alertBox('Error', `Minimum ${promotion.minCartItemCount} cart items required to apply this coupon!`);
-        }
-      } else {
-        alertBox('Error', `Minimum ₹${promotion.minCartAmount} cart value required to apply this coupon`);
-      }
-    }
-    setAppliedCoupon({});
-    setCouponApplied(false);
-    return false;
-  };
-
   const applyCoupon = (promotion, showAppliedModal = true) => {
     if (promotion) {
-      const isPromotionApplicable = checkIfPromotionApplies(promotion);
-
-      if (isPromotionApplicable) {
-        let discountAmount = 0;
-        if (!promotion.isPercentage) {
-          discountAmount = Math.min(promotion.discount, amount);
-        } else {
-          discountAmount = Math.round((amount * promotion.discount) / 100);
-        }
-
-        // final check on max discount that can be applied
-        setAppliedCouponValue(Math.min(promotion.maxDiscount, discountAmount));
-
-        setAppliedCoupon(promotion);
-        setCouponApplied(true);
-
-        setShowCouponModal(false);
-        setShowCouponAppliedModal(showAppliedModal);
-
-        // set qpoints to 0
-        setQPointsRedeemed(0);
-
-        // set the coupon as well
-        activeCoupon(promotion);
-        AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(promotion));
-
-        // mark coupon as used
-        markCouponUsed({
-          variables: { code: promotion.code },
-        });
+      let discountAmount = 0;
+      if (!promotion.isPercentage) {
+        discountAmount = Math.min(promotion.discount, amount);
+      } else {
+        discountAmount = Math.round((amount * promotion.discount) / 100);
       }
+
+      // final check on max discount that can be applied
+      setAppliedCouponValue(Math.min(promotion.maxDiscount, discountAmount));
+
+      setAppliedCoupon(promotion);
+      setCouponApplied(true);
+
+      setShowCouponModal(false);
+      setShowCouponAppliedModal(showAppliedModal);
+
+      // set qpoints to 0
+      setQPointsRedeemed(0);
+
+      // set the coupon as well
+      activeCoupon(promotion);
+      AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(promotion));
     }
   };
 
@@ -493,7 +434,7 @@ const MyCart = () => {
 
   const renderCartItems = (item, index) => (
     <>
-      <View style={commonStyles.horizontalChildrenStartView}>
+      <View style={commonStyles.horizontalChildrenStartView} key={index}>
         <TutorImageComponent tutor={item?.tutor} width={80} height={80} styling={{ flex: 0.3, borderRadius: 8 }} />
         <View style={([commonStyles.verticallyCenterItemsView], { flex: 1, marginLeft: RfW(16) })}>
           <View style={commonStyles.horizontalChildrenSpaceView}>
@@ -737,11 +678,6 @@ const MyCart = () => {
     </View>
   );
 
-  // const createBooking = () => {
-  //   setShowQPointPayModal(false);
-  //   setShowPaymentModal(true);
-  // };
-
   return (
     <View style={[commonStyles.mainContainer, { paddingHorizontal: 0, backgroundColor: Colors.lightGrey }]}>
       <Loader
@@ -751,8 +687,7 @@ const MyCart = () => {
           addToCartLoading ||
           bookingLoading ||
           cancelPendingBookingLoading ||
-          removeCouponLoading ||
-          markCouponUsedLoading
+          removeCouponLoading
         }
       />
       <ScreenHeader label="My Cart" labelStyle={{ justifyContent: 'center' }} homeIcon horizontalPadding={16} />
