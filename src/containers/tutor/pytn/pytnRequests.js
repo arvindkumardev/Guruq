@@ -6,7 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { isEmpty } from 'lodash';
 import commonStyles from '../../../theme/styles';
-import { IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
+import { CustomCheckBox, IconButtonWrapper, Loader, ScreenHeader } from '../../../components';
 import { Colors, Fonts, Images } from '../../../theme';
 import { alertBox, getSubjectIcons, printDate, RfH, RfW } from '../../../utils/helpers';
 import { SEARCH_TUTOR_PYTN_REQUESTS } from '../../student/pytn/pytn.query';
@@ -15,6 +15,7 @@ import { offeringsMasterData } from '../../../apollo/cache';
 import { ACCEPT_STUDENT_PYTN } from '../../student/pytn/pytn.mutation';
 import PriceInputModal from './priceInputModal';
 import styles from '../../student/tutorListing/styles';
+import ActionSheet from '../../../components/ActionSheet';
 
 function PytnRequests() {
   const itemsPerPage = 25;
@@ -28,6 +29,9 @@ function PytnRequests() {
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const [loadMore, setLoadMore] = useState(false);
   const [hasMore, setHasMore] = useState(false);
+
+  const [openMenu, setOpenMenu] = useState(false);
+  const [showPendingOnly, setShowPendingOnly] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -60,8 +64,15 @@ function PytnRequests() {
 
   const loadPytnData = (page) => {
     setCurrentPage(page);
+
+    const searchDto = { page, size: itemsPerPage, sortBy: 'createdDate', sortOrder: 'asc' };
+
+    if (showPendingOnly) {
+      searchDto.pending = true;
+    }
+
     getPytnRequests({
-      variables: { searchDto: { page, size: itemsPerPage, sortBy: 'createdDate', sortOrder: 'asc' } },
+      variables: { searchDto },
     });
   };
 
@@ -134,7 +145,7 @@ function PytnRequests() {
       setCurrentPage(1);
       loadPytnData(1);
     }
-  }, [isFocussed]);
+  }, [isFocussed, showPendingOnly]);
 
   const handleLoadMore = () => {
     setLoadMore(true);
@@ -275,7 +286,15 @@ function PytnRequests() {
         behavior={Platform.select({ android: '', ios: 'padding' })}
         // keyboardVerticalOffset={Platform.OS === 'ios' ? (isDisplayWithNotch() ? 44 : 20) : 0}
         enabled>
-        <ScreenHeader label="Student Tuition Requests" homeIcon horizontalPadding={RfW(16)} />
+        <ScreenHeader
+          label="Student Tuition Requests"
+          homeIcon
+          horizontalPadding={RfW(16)}
+          showRightIcon
+          rightIcon={Images.vertical_dots_b}
+          onRightIconClick={() => setOpenMenu(!openMenu)}
+        />
+
         <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: RfW(16) }]}>
           {!isEmpty(requests) && (
             <FlatList
@@ -331,6 +350,33 @@ function PytnRequests() {
             </View>
           )}
         </View>
+
+        <ActionSheet
+          actions={[
+            {
+              label: 'All Requests',
+              handler: () => {
+                setShowPendingOnly(false);
+                setOpenMenu(false);
+              },
+              isEnabled: true,
+            },
+
+            {
+              label: 'Pending Requests Only',
+              handler: () => {
+                setShowPendingOnly(true);
+                setOpenMenu(false);
+              },
+              isEnabled: true,
+            },
+          ]}
+          cancelText="Dismiss"
+          handleCancel={() => setOpenMenu(false)}
+          isVisible={openMenu}
+          topLabel="Action"
+        />
+
         <PriceInputModal
           visible={showPriceModal}
           onClose={() => setShowPriceModal(false)}
