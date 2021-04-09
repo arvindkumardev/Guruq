@@ -2,7 +2,7 @@ import { KeyboardAvoidingView, ScrollView, Text, TouchableWithoutFeedback, View 
 import React, { useState } from 'react';
 import { Button, Input, Item } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import { Colors, Images } from '../../../theme';
 import { alertBox, RfH, RfW } from '../../../utils/helpers';
@@ -12,9 +12,13 @@ import { CustomRadioButton, IconButtonWrapper, ScreenHeader } from '../../../com
 import { CREATE_STUDENT_PYTN } from './pytn.mutation';
 import routeNames from '../../../routes/screenNames';
 import Loader from '../../../components/Loader';
+import { studentDetails } from '../../../apollo/cache';
+import NavigationRouteNames from '../../../routes/screenNames';
 
 function PytnSubmit(props) {
   const { route } = props;
+
+  const studentInfo = useReactiveVar(studentDetails);
 
   const subjectData = route?.params?.subjectData;
   const navigation = useNavigation();
@@ -39,11 +43,31 @@ function PytnSubmit(props) {
   });
 
   const submitPYTN = () => {
+    let submit = true;
+
     if (maxPrice < 25) {
+      submit = false;
       alertBox('The price should be greater than 25');
       // } else if (parseFloat(maxPrice) < parseFloat(minPrice)) {
       //   alertBox('Maximum price should be greater than or equal to minimum price');
-    } else {
+    } else if (!isOnline) {
+      submit = false;
+      // check student address and make sure at least 1 address is added
+      if (!studentInfo.addresses || studentInfo.addresses.length === 0) {
+        // show alert
+        alertBox('', 'For offline request, please add at least 1 address!', {
+          positiveText: 'Add Address Now',
+          onPositiveClick: () => {
+            navigation.navigate(NavigationRouteNames.ADDRESS);
+          },
+          negativeText: 'Cancel',
+        });
+      } else {
+        submit = true;
+      }
+    }
+
+    if (submit) {
       const offeringArray = [];
       if (!isEmpty(subjectData?.subject)) {
         subjectData?.subject?.map((obj) => {

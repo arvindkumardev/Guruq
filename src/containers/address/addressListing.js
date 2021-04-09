@@ -5,7 +5,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from 'native-base';
 import { IconButtonWrapper, Loader, ScreenHeader } from '../../components';
-import { tutorDetails, userType } from '../../apollo/cache';
+import { studentDetails, tutorDetails, userType } from '../../apollo/cache';
 import commonStyles from '../../theme/styles';
 import { Colors, Fonts, Images } from '../../theme';
 import { alertBox, RfH, RfW } from '../../utils/helpers';
@@ -24,6 +24,8 @@ function AddressListing() {
   const [addresses, setAddresses] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
 
+  const studentInfo = useReactiveVar(studentDetails);
+
   const tutorInfo = useReactiveVar(tutorDetails);
 
   const [getStudentDetails, { loading: studentDetailLoading }] = useLazyQuery(GET_STUDENT_DETAILS, {
@@ -35,6 +37,8 @@ function AddressListing() {
       if (data) {
         setAddresses(data?.getStudentDetails?.addresses);
         setIsListEmpty(data?.getStudentDetails?.addresses.length === 0);
+
+        studentDetails({ ...studentInfo, addresses: data?.getStudentDetails?.addresses });
       }
     },
   });
