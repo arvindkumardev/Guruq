@@ -83,12 +83,13 @@ const AddToCartModal = (props) => {
         onClose(false);
         fireLogEvent(data);
 
-        console.log(data);
-
         if ((!activeCouponVar || isPytnBooking) && data?.addToCart?.promotion) {
           // set the promotion
           activeCoupon(data?.addToCart?.promotion);
           AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify(data?.addToCart?.promotion));
+        } else {
+          activeCoupon({});
+          AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify({}));
         }
 
         navigation.navigate(routeNames.STUDENT.MY_CART);

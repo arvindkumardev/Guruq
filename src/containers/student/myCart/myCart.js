@@ -181,6 +181,9 @@ const MyCart = () => {
           fireLogCartEvent('add_to_cart', data.addToCart);
         }
         getCartItems();
+
+        activeCoupon({});
+        AsyncStorage.setItem(LOCAL_STORAGE_DATA_KEY.ACTIVE_COUPON, JSON.stringify({}));
       }
     },
   });
@@ -357,7 +360,7 @@ const MyCart = () => {
 
   const removeCartItem = (item) => {
     Alert.alert(
-      'Do you want to remove item from cart?',
+      'Do you want to remove item from cart? Any applied coupon will be removed. ',
       '',
       [
         {
@@ -367,6 +370,7 @@ const MyCart = () => {
         {
           text: 'OK',
           onPress: () => {
+            removeCoupon();
             removeItem({
               variables: { cartItemId: item.id },
             });
@@ -378,25 +382,38 @@ const MyCart = () => {
     );
   };
 
+  const addClassAction = (item) => {
+    const cartCreate = {
+      tutorOfferingId: item.tutorOffering.id,
+      count: 1,
+      groupSize: 1,
+      demo: item.demo,
+      onlineClass: item.onlineClass,
+      price: item.mrp / item.count,
+    };
+    addToCart({
+      variables: { cartCreateDto: cartCreate },
+    });
+  };
+
   const addClass = (item) => {
     if (item.demo) {
       alertBox("You can't add more than one demo class");
-    } else {
-      const cartCreate = {
-        tutorOfferingId: item.tutorOffering.id,
-        count: 1,
-        groupSize: 1,
-        demo: item.demo,
-        onlineClass: item.onlineClass,
-        price: item.mrp / item.count,
-      };
-      addToCart({
-        variables: { cartCreateDto: cartCreate },
+    } else if (!isEmpty(appliedCoupon)) {
+      alertBox('Any applied coupon will be removed.', '', {
+        positiveText: 'Yes',
+        onPositiveClick: () => {
+          removeCoupon();
+          addClassAction(item);
+        },
+        negativeText: 'Cancel',
       });
+    } else {
+      addClassAction(item);
     }
   };
 
-  const removeClassItem = (item) => {
+  const removeClassItemAction = (item) => {
     const cartCreate = {
       tutorOfferingId: item.tutorOffering.id,
       count: -1,
@@ -410,10 +427,26 @@ const MyCart = () => {
     });
   };
 
+  const removeClassItem = (item) => {
+    if (!isEmpty(appliedCoupon)) {
+      alertBox('Do you want to remove item from cart? Any applied coupon will be removed. ', '', {
+        positiveText: 'Yes',
+        onPositiveClick: () => {
+          removeCoupon();
+
+          removeClassItemAction(item);
+        },
+        negativeText: 'Cancel',
+      });
+    } else {
+      removeClassItemAction(item);
+    }
+  };
+
   const removeClass = (item) => {
-    if (item.count === 1) {
+    if (item.count === 1 && !isEmpty(appliedCoupon)) {
       Alert.alert(
-        'Do you want to remove item from cart?',
+        'Do you want to remove item from cart? Any applied coupon will be removed. ',
         '',
         [
           {
@@ -422,7 +455,10 @@ const MyCart = () => {
           },
           {
             text: 'OK',
-            onPress: () => removeCartItem(item),
+            onPress: () => {
+              removeCoupon();
+              removeCartItem(item);
+            },
           },
         ],
         { cancelable: false }
@@ -546,7 +582,12 @@ const MyCart = () => {
             <View
               style={[
                 commonStyles.horizontalChildrenView,
-                { borderWidth: 1, borderColor: Colors.borderColor, paddingLeft: RfW(8), borderRadius: 8 },
+                {
+                  borderWidth: 1,
+                  borderColor: Colors.borderColor,
+                  paddingLeft: RfW(8),
+                  borderRadius: 8,
+                },
               ]}>
               <View style={{ borderRightColor: Colors.lightGrey, borderRightWidth: 1 }}>
                 <Text style={commonStyles.regularPrimaryText}>₹ </Text>
@@ -663,7 +704,14 @@ const MyCart = () => {
           <View style={commonStyles.lineSeparator} />
           <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
             <Text style={[commonStyles.mediumPrimaryText, { color: Colors.darkGrey }]}>Paid by Q-Points</Text>
-            <Text style={[commonStyles.mediumPrimaryText, { color: Colors.brandBlue2, fontWeight: 'bold' }]}>
+            <Text
+              style={[
+                commonStyles.mediumPrimaryText,
+                {
+                  color: Colors.brandBlue2,
+                  fontWeight: 'bold',
+                },
+              ]}>
               - ₹{printCurrency(qPointsRedeemed) * 1}
             </Text>
           </View>
