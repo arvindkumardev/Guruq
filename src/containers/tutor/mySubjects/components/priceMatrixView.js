@@ -111,58 +111,68 @@ function PriceMatrixView(props) {
 
   showLoader(offeringLoading);
   const onUpdatingOffering = () => {
-    showLoader(offeringLoading);
-    const budgetArray = [];
-    Object.entries(priceMatrix.online).forEach(([key, value]) => {
-      budgetArray.push({
-        price: value,
-        count: parseInt(key),
-        groupSize: 1,
-        demo: false,
-        onlineClass: true,
-      });
-    });
+    const lowCostOnline = Object.entries(priceMatrix.online).find(([key, value]) => value > 0 && value < 25);
+    const lowCostOffline = Object.entries(priceMatrix.offline).find(([key, value]) => value > 0 && value < 25);
 
-    Object.entries(priceMatrix.offline).forEach(([key, value]) => {
-      budgetArray.push({
-        price: value,
-        count: parseInt(key),
-        groupSize: 1,
-        demo: false,
-        onlineClass: false,
-      });
-    });
-    if (isDemoClass) {
-      if (modeDemoClass !== 0) {
+    if (
+      (Object.entries(priceMatrix.online).length > 0 && lowCostOnline) ||
+      (Object.entries(priceMatrix.offline).length > 0 && lowCostOffline)
+    ) {
+      alertBox('Price should be greater than 25. ');
+    } else {
+      showLoader(offeringLoading);
+      const budgetArray = [];
+      Object.entries(priceMatrix.online).forEach(([key, value]) => {
         budgetArray.push({
-          price: demoClassPm.online,
-          count: 1,
+          price: value,
+          count: parseInt(key),
           groupSize: 1,
-          demo: true,
+          demo: false,
           onlineClass: true,
         });
-      }
+      });
 
-      if (modeDemoClass !== 1) {
+      Object.entries(priceMatrix.offline).forEach(([key, value]) => {
         budgetArray.push({
-          price: demoClassPm.offline,
-          count: 1,
+          price: value,
+          count: parseInt(key),
           groupSize: 1,
-          demo: true,
+          demo: false,
           onlineClass: false,
         });
-      }
-    }
+      });
+      if (isDemoClass) {
+        if (modeDemoClass !== 0) {
+          budgetArray.push({
+            price: demoClassPm.online,
+            count: 1,
+            groupSize: 1,
+            demo: true,
+            onlineClass: true,
+          });
+        }
 
-    updateOffering({
-      variables: {
-        tutorOfferingDto: {
-          id: offering.id,
-          offering: { id: offering?.offering?.id },
-          budgets: budgetArray,
+        if (modeDemoClass !== 1) {
+          budgetArray.push({
+            price: demoClassPm.offline,
+            count: 1,
+            groupSize: 1,
+            demo: true,
+            onlineClass: false,
+          });
+        }
+      }
+
+      updateOffering({
+        variables: {
+          tutorOfferingDto: {
+            id: offering.id,
+            offering: { id: offering?.offering?.id },
+            budgets: budgetArray,
+          },
         },
-      },
-    });
+      });
+    }
   };
 
   const renderItem = (item) => {

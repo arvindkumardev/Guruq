@@ -224,54 +224,56 @@ function PytnRequests() {
           <Text>Created On {printDate(item.createdDate)}</Text>
         </View>
 
-        {item.pending ? (
+        {item.active ? (
           <>
-            {isEmpty(item.acceptedPytns) ? (
-              <Button
-                block
-                style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
-                onPress={() => handleAccept(item)}>
-                <Text style={commonStyles.textButtonPrimary}>Accept Request</Text>
-              </Button>
+            {item.pending ? (
+              <>
+                {isEmpty(item.acceptedPytns) ? (
+                  <Button
+                    block
+                    style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+                    onPress={() => handleAccept(item)}>
+                    <Text style={commonStyles.textButtonPrimary}>Accept Request</Text>
+                  </Button>
+                ) : (
+                  <Text
+                    style={[
+                      commonStyles.headingPrimaryText,
+                      {
+                        color: Colors.brandBlue2,
+                        paddingVertical: RfH(10),
+                      },
+                    ]}>
+                    Accepted
+                  </Text>
+                )}
+              </>
             ) : (
-              <Text
-                style={[
-                  commonStyles.headingPrimaryText,
-                  {
-                    color: Colors.brandBlue2,
-                    paddingVertical: RfH(10),
-                  },
-                ]}>
-                Accepted
-              </Text>
+              <>
+                <Text
+                  style={[
+                    commonStyles.headingPrimaryText,
+                    {
+                      color: Colors.orangeRed,
+                      paddingVertical: RfH(10),
+                    },
+                  ]}>
+                  Closed
+                </Text>
+              </>
             )}
           </>
         ) : (
-          <>
-            {item.active ? (
-              <Text
-                style={[
-                  commonStyles.headingPrimaryText,
-                  {
-                    color: Colors.green,
-                    paddingVertical: RfH(10),
-                  },
-                ]}>
-                Closed
-              </Text>
-            ) : (
-              <Text
-                style={[
-                  commonStyles.headingPrimaryText,
-                  {
-                    color: Colors.orangeRed,
-                    paddingVertical: RfH(10),
-                  },
-                ]}>
-                Expired
-              </Text>
-            )}
-          </>
+          <Text
+            style={[
+              commonStyles.headingPrimaryText,
+              {
+                color: Colors.green,
+                paddingVertical: RfH(10),
+              },
+            ]}>
+            Expired
+          </Text>
         )}
       </View>
       <View style={commonStyles.lineSeparator} />
