@@ -12,6 +12,7 @@ import { Colors, Images } from '../../../theme';
 import { GET_FAVOURITE_TUTORS, GET_TUTOR_OFFERINGS, SEARCH_TUTORS } from '../tutor-query';
 import styles from './styles';
 import {
+  alertBox,
   getFullName,
   getSaveData,
   getSubjectIcons,
@@ -344,8 +345,12 @@ function TutorDetails(props) {
   };
 
   const openClassModeModal = (demo) => {
-    setIsDemo(demo);
-    setShowClassModePopup(true);
+    if (isEmpty(selectedSubject)) {
+      alertBox('', 'No subject selected for booking!');
+    } else {
+      setIsDemo(demo);
+      setShowClassModePopup(true);
+    }
   };
 
   const topHeaderComponent = () => (
@@ -482,7 +487,16 @@ function TutorDetails(props) {
               {selectedSubject && classView()}
               <View style={commonStyles.lineSeparator} />
               <View style={{ marginBottom: RfH(16) }}>
-                <Text style={[styles.tutorName, { marginHorizontal: RfW(16), marginTop: RfH(16) }]}>Subjects</Text>
+                <Text
+                  style={[
+                    styles.tutorName,
+                    {
+                      marginHorizontal: RfW(16),
+                      marginTop: RfH(16),
+                    },
+                  ]}>
+                  Subjects
+                </Text>
                 <ScrollView
                   containerStyle={{ paddingHorizontal: RfW(16) }}
                   horizontal
