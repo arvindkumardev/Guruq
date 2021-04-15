@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { Alert, FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import analytics from '@react-native-firebase/analytics';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -13,7 +13,7 @@ import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
 import { CustomRadioButton, IconButtonWrapper, Loader } from '..';
 import { alertBox, getFullName, printCurrency, RfH, RfW } from '../../utils/helpers';
-import { RAZORPAY_KEY, STANDARD_SCREEN_SIZE } from '../../utils/constants';
+import { COB_AMOUNT, RAZORPAY_KEY, STANDARD_SCREEN_SIZE } from '../../utils/constants';
 import { userDetails } from '../../apollo/cache';
 import { CREATE_BOOKING, MAKE_PAYMENT } from '../../containers/student/booking.mutation';
 import Dash from '../Dash';
@@ -21,7 +21,6 @@ import { OrderStatusEnum, PaymentMethodEnum, PaymentStatusEnum } from './payment
 import NavigationRouteNames from '../../routes/screenNames';
 import { DUPLICATE_FOUND } from '../../common/errorCodes';
 
-const convenienceCharges = 100;
 let bookingDataObj = {};
 const PaymentMethod = (props) => {
   const {
@@ -191,7 +190,7 @@ const PaymentMethod = (props) => {
   };
 
   const makeCashPayment = () => {
-    bookingData.convenienceCharges = convenienceCharges;
+    bookingData.convenienceCharges = COB_AMOUNT;
     bookingData.orderPayment = { paymentMethod: '', amount: 0 };
     bookingData.orderPayment.paymentMethod = PaymentMethodEnum.CASH.label;
     bookingData.orderPayment.amount = amount;
@@ -315,7 +314,7 @@ const PaymentMethod = (props) => {
                     color: Colors.darkGrey,
                     fontFamily: Fonts.semiBold,
                   }}>
-                  ₹{printCurrency(convenienceCharges)}
+                  ₹{printCurrency(COB_AMOUNT)}
                 </Text>
               </View>
             )}
@@ -372,7 +371,7 @@ const PaymentMethod = (props) => {
 
   const getPayableAmount = () => {
     const payable =
-      amount + (paymentMethod === PaymentMethodEnum.CASH.value ? convenienceCharges : 0) - discount - qPointsRedeemed;
+      amount + (paymentMethod === PaymentMethodEnum.CASH.value ? COB_AMOUNT : 0) - discount - qPointsRedeemed;
 
     return payable > 0 ? payable : 0;
   };

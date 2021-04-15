@@ -116,3 +116,5 @@ export const MIN_AGE_STUDENT = 5;
 export const MIN_AGE_TUTOR = 18;
 
 export const RAZORPAY_KEY = isProd ? 'rzp_live_iVRwHQCLxAFyBQ' : 'rzp_test_0kNEbt0JJ60aiz';
+
+export const COB_AMOUNT = 100;
