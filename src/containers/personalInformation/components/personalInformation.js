@@ -42,11 +42,11 @@ function PersonalInformation(props) {
       setToken(tk);
     });
 
-    setDOB(
-      userInfo.type === UserTypeEnum.STUDENT.label
-        ? moment().subtract(MIN_AGE_STUDENT, 'years').toDate()
-        : moment().subtract(MIN_AGE_TUTOR, 'years').toDate()
-    );
+    // setDOB(
+    //   userInfo.type === UserTypeEnum.STUDENT.label
+    //     ? moment().subtract(MIN_AGE_STUDENT, 'years').toDate()
+    //     : moment().subtract(MIN_AGE_TUTOR, 'years').toDate()
+    // );
   }, []);
 
   useEffect(() => {
