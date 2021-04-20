@@ -689,7 +689,7 @@ const MyCart = () => {
         <Text style={commonStyles.mediumPrimaryText}>Sub Total</Text>
         <Text style={commonStyles.mediumPrimaryText}>₹{printCurrency(amount)}</Text>
       </View>
-      {couponApplied && (
+      {couponApplied && appliedCouponValue > 0 && (
         <View>
           <View style={commonStyles.lineSeparator} />
           <View style={[commonStyles.horizontalChildrenSpaceView, { height: RfH(44), alignItems: 'center' }]}>
