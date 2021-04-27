@@ -42,6 +42,7 @@ import { clearAllLocalStorage, createPayload } from '../utils/helpers';
 import scheduledClassDetails from '../containers/calendar/scheduledClassDetails';
 import cancelReason from '../containers/calendar/cancelReason';
 import MyClasses from '../containers/myClasses/classes';
+import TestResult from '../containers/tutor/testresult';
 import scheduleClass from '../containers/myClasses/scheduleClass';
 import CalendarView from '../containers/calendar/calendarView';
 import AddEditAddress from '../containers/address/addEditAddress';
@@ -329,6 +330,11 @@ const AppStack = (props) => {
                 <Stack.Screen
                   name={NavigationRouteNames.TUTOR.PROFICIENCY_TEST}
                   component={ProficiencyTest}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name={NavigationRouteNames.TUTOR.PROFICIENCY_RESULT}
+                  component={TestResult}
                   options={{ headerShown: false }}
                 />
               </>

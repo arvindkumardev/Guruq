@@ -22,7 +22,7 @@ import StudentDetails from '../containers/tutor/studentDetails/studentDetails';
 import Profile from '../containers/tutor/profile/profile';
 import scheduleClass from '../containers/myClasses/scheduleClass';
 import MyClasses from '../containers/myClasses/classes';
-
+import TestResult from '../containers/tutor/testresult';
 const Stack = createStackNavigator();
 
 export const getTutorRoutes = (tutorInfo) => {
@@ -98,6 +98,11 @@ export const getTutorRoutes = (tutorInfo) => {
         component={DocumentListing}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+                  name={NavigationRouteNames.TUTOR.PROFICIENCY_RESULT}
+                  component={TestResult}
+                  options={{ headerShown: false }}
+         />
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.PT_START_SCREEN}
         component={PtStartScreen}

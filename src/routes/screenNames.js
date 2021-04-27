@@ -88,6 +88,7 @@ const NavigationRouteNames = {
     SCHEDULE_YOUR_INTERVIEW: 'schedule_your_interview',
     PT_START_SCREEN: 'pt_start_screen',
     PROFICIENCY_TEST: 'proficiency_test',
+    PROFICIENCY_RESULT:'test_result',
     COMPLETE_PROFILE: 'complete_profile',
     INTERVIEW_AND_DOCUMENTS: 'interview_and_documents',
     UPLOAD_DOCUMENTS: 'upload_documents',
