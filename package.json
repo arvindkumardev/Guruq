@@ -70,6 +70,7 @@
     "react-native-ratings": "^7.3.0",
     "react-native-razorpay": "^2.2.1",
     "react-native-reanimated": "^1.9.0",
+    "react-native-render-html": "^5.1.0",
     "react-native-responsive-fontsize": "^0.4.3",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.9.0",

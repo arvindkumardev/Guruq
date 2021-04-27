@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { WebView } from 'react-native-webview';
 import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import ScreenHeader from '../../../components/ScreenHeader';
-import { getToken, RfW } from '../../../utils/helpers';
+import { RfW } from '../../../utils/helpers';
 import { Images } from '../../../theme';
 import ActionModal from '../../certficationProcess/components/helpSection';
-import { urlConfig } from '../../../utils/constants';
 import PTTestView from '../../../components/PTTest';
-import {START_PROFICIENCY_TEST,CHECK_PT_RESPONSE} from './pt.mutation'
+import { CHECK_PT_RESPONSE, START_PROFICIENCY_TEST } from './pt.mutation';
 import NavigationRouteNames from '../../../routes/screenNames';
+import Loader from '../../../components/Loader';
+
 const ProficiencyTest = (props) => {
   const { route } = props;
   const navigation = useNavigation();
@@ -19,20 +19,15 @@ const ProficiencyTest = (props) => {
   const [token, setToken] = useState();
   const [url, setUrl] = useState('');
   const [isError, setError] = useState(false);
-  const [ptQuestions,setPTQuestions]=useState([]);
-  const [ptDetails,setPTDetails]=useState(null);
-  const INJECTEDJAVASCRIPT = `const meta = document.createElement('meta'); meta.setAttribute('content', 'width=375, initial-scale=1, maximum-scale=1, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `;
+  const [ptQuestions, setPTQuestions] = useState([]);
+  const [ptDetails, setPTDetails] = useState(null);
+  // const INJECTEDJAVASCRIPT = `const meta = document.createElement('meta'); meta.setAttribute('content', 'width=375, initial-scale=1, maximum-scale=1, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `;
 
-
-
-  useEffect(() => {
-    if (token) {
-      setUrl(`${urlConfig.DASHBOARD_URL}/tutor-proficiency-test/${offeringId}/start/${token}`);
-    }
-  }, [token]);
-
-
-  
+  // useEffect(() => {
+  //   if (token) {
+  //     setUrl(`${urlConfig.DASHBOARD_URL}/tutor-proficiency-test/${offeringId}/start/${token}`);
+  //   }
+  // }, [token]);
 
   const [startPTRequest, { loading: startPTLoading }] = useMutation(START_PROFICIENCY_TEST, {
     fetchPolicy: 'no-cache',
@@ -43,8 +38,10 @@ const ProficiencyTest = (props) => {
     onCompleted(data) {
       if (data?.startProficiencyTest) {
         const { tutorOffering, tutorPT, questions } = data.startProficiencyTest;
-          setPTQuestions(questions)
-          setPTDetails(tutorPT)
+        setPTQuestions(questions);
+        setPTDetails(tutorPT);
+
+        // FIXME: take user back to "Start Test" screen if there are no questions
       }
     },
   });
@@ -56,23 +53,20 @@ const ProficiencyTest = (props) => {
       console.log({ e });
     },
     onCompleted(data) {
-      
       navigation.navigate(NavigationRouteNames.TUTOR.PROFICIENCY_RESULT, {
         data,
       });
-      
     },
   });
-  const handleSubmit=(checkPTDto)=>{
+  const handleSubmit = (checkPTDto) => {
     checkPTRequest({ variables: { tutorOfferingId: parseInt(offeringId), checkPTDto } });
-  }
-
+  };
 
   useEffect(() => {
     if (offeringId > 0) {
       startPTRequest({
         variables: {
-          tutorOfferingId: parseInt(offeringId),
+          tutorOfferingId: parseInt(offeringId, 10),
         },
       });
     }
@@ -88,15 +82,17 @@ const ProficiencyTest = (props) => {
         rightIcon={Images.vertical_dots_b}
         onRightIconClick={() => setOpenMenu(true)}
       />
-   
-   {ptQuestions.length>0&&ptDetails!=null?  
-   <PTTestView
-      ptQuestions={ptQuestions}
-        ptDetails={ptDetails}
-        offeringId={offeringId}
-        handleSubmit={handleSubmit}
-      >
-   </PTTestView>:null} 
+
+      <Loader isLoading={startPTLoading || checkPTLoading} />
+
+      {ptQuestions && (
+        <PTTestView
+          ptQuestions={ptQuestions}
+          ptDetails={ptDetails}
+          offeringId={offeringId}
+          handleSubmit={handleSubmit}
+        />
+      )}
 
       {isError && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
