@@ -19,6 +19,10 @@ const style = StyleSheet.create({
   childView: {
     flex: 1,
   },
+  timetext: {
+    fontSize: RFValue(40, STANDARD_SCREEN_SIZE),
+    color: Colors.black,
+  },
   questionView: {
     marginHorizontal: RfW(16),
     marginVertical: RfH(16),
