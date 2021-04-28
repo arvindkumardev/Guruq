@@ -10,7 +10,7 @@ const PTTestView = (props) => {
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [counter, setCounter] = useState(1);
   const [timeRemaining, setTimeRemaining] = useState();
-  const [endDateTime, setEndDateTime] = useState(moment().add(30, 'minutes').valueOf());
+  const [endDateTime] = useState(moment().add(30, 'minutes').valueOf());
 
   let timer;
   const totalTime = 30 * 60;
@@ -19,6 +19,8 @@ const PTTestView = (props) => {
   const maxQuestion = ptQuestions.length;
 
   const temp = [];
+
+  // eslint-disable-next-line array-callback-return
   ptQuestions.map((question) => {
     temp.push({ questionId: question.id, answers: [] });
   });
@@ -58,8 +60,8 @@ const PTTestView = (props) => {
       if (parseInt((endDateTime - moment().valueOf()) / 1000, 10) > 0) {
         return (endDateTime - moment().valueOf()) / 1000;
       }
-      return 0.0;
     }
+    return 0.0;
   };
   const getTimeString = () => {
     if (endDateTime > 0) {
@@ -70,7 +72,7 @@ const PTTestView = (props) => {
 
   // var timer ;
   useEffect(() => {
-    timer = setInterval(function () {
+    timer = setInterval(function interval() {
       setCounter(counter + 1);
       getTimeString();
     }, 1000);
@@ -135,9 +137,15 @@ const PTTestView = (props) => {
 
 PTTestView.propTypes = {
   ptQuestions: PropTypes.array,
+  ptDetails: PropTypes.object,
+  offeringId: PropTypes.number,
+  handleSubmit: PropTypes.func,
 };
 PTTestView.defaultProps = {
   ptQuestions: [],
+  ptDetails: {},
+  offeringId: 0,
+  handleSubmit: null,
 };
 
 export default PTTestView;

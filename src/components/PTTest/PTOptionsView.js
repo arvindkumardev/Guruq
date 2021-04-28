@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
-import { CheckBox, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import React, { useState } from 'react';
+import { Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import HTML from 'react-native-render-html';
+import PropTypes from 'prop-types';
 import Colors from '../../theme/colors';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-
+import { CustomCheckBox } from '..';
 import styles from './ptOption.style';
 
 const PTOptionsView = (props) => {
@@ -19,10 +20,7 @@ const PTOptionsView = (props) => {
     maxQuestion,
     question,
   } = props;
-  const optionOneRef = useRef(null);
-  const optionTwoRef = useRef(null);
-  const optionThreeRef = useRef(null);
-  const optionFourRef = useRef(null);
+
   const [optionOne, setOptionOne] = useState(false);
   const [optionTwo, setOptionTwo] = useState(false);
   const [optionThree, setOptionThree] = useState(false);
@@ -52,25 +50,25 @@ const PTOptionsView = (props) => {
         </View>
 
         <TouchableOpacity
-          style={styles.optionView}
-          activeOpacity={1}
           onPress={() => {
-            optionOneRef.current._internalFiberInstanceHandleDEV.memoizedProps.onValueChange();
-          }}>
-          <CheckBox
-            ref={optionOneRef}
-            value={optionOne}
-            tintColors={{ true: '#005CC8', false: 'black' }}
-            onValueChange={() => {
+            handleMarkAnswer(answers[0]);
+            setOptionOne(!optionOne);
+            setOptionTwo(false);
+            setOptionThree(false);
+            setOptionFour(false);
+          }}
+          style={styles.optionView}
+          activeOpacity={0.8}>
+          <CustomCheckBox
+            enabled={optionOne}
+            submitFunction={() => {
               handleMarkAnswer(answers[0]);
               setOptionOne(!optionOne);
               setOptionTwo(false);
               setOptionThree(false);
               setOptionFour(false);
             }}
-            style={styles.checkboxView}
           />
-
           <HTML
             tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
@@ -78,81 +76,82 @@ const PTOptionsView = (props) => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.optionView}
-          activeOpacity={1}
           onPress={() => {
-            optionTwoRef.current._internalFiberInstanceHandleDEV.memoizedProps.onValueChange();
-          }}>
-          <CheckBox
-            ref={optionTwoRef}
-            value={optionTwo}
-            tintColors={{ true: '#005CC8', false: 'black' }}
-            onValueChange={() => {
+            handleMarkAnswer(answers[1]);
+            setOptionOne(false);
+            setOptionTwo(!optionTwo);
+            setOptionThree(false);
+            setOptionFour(false);
+          }}
+          style={styles.optionView}
+          activeOpacity={0.8}>
+          <CustomCheckBox
+            enabled={optionTwo}
+            submitFunction={() => {
               handleMarkAnswer(answers[1]);
               setOptionOne(false);
               setOptionTwo(!optionTwo);
               setOptionThree(false);
               setOptionFour(false);
             }}
-            style={styles.checkboxView}
           />
-
           <HTML
             tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
             source={{ html: answers[1].text }}
           />
         </TouchableOpacity>
+
         <TouchableOpacity
-          style={styles.optionView}
-          activeOpacity={1}
           onPress={() => {
-            optionThreeRef.current._internalFiberInstanceHandleDEV.memoizedProps.onValueChange();
-          }}>
-          <CheckBox
-            ref={optionThreeRef}
-            tintColors={{ true: '#005CC8', false: 'black' }}
-            value={optionThree}
-            onValueChange={() => {
+            handleMarkAnswer(answers[2]);
+            setOptionOne(false);
+            setOptionTwo(false);
+            setOptionThree(!optionThree);
+            setOptionFour(false);
+          }}
+          style={styles.optionView}
+          activeOpacity={0.8}>
+          <CustomCheckBox
+            enabled={optionThree}
+            submitFunction={() => {
               handleMarkAnswer(answers[2]);
               setOptionOne(false);
               setOptionTwo(false);
               setOptionThree(!optionThree);
               setOptionFour(false);
             }}
-            style={styles.checkboxView}
           />
-
           <HTML
             tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
-            source={{ html: answers[2].text }}
+            source={{ html: answers[0].text }}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.optionView}
-          activeOpacity={1}
           onPress={() => {
-            optionFourRef.current._internalFiberInstanceHandleDEV.memoizedProps.onValueChange();
-          }}>
-          <CheckBox
-            ref={optionFourRef}
-            tintColors={{ true: '#005CC8', false: 'black' }}
-            value={optionFour}
-            onValueChange={() => {
+            handleMarkAnswer(answers[3]);
+            setOptionOne(false);
+            setOptionTwo(false);
+            setOptionThree(false);
+            setOptionFour(!optionFour);
+          }}
+          style={styles.optionView}
+          activeOpacity={0.8}>
+          <CustomCheckBox
+            enabled={optionFour}
+            submitFunction={() => {
               handleMarkAnswer(answers[3]);
               setOptionOne(false);
               setOptionTwo(false);
               setOptionThree(false);
               setOptionFour(!optionFour);
             }}
-            style={styles.checkboxView}
           />
-
           <HTML
             tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
-            source={{ html: answers[3].text }}
+            source={{ html: answers[0].text }}
           />
         </TouchableOpacity>
       </View>
@@ -187,6 +186,29 @@ const PTOptionsView = (props) => {
       </View>
     </View>
   );
+};
+
+PTOptionsView.propTypes = {
+  handleNext: PropTypes.func,
+  handleMarkAnswer: PropTypes.func,
+  handlePrevious: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  question: PropTypes.string,
+  maxQuestion: PropTypes.number,
+  currentQuestion: PropTypes.number,
+  submission: PropTypes.number,
+  answers: PropTypes.array,
+};
+PTOptionsView.defaultProps = {
+  handleNext: null,
+  handleMarkAnswer: null,
+  handlePrevious: null,
+  handleSubmit: null,
+  question: null,
+  maxQuestion: 0,
+  currentQuestion: 0,
+  submission: 0,
+  answers: [],
 };
 
 export default PTOptionsView;

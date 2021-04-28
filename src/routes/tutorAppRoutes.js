@@ -23,6 +23,7 @@ import Profile from '../containers/tutor/profile/profile';
 import scheduleClass from '../containers/myClasses/scheduleClass';
 import MyClasses from '../containers/myClasses/classes';
 import TestResult from '../containers/tutor/testresult';
+
 const Stack = createStackNavigator();
 
 export const getTutorRoutes = (tutorInfo) => {

@@ -16,31 +16,27 @@ const ProficiencyTest = (props) => {
   const navigation = useNavigation();
   const offeringId = route?.params?.offeringId;
   const [openMenu, setOpenMenu] = useState(false);
-  const [token, setToken] = useState();
-  const [url, setUrl] = useState('');
-  const [isError, setError] = useState(false);
+  const [isError] = useState(false);
   const [ptQuestions, setPTQuestions] = useState([]);
   const [ptDetails, setPTDetails] = useState(null);
-  // const INJECTEDJAVASCRIPT = `const meta = document.createElement('meta'); meta.setAttribute('content', 'width=375, initial-scale=1, maximum-scale=1, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `;
 
-  // useEffect(() => {
-  //   if (token) {
-  //     setUrl(`${urlConfig.DASHBOARD_URL}/tutor-proficiency-test/${offeringId}/start/${token}`);
-  //   }
-  // }, [token]);
-
+  const goBack = () => {
+    navigation.navigate(NavigationRouteNames.TUTOR.PT_START_SCREEN);
+  };
   const [startPTRequest, { loading: startPTLoading }] = useMutation(START_PROFICIENCY_TEST, {
     fetchPolicy: 'no-cache',
     onError(e) {
-      console.log({ e });
-      // history.push('/');
+      console.log(e);
+      goBack();
     },
     onCompleted(data) {
       if (data?.startProficiencyTest) {
-        const { tutorOffering, tutorPT, questions } = data.startProficiencyTest;
+        const { tutorPT, questions } = data.startProficiencyTest;
         setPTQuestions(questions);
         setPTDetails(tutorPT);
-
+        if (!(questions.length > 0 && tutorPT != null)) {
+          goBack();
+        }
         // FIXME: take user back to "Start Test" screen if there are no questions
       }
     },
@@ -71,7 +67,6 @@ const ProficiencyTest = (props) => {
       });
     }
   }, [offeringId]);
-
   return (
     <>
       <ScreenHeader
@@ -82,18 +77,17 @@ const ProficiencyTest = (props) => {
         rightIcon={Images.vertical_dots_b}
         onRightIconClick={() => setOpenMenu(true)}
       />
-
       <Loader isLoading={startPTLoading || checkPTLoading} />
-
-      {ptQuestions && (
-        <PTTestView
-          ptQuestions={ptQuestions}
-          ptDetails={ptDetails}
-          offeringId={offeringId}
-          handleSubmit={handleSubmit}
-        />
+      {ptQuestions.length > 0 && ptDetails != null && (
+        <>
+          <PTTestView
+            ptQuestions={ptQuestions}
+            ptDetails={ptDetails}
+            offeringId={offeringId}
+            handleSubmit={handleSubmit}
+          />
+        </>
       )}
-
       {isError && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Something went wrong</Text>

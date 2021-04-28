@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   optionText: {
+    marginLeft: RfH(16),
     flexShrink: 1,
     justifyContent: 'center',
   },
