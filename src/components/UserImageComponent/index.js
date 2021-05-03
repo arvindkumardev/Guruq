@@ -14,6 +14,7 @@ import { userDetails } from '../../apollo/cache';
 const UserImageComponent = (props) => {
   const { styling, width, height, fontSize } = props;
   const userInfo = useReactiveVar(userDetails);
+  
   return (
     <>
       {userInfo?.profileImage?.filename ? (

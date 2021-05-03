@@ -11,15 +11,13 @@ import CustomImage from '../CustomImage';
 
 const StudentImageComponent = (props) => {
   const { styling, width, height, student, fontSize } = props;
-
-  console.log("student",student)
   return (
     <>
       {student?.profileImage?.filename ? (
         <CustomImage
           imageWidth={RfH(width)}
           imageHeight={RfH(height)}
-          image={getProfileImageUrl(student?.profileImage?.filename)}
+          image={getProfileImageUrl(student?.profileImage?.original)}
           imageResizeMode="cover"
           styling={styling}
         />

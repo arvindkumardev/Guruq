@@ -1,10 +1,38 @@
 import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Colors, Fonts } from '../../theme';
-import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { RfH } from '../../utils/helpers';
+import { Colors, Fonts } from '../../../theme';
+import { RfH, RfW } from '../../../utils/helpers';
+import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
+  mainContainer: {
+    width: RfW(120),
+    marginTop: RfH(20),
+    flex: 1,
+    alignItems: 'center',
+  },
+  iconContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: RfH(70),
+    width: RfH(70),
+    marginHorizontal: RfW(8),
+    borderRadius: RfW(8),
+  },
+  subjectText: {
+    textAlign: 'center',
+    fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
+    color: Colors.primaryText,
+    marginTop: RfH(5),
+  },
+  circle: {
+    backgroundColor: Colors.brandBlue2,
+    marginTop: RfH(8),
+    width: RfW(10),
+    height: RfH(10),
+    borderRadius: 10 / 2,
+  },
   activeRightButton: {
     flex: 1,
     // marginLeft: RfW(-4),
@@ -57,4 +85,3 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
   },
 });
-export default styles;

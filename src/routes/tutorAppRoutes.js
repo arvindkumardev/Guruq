@@ -17,8 +17,8 @@ import DocumentListing from '../containers/tutor/documentListing/documentListing
 import TutorOnBoard from '../containers/tutor/tutorOnBoard/index';
 import PtStartScreen from '../containers/certficationProcess/ptStartScreen';
 import ProficiencyTest from '../containers/tutor/proficiencyTest';
-import StudentListing from '../containers/tutor/studentDetails/studentListing';
-import StudentDetails from '../containers/tutor/studentDetails/studentDetails';
+import StudentListing from '../containers/tutor/studentList';
+import StudentDetails from '../containers/tutor/studentDetails';
 import Profile from '../containers/tutor/profile/profile';
 import scheduleClass from '../containers/myClasses/scheduleClass';
 import MyClasses from '../containers/myClasses/classes';
@@ -100,10 +100,10 @@ export const getTutorRoutes = (tutorInfo) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-                  name={NavigationRouteNames.TUTOR.PROFICIENCY_RESULT}
-                  component={TestResult}
-                  options={{ headerShown: false }}
-         />
+        name={NavigationRouteNames.TUTOR.PROFICIENCY_RESULT}
+        component={TestResult}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.PT_START_SCREEN}
         component={PtStartScreen}

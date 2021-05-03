@@ -55,7 +55,7 @@ const ProficiencyTest = (props) => {
     },
   });
   const handleSubmit = (checkPTDto) => {
-    checkPTRequest({ variables: { tutorOfferingId: parseInt(offeringId), checkPTDto } });
+    checkPTRequest({ variables: { tutorOfferingId: parseInt(offeringId, 10), checkPTDto } });
   };
 
   useEffect(() => {
