@@ -28,8 +28,8 @@ export const LOTTIE_JSON_FILES = {
   fireworks2: require('../assets/json/fireworks2.json'),
 };
 
-const isDev = false;
-const isProd = false;
+export const isDev = false;
+export const isProd = false;
 
 const dev = {
   FRONTEND_URL: 'https://staging.guruq.in',
