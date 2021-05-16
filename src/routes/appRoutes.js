@@ -337,6 +337,11 @@ const AppStack = (props) => {
                   component={TestResult}
                   options={{ headerShown: false }}
                 />
+                 <Stack.Screen
+                name={NavigationRouteNames.TUTOR.COMPLETE_PROFILE}
+                component={CompleteYourProfile}
+                options={{ headerShown: false }}
+              />
               </>
             )}
             {tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.PROFILE_COMPLETION_PENDING.label && (

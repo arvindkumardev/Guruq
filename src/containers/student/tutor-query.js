@@ -114,6 +114,7 @@ export const GET_TUTOR_OFFERINGS = gql`
       demoClass
       freeDemo
       onlineClass
+      description
       groupClass
       minBudgetPrice
       tutor {

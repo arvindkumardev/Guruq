@@ -4,6 +4,10 @@ import NavigationRouteNames from './screenNames';
 import TutorDashboardContainer from '../containers/tutor/dashboard/tutorDashboardContainer';
 import SubjectList from '../containers/tutor/mySubjects/subjectList';
 import PriceMatrix from '../containers/tutor/mySubjects/priceMatrix';
+import ClassPriceMatrix from '../containers/tutor/mySubjects/classpricematrix';
+import DemoPriceMatrix from '../containers/tutor/mySubjects/demopricematrix';
+import WhyMeView from '../containers/tutor/mySubjects/components/whyMeView';
+import AddSubjectDetails from '../containers/tutor/mySubjects/addsubjectdetails';
 import ViewSchedule from '../containers/tutor/schedule/viewSchedule';
 import UpdateSchedule from '../containers/tutor/schedule/updateSchedule';
 import PytnSubmit from '../containers/student/pytn/pytnSubmit';
@@ -59,7 +63,18 @@ export const getTutorRoutes = (tutorInfo) => {
       />
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.PRICE_MATRIX}
-        component={PriceMatrix}
+        component={ClassPriceMatrix}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={NavigationRouteNames.TUTOR.WHY_ME} component={WhyMeView} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.DEMO_PRICE_MATRIX}
+        component={DemoPriceMatrix}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.ADD_SUBJECT_DETAILS}
+        component={AddSubjectDetails}
         options={{ headerShown: false }}
       />
       <Stack.Screen

@@ -15,7 +15,6 @@ function PriceMatrix(props) {
   const { route } = props;
 
   const offering = route?.params?.offering;
-
   const onButtonClicked = (val) => {
     setIsPriceMatrix(val);
   };

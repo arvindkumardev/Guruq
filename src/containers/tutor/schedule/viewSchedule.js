@@ -64,6 +64,7 @@ function ViewSchedule() {
   };
 
   const renderItem = (item) => {
+    console.log("value of item schedule is ",item)
     return (
       <View style={{ marginTop: RfH(16) }}>
         <View style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(10) }]}>

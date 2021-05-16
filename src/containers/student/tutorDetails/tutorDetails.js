@@ -199,8 +199,9 @@ function TutorDetails(props) {
         });
       }
     } else {
+      alertBox("Already added Two Tutors ?")
       setShowCompareModal(true);
-    }
+    } 
   };
 
   const removeFromCompare = async (index) => {

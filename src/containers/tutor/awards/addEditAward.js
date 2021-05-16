@@ -78,7 +78,7 @@ function AddEditAward(props) {
     <>
       <Loader isLoading={awardDetailLoading} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-        <ScreenHeader homeIcon label="Experience" horizontalPadding={RfW(16)} lineVisible />
+        <ScreenHeader homeIcon label="Add/Edit A Award" horizontalPadding={RfW(16)} lineVisible />
         <View style={{ paddingHorizontal: RfW(16) }}>
           <View style={{ height: RfH(24) }} />
           <Item floatingLabel>

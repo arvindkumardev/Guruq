@@ -12,7 +12,10 @@ import { tutorDetails } from '../../../apollo/cache';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { SEARCH_TUTOR_OFFERINGS } from './subject.query';
 import { TutorOfferingStageEnum } from '../enums';
-import { DISABLE_TUTOR_OFFERING, ENABLE_TUTOR_OFFERING } from '../tutor.mutation';
+import {
+  DISABLE_TUTOR_OFFERING,
+  ENABLE_TUTOR_OFFERING,
+} from '../tutor.mutation';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 
 function SubjectList() {
@@ -22,22 +25,28 @@ function SubjectList() {
   const [subjects, setSubjects] = useState([]);
   const [isListEmpty, setIsListEmpty] = useState(false);
 
-  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(SEARCH_TUTOR_OFFERINGS, {
-    fetchPolicy: 'no-cache',
-    variables: { tutorId: tutorInfo.id },
-    onError: (e) => {
-      console.log(e);
+  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(
+    SEARCH_TUTOR_OFFERINGS,
+    {
+      fetchPolicy: 'no-cache',
+      variables: { tutorId: tutorInfo.id },
+      onError: (e) => {
+        console.log(e);
+      },
+      onCompleted: (data) => {
+        if (data) {
+          const subjectsList = data?.searchTutorOfferings;
+          setSubjects(subjectsList);
+          setIsListEmpty(subjectsList.length === 0);
+        }
+      },
     },
-    onCompleted: (data) => {
-      if (data) {
-        const subjectsList = data?.searchTutorOfferings;
-        setSubjects(subjectsList);
-        setIsListEmpty(subjectsList.length === 0);
-      }
-    },
-  });
+  );
 
-  const [enableTutorOffering, { loading: enableTutorOfferingLoading }] = useMutation(ENABLE_TUTOR_OFFERING, {
+  const [
+    enableTutorOffering,
+    { loading: enableTutorOfferingLoading },
+  ] = useMutation(ENABLE_TUTOR_OFFERING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
@@ -52,7 +61,10 @@ function SubjectList() {
     },
   });
 
-  const [disableTutorOffering, { loading: disableTutorOfferingLoading }] = useMutation(DISABLE_TUTOR_OFFERING, {
+  const [
+    disableTutorOffering,
+    { loading: disableTutorOfferingLoading },
+  ] = useMutation(DISABLE_TUTOR_OFFERING, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       console.log(e);
@@ -79,25 +91,38 @@ function SubjectList() {
         offeringId: offering?.id,
       });
     } else {
-      navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX, {
+      navigation.navigate(NavigationRouteNames.TUTOR.ADD_SUBJECT_DETAILS, {
         offering,
-        priceMatrix:
-          offering.stage === TutorOfferingStageEnum.BUDGET_PENDING.label ||
-          offering.stage === TutorOfferingStageEnum.COMPLETED.label,
       });
+        // navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX, {
+        //   offering,
+        //   priceMatrix:
+        //     offering.stage === TutorOfferingStageEnum.BUDGET_PENDING.label ||
+        //     offering.stage === TutorOfferingStageEnum.COMPLETED.label,
+        // });
     }
   };
 
   const markActiveInactive = (item) => {
     if (item.stage === TutorOfferingStageEnum.COMPLETED.label) {
-      alertBox(`Do you really want to ${item.active ? 'disable' : 'enable'} the subject!`, '', {
-        positiveText: 'Yes',
-        onPositiveClick: () =>
-          item.active
-            ? disableTutorOffering({ variables: { tutorOfferingId: item.id } })
-            : enableTutorOffering({ variables: { tutorOfferingId: item.id } }),
-        negativeText: 'No',
-      });
+      alertBox(
+        `Do you really want to ${
+          item.active ? 'disable' : 'enable'
+        } the subject!`,
+        '',
+        {
+          positiveText: 'Yes',
+          onPositiveClick: () =>
+            item.active
+              ? disableTutorOffering({
+                  variables: { tutorOfferingId: item.id },
+                })
+              : enableTutorOffering({
+                  variables: { tutorOfferingId: item.id },
+                }),
+          negativeText: 'No',
+        },
+      );
     } else {
       alertBox('Making subject active  is not possible at this stage');
     }
@@ -106,44 +131,78 @@ function SubjectList() {
   const renderSubjects = (item) => (
     <View style={{ paddingHorizontal: RfW(16) }}>
       <TouchableOpacity
-        style={[commonStyles.horizontalChildrenSpaceView, { paddingVertical: RfH(16) }]}
+        style={[
+          commonStyles.horizontalChildrenSpaceView,
+          { paddingVertical: RfH(16) },
+        ]}
         onPress={() => handleSubjectClick(item)}
         activeOpacity={0.8}>
         <View style={{ flexDirection: 'row' }}>
-          <IconButtonWrapper iconImage={getSubjectIcons(item.offering.displayName)} />
+          <IconButtonWrapper
+            iconImage={getSubjectIcons(item.offering.displayName)}
+          />
           <View style={{ marginLeft: RfW(16) }}>
             <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
               {`${item?.offering?.rootOffering?.displayName} | ${item?.offering?.parentOffering?.parentOffering?.displayName}`}
             </Text>
-            <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
+            <Text
+              style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
               {`${item?.offering?.parentOffering?.displayName} | ${item?.offering?.displayName}`}
             </Text>
           </View>
         </View>
-        <IconButtonWrapper iconHeight={RfH(24)} iconWidth={RfW(24)} iconImage={Images.chevronRight} />
+        <IconButtonWrapper
+          iconHeight={RfH(24)}
+          iconWidth={RfW(24)}
+          iconImage={Images.chevronRight}
+        />
       </TouchableOpacity>
       <View style={[commonStyles.horizontalChildrenSpaceView]}>
         <View>
           {item.stage === TutorOfferingStageEnum.PT_PENDING.label && (
-            <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>Proficiency Test Pending</Text>
+            <Text
+              style={[
+                commonStyles.regularPrimaryText,
+                { color: Colors.orangeRed },
+              ]}>
+              Proficiency Test Pending
+            </Text>
           )}
           {item.stage === TutorOfferingStageEnum.BUDGET_PENDING.label && (
-            <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>Price Matrix Pending</Text>
+            <Text
+              style={[
+                commonStyles.regularPrimaryText,
+                { color: Colors.orangeRed },
+              ]}>
+              Price Matrix Pending
+            </Text>
           )}
-          {item.stage === TutorOfferingStageEnum.OFFERING_DETAILED_PENDING.label && (
-            <Text style={[commonStyles.regularPrimaryText, { color: Colors.orangeRed }]}>
+          {item.stage ===
+            TutorOfferingStageEnum.OFFERING_DETAILED_PENDING.label && (
+            <Text
+              style={[
+                commonStyles.regularPrimaryText,
+                { color: Colors.orangeRed },
+              ]}>
               Short description pending
             </Text>
           )}
           {item.stage === TutorOfferingStageEnum.COMPLETED.label && (
-            <Text style={[commonStyles.regularPrimaryText, { color: item.active ? Colors.green : Colors.orangeRed }]}>
+            <Text
+              style={[
+                commonStyles.regularPrimaryText,
+                { color: item.active ? Colors.green : Colors.orangeRed },
+              ]}>
               {item.active ? 'Active' : 'Inactive'}
             </Text>
           )}
         </View>
         {item.stage === TutorOfferingStageEnum.COMPLETED.label && (
           <View>
-            <Switch value={item.active} onValueChange={() => markActiveInactive(item)} />
+            <Switch
+              value={item.active}
+              onValueChange={() => markActiveInactive(item)}
+            />
           </View>
         )}
       </View>
@@ -158,8 +217,18 @@ function SubjectList() {
 
   return (
     <>
-      <Loader isLoading={loadingTutorsOffering || enableTutorOfferingLoading || disableTutorOfferingLoading} />
-      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
+      <Loader
+        isLoading={
+          loadingTutorsOffering ||
+          enableTutorOfferingLoading ||
+          disableTutorOfferingLoading
+        }
+      />
+      <View
+        style={[
+          commonStyles.mainContainer,
+          { backgroundColor: Colors.white, paddingHorizontal: 0 },
+        ]}>
         <ScreenHeader
           label="My Subjects"
           homeIcon
@@ -175,7 +244,10 @@ function SubjectList() {
               showsVerticalScrollIndicator={false}
               renderItem={({ item, index }) => renderSubjects(item, index)}
               keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: RfH(100), paddingTop: RfH(20) }}
+              contentContainerStyle={{
+                paddingBottom: RfH(100),
+                paddingTop: RfH(20),
+              }}
             />
           </View>
         ) : (
@@ -192,20 +264,30 @@ function SubjectList() {
             <Text
               style={[
                 commonStyles.pageTitleThirdRow,
-                { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                {
+                  fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                  textAlign: 'center',
+                },
               ]}>
               No data found
             </Text>
             <Text
               style={[
                 commonStyles.regularMutedText,
-                { marginHorizontal: RfW(80), textAlign: 'center', marginTop: RfH(16) },
+                {
+                  marginHorizontal: RfW(80),
+                  textAlign: 'center',
+                  marginTop: RfH(16),
+                },
               ]}>
               Looks like you haven't provided your offering details.
             </Text>
             <Button
               onPress={handleSubjectSelection}
-              style={[commonStyles.buttonPrimary, { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) }]}>
+              style={[
+                commonStyles.buttonPrimary,
+                { alignSelf: 'center', marginTop: RfH(64), width: RfW(190) },
+              ]}>
               <Text style={commonStyles.textButtonPrimary}>Add Subject</Text>
             </Button>
           </View>
