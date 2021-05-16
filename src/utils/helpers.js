@@ -22,6 +22,7 @@ import {
   isTokenLoading,
   networkConnectivityError,
   notificationPayload,
+  notificationsList,
   studentDetails,
   tutorDetails,
   userDetails,
@@ -170,7 +171,9 @@ export const alertBox = (
       },
     ];
   }
-  Alert.alert(alertTitle, alertMsg, configuration, { cancelable: config.cancelable });
+  Alert.alert(alertTitle, alertMsg, configuration, {
+    cancelable: config.cancelable,
+  });
 };
 
 export const comingSoonAlert = () => alertBox('Coming Soon');
@@ -304,6 +307,7 @@ export const logout = () => {
     userLocation({});
     interestingOfferingData([]);
     notificationPayload({});
+    notificationsList([]);
   });
 
   clearAllLocalStorage(); // .then(() => {

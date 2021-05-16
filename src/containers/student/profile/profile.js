@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FORGOT_PASSWORD_MUTATION } from '../../common/graphql-mutation';
 import { appMetaData, notificationsList, studentDetails, userDetails } from '../../../apollo/cache';
-import { APP_VERSION, LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import {APP_VERSION, isDev, isProd, LOCAL_STORAGE_DATA_KEY} from '../../../utils/constants';
 import { IconButtonWrapper, Loader, UserImageComponent } from '../../../components';
 import NavigationRouteNames from '../../../routes/screenNames';
 import { Colors, Images } from '../../../theme';
@@ -466,6 +466,8 @@ function Profile(props) {
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
                 Version {APP_VERSION}
               </Text>
+              {!isDev && !isProd && <Text>Staging</Text>}
+              {isDev && !isProd && <Text>Local</Text>}
             </View>
 
             <View>

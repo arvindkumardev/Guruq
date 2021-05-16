@@ -14,7 +14,7 @@ import {
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { appMetaData, notificationsList, tutorDetails, userDetails } from '../../../apollo/cache';
-import { APP_VERSION, LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
+import { APP_VERSION, isDev, isProd, LOCAL_STORAGE_DATA_KEY } from '../../../utils/constants';
 import { alertBox, comingSoonAlert, getFullName, getSaveData, logout, RfH, RfW } from '../../../utils/helpers';
 import { Loader, IconButtonWrapper, UserImageComponent } from '../../../components';
 import { Colors, Images } from '../../../theme';
@@ -418,6 +418,8 @@ function Profile(props) {
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.versionText}>
               Version {APP_VERSION}
             </Text>
+            {!isDev && !isProd && <Text>Staging</Text>}
+            {isDev && !isProd && <Text>Local</Text>}
           </View>
 
           <View>
@@ -445,6 +447,7 @@ function Profile(props) {
     </View>
   );
 }
+
 Profile.propTypes = {
   changeTab: PropTypes.func,
 };

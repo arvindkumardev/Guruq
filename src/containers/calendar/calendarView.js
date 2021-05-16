@@ -222,7 +222,7 @@ function CalendarView(props) {
                 }
                 calendarAnimation={{ type: 'parallel', duration: 300 }}
                 // daySelectionAnimation={{ type: 'background', highlightColor: Colors.lightBlue }}
-                markedDates={markedDates}
+                // markedDates={markedDates}
                 onHeaderSelected={(a) => console.log(a)}
                 onWeekChanged={(start, end) => {
                   if (!start.isSame(weekStartDate, 'day')) {
