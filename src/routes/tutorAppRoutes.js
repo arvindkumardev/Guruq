@@ -54,7 +54,11 @@ export const getTutorRoutes = (tutorInfo) => {
         />
       )}
 
-      <Stack.Screen name={NavigationRouteNames.TUTOR.PROFILE} component={Profile} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PROFILE}
+        component={Profile}
+        options={{ headerShown: false }}
+      />
 
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.SUBJECTS_LIST}
@@ -66,7 +70,16 @@ export const getTutorRoutes = (tutorInfo) => {
         component={ClassPriceMatrix}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.TUTOR.WHY_ME} component={WhyMeView} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.PRICE_MATRIX_OLD}
+        component={PriceMatrix}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={NavigationRouteNames.TUTOR.WHY_ME}
+        component={WhyMeView}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.DEMO_PRICE_MATRIX}
         component={DemoPriceMatrix}
@@ -87,13 +100,21 @@ export const getTutorRoutes = (tutorInfo) => {
         component={UpdateSchedule}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.PYTN_DETAILS} component={PytnSubmit} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.PYTN_DETAILS}
+        component={PytnSubmit}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.TUTOR.STUDENT_REQUESTS}
         component={PytnRequests}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.BANK_DETAILS} component={BankDetails} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.BANK_DETAILS}
+        component={BankDetails}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.ADD_EDIT_BANK_DETAILS}
         component={AddEditBankDetails}
@@ -139,7 +160,11 @@ export const getTutorRoutes = (tutorInfo) => {
         component={StudentDetails}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={NavigationRouteNames.MY_CLASSES} component={MyClasses} options={{ headerShown: false }} />
+      <Stack.Screen
+        name={NavigationRouteNames.MY_CLASSES}
+        component={MyClasses}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={NavigationRouteNames.SCHEDULE_CLASS}
         component={scheduleClass}

@@ -83,6 +83,7 @@ const NavigationRouteNames = {
     SUBJECT_SELECTION: 'subject_selection',
     ADD_SUBJECT_DETAILS: 'add_subject_details',
     PRICE_MATRIX: 'price_matrix',
+    PRICE_MATRIX_OLD: 'price_matrix_old',
     WHY_ME: 'why_me',
     DEMO_PRICE_MATRIX: 'demo_price_matrix',
     VIEW_SCHEDULE: 'view_schedule',

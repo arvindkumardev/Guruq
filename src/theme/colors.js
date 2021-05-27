@@ -8,7 +8,6 @@ const Colors = {
   greyBlue: '#E7E5F2',
   brandBlue: '#1E5AA0',
   brandBlue2: '#07A6EE',
-
   primaryText: '#000000',
   secondaryText: '#888888',
   borderColor: '#d9d9d9',
