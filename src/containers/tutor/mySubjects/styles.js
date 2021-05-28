@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Colors, Fonts } from '../../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { RfH, RfW } from '../../../utils/helpers';
+import { RfH } from '../../../utils/helpers';
 
 const styles = StyleSheet.create({
   rightButton: {
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
   },
-  adddetailmainview: {
+  addDetailMainView: {
     marginTop: RfH(24),
     padding: RFValue(16),
   },
@@ -73,17 +73,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     right: 0,
-  },
-  isDemoClassText: {
-    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
-    fontFamily: Fonts.regular,
-    color: Colors.black,
-  },
-  isDemoCheckBoxText: {
-    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
-    fontFamily: Fonts.regular,
-    color: Colors.black,
-    paddingLeft: RfW(8),
-  },
+  }
 });
 export default styles;

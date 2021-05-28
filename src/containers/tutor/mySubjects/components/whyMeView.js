@@ -44,7 +44,8 @@ const WhyMeView = (props) => {
       },
     });
   };
-
+  
+  
   return (
     <View style={{ backgroundColor: Colors.white, height: '100%' }}>
       <ScreenHeader label="Why Me" homeIcon horizontalPadding={RfW(16)} />

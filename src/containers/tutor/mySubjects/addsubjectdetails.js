@@ -78,7 +78,7 @@ const AddSubjectDetails = (props) => {
       <Loader isLoading={loadingTutorsOffering} />
       <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
         <ScreenHeader label="Add Details" homeIcon horizontalPadding={RfW(16)} />
-        <View style={styles.adddetailmainview}>
+        <View style={styles.addDetailMainView}>
           <View style={{ flexDirection: 'row' }}>
             <IconButtonWrapper iconImage={getSubjectIcons(item.offering.displayName)} />
             <View style={{ marginLeft: RfW(16) }}>
