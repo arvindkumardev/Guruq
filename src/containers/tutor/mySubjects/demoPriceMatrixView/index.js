@@ -255,7 +255,7 @@ const DemoPriceMatrix = (props) => {
                     setOnlineFree(false);
                   }}
                 />
-                <Text style={styles.isDemoCheckBoxText}>Online</Text>
+                <Text style={styles.isDemoCheckBoxText}>Paid</Text>
               </Pressable>
             </View>
           ) : null}
@@ -318,7 +318,7 @@ const DemoPriceMatrix = (props) => {
                 setOfflineFree(false);
               }}
             />
-            <Text style={styles.isDemoCheckBoxText}>Offline</Text>
+            <Text style={styles.isDemoCheckBoxText}>Paid</Text>
           </Pressable>
         </View>
       ) : null}

@@ -28,8 +28,8 @@ const StudentClassComponent = ({ student, subject }) => {
       if (data && data?.searchOrderItems && data?.searchOrderItems.edges.length > 0) {
         setIsEmpty(false);
         setOrderList(data?.searchOrderItems.edges);
-        setIsEmpty(true);
       } else {
+        setIsEmpty(true);
         setOrderList([]);
       }
     },
@@ -68,6 +68,25 @@ const StudentClassComponent = ({ student, subject }) => {
       setIsHistorySelected(false);
     }
   }, [isFoucsed]);
+
+  // use effect to track subject change
+  useEffect(() => {
+    setIsHistorySelected(false);
+    setOrderList([]);
+    setIsEmpty([]);
+    searchOrderItems({
+      variables: {
+        bookingSearchDto: {
+          ownerId: student.user.id,
+          offeringId: subject.id,
+          showActive: true,
+          showHistory: false,
+          showWithAvailableClasses: !false,
+          size: 100,
+        },
+      },
+    });
+  }, [subject]);
 
   const renderClassItem = (item) => {
     return (

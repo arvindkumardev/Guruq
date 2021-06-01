@@ -3,7 +3,7 @@ import { View, Text, TouchableWithoutFeedback } from 'react-native';
 import { styles } from './styles';
 import { getSubjectIcons, RfH, RfW } from '../../../utils/helpers';
 import IconButtonWrapper from '../../../components/IconWrapper';
-
+import commonStyles from '../../../theme/styles';
 const SubjectItemComponent = ({ subject, selectedSubject, setSelectSubject }) => {
   function setIconImage() {
     if (selectedSubject != null) {
@@ -24,7 +24,9 @@ const SubjectItemComponent = ({ subject, selectedSubject, setSelectSubject }) =>
           />
         </View>
         <Text style={styles.subjectText}>{subject.displayName}</Text>
-        {subject.id === selectedSubject.id ? <View style={styles.circle} /> : null}
+        <Text style={commonStyles.smallMutedText}>
+          {subject.parentOffering.displayName}|{subject.parentOffering.parentOffering.displayName}
+        </Text>
       </View>
     </TouchableWithoutFeedback>
   );
