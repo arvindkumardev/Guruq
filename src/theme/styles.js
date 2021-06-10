@@ -191,7 +191,11 @@ const styles = StyleSheet.create({
     fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.bold,
   },
-
+  pageTitleBlack:{
+    fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.bold,
+    color: Colors.black,
+  },
   // titleText: {
   //   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
   //   fontFamily: Fonts.semiBold,
@@ -216,7 +220,7 @@ const styles = StyleSheet.create({
   headingPrimaryText: {
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
-    color: Colors.primaryText,
+    color: Colors.black,
   },
   headingMutedText: {
     fontSize: RFValue(17, STANDARD_SCREEN_SIZE),

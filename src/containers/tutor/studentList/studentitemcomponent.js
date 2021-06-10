@@ -14,7 +14,7 @@ const StudentItemComponent = ({ student, navigation, routeNames }) => {
             <Text style={styles.nameTextStyle}>
               {student.contactDetail.firstName} {student.contactDetail.lastName}
             </Text>
-            <Text style={styles.idTextStyle}>S-{student.id}</Text>
+            <Text style={styles.idTextStyle}>GURUQS-{student.id}</Text>
           </View>
         </View>
         <View style={styles.bottomBarView} />

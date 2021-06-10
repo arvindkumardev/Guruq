@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     marginBottom: RfH(17),
   },
   studentName: {
-    fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     color: Colors.primaryText,
     fontFamily: Fonts.semiBold,
   },

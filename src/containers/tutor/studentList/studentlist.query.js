@@ -15,6 +15,25 @@ export const GET_MY_STUDENT_LIST = gql`
           lastName
           gender
         }
+        educationDetails {
+          board
+          grade
+          isCurrent  
+        }
+        interestedOfferings {
+          id
+          offering {
+            id
+            name
+            displayName
+            slug
+            parentOffering {
+              id
+              name
+              displayName
+            }
+          }
+        }
         user {
           id
         }

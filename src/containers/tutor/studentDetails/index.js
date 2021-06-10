@@ -58,16 +58,19 @@ const StudentDetails = (props) => {
         <StudentTopProfileComponent student={student} />
         <View
           style={{
-            borderBottomColor: Colors.borderColor,
             borderTopColor: Colors.borderColor,
-            borderBottomWidth: 0.5,
             borderTopWidth: 0.5,
-            padding: RfH(16),
+            paddingHorizontal: RfW(16),
+            paddingTop: RfH(16),
           }}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Subjects</Text>
+          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Subjects</Text>
         </View>
-
-        <View>
+        <View
+          style={{
+            borderBottomColor: Colors.borderColor,
+            borderBottomWidth: 0.5,
+            paddingTop: RfH(8),
+          }}>
           <View>
             <FlatList
               horizontal
@@ -75,22 +78,15 @@ const StudentDetails = (props) => {
               data={subjects}
               renderItem={({ item }) => renderItem(item)}
               keyExtractor={(index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: RfH(34) }}
+              contentContainerStyle={{ paddingBottom: RfH(16) }}
             />
           </View>
-          <View
-            style={{
-              borderBottomColor: Colors.borderColor,
-              borderTopColor: Colors.borderColor,
-              borderBottomWidth: 0.5,
-              borderTopWidth: 0.5,
-              padding: RfH(16),
-            }}>
-            <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>Classes</Text>
-          </View>
         </View>
-
-        {selectedSubject !== null ? <StudentClassComponent student={student} subject={selectedSubject} /> : null}
+        {selectedSubject !== null ? (
+          <View style={{ marginTop: RfH(16) }}>
+            <StudentClassComponent student={student} subject={selectedSubject} />
+          </View>
+        ) : null}
       </ScrollView>
     </View>
   );

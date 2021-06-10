@@ -17,6 +17,7 @@ import AddToCartModal from '../student/tutorDetails/components/addToCartModal';
 import NavigationRouteNames from '../../routes/screenNames';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
+import moment from 'moment'
 
 function MyClasses(props) {
   const navigation = useNavigation();
@@ -164,6 +165,7 @@ function MyClasses(props) {
   };
 
   const renderClassItem = (item) => {
+    
     return (
       <View style={{ marginTop: RfH(30) }}>
         <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName}</Text>
@@ -283,7 +285,7 @@ function MyClasses(props) {
           stickyHeaderIndices={[1]}
           scrollEventThrottle={16}>
           <View>
-            <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
+            <Text style={commonStyles.pageTitleBlack}>My Classes</Text>
           </View>
           <View>
             <View

@@ -18,7 +18,7 @@ const SubjectItemComponent = ({ subject, selectedSubject, setSelectSubject }) =>
         <View style={styles.iconContainer}>
           <IconButtonWrapper
             iconWidth={RfW(64)}
-            styling={{ alignSelf: 'center' }}
+            styling={{ alignSelf: 'center', borderRadius:8 }}
             iconHeight={RfH(64)}
             iconImage={setIconImage()}
           />

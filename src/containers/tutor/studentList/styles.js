@@ -26,12 +26,17 @@ export const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   nameTextStyle: {
-    fontSize: RFValue(22, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     color: Colors.black,
+    fontFamily:Fonts.semiBold,
+    lineHeight:21,
+    letterSpacing:0.32
   },
   idTextStyle: {
-    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
-    color: Colors.lightBlack,
+    fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+    color: Colors.darkGrey,
+    lineHeight:19,
+    letterSpacing:0.28
   },
   subscreenheadingView: {
     flex: 1,
