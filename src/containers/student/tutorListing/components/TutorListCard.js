@@ -149,6 +149,16 @@ function TutorListCard(props) {
                         {tutor.reviewCount} Reviews
                       </Text>
                     )}
+
+                    {tutor?.additionalProperties?.covidVaccinated && (
+                      <IconButtonWrapper
+                        iconImage={Images.vaccine}
+                        iconHeight={RfH(15)}
+                        iconWidth={RfW(15)}
+                        imageResizeMode="contain"
+                        styling={{ marginLeft: RfW(10) }}
+                      />
+                    )}
                   </View>
                 </View>
               </View>
