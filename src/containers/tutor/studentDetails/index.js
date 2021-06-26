@@ -1,7 +1,7 @@
 import { FlatList, View, Text, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused,useNavigation } from '@react-navigation/native';
 import { ScreenHeader } from '../../../components';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts } from '../../../theme';
@@ -11,8 +11,10 @@ import Loader from '../../../components/Loader';
 import SubjectItemComponent from './subjectitemcomponent';
 import StudentTopProfileComponent from '../../../components/StudentTopProfileComponent';
 import StudentClassComponent from './studentclasscomponent';
+import { BackArrow } from '../../../components';
 
 const StudentDetails = (props) => {
+  const navigation=useNavigation()
   const { route } = props;
   const student = route?.params.student;
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -49,11 +51,29 @@ const StudentDetails = (props) => {
       <SubjectItemComponent subject={item} selectedSubject={selectedSubject} setSelectSubject={setSelectedSubject} />
     );
   };
+  const onBackPress = () => {
+    navigation.goBack();
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.white }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ScreenHeader label="Student Detail" homeIcon horizontalPadding={RfW(16)} lineVisible={false} />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: RfW(16),
+            paddingVertical: RfH(20),
+          }}>
+          <BackArrow action={onBackPress} />
+          <Text
+            style={[
+              commonStyles.pageTitleBlackSmall,
+              { textAlign: 'center', marginLeft: 10 },
+            ]}>
+            Student Detail
+          </Text>
+        </View>
         <Loader isLoading={subjectLoader} />
         <StudentTopProfileComponent student={student} />
         <View
@@ -63,7 +83,13 @@ const StudentDetails = (props) => {
             paddingHorizontal: RfW(16),
             paddingTop: RfH(16),
           }}>
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold }]}>Subjects</Text>
+          <Text
+            style={[
+              commonStyles.regularPrimaryText,
+              { fontFamily: Fonts.bold },
+            ]}>
+            Subjects
+          </Text>
         </View>
         <View
           style={{
@@ -84,7 +110,10 @@ const StudentDetails = (props) => {
         </View>
         {selectedSubject !== null ? (
           <View style={{ marginTop: RfH(16) }}>
-            <StudentClassComponent student={student} subject={selectedSubject} />
+            <StudentClassComponent
+              student={student}
+              subject={selectedSubject}
+            />
           </View>
         ) : null}
       </ScrollView>

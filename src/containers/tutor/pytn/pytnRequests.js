@@ -38,7 +38,8 @@ function PytnRequests() {
   const [getPytnRequests, { loading: pytnRequestLoading }] = useLazyQuery(SEARCH_TUTOR_PYTN_REQUESTS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
-      console.log(e);
+      setIsListEmpty(true);
+      console.log("Rohit error is ",e);
     },
     onCompleted: (data) => {
       if (data) {
@@ -57,6 +58,10 @@ function PytnRequests() {
         }
         setHasMore(data?.searchTutorPYTN?.edges?.length === itemsPerPage);
         setLoadMore(false);
+        console.log(
+          'Rohit: search tutor pytn',
+          data?.searchTutorPYTN?.edges?.length,
+        );
         setIsListEmpty(data?.searchTutorPYTN?.edges?.length === 0);
       }
     },
@@ -66,7 +71,7 @@ function PytnRequests() {
     setCurrentPage(page);
 
     const searchDto = { page, size: itemsPerPage, sortBy: 'createdDate', sortOrder: 'asc' };
-
+    console.log("Rohit: Search data is ",searchDto)
     if (showPendingOnly) {
       searchDto.pending = true;
     }
@@ -154,6 +159,9 @@ function PytnRequests() {
 
   const getRootOfferingName = (offering) =>
     offeringMasterData.find((item) => item.id === offering?.offering?.id)?.rootOffering?.displayName;
+
+
+  console.log("Rohit: right now the value of isList emptyis ",isListEmpty)
 
   const renderClassItem = (item) => (
     <>

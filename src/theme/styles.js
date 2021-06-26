@@ -191,10 +191,16 @@ const styles = StyleSheet.create({
     fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.bold,
   },
-  pageTitleBlack:{
+  pageTitleBlack: {
     fontSize: RFValue(34, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.bold,
     color: Colors.black,
+  },
+  pageTitleBlackSmall: {
+    fontSize: RFValue(24, STANDARD_SCREEN_SIZE),
+    fontFamily: Fonts.bold,
+    color: Colors.black,
+    lineHeight:27
   },
   // titleText: {
   //   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),

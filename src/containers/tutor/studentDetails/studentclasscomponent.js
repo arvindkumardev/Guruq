@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, FlatList } from 'react-native';
+import { View, Text, Image, ScrollView, FlatList ,TouchableOpacity} from 'react-native';
 import { useLazyQuery } from '@apollo/client';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused,useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { RFValue } from 'react-native-responsive-fontsize';
 import moment from 'moment';
@@ -14,13 +14,16 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { styles } from './styles';
 import { SEARCH_ORDER_ITEMS } from '../../student/booking.query';
 import TutorImageComponent from '../../../components/TutorImageComponent';
+import NavigationRouteNames from '../../../routes/screenNames';
 import RatingView from './ratingview'
 
 const StudentClassComponent = ({ student, subject }) => {
+  const navigation = useNavigation();
   const [isHistorySelected, setIsHistorySelected] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const isFoucsed = useIsFocused();
   const [orderList, setOrderList] = useState([]);
+  
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -271,13 +274,18 @@ const StudentClassComponent = ({ student, subject }) => {
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingBottom: RfH(16) }}
               />
-              <Text
-                style={[
-                  commonStyles.mediumPrimaryText,
-                  { alignSelf: 'flex-end', color: Colors.brandBlue2 },
-                ]}>
-                View All
-              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate(NavigationRouteNames.MY_CLASSES);
+                }}>
+                <Text
+                  style={[
+                    commonStyles.mediumPrimaryText,
+                    { alignSelf: 'flex-end', color: Colors.brandBlue2 },
+                  ]}>
+                  View All
+                </Text>
+              </TouchableOpacity>
             </View>
           ) : (
             <View>
@@ -301,21 +309,36 @@ const StudentClassComponent = ({ student, subject }) => {
                 ]}>
                 No class found
               </Text>
-              <Text
-                style={[
-                  commonStyles.regularMutedText,
-                  {
-                    marginHorizontal: RfW(60),
-                    textAlign: 'center',
-                    marginTop: RfH(16),
-                  },
-                ]}>
-                Looks like Student haven't booked any class.
-              </Text>
+              {!isHistorySelected ? (
+                <Text
+                  style={[
+                    commonStyles.regularMutedText,
+                    {
+                      marginHorizontal: RfW(60),
+                      textAlign: 'center',
+                      marginTop: RfH(16),
+                    },
+                  ]}>
+                  Looks like Student don't have Unscheduled Classes.
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    commonStyles.regularMutedText,
+                    {
+                      marginHorizontal: RfW(60),
+                      textAlign: 'center',
+                      marginTop: RfH(16),
+                    },
+                  ]}>
+                  Looks like Student don't have Class History.
+                </Text>
+              )}
+
               <View style={{ height: RfH(40) }} />
             </View>
           )}
-         <RatingView student={student}/>
+          {/* <RatingView student={student}/> */}
         </ScrollView>
       </View>
     </>

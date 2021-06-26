@@ -32,7 +32,7 @@ import { LOCAL_STORAGE_DATA_KEY } from '../utils/constants';
 import NavigationRouteNames from './screenNames';
 import { getStudentRoutes } from './studentAppRoutes';
 import { getTutorRoutes } from './tutorAppRoutes';
-import { TutorCertificationStageEnum } from '../containers/tutor/enums';
+import { PtStatus, TutorCertificationStageEnum } from '../containers/tutor/enums';
 import WebViewPage from '../components/WebViewPage';
 import UploadDocuments from '../containers/certficationProcess/uploadDocuments';
 import AddressListing from '../containers/address/addressListing';
@@ -274,6 +274,8 @@ const AppStack = (props) => {
   );
 
   const getLoggedInRoutes = () => {
+
+    console.log("Rohit: value of tutor is ",tutorInfo)
     if (userType === UserTypeEnum.STUDENT.label) {
       if (studentInfo) {
         return getStudentRoutes(studentInfo);
@@ -295,7 +297,7 @@ const AppStack = (props) => {
       }
       if (
         tutorInfo &&
-        !tutorInfo?.certified &&
+        !tutorInfo?.certified && !(tutorInfo?.lead?.backgroundCheck?.status===PtStatus.EXEMPTED.label) &&
         (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.CERTIFICATION_PROCESS_COMPLETED.label ||
           (tutorInfo?.lead?.certificationStage === TutorCertificationStageEnum.BACKGROUND_CHECK_PENDING.label &&
             tutorInfo?.lead?.backgroundCheck?.status !== BackgroundCheckStatusEnum.NOT_STARTED.label))

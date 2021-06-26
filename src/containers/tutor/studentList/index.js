@@ -1,36 +1,88 @@
-import { FlatList, View, Text, Pressable,Image } from 'react-native';
-import commonStyles from '../../../theme/styles';
+import { FlatList, View, Text, Pressable, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { ScreenHeader } from '../../../components';
+import commonStyles from '../../../theme/styles';
+import { ScreenHeader, IconButtonWrapper } from '../../../components';
 import { Colors, Images, Fonts } from '../../../theme';
 import { RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
-import { GET_MY_STUDENT_LIST } from './studentlist.query';
+import { GET_MY_STUDENT_LIST,GET_STUDENT_BY_OFFERING_ID } from './studentlist.query';
+import { SEARCH_TUTOR_OFFERINGS } from '../mySubjects/subject.query';
 import { styles } from './styles';
 import routeNames from '../../../routes/screenNames';
 import Loader from '../../../components/Loader';
 import StudentItemComponent from './studentitemcomponent';
+import TutorStudentFilterComponent from './components/filterComponent';
+import { tutorDetails } from '../../../apollo/cache';
+import { BackArrow } from '../../../components';
 
 function StudentListing(props) {
-  const { isSubScreen } = props;
+  const { isSubScreen, offeringId } = props;
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const [studentList, setStudentList] = useState([]);
+    const tutorInfo = useReactiveVar(tutorDetails);
   const [displayNoDataFound, setDisplayNoDataFound] = useState(false);
   const [page] = useState(1);
   const [limit] = useState(50);
+ const [showFilterPopup, setShowFilterPopup] = useState(false);
+ const [subjectList,setSubjectList]=useState([]);
+ const [subjectListEmpty,setIsSubjectListEmpty]=useState(false)
+ const [currentSelectedSubject,setCurrentSelectedSubject]=useState(null)
   const studentListPadding = isSubScreen ? 100 : 34;
-  const [loadStudentList, { loading: studentListLoader }] = useLazyQuery(
-    GET_MY_STUDENT_LIST,
+
+  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(
+    SEARCH_TUTOR_OFFERINGS,
+    {
+      fetchPolicy: 'no-cache',
+      variables: { tutorId: tutorInfo.id },
+      onError: (e) => {
+        console.log(e);
+         setIsSubjectListEmpty(subjectsList.length === 0);
+      },
+      onCompleted: (data) => {
+        if (data) {
+          const subjectsList = data?.searchTutorOfferings;
+          setSubjectList(subjectsList);
+          setIsSubjectListEmpty(subjectsList.length === 0);
+        }
+      },
+    },
+  );
+
+
+
+  
+
+  const [loadStudentList, { loading: studentListLoader }] = useLazyQuery(GET_MY_STUDENT_LIST, {
+    fetchPolicy: 'no-cache',
+    onError(e) {
+      setDisplayNoDataFound(true);
+      console.log('errorn is', e);
+    },
+    onCompleted(data) {
+      if (data && data?.getTutorStudents && data?.getTutorStudents.edges.length > 0) {
+        console.log('Value of student list is ', data.getTutorStudents.edges);
+        setStudentList(data.getTutorStudents.edges);
+      } else {
+        console.log('data not found');
+        setDisplayNoDataFound(true);
+      }
+    },
+  });
+
+
+
+  const [loadStudentByOfferingId, { loading: studentFilterLoader }] = useLazyQuery(
+    GET_STUDENT_BY_OFFERING_ID,
     {
       fetchPolicy: 'no-cache',
       onError(e) {
         setDisplayNoDataFound(true);
-        console.log("errorn is",e);
+        console.log('errorn is', e);
       },
       onCompleted(data) {
         if (
@@ -38,24 +90,41 @@ function StudentListing(props) {
           data?.getTutorStudents &&
           data?.getTutorStudents.edges.length > 0
         ) {
-          console.log("Value of student list is ",data.getTutorStudents.edges)
+          console.log('By Offering Id Value of student list is ', data.getTutorStudents.edges);
           setStudentList(data.getTutorStudents.edges);
         } else {
-          console.log("data not found")
+          console.log('data not found');
           setDisplayNoDataFound(true);
         }
       },
     },
   );
+
+
   useEffect(() => {
     if (isFocussed) {
       // getting  student list
-      loadStudentList({
-        variables: {
+      if(isSubScreen)
+      {
+        console.log("Rohit: Offering id is ",offeringId)
+       loadStudentByOfferingId({
+         variables: {
+              page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+            offeringId: parseInt(offeringId, 10),
+         },
+         });
+      }
+      else{
+        loadStudentList({
+           variables: {
           page: parseInt(page, 10),
-          limit: parseInt(limit, 10),
-        },
-      });
+           limit: parseInt(limit, 10),
+         },
+        });
+      }
+    
+      getTutorOffering()
     }
   }, [isFocussed]);
 
@@ -65,15 +134,88 @@ function StudentListing(props) {
         id={item.id.toString()}
         student={item}
         navigation={navigation}
+        currentFilterSubject={currentSelectedSubject}
         routeNames={routeNames}
       />
     );
   };
-  let labelText = {
-    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
-    fontFamily: Fonts.semiBold,
-    color: Colors.black,
+
+
+  const  handleSubjectFilterModal=()=>{
+    setShowFilterPopup(false)
+  }
+  
+  const onOfferingSelect = (selectedOffering) => {
+    loadStudentByOfferingId({
+      variables: {
+        page: parseInt(page, 10),
+        limit: parseInt(limit, 10),
+        offeringId: parseInt(selectedOffering.id, 10),
+      },
+    });
+    setShowFilterPopup(false);
+    setCurrentSelectedSubject(selectedOffering.displayName)
   };
+  
+  const clearSelection=()=>{
+    setShowFilterPopup(false);
+    setCurrentSelectedSubject(null)
+        loadStudentList({
+          variables: {
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+          },
+        });
+  }
+
+
+  const FilterItem=()=>{
+      
+      return (
+      <View>
+         <View>
+           <View style={styles.filterContainer}>
+             <Text
+               style={[
+                 styles.filterText,
+                 { position: 'absolute', left: 0, paddingLeft: 12 },
+               ]}>
+               {studentList.length} Students
+             </Text>
+             <Pressable
+               onPress={() => setShowFilterPopup(true)}
+               style={[
+                 styles.filterContainer,
+                 { position: 'absolute', right: 0, paddingRight: 24 },
+               ]}>
+               <IconButtonWrapper
+                 iconHeight={15}
+                 iconWidth={15}
+                 iconImage={Images.filter}
+               />
+               <Text style={[styles.filterText]}>Filters</Text>
+             </Pressable>
+           </View>
+         </View>
+         <View style={styles.horizontalLine} />
+         {currentSelectedSubject ? (
+           <View>
+             <Text
+               style={[styles.filterText, { paddingLeft: 12, marginTop: 4 }]}>
+               {currentSelectedSubject.toUpperCase()}
+             </Text>
+             <View style={styles.horizontalLine} />
+           </View>
+         ) : null}
+       </View>)
+  }
+
+
+  const onBackPress = () => {
+       navigation.goBack();
+    }
+
+
   if (!displayNoDataFound) {
     return (
       <View style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -89,10 +231,26 @@ function StudentListing(props) {
             </Pressable>
           </View>
         ) : (
-          <ScreenHeader label="Students" homeIcon horizontalPadding={RfW(16)} />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: RfW(16),
+              paddingVertical: RfH(20),
+            }}>
+            <BackArrow action={onBackPress} />
+            <Text
+              style={[
+                commonStyles.pageTitleBlackSmall,
+                { textAlign: 'center', marginLeft: 10 },
+              ]}>
+              Students
+            </Text>
+          </View>
         )}
         <Loader isLoading={studentListLoader} />
         <View>
+          {isSubScreen ? null : <FilterItem />}
           <FlatList
             initialNumToRender={10}
             showsVerticalScrollIndicator={false}
@@ -102,6 +260,15 @@ function StudentListing(props) {
             contentContainerStyle={{ paddingBottom: RfH(studentListPadding) }}
           />
         </View>
+        {studentList.length > 0 ? (
+          <TutorStudentFilterComponent
+            onClose={handleSubjectFilterModal}
+            visible={showFilterPopup}
+            onSelect={onOfferingSelect}
+            offerings={subjectList}
+            clearSelection={clearSelection}
+          />
+        ) : null}
       </View>
     );
   }
@@ -119,17 +286,25 @@ function StudentListing(props) {
           </Pressable>
         </View>
       ) : (
-        <ScreenHeader
-          label="Students"
-          homeIcon
-          labelStyle={{
-            flexDirection: 'column',
-            marginLeft: RfW(8),
-          }}
-          
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: RfW(16),
+            paddingVertical: RfH(20),
+          }}>
+          <BackArrow action={onBackPress} />
+          <Text
+            style={[
+              commonStyles.pageTitleBlackSmall,
+              { textAlign: 'center', marginLeft: 10 },
+            ]}>
+            Students
+          </Text>
+        </View>
       )}
       <View>
+        {isSubScreen ? null : <FilterItem />}
         <Image
           source={Images.empty_classes}
           style={{
