@@ -26,7 +26,7 @@ function BackgroundCheck() {
   const [tncCheckBox, setTncCheckBox] = useState(false);
   const [backgroundStatus, setBackgroundStatus] = useState('');
   const [openMenu, setOpenMenu] = useState(false);
-
+  console.log("Rohit: Inside background check ")
   const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {},
@@ -122,7 +122,7 @@ function BackgroundCheck() {
               activeOpacity={0.8}>
               <CustomCheckBox enabled={consentCheckBox} submitFunction={() => setConsentCheckBox(!consentCheckBox)} />
               <Text style={[commonStyles.mediumPrimaryText, { marginHorizontal: RfW(16) }]}>
-                I agree to a background check by the GuruQ Team to verify my information and credentials.
+                I agree to a background check by GuruQ team to verify my credentials.
               </Text>
             </TouchableOpacity>
 

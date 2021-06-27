@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Colors, Fonts } from '../../theme';
 import { STANDARD_SCREEN_SIZE } from '../../utils/constants';
-import { RfH } from '../../utils/helpers';
+import { RfH ,RfW} from '../../utils/helpers';
 
 const styles = StyleSheet.create({
   activeRightButton: {
@@ -61,6 +61,33 @@ const styles = StyleSheet.create({
     color: Colors.darkGrey,
     fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.semiBold,
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: RfW(16),
+    paddingVertical: RfH(10),
+  },
+  tutorCountText: {
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    color: Colors.primaryText,
+    // marginLeft: RfW(8),
+  },
+  filterText: {
+    fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+    color: Colors.darkGrey,
+    letterSpacing: 0.28,
+    lineHeight: RfH(19),
+    marginLeft: RfW(5),
+    fontFamily: Fonts.semiBold,
+  },
+  horizontalLine: {
+    width: '100%',
+    borderWidth: 0.2,
+    opacity: 0.15,
+    borderColor: Colors.darkGrey,
+    height: RfH(1),
+    marginTop: RfH(4),
   },
 });
 export default styles;

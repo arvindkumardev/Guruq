@@ -30,7 +30,7 @@ const DateSlotSelectorModal = (props) => {
       }
     },
   });
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(moment());
 
   const getAvailabilityData = (date) => {
     setSelectedDate(date);
@@ -66,7 +66,13 @@ const DateSlotSelectorModal = (props) => {
         onRequestClose={() => {
           onClose(false);
         }}>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'column' }} />
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            flexDirection: 'column',
+          }}
+        />
         <View
           style={{
             bottom: 0,
@@ -89,7 +95,13 @@ const DateSlotSelectorModal = (props) => {
               },
             ]}>
             <View style={{ flex: 1 }}>
-              <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Available Slots</Text>
+              <Text
+                style={[
+                  commonStyles.headingPrimaryText,
+                  { marginLeft: RfW(16) },
+                ]}>
+                Available Slots
+              </Text>
             </View>
             <View style={{ flex: 0.5 }}>
               <IconButtonWrapper
@@ -110,10 +122,12 @@ const DateSlotSelectorModal = (props) => {
                 alignSelf: 'flex-start',
                 paddingBottom: RfH(8),
               }}
-              // selectedDate={selectedDate}
+              selectedDate={selectedDate}
               highlightDateNumberStyle={{ color: Colors.brandBlue2 }}
               highlightDateNameStyle={{ color: Colors.brandBlue2 }}
-              highlightDateContainerStyle={{ backgroundColor: Colors.lightBlue }}
+              highlightDateContainerStyle={{
+                backgroundColor: Colors.lightBlue,
+              }}
               disabledDateNameStyle={{ color: Colors.darkGrey }}
               disabledDateNumberStyle={{ color: Colors.darkGrey }}
               dateNameStyle={{
@@ -141,7 +155,10 @@ const DateSlotSelectorModal = (props) => {
               //   },
               // ]}
               onHeaderSelected={(a) => console.log(a)}
-              onDateSelected={(d) => getAvailabilityData(d)}
+              onDateSelected={(d) => {
+                console.log('Rohit : select date', d);
+                getAvailabilityData(d);
+              }}
             />
           </View>
           {!isEmpty(availability) ? (
@@ -154,10 +171,26 @@ const DateSlotSelectorModal = (props) => {
                     marginTop: RfH(20),
                   },
                 ]}>
-                <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>Start Time</Text>
-                <Text style={[commonStyles.mediumPrimaryText, { fontWeight: 'bold' }]}>End Time</Text>
+                <Text
+                  style={[
+                    commonStyles.mediumPrimaryText,
+                    { fontWeight: 'bold' },
+                  ]}>
+                  Start Time
+                </Text>
+                <Text
+                  style={[
+                    commonStyles.mediumPrimaryText,
+                    { fontWeight: 'bold' },
+                  ]}>
+                  End Time
+                </Text>
               </View>
-              <View style={[commonStyles.horizontalChildrenSpaceView, { paddingLeft: RfW(15) }]}>
+              <View
+                style={[
+                  commonStyles.horizontalChildrenSpaceView,
+                  { paddingLeft: RfW(15) },
+                ]}>
                 <CustomSelect
                   label="Start Time"
                   data={availability.map((item) => ({
@@ -174,13 +207,23 @@ const DateSlotSelectorModal = (props) => {
                   }}
                 />
                 <Text style={{ marginRight: RfW(16), textAlign: 'center' }}>
-                  {!isEmpty(selectedSlot) ? moment(selectedSlot.endDate).format('hh:mm A') : '--'}
+                  {!isEmpty(selectedSlot)
+                    ? moment(selectedSlot.endDate).format('hh:mm A')
+                    : '--'}
                 </Text>
               </View>
             </View>
           ) : (
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: RfH(10) }}>
-              <Text style={commonStyles.mediumPrimaryText}> No slots available for the selected date</Text>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginVertical: RfH(10),
+              }}>
+              <Text style={commonStyles.mediumPrimaryText}>
+                {' '}
+                No slots available for the selected date
+              </Text>
             </View>
           )}
 
@@ -193,7 +236,9 @@ const DateSlotSelectorModal = (props) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Button onPress={() => onSubmit(selectedSlot)} style={commonStyles.buttonPrimary}>
+              <Button
+                onPress={() => onSubmit(selectedSlot)}
+                style={commonStyles.buttonPrimary}>
                 <Text style={commonStyles.textButtonPrimary}>
                   {isReschedule ? 'Reschedule Class' : 'Schedule Class'}
                 </Text>

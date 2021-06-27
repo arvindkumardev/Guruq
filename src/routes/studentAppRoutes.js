@@ -64,7 +64,7 @@ export const getStudentRoutes = (studentInfo) => {
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.CLASS}
         component={ClassSelector}
-        options={{ headerShown: false }}
+        options={{ headerShown: false }} 
       />
       <Stack.Screen
         name={NavigationRouteNames.STUDENT.COMPARE_TUTORS}

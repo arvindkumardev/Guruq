@@ -33,22 +33,24 @@ import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
 import { alertBox, deviceWidth, getSubjectIcons, printDate, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
+import { GET_APP_CAROUSELS } from '../../../app.query';
 import TutorSubjectsModal from './tutorSubjectsModal';
 import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 import NotificationRedirection from '../../../notification/notificationRedirection';
+import { BannerTypeEnum } from '../../../../common/banner.enum';
 
-const carouselItems = [
-  {
-    image: Images.tutor_home_banner_1,
-    routeName: NavigationRouteNames.PERSONAL_DETAILS,
-  },
-  {
-    image: Images.tutor_home_banner_2,
-    routeName: NavigationRouteNames.TUTOR.VIEW_SCHEDULE,
-  },
-  { image: Images.tutor_home_banner_3, routeName: NavigationRouteNames.TUTOR.SUBJECTS_LIST },
-];
+// const carouselItems = [
+//   {
+//     image: Images.tutor_home_banner_1,
+//     routeName: NavigationRouteNames.PERSONAL_DETAILS,
+//   },
+//   {
+//     image: Images.tutor_home_banner_2,
+//     routeName: NavigationRouteNames.TUTOR.VIEW_SCHEDULE,
+//   },
+//   { image: Images.tutor_home_banner_3, routeName: NavigationRouteNames.TUTOR.SUBJECTS_LIST },
+// ];
 
 function TutorDashboard(props) {
   const navigation = useNavigation();
@@ -61,7 +63,7 @@ function TutorDashboard(props) {
   const [refreshSubjectList, setRefreshSubjectList] = useState(false);
   const tutorInfo = useReactiveVar(tutorDetails);
   const userInfo = useReactiveVar(userDetails);
-
+  const [carouselItems, setCarouselItems] = useState([]);
   const [activeSlide, setActiveSlide] = useState(0);
 
   const SLIDER_WIDTH = Dimensions.get('window').width;
@@ -84,6 +86,7 @@ function TutorDashboard(props) {
       return () => backHandler.remove();
     }
   }, [isFocused]);
+
 
   const [getScheduledClasses, { loading: loadingScheduledClasses }] = useLazyQuery(GET_SCHEDULED_CLASSES, {
     fetchPolicy: 'no-cache',
@@ -115,6 +118,20 @@ function TutorDashboard(props) {
     },
   });
 
+
+  
+  const [getAppCarousels, { loading: loadingAppCarousels }] =
+    useLazyQuery(GET_APP_CAROUSELS, {
+      fetchPolicy: 'no-cache',
+      onError: (e) => {
+        console.log(e);
+      },
+      onCompleted: (data) => {
+        console.log("AppCarousels: Value of data is ",data)
+          setCarouselItems(data.getAppCarousels);
+      },
+    });
+
   useEffect(() => {
     if (!isEmpty(tutorInfo) && isFocused) {
       getScheduledClasses({
@@ -127,6 +144,7 @@ function TutorDashboard(props) {
         },
       });
       getTutorOffering();
+      getAppCarousels();
     }
   }, [tutorInfo, isFocused]);
 
@@ -152,9 +170,9 @@ function TutorDashboard(props) {
     return (
       <TouchableWithoutFeedback
         onPress={() =>
-          navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX, {
+          navigation.navigate(NavigationRouteNames.TUTOR.ADD_SUBJECT_DETAILS, {
             offering: item,
-            priceMatrix: true,
+            tutorId: tutorInfo.id,
           })
         }>
         <View
@@ -176,13 +194,18 @@ function TutorDashboard(props) {
             styling={{ alignSelf: 'flex-start' }}
             iconImage={getSubjectIcons(item?.offering?.displayName)}
           />
-          <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.semiBold }]}>
+          <Text
+            style={[
+              commonStyles.regularPrimaryText,
+              { fontFamily: Fonts.semiBold },
+            ]}>
             {item?.offering?.displayName}
           </Text>
 
           <View style={commonStyles.horizontalChildrenView}>
             <Text style={[commonStyles.smallMutedText]}>
-              {item?.offerings[2]?.displayName} - {item?.offerings[1]?.displayName}
+              {item?.offerings[2]?.displayName} -{' '}
+              {item?.offerings[1]?.displayName}
             </Text>
           </View>
         </View>
@@ -190,10 +213,61 @@ function TutorDashboard(props) {
     );
   };
 
+   const handleBannerClick = async (bannerItem) => {
+     console.log("kabbu---------------->",bannerItem.targetScreenName)
+     switch (bannerItem.targetScreenName) {
+       case BannerTypeEnum.WEB_VIEW.label: {
+         let url = null;
+         bannerItem.payload.forEach((element) => {
+           if ((element.key = 'url')) {
+             url = element.value;
+           }
+         });
+         navigation.navigate(NavigationRouteNames.WEB_VIEW, { url: url });
+         return;
+       }
+       case BannerTypeEnum.EXTERNAL_LINK.label: {
+         let url = null;
+         bannerItem.payload.forEach((element) => {
+           if ((element.key = 'url')) {
+             url = element.value;
+           }
+         });
+         await Linking.openURL(url);
+         return;
+       }
+       case BannerTypeEnum.COMPLETE_PROFILE.label: {
+         navigation.navigate(NavigationRouteNames.TUTOR.PROFILE);
+         return;
+       }
+       case BannerTypeEnum.REQUEST_HELP.label: {
+         navigation.navigate(NavigationRouteNames.CUSTOMER_CARE);
+         return;
+       }
+       case BannerTypeEnum.TUTOR_UPDATE_SCHEDULE.label: {
+         navigation.navigate(NavigationRouteNames.TUTOR.VIEW_SCHEDULE);
+         return;
+       }
+       case BannerTypeEnum.TUTOR_UPDATE_PRICE_MATRIX.label: {
+          navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX);
+         return;
+       }
+       case BannerTypeEnum.TUTOR_SUBJECTS_LIST.label: {
+          navigation.navigate(NavigationRouteNames.TUTOR.SUBJECTS_LIST);
+         return;
+       }
+       case BannerTypeEnum.TUTOR_VIEW_SCHEDULE.label: {
+         navigation.navigate(NavigationRouteNames.TUTOR.VIEW_SCHEDULE);
+         return;
+       }
+       default:
+         return;
+     }
+   };
   const renderCardItem = (item) => (
     <TouchableOpacity
       style={{ width: ITEM_WIDTH, alignItems: 'center', justifyContent: 'center' }}
-      onPress={() => navigation.navigate(item.routeName)}
+      onPress={() => handleBannerClick(item)}
       activeOpacity={0.8}>
       <CustomImage
         image={item.image}
@@ -241,7 +315,7 @@ function TutorDashboard(props) {
         // autoplayInterval={5000}
         // loop
       />
-      {pagination()}
+      {/* {pagination()} */}
     </>
   );
 
