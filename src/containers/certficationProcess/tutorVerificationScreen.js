@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import { Button } from 'native-base';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { RfH, RfW } from '../../utils/helpers';
 import commonStyles from '../../theme/styles';
 import Images from '../../theme/images';
@@ -12,6 +12,7 @@ import { tutorDetails } from '../../apollo/cache';
 import ActionModal from './components/helpSection';
 
 const TutorVerificationScreen = () => {
+	const tutorInfo = useReactiveVar(tutorDetails);
   const [openMenu, setOpenMenu] = useState(false);
   const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
@@ -41,7 +42,7 @@ const TutorVerificationScreen = () => {
       <View style={{ flex: 1, alignItems: 'center', paddingTop: RfH(100), backgroundColor: Colors.white }}>
         <Image source={Images.pendingStatus} style={{ width: RfW(300), height: RfH(300) }} resizeMode="contain" />
         <View style={{ marginTop: RfH(52), alignItems: 'center' }}>
-          <Text style={commonStyles.headingPrimaryText}>Verification Pending</Text>
+          <Text style={commonStyles.headingPrimaryText}>Verification {tutorInfo?.lead?.backgroundCheck?.status}</Text>
           <Text
             style={[
               commonStyles.regularPrimaryText,
