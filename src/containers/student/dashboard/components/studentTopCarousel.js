@@ -95,7 +95,7 @@ const userTokenVal = useReactiveVar(userToken);
           return;
         }
         case BannerTypeEnum.STUDENT_RENEW_CLASS.label: {
-            // navigation.navigate(NavigationRouteNames.STUDENT.PROFILE);
+           navigation.navigate(NavigationRouteNames.MY_CLASSES);
           return;
         }
         default:
@@ -123,39 +123,17 @@ const userTokenVal = useReactiveVar(userToken);
         }}
         onPress={() => handleBannerClick(item)}
         activeOpacity={0.8}>
-           <CustomImage
-        image={item.image}
-        imageWidth={ITEM_WIDTH}
-        imageHeight={ITEM_HEIGHT}
-        imageResizeMode="contain"
-        styling={{ borderRadius: RfW(3) }}
-      />
-        {/* <IconButtonWrapper
+        <IconButtonWrapper
           iconWidth={ITEM_WIDTH}
           iconHeight={ITEM_HEIGHT}
-          styling={{ borderRadius: RfH(8), marginRight: RfW(20) }}
-          imageResizeMode={'contain'}
+          styling={{ borderRadius: RfH(8) }}
           iconImage={getDocumentFileUrl(item.attachment.original, userTokenVal)}
-          submitFunction={() => {}}
-        /> */}
+        />
       </TouchableOpacity>
     );
   }
 
-  // const renderCardItem = (item) => (
-  //   <TouchableOpacity
-  //     style={{ width: ITEM_WIDTH, alignItems: 'center', justifyContent: 'center' }}
-  //     onPress={() => navigation.navigate(item.routeName, item.params)}
-  //     activeOpacity={0.8}>
-  //     <CustomImage
-  //       image={item.image}
-  //       imageWidth={ITEM_WIDTH}
-  //       imageHeight={ITEM_HEIGHT}
-  //       imageResizeMode="contain"
-  //       styling={{ borderRadius: RfW(3) }}
-  //     />
-  //   </TouchableOpacity>
-  // );
+ 
   
   return (
     <>

@@ -105,7 +105,7 @@ const [getTutorSubject, { loading: loadingTutorsOffering }] = useLazyQuery(
     variables: { tutorId: tutorInfo.id },
     onError: (e) => {
       console.log(e);
-      setSubjectListEmpty(subjectsList.length === 0);
+      setSubjectListEmpty(false);
     },
     onCompleted: (data) => {
       if (data) {
