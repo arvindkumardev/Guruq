@@ -21,7 +21,7 @@ import {
 import { RFValue } from 'react-native-responsive-fontsize';
 import { isEmpty } from 'lodash';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { tutorDetails, userDetails } from '../../../../apollo/cache';
+import { tutorDetails, userDetails, userToken } from '../../../../apollo/cache';
 import { IconButtonWrapper, UpcomingClassComponent } from '../../../../components';
 import Loader from '../../../../components/Loader';
 import NavigationRouteNames from '../../../../routes/screenNames';
@@ -39,6 +39,7 @@ import CustomImage from '../../../../components/CustomImage';
 import UserImageComponent from '../../../../components/UserImageComponent';
 import NotificationRedirection from '../../../notification/notificationRedirection';
 import { BannerTypeEnum } from '../../../../common/banner.enum';
+import { getDocumentFileUrl } from '../../../../utils/helpers';
 
 // const carouselItems = [
 //   {
@@ -57,6 +58,7 @@ function TutorDashboard(props) {
 
   const isFocused = useIsFocused();
 
+  const userTokenVal = useReactiveVar(userToken);
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
@@ -245,7 +247,7 @@ function TutorDashboard(props) {
          return;
        }
        case BannerTypeEnum.TUTOR_UPDATE_SCHEDULE.label: {
-         navigation.navigate(NavigationRouteNames.TUTOR.VIEW_SCHEDULE);
+         navigation.navigate(NavigationRouteNames.TUTOR.UPDATE_SCHEDULE);
          return;
        }
        case BannerTypeEnum.TUTOR_UPDATE_PRICE_MATRIX.label: {
@@ -266,15 +268,19 @@ function TutorDashboard(props) {
    };
   const renderCardItem = (item) => (
     <TouchableOpacity
-      style={{ width: ITEM_WIDTH, alignItems: 'center', justifyContent: 'center' }}
+      style={{
+        width: ITEM_WIDTH,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
       onPress={() => handleBannerClick(item)}
       activeOpacity={0.8}>
-      <CustomImage
-        image={item.image}
-        imageWidth={ITEM_WIDTH}
-        imageHeight={ITEM_HEIGHT}
-        imageResizeMode="contain"
-        styling={{ borderRadius: RfW(3) }}
+  
+      <IconButtonWrapper
+        iconWidth={ITEM_WIDTH}
+        iconHeight={ITEM_HEIGHT}
+        styling={{ borderRadius: RfH(8) }}
+        iconImage={getDocumentFileUrl(item.attachment.original, userTokenVal)}
       />
     </TouchableOpacity>
   );
@@ -283,7 +289,7 @@ function TutorDashboard(props) {
     <Pagination
       dotsLength={carouselItems.length}
       activeDotIndex={activeSlide}
-      containerStyle={{ paddingVertical: RfH(4) }}
+      containerStyle={{ paddingVertical: RfH(8) }}
       dotStyle={{
         width: RfH(10),
         height: RfH(10),
@@ -315,7 +321,7 @@ function TutorDashboard(props) {
         // autoplayInterval={5000}
         // loop
       />
-      {/* {pagination()} */}
+      {pagination()}
     </>
   );
 
