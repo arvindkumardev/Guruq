@@ -65,13 +65,13 @@ const CertificationProcessSteps = (props) => {
       });
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFICIENCY_TEST_PENDING.label) {
-      // navigation.navigate(NavigationRouteNames.TUTOR.PT_START_SCREEN, {
-      //   isOnBoarding: true,
-      //   offeringId: leadDetail.tutorOffering?.id,
-      // });
-      navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
+      navigation.navigate(NavigationRouteNames.TUTOR.PT_START_SCREEN, {
         isOnBoarding: true,
+        offeringId: leadDetail.tutorOffering?.id,
       });
+      // navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {
+      //   isOnBoarding: true,
+      // });
     }
     if (leadDetail.certificationStage === TutorCertificationStageEnum.PROFILE_COMPLETION_PENDING.label) {
       navigation.navigate(NavigationRouteNames.TUTOR.COMPLETE_PROFILE, {

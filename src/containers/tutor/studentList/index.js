@@ -24,6 +24,7 @@ function StudentListing(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const [studentList, setStudentList] = useState([]);
+  const [sizeFlag,setSizeFlag]=useState(false)
     const tutorInfo = useReactiveVar(tutorDetails);
   const [displayNoDataFound, setDisplayNoDataFound] = useState(false);
   const [page] = useState(1);
@@ -65,10 +66,9 @@ function StudentListing(props) {
     },
     onCompleted(data) {
       if (data && data?.getTutorStudents && data?.getTutorStudents.edges.length > 0) {
-        console.log('Value of student list is ', data.getTutorStudents.edges);
         setStudentList(data.getTutorStudents.edges);
+             setDisplayNoDataFound(false);
       } else {
-        console.log('data not found');
         setDisplayNoDataFound(true);
       }
     },
@@ -90,8 +90,20 @@ function StudentListing(props) {
           data?.getTutorStudents &&
           data?.getTutorStudents.edges.length > 0
         ) {
-          console.log('By Offering Id Value of student list is ', data.getTutorStudents.edges);
-          setStudentList(data.getTutorStudents.edges);
+              setDisplayNoDataFound(false);
+          if (data.getTutorStudents.edges.length<3)
+          {
+            setSizeFlag(true)
+          }
+          if(isSubScreen)
+          {
+            setStudentList(data.getTutorStudents.edges.slice(0, 3));
+                
+          }
+          else{
+              setStudentList(data.getTutorStudents.edges);
+          }
+          
         } else {
           console.log('data not found');
           setDisplayNoDataFound(true);
@@ -106,7 +118,6 @@ function StudentListing(props) {
       // getting  student list
       if(isSubScreen)
       {
-        console.log("Rohit: Offering id is ",offeringId)
        loadStudentByOfferingId({
          variables: {
               page: parseInt(page, 10),
@@ -146,6 +157,7 @@ function StudentListing(props) {
   }
   
   const onOfferingSelect = (selectedOffering) => {
+    setStudentList([]);
     loadStudentByOfferingId({
       variables: {
         page: parseInt(page, 10),
@@ -158,6 +170,7 @@ function StudentListing(props) {
   };
   
   const clearSelection=()=>{
+    setStudentList([]);
     setShowFilterPopup(false);
     setCurrentSelectedSubject(null)
         loadStudentList({
@@ -168,20 +181,26 @@ function StudentListing(props) {
         });
   }
 
-
   const FilterItem=()=>{
       
       return (
       <View>
          <View>
            <View style={styles.filterContainer}>
-             <Text
+            {studentList.length>0?<Text
                style={[
                  styles.filterText,
                  { position: 'absolute', left: 0, paddingLeft: 12 },
                ]}>
                {studentList.length} Students
-             </Text>
+             </Text>:
+             <Text
+               style={[
+                 styles.filterText,
+                 { position: 'absolute', left: 0, paddingLeft: 12 },
+               ]}>
+               0 Students
+             </Text>}
              <Pressable
                onPress={() => setShowFilterPopup(true)}
                style={[
@@ -216,19 +235,22 @@ function StudentListing(props) {
     }
 
 
+
   if (!displayNoDataFound) {
     return (
       <View style={{ flex: 1, backgroundColor: Colors.white }}>
         {isSubScreen ? (
           <View style={styles.subscreenheadingView}>
             <Text style={styles.subscreenheadingText}>My Students</Text>
-            <Pressable
-              style={styles.subscreenheadingView}
-              onPress={() => {
-                navigation.navigate(routeNames.TUTOR.STUDENT_LISTING);
-              }}>
-              <Text style={styles.textviewAll}>View All</Text>
-            </Pressable>
+            {!sizeFlag ? (
+              <Pressable
+                style={styles.subscreenheadingView}
+                onPress={() => {
+                  navigation.navigate(routeNames.TUTOR.STUDENT_LISTING);
+                }}>
+                <Text style={styles.textviewAll}>View All</Text>
+              </Pressable>
+            ) : null}
           </View>
         ) : (
           <View
@@ -248,8 +270,12 @@ function StudentListing(props) {
             </Text>
           </View>
         )}
-        <Loader isLoading={studentListLoader} />
-        <View>
+        <Loader
+          isLoading={
+            studentListLoader || studentFilterLoader || loadingTutorsOffering
+          }
+        />
+        <View style={{ flex: 1 }}>
           {isSubScreen ? null : <FilterItem />}
           <FlatList
             initialNumToRender={10}
@@ -260,15 +286,14 @@ function StudentListing(props) {
             contentContainerStyle={{ paddingBottom: RfH(studentListPadding) }}
           />
         </View>
-        {studentList.length > 0 ? (
-          <TutorStudentFilterComponent
-            onClose={handleSubjectFilterModal}
-            visible={showFilterPopup}
-            onSelect={onOfferingSelect}
-            offerings={subjectList}
-            clearSelection={clearSelection}
-          />
-        ) : null}
+
+        <TutorStudentFilterComponent
+          onClose={handleSubjectFilterModal}
+          visible={showFilterPopup}
+          onSelect={onOfferingSelect}
+          offerings={subjectList}
+          clearSelection={clearSelection}
+        />
       </View>
     );
   }
@@ -303,6 +328,11 @@ function StudentListing(props) {
           </Text>
         </View>
       )}
+      <Loader
+        isLoading={
+          studentListLoader || studentFilterLoader || loadingTutorsOffering
+        }
+      />
       <View>
         {isSubScreen ? null : <FilterItem />}
         <Image
@@ -337,6 +367,14 @@ function StudentListing(props) {
           Looks like Student haven't booked any class.
         </Text>
         <View style={{ height: RfH(40) }} />
+
+        <TutorStudentFilterComponent
+          onClose={handleSubjectFilterModal}
+          visible={showFilterPopup}
+          onSelect={onOfferingSelect}
+          offerings={subjectList}
+          clearSelection={clearSelection}
+        />
       </View>
     </View>
   );

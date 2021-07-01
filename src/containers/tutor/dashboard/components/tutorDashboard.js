@@ -216,7 +216,6 @@ function TutorDashboard(props) {
   };
 
    const handleBannerClick = async (bannerItem) => {
-     console.log("kabbu---------------->",bannerItem.targetScreenName)
      switch (bannerItem.targetScreenName) {
        case BannerTypeEnum.WEB_VIEW.label: {
          let url = null;
@@ -275,12 +274,13 @@ function TutorDashboard(props) {
       }}
       onPress={() => handleBannerClick(item)}
       activeOpacity={0.8}>
-  
       <IconButtonWrapper
         iconWidth={ITEM_WIDTH}
         iconHeight={ITEM_HEIGHT}
         styling={{ borderRadius: RfH(8) }}
+        imageResizeMode={'contain'}
         iconImage={getDocumentFileUrl(item.attachment.original, userTokenVal)}
+        placeHolderImage={Images.empty_classes}
       />
     </TouchableOpacity>
   );

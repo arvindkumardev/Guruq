@@ -28,3 +28,14 @@ export const ADD_REVIEW = gql`
     }
   }
 `;
+
+
+export const ADD_STUDENT_FEEDBACK = gql`
+  mutation AddStudentFeedBack(
+    $studentFeedback: CreateUpdateStudentFeedbackDto!
+  ) {
+    addStudentFeedback(studentFeedback: $studentFeedback) {
+      id
+    }
+  }
+`;
