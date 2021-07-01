@@ -26,6 +26,7 @@ import ActionSheet from '../../components/ActionSheet';
 import UploadDocument from '../../components/UploadDocument';
 import { ClassStatusEnum, DocumentTypeEnum } from '../common/enums';
 import CustomModalDocumentViewer from '../../components/CustomModalDocumentViewer';
+import StudentReviewModal from '../../components/StudentReviewModal';
 
 function ScheduledClassDetails(props) {
   const navigation = useNavigation();
@@ -47,6 +48,7 @@ function ScheduledClassDetails(props) {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
+  const [showStudentReviewPopup,setShowStudentReviewPopup]=useState(false)
   const [menuItem, setMenuItem] = useState([]);
   const [token, setToken] = useState();
 
@@ -102,7 +104,7 @@ function ScheduledClassDetails(props) {
       }
     },
   });
-
+  console.log("Rohit==========>",classData)
   const handleAcceptedFiles = async (file) => {
     setIsUploadModalOpen(false);
     const headers = new Headers();
@@ -155,6 +157,12 @@ function ScheduledClassDetails(props) {
   useEffect(() => {
     if (route.params.showReviewModal && isFocussed && isStudent && !classReviewed) {
       setShowReviewPopup(true);
+    }
+    else{
+      if(route.params.showReviewModal && isFocussed && !isStudent && !classReviewed)
+      {
+        setShowStudentReviewPopup(true)
+      }
     }
   }, [route.params.showReviewModal, isFocussed]);
 
@@ -287,8 +295,17 @@ function ScheduledClassDetails(props) {
 
   return (
     <>
-      <View style={{ backgroundColor: Colors.white, flex: 1 }} activeOpacity={1}>
-        <Loader isLoading={isFileUploading || classDetailsLoading || scheduleLoading || addDocumentLoading} />
+      <View
+        style={{ backgroundColor: Colors.white, flex: 1 }}
+        activeOpacity={1}>
+        <Loader
+          isLoading={
+            isFileUploading ||
+            classDetailsLoading ||
+            scheduleLoading ||
+            addDocumentLoading
+          }
+        />
         {!isEmpty(classData) && (
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -303,7 +320,12 @@ function ScheduledClassDetails(props) {
                   paddingRight: RfW(16),
                   flex: 1,
                 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingVertical: RfH(16) }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    paddingVertical: RfH(16),
+                  }}>
                   <BackArrow action={onBackPress} />
                   <View
                     style={[
@@ -314,13 +336,23 @@ function ScheduledClassDetails(props) {
                       },
                     ]}>
                     <Text
-                      style={[styles.subjectTitle, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]}
+                      style={[
+                        styles.subjectTitle,
+                        { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) },
+                      ]}
                       numberOfLines={1}>
-                      {`${classData?.classEntity?.offering?.displayName} by ${getFullName(
-                        classData?.classEntity?.tutor?.contactDetail
+                      {`${
+                        classData?.classEntity?.offering?.displayName
+                      } by ${getFullName(
+                        classData?.classEntity?.tutor?.contactDetail,
                       )}`}
                     </Text>
-                    <Text style={[styles.classText, { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) }]} numberOfLines={1}>
+                    <Text
+                      style={[
+                        styles.classText,
+                        { fontSize: RFValue(17, STANDARD_SCREEN_SIZE) },
+                      ]}
+                      numberOfLines={1}>
                       {`${classData?.classEntity?.offering?.parentOffering?.displayName} | ${classData?.classEntity?.offering?.parentOffering?.parentOffering?.displayName}`}
                     </Text>
                   </View>
@@ -378,13 +410,30 @@ function ScheduledClassDetails(props) {
                 </View>
               </View>
             </View>
-            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16), marginTop: RfH(25) }]}>
-              <IconButtonWrapper iconHeight={RfH(16)} iconWidth={RfW(16)} iconImage={Images.tutor_icon} />
-              <Text style={[commonStyles.headingPrimaryText, { marginLeft: RfW(16) }]}>Tutor</Text>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                { paddingHorizontal: RfW(16), marginTop: RfH(25) },
+              ]}>
+              <IconButtonWrapper
+                iconHeight={RfH(16)}
+                iconWidth={RfW(16)}
+                iconImage={Images.tutor_icon}
+              />
+              <Text
+                style={[
+                  commonStyles.headingPrimaryText,
+                  { marginLeft: RfW(16) },
+                ]}>
+                Tutor
+              </Text>
             </View>
             {!isEmpty(classData) && (
               <TouchableOpacity
-                style={[commonStyles.horizontalChildrenView, { margin: RfW(16), marginLeft: 56 }]}
+                style={[
+                  commonStyles.horizontalChildrenView,
+                  { margin: RfW(16), marginLeft: 56 },
+                ]}
                 activeOpacity={0.8}
                 onPress={handleTutorDetail}
                 disabled={!isStudent}>
@@ -395,38 +444,75 @@ function ScheduledClassDetails(props) {
                   fontSize={16}
                   styling={{ borderRadius: RfH(36) }}
                 />
-                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+                <View
+                  style={[
+                    commonStyles.verticallyStretchedItemsView,
+                    { marginLeft: RfW(8) },
+                  ]}>
                   <Text style={commonStyles.headingPrimaryText}>
                     {getFullName(classData?.classEntity?.tutor?.contactDetail)}
                   </Text>
-                  <Text style={commonStyles.mediumMutedText}>T-{classData?.classEntity?.tutor?.id}</Text>
+                  <Text style={commonStyles.mediumMutedText}>
+                    T-{classData?.classEntity?.tutor?.id}
+                  </Text>
                 </View>
               </TouchableOpacity>
             )}
             <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-              <IconButtonWrapper iconImage={Images.calendar_icon} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-                <Text style={commonStyles.headingPrimaryText}>{printDate(classData?.classEntity?.startDate)}</Text>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                { paddingHorizontal: RfH(16), height: 60 },
+              ]}>
+              <IconButtonWrapper
+                iconImage={Images.calendar_icon}
+                iconWidth={RfW(16)}
+                iconHeight={RfH(16)}
+              />
+              <View
+                style={[
+                  commonStyles.verticallyStretchedItemsView,
+                  { marginLeft: RfW(16) },
+                ]}>
+                <Text style={commonStyles.headingPrimaryText}>
+                  {printDate(classData?.classEntity?.startDate)}
+                </Text>
                 <Text style={commonStyles.mediumMutedText}>
-                  {printTime(classData?.classEntity?.startDate)} - {printTime(classData?.classEntity?.endDate)}
+                  {printTime(classData?.classEntity?.startDate)} -{' '}
+                  {printTime(classData?.classEntity?.endDate)}
                 </Text>
               </View>
             </View>
 
             <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                { paddingHorizontal: RfH(16), height: 60 },
+              ]}>
               <IconButtonWrapper
-                iconImage={classData?.classEntity?.onlineClass ? Images.laptop : Images.home}
+                iconImage={
+                  classData?.classEntity?.onlineClass
+                    ? Images.laptop
+                    : Images.home
+                }
                 iconWidth={RfW(16)}
                 iconHeight={RfH(16)}
                 imageResizeMode="contain"
               />
               <View style={commonStyles.horizontalChildrenSpaceView}>
-                <View style={[commonStyles.verticallyStretchedItemsView, { flex: 1, marginLeft: RfW(16) }]}>
-                  <Text style={commonStyles.headingPrimaryText}>Class Mode</Text>
+                <View
+                  style={[
+                    commonStyles.verticallyStretchedItemsView,
+                    { flex: 1, marginLeft: RfW(16) },
+                  ]}>
+                  <Text style={commonStyles.headingPrimaryText}>
+                    Class Mode
+                  </Text>
                   <Text style={commonStyles.mediumMutedText}>
-                    {classData?.classEntity?.onlineClass ? 'Online Class' : 'Home Tuition'}
+                    {classData?.classEntity?.onlineClass
+                      ? 'Online Class'
+                      : 'Home Tuition'}
                   </Text>
                 </View>
 
@@ -439,7 +525,13 @@ function ScheduledClassDetails(props) {
                       paddingVertical: RfH(4),
                       borderRadius: RfH(8),
                     }}>
-                    <Text style={[commonStyles.mediumPrimaryText, { color: Colors.white }]}>Demo</Text>
+                    <Text
+                      style={[
+                        commonStyles.mediumPrimaryText,
+                        { color: Colors.white },
+                      ]}>
+                      Demo
+                    </Text>
                   </View>
                 )}
               </View>
@@ -460,17 +552,26 @@ function ScheduledClassDetails(props) {
             {/* </View> */}
 
             <View style={commonStyles.lineSeparatorWithHorizontalMargin} />
-            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                { paddingHorizontal: RfH(16), height: 60 },
+              ]}>
               <IconButtonWrapper
                 iconImage={Images.attendees}
                 iconWidth={RfW(16)}
                 iconHeight={RfH(16)}
                 imageResizeMode="contain"
               />
-              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16), flex: 1 }]}>
+              <View
+                style={[
+                  commonStyles.verticallyStretchedItemsView,
+                  { marginLeft: RfW(16), flex: 1 },
+                ]}>
                 <Text style={commonStyles.headingPrimaryText}>Attendees</Text>
                 <Text style={commonStyles.mediumMutedText}>
-                  {classData?.classEntity?.students?.length} participant(s) to join the Class
+                  {classData?.classEntity?.students?.length} participant(s) to
+                  join the Class
                 </Text>
               </View>
               {/* {classData?.isMessagingAllowed && ( */}
@@ -496,12 +597,26 @@ function ScheduledClassDetails(props) {
             <View
               style={[
                 commonStyles.horizontalChildrenSpaceView,
-                { paddingHorizontal: RfH(16), paddingTop: RfH(10), alignItems: 'center' },
+                {
+                  paddingHorizontal: RfH(16),
+                  paddingTop: RfH(10),
+                  alignItems: 'center',
+                },
               ]}>
               <View style={{ flexDirection: 'row' }}>
-                <IconButtonWrapper iconImage={Images.attachment} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-                <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-                  <Text style={commonStyles.headingPrimaryText}>Attachments</Text>
+                <IconButtonWrapper
+                  iconImage={Images.attachment}
+                  iconWidth={RfW(16)}
+                  iconHeight={RfH(16)}
+                />
+                <View
+                  style={[
+                    commonStyles.verticallyStretchedItemsView,
+                    { marginLeft: RfW(16) },
+                  ]}>
+                  <Text style={commonStyles.headingPrimaryText}>
+                    Attachments
+                  </Text>
                 </View>
               </View>
               <View>
@@ -518,17 +633,29 @@ function ScheduledClassDetails(props) {
             </View>
 
             {!isEmpty(classData?.classEntity?.documents) ? (
-              <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfW(16) }]}>
+              <View
+                style={[
+                  commonStyles.horizontalChildrenView,
+                  { paddingHorizontal: RfW(16) },
+                ]}>
                 <FlatList
                   style={{ marginBottom: RfH(16), marginLeft: 40 }}
                   showsHorizontalScrollIndicator={false}
-                  data={classData?.classEntity?.documents.sort((a, b) => (a.id < b.id ? 1 : -1))}
-                  renderItem={({ item, index }) => renderAttachments(item, index)}
+                  data={classData?.classEntity?.documents.sort((a, b) =>
+                    a.id < b.id ? 1 : -1,
+                  )}
+                  renderItem={({ item, index }) =>
+                    renderAttachments(item, index)
+                  }
                   keyExtractor={(item, index) => index.toString()}
                 />
               </View>
             ) : (
-              <View style={[commonStyles.horizontalChildrenView, { paddingLeft: RfW(50), padding: RfW(16) }]}>
+              <View
+                style={[
+                  commonStyles.horizontalChildrenView,
+                  { paddingLeft: RfW(50), padding: RfW(16) },
+                ]}>
                 <Text>No documents uploaded by the tutor.</Text>
               </View>
             )}
@@ -537,18 +664,40 @@ function ScheduledClassDetails(props) {
 
             {classData?.classEntity?.address && (
               <>
-                <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16), height: 60 }]}>
-                  <IconButtonWrapper iconImage={Images.pin} iconWidth={RfW(16)} iconHeight={RfH(16)} />
-                  <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
-                    <Text style={commonStyles.headingPrimaryText}>Class Location </Text>
+                <View
+                  style={[
+                    commonStyles.horizontalChildrenView,
+                    { paddingHorizontal: RfH(16), height: 60 },
+                  ]}>
+                  <IconButtonWrapper
+                    iconImage={Images.pin}
+                    iconWidth={RfW(16)}
+                    iconHeight={RfH(16)}
+                  />
+                  <View
+                    style={[
+                      commonStyles.verticallyStretchedItemsView,
+                      { marginLeft: RfW(16) },
+                    ]}>
+                    <Text style={commonStyles.headingPrimaryText}>
+                      Class Location{' '}
+                    </Text>
                   </View>
                 </View>
                 <View style={{ paddingHorizontal: RfW(16) }}>
                   <Text style={commonStyles.headingPrimaryText}>Block 27</Text>
-                  <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                  <Text
+                    style={{
+                      fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                      color: Colors.darkGrey,
+                    }}>
                     Block 72, , Ashok Nagar, New Delhi, Delhi 110018, India
                   </Text>
-                  <Text style={{ fontSize: RFValue(15, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+                  <Text
+                    style={{
+                      fontSize: RFValue(15, STANDARD_SCREEN_SIZE),
+                      color: Colors.darkGrey,
+                    }}>
                     Landmark : Monga Sweets
                   </Text>
                 </View>
@@ -563,22 +712,34 @@ function ScheduledClassDetails(props) {
                       latitudeDelta: 0.0922,
                       longitudeDelta: 0.0421,
                     }}>
-                    <Marker coordinate={{ latitude: 28.561929, longitude: 77.06681 }} />
+                    <Marker
+                      coordinate={{ latitude: 28.561929, longitude: 77.06681 }}
+                    />
                   </MapView>
                 </View>
               </>
             )}
 
-            <View style={[commonStyles.horizontalChildrenView, { paddingHorizontal: RfH(16) }]}>
+            <View
+              style={[
+                commonStyles.horizontalChildrenView,
+                { paddingHorizontal: RfH(16) },
+              ]}>
               <IconButtonWrapper
                 iconImage={Images.personal}
                 iconWidth={RfW(16)}
                 iconHeight={RfH(16)}
                 imageResizeMode="contain"
               />
-              <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(16) }]}>
+              <View
+                style={[
+                  commonStyles.verticallyStretchedItemsView,
+                  { marginLeft: RfW(16) },
+                ]}>
                 <Text style={commonStyles.headingPrimaryText}>Class ID</Text>
-                <Text style={commonStyles.mediumMutedText}>C-{classData?.classEntity?.id}</Text>
+                <Text style={commonStyles.mediumMutedText}>
+                  C-{classData?.classEntity?.id}
+                </Text>
                 {/* <Text style={commonStyles.mediumMutedText}>classData?. */}
                 {/* </Text> */}
               </View>
@@ -600,10 +761,14 @@ function ScheduledClassDetails(props) {
                     onPress={() =>
                       classData?.isClassJoinAllowed
                         ? goToOnlineClass()
-                        : alertBox('You can join the class 15 mins before the start time.')
+                        : alertBox(
+                            'You can join the class 15 mins before the start time.',
+                          )
                     }
                     style={[
-                      classData?.isClassJoinAllowed ? commonStyles.buttonPrimary : commonStyles.disableButton,
+                      classData?.isClassJoinAllowed
+                        ? commonStyles.buttonPrimary
+                        : commonStyles.disableButton,
                       {
                         borderRadius: 4,
                         marginHorizontal: 0,
@@ -615,7 +780,13 @@ function ScheduledClassDetails(props) {
                       iconWidth={RfW(16)}
                       styling={{ alignSelf: 'center' }}
                     />
-                    <Text style={[commonStyles.textButtonPrimary, { marginLeft: RfW(8) }]}>Join Class</Text>
+                    <Text
+                      style={[
+                        commonStyles.textButtonPrimary,
+                        { marginLeft: RfW(8) },
+                      ]}>
+                      Join Class
+                    </Text>
                   </Button>
                 ) : (
                   <Button style={commonStyles.buttonOutlineSecondary}>
@@ -654,6 +825,15 @@ function ScheduledClassDetails(props) {
             }}
             classDetails={classData?.classEntity}
           />
+        )}
+        {showStudentReviewPopup && !classReviewed && (
+          <StudentReviewModal visible={showStudentReviewPopup}
+          onClose={() => {
+              setShowStudentReviewPopup(false);
+              setClassReviewed(true);
+            }}
+            classDetails={classData?.classEntity}
+           />
         )}
 
         <ActionSheet

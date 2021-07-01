@@ -33,7 +33,7 @@ const userTokenVal = useReactiveVar(userToken);
     useLazyQuery(GET_APP_CAROUSELS, {
       fetchPolicy: 'no-cache',
       onError: (e) => {
-        console.log("Mangi:  App Carsousel error is=-======>",e);
+        
       },
       onCompleted: (data) => {
         if (data) {
@@ -126,8 +126,10 @@ const userTokenVal = useReactiveVar(userToken);
         <IconButtonWrapper
           iconWidth={ITEM_WIDTH}
           iconHeight={ITEM_HEIGHT}
+          imageResizeMode={"contain"}
           styling={{ borderRadius: RfH(8) }}
           iconImage={getDocumentFileUrl(item.attachment.original, userTokenVal)}
+          placeHolderImage={Images.empty_classes}
         />
       </TouchableOpacity>
     );
