@@ -104,6 +104,9 @@ export const GET_CURRENT_TUTOR_QUERY = gql`
     getCurrentTutor {
       id
       certified
+      additionalProperties {
+        covidVaccinated
+      }
       contactDetail {
         firstName
         lastName

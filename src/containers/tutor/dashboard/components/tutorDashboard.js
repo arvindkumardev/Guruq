@@ -29,7 +29,10 @@ import { Colors, Images } from '../../../../theme';
 import { getBoxColor } from '../../../../theme/colors';
 import Fonts from '../../../../theme/fonts';
 import commonStyles from '../../../../theme/styles';
-import { STANDARD_SCREEN_SIZE } from '../../../../utils/constants';
+import {
+  STANDARD_SCREEN_SIZE,
+  GURUQ_WHATSAPP_NUMBER_VACCINATION,
+} from '../../../../utils/constants';
 import { alertBox, deviceWidth, getSubjectIcons, printDate, RfH, RfW } from '../../../../utils/helpers';
 import { GET_SCHEDULED_CLASSES } from '../../../student/booking.query';
 import { GET_TUTOR_OFFERINGS } from '../../../student/tutor-query';
@@ -71,6 +74,39 @@ function TutorDashboard(props) {
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.9);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 3) / 4);
+  
+
+  useEffect(()=>{
+
+    if(tutorInfo)
+    {
+      if (!(tutorInfo?.additionalProperties?.covidVaccinated)) {
+           alertBox(
+             'Alert',
+             'You need to get covid vaccinated for taking the offline class. Connect us on WhatsApp no  919891587300  to know more',
+             {
+               positiveText: 'Yes',
+               onPositiveClick: () => {
+                openWhatsappPopup()
+               },
+               negativeText: 'No',
+             },
+           );
+      }
+    }
+  },[])
+
+  function openWhatsappPopup()
+  {
+      const url = `whatsapp://send?text=Hi&phone=91${GURUQ_WHATSAPP_NUMBER_VACCINATION}`;
+      Linking.openURL(url)
+        .then((data) => {
+          console.log(`WhatsApp Opened successfully ${data}`); // <---Success
+        })
+        .catch(() => {
+          alertBox('Make sure WhatsApp installed on your device'); // <---Error
+        });
+  }
 
   useEffect(() => {
     if (isFocused) {

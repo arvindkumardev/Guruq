@@ -109,11 +109,7 @@ const userTokenVal = useReactiveVar(userToken);
 
 
     const renderCardItem=(item,index)=>{
-    console.log("Mangi: Value of item is as follows ",item)
-    console.log(
-      'Mangi: value of attachment ',
-      getDocumentFileUrl(item.attachment.original, userTokenVal),
-  );
+
     return (
       <TouchableOpacity
         style={{
