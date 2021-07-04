@@ -132,7 +132,7 @@ android {
         applicationId "com.guruq"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5000061
+        versionCode 5000062
         versionName "2.1.1"
         multiDexEnabled true
     }
