@@ -253,6 +253,8 @@ const Images = {
 
   discount1: require('../assets/images/discount1.png'),
 
+  vaccine: require('../assets/images/vaccine.png'),
+
   ...SubjectIcons,
 };
 

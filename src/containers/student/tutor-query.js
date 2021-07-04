@@ -8,6 +8,9 @@ export const SEARCH_TUTORS = gql`
         teachingExperience
         averageRating
         reviewCount
+        additionalProperties {
+          covidVaccinated
+        }
         profileImage {
           id
           name

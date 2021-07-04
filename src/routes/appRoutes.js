@@ -110,18 +110,6 @@ const AppStack = (props) => {
   });
 
   useEffect(() => {
-    if (!isEmpty(userDetailsObj)) {
-      getFcmToken().then((token) => {
-        if (token) {
-          createPayload(userDetailsObj.me, token).then((payload) => {
-            registerDevice({ variables: { deviceDto: payload } });
-          });
-        }
-      });
-    }
-  }, [userDetailsObj]);
-
-  useEffect(() => {
     requestUserPermission();
     initializeNotification();
     getFcmToken().then((token) => {
