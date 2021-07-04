@@ -9,7 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Root } from 'native-base';
-// import TestFairy from 'react-native-testfairy';
+import TestFairy from 'react-native-testfairy';
 import { getToken } from './utils/helpers';
 import { appMetaData, isLoggedIn, isSplashScreenVisible, isTokenLoading, userToken, userType } from './apollo/cache';
 import AppStack from './routes/appRoutes';
