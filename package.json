@@ -12,7 +12,7 @@
     "clean:ios": "cd ios && xcodebuild clean && cd ../",
     "clean-android-assets": "rm -rf ./android/app/src/main/res/drawable-*; rm -rf ./android/app/src/main/res/raw-*",
     "postinstall": "patch-package",
-    "release:android": "cd android ./gradlew clean && ./gradlew assembleRelease",
+    "release:android": "cd android && ./gradlew clean && ./gradlew assembleRelease",
     "release:ios": "yarn clean:ios && react-native run-ios --configuration=release",
     "release": "yarn release:android && yarn release:ios"
   },
