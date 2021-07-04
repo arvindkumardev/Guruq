@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     fontSize: RFValue(24, STANDARD_SCREEN_SIZE),
     fontFamily: Fonts.bold,
     color: Colors.black,
-    lineHeight:27
+    lineHeight: 27,
   },
   // titleText: {
   //   fontSize: RFValue(17, STANDARD_SCREEN_SIZE),
@@ -284,6 +284,11 @@ const styles = StyleSheet.create({
   rhaText: {
     fontSize: RFValue(12, STANDARD_SCREEN_SIZE),
     color: Colors.secondaryText,
+    textAlign: 'center',
+  },
+  warningTextColor: {
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
+    color: Colors.orangeRed,
     textAlign: 'center',
   },
 });

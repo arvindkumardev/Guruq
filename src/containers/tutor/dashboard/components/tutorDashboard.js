@@ -375,9 +375,16 @@ function TutorDashboard(props) {
           alignItems: 'stretch',
           backgroundColor: Colors.white,
         }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: RfW(16) }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            paddingHorizontal: RfW(16),
+          }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate(NavigationRouteNames.NOTIFICATIONS)}
+            onPress={() =>
+              navigation.navigate(NavigationRouteNames.NOTIFICATIONS)
+            }
             style={{ paddingLeft: RfW(8) }}>
             <IconButtonWrapper
               iconImage={Images.bell}
@@ -413,15 +420,32 @@ function TutorDashboard(props) {
               paddingHorizontal: RfW(16),
             }}>
             <View style={{ flex: 0.7 }}>
-              <Text style={{ fontFamily: Fonts.bold, fontSize: 34, color: Colors.primaryText }}>
+              <Text
+                style={{
+                  fontFamily: Fonts.bold,
+                  fontSize: 34,
+                  color: Colors.primaryText,
+                }}>
                 Hi {userInfo?.firstName}
               </Text>
             </View>
-            <View style={{ flexDirection: 'row', flex: 0.3, justifyContent: 'flex-end' }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 0.3,
+                justifyContent: 'flex-end',
+              }}>
               <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.PROFILE)}>
-                <UserImageComponent height={40} width={40} fontSize={16} styling={{ borderRadius: RfH(40) }} />
+                onPress={() =>
+                  navigation.navigate(NavigationRouteNames.TUTOR.PROFILE)
+                }>
+                <UserImageComponent
+                  height={40}
+                  width={40}
+                  fontSize={16}
+                  styling={{ borderRadius: RfH(40) }}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -437,10 +461,18 @@ function TutorDashboard(props) {
                     justifyContent: 'space-between',
                     alignItems: 'flex-end',
                   }}>
-                  <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                  <Text
+                    style={{
+                      color: Colors.primaryText,
+                      fontFamily: Fonts.bold,
+                      fontSize: 20,
+                    }}>
                     Upcoming Classes
                   </Text>
-                  <TouchableWithoutFeedback onPress={() => navigation.navigate(NavigationRouteNames.CALENDAR)}>
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      navigation.navigate(NavigationRouteNames.CALENDAR)
+                    }>
                     <Text
                       style={{
                         color: Colors.brandBlue2,
@@ -455,7 +487,12 @@ function TutorDashboard(props) {
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={upcomingClasses}
-                    renderItem={({ item, index }) => <UpcomingClassComponent classDetails={item} index={index} />}
+                    renderItem={({ item, index }) => (
+                      <UpcomingClassComponent
+                        classDetails={item}
+                        index={index}
+                      />
+                    )}
                     keyExtractor={(item, index) => index.toString()}
                   />
                 </View>
@@ -470,11 +507,20 @@ function TutorDashboard(props) {
                     justifyContent: 'space-between',
                     alignItems: 'flex-end',
                   }}>
-                  <Text style={{ color: Colors.primaryText, fontFamily: Fonts.bold, fontSize: 20 }}>
+                  <Text
+                    style={{
+                      color: Colors.primaryText,
+                      fontFamily: Fonts.bold,
+                      fontSize: 20,
+                    }}>
                     My Active Subjects
                   </Text>
                   <TouchableWithoutFeedback
-                    onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.SUBJECTS_LIST)}>
+                    onPress={() =>
+                      navigation.navigate(
+                        NavigationRouteNames.TUTOR.SUBJECTS_LIST,
+                      )
+                    }>
                     <Text
                       style={{
                         color: Colors.brandBlue2,
@@ -484,12 +530,19 @@ function TutorDashboard(props) {
                     </Text>
                   </TouchableWithoutFeedback>
                 </View>
-                <View style={{ marginTop: RfH(8), flex: 1, justifyContent: 'space-between' }}>
+                <View
+                  style={{
+                    marginTop: RfH(8),
+                    flex: 1,
+                    justifyContent: 'space-between',
+                  }}>
                   <FlatList
                     data={subjects.slice(0, 6)}
                     extraData={refreshSubjectList}
                     numColumns={2}
-                    renderItem={({ item, index }) => renderSubjects(item, index)}
+                    renderItem={({ item, index }) =>
+                      renderSubjects(item, index)
+                    }
                     keyExtractor={(item, index) => index.toString()}
                   />
                 </View>
@@ -497,9 +550,14 @@ function TutorDashboard(props) {
             )}
 
             <View style={commonStyles.blankViewMedium} />
-
+           {!(tutorInfo?.additionalProperties?.covidVaccinated)? <Text style={commonStyles.warningTextColor}>
+              You need to get covid vaccinated for taking the offline class.
+              Connect us on WhatsApp no 919891587300 to know more
+            </Text>:null}
             <TouchableOpacity
-              onPress={() => navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS)}
+              onPress={() =>
+                navigation.navigate(NavigationRouteNames.TUTOR.STUDENT_REQUESTS)
+              }
               style={{ marginTop: RfH(20) }}
               activeOpacity={0.8}>
               <Image
@@ -512,7 +570,9 @@ function TutorDashboard(props) {
               />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate(NavigationRouteNames.REFER_EARN)}
+              onPress={() =>
+                navigation.navigate(NavigationRouteNames.REFER_EARN)
+              }
               style={{ marginBottom: RfH(15) }}
               activeOpacity={0.8}>
               <Image
