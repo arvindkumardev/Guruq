@@ -106,6 +106,14 @@ const MyCart = () => {
           setCartItems(data.getCartItems);
           setAmount(sum(data.getCartItems.map((item) => item.price)));
           setCartEmpty(false);
+										// Set promo code if there in the cart.
+      data.getCartItems.forEach((ci) => {
+							if (ci.promotion){
+								setAppliedCoupon(ci.promotion);
+								setCouponApplied(true);
+							}
+					});
+								
         } else {
           setCartEmpty(true);
         }
