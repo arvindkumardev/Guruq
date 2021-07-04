@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, FlatList ,TouchableOpacity} from 'react-native';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useIsFocused,useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -13,8 +13,10 @@ import { getFullName, RfH, RfW } from '../../../utils/helpers';
 import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { styles } from './styles';
 import { SEARCH_ORDER_ITEMS } from '../../student/booking.query';
+import { SEARCH_REVIEW } from '../../student/tutor-query';
 import TutorImageComponent from '../../../components/TutorImageComponent';
 import NavigationRouteNames from '../../../routes/screenNames';
+import { tutorDetails } from '../../../apollo/cache';
 import RatingView from './ratingview'
 
 const StudentClassComponent = ({ student, subject }) => {
@@ -23,7 +25,12 @@ const StudentClassComponent = ({ student, subject }) => {
   const [isEmpty, setIsEmpty] = useState(false);
   const isFoucsed = useIsFocused();
   const [orderList, setOrderList] = useState([]);
-  
+  const tutorInfo = useReactiveVar(tutorDetails);
+  const [reviewArray,setReviewArray]=useState([])
+  console.log('Rohit tutor user info is ', tutorInfo);
+  console.log("Rohit student details is ",student)
+    console.log('Rohit subject ', subject);
+
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -41,6 +48,23 @@ const StudentClassComponent = ({ student, subject }) => {
     },
   });
 
+
+ const [searchCurrentStudentReview, { loading: loadCurrentStudentReview }] = useLazyQuery(
+   SEARCH_REVIEW,
+   {
+     fetchPolicy: 'no-cache',
+     onError: (e) => {
+       console.log(e);
+     },
+     onCompleted: (data) => {
+       if (data && data?.searchReview && data?.searchReview.edges.length > 0) {
+         setReviewArray(data.searchReview.edges);
+       }
+     },
+   },
+ );
+
+
   const onClicked = (isHistory) => {
     searchOrderItems({
       variables: {
@@ -57,6 +81,23 @@ const StudentClassComponent = ({ student, subject }) => {
     setIsHistorySelected(isHistory);
   };
 
+
+  useEffect(() => {
+    console.log("Rohit api called again",subject)
+    setReviewArray([])
+    searchCurrentStudentReview({
+      variables: {
+        reviewSearchDto: {
+          tutorId: tutorInfo.id,
+          createdById: student.user.id,
+          sortBy: 'createdDate',
+          sortOrder: 'DSC',
+          offeringId: subject.id,
+        },
+      },
+    });
+  }, [subject]);
+
   useEffect(() => {
     if (isFoucsed) {
       searchOrderItems({
@@ -68,6 +109,17 @@ const StudentClassComponent = ({ student, subject }) => {
             showHistory: false,
             showWithAvailableClasses: !false,
             size: 2,
+          },
+        },
+      });
+      searchCurrentStudentReview({
+        variables: {
+          reviewSearchDto: {
+            tutorId: tutorInfo.id,
+            createdById: student.user.id,
+            sortBy: 'createdDate',
+            sortOrder: 'DSC',
+            offeringId:subject.id
           },
         },
       });
@@ -212,7 +264,7 @@ const StudentClassComponent = ({ student, subject }) => {
   return (
     <>
       <View style={[commonStyles.mainContainer]}>
-        <Loader isLoading={loadingBookings} />
+        <Loader isLoading={loadingBookings || loadCurrentStudentReview} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           stickyHeaderIndices={[1]}
@@ -338,7 +390,7 @@ const StudentClassComponent = ({ student, subject }) => {
               <View style={{ height: RfH(40) }} />
             </View>
           )}
-          {/* <RatingView student={student}/> */}
+          {reviewArray.length>0?<RatingView student={student} reviewArray={reviewArray}/>:null}
         </ScrollView>
       </View>
     </>

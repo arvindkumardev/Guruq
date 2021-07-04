@@ -56,7 +56,7 @@ function StudentDashboard(props) {
   const offeringMasterData = useReactiveVar(offeringsMasterData);
   const interestedOfferings = useReactiveVar(interestingOfferingData);
   const studentInfo = useReactiveVar(studentDetails);
-
+   console.log('Rohit: User info is  ', userInfo);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
   const [studentOfferingModalVisible, setStudentOfferingModalVisible] = useState(false);
   const [selectedOffering, setSelectedOffering] = useState({});

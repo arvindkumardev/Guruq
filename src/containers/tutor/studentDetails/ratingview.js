@@ -5,14 +5,18 @@ import commonStyles from '../../../theme/styles';
 import { Fonts, Images, Colors } from '../../../theme';
 import { RfH, RfW, getFullName } from '../../../utils/helpers';
 import { IconButtonWrapper } from '../../../components';
+import moment from 'moment';
 import StudentImageComponent from '../../../components/StudentImageComponent';
 
-const RatingView = ({ student }) => {
-  const reviewText = 'The Session With tutors stimulate the mind & \n bring in being at school feeling as well.';
-
+const RatingView = ({ student,reviewArray }) => {
+  const reviewData = reviewArray[0]  
   return (
     <View style={{ marginBottom: RfH(30) }}>
-      <Text style={[commonStyles.regularPrimaryText, { fontFamily: Fonts.bold, marginBottom: RfH(16) }]}>
+      <Text
+        style={[
+          commonStyles.regularPrimaryText,
+          { fontFamily: Fonts.bold, marginBottom: RfH(16) },
+        ]}>
         Rating & Reviews
       </Text>
       <View
@@ -40,8 +44,11 @@ const RatingView = ({ student }) => {
               }}>
               {getFullName(student?.contactDetail)}
             </Text>
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontSize: 10 }}>18 Aug |</Text>
+            <View
+              style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontSize: 10 }}>
+                {moment(reviewData.createdDate).format('DD-MMM-YYYY')} |
+              </Text>
               <IconButtonWrapper
                 iconImage={Images.star_orange}
                 iconWidth={RfW(11)}
@@ -51,7 +58,7 @@ const RatingView = ({ student }) => {
                   paddingHorizontal: 2,
                 }}
               />
-              <Text style={{ fontSize: 10 }}>5.0</Text>
+              <Text style={{ fontSize: 10 }}>{reviewData.overallRating}</Text>
             </View>
           </View>
         </View>
@@ -65,12 +72,16 @@ const RatingView = ({ student }) => {
             alignSelf: 'flex-start',
             color: Colors.darkGrey,
           }}>
-          {reviewText}
+          {reviewData.text}
         </Text>
       </View>
-      <Text style={[commonStyles.mediumPrimaryText, { marginTop: 8, alignSelf: 'flex-end', color: Colors.brandBlue2 }]}>
+      {/* <Text
+        style={[
+          commonStyles.mediumPrimaryText,
+          { marginTop: 8, alignSelf: 'flex-end', color: Colors.brandBlue2 },
+        ]}>
         View All
-      </Text>
+      </Text> */}
     </View>
   );
 };

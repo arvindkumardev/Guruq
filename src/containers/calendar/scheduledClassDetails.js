@@ -25,6 +25,8 @@ import VideoMessagingModal from '../onlineClass/components/videoMessagingModal';
 import ActionSheet from '../../components/ActionSheet';
 import UploadDocument from '../../components/UploadDocument';
 import { ClassStatusEnum, DocumentTypeEnum } from '../common/enums';
+import { SEARCH_REVIEW } from '../student/tutor-query';
+import moment from 'moment';
 import CustomModalDocumentViewer from '../../components/CustomModalDocumentViewer';
 import StudentReviewModal from '../../components/StudentReviewModal';
 
@@ -48,8 +50,9 @@ function ScheduledClassDetails(props) {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
-  const [showStudentReviewPopup,setShowStudentReviewPopup]=useState(false)
+  const [showStudentReviewPopup, setShowStudentReviewPopup] = useState(false);
   const [menuItem, setMenuItem] = useState([]);
+  const [isReviewAvailable,setIsReviewAvailable]=useState(false)
   const [token, setToken] = useState();
 
   useEffect(() => {
@@ -66,6 +69,8 @@ function ScheduledClassDetails(props) {
     onCompleted: (data) => {
       if (data) {
         setClassData(data.classDetails);
+        let temp=data.classDetails
+        checkOldData(temp);
       }
     },
   });
@@ -104,7 +109,6 @@ function ScheduledClassDetails(props) {
       }
     },
   });
-  console.log("Rohit==========>",classData)
   const handleAcceptedFiles = async (file) => {
     setIsUploadModalOpen(false);
     const headers = new Headers();
@@ -154,17 +158,66 @@ function ScheduledClassDetails(props) {
     }
   }, [uuid, isFocussed]);
 
-  useEffect(() => {
-    if (route.params.showReviewModal && isFocussed && isStudent && !classReviewed) {
-      setShowReviewPopup(true);
-    }
-    else{
-      if(route.params.showReviewModal && isFocussed && !isStudent && !classReviewed)
-      {
-        setShowStudentReviewPopup(true)
+
+
+  function checkTime() {
+    let isEnableRating = false;
+    if (classData?.classEntity) {
+      let classDetails = classData.classEntity;
+      let startTime = moment(classDetails.startDate);
+      let endTime = moment(classDetails.endDate);
+      let currentTime = moment(new Date());
+      //calculate percentage
+      let percentage = (100 * (currentTime - startTime)) / (endTime - startTime);
+      let percentageRounded = Math.round(percentage * 100) / 100;
+      if (percentageRounded > 80.0) {
+        isEnableRating = true;
       }
     }
-  }, [route.params.showReviewModal, isFocussed]);
+    return isEnableRating;
+  }
+
+  function checkOldData(temp){
+ searchCurrentStudentReview({
+   variables: {
+     reviewSearchDto: {
+       tutorId: temp?.classEntity?.tutor?.id,
+       createdById: temp?.classEntity?.students?.id,
+       sortBy: 'createdDate',
+       sortOrder: 'DSC',
+       offeringId: temp.classEntity.offering.id,
+       classId: temp.classEntity.id,
+     },
+   },
+ });
+  }
+
+  const [searchCurrentStudentReview, { loading: loadCurrentStudentReview }] = useLazyQuery(SEARCH_REVIEW, {
+    fetchPolicy: 'no-cache',
+    onError: (e) => {
+      console.log(e);
+    },
+    onCompleted: (data) => {
+      if (data && data?.searchReview && data?.searchReview.edges.length > 0) {
+        console.log("Rohit search review data is as follows ",data)
+        setIsReviewAvailable(true);
+      }
+    },
+  });
+
+  console.log('Rohit ---------->', classData);
+
+  useEffect(() => {
+    if (checkTime()) {
+      if (route.params.showReviewModal && isFocussed && isStudent && !classReviewed) {
+        setShowReviewPopup(true);
+      } else {
+        if (route.params.showReviewModal && isFocussed && !isStudent && !classReviewed) {
+          setShowStudentReviewPopup(true);
+        }
+      }
+    }
+  }, [route.params.showReviewModal, isFocussed, classData]);
 
   const handleTutorDetail = () => {
     const selectedOffering = classData?.classEntity?.offering;
@@ -241,6 +294,15 @@ function ScheduledClassDetails(props) {
     const scrollPosition = event.nativeEvent.contentOffset.y;
     // setShowBackButton(scrollPosition > 30);
   };
+  function toggleRatingPopup(){
+    if(isStudent)
+    {
+      setShowReviewPopup(true);
+    }
+    else{
+      setShowStudentReviewPopup(true)
+    }
+  }
 
   const onScheduleClass = (slot) => {
     reScheduleClass({
@@ -303,7 +365,8 @@ function ScheduledClassDetails(props) {
             isFileUploading ||
             classDetailsLoading ||
             scheduleLoading ||
-            addDocumentLoading
+            addDocumentLoading ||
+            loadCurrentStudentReview
           }
         />
         {!isEmpty(classData) && (
@@ -793,6 +856,19 @@ function ScheduledClassDetails(props) {
                     <Text>Class Has Ended!</Text>
                   </Button>
                 )}
+                {!isReviewAvailable &&
+                classData?.isClassEnded &&
+                !classReviewed ? (
+                  <Button
+                    style={[commonStyles.buttonPrimary,{marginLeft:8}]}
+                    onPress={() => {
+                      toggleRatingPopup();
+                    }}>
+                    <Text style={commonStyles.textButtonPrimary}>
+                      Rate & Review Class
+                    </Text>
+                  </Button>
+                ) : null}
               </View>
             )}
           </ScrollView>
@@ -827,13 +903,14 @@ function ScheduledClassDetails(props) {
           />
         )}
         {showStudentReviewPopup && !classReviewed && (
-          <StudentReviewModal visible={showStudentReviewPopup}
-          onClose={() => {
+          <StudentReviewModal
+            visible={showStudentReviewPopup}
+            onClose={() => {
               setShowStudentReviewPopup(false);
               setClassReviewed(true);
             }}
             classDetails={classData?.classEntity}
-           />
+          />
         )}
 
         <ActionSheet

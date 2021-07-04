@@ -24,8 +24,9 @@ import {
   RfH,
   RfW,
 } from '../../utils/helpers';
+import moment from 'moment';
 import Fonts from '../../theme/fonts';
-import TutorImageComponent from '../TutorImageComponent';
+
 import { StudentImageComponent } from '..';
 
 const StudentReviewModal = (props) => {
@@ -42,6 +43,8 @@ const StudentReviewModal = (props) => {
   const [review, setReview] = useState('');
 
   const { visible, onClose, classDetails } = props;
+  
+ 
   const [addReview, { loading: reviewLoading }] = useMutation(
     ADD_STUDENT_FEEDBACK,
     {
