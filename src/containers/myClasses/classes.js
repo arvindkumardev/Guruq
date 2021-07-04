@@ -2,9 +2,9 @@ import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View,Pressable } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { SelectSubjectModal, TutorImageComponent } from '../../components';
+import { SelectSubjectModal, TutorImageComponent ,IconButtonWrapper} from '../../components';
 import Loader from '../../components/Loader';
 import { Colors, Fonts, Images } from '../../theme';
 import commonStyles from '../../theme/styles';
@@ -13,10 +13,19 @@ import { getFullName, RfH, RfW } from '../../utils/helpers';
 import { SEARCH_ORDER_ITEMS } from '../student/booking.query';
 import styles from './styles';
 import { GET_TUTOR_OFFERINGS } from '../student/tutor-query';
+import {
+  GET_MY_STUDENT_LIST,
+  GET_STUDENT_BY_OFFERING_ID,
+} from '../tutor/studentList/studentlist.query';
+import { SEARCH_TUTOR_OFFERINGS } from '../tutor/mySubjects/subject.query';
 import AddToCartModal from '../student/tutorDetails/components/addToCartModal';
 import NavigationRouteNames from '../../routes/screenNames';
 import { userType } from '../../apollo/cache';
 import { UserTypeEnum } from '../../common/userType.enum';
+import { tutorDetails } from '../../apollo/cache';
+import moment from 'moment'
+import ClassesFilterComponent from './components/filtercomponent';
+import StudentFilterComponent from './components/studentfilter';
 
 function MyClasses(props) {
   const navigation = useNavigation();
@@ -34,7 +43,19 @@ function MyClasses(props) {
   const [selectedSubject, setSelectedSubject] = useState({});
   const [openClassModal, setOpenClassModal] = useState(false);
   const [showAllSubjects, setShowAllSubjects] = useState(false);
+  const [page] = useState(1);
+  const [limit] = useState(1000);
+  const [showSubjectFilter,setShowSubjectFilter]=useState(false)
+  const [showStudentFilter, setShowStudentFilter] = useState(false);
+  const [subjectList,setSubjectList]=useState([])
+  const [subjectListEmpty,setSubjectListEmpty]=useState(false)
+  const [currentSelectedSubject,setCurrentSelectedSubject]=useState(null)
+  const [currentSelectedStudent,setCurrentSelectedStudent]=useState(null)
+  const [studentList,setStudentList]=useState([])
+  const [studentListEmpty,setStudentListEmpty]=useState(false)
 
+
+      const tutorInfo = useReactiveVar(tutorDetails);
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -44,6 +65,7 @@ function MyClasses(props) {
       if (data && data?.searchOrderItems && data?.searchOrderItems.edges.length > 0) {
         setIsEmpty(false);
         setOrderItems(data?.searchOrderItems.edges);
+        console.log("Arun search order items are ",data)
         setRefreshData(true);
       } else {
         setIsEmpty(true);
@@ -52,8 +74,50 @@ function MyClasses(props) {
       }
     },
   });
+  const [loadStudentList, { loading: studentListLoader }] = useLazyQuery(
+    GET_MY_STUDENT_LIST,
+    {
+      fetchPolicy: 'no-cache',
+      onError(e) {
+        setStudentListEmpty(true);
+        console.log('errorn is', e);
+      },
+      onCompleted(data) {
+        if (
+          data &&
+          data?.getTutorStudents &&
+          data?.getTutorStudents.edges.length > 0
+        ) {
+          console.log('Value of student list is ', data.getTutorStudents.edges);
+          setStudentList(data.getTutorStudents.edges);
+        } else {
+          console.log('data not found');
+          setStudentListEmpty(true);
+        }
+      },
+    },
+  );
 
-  const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
+const [getTutorSubject, { loading: loadingTutorsOffering }] = useLazyQuery(
+  SEARCH_TUTOR_OFFERINGS,
+  {
+    fetchPolicy: 'no-cache',
+    variables: { tutorId: tutorInfo.id },
+    onError: (e) => {
+      console.log(e);
+      setSubjectListEmpty(false);
+    },
+    onCompleted: (data) => {
+      if (data) {
+        const subjectsList = data?.searchTutorOfferings;
+        setSubjectList(subjectsList);
+        setSubjectListEmpty(subjectsList.length === 0);
+      }
+    },
+  },
+);
+
+  const [getTutorOffering, { loading: loadTutorSubject }] = useLazyQuery(GET_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
       if (e.graphQLErrors && e.graphQLErrors.length > 0) {
@@ -94,6 +158,13 @@ function MyClasses(props) {
         },
       });
       setIsHistorySelected(isHistory);
+      getTutorSubject();
+        loadStudentList({
+          variables: {
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+          },
+        });
     }
   }, [isFocussed]);
 
@@ -119,7 +190,7 @@ function MyClasses(props) {
           showActive: true,
           showHistory: isHistory,
           showWithAvailableClasses: !isHistory,
-          size: 100,
+          size: 100
         },
       },
     });
@@ -163,7 +234,124 @@ function MyClasses(props) {
     return 'Schedule Class';
   };
 
+
+
+  const handleStudentClose=()=>{
+    setShowStudentFilter(false)
+  }
+   const onStudentSelection=(selectedStudent)=>{
+     searchOrderItems({
+       variables: {
+         bookingSearchDto: {
+           // orderStatus: OrderStatus.COMPLETE.label,
+           showActive: true,
+           showHistory: isHistorySelected,
+           showWithAvailableClasses: !isHistorySelected,
+           size: 100,
+           ownerId: selectedStudent.user.id,
+         },
+       },
+     });
+     setCurrentSelectedStudent(selectedStudent);
+    setCurrentSelectedSubject(null)
+    setShowStudentFilter(false);
+  }
+   const clearStudentSelection=()=>{
+         setShowStudentFilter(false);
+        setCurrentSelectedStudent(null);
+        if(currentSelectedSubject===null){
+          onClicked(isHistorySelected);
+        }
+        
+  }
+   const handleSubjectClose=()=>{
+    setShowSubjectFilter(false);
+  }
+  const onSubjectSelection=(selectedOffering)=>{
+        searchOrderItems({
+          variables: {
+            bookingSearchDto: {
+              // orderStatus: OrderStatus.COMPLETE.label,
+              showActive: true,
+              showHistory: isHistorySelected,
+              showWithAvailableClasses: !isHistorySelected,
+              size: 100,
+              offeringId: selectedOffering?.id,
+            },
+          },
+        });
+        setShowSubjectFilter(false);
+         setCurrentSelectedStudent(null);
+        setCurrentSelectedSubject(selectedOffering)
+  }
+  const clearSubjectSelection=()=>{
+        setShowSubjectFilter(false);
+        setSelectedSubject(null)
+        setCurrentSelectedSubject(null);
+        onClicked(isHistorySelected);
+  }
+    
+ const FilterItem = () => {
+   return (
+     <View style={{ marginTop: RfH(16) }}>
+       <View>
+         <View style={styles.filterContainer}>
+           <Pressable
+             onPress={() => setShowStudentFilter(true)}
+             style={[
+               styles.filterContainer,
+               { position: 'absolute', left: 0, paddingRight: 24 },
+             ]}>
+             <IconButtonWrapper
+               iconHeight={15}
+               iconWidth={15}
+               iconImage={Images.filter}
+             />
+             <Text style={[styles.filterText]}>Student</Text>
+           </Pressable>
+
+           <Pressable
+             onPress={() => setShowSubjectFilter(true)}
+             style={[
+               styles.filterContainer,
+               { position: 'absolute', right: 0, paddingRight: 24 },
+             ]}>
+             <IconButtonWrapper
+               iconHeight={15}
+               iconWidth={15}
+               iconImage={Images.filter}
+             />
+             <Text style={[styles.filterText]}>Subject</Text>
+           </Pressable>
+         </View>
+       </View>
+       <View style={styles.horizontalLine} />
+       {currentSelectedSubject ? (
+         <View>
+           <Text style={[styles.filterText, { paddingLeft: 12, marginTop: 4 }]}>
+             {currentSelectedSubject.displayName.toUpperCase()}
+           </Text>
+           <View style={styles.horizontalLine} />
+         </View>
+       ) : null}
+       {currentSelectedStudent ? (
+         <View>
+           <Text style={[styles.filterText, { paddingLeft: 12, marginTop: 4 }]}>
+             {currentSelectedStudent?.contactDetail?.firstName}{' '}{currentSelectedStudent?.contactDetail?.lastName}
+           </Text>
+           <View style={styles.horizontalLine} />
+         </View>
+       ) : null}
+     </View>
+   );
+ };
+
+
+
+
+
   const renderClassItem = (item) => {
+    
     return (
       <View style={{ marginTop: RfH(30) }}>
         <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName}</Text>
@@ -273,9 +461,23 @@ function MyClasses(props) {
   return (
     <>
       <Loader isLoading={loadingTutorsOffering || loadingBookings} />
-      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
-        <View style={{ height: RfH(44), alignItems: 'center', justifyContent: 'center' }}>
-          {showHeader && <Text style={[commonStyles.headingPrimaryText, { alignSelf: 'center' }]}>My Classes</Text>}
+      <View
+        style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
+        <View
+          style={{
+            height: RfH(44),
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          {showHeader && (
+            <Text
+              style={[
+                commonStyles.headingPrimaryText,
+                { alignSelf: 'center' },
+              ]}>
+              My Classes
+            </Text>
+          )}
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -283,7 +485,7 @@ function MyClasses(props) {
           stickyHeaderIndices={[1]}
           scrollEventThrottle={16}>
           <View>
-            <Text style={commonStyles.pageTitleThirdRow}>My Classes</Text>
+            <Text style={commonStyles.pageTitleBlack}>My Classes</Text>
           </View>
           <View>
             <View
@@ -298,8 +500,17 @@ function MyClasses(props) {
                 small
                 block
                 bordered
-                style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
-                <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
+                style={
+                  isHistorySelected
+                    ? styles.inactiveLeftButton
+                    : styles.activeLeftButton
+                }>
+                <Text
+                  style={
+                    isHistorySelected
+                      ? styles.inactiveButtonText
+                      : styles.activeButtonText
+                  }>
                   Unscheduled Classes
                 </Text>
               </Button>
@@ -308,24 +519,57 @@ function MyClasses(props) {
                 small
                 block
                 bordered
-                style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
-                <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
+                style={
+                  isHistorySelected
+                    ? styles.activeRightButton
+                    : styles.inactiveRightButton
+                }>
+                <Text
+                  style={
+                    isHistorySelected
+                      ? styles.activeButtonText
+                      : styles.inactiveButtonText
+                  }>
+                  History
+                </Text>
               </Button>
             </View>
           </View>
-
+          <StudentFilterComponent
+            onClose={handleStudentClose}
+            visible={showStudentFilter}
+            onSelect={onStudentSelection}
+            students={studentList}
+            clearSelection={clearStudentSelection}
+            title={'Choose A Student'}
+            isStudent={true}
+            currentStudent={currentSelectedStudent}
+          />
+          <ClassesFilterComponent
+            onClose={handleSubjectClose}
+            visible={showSubjectFilter}
+            onSelect={onSubjectSelection}
+            offerings={subjectList}
+            clearSelection={clearSubjectSelection}
+            title={'Choose A Subject'}
+            isStudent={false}
+            currentSubject={currentSelectedSubject}
+          />
           <View>
             {!isEmpty ? (
               <FlatList
+                ListHeaderComponent={FilterItem}
                 showsVerticalScrollIndicator={false}
                 data={orderItems}
                 renderItem={({ item }) => renderClassItem(item)}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingBottom: RfH(170) }}
                 extraData={refreshData}
+            
               />
             ) : (
               <View>
+              <FilterItem/>
                 <Image
                   source={Images.empty_classes}
                   style={{
@@ -339,14 +583,21 @@ function MyClasses(props) {
                 <Text
                   style={[
                     commonStyles.pageTitleThirdRow,
-                    { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                    {
+                      fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                      textAlign: 'center',
+                    },
                   ]}>
                   No class found
                 </Text>
                 <Text
                   style={[
                     commonStyles.regularMutedText,
-                    { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
+                    {
+                      marginHorizontal: RfW(60),
+                      textAlign: 'center',
+                      marginTop: RfH(16),
+                    },
                   ]}>
                   {isStudent
                     ? "Looks like you haven't booked any class."
@@ -356,7 +607,10 @@ function MyClasses(props) {
                 {isStudent && (
                   <Button
                     block
-                    style={[commonStyles.buttonPrimary, { alignSelf: 'center' }]}
+                    style={[
+                      commonStyles.buttonPrimary,
+                      { alignSelf: 'center' },
+                    ]}
                     onPress={() => setShowAllSubjects(true)}>
                     <Text style={commonStyles.textButtonPrimary}>Book Now</Text>
                   </Button>

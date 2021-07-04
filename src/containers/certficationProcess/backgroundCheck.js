@@ -26,7 +26,7 @@ function BackgroundCheck() {
   const [tncCheckBox, setTncCheckBox] = useState(false);
   const [backgroundStatus, setBackgroundStatus] = useState('');
   const [openMenu, setOpenMenu] = useState(false);
-
+  console.log("Rohit: Inside background check ")
   const [getCurrentTutor, { loading: getCurrentTutorLoading }] = useLazyQuery(GET_CURRENT_TUTOR_QUERY, {
     fetchPolicy: 'no-cache',
     onError: (e) => {},

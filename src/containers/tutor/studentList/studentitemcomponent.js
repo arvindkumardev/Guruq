@@ -4,20 +4,28 @@ import { styles } from './styles';
 import StudentImageComponent from '../../../components/StudentImageComponent';
 import { RfH } from '../../../utils/helpers';
 
-const StudentItemComponent = ({ student, navigation, routeNames }) => {
+const StudentItemComponent = ({ student, navigation, routeNames,currentFilterSubject }) => {
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate(routeNames.TUTOR.STUDENT_DETAILS, { student })}>
+    <TouchableWithoutFeedback
+      onPress={() =>
+        navigation.navigate(routeNames.TUTOR.STUDENT_DETAILS, { student })
+      }>
       <View>
         <View style={styles.mainContainer}>
-          <StudentImageComponent student={student} width={64} height={64} styling={{ borderRadius: RfH(8) }} />
+          <StudentImageComponent
+            student={student}
+            width={64}
+            height={64}
+            styling={{ borderRadius: RfH(8) }}
+          />
           <View style={styles.childContainer}>
             <Text style={styles.nameTextStyle}>
               {student.contactDetail.firstName} {student.contactDetail.lastName}
             </Text>
-            <Text style={styles.idTextStyle}>S-{student.id}</Text>
+            <Text style={styles.idTextStyle}>GURUQS-{student.id}</Text>
+            {currentFilterSubject?<Text style={styles.idTextStyle}>{currentFilterSubject}</Text>:null}
           </View>
         </View>
-        <View style={styles.bottomBarView} />
       </View>
     </TouchableWithoutFeedback>
   );

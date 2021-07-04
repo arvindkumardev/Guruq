@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
 
   questionHeadingText: {
-    fontSize: RFValue(18, STANDARD_SCREEN_SIZE),
+    fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
     color: Colors.secondaryText,
     position: 'absolute',
     left: 0,

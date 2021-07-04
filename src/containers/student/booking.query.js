@@ -188,6 +188,7 @@ export const SEARCH_ORDER_ITEMS = gql`
         availableClasses
         onlineClass
         demo
+        createdDate
         count
         groupSize
 

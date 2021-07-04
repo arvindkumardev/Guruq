@@ -1,9 +1,11 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, FlatList } from 'react-native';
+import { View, Text, Image, ScrollView, FlatList ,TouchableOpacity} from 'react-native';
 import { useLazyQuery } from '@apollo/client';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused,useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
 import { RFValue } from 'react-native-responsive-fontsize';
+import moment from 'moment';
 import Loader from '../../../components/Loader';
 import commonStyles from '../../../theme/styles';
 import { Colors, Fonts, Images } from '../../../theme';
@@ -12,12 +14,16 @@ import { STANDARD_SCREEN_SIZE } from '../../../utils/constants';
 import { styles } from './styles';
 import { SEARCH_ORDER_ITEMS } from '../../student/booking.query';
 import TutorImageComponent from '../../../components/TutorImageComponent';
+import NavigationRouteNames from '../../../routes/screenNames';
+import RatingView from './ratingview'
 
 const StudentClassComponent = ({ student, subject }) => {
+  const navigation = useNavigation();
   const [isHistorySelected, setIsHistorySelected] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const isFoucsed = useIsFocused();
   const [orderList, setOrderList] = useState([]);
+  
   const [searchOrderItems, { loading: loadingBookings }] = useLazyQuery(SEARCH_ORDER_ITEMS, {
     fetchPolicy: 'no-cache',
     onError: (e) => {
@@ -44,7 +50,7 @@ const StudentClassComponent = ({ student, subject }) => {
           showActive: true,
           showHistory: isHistory,
           showWithAvailableClasses: !isHistory,
-          size: 100,
+          size: 2,
         },
       },
     });
@@ -61,7 +67,7 @@ const StudentClassComponent = ({ student, subject }) => {
             showActive: true,
             showHistory: false,
             showWithAvailableClasses: !false,
-            size: 100,
+            size: 2,
           },
         },
       });
@@ -82,7 +88,7 @@ const StudentClassComponent = ({ student, subject }) => {
           showActive: true,
           showHistory: false,
           showWithAvailableClasses: !false,
-          size: 100,
+          size: 2,
         },
       },
     });
@@ -91,81 +97,126 @@ const StudentClassComponent = ({ student, subject }) => {
   const renderClassItem = (item) => {
     return (
       <View style={{ marginTop: RfH(30) }}>
-        <Text style={commonStyles.headingPrimaryText}>{item.offering.displayName}</Text>
+        <Text style={commonStyles.headingPrimaryText}>
+          {item.offering.displayName}
+        </Text>
         <View style={commonStyles.horizontalChildrenSpaceView}>
-          <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
+          <Text
+            style={{
+              fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+              color: Colors.darkGrey,
+            }}>
             {item.offering?.parentOffering?.parentOffering?.displayName}
             {' | '}
             {item.offering?.parentOffering?.displayName}
           </Text>
-          {item.demo && <Text style={commonStyles.mediumPrimaryText}>Demo Class</Text>}
+          <Text
+            style={[
+              commonStyles.mediumPrimaryText,
+              { color: Colors.brandBlue2 },
+            ]}>
+            {moment(item.createdDate).format('DD-MMM-YYYY')}
+          </Text>
+          {item.demo && (
+            <Text style={commonStyles.mediumPrimaryText}>Demo Class</Text>
+          )}
         </View>
-        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(8) }} />
-        <View style={[commonStyles.horizontalChildrenSpaceView, { marginTop: RfH(8) }]}>
+        <View
+          style={{
+            borderBottomColor: Colors.darkGrey,
+            borderBottomWidth: 0.5,
+            marginTop: RfH(8),
+          }}
+        />
+        <View
+          style={[
+            commonStyles.horizontalChildrenSpaceView,
+            { marginTop: RfH(8) },
+          ]}>
           <View style={commonStyles.horizontalChildrenStartView}>
             <View style={commonStyles.verticallyStretchedItemsView}>
               <TutorImageComponent
                 tutor={item?.tutor}
-                styling={{ borderRadius: RfH(32), width: RfH(64), height: RfH(64) }}
+                styling={{
+                  borderRadius: RfH(32),
+                  width: RfH(64),
+                  height: RfH(64),
+                }}
               />
             </View>
-            <View style={[commonStyles.verticallyStretchedItemsView, { marginLeft: RfW(8) }]}>
+            <View
+              style={[
+                commonStyles.verticallyStretchedItemsView,
+                { marginLeft: RfW(8) },
+              ]}>
               <Text
                 style={{
                   fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
                   fontFamily: Fonts.semiBold,
                   marginTop: RfH(2),
+                  color: Colors.black,
+                  lineHeight: 21,
                 }}>
-                {getFullName(item.tutor.contactDetail)}
+                {getFullName(student?.contactDetail)}
               </Text>
-              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                T-{item.tutor.id}
-              </Text>
-              <Text style={{ fontSize: RFValue(14, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>
-                {item.onlineClass ? 'Online' : 'Home Tuition'} - Individual Class
+              <Text
+                style={{
+                  fontSize: RFValue(14, STANDARD_SCREEN_SIZE),
+                  color: Colors.darkGrey,
+                }}>
+                {item.onlineClass ? 'Online' : 'Home Tuition'} - Individual
+                Class
               </Text>
             </View>
           </View>
-          <View style={commonStyles.verticallyCenterItemsView}>
+          <View
+            style={[
+              commonStyles.verticallyCenterItemsView,
+              {
+                borderRadius: 8,
+                paddingHorizontal: RfW(8),
+                backgroundColor: Colors.lightBlue,
+              },
+            ]}>
             <Text
               style={[
                 commonStyles.headingPrimaryText,
-                { backgroundColor: Colors.lightBlue, padding: RfH(8), borderRadius: 8 },
+                {
+                  backgroundColor: Colors.lightBlue,
+                  paddingHorizontal: RfW(8),
+                },
               ]}>
               {item.count}
             </Text>
-            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Total</Text>
-            <Text style={{ fontSize: RFValue(10, STANDARD_SCREEN_SIZE), color: Colors.darkGrey }}>Classes</Text>
-          </View>
-        </View>
-        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5, marginTop: RfH(16) }} />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}>
-          {!isHistorySelected && (
             <Text
               style={{
-                fontSize: RFValue(16, STANDARD_SCREEN_SIZE),
-                textAlign: 'right',
-                color: Colors.darkGrey,
+                fontSize: RFValue(10, STANDARD_SCREEN_SIZE),
+                color: Colors.black,
+                paddingBottom: RfH(8),
               }}>
-              {item.availableClasses} Unscheduled {item.availableClasses === 1 ? 'Class' : 'Classes'}
+              Classes
             </Text>
-          )}
+          </View>
         </View>
-        <View style={{ borderBottomColor: Colors.darkGrey, borderBottomWidth: 0.5 }} />
+        <View
+          style={{
+            borderBottomColor: Colors.darkGrey,
+            marginTop: 8,
+            borderBottomWidth: 0.5,
+          }}
+        />
       </View>
     );
   };
 
   return (
     <>
-      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white }]}>
+      <View style={[commonStyles.mainContainer]}>
         <Loader isLoading={loadingBookings} />
-        <ScrollView showsVerticalScrollIndicator={false} stickyHeaderIndices={[1]} scrollEventThrottle={16}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          stickyHeaderIndices={[1]}
+          scrollEventThrottle={16}>
           <View>
             <View style={[commonStyles.horizontalChildrenCenterView]}>
               <Button
@@ -173,8 +224,17 @@ const StudentClassComponent = ({ student, subject }) => {
                 small
                 block
                 bordered
-                style={isHistorySelected ? styles.inactiveLeftButton : styles.activeLeftButton}>
-                <Text style={isHistorySelected ? styles.inactiveButtonText : styles.activeButtonText}>
+                style={
+                  isHistorySelected
+                    ? styles.inactiveLeftButton
+                    : styles.activeLeftButton
+                }>
+                <Text
+                  style={
+                    isHistorySelected
+                      ? styles.inactiveButtonText
+                      : styles.activeButtonText
+                  }>
                   Unscheduled Classes
                 </Text>
               </Button>
@@ -183,19 +243,50 @@ const StudentClassComponent = ({ student, subject }) => {
                 small
                 block
                 bordered
-                style={isHistorySelected ? styles.activeRightButton : styles.inactiveRightButton}>
-                <Text style={isHistorySelected ? styles.activeButtonText : styles.inactiveButtonText}>History</Text>
+                style={
+                  isHistorySelected
+                    ? styles.activeRightButton
+                    : styles.inactiveRightButton
+                }>
+                <Text
+                  style={
+                    isHistorySelected
+                      ? styles.activeButtonText
+                      : styles.inactiveButtonText
+                  }>
+                  History
+                </Text>
               </Button>
             </View>
           </View>
           {!isEmpty ? (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={orderList}
-              renderItem={({ item }) => renderClassItem(item)}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: RfH(170) }}
-            />
+            <View
+              style={{
+                height: 'auto',
+                flexGrow: 0,
+                marginBottom: RfH(38),
+              }}>
+              <FlatList
+                style={{ flexGrow: 0, height: 'auto' }}
+                showsVerticalScrollIndicator={false}
+                data={orderList}
+                renderItem={({ item }) => renderClassItem(item)}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={{ paddingBottom: RfH(16) }}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate(NavigationRouteNames.MY_CLASSES);
+                }}>
+                <Text
+                  style={[
+                    commonStyles.mediumPrimaryText,
+                    { alignSelf: 'flex-end', color: Colors.brandBlue2 },
+                  ]}>
+                  View All
+                </Text>
+              </TouchableOpacity>
+            </View>
           ) : (
             <View>
               <Image
@@ -211,20 +302,43 @@ const StudentClassComponent = ({ student, subject }) => {
               <Text
                 style={[
                   commonStyles.pageTitleThirdRow,
-                  { fontSize: RFValue(20, STANDARD_SCREEN_SIZE), textAlign: 'center' },
+                  {
+                    fontSize: RFValue(20, STANDARD_SCREEN_SIZE),
+                    textAlign: 'center',
+                  },
                 ]}>
                 No class found
               </Text>
-              <Text
-                style={[
-                  commonStyles.regularMutedText,
-                  { marginHorizontal: RfW(60), textAlign: 'center', marginTop: RfH(16) },
-                ]}>
-                Looks like Student haven't booked any class.
-              </Text>
+              {!isHistorySelected ? (
+                <Text
+                  style={[
+                    commonStyles.regularMutedText,
+                    {
+                      marginHorizontal: RfW(60),
+                      textAlign: 'center',
+                      marginTop: RfH(16),
+                    },
+                  ]}>
+                  Looks like Student don't have Unscheduled Classes.
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    commonStyles.regularMutedText,
+                    {
+                      marginHorizontal: RfW(60),
+                      textAlign: 'center',
+                      marginTop: RfH(16),
+                    },
+                  ]}>
+                  Looks like Student don't have Class History.
+                </Text>
+              )}
+
               <View style={{ height: RfH(40) }} />
             </View>
           )}
+          {/* <RatingView student={student}/> */}
         </ScrollView>
       </View>
     </>

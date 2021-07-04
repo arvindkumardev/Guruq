@@ -43,7 +43,7 @@ const PTOptionsView = (props) => {
         </Text>
         <View style={styles.questionContainer}>
           <HTML
-            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(22, STANDARD_SCREEN_SIZE) } }}
+            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
             source={{ html: question }}
             contentWidth={contentWidth}
           />
@@ -70,7 +70,7 @@ const PTOptionsView = (props) => {
             }}
           />
           <HTML
-            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
+            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
             source={{ html: answers[0].text }}
           />
@@ -96,7 +96,7 @@ const PTOptionsView = (props) => {
             }}
           />
           <HTML
-            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
+            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
             source={{ html: answers[1].text }}
           />
@@ -123,7 +123,7 @@ const PTOptionsView = (props) => {
             }}
           />
           <HTML
-            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
+            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
             source={{ html: answers[0].text }}
           />
@@ -149,7 +149,7 @@ const PTOptionsView = (props) => {
             }}
           />
           <HTML
-            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
+            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
             source={{ html: answers[0].text }}
           />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,ScrollView } from 'react-native';
 
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useLazyQuery } from '@apollo/client';
@@ -19,7 +19,7 @@ const AddSubjectDetails = (props) => {
   const tutorId = route?.params?.tutorId;
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
-
+console.log("Rohit: value is ",item)
   const [getTutorOffering, { loading: loadingTutorsOffering }] = useLazyQuery(SEARCH_TUTOR_OFFERINGS, {
     fetchPolicy: 'no-cache',
     variables: { tutorId },
@@ -75,27 +75,55 @@ const AddSubjectDetails = (props) => {
   };
   return (
     <>
-      <Loader isLoading={loadingTutorsOffering} />
-      <View style={[commonStyles.mainContainer, { backgroundColor: Colors.white, paddingHorizontal: 0 }]}>
-        <ScreenHeader label="Add Details" homeIcon horizontalPadding={RfW(16)} />
-        <View style={styles.addDetailMainView}>
-          <View style={{ flexDirection: 'row' }}>
-            <IconButtonWrapper iconImage={getSubjectIcons(item.offering.displayName)} />
-            <View style={{ marginLeft: RfW(16) }}>
-              <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
-                {`${item?.offering?.rootOffering?.displayName} | ${item?.offering?.parentOffering?.parentOffering?.displayName}`}
-              </Text>
-              <Text style={[commonStyles.mediumPrimaryText, { marginTop: RfH(5) }]}>
-                {`${item?.offering?.parentOffering?.displayName} | ${item?.offering?.displayName}`}
-              </Text>
+      <ScrollView
+        style={{ backgroundColor: Colors.white }}
+        showsVerticalScrollIndicator={false}>
+        <Loader isLoading={loadingTutorsOffering} />
+        <View
+          style={[
+            commonStyles.mainContainer,
+            { backgroundColor: Colors.white, paddingHorizontal: 0 },
+          ]}>
+          <ScreenHeader
+            label="Add Details"
+            homeIcon
+            horizontalPadding={RfW(16)}
+          />
+          <View style={styles.addDetailMainView}>
+            <View style={{ flexDirection: 'row' }}>
+              <IconButtonWrapper
+                iconImage={getSubjectIcons(item.offering.displayName)}
+              />
+              <View style={{ marginLeft: RfW(16) }}>
+                <Text style={commonStyles.regularPrimaryText} numberOfLines={2}>
+                  {`${item?.offering?.rootOffering?.displayName} | ${item?.offering?.parentOffering?.parentOffering?.displayName}`}
+                </Text>
+                <Text
+                  style={[
+                    commonStyles.mediumPrimaryText,
+                    { marginTop: RfH(5) },
+                  ]}>
+                  {`${item?.offering?.parentOffering?.displayName} | ${item?.offering?.displayName}`}
+                </Text>
+              </View>
             </View>
+            {optionsArray.map((element) => {
+              return (
+                <LabelComponent
+                  id={element.id}
+                  label={element.label}
+                  onPress={handleOnPress}
+                />
+              );
+            })}
           </View>
-          {optionsArray.map((element) => {
-            return <LabelComponent id={element.id} label={element.label} onPress={handleOnPress} />;
-          })}
+          <StudentListing
+            isSubScreen
+            offeringId={item.offering.id}
+            showFilter
+          />
         </View>
-        <StudentListing isSubScreen />
-      </View>
+      </ScrollView>
     </>
   );
 };
