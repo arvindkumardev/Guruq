@@ -334,7 +334,7 @@ function StudentListing(props) {
         }
       />
       <View>
-        {isSubScreen ? null : <FilterItem />}
+        {/* {isSubScreen ? null : <FilterItem />} */}
         <Image
           source={Images.empty_classes}
           style={{

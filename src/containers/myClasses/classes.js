@@ -99,12 +99,12 @@ function MyClasses(props) {
   );
 
 const [getTutorSubject, { loading: loadingTutorsOffering }] = useLazyQuery(
-  SEARCH_TUTOR_OFFERINGS,
+SEARCH_TUTOR_OFFERINGS,
   {
     fetchPolicy: 'no-cache',
     variables: { tutorId: tutorInfo.id },
     onError: (e) => {
-      console.log(e);
+      console.log('Search tutor offering error',tutorInfo,e );
       setSubjectListEmpty(false);
     },
     onCompleted: (data) => {
@@ -158,7 +158,8 @@ const [getTutorSubject, { loading: loadingTutorsOffering }] = useLazyQuery(
         },
       });
       setIsHistorySelected(isHistory);
-      getTutorSubject();
+						if(tutorInfo && tutorInfo.id)
+      {getTutorSubject();}
         loadStudentList({
           variables: {
             page: parseInt(page, 10),
@@ -292,11 +293,12 @@ const [getTutorSubject, { loading: loadingTutorsOffering }] = useLazyQuery(
   }
     
  const FilterItem = () => {
+		if(!tutorInfo || !tutorInfo.id) return null;
    return (
      <View style={{ marginTop: RfH(16) }}>
        <View>
          <View style={styles.filterContainer}>
-           <Pressable
+           {studentList && studentList.length > 0 && <Pressable
              onPress={() => setShowStudentFilter(true)}
              style={[
                styles.filterContainer,
@@ -308,9 +310,9 @@ const [getTutorSubject, { loading: loadingTutorsOffering }] = useLazyQuery(
                iconImage={Images.filter}
              />
              <Text style={[styles.filterText]}>Student</Text>
-           </Pressable>
+           </Pressable>}
 
-           <Pressable
+           {tutorInfo && tutorInfo.id && <Pressable
              onPress={() => setShowSubjectFilter(true)}
              style={[
                styles.filterContainer,
@@ -322,7 +324,7 @@ const [getTutorSubject, { loading: loadingTutorsOffering }] = useLazyQuery(
                iconImage={Images.filter}
              />
              <Text style={[styles.filterText]}>Subject</Text>
-           </Pressable>
+           </Pressable>}
          </View>
        </View>
        <View style={styles.horizontalLine} />
@@ -569,7 +571,7 @@ const [getTutorSubject, { loading: loadingTutorsOffering }] = useLazyQuery(
               />
             ) : (
               <View>
-              <FilterItem/>
+              {/* <FilterItem/> */}
                 <Image
                   source={Images.empty_classes}
                   style={{

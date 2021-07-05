@@ -124,12 +124,13 @@ const StudentFilterComponent = (props) => {
             }}>
             <Button
               block
+														disabled={!selectedOffering}
               style={{
                 flex: 0.5,
-                backgroundColor: Colors.brandBlue2,
+                 backgroundColor: selectedOffering? Colors.brandBlue2:Colors.greyBlue,
                 marginRight: RfW(4),
               }}
-              onPress={() => onSelect(selectedOffering)}>
+              onPress={() => selectedOffering && onSelect(selectedOffering)}>
               <Text
                 style={[
                   commonStyles.headingPrimaryText,
