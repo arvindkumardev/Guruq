@@ -124,7 +124,7 @@ const StudentFilterComponent = (props) => {
             }}>
             <Button
               block
-														disabled={!selectedOffering}
+											
               style={{
                 flex: 0.5,
                  backgroundColor: selectedOffering? Colors.brandBlue2:Colors.greyBlue,
@@ -136,7 +136,7 @@ const StudentFilterComponent = (props) => {
                   commonStyles.headingPrimaryText,
                   { color: Colors.white },
                 ]}>
-                Select
+                Search
               </Text>
             </Button>
             <Button

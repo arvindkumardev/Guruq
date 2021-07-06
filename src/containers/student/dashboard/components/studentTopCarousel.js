@@ -63,12 +63,18 @@ const userTokenVal = useReactiveVar(userToken);
       switch (bannerItem.targetScreenName) {
         case BannerTypeEnum.WEB_VIEW.label: {
              let url = null;
+             let label='';
              bannerItem.payload.forEach((element) => {
-               if ((element.key = 'url')) {
+               if ((element.key === 'url')) {
                  url = element.value;
                }
+               else if(element.key==='label')
+               {
+                label= element.value;
+               }
+               
              }); 
-             navigation.navigate(NavigationRouteNames.WEB_VIEW,{url:url})
+             navigation.navigate(NavigationRouteNames.WEB_VIEW,{url:url,label:label})
           return;
         }
         case BannerTypeEnum.EXTERNAL_LINK.label: {
@@ -95,7 +101,13 @@ const userTokenVal = useReactiveVar(userToken);
           return;
         }
         case BannerTypeEnum.STUDENT_RENEW_CLASS.label: {
-           navigation.navigate(NavigationRouteNames.MY_CLASSES);
+            let tab = null;
+            bannerItem.payload.forEach((element) => {
+              if (element.key === 'tab') {
+                tab = element.value;
+              } 
+            }); 
+           navigation.navigate(NavigationRouteNames.MY_CLASSES,{tab:tab});
           return;
         }
         default:
@@ -119,10 +131,11 @@ const userTokenVal = useReactiveVar(userToken);
         }}
         onPress={() => handleBannerClick(item)}
         activeOpacity={0.8}>
+
         <IconButtonWrapper
           iconWidth={ITEM_WIDTH}
           iconHeight={ITEM_HEIGHT}
-          imageResizeMode={"contain"}
+          imageResizeMode={'contain'}
           styling={{ borderRadius: RfH(8) }}
           iconImage={getDocumentFileUrl(item.attachment.original, userTokenVal)}
           placeHolderImage={Images.empty_classes}

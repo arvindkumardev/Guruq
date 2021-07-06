@@ -194,13 +194,12 @@ const MyCart = () => {
     },
   });
 
-  useEffect(() => {
-    getCartItems();
-    getMyQpointBalance();
-  }, []);
+
 
   useEffect(() => {
     if (isFocussed) {
+          getCartItems();
+          getMyQpointBalance();
       getStudentDetails();
     }
   }, [isFocussed]);

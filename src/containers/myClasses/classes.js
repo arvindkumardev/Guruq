@@ -33,8 +33,9 @@ function MyClasses(props) {
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
   const tab = props?.route?.params?.tab;
+  
   const isHistory = tab === 'history';
-  const [isHistorySelected, setIsHistorySelected] = useState(false);
+  const [isHistorySelected, setIsHistorySelected] = useState(isHistory);
   const [showHeader, setShowHeader] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
@@ -241,6 +242,7 @@ SEARCH_TUTOR_OFFERINGS,
     setShowStudentFilter(false)
   }
    const onStudentSelection=(selectedStudent)=>{
+     if(selectedStudent?.user){
      searchOrderItems({
        variables: {
          bookingSearchDto: {
@@ -253,6 +255,7 @@ SEARCH_TUTOR_OFFERINGS,
          },
        },
      });
+    }
      setCurrentSelectedStudent(selectedStudent);
     setCurrentSelectedSubject(null)
     setShowStudentFilter(false);
@@ -269,6 +272,7 @@ SEARCH_TUTOR_OFFERINGS,
     setShowSubjectFilter(false);
   }
   const onSubjectSelection=(selectedOffering)=>{
+    if(selectedOffering?.id){
         searchOrderItems({
           variables: {
             bookingSearchDto: {
@@ -281,6 +285,7 @@ SEARCH_TUTOR_OFFERINGS,
             },
           },
         });
+      }
         setShowSubjectFilter(false);
          setCurrentSelectedStudent(null);
         setCurrentSelectedSubject(selectedOffering)
@@ -293,7 +298,7 @@ SEARCH_TUTOR_OFFERINGS,
   }
     
  const FilterItem = () => {
-		if(!tutorInfo || !tutorInfo.id) return null;
+  if(!isStudent){
    return (
      <View style={{ marginTop: RfH(16) }}>
        <View>
@@ -328,7 +333,7 @@ SEARCH_TUTOR_OFFERINGS,
          </View>
        </View>
        <View style={styles.horizontalLine} />
-       {currentSelectedSubject ? (
+       {(currentSelectedSubject?.displayName) ? (
          <View>
            <Text style={[styles.filterText, { paddingLeft: 12, marginTop: 4 }]}>
              {currentSelectedSubject.displayName.toUpperCase()}
@@ -346,6 +351,11 @@ SEARCH_TUTOR_OFFERINGS,
        ) : null}
      </View>
    );
+       }
+       else{
+
+        return null
+       }
  };
 
 

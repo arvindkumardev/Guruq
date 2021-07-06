@@ -142,7 +142,7 @@ const ClassesFilterComponent = (props) => {
                   commonStyles.headingPrimaryText,
                   { color: Colors.white },
                 ]}>
-                Select
+                Search
               </Text>
             </Button>
             <Button

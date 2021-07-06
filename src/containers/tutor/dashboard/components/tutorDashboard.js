@@ -255,18 +255,23 @@ function TutorDashboard(props) {
      switch (bannerItem.targetScreenName) {
        case BannerTypeEnum.WEB_VIEW.label: {
          let url = null;
+         let label=null
          bannerItem.payload.forEach((element) => {
-           if ((element.key = 'url')) {
+           if ((element.key === 'url')) {
              url = element.value;
            }
+           else if (element.key==='label')
+           {
+             label=element.value
+           }
          });
-         navigation.navigate(NavigationRouteNames.WEB_VIEW, { url: url });
+         navigation.navigate(NavigationRouteNames.WEB_VIEW, { url: url,label:label });
          return;
        }
        case BannerTypeEnum.EXTERNAL_LINK.label: {
          let url = null;
          bannerItem.payload.forEach((element) => {
-           if ((element.key = 'url')) {
+           if ((element.key == 'url')) {
              url = element.value;
            }
          });
@@ -282,11 +287,12 @@ function TutorDashboard(props) {
          return;
        }
        case BannerTypeEnum.TUTOR_UPDATE_SCHEDULE.label: {
-         navigation.navigate(NavigationRouteNames.TUTOR.UPDATE_SCHEDULE);
+         navigation.navigate(NavigationRouteNames.TUTOR.UPDATE_SCHEDULE, {
+           selectedDate:moment(new Date())});
          return;
        }
        case BannerTypeEnum.TUTOR_UPDATE_PRICE_MATRIX.label: {
-          navigation.navigate(NavigationRouteNames.TUTOR.PRICE_MATRIX);
+          navigation.navigate(NavigationRouteNames.TUTOR.SUBJECTS_LIST);
          return;
        }
        case BannerTypeEnum.TUTOR_SUBJECTS_LIST.label: {
