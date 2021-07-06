@@ -333,6 +333,7 @@ function StudentListing(props) {
           studentListLoader || studentFilterLoader || loadingTutorsOffering
         }
       />
+      {isSubScreen ? null : <FilterItem />}
       <View>
         {/* {isSubScreen ? null : <FilterItem />} */}
         <Image
