@@ -34,7 +34,7 @@ function ScheduledClassDetails(props) {
   const navigation = useNavigation();
   const isFocussed = useIsFocused();
   const { route } = props;
-  const { uuid } = route.params;
+   const { uuid } = route.params;
 
   const userTypeVal = useReactiveVar(userType);
   const isStudent = userTypeVal === UserTypeEnum.STUDENT.label;
@@ -205,7 +205,7 @@ function ScheduledClassDetails(props) {
     },
   });
 
-  console.log('Rohit ---------->', classData);
+  
 
   useEffect(() => {
     if (checkTime()) {

@@ -43,7 +43,7 @@ const PTOptionsView = (props) => {
         </Text>
         <View style={styles.questionContainer}>
           <HTML
-            tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(18, STANDARD_SCREEN_SIZE) } }}
+            tagsStyles={{ p: { color: Colors.black, marginLeft:-10,fontSize: RFValue(18, STANDARD_SCREEN_SIZE)} }}
             source={{ html: question }}
             contentWidth={contentWidth}
           />
@@ -125,7 +125,7 @@ const PTOptionsView = (props) => {
           <HTML
             tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
-            source={{ html: answers[0].text }}
+            source={{ html: answers[2].text }}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -151,7 +151,7 @@ const PTOptionsView = (props) => {
           <HTML
             tagsStyles={{ p: { color: Colors.black, fontSize: RFValue(16, STANDARD_SCREEN_SIZE) } }}
             containerStyle={styles.optionText}
-            source={{ html: answers[0].text }}
+            source={{ html: answers[3].text }}
           />
         </TouchableOpacity>
       </View>
